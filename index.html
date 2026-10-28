@@ -357,6 +357,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .foss{display:grid;gap:10px;margin-bottom:6px}
 .fos{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--panel)}
 .fos.done{border-color:var(--amber)}
+.galbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
 .fpn{display:flex;flex-wrap:wrap;gap:3px;margin:4px 0}.fpn span{font-size:10.5px;padding:1px 6px;border-radius:999px;border:1px dashed var(--line);color:var(--mute)}.fpn span.on{border-style:solid;border-color:#c9b48a;color:#efe3c6;background:rgba(239,227,198,.08)}
 .fos svg{width:130px;height:auto;background:#0e1315;border-radius:8px}
 .fi{display:grid;gap:3px;min-width:0}
@@ -399,6 +400,17 @@ nav.tabs button{font-size:12px}
 .pickbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;border:1px solid var(--amber);border-radius:12px;background:var(--panel2);padding:6px 10px;font-size:13px}.pickbar>span{display:flex;align-items:center;gap:6px}.pickbar>span svg{width:34px;height:40px}.pickbar>div{display:flex;gap:6px;flex-wrap:wrap}#roomBar:not(:has(button)){border-color:var(--line);background:transparent;color:var(--mute)}.roomart .fu,.roomart .ft,.roomart .stair{cursor:pointer}.flt{display:flex;gap:6px;margin-left:auto;margin-right:8px}.flt:empty{display:none}.flt button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}.flt button.on{border-color:var(--amber);background:var(--amber);color:#1a1206}
 #room{position:fixed;inset:0;z-index:55;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}
 #room .dsheet{max-height:92vh;overflow-y:auto}
+#gal{position:fixed;inset:0;z-index:56;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#gal .dsheet{max-height:94vh;overflow-y:auto}
+.galbody{display:grid;gap:14px}.gxs{display:grid;gap:14px}.gx{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#1c2226}.gx svg{display:block;width:100%;height:auto}
+.gpl{padding:8px 12px 12px;display:grid;gap:3px;background:linear-gradient(#2a2420,#221d1a);border-top:3px solid #8a6a3a}.gpl b{font-size:15px;color:#f2e6c8}.gpl>span{font-size:11.5px;color:var(--mute)}.gpl em{font-style:normal;font-size:12px;color:var(--mute)}.gpl em.ok{color:var(--ok)}
+.vera{display:grid;gap:8px}.vhd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #8a6a3a;padding-bottom:4px}.vhd b{font-size:15px;color:#f2e6c8}.vhd span{font-size:11.5px;color:var(--mute)}
+.vrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.vit{display:grid;justify-items:stretch}.vglass{height:104px;display:grid;place-items:center;border:1.5px solid rgba(200,230,245,.45);border-bottom:0;border-radius:8px 8px 0 0;
+  background:radial-gradient(ellipse at 50% 0,rgba(255,240,205,.28),transparent 70%),linear-gradient(135deg,rgba(220,240,255,.10),rgba(220,240,255,.02) 45%,rgba(220,240,255,.08));position:relative}
+.vglass::after{content:'';position:absolute;left:10%;top:8%;width:10%;height:70%;background:linear-gradient(rgba(255,255,255,.18),transparent);transform:skewX(-12deg)}
+.vglass svg{filter:drop-shadow(0 6px 6px rgba(0,0,0,.55))}.vit.no .vglass svg{opacity:.28}
+.vped{background:linear-gradient(#4a3a2a,#2e241a);border-top:3px solid var(--g);border-radius:0 0 6px 6px;padding:5px 6px 7px;display:grid;justify-items:center;gap:3px;text-align:center}
+.vped b{font-size:11.5px;color:#f2e6c8;line-height:1.2}.vit.no .vped b{color:var(--mute)}.vq{font-size:11px;color:var(--mute)}
 .roomart{border-radius:12px;overflow:hidden;line-height:0;border:1px solid var(--line)}.roomart svg{width:100%;height:auto}
 </style>
 
@@ -530,6 +542,7 @@ nav.tabs button{font-size:12px}
   <div class="nbar"><span class="nlogo">GNN</span><span class="nlive">속보</span><span class="ntime" id="nTime"></span></div>
   <h3 class="nhead" id="nHead"></h3><div class="nart" id="nArt"></div><p class="nbody" id="nBody"></p>
   <div class="nreward" id="nReward"></div><button class="primary" type="button" id="nOk">받기</button></div></section>
+<section id="gal" hidden><div class="dsheet"><div class="ehd"><div class="iname" style="font-size:18px">전시관</div><div class="flt" id="galTab"></div><button class="skip" id="galClose" type="button">닫기</button></div><div id="galBody" class="galbody"></div></div></section>
 <section id="room" hidden><div class="dsheet">
   <div class="ehd"><div class="iname" style="font-size:18px" id="roomTitle">집 안 꾸미기</div><div class="flt" id="roomFl"></div><button class="skip" id="roomClose" type="button">닫기</button></div>
   <div class="roomart" id="roomArt"></div><div class="pickbar" id="roomBar"></div><div class="lpal" id="roomList"></div></div></section>
@@ -945,7 +958,7 @@ const FOSPARTS={
   [['F','M165,12 Q170,3 181,5 L191,9 Q195,13 191,16 L178,18 Q167,18 165,12Z'],['L',[[170,17],[190,15]],1.6],['H',176,9,2.4,2.4],['H',185,8,1.7,1.2]]],
  haenam:()=>[[manP(30,62)],[pesP(64,38)],[manP(102,64)],[pesP(138,40)],[manP(176,62)]],
 };
-function fossilArt(f,got,hl,slab=true){const parts=FOSPARTS[f.id](),BONE='#efe3c6',BO='#4a3a28',IMP='#6a5a44';let g='';
+function fossilArt(f,got,hl,slab=true,mount=null){const parts=FOSPARTS[f.id](),BONE=mount?`url(#${mount})`:'#efe3c6',BO=mount?'#3a2a18':'#4a3a28',IMP='#6a5a44';let g='';
   if(slab){g+=`<path d="M6,14 Q4,6 16,5 L100,3 L186,6 Q196,8 195,20 L197,80 Q196,94 182,95 L100,97 L14,95 Q4,93 5,82Z" fill="#7d6e58" stroke="#3a2f22" stroke-width="1.5"/><path d="M14,16 Q20,10 60,11 L150,9 Q186,10 188,24 L189,76 Q186,88 160,88 L40,90 Q14,89 13,74Z" fill="#a28f72"/>`;
     for(let i=0;i<46;i++)g+=`<circle cx="${(10+hsh(i,7)*180).toFixed(1)}" cy="${(8+hsh(i,9)*84).toFixed(1)}" r="${(.5+hsh(i,3)*1.3).toFixed(1)}" fill="${hsh(i,5)<.5?'#8a7a60':'#b9a888'}"/>`;
     g+=`<path d="M8,40 L22,44 L30,41 M190,58 L176,62 L170,70 M120,95 L124,86" stroke="#5e5040" stroke-width="1" fill="none"/>`;}
@@ -954,6 +967,8 @@ function fossilArt(f,got,hl,slab=true){const parts=FOSPARTS[f.id](),BONE='#efe3c
     if(mode==='glow'){if(t==='L'&&o[3])return '';if(t==='L')return `<path d="${ln(o[1])}" stroke="#ffd56a" stroke-width="${o[2]+7}" stroke-linecap="round" fill="none" opacity=".55"/>`;
       if(t==='F'||t==='P')return `<path d="${o[1]}" fill="#ffd56a" stroke="#ffd56a" stroke-width="7" stroke-linejoin="round" opacity=".55"/>`;
       if(t==='E')return `<ellipse cx="${o[1]}" cy="${o[2]}" rx="${o[3]+3}" ry="${o[4]+3}" transform="rotate(${o[5]} ${o[1]} ${o[2]})" fill="#ffd56a" opacity=".55"/>`;return '';}
+    if(mode==='miss'&&mount&&t!=='P'){const GS='stroke="rgba(220,235,255,.4)" stroke-dasharray="3 2.4"';if(t==='L')return o[3]?'':`<path d="${ln(o[1])}" ${GS} stroke-width="${Math.max(1,o[2]*.5)}" stroke-linecap="round" fill="none"/>`;
+      if(t==='F')return `<path d="${o[1]}" fill="rgba(220,235,255,.05)" ${GS} stroke-width="1"/>`;if(t==='E')return `<ellipse cx="${o[1]}" cy="${o[2]}" rx="${o[3]}" ry="${o[4]}" transform="rotate(${o[5]} ${o[1]} ${o[2]})" fill="rgba(220,235,255,.05)" ${GS} stroke-width=".9"/>`;return '';}
     if(mode==='miss'){if(t==='L'&&o[3])return '';if(t==='L')return `<path d="${ln(o[1])}" stroke="${IMP}" stroke-width="${o[2]+.6}" stroke-linecap="round" fill="none" opacity=".55"/>`;
       if(t==='F')return `<path d="${o[1]}" fill="${IMP}" opacity=".55"/>`;
       if(t==='P')return `<path d="${o[1]}" fill="none" stroke="#e8dcc0" stroke-width="1.2" stroke-dasharray="3 2" opacity=".45"/>`;
@@ -1377,13 +1392,13 @@ function renderStore(){
       <div class="rgrid">${rs.map(x=>`<div class="rel ${hasRelic(x.id)?'':'no'}" style="--g:${hasRelic(x.id)?GR[S.relic[x.id]].c:'#26323a'}">${relicIcon(x,hasRelic(x.id))}${hasRelic(x.id)?gBadge(S.relic[x.id]):''}<span>${hasRelic(x.id)?x.n:'???'}</span></div>`).join('')}</div>
       <div class="eb"><span class="${lv>=1?'on':''}">3개 세트 · ${e.b(1*gm)}</span><span class="${lv>=2?'on':''}">4개 완성 · ${e.b(1.4*gm)}</span><span>등급 보너스 ×${gm.toFixed(2)} (평균 등급이 높을수록 최대 ×1.30)</span></div></div>`;}).join('');
   const fos=FOSSILS.map(f=>{const n=fosGot(f.id).length;return `<div class="fos ${n>=5?'done':''}">${fossilSVG(f)}<div class="fi"><div class="en">${f.n}</div><div class="ed">${f.where}</div><div class="fpn">${f.pn.map((x,i)=>`<span class="${fosGot(f.id).includes(i)?'on':''}">${x}</span>`).join('')}</div><div class="eb"><span class="${n>=5?'on':''}">복원 ${n}/5 · ${f.eff}</span></div></div></div>`;}).join('');
-  $('#storeList').innerHTML=`<h2 class="h3">본공 화석 복원</h2><p class="sub">본공이 지각(지표~35km)을 지나는 동안 화석 조각이 나옵니다. 조각 5개를 모으면 화석이 복원되고 효과가 생겨요.</p><div class="foss">${fos}</div>
+  $('#storeList').innerHTML=`<div class="galbtns"><button class="primary" type="button" data-gal="fos">화석관 열기</button><button class="ghost" type="button" data-gal="rel">유물관 열기</button></div><h2 class="h3">본공 화석 복원</h2><p class="sub">본공이 지각(지표~35km)을 지나는 동안 화석 조각이 나옵니다. 조각 5개를 모으면 화석이 복원되고 효과가 생겨요.</p><div class="foss">${fos}</div>
    <h2 class="h3" style="margin-top:22px">유물 도감</h2><p class="sub">원정에서 깊이 팔수록 더 오래된 시대가 나옵니다. 같은 시대 유물을 3개 모으면 드릴에 세트 효과가 붙어요. 더 높은 등급이 나오면 자동으로 바꾸고, 같거나 낮은 등급은 감정가에 팝니다. 발견 ${relicCount()}/${RELICS.length}</p>${eras}
    <h2 class="h3" style="margin-top:22px">창고</h2><p class="sub">본공 ${fmtD(S.depth)} · 보유 ${won(S.money)}</p>
    <div class="sect">육상 자원</div><div class="inv">${REG.filter(r=>r.t==='land').map(r=>item(r.res)).join('')}</div>
    <div class="sect">해상 자원</div><div class="inv">${REG.filter(r=>r.t==='sea').map(r=>item(r.res)).join('')}</div>
    <button class="reset" type="button" id="reset">진행 상황 초기화</button>`;}
-$('#storeList').addEventListener('click',e=>{const b=e.target.closest('#reset');if(!b)return;
+$('#storeList').addEventListener('click',e=>{const gb=e.target.closest('[data-gal]');if(gb){openGal(gb.dataset.gal);return;}const b=e.target.closest('#reset');if(!b)return;
   if(b.dataset.armed){resetGame();return;}
   b.dataset.armed='1';b.textContent='한 번 더 누르면 모든 진행이 지워집니다';});
 function renderFuels(){
@@ -2028,13 +2043,13 @@ document.querySelector('nav.tabs').addEventListener('click',e=>{const b=e.target
 // ---------------- my land (garden + house + interior) ----------------
 const LAND_SIZE=[3,4,5,6],LAND_COST=[0,20000,100000,400000];
 const LITEM=[
- {id:'house_s',n:'작은 집',p:3000,house:1,off:1},{id:'house_h',n:'한옥',p:15000,house:1,off:2},{id:'house_b',n:'2층 주택',p:60000,house:1,off:3},
+ {id:'house_s',n:'작은 집',p:3000,house:1,off:1},{id:'house_h',n:'한옥',p:15000,house:1,off:2},{id:'house_b',n:'2층 주택',p:60000,house:1,off:3},{id:'house_d',n:'단독 주택',p:150000,house:1,off:4},{id:'house_y',n:'양반 가옥',p:400000,house:1,off:5},
  {id:'tree',n:'소나무',p:200},{id:'cherry',n:'벚나무',p:500},{id:'flower',n:'꽃밭',p:150},{id:'veg',n:'텃밭',p:300},
- {id:'pond',n:'연못',p:800},{id:'cairn',n:'돌탑',p:400},{id:'bench',n:'벤치',p:250},{id:'lamp',n:'가로등',p:300},
+ {id:'pond',n:'연못',p:800},{id:'cairn',n:'돌탑',p:400},{id:'bench',n:'벤치',p:250},{id:'lamp',n:'가로등',p:300},{id:'fountain',n:'분수',p:2500},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800},
  {id:'monument',n:'드릴 기념비',p:5000},{id:'museum',n:'유물 전시관',p:10000}];
 const FURN=[
  {id:'rug',n:'러그',p:400},{id:'bed',n:'침대',p:800},{id:'desk',n:'책상',p:500},{id:'sofa',n:'소파',p:1200},{id:'tv',n:'TV',p:1500},
- {id:'shelf',n:'책장',p:700},{id:'plant',n:'화분',p:200},{id:'case',n:'유물 진열장',p:3000},{id:'frame',n:'화석 액자',p:2000}];
+ {id:'shelf',n:'책장',p:700},{id:'plant',n:'화분',p:200},{id:'case',n:'유물 진열장',p:3000},{id:'frame',n:'화석 액자',p:2000},{id:'tank',n:'어항',p:2500},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800}];
 const landOf=()=>{S.land=S.land||{lv:1,tiles:{},furn:{}};return S.land;};
 const landSize=()=>LAND_SIZE[landOf().lv-1];
 const houseTile=()=>Object.entries(landOf().tiles).find(([k,v])=>LITEM.find(x=>x.id===v)?.house);
@@ -2085,6 +2100,19 @@ function isoItem(id,cx,cy){let g='';
   case 'house_b':{g+=shadowE(cx,cy,26,11);const b=isoBox(cx,cy,.6,48,'#d6dde2');g+=b.svg;
     for(const v of[8,30])for(const [u0,u1] of [[.15,.4],[.6,.85]]){g+=facePoly(b,'l',u0,u1,v,v+10,'#9cd0ea',ISK);if(v>10||u0>.5)g+=facePoly(b,'r',u0,u1,v,v+10,'#9cd0ea',ISK);}
     g+=facePoly(b,'r',.15,.42,0,17,'#7a5a3c',ISK)+facePoly(b,'l',0,1,24,26,'#b8c2c8')+facePoly(b,'r',0,1,24,26,'#8a969c')+isoRoof(cx,cy,.6,48,16,'#3a5a9a',1.12);break;}
+  case 'house_d':{g+=shadowE(cx,cy,30,12);const b=isoBox(cx,cy,.7,30,'#f3f1ec');g+=b.svg+facePoly(b,'l',.1,.48,5,26,'#9cd0ea',ISK)+facePoly(b,'l',.29,.31,5,26,'#4a4f55')+facePoly(b,'r',.12,.38,0,20,'#a0703c',ISK)+facePoly(b,'r',.5,.88,12,24,'#9cd0ea',ISK)+facePoly(b,'l',.6,.92,0,10,'#6a6e74',ISK);
+    g+=isoBox(cx,cy-30,.78,3,'#4a4f55').svg;const u=isoBox(cx-5,cy-35,.42,16,'#e6e2da');g+=u.svg+facePoly(u,'l',.2,.8,4,12,'#9cd0ea',ISK)+facePoly(u,'r',.3,.7,4,12,'#9cd0ea',ISK)+isoBox(cx-5,cy-51,.48,3,'#4a4f55').svg
+      +`<rect x="${cx+16}" y="${cy-44}" width="5" height="10" fill="#9a5a3a" ${ISK}/>`;break;}
+  case 'house_y':{g+=shadowE(cx,cy,34,14);g+=isoBox(cx,cy,.9,7,'#a8a29a').svg+isoBox(cx,cy-7,.84,2,'#8f8a80').svg;const b=isoBox(cx,cy-9,.7,24,'#f3e8d0');g+=b.svg;
+    for(const u of[.06,.36,.64,.94]){g+=facePoly(b,'l',u-.03,u+.03,0,24,'#6a4a2c');g+=facePoly(b,'r',u-.03,u+.03,0,24,'#6a4a2c');}
+    for(const [u0,u1] of[[.1,.32],[.4,.6],[.68,.9]]){g+=facePoly(b,'r',u0,u1,2,18,'#e8d8b0',ISK);g+=facePoly(b,'r',u0+.1,u0+.12,2,18,'#8a6a44');}
+    g+=facePoly(b,'l',.1,.9,14,19,'#6a4a2c')+facePoly(b,'l',.12,.88,2,13,'#c9a67a',ISK);
+    const f=foot(cx,cy-9,.7*1.5),hh=24,L=up(f.L,hh),R2=up(f.R,hh),T=up(f.T,hh),B=up(f.B,hh);g+=isoRoof(cx,cy-9,.7,24,20,'#33333c',1.5)
+      +`<path d="M${L[0]+2},${L[1]-1} q-4,-1 -5,-6 M${R2[0]-2},${R2[1]-1} q4,-1 5,-6" stroke="#1e1e24" stroke-width="2.6" fill="none" stroke-linecap="round"/>`
+      +[.2,.4,.6,.8].map(t=>{const a=[L[0]+(B[0]-L[0])*t,L[1]+(B[1]-L[1])*t];return `<path d="M${a[0]},${a[1]} L${(a[0]*.55+cx*.45).toFixed(1)},${(a[1]*.55+(cy-53)*.45).toFixed(1)}" stroke="#4a4a54" stroke-width="1"/>`;}).join('')
+      +`<path d="M${cx-14},${cy-53} Q${cx},${cy-56} ${cx+14},${cy-53}" stroke="#1e1e24" stroke-width="3" fill="none"/><circle cx="${cx+20}" cy="${cy-12}" r="3.4" fill="#f2c14e" ${ISK}/><path d="M${cx+20},${cy-16} v-6" stroke="#2b211c"/>`;break;}
+  case 'fountain':g+=fountainArt(cx,cy);break;
+  case 'dog':case 'cat':g+=shadowE(cx,cy,13,5)+petArt(id,cx-2,cy+2,.95);break;
   case 'tree':{g+=shadowE(cx,cy,14,6)+`<rect x="${cx-2.5}" y="${cy-12}" width="5" height="12" fill="#7a5a3c" ${ISK}/>`;
     for(const [w,y0,h] of [[16,-12,16],[13,-22,15],[9,-31,13]]){const tY=cy+y0-h;g+=`<polygon points="${PT([[cx,tY],[cx-w,cy+y0],[cx,cy+y0+3]])}" fill="#3f8a4a" ${ISK}/><polygon points="${PT([[cx,tY],[cx+w,cy+y0],[cx,cy+y0+3]])}" fill="#2a6233" ${ISK}/>`;}break;}
   case 'cherry':{g+=shadowE(cx,cy,16,7)+`<path d="M${cx},${cy} V${cy-16} M${cx},${cy-10} l-6,-6 M${cx},${cy-12} l5,-7" stroke="#7a5a3c" stroke-width="4" stroke-linecap="round"/>`;
@@ -2141,7 +2169,7 @@ function renderLand(){const L0=landOf(),n=landSize(),hb=houseBonus();
      <div class="lbtns">${nx?`<button class="ghost sm" type="button" id="landBuy" ${S.money>=nx?'':'disabled'}>땅 넓히기 ${won(nx)}</button>`:''}<button class="ghost sm ${landDel?'on':''}" type="button" id="landDel">${landDel?'철거 중':'철거'}</button></div></div>
    <div class="lgrid-wrap">${landSVG()}</div>
    ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
-     :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
+     :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${pk.id==='museum'?B('lpGal','전시관 들어가기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
    <p class="sub" style="margin:0">${msg}</p>
    <div class="lpal">${LITEM.map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${isoIcon(i.id)}<span>${i.n}</span><em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;}
 function removeTile(k){const L0=landOf(),it=LITEM.find(i=>i.id===L0.tiles[k]);if(!it)return;S.money+=Math.floor(it.p/2);delete L0.tiles[k];delete landRot()[k];save();toast(it.n+' 철거 · '+won(it.p/2)+' 환급');}
@@ -2152,6 +2180,7 @@ $('#landView').addEventListener('click',e=>{const L0=landOf();
   if(e.target.closest('#lpFlip')){if(landPick==='me'){const m=landMe();m.f=m.f?0:1;}else{const R=landRot();if(R[landPick])delete R[landPick];else R[landPick]=1;}save();renderLand();return;}
   if(e.target.closest('#lpDel')){removeTile(landPick);landPick=null;renderLand();return;}
   if(e.target.closest('#lpRoom')){landPick=null;openRoom();renderLand();return;}
+  if(e.target.closest('#lpGal')){openGal('fos');return;}
   const p=e.target.closest('[data-it]');if(p){landSel=landSel===p.dataset.it?null:p.dataset.it;landDel=false;landPick=null;renderLand();return;}
   if(e.target.closest('.mech')){if(landDel)return;landSel=null;landPick=landPick==='me'?null:'me';renderLand();return;}
   const t=e.target.closest('.it.own,.ii');if(!t)return;const k=t.dataset.xy,cur=L0.tiles[k];
@@ -2165,11 +2194,13 @@ $('#landView').addEventListener('click',e=>{const L0=landOf();
   S.money-=it.p;L0.tiles[k]=it.id;landMe();save();renderLand();});
 
 // ---------------- interior (grid placement) ----------------
-const FDEF={rug:{w:3,d:2,flat:1},bed:{w:2,d:3},sofa:{w:2,d:1},desk:{w:2,d:1},tv:{w:2,d:1},shelf:{w:1,d:1},plant:{w:1,d:1},case:{w:1,d:2},frame:{wall:1}};
+const FDEF={rug:{w:3,d:2,flat:1},bed:{w:2,d:3},sofa:{w:2,d:1},desk:{w:2,d:1},tv:{w:2,d:1},shelf:{w:1,d:1},plant:{w:1,d:1},case:{w:1,d:2},frame:{wall:1},tank:{w:2,d:1},dog:{w:1,d:1},cat:{w:1,d:1}};
 const FDEFPOS={rug:[2,2],bed:[0,3],sofa:[2,4],desk:[4,0],tv:[2,0],shelf:[5,2],plant:[1,0],case:[0,0],frame:[3.5,0]};
 let roomPick=null,roomFloor=0;
-const twoF=()=>houseTile()?.[1]==='house_b';
-const stairR=()=>{const L0=landOf();if(!L0.stair)L0.stair={x:5,y:4,r:0};return L0.stair;};
+const ROOMN={house_s:5,house_h:6,house_b:6,house_d:7,house_y:8},RN=()=>ROOMN[houseTile()?.[1]]||6;
+const FRMAX=wl=>wl?Math.max(0,RN()-4.5):RN()-1.8;
+const twoF=()=>['house_b','house_d'].includes(houseTile()?.[1]);
+const stairR=()=>{const L0=landOf();if(!L0.stair){const N=RN();L0.stair={x:N-1,y:N-2,r:0};}return L0.stair;};
 const stDims=r=>r%2?[2,1]:[1,2];
 function stKeys(x,y,r){const st=stairR();if(x==null){x=st.x;y=st.y;r=st.r;}const [w,d]=stDims(r),k=[];for(let i=0;i<w;i++)for(let j=0;j<d;j++)k.push((x+i)+','+(y+j));return k;}
 const flMap=()=>{const L0=landOf();L0.fl=L0.fl||{};return L0.fl;},flOf=id=>id==='me'?meR().fl:id==='stair'?roomFloor:(flMap()[id]||0);
@@ -2180,20 +2211,21 @@ const dims=(id,r)=>{const D=FDEF[id];return r%2?[D.d,D.w]:[D.w,D.d];};
 const meR=()=>{const L0=landOf();if(!L0.me2)L0.me2={x:3,y:5,f:0,fl:0};if(!twoF())L0.me2.fl=0;return L0.me2;};
 function occ(except){const o={},pos=roomPos();if(twoF()&&except!=='stair')for(const k of stKeys())o[k]='stairs';
   for(const id in pos){if(id===except||!pos[id]||!FDEF[id]||FDEF[id].flat||FDEF[id].wall||flOf(id)!==roomFloor)continue;const [x,y,r]=pos[id],[w,d]=dims(id,r||0);for(let i=0;i<w;i++)for(let j=0;j<d;j++)o[(x+i)+','+(y+j)]=id;}return o;}
-function fits(id,x,y,r=rotOf(id)){const [w,d]=dims(id,r);if(x<0||y<0||x+w>6||y+d>6)return false;
+function fits(id,x,y,r=rotOf(id)){const [w,d]=dims(id,r);if(x<0||y<0||x+w>RN()||y+d>RN())return false;
   const o=FDEF[id].flat?(twoF()?Object.fromEntries(stKeys().map(k=>[k,1])):{}):occ(id);
   for(let i=0;i<w;i++)for(let j=0;j<d;j++)if(o[(x+i)+','+(y+j)])return false;return true;}
 function freeSpot(id,r=0){if(FDEF[id].wall)return [3.5,0];const d=FDEFPOS[id];if(d&&fits(id,d[0],d[1],r))return [d[0],d[1],r];
-  for(let y=0;y<6;y++)for(let x=0;x<6;x++)if(fits(id,x,y,r))return [x,y,r];return null;}
-function stairFits(x,y,r){const [w,d]=stDims(r);if(x<0||y<0||x+w>6||y+d>6)return false;const ks=stKeys(x,y,r),rf=roomFloor,pos=roomPos();let ok=true;
+  for(let y=0;y<RN();y++)for(let x=0;x<RN();x++)if(fits(id,x,y,r))return [x,y,r];return null;}
+function stairFits(x,y,r){const [w,d]=stDims(r);if(x<0||y<0||x+w>RN()||y+d>RN())return false;const ks=stKeys(x,y,r),rf=roomFloor,pos=roomPos();let ok=true;
   for(const fl of [0,1]){roomFloor=fl;const o=occ('stair');if(pos.rug&&flOf('rug')===fl){const [rx,ry,rr]=pos.rug,[rw,rd]=dims('rug',rr||0);for(let i=0;i<rw;i++)for(let j=0;j<rd;j++)o[(rx+i)+','+(ry+j)]=1;}
     if(ks.some(k=>o[k]))ok=false;}roomFloor=rf;return ok;}
-function nearSpot(id,x0,y0,r){let best=null,bd=1e9;for(let y=0;y<6;y++)for(let x=0;x<6;x++)if(fits(id,x,y,r)){const dd=Math.abs(x-x0)+Math.abs(y-y0);if(dd<bd){bd=dd;best=[x,y,r];}}return best;}
-function meSpot(){const m=meR(),o=occ();if(!o[m.x+','+m.y])return m;for(let y=5;y>=0;y--)for(let x=5;x>=0;x--)if(!o[x+','+y]){m.x=x;m.y=y;return m;}return m;}
+function nearSpot(id,x0,y0,r){let best=null,bd=1e9;for(let y=0;y<RN();y++)for(let x=0;x<RN();x++)if(fits(id,x,y,r)){const dd=Math.abs(x-x0)+Math.abs(y-y0);if(dd<bd){bd=dd;best=[x,y,r];}}return best;}
+function meSpot(){const m=meR(),o=occ();if(!o[m.x+','+m.y]&&m.x<RN()&&m.y<RN())return m;for(let y=RN()-1;y>=0;y--)for(let x=RN()-1;x>=0;x--)if(!o[x+','+y]){m.x=x;m.y=y;return m;}return m;}
 function ensurePos(){const f=landOf().furn,pos=roomPos();
-  if(pos.frame&&pos.frame.length<2)pos.frame=[pos.frame[0],0];
+  if(pos.frame&&pos.frame.length<2)pos.frame=[pos.frame[0],0];if(pos.frame)pos.frame[0]=Math.min(pos.frame[0],FRMAX(pos.frame[1]));
   if(!twoF()){roomFloor=0;for(const id in flMap()){setFl(id,0);if(pos[id]&&!FDEF[id].wall)pos[id]=freeSpot(id,rotOf(id));}}
-  else{const rf=roomFloor;for(const id in pos){if(!pos[id]||!FDEF[id]||FDEF[id].wall)continue;roomFloor=flOf(id);if(!fits(id,pos[id][0],pos[id][1]))pos[id]=freeSpot(id,rotOf(id));}roomFloor=rf;}
+  else{const st=stairR();if(!stairFits(st.x,st.y,st.r)){let done=0;for(let y=RN()-1;y>=0&&!done;y--)for(let x=RN()-1;x>=0&&!done;x--)for(const r of[0,1])if(!done&&stairFits(x,y,r)){st.x=x;st.y=y;st.r=r;done=1;}}
+    const rf=roomFloor;for(const id in pos){if(!pos[id]||!FDEF[id]||FDEF[id].wall)continue;roomFloor=flOf(id);if(!fits(id,pos[id][0],pos[id][1]))pos[id]=freeSpot(id,rotOf(id));}roomFloor=rf;}
   for(const id in f)if(f[id]&&!(id in pos))pos[id]=freeSpot(id);}
 // furniture model in local units: u = width (0..w), v = depth (0..d, v=d is the front), z/h in px
 const FB=(u0,v0,u1,v1,z,h,c,o)=>({b:[u0,v0,u1,v1,z,h],c,o:o||{}});
@@ -2206,6 +2238,8 @@ function partsOf(id){switch(id){
   case 'tv':return [FB(.06,.36,1.94,.96,0,10,'#7a5a3c'),FB(.9,.56,1.1,.66,10,4,'#2a2a2a'),FB(.12,.48,1.88,.58,14,30,'#1c2226',{f:'#1d5a76'}),FB(.3,.7,.7,.9,10,3,'#c94a2a')];
   case 'shelf':{const L=[FB(.05,.05,.95,.15,0,54,'#8a603a'),FB(.05,.15,.15,.93,0,54,'#a0703c'),FB(.85,.15,.95,.93,0,54,'#a0703c'),FB(.05,.05,.95,.93,54,3,'#a0703c')];
     for(const z of[0,18,36]){L.push(FB(.15,.15,.85,.9,z,2,'#a0703c'));BOOKS.forEach((c,i)=>L.push(FB(.18+i*.16,.24,.3+i*.16,.74,z+2,13-(i%2)*3,c)));}return L;}
+  case 'tank':return [FB(.04,.18,1.96,.88,0,18,'#5a4632'),FB(.1,.26,1.9,.8,18,3,'#d8c49a'),{fish:[.2,1.8,.53,23]},{b:[.08,.24,1.92,.82,18,28],glass:1,water:1}];
+  case 'dog':case 'cat':return [{pet:id}];
   case 'plant':return [FB(.28,.28,.72,.72,0,12,'#c97a4a'),{puff:[.5,.5,20]}];
   case 'case':{const L=[FB(.08,.08,.92,1.92,0,10,'#7a5a3c')];RELICS.filter(r=>hasRelic(r.id)).slice(0,3).forEach((r,i)=>L.push({icon:[.5,.42+i*.56,10],r}));
     L.push({b:[.08,.08,.92,1.92,10,30],glass:1},FB(.06,.06,.94,1.94,40,3,'#7a5a3c'));return L;}
@@ -2224,29 +2258,29 @@ function isoSort(L){const n=L.length,pre=L.map(()=>0),nx=L.map(()=>[]);
     if(k<0)for(let i=0;i<n;i++)if(!done[i]&&(k<0||key(L[i])<key(L[k])))k=i;
     done[k]=true;out.push(L[k]);for(const j of nx[k])pre[j]--;}return out;}
 function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()?.[1]||'house_s';
-  const WL={house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee'}[h],FL={house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a'}[h];
-  const TX=160,TY=66,U=24,V=12,WH=78;
-  const P=(x,y,z=0)=>[TX+(x-y)*U,TY+(x+y)*V-z];
+  const WL={house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee',house_d:'#f2efe8',house_y:'#f1e6cc'}[h],FL={house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a',house_d:'#b98a5a',house_y:'#a87a4a'}[h];
+  const N=RN(),SC=6/N,TX=160,TY=66+(N>6?(N-6)*5:0),U=24*SC,V=12*SC,WH=78,HN=h==='house_h'||h==='house_y';
+  const P=(x,y,z=0)=>[TX+(x-y)*U,TY+(x+y)*V-z*SC];
   const poly=(pts,col,ex='')=>`<polygon points="${PT(pts)}" fill="${col}" ${ISK} ${ex}/>`;
   const wbox=(x0,y0,x1,y1,z0,hh,cy,cx,ct,ex='')=>{const z1=z0+hh;return poly([P(x0,y1,z0),P(x1,y1,z0),P(x1,y1,z1),P(x0,y1,z1)],cy,ex)+poly([P(x1,y0,z0),P(x1,y1,z0),P(x1,y1,z1),P(x1,y0,z1)],cx,ex)+poly([P(x0,y0,z1),P(x1,y0,z1),P(x1,y1,z1),P(x0,y1,z1)],ct,ex);};
   const wallR=(x0,x1,z0,z1,col,ex='')=>poly([P(x0,0,z0),P(x1,0,z0),P(x1,0,z1),P(x0,0,z1)],col,ex);
   const wallL=(y0,y1,z0,z1,col,ex='')=>poly([P(0,y0,z0),P(0,y1,z0),P(0,y1,z1),P(0,y0,z1)],col,ex);
   let g=`<rect width="320" height="240" fill="#141b1e"/>`;
-  g+=poly([P(0,0),P(6,0),P(6,6),P(0,6)],FL);
-  for(let i=1;i<6;i++)g+=`<path d="M${P(i,0)[0]},${P(i,0)[1]} L${P(i,6)[0]},${P(i,6)[1]}" stroke="${shade(FL,-.15)}" stroke-width="1"/>`;
-  g+=poly([P(0,6),P(6,6),P(6,6,-8),P(0,6,-8)],shade(FL,-.25))+poly([P(6,0),P(6,6),P(6,6,-8),P(6,0,-8)],shade(FL,-.38));
-  g+=poly([P(0,0),P(0,6),P(0,6,WH),P(0,0,WH)],shade(WL,.02))+poly([P(0,0),P(6,0),P(6,0,WH),P(0,0,WH)],shade(WL,-.12));
-  g+=wallL(0,6,0,5,shade(WL,-.35))+wallR(0,6,0,5,shade(WL,-.42));
-  if(h==='house_h'){for(const t of[0,2,4,6]){g+=wallL(t-.08,t+.08,0,WH,'#7a5a3c');g+=wallR(t-.08,t+.08,0,WH,'#7a5a3c');}g+=wallL(0,6,WH-8,WH,'#7a5a3c')+wallR(0,6,WH-8,WH,'#7a5a3c');
+  g+=poly([P(0,0),P(N,0),P(N,N),P(0,N)],FL);
+  for(let i=1;i<N;i++)g+=`<path d="M${P(i,0)[0]},${P(i,0)[1]} L${P(i,N)[0]},${P(i,N)[1]}" stroke="${shade(FL,-.15)}" stroke-width="1"/>`;
+  g+=poly([P(0,N),P(N,N),P(N,N,-8),P(0,N,-8)],shade(FL,-.25))+poly([P(N,0),P(N,N),P(N,N,-8),P(N,0,-8)],shade(FL,-.38));
+  g+=poly([P(0,0),P(0,N),P(0,N,WH),P(0,0,WH)],shade(WL,.02))+poly([P(0,0),P(N,0),P(N,0,WH),P(0,0,WH)],shade(WL,-.12));
+  g+=wallL(0,N,0,5,shade(WL,-.35))+wallR(0,N,0,5,shade(WL,-.42));
+  if(HN){for(let t=0;t<=N;t+=2){g+=wallL(t-.08,t+.08,0,WH,'#7a5a3c');g+=wallR(t-.08,t+.08,0,WH,'#7a5a3c');}g+=wallL(0,N,WH-8,WH,'#7a5a3c')+wallR(0,N,WH-8,WH,'#7a5a3c');
     for(let i=0;i<4;i++)for(let j=0;j<3;j++)g+=wallL(2.3+i*.4,2.6+i*.4,20+j*14,32+j*14,'#fbf6ea');}
-  g+=wallR(3.4,5,30,62,'#7a5a3c')+wallR(3.55,4.85,34,58,'#9ccde6')+wallR(4.17,4.23,34,58,'#7a5a3c')+wallR(3.55,4.85,45,47,'#7a5a3c');
+  {const d=N-6;g+=wallR(3.4+d,5+d,30,62,'#7a5a3c')+wallR(3.55+d,4.85+d,34,58,'#9ccde6')+wallR(4.17+d,4.23+d,34,58,'#7a5a3c')+wallR(3.55+d,4.85+d,45,47,'#7a5a3c');}
   // clickable floor tiles (+ highlight targets when something is picked)
   const o0=occ();
-  for(let y=0;y<6;y++)for(let x=0;x<6;x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&!FDEF[roomPick].wall&&fits(roomPick,x,y);
+  for(let y=0;y<RN();y++)for(let x=0;x<RN();x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&!FDEF[roomPick].wall&&fits(roomPick,x,y);
     g+=`<polygon class="ft" data-g="${x},${y}" points="${PT([P(x,y),P(x+1,y),P(x+1,y+1),P(x,y+1)])}" fill="${ok?'rgba(154,216,110,.45)':'rgba(0,0,0,0)'}" stroke="${ok?'rgba(255,255,255,.5)':'rgba(0,0,0,.06)'}" stroke-width="1"/>`;}
   // wall frame (left wall along y, or right wall along x)
-  if(f.frame&&pos.frame&&flOf('frame')===roomFloor){const [t,wl]=pos.frame,fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],W=wl?wallR:wallL,c=wl?P(t+.9,0,47):P(0,t+.9,47);
-    g+=`<g class="fu" data-fu="frame">${W(t,t+1.8,34,60,roomPick==='frame'?'#ffd56a':'#a0703c')+W(t+.12,t+1.68,37,57,'#f4ece0')}<g transform="translate(${c[0]-16},${c[1]-(wl?24:8)}) skewY(${wl?26.6:-26.6}) scale(.16)">${fossilArt(fo,fosGot(fo.id),-1,false)}</g></g>`;}
+  if(f.frame&&pos.frame&&flOf('frame')===roomFloor){const [t,wl]=pos.frame,fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],W=wl?wallR:wallL,c=wl?P(t+.9,0,47):P(0,t+.9,47),fs=16*SC;
+    g+=`<g class="fu" data-fu="frame">${W(t,t+1.8,34,60,roomPick==='frame'?'#ffd56a':'#a0703c')+W(t+.12,t+1.68,37,57,'#f4ece0')}<g transform="translate(${c[0]-fs},${c[1]-(wl?24:8)*SC}) skewY(${wl?26.6:-26.6}) scale(${(.16*SC).toFixed(3)})">${fossilArt(fo,fosGot(fo.id),-1,false)}</g></g>`;}
   // collect primitives with world bounding boxes, then depth-sort them all together
   const L=[];
   const add=(bb,svg,cls)=>L.push(Object.assign(bb,{svg,cls}));
@@ -2256,11 +2290,17 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
     for(const p of partsOf(id)){
       if(p.b){const [u0,v0,u1,v1,z0,hh]=p.b,a=rotP(u0,v0,D.w,D.d,r),b=rotP(u1,v1,D.w,D.d,r);
         const bb={x0:x+Math.min(a[0],b[0]),x1:x+Math.max(a[0],b[0]),y0:y+Math.min(a[1],b[1]),y1:y+Math.max(a[1],b[1]),z0,z1:z0+hh,glass:p.glass};
-        const svg=p.glass?wbox(bb.x0,bb.y0,bb.x1,bb.y1,z0,hh,'rgba(190,230,245,.28)','rgba(160,210,230,.32)','rgba(220,245,255,.22)','stroke-opacity=".5"')
+        const svg=p.water?wbox(bb.x0,bb.y0,bb.x1,bb.y1,z0,hh,'rgba(70,160,220,.36)','rgba(50,130,190,.42)','rgba(150,215,245,.4)','stroke-opacity=".55"'):p.glass?wbox(bb.x0,bb.y0,bb.x1,bb.y1,z0,hh,'rgba(190,230,245,.28)','rgba(160,210,230,.32)','rgba(220,245,255,.22)','stroke-opacity=".5"')
           :wbox(bb.x0,bb.y0,bb.x1,bb.y1,z0,hh,p.o[FACEY[r]]||shade(p.c,-.04),p.o[FACEX[r]]||shade(p.c,-.26),p.o.t||shade(p.c,.14));
         add(bb,svg,cls);}
-      else if(p.puff){const [u,v,z]=p.puff,q=rotP(u,v,D.w,D.d,r);add({x0:x+q[0]-.2,x1:x+q[0]+.2,y0:y+q[1]-.2,y1:y+q[1]+.2,z0:z-8,z1:z+14},puffs3(P(x+q[0],y+q[1],z)),cls);}
-      else if(p.icon){const [u,v,z]=p.icon,q=rotP(u,v,D.w,D.d,r),s=P(x+q[0],y+q[1],z);add({x0:x+q[0]-.15,x1:x+q[0]+.15,y0:y+q[1]-.15,y1:y+q[1]+.15,z0:z,z1:z+12},`<g transform="translate(${s[0]-6},${s[1]-12}) scale(.3)">${relicIcon(p.r,true,40).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g>`,cls);}
+      else if(p.fish){const [u0,u1,v,z]=p.fish,A=rotP(u0,v,D.w,D.d,r),Bq=rotP(u1,v,D.w,D.d,r),pa=P(x+A[0],y+A[1],z+8),pb=P(x+Bq[0],y+Bq[1],z+8),dx=pb[0]-pa[0],dy=pb[1]-pa[1];
+        const fish=(col,dur,off,dz,sc2)=>`<g><animateTransform attributeName="transform" type="translate" values="${pa[0]},${pa[1]-dz};${pb[0]},${pb[1]-dz};${pa[0]},${pa[1]-dz}" dur="${dur}s" begin="${off}s" repeatCount="indefinite"/><g><animateTransform attributeName="transform" type="scale" values="${dx>=0?1:-1} 1;${dx>=0?-1:1} 1" keyTimes="0;.5" calcMode="discrete" dur="${dur}s" begin="${off}s" repeatCount="indefinite"/><g transform="scale(${sc2})"><path d="M-6,0 Q-1,-4 4,0 Q-1,4 -6,0Z M-6,0 L-10,-3 L-10,3Z" fill="${col}" stroke="#2b211c" stroke-width=".6"/><circle cx="2" cy="-.6" r=".7" fill="#111"/></g></g></g>`;
+        const bub=(bx,by,dl)=>`<circle cx="${bx}" cy="${by}" r="1.2" fill="none" stroke="#e8f8ff" stroke-width=".7"><animate attributeName="cy" values="${by};${by-18*SC}" dur="2.2s" begin="${dl}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="2.2s" begin="${dl}s" repeatCount="indefinite"/></circle>`;
+        const wx=pa[0]+dx*.15,wy=pa[1]+dy*.15,weed=`<path d="M${wx},${wy+6*SC} q-3,-6 0,-12 q3,-6 0,-11" stroke="#3f9a50" stroke-width="2" fill="none"><animateTransform attributeName="transform" type="skewX" values="-6;6;-6" dur="3s" repeatCount="indefinite"/></path>`;
+        add({x0:x+Math.min(A[0],Bq[0])-.05,x1:x+Math.max(A[0],Bq[0])+.05,y0:y+Math.min(A[1],Bq[1])-.05,y1:y+Math.max(A[1],Bq[1])+.05,z0:z,z1:z+14},weed+fish('#ff8a3a',6,0,0,SC)+fish('#ffd56a',8.5,-3,5*SC,.8*SC)+fish('#4fc3f7',7,-5,-4*SC,.7*SC)+bub(pa[0]+dx*.7,pa[1]+dy*.7,0)+bub(pa[0]+dx*.4,pa[1]+dy*.4,1.1),cls);}
+      else if(p.pet){const c2=P(x+.5,y+.5);add({x0:x+.2,x1:x+.8,y0:y+.2,y1:y+.8,z0:0,z1:34},`<ellipse cx="${c2[0]}" cy="${c2[1]}" rx="${11*SC}" ry="${4.5*SC}" fill="rgba(0,0,0,.25)"/>`+petArt(p.pet,c2[0]-2*SC,c2[1]+2*SC,.95*SC),cls);}
+      else if(p.puff){const [u,v,z]=p.puff,q=rotP(u,v,D.w,D.d,r);add({x0:x+q[0]-.2,x1:x+q[0]+.2,y0:y+q[1]-.2,y1:y+q[1]+.2,z0:z-8,z1:z+14},puffs3(P(x+q[0],y+q[1],z),SC),cls);}
+      else if(p.icon){const [u,v,z]=p.icon,q=rotP(u,v,D.w,D.d,r),s=P(x+q[0],y+q[1],z);add({x0:x+q[0]-.15,x1:x+q[0]+.15,y0:y+q[1]-.15,y1:y+q[1]+.15,z0:z,z1:z+12},`<g transform="translate(${s[0]-6*SC},${s[1]-12*SC}) scale(${(.3*SC).toFixed(3)})">${relicIcon(p.r,true,40).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g>`,cls);}
     }}
   if(twoF()){const sc='class="stair"',st=stairR(),SB=(u0,v0,u1,v1)=>{const A=rotP(u0,v0,1,2,st.r),B2=rotP(u1,v1,1,2,st.r);return [st.x+Math.min(A[0],B2[0]),st.y+Math.min(A[1],B2[1]),st.x+Math.max(A[0],B2[0]),st.y+Math.max(A[1],B2[1])];};
     const sb=(u0,v0,u1,v1,z0,hh,cy,cx,ct)=>{const [x0,y0,x1,y1]=SB(u0,v0,u1,v1);add({x0,y0,x1,y1,z0,z1:z0+hh},wbox(x0,y0,x1,y1,z0,hh,cy,cx,ct),sc);};
@@ -2274,11 +2314,11 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
   }
   const me=meR();if(me.fl===roomFloor){const m=meSpot(),c=P(m.x+.5,m.y+.5);
     if(roomPick==='me')add({x0:m.x,x1:m.x+1,y0:m.y,y1:m.y+1,z0:0,z1:.9},poly([P(m.x,m.y,.8),P(m.x+1,m.y,.8),P(m.x+1,m.y+1,.8),P(m.x,m.y+1,.8)],'rgba(255,213,106,.35)','stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"'),'class="mech"');
-    add({x0:m.x+.3,x1:m.x+.7,y0:m.y+.3,y1:m.y+.7,z0:1,z1:70},fig(ME(),c[0],c[1]+4,70,{expr:'happy',flip:!!m.f}),'class="mech"');}
+    add({x0:m.x+.3,x1:m.x+.7,y0:m.y+.3,y1:m.y+.7,z0:1,z1:70},fig(ME(),c[0],c[1]+4,70*SC,{expr:'happy',flip:!!m.f}),'class="mech"');}
   let out=isoSort(L).map(p=>`<g ${p.cls}>${p.svg}</g>`).join('');
   if(twoF()){const st=stairR(),q=rotP(.5,roomFloor?1:2.45,1,2,st.r),lb=P(st.x+q[0],st.y+q[1],roomFloor?-6:-4);out+=`<text class="stairlb" style="cursor:pointer" x="${lb[0]}" y="${lb[1]}" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" stroke="#000" stroke-width="2.4" paint-order="stroke">${roomFloor?'▼ 1층':'▲ 2층'}</text>`;}
   return `<svg viewBox="0 0 320 240" role="img" aria-label="집 안 ${roomFloor+1}층">${g}${out}</svg>`;}
-function puffs3(p){return [[-7,0,'#4f9a50'],[7,-1,'#5fb05f'],[0,-8,'#6abf6a']].map(([dx,dy,c])=>`<circle cx="${p[0]+dx}" cy="${p[1]+dy}" r="7" fill="${c}" ${ISK}/>`).join('');}
+function puffs3(p,k=1){return [[-7,0,'#4f9a50'],[7,-1,'#5fb05f'],[0,-8,'#6abf6a']].map(([dx,dy,c])=>`<circle cx="${p[0]+dx*k}" cy="${p[1]+dy*k}" r="${7*k}" fill="${c}" ${ISK}/>`).join('');}
 function openRoom(){roomPick=null;roomFloor=0;renderRoom();$('#room').hidden=false;}
 function renderRoom(){const f=landOf().furn,pos=(ensurePos(),roomPos());$('#roomArt').innerHTML=roomSVG();
   const TF=twoF(),B=(a,t)=>`<button class="ghost sm" type="button" data-rb="${a}">${t}</button>`,mv=TF?B('mv',roomFloor?'1층으로':'2층으로'):'';
@@ -2297,11 +2337,11 @@ $('#roomArt').addEventListener('click',e=>{
   if(e.target.closest('.mech')){roomPick=roomPick==='me'?null:'me';renderRoom();return;}
   const fu=e.target.closest('.fu');if(fu){roomPick=roomPick===fu.dataset.fu?null:fu.dataset.fu;renderRoom();return;}
   const t=e.target.closest('.ft');if(!t||!roomPick)return;const [x,y]=t.dataset.g.split(',').map(Number);
-  if(roomPick==='stair'){const st=stairR(),[w,d]=stDims(st.r),cx=Math.min(Math.max(0,x),6-w),cy=Math.min(Math.max(0,y),6-d);
+  if(roomPick==='stair'){const st=stairR(),[w,d]=stDims(st.r),cx=Math.min(Math.max(0,x),RN()-w),cy=Math.min(Math.max(0,y),RN()-d);
     if(!stairFits(cx,cy,st.r)){toast('1층이나 2층 가구와 겹쳐요. 밝은 칸을 골라 주세요');return;}st.x=cx;st.y=cy;save();renderRoom();return;}
   if(roomPick==='me'){if(occ()[x+','+y]){toast('가구가 있는 칸이에요. 밝은 칸을 골라 주세요');return;}const m=meR();m.x=x;m.y=y;save();renderRoom();return;}
   if(FDEF[roomPick].wall)return;const r=rotOf(roomPick),[w,d]=dims(roomPick,r);
-  const cx=Math.min(Math.max(0,x),6-w),cy=Math.min(Math.max(0,y),6-d);
+  const cx=Math.min(Math.max(0,x),RN()-w),cy=Math.min(Math.max(0,y),RN()-d);
   if(!fits(roomPick,cx,cy,r)){toast('다른 가구와 겹쳐요. 밝은 칸을 골라 주세요');return;}
   roomPos()[roomPick]=[cx,cy,r];save();renderRoom();});
 $('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]');if(!b||!roomPick)return;const pos=roomPos(),a=b.dataset.rb,id=roomPick;
@@ -2309,7 +2349,7 @@ $('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]')
   else if(id==='stair'){const st=stairR();
     if(a==='go')roomFloor=1-roomFloor;
     else if(a==='rot'){const nr=(st.r+1)%4;let sp=stairFits(st.x,st.y,nr)?[st.x,st.y]:null;
-      if(!sp){let bd=1e9;for(let y=0;y<6;y++)for(let x=0;x<6;x++)if(stairFits(x,y,nr)){const dd=Math.abs(x-st.x)+Math.abs(y-st.y);if(dd<bd){bd=dd;sp=[x,y];}}}
+      if(!sp){let bd=1e9;for(let y=0;y<RN();y++)for(let x=0;x<RN();x++)if(stairFits(x,y,nr)){const dd=Math.abs(x-st.x)+Math.abs(y-st.y);if(dd<bd){bd=dd;sp=[x,y];}}}
       if(sp){st.x=sp[0];st.y=sp[1];st.r=nr;}else toast('회전할 공간이 없어요. 주변 가구를 옮겨 주세요');}}
   else if(id==='me'){const m=meR();if(a==='flip')m.f=m.f?0:1;
     else if(a==='mv'){const to=1-roomFloor;roomFloor=to;m.fl=to;meSpot();}}
@@ -2317,9 +2357,9 @@ $('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]')
     if(!sp){setFl(id,old);roomFloor=from;toast((to+1)+'층에 놓을 자리가 없어요');}else{pos[id]=sp;toast(FURN.find(x=>x.id===id).n+' → '+(to+1)+'층');}}
   else if(a==='store'){pos[id]=null;toast(FURN.find(x=>x.id===id).n+' 보관');roomPick=null;}
   else if(a==='rot'&&pos[id]){
-    if(FDEF[id].wall){const [t,wl]=pos[id];pos[id]=[Math.min(t,wl?4.2:1.5),wl?0:1];}
+    if(FDEF[id].wall){const [t,wl]=pos[id];pos[id]=[Math.min(t,FRMAX(wl?0:1)),wl?0:1];}
     else{const [x,y,r]=pos[id],nr=((r||0)+1)%4,sp=fits(id,x,y,nr)?[x,y,nr]:nearSpot(id,x,y,nr);if(sp)pos[id]=sp;else toast('회전할 공간이 없어요. 주변 가구를 옮겨 주세요');}}
-  else if((a==='left'||a==='right')&&pos[id]){const [t,wl]=pos[id];pos[id]=[Math.max(0,Math.min(wl?1.5:4.2,t+(a==='left'?-.6:.6)*(wl?-1:1))),wl];}
+  else if((a==='left'||a==='right')&&pos[id]){const [t,wl]=pos[id];pos[id]=[Math.max(0,Math.min(FRMAX(wl),t+(a==='left'?-.6:.6)*(wl?-1:1))),wl];}
   save();renderRoom();});
 $('#roomList').addEventListener('click',e=>{const b=e.target.closest('[data-fu]');if(!b)return;const f=landOf().furn,pos=roomPos(),i=FURN.find(x=>x.id===b.dataset.fu);
   if(!f[i.id]){if(S.money<i.p){toast('자금이 부족해요');return;}const sp=freeSpot(i.id);if(!sp){toast('놓을 자리가 없어요. 가구를 보관하거나 옮겨 주세요');return;}S.money-=i.p;f[i.id]=1;setFl(i.id,roomFloor);pos[i.id]=sp;roomPick=i.id;save();toast(i.n+' 배치 · 원하는 칸을 눌러 옮길 수 있어요');renderRoom();return;}
@@ -2327,6 +2367,57 @@ $('#roomList').addEventListener('click',e=>{const b=e.target.closest('[data-fu]'
   if(flOf(i.id)!==roomFloor){roomFloor=flOf(i.id);roomPick=i.id;renderRoom();return;}
   roomPick=roomPick===i.id?null:i.id;renderRoom();});
 $('#roomClose').addEventListener('click',()=>{roomPick=null;$('#room').hidden=true;});
+
+// ---------------- pets / animated land art ----------------
+function petArt(kind,x,y,k=1){const O='stroke="#2b211c" stroke-width="1.3" stroke-linejoin="round"';let g='';
+  if(kind==='dog'){const c='#d98a3a',w='#fff4e6';
+    g=`<g><path d="M-13,-15 q-9,-5 -5,-14 q5,3 3,11" fill="${c}" ${O}><animateTransform attributeName="transform" type="rotate" values="-10 -13 -15;14 -13 -15;-10 -13 -15" dur=".55s" repeatCount="indefinite"/></path>
+      <rect x="-12" y="-8" width="4" height="8" rx="1.5" fill="${c}" ${O}/><rect x="-5" y="-8" width="4" height="8" rx="1.5" fill="${c}" ${O}/><rect x="3" y="-8" width="4" height="8" rx="1.5" fill="${c}" ${O}/><rect x="9" y="-8" width="4" height="8" rx="1.5" fill="${c}" ${O}/>
+      <ellipse cx="-1" cy="-12" rx="15" ry="8.5" fill="${c}" ${O}/><ellipse cx="3" cy="-9" rx="8" ry="4" fill="${w}"/>
+      <g><animateTransform attributeName="transform" type="translate" values="0 0;0 -1.4;0 0" dur="1.3s" repeatCount="indefinite"/>
+      <path d="M5,-29 L7,-38 L12,-31Z M15,-31 L19,-38 L20,-29Z" fill="${c}" ${O}/><circle cx="13" cy="-24" r="9" fill="${c}" ${O}/><ellipse cx="18" cy="-20.5" rx="6" ry="4.2" fill="${w}" ${O}/><circle cx="23.2" cy="-21.6" r="1.6" fill="#2b211c"/>
+      <circle cx="14.5" cy="-26" r="1.5" fill="#2b211c"/><path d="M18,-17.6 q2,1.6 4,0" stroke="#2b211c" stroke-width="1" fill="none"/><ellipse cx="10" cy="-21" rx="2" ry="1.2" fill="#f2a39a" opacity=".8"/></g></g>`;}
+  else{const c='#a8a8b4',d='#6e6e7a',w='#f4f4f6';
+    g=`<g><path d="M8,-3 q12,0 11,-12" stroke="${d}" stroke-width="4.4" fill="none" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" values="0 8 -3;-16 8 -3;0 8 -3" dur="1.8s" repeatCount="indefinite"/></path>
+      <ellipse cx="0" cy="-12" rx="10" ry="12" fill="${c}" ${O}/><ellipse cx="0" cy="-9" rx="5.5" ry="7" fill="${w}"/><path d="M-6,-20 q3,-1.5 6,0 M-8,-15 q4,-1.5 8,0" stroke="${d}" stroke-width="1.4" fill="none"/>
+      <rect x="-6" y="-4" width="4" height="4" rx="1.5" fill="${w}" ${O}/><rect x="2" y="-4" width="4" height="4" rx="1.5" fill="${w}" ${O}/>
+      <g><animateTransform attributeName="transform" type="rotate" values="0 0 -24;-6 0 -24;0 0 -24;0 0 -24" dur="3s" repeatCount="indefinite"/>
+      <path d="M-8,-30 L-8,-41 L-2,-35Z M8,-30 L8,-41 L2,-35Z" fill="${c}" ${O}/><circle cx="0" cy="-29" r="9" fill="${c}" ${O}/><path d="M-3,-36 l1,3 M0,-37 v3 M3,-36 l-1,3" stroke="${d}" stroke-width="1.2"/>
+      <ellipse cx="-3.4" cy="-29" rx="1.4" ry="2" fill="#3a7a3a"/><ellipse cx="3.4" cy="-29" rx="1.4" ry="2" fill="#3a7a3a"/><path d="M-1,-25.4 l1,1 l1,-1" fill="#f2a39a" stroke="#2b211c" stroke-width=".6"/>
+      <path d="M-10,-26 h-5 M-10,-24 l-5,1 M10,-26 h5 M10,-24 l5,1" stroke="#2b211c" stroke-width=".6"/></g></g>`;}
+  return `<g transform="translate(${x},${y}) scale(${k})">${g}</g>`;}
+function fountainArt(cx,cy){const st='#b8b3aa',sd='#8f8a80',wt='#4fa3d9',O=ISK;let g=shadowE(cx,cy,26,11);
+  g+=`<path d="M${cx-25},${cy-7} v7 a25,12.5 0 0 0 50,0 v-7Z" fill="${sd}" ${O}/><ellipse cx="${cx}" cy="${cy-7}" rx="25" ry="12.5" fill="${st}" ${O}/><ellipse cx="${cx}" cy="${cy-7}" rx="21" ry="10" fill="${wt}"/>`;
+  for(const dl of[0,.8])g+=`<ellipse cx="${cx}" cy="${cy-7}" rx="4" ry="2" fill="none" stroke="#d8f2ff" stroke-width="1.2"><animate attributeName="rx" values="4;19" dur="1.6s" begin="${dl}s" repeatCount="indefinite"/><animate attributeName="ry" values="2;9" dur="1.6s" begin="${dl}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;0" dur="1.6s" begin="${dl}s" repeatCount="indefinite"/></ellipse>`;
+  g+=`<rect x="${cx-3}" y="${cy-30}" width="6" height="23" fill="${sd}" ${O}/><path d="M${cx-11},${cy-31} q11,9 22,0Z" fill="${st}" ${O}/><ellipse cx="${cx}" cy="${cy-31}" rx="11" ry="4" fill="${st}" ${O}/><ellipse cx="${cx}" cy="${cy-31}" rx="8.5" ry="2.8" fill="${wt}"/><rect x="${cx-1.6}" y="${cy-40}" width="3.2" height="9" fill="${sd}" ${O}/>`;
+  for(const [dx,ex,ey] of[[-1,-15,-9],[1,15,-9],[-1,-8,-4],[1,8,-4]])g+=`<path d="M${cx},${cy-40} Q${cx+dx*9},${cy-52} ${cx+ex},${cy+ey}" stroke="#d8f2ff" stroke-width="2" fill="none" stroke-dasharray="4 3" stroke-linecap="round"><animate attributeName="stroke-dashoffset" values="14;0" dur=".7s" repeatCount="indefinite"/></path>`;
+  g+=`<circle cx="${cx}" cy="${cy-42}" r="2.4" fill="#eaf8ff"><animate attributeName="r" values="1.6;3;1.6" dur=".5s" repeatCount="indefinite"/></circle>`;
+  return g;}
+// ---------------- exhibition hall ----------------
+const MOUNT={kcera:[[90,46],[132,48]],kano:[[88,46],[118,38]],puk:[[70,48],[108,44],[148,22]],cavebear:[[60,40],[124,34]]};
+const TRACE={haenam:1,goseong:1,ura:1};
+let galTab='fos';
+function fossilExhibit(f){const u='bx'+(++UID),got=fosGot(f.id),n=got.length;let art;
+  const bg=`<defs><linearGradient id="${u}" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#fdf6e2"/><stop offset=".6" stop-color="#ecdcb6"/><stop offset="1" stop-color="#cdb486"/></linearGradient>
+    <radialGradient id="${u}s" cx=".5" cy="0" r=".9"><stop offset="0" stop-color="rgba(255,240,205,.32)"/><stop offset="1" stop-color="rgba(255,240,205,0)"/></radialGradient></defs>
+    <rect width="240" height="150" fill="#232b30"/><path d="M0,0 H240 V128 H0Z" fill="url(#${u}s)"/><rect y="128" width="240" height="22" fill="#3a3430"/><path d="M0,128 H240" stroke="#5a5048" stroke-width="2"/>`;
+  if(TRACE[f.id]){art=`<path d="M40,132 L70,92 M200,132 L170,92" stroke="#2a2a2e" stroke-width="5"/><g transform="translate(26,26) scale(.94)">${fossilArt(f,got,-1,true)}</g><path d="M30,120 H210" stroke="#1a1a1e" stroke-width="3"/>`;}
+  else if(f.id==='eggnest'){art=`<path d="M36,128 V116 H204 V128Z" fill="#4a423c" stroke="#1a140f" stroke-width="1.5"/><path d="M40,116 H200 L196,112 H44Z" fill="#6a5e54"/><g transform="translate(12,34)">${fossilArt(f,got,-1,false,u)}</g>
+      <path d="M50,114 Q50,40 120,38 Q190,40 190,114" fill="rgba(200,230,245,.12)" stroke="rgba(220,240,255,.55)" stroke-width="1.6"/><path d="M62,104 Q62,54 104,46" stroke="rgba(255,255,255,.45)" stroke-width="2.4" fill="none"/>`;}
+  else{const rods=(MOUNT[f.id]||[]).map(([x,y])=>`<path d="M${x+20},${y+18} V${112}" stroke="#55595e" stroke-width="2.2"/><circle cx="${x+20}" cy="${y+18}" r="2" fill="#6a6e74"/>`).join('');
+    art=`<path d="M14,128 V116 H226 V128Z" fill="#4a423c" stroke="#1a140f" stroke-width="1.5"/><path d="M14,116 H226 L220,111 H20Z" fill="#6a5e54" stroke="#1a140f" stroke-width="1"/>${rods}<g transform="translate(20,18)">${fossilArt(f,got,-1,false,u)}</g>`;}
+  return `<div class="gx"><svg viewBox="0 0 240 150" aria-label="${f.n} 전시">${bg}${art}</svg>
+    <div class="gpl"><b>${f.n}</b><span>${f.where}</span><div class="fpn">${f.pn.map((x,i)=>`<span class="${got.includes(i)?'on':''}">${x}</span>`).join('')}</div><em class="${n>=5?'ok':''}">${n>=5?'복원 완료 · '+f.eff:`복원 중 ${n}/5 · 빈 곳은 아직 못 찾은 부위예요`}</em></div></div>`;}
+function relicCase(r){const h=hasRelic(r.id),g=h?S.relic[r.id]:-1;
+  return `<div class="vit ${h?'':'no'}" style="--g:${h?GR[g].c:'#3a4650'}"><div class="vglass">${relicIcon(r,h,74)}</div><div class="vped"><b>${h?r.n:'미발굴'}</b>${h?gBadge(g):'<span class="vq">?</span>'}</div></div>`;}
+function renderGal(){const nf=FOSSILS.filter(f=>fosDone(f.id)).length;
+  $('#galTab').innerHTML=[['fos','화석관'],['rel','유물관']].map(([k,t])=>`<button type="button" class="${galTab===k?'on':''}" data-gt="${k}">${t}</button>`).join('');
+  if(galTab==='fos')$('#galBody').innerHTML=`<p class="sub" style="margin:0">찾은 뼈로 골격을 세워 전시해요. 비어 있는 부분은 아직 못 찾은 부위예요. 복원 완료 ${nf}/${FOSSILS.length}</p><div class="gxs">${FOSSILS.map(fossilExhibit).join('')}</div>`;
+  else $('#galBody').innerHTML=`<p class="sub" style="margin:0">원정에서 발굴한 유물을 시대별 진열장에 전시해요. 발굴 ${relicCount()}/${RELICS.length}</p>`+ERAS.map(e=>{const rs=relicsOf(e.id),n=setCount(e.id);
+    return `<div class="vera"><div class="vhd"><b>${e.n}</b><span>${n}/${rs.length}${setLv(e.id)?' · 세트 효과 '+e.b(setPow(e.id)):''}</span></div><div class="vrow">${rs.map(relicCase).join('')}</div></div>`;}).join('');}
+function openGal(t){if(t)galTab=t;renderGal();$('#gal').hidden=false;$('#gal .dsheet').scrollTop=0;}
+$('#galTab').addEventListener('click',e=>{const b=e.target.closest('[data-gt]');if(!b)return;galTab=b.dataset.gt;renderGal();$('#gal .dsheet').scrollTop=0;});
+$('#galClose').addEventListener('click',()=>{$('#gal').hidden=true;});
 
 // ---------------- menu / reset ----------------
 function resetGame(){try{localStorage.removeItem(KEY)}catch(_){}S=fresh();save();
