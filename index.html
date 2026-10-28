@@ -118,7 +118,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .sect{font-size:11px;letter-spacing:.08em;color:var(--mute);margin:18px 0 8px}
 .reset{margin-top:22px;font-size:12px;color:var(--mute);text-decoration:underline}
 
-nav.tabs{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);background:var(--panel);
+nav.tabs{display:grid;grid-template-columns:repeat(8,1fr);border-top:1px solid var(--line);background:var(--panel);
   padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
 nav.tabs button{height:54px;font-size:13px;font-weight:600;color:var(--mute);position:relative}
 nav.tabs button[aria-current="page"]{color:var(--amber)}
@@ -360,6 +360,11 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .foss{display:grid;gap:10px;margin-bottom:6px}
 .fos{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--panel)}
 .fos.done{border-color:var(--amber)}
+.shseg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 10px}.shseg button{height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--mute);font-weight:700}.shseg button.on{background:var(--amber);color:#1a1206;border-color:var(--amber)}
+.shlist{display:grid;gap:8px}.shrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel)}
+.shrow.lock{opacity:.5}.shn{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:6px}.shn b{font-size:15px}.shn span{grid-column:1/-1;font-size:11.5px;color:var(--mute)}
+.shp{font-size:12px;color:var(--mute);align-self:center;text-align:right}.shp b{color:var(--fg);font-family:var(--f-num)}
+.shq{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.shq button{display:grid;gap:1px;height:auto;padding:6px 4px;font-weight:700}.shq em{font-style:normal;font-size:10.5px;font-family:var(--f-num);opacity:.85}
 .galbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}.galbtns.lock button{opacity:.6}
 .fpn{display:flex;flex-wrap:wrap;gap:3px;margin:4px 0}.fpn span{font-size:10.5px;padding:1px 6px;border-radius:999px;border:1px dashed var(--line);color:var(--mute)}.fpn span.on{border-style:solid;border-color:#c9b48a;color:#efe3c6;background:rgba(239,227,198,.08)}
 .fos svg{width:130px;height:auto;background:#0e1315;border-radius:8px}
@@ -463,6 +468,7 @@ nav.tabs button{font-size:12px}
     </div>
   </section>
   <section class="view" id="v-store" hidden><div class="scroll" id="storeList"></div></section>
+  <section class="view" id="v-shop" hidden><div class="scroll" id="shopList"></div></section>
   <section class="view" id="v-invest" hidden><div class="scroll" id="investList"></div></section>
   <section class="view" id="v-land" hidden><div class="scroll" id="landView"></div></section>
 
@@ -472,6 +478,7 @@ nav.tabs button{font-size:12px}
     <button type="button" data-tab="exp">원정<i class="badge cool" id="expBadge" hidden></i></button>
     <button type="button" data-tab="craft">제작</button>
     <button type="button" data-tab="store">창고</button>
+    <button type="button" data-tab="shop">상점</button>
     <button type="button" data-tab="invest">투자<i class="badge" id="invBadge" hidden></i></button>
     <button type="button" data-tab="land">내 땅</button>
   </nav>
@@ -1010,7 +1017,7 @@ const CHEST={cash:{c:'#8a5a3a',lid:'#6a4128',n:'현금 뭉치'},coin:{c:'#7a6a4a
 function chestSVG(t){const C=CHEST[t];return `<svg viewBox="0 0 40 34" aria-hidden="true"><rect x="3" y="14" width="34" height="18" rx="2" fill="${C.c}" stroke="#2b211c" stroke-width="2"/><path d="M3,15 Q3,4 20,4 Q37,4 37,15Z" fill="${C.lid}" stroke="#2b211c" stroke-width="2"/><rect x="17" y="13" width="6" height="7" rx="1" fill="#f2c14e" stroke="#2b211c" stroke-width="1.4"/><path d="M8,20 V30 M32,20 V30" stroke="rgba(0,0,0,.25)" stroke-width="2"/></svg>`;}
 function incomePerSec(){const l=layerAt(S.depth);return gateAt()?0:boreDps()/l.H*l.v*(perk('tuber')?1.2:1)*(1+.15*setPow('joseon'))*(fosDone('kano')?1.2:1);}
 function spawnChest(){const d=S.depth,r=Math.random();
-  const t=d<15000?(r<.7?'cash':r<.95?'coin':'gold'):d<35000?(r<.45?'coin':r<.9?'supply':'gold'):(r<.88?'supply':'gold');
+  const t=d<15000?(r<.55?'cash':r<.75?'coin':r<.95?'supply':'gold'):d<35000?(r<.45?'coin':r<.9?'supply':'gold'):(r<.88?'supply':'gold');
   chest={t,until:30};const b=$('#chest');b.innerHTML=chestSVG(t)+`<span class="cbar"><i id="cbarI"></i></span>`;
   b.style.left=(30+Math.random()*48)+'%';b.style.top=(62+Math.random()*12)+'%';b.setAttribute('aria-label',CHEST[t].n+' 열기');
   pushAlert({kind:'chest',icon:chestSVG(t),title:`본공 지하 ${fmtD(S.depth)}에서 ${CHEST[t].n} 발견!`,text:'30초 안에 열지 않으면 다시 묻혀요.',btn:'열기'});}
@@ -1033,7 +1040,8 @@ function openChest(){if(!chest)return;const t=chest.t;chest=null;$('#chest').hid
   if(t==='cash')money=Math.round(Math.min(cap,Math.max(80,ips*60)));
   if(t==='coin')money=Math.round(Math.min(cap*1.2,Math.max(120,ips*90)));
   if(t==='gold')money=Math.round(Math.min(cap*2,Math.max(250,ips*150)));
-  if(t==='supply'){money=Math.round(ips*60);const pool=REG.filter(isUnl);for(let i=0;i<2;i++){const r=pool[Math.floor(Math.random()*pool.length)];res.push([r.res,20+Math.floor(S.depth/20000)]);}}
+  if(t==='supply'){money=Math.round(ips*60);const pool=[...new Set(REG.filter(isUnl).map(x=>x.res))].sort(()=>Math.random()-.5),k=2+(Math.random()<.4?1:0);
+    for(const rs of pool.slice(0,k)){const ps=PARTS.filter(q=>q.res===rs||q.sub===rs),lv=ps.length?Math.min(...ps.map(q=>Math.min(L(q.id),9))):Math.min(9,Math.floor(S.dl/5));res.push([rs,Math.max(20,Math.round(RESC[lv]*(.25+Math.random()*.2)))]);}}
   const v=NEWS[t][Math.floor(Math.random()*NEWS[t].length)](d);
   $('#nHead').textContent=v[0];$('#nBody').textContent=v[1];$('#nTime').textContent=new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
   $('#nArt').innerHTML=chestSVG(t);
@@ -1231,7 +1239,7 @@ function addRelic(rl,vis,belowM){S.relic=S.relic||{};const g=rollGrade(belowM||0
   if(vis)popQ.push({rl,g,cur,sold,msg});else if(g>=4||cur<0)toast(`${cur<0?'유물 발견':'등급 상승'}: ${GR[g].n} ${rl.n}`);}
 function expBreak(r,vis){const g=digOf(r.id),below=belowOf(r,g.i);
   if(r.t==='land'&&PEAK[r.id][1]-g.i*BLK>0&&PEAK[r.id][1]-(g.i+1)*BLK<=0)toast(r.n+' 해수면 도달 · 이제부터 땅속으로 계속 내려갑니다');
-  if(below>=0){const wp=r.t==='sea'?setPow('wreck'):0,amt=2+Math.floor(below*BLK/1500)+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.25?1:0)+(r.t==='sea'?(perk('sea')?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
+  if(below>=0){const wp=r.t==='sea'?setPow('wreck'):0,amt=Math.max(2,Math.round(2*Math.pow(expHP(r,g.i)/(100*r.diff),.55)))+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.25?1:0)+(r.t==='sea'?(perk('sea')?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
     S.res[r.res]=(S.res[r.res]||0)+amt;const m=Math.round(5*r.diff*(1+.15*setPow('joseon')));S.money+=m;
     if(vis&&!expPopped){ex.pop('+'+amt+' '+r.res,RES[r.res]);expPopped=1;}
     S.st.exp++;if(r.t==='sea')S.st.sea++;
@@ -2036,9 +2044,9 @@ $('#wBuy').addEventListener('click',e=>{if(!e.target.closest('#wBuyBtn')||!wTry)
 // ---------------- tabs ----------------
 let hudCache='';
 function show(v){view=v;
-  for(const id of ['map','bore','craft','store','invest','land'])$('#v-'+id).hidden=id!==v;
+  for(const id of ['map','bore','craft','store','shop','invest','land'])$('#v-'+id).hidden=id!==v;
   document.querySelectorAll('nav.tabs button').forEach(b=>{if(b.dataset.tab===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
-  if(v==='map')updateMap();if(v==='craft')renderCraft();if(v==='store')renderStore();if(v==='invest')renderInvest();if(v==='land')renderLand();if(v==='bore'){hudCache='';}}
+  if(v==='map')updateMap();if(v==='craft')renderCraft();if(v==='store')renderStore();if(v==='invest')renderInvest();if(v==='shop')renderShop();if(v==='land')renderLand();if(v==='bore'){hudCache='';}}
 document.querySelector('nav.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;
   if(b.dataset.tab!=='exp'&&exp){exp=null;$('#exp').hidden=true;}
   if(b.dataset.tab==='exp'){if(exp)return;if(S.ex.active){const r=regById(S.ex.active);openExp(r);startHere();}else{show('map');toast('진행 중인 원정이 없어요. 지도에서 산이나 바다를 눌러 시작하세요');}return;}
@@ -2491,6 +2499,31 @@ function openGal(t){if(!hasMuseum()){toast('내 땅에 유물 전시관을 먼�
 $('#galTab').addEventListener('click',e=>{const b=e.target.closest('[data-gt]');if(!b)return;galTab=b.dataset.gt;renderGal();$('#gal .dsheet').scrollTop=0;});
 $('#galClose').addEventListener('click',()=>{$('#gal').hidden=true;});
 
+// ---------------- material shop ----------------
+// balance knobs: base value per unit, buy = base x SHOP_BUY, sell = base x SHOP_SELL (3 : 1), all scale with drill level
+// unit value follows what one unit is "worth" for the part it upgrades (part money cost / material need at that level),
+// so the shop stays expensive at every stage. SHOP_BUY: buying a level's materials costs ~8x that level's money cost; SHOP_SELL: sell = buy / 9.
+const SHOP_BUY=8,SHOP_SELL=9,SHOP_LV=.04,SHOP_DEMAND=.05; // demand: +5% per 100 bought today (resets daily)
+const resBase=k=>{const r=REG.find(x=>x.res===k),ps=PARTS.filter(q=>q.res===k||q.sub===k),lv=ps.length?Math.min(...ps.map(q=>Math.min(L(q.id),9))):Math.min(9,Math.floor(S.dl/5));
+  return MONC[lv]/RESC[lv]*Math.pow(r?r.diff:1,.25);};
+const shopMul=()=>1+SHOP_LV*(S.dl-1);
+const shopDay=()=>{const d=new Date().toISOString().slice(0,10);if(!S.shopDay||S.shopDay.d!==d)S.shopDay={d,b:{}};return S.shopDay;};
+const demand=k=>1+SHOP_DEMAND*(shopDay().b[k]||0)/100;
+const buyP=k=>Math.round(resBase(k)*SHOP_BUY*shopMul()*demand(k)),sellP=k=>Math.max(1,Math.round(resBase(k)*SHOP_BUY*shopMul()/SHOP_SELL));
+let shopMode='buy';
+function renderShop(){const list=[...new Set(REG.map(r=>r.res))],QB=[10,100,1000];
+  const row=k=>{const r=REG.find(x=>x.res===k),u=isUnl(r),n=have(k),p=shopMode==='buy'?buyP(k):sellP(k),uses=PARTS.filter(q=>q.res===k||q.sub===k).map(q=>q.n);const f=FUEL.find(x=>x.res===k);if(f)uses.push('부스터 연료');
+    if(!u)return `<div class="shrow lock"><div class="shn">${ric(k)}<b>${k}</b><span>${r.n} 해금 후 판매</span></div></div>`;
+    const btn=q=>{const ok=shopMode==='buy'?S.money>=p*q:n>=q;return `<button class="${shopMode==='buy'?'primary':'ghost'} sm" type="button" data-sh="${k}" data-q="${q}" ${ok?'':'disabled'}>${shopMode==='buy'?'+':'-'}${q.toLocaleString('ko-KR')}<em>${won(p*q)}</em></button>`;};
+    return `<div class="shrow"><div class="shn">${ric(k)}<b>${k}</b><span>보유 ${n.toLocaleString('ko-KR')} · ${uses.join(', ')||'-'}</span></div><div class="shp">개당 <b>${won(p)}</b>${shopMode==='buy'&&demand(k)>1?`<br><small>수요 +${Math.round((demand(k)-1)*100)}%</small>`:''}</div><div class="shq">${QB.map(btn).join('')}</div></div>`;};
+  $('#shopList').innerHTML=`<h2 class="h3">재료 상점</h2><p class="sub">원정에서 해금한 지역의 재료를 원화로 사고팔 수 있어요. 재료 값은 그 재료로 강화하는 부품 레벨에 맞춰 오르고, 팔 때는 살 때의 약 1/9 값이에요. 같은 재료를 하루에 많이 살수록 100개마다 5%씩 비싸져요(자정에 초기화). 보유 ${won(S.money)}</p>
+    <div class="shseg"><button type="button" class="${shopMode==='buy'?'on':''}" data-sm="buy">사기</button><button type="button" class="${shopMode==='sell'?'on':''}" data-sm="sell">팔기</button></div>
+    <div class="shlist">${list.map(row).join('')}</div>`;}
+$('#shopList').addEventListener('click',e=>{const m=e.target.closest('[data-sm]');if(m){shopMode=m.dataset.sm;renderShop();return;}
+  const b=e.target.closest('[data-sh]');if(!b||b.disabled)return;const k=b.dataset.sh,q=+b.dataset.q;
+  if(shopMode==='buy'){const c=buyP(k)*q;if(S.money<c)return;S.money-=c;S.res[k]=(S.res[k]||0)+q;const sd=shopDay();sd.b[k]=(sd.b[k]||0)+q;toast(`${k} ${q}개 구매 · ${won(c)}`);}
+  else{if(have(k)<q)return;const g=sellP(k)*q;S.res[k]-=q;S.money+=g;toast(`${k} ${q}개 판매 · +${won(g)}`);}
+  save();renderShop();});
 // ---------------- menu / reset ----------------
 function resetGame(){try{localStorage.removeItem(KEY)}catch(_){}S=fresh();save();
   exp=null;for(const id of ['exp','ward','deal','menu','story','room'])$('#'+id).hidden=true;
@@ -2514,6 +2547,7 @@ $('#tReset').addEventListener('click',e=>armReset(e.currentTarget));
 let mapInfoKey='',liveKey='',liveT=0,pressing=false;
 addEventListener('pointerdown',()=>pressing=true,true);addEventListener('pointerup',()=>setTimeout(()=>pressing=false,60),true);addEventListener('pointercancel',()=>pressing=false,true);
 function liveRefresh(dt){liveT-=dt;if(liveT>0||pressing)return;liveT=.4;
+  if(view==='shop'){const k='shop'+Math.floor(S.money)+JSON.stringify(S.res);if(k!==liveKey){liveKey=k;renderShop();}return;}
   if(view!=='craft'&&view!=='store'&&view!=='land')return;
   const key=view+JSON.stringify(S.res)+Math.floor(S.money/(view==='store'?1:10))+JSON.stringify(S.parts)+S.dl+relicCount();if(key===liveKey)return;liveKey=key;
   if(view==='craft')renderCraft(true);else if(view==='store')renderStore();else landAfford();}
