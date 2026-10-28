@@ -820,7 +820,7 @@ class Shaft{
       c.strokeStyle=`rgba(255,${220+Math.floor(fr*30)},160,${.6+fr*.4})`;c.lineWidth=3*w;c.stroke();}
     c.restore();}
   burst(col){const W=this.W,H=this.H,y=this.tipY+6;this.lb=performance.now();this.flash=1.2;this.kick=Math.max(this.kick,.3);
-    const st=this.cv.parentElement;if(st&&!matchMedia('(prefers-reduced-motion: reduce)').matches){st.classList.remove('shake');void st.offsetWidth;st.classList.add('shake');}
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&this.lb-(this.ls||0)>1200){this.shk=.45;this.ls=this.lb;}
     this.chunks=(this.chunks||[]).slice(-14);
     for(let i=0;i<8;i++){const big=i<3,sz=big?30+Math.random()*16:14+Math.random()*12,nv=6+Math.floor(Math.random()*3),pts=Array.from({length:nv},(_,j)=>{const an=j/nv*Math.PI*2,rr=sz*(.65+Math.random()*.45);return [Math.cos(an)*rr,Math.sin(an)*rr];});
       const dir=i%2?1:-1;this.chunks.push({x:W/2+dir*(10+Math.random()*30),y:y-6,vx:dir*(140+Math.random()*(big?260:420)),vy:-(big?320:380)-Math.random()*320,r:0,vr:(Math.random()-.5)*(big?5:9),pts,col:shade(col,(Math.random()-.5)*.3),l:big?2:1.5,big});}
@@ -839,6 +839,7 @@ class Shaft{
     if(b.label){c.fillStyle=b.warn?'#ffb3a0':'rgba(255,250,240,.75)';c.font="500 11px 'IBM Plex Mono',monospace";c.fillText(b.label,this.labelX||12,y+16);}
   }
   draw(dt,st){if(!this.size())return;const c=this.c,W=this.W,H=this.H,bh=this.bh();c.setTransform(this.d,0,0,this.d,0,0);
+    if(this.shk>0){this.shk=Math.max(0,this.shk-dt);const a=(this.mild?4:8)*this.shk/.45;c.fillStyle=this.bg||'#0b0f10';c.fillRect(0,0,W,H);c.setTransform(this.d,0,0,this.d,Math.sin(this.shk*70)*a*this.d,Math.cos(this.shk*55)*a*.5*this.d);}
     this.scroll*=Math.pow(.002,dt);if(this.scroll<.5)this.scroll=0;
     const P=levels(),k=Math.max(1,Math.min(1.75,H/430,W/230)),DD=drillDims(P,k);
     const blockTop=Math.round(H*.58);this.tipY=blockTop;
@@ -878,7 +879,7 @@ function expBlock(abs){if(!exp||abs<0)return{sky:true};const r=exp.r;
   if(r.t==='sea'&&abs<r.water)return{water:true,label:altText(r,abs)};
   const below=belowOf(r,abs),e=eraAt(r,below),start=below===e.from||(r.t==='sea'&&below===WB);
   return{c:shade(r.rock,-Math.min(.45,below*.004)),ore:RES[r.res],res:r.res,label:altText(r,abs)+(start?' · '+eraAt(r,below).n+' 지층':''),warn:start};}
-const ex=new Shaft($('#eCv'),expBlock);ex.bg='#1c1712';ex.hole='#2e2218';ex.strata=true;ex.lamp=true;
+const ex=new Shaft($('#eCv'),expBlock);ex.bg='#1c1712';ex.mild=1;ex.hole='#2e2218';ex.strata=true;ex.lamp=true;
 
 // ---------------- fossils (bore, crust only) ----------------
 const FOSSILS=[
@@ -1727,10 +1728,20 @@ function pixelChar(c,o={}){
   for(const key in G){const [x,y]=key.split(',').map(Number);
     for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=PXW||ny>=PXH)continue;if(!G[nx+','+ny])add.push(nx+','+ny);}}
   for(const key of add)G[key]='#2b211c';
+  // soft pixel shading: light rim on top/left edges, shadow on right/bottom edges (skip eyes and tiny details)
+  const OUTC='#2b211c',KEEP={'#2b211c':1,'#1a1412':1,'#fff':1,'#ffffff':1},isO=(x,y)=>G[x+','+y]===OUTC||!G[x+','+y],sh2={};
+  for(const key in G){const col=G[key];if(KEEP[col]||col[0]!=='#'||col.length!==7)continue;const [x,y]=key.split(',').map(Number);
+    const same=[[1,0],[-1,0],[0,1],[0,-1]].filter(([dx,dy])=>G[(x+dx)+','+(y+dy)]===col).length;if(same<2)continue;
+    if(isO(x+1,y)||isO(x,y+1))sh2[key]=shade(col,-.16);else if(isO(x,y-1)||isO(x-1,y))sh2[key]=shade(col,.13);}
+  Object.assign(G,sh2);
+  // light rim so the sprite reads on dark backgrounds
+  const rim=[];for(const key in G){if(G[key]!==OUTC)continue;const [x,y]=key.split(',').map(Number);
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=PXW||ny>=PXH)continue;if(!G[nx+','+ny])rim.push(nx+','+ny);}}
+  for(const key of rim)G[key]='rgba(255,244,222,.38)';
   const by={};for(const key in G)(by[G[key]]=by[G[key]]||[]).push(key);
   let s='';for(const col in by)s+=`<path d="${by[col].map(key=>{const [x,y]=key.split(',');return `M${x} ${y}h1v1h-1z`;}).join('')}" fill="${col}"/>`;
-  const g=`<g transform="translate(${PXOX.toFixed(2)},${PXOY.toFixed(2)}) scale(${PXS})" shape-rendering="crispEdges">${s}</g>`;
-  return o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g;
+  const g=`<g transform="translate(${PXOX.toFixed(2)},${PXOY.toFixed(2)}) scale(${PXS})" shape-rendering="crispEdges">${s}</g>`,sd=o.noShadow?'':`<ellipse cx="50" cy="170" rx="34" ry="5.5" fill="rgba(0,0,0,.3)"/>`;
+  return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);
 }
 
 const charG=(c,o)=>pixelChar(c,o||{});
