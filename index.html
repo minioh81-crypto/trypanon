@@ -334,7 +334,12 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .lg span{font-size:9px;font-family:var(--f-num);color:rgba(255,255,255,.85);text-shadow:0 1px 2px rgba(0,0,0,.7)}
 .lg.lock{filter:brightness(.5) saturate(.6)}
 .lg.cur{box-shadow:inset 0 0 0 2px #fff}
-.lmark{position:absolute;left:-2px;right:-2px;height:3px;background:#fff;box-shadow:0 0 8px #fff;transform:translateY(-1px)}
+.lmark{position:absolute;left:-2px;right:-2px;height:3px;background:#fff;box-shadow:0 0 8px #fff;transform:translateY(-1px);z-index:2}
+.lmark .lptr{position:absolute;right:-19px;top:50%;width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-right:14px solid #ffd56a;transform:translateY(-50%);filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));animation:lptr 1s ease-in-out infinite}
+@keyframes lptr{50%{right:-24px}}
+.lmark em{position:absolute;left:calc(100% + 24px);top:50%;transform:translateY(-50%);font-style:normal;font-family:var(--f-num);font-size:10px;font-weight:700;color:#1a1206;background:#ffd56a;border-radius:6px;padding:1px 5px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.6)}
+.lgauge{overflow:visible!important}.lgauge .lg:first-child{border-radius:8px 8px 0 0}.lgauge .lg:last-child{border-radius:0 0 8px 8px}
+@media (prefers-reduced-motion:reduce){.lmark .lptr{animation:none}}
 .chest{position:absolute;z-index:3;width:68px;height:66px;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:3px;animation:bob 1s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(246,199,106,.8))}
 .chest svg{width:62px;height:auto}
 .cbar{width:52px;height:5px;background:rgba(0,0,0,.5);border-radius:3px;overflow:hidden}.cbar i{display:block;height:100%;background:var(--amber2)}
@@ -643,7 +648,7 @@ const extraP=()=>Math.min(.9,.08+.05*L('sensor')+.1*setPow('goryeo'));
 const boostM=()=>S.boost&&S.boost.until>Date.now()?S.boost.m:1;
 const isUnl=r=>r.un===0||S.unl.includes(r.id);
 function gateAt(){const l=layerAt(S.depth);return !S.done&&l.req>S.dl?l:null;}
-const boreDps=()=>dps()*dlMul(S.dl)*boostM()*(1+.15*setPow('paleoz'))*(fosDone('kcera')?1.1:1);
+const boreDps=()=>dps()*dlMul(S.dl)*boostM()*(1+.15*setPow('paleoz'))*(fosDone('kcera')?1.1:1)*(fosDone('cavebear')?1.05:1);
 const tierName=()=>dlName(S.dl)+' · Lv.'+S.dl;
 const GSTY=[
  ['#8a5a3a','#5e3a24','#b07a4a','#e8a93a','#8a8f94',null],['#7d8288','#52575c','#a3a9ae','#e8a93a','#a3adb4',null],
@@ -887,6 +892,10 @@ const FOSSILS=[
  {id:'kano',n:'코리아노사우루스',where:'전남 보성에서 발견된 소형 조각류 공룡',eff:'본공 굴착 보상 +20%',pn:['꼬리뼈','골반·뒷다리뼈','등뼈·갈비뼈','목뼈·앞발뼈','머리뼈']},
  {id:'puk',n:'부경고사우루스',where:'경남 하동에서 발견된 목 긴 용각류',eff:'원정 굴착력 +10%',pn:['꼬리뼈','골반·뒷다리뼈','등뼈·갈비뼈','긴 목뼈·앞다리뼈','머리뼈']},
  {id:'haenam',n:'해남이크누스',where:'전남 해남 우항리의 익룡 발자국 화석',eff:'보물 상자 등장 +50%',pn:['첫째 앞발자국','첫째 뒷발자국','둘째 앞발자국','둘째 뒷발자국','셋째 앞발자국']},
+ {id:'goseong',n:'고성 공룡 발자국',where:'경남 고성 덕명리 해안의 조각류 공룡 보행렬',eff:'원정 자원 추가 획득 확률 +25%',pn:['첫째 발자국','둘째 발자국','셋째 발자국','넷째 발자국','다섯째 발자국']},
+ {id:'eggnest',n:'화성 공룡알 둥지',where:'경기 화성 시화호 공룡알 화석 산지',eff:'유물 감정가 +15%',pn:['왼쪽 알','윗쪽 알','오른쪽 알','아래 왼쪽 알','아래 오른쪽 알']},
+ {id:'ura',n:'우항리 물갈퀴새 발자국',where:'전남 해남 우항리의 물갈퀴 새 발자국 (우항리크누스)',eff:'원정 굴착력 +5%',pn:['첫째 발자국','둘째 발자국','셋째 발자국','넷째 발자국','다섯째 발자국']},
+ {id:'cavebear',n:'단양 동굴곰',where:'충북 단양 구낭굴에서 나온 동굴곰 뼈',eff:'본공 굴착력 +5%',pn:['뒷다리뼈','골반·꼬리뼈','등뼈·갈비뼈','앞다리뼈','머리뼈(송곳니)']},
 ];
 const fosGot=id=>(S.fos&&S.fos[id])||[];
 const fosDone=id=>fosGot(id).length>=5;
@@ -902,7 +911,20 @@ const ftoes=(x,y,w,ds)=>ds.map(([a,b])=>['L',[[x,y],[x+a,y+b]],w]);
 function fpath(cx,cy,sc,pts){return 'M'+pts.map(([x,y])=>(cx+x*sc).toFixed(1)+','+(cy+y*sc).toFixed(1)).join(' L')+'Z';}
 function pesP(cx,cy){return ['P',fpath(cx,cy,1.25,[[-15,2],[-16,-2],[-13,-4.5],[-6,-5.5],[5,-6.5],[9,-10.5],[11.5,-10],[10.5,-6],[14,-6.5],[15,-4.5],[11.5,-2.6],[15,-.6],[14.5,1.4],[11,1.2],[13,4],[11.5,5.6],[5,3.4],[-4,6],[-11,5.5]])];}
 function manP(cx,cy){return ['P',fpath(cx,cy,1.35,[[-3,1.6],[5,-7],[7.4,-8.4],[7.6,-6],[3.4,-.4],[10.6,-2.4],[12.4,-.6],[10.6,1.2],[3,3.4],[-8.6,9.4],[-10.8,8.6],[-9.6,6.6]])];}
+function triP(cx,cy){return ['P',fpath(cx,cy,1.45,[[-8,0],[-8.6,-4],[-3,-6],[5,-12],[7.6,-12.4],[7,-9],[2,-3],[12,-2.2],[13.6,0],[12,2.2],[2,3],[7,9],[7.6,12.4],[5,12],[-3,6],[-8.6,4]])];}
+function webP(cx,cy){return ['P',fpath(cx,cy,1.5,[[-3,0],[7,-8.5],[8,-7.6],[5.4,-2],[10.5,-.6],[10.5,.6],[5.4,2],[8,7.6],[7,8.5]])];}
+const EGG='#d9c9a8',CRK='#6a5a44';
+const eggOps=(x,y)=>[['E',x,y,13,10,-12,EGG],['L',[[x-7,y-3],[x-3,y],[x+1,y-4],[x+5,y-1]],.8,CRK],['L',[[x+2,y+4],[x+6,y+6]],.7,CRK]];
 const FOSPARTS={
+ goseong:()=>[[triP(30,62)],[triP(64,38)],[triP(100,62)],[triP(136,38)],[triP(170,62)]],
+ ura:()=>[[webP(34,58)],[webP(66,44)],[webP(100,60)],[webP(132,44)],[webP(164,58)]],
+ eggnest:()=>[eggOps(68,50),eggOps(98,36),eggOps(130,48),eggOps(84,72),eggOps(116,72)],
+ cavebear:()=>[
+  [['L',[[60,44],[56,66]],5.5],['E',56,66,3.4,3,0],['L',[[56,66],[60,86]],4.5],['L',[[60,86],[72,89]],3.5],...ftoes(72,89,1.6,[[5,-1],[5,1.5],[4,3]])],
+  [['F','M44,36 Q58,29 71,38 Q60,46 46,44Z'],...fchain([[44,41],[35,46],[28,52]],4,2.6,1.6,1.5,1)],
+  [...fchain([[68,38],[96,29],[126,34]],10,4,4.2,t=>4+5*Math.sin(Math.PI*t),0),...fribs(7,74,7,33,-.3,26,2)],
+  [['F','M117,32 Q132,27 137,38 Q131,48 122,48Z'],['L',[[130,44],[126,66]],5],['E',126,66,3.2,2.8,0],['L',[[126,66],[130,86]],4.2],['L',[[130,86],[142,89]],3.6],...ftoes(142,89,1.6,[[5,-1],[5,1.5],[4,3]])],
+  [['F','M140,34 Q150,23 166,27 L184,35 Q191,40 186,44 L172,48 Q156,52 146,48 Q137,44 140,34Z'],['L',[[150,50],[182,46]],3],['L',[[176,45],[178,53]],2],['H',160,35,3.4,3],['H',182,39,1.8,1.4]]],
  kcera:()=>[
   fchain([[14,66],[40,60],[66,52],[88,47]],12,1.8,4.2,t=>5+8*Math.sin(Math.PI*Math.min(1,t*1.3)),0,5),
   [['F','M80,42 Q92,35 105,42 Q96,48 80,46Z'],['L',[[92,47],[101,58]],2.4],['L',[[87,48],[79,58]],2.4],['L',[[90,47],[84,70]],4.6],['E',84,70,2.8,2.6,0],['L',[[84,70],[92,85]],3.6],['L',[[87,71],[94,84]],1.4],['L',[[92,85],[100,88]],2.6],...ftoes(100,88,1.5,[[6,2],[6,-2],[4,4]])],
@@ -929,18 +951,18 @@ function fossilArt(f,got,hl,slab=true){const parts=FOSPARTS[f.id](),BONE='#efe3c
     g+=`<path d="M8,40 L22,44 L30,41 M190,58 L176,62 L170,70 M120,95 L124,86" stroke="#5e5040" stroke-width="1" fill="none"/>`;}
   const ln=pts=>'M'+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L');
   const draw=(ops,mode)=>ops.map(o=>{const t=o[0];
-    if(mode==='glow'){if(t==='L')return `<path d="${ln(o[1])}" stroke="#ffd56a" stroke-width="${o[2]+7}" stroke-linecap="round" fill="none" opacity=".55"/>`;
+    if(mode==='glow'){if(t==='L'&&o[3])return '';if(t==='L')return `<path d="${ln(o[1])}" stroke="#ffd56a" stroke-width="${o[2]+7}" stroke-linecap="round" fill="none" opacity=".55"/>`;
       if(t==='F'||t==='P')return `<path d="${o[1]}" fill="#ffd56a" stroke="#ffd56a" stroke-width="7" stroke-linejoin="round" opacity=".55"/>`;
       if(t==='E')return `<ellipse cx="${o[1]}" cy="${o[2]}" rx="${o[3]+3}" ry="${o[4]+3}" transform="rotate(${o[5]} ${o[1]} ${o[2]})" fill="#ffd56a" opacity=".55"/>`;return '';}
-    if(mode==='miss'){if(t==='L')return `<path d="${ln(o[1])}" stroke="${IMP}" stroke-width="${o[2]+.6}" stroke-linecap="round" fill="none" opacity=".55"/>`;
+    if(mode==='miss'){if(t==='L'&&o[3])return '';if(t==='L')return `<path d="${ln(o[1])}" stroke="${IMP}" stroke-width="${o[2]+.6}" stroke-linecap="round" fill="none" opacity=".55"/>`;
       if(t==='F')return `<path d="${o[1]}" fill="${IMP}" opacity=".55"/>`;
       if(t==='P')return `<path d="${o[1]}" fill="none" stroke="#e8dcc0" stroke-width="1.2" stroke-dasharray="3 2" opacity=".45"/>`;
       if(t==='E')return `<ellipse cx="${o[1]}" cy="${o[2]}" rx="${o[3]}" ry="${o[4]}" transform="rotate(${o[5]} ${o[1]} ${o[2]})" fill="${IMP}" opacity=".55"/>`;return '';}
-    if(mode==='out'){if(t==='L')return `<path d="${ln(o[1])}" stroke="${BO}" stroke-width="${o[2]+2.2}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
+    if(mode==='out'){if(t==='L'&&o[3])return '';if(t==='L')return `<path d="${ln(o[1])}" stroke="${BO}" stroke-width="${o[2]+2.2}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
       if(t==='E')return `<ellipse cx="${o[1]}" cy="${o[2]}" rx="${o[3]+1.1}" ry="${o[4]+1.1}" transform="rotate(${o[5]} ${o[1]} ${o[2]})" fill="${BO}"/>`;return '';}
-    if(t==='L')return `<path d="${ln(o[1])}" stroke="${BONE}" stroke-width="${o[2]}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
+    if(t==='L')return `<path d="${ln(o[1])}" stroke="${o[3]||BONE}" stroke-width="${o[2]}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
     if(t==='F')return `<path d="${o[1]}" fill="${BONE}" stroke="${BO}" stroke-width="1.6" stroke-linejoin="round"/>`;
-    if(t==='E')return `<ellipse cx="${o[1]}" cy="${o[2]}" rx="${o[3]}" ry="${o[4]}" transform="rotate(${o[5]} ${o[1]} ${o[2]})" fill="${BONE}"/>`;
+    if(t==='E')return `<ellipse cx="${o[1]}" cy="${o[2]}" rx="${o[3]}" ry="${o[4]}" transform="rotate(${o[5]} ${o[1]} ${o[2]})" fill="${o[6]||BONE}"/>`;
     if(t==='H')return `<ellipse cx="${o[1]}" cy="${o[2]}" rx="${o[3]}" ry="${o[4]}" fill="#4f4130"/>`;
     if(t==='P')return `<path d="${o[1]}" fill="#4a3c2c" stroke="#3a2e20" stroke-width="1"/><path d="${o[1]}" fill="none" stroke="#e2d2ae" stroke-width="1.3" transform="translate(.8,.8)" opacity=".7"/>`;return '';}).join('');
   parts.forEach((ops,i)=>{const have=got.includes(i);if(!have){g+=draw(ops,'miss');return;}if(i===hl)g+=draw(ops,'glow');g+=draw(ops,'out')+draw(ops,'fill');});
@@ -1004,10 +1026,10 @@ $('#nOk').addEventListener('click',()=>{if(newsGive){S.money+=newsGive.money;for
 
 // ---------------- earth layer gauge ----------------
 const LSHORT=['표토','상부 지각','하부 지각','상부 맨틀','하부 맨틀','외핵','내핵'];
-function buildGauge(){$('#lgauge').innerHTML=LAY.map((l,i)=>`<div class="lg" style="--c:${l.c}" data-i="${i}"><b>${LSHORT[i]}</b><span>${l.to>=1000?fmtD(l.to):l.to+'m'}</span></div>`).join('')+'<div class="lmark" id="lmark"></div>';}
+function buildGauge(){$('#lgauge').innerHTML=LAY.map((l,i)=>`<div class="lg" style="--c:${l.c}" data-i="${i}"><b>${LSHORT[i]}</b><span>${l.to>=1000?fmtD(l.to):l.to+'m'}</span></div>`).join('')+'<div class="lmark" id="lmark"><i class="lptr"></i><em id="lmarkT"></em></div>';}
 function updateGauge(){const i=LAY.indexOf(layerAt(S.depth)),l=LAY[i],f=Math.min(1,(S.depth-l.from)/(l.to-l.from));
   document.querySelectorAll('#lgauge .lg').forEach((el,j)=>{el.classList.toggle('cur',j===i);el.classList.toggle('lock',LAY[j].req>S.dl);});
-  $('#lmark').style.top=((i+f)/LAY.length*100).toFixed(2)+'%';}
+  $('#lmark').style.top=((i+f)/LAY.length*100).toFixed(2)+'%';$('#lmarkT').textContent=fmtD(S.depth);}
 
 // ---------------- bore (automatic) ----------------
 let bgPop=0,bMoneyAcc=0;
@@ -1086,7 +1108,7 @@ const setCount=e=>relicsOf(e).filter(r=>hasRelic(r.id)).length;
 const setLv=e=>{const n=setCount(e);return n>=4?2:n>=3?1:0;};
 const gradeMul=e=>{const g=relicsOf(e).filter(r=>hasRelic(r.id)).map(r=>S.relic[r.id]);return g.length?1+.02*g.reduce((a,b)=>a+b,0)/g.length:1;};
 const setPow=e=>{const l=setLv(e);return (l===2?1.4:l)*gradeMul(e);};
-const relicVal=(rl,g)=>Math.round(rl.v*GR[g].m*(1+.15*setPow('joseon')));
+const relicVal=(rl,g)=>Math.round(rl.v*GR[g].m*(1+.15*setPow('joseon'))*(fosDone('eggnest')?1.15:1));
 function rollGrade(belowM){const f=(1+belowM/2000)*(1+.25*setPow('precam'));const ws=GR.map((g,i)=>g.w*Math.pow(f,i/6));let x=Math.random()*ws.reduce((a,b)=>a+b);
   for(let i=0;i<GR.length;i++){x-=ws[i];if(x<=0)return i;}return 0;}
 const gBadge=g=>`<span class="gbadge" style="--g:${GR[g].c}">${GR[g].n}</span>`;
@@ -1179,7 +1201,7 @@ function digOf(id){S.ex.dig[id]=S.ex.dig[id]||{i:0,hp:0};const g=S.ex.dig[id];if
 const belowOf=(r,i)=>r.t==='sea'?i-r.water:i;
 function altText(r,i){if(r.t==='sea')return i<r.water?'수심 '+(i*r.ws).toLocaleString('ko-KR')+'m':'해저 아래 '+((i-r.water)*BLK).toLocaleString('ko-KR')+'m';
   const a=PEAK[r.id][1]-i*BLK;return a>=0?'해발 '+a.toLocaleString('ko-KR')+'m':'해수면 아래 '+(-a).toLocaleString('ko-KR')+'m';}
-const expDps=()=>dps()*boostM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.1:1);
+const expDps=()=>dps()*boostM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.1:1)*(fosDone('ura')?1.05:1);
 const relicP=()=>.15+.004*L('sensor')+(perk('prof')?.02:0);
 const critMul=()=>5+setPow('paleo');
 let exAcc=0,popQ=[],popT=0;
@@ -1191,7 +1213,7 @@ function addRelic(rl,vis,belowM){S.relic=S.relic||{};const g=rollGrade(belowM||0
   if(vis)popQ.push({rl,g,cur,sold,msg});else if(g>=4||cur<0)toast(`${cur<0?'유물 발견':'등급 상승'}: ${GR[g].n} ${rl.n}`);}
 function expBreak(r,vis){const g=digOf(r.id),below=belowOf(r,g.i);
   if(r.t==='land'&&PEAK[r.id][1]-g.i*BLK>0&&PEAK[r.id][1]-(g.i+1)*BLK<=0)toast(r.n+' 해수면 도달 · 이제부터 땅속으로 계속 내려갑니다');
-  if(below>=0){const wp=r.t==='sea'?setPow('wreck'):0,amt=2+Math.floor(below*BLK/1500)+(Math.random()<extraP()?1:0)+(r.t==='sea'?(perk('sea')?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
+  if(below>=0){const wp=r.t==='sea'?setPow('wreck'):0,amt=2+Math.floor(below*BLK/1500)+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.25?1:0)+(r.t==='sea'?(perk('sea')?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
     S.res[r.res]=(S.res[r.res]||0)+amt;const m=Math.round(5*r.diff*(1+.15*setPow('joseon')));S.money+=m;
     if(vis&&!expPopped){ex.pop('+'+amt+' '+r.res,RES[r.res]);expPopped=1;}
     S.st.exp++;if(r.t==='sea')S.st.sea++;
@@ -2146,20 +2168,26 @@ $('#landView').addEventListener('click',e=>{const L0=landOf();
 const FDEF={rug:{w:3,d:2,flat:1},bed:{w:2,d:3},sofa:{w:2,d:1},desk:{w:2,d:1},tv:{w:2,d:1},shelf:{w:1,d:1},plant:{w:1,d:1},case:{w:1,d:2},frame:{wall:1}};
 const FDEFPOS={rug:[2,2],bed:[0,3],sofa:[2,4],desk:[4,0],tv:[2,0],shelf:[5,2],plant:[1,0],case:[0,0],frame:[3.5,0]};
 let roomPick=null,roomFloor=0;
-const twoF=()=>houseTile()?.[1]==='house_b',STAIR=['5,4','5,5'];
-const flMap=()=>{const L0=landOf();L0.fl=L0.fl||{};return L0.fl;},flOf=id=>id==='me'?meR().fl:(flMap()[id]||0);
+const twoF=()=>houseTile()?.[1]==='house_b';
+const stairR=()=>{const L0=landOf();if(!L0.stair)L0.stair={x:5,y:4,r:0};return L0.stair;};
+const stDims=r=>r%2?[2,1]:[1,2];
+function stKeys(x,y,r){const st=stairR();if(x==null){x=st.x;y=st.y;r=st.r;}const [w,d]=stDims(r),k=[];for(let i=0;i<w;i++)for(let j=0;j<d;j++)k.push((x+i)+','+(y+j));return k;}
+const flMap=()=>{const L0=landOf();L0.fl=L0.fl||{};return L0.fl;},flOf=id=>id==='me'?meR().fl:id==='stair'?roomFloor:(flMap()[id]||0);
 function setFl(id,v){const m=flMap();if(v)m[id]=v;else delete m[id];}
 const roomPos=()=>{const L0=landOf();L0.pos=L0.pos||{};return L0.pos;};
 const rotOf=id=>(roomPos()[id]||[])[2]||0;
 const dims=(id,r)=>{const D=FDEF[id];return r%2?[D.d,D.w]:[D.w,D.d];};
 const meR=()=>{const L0=landOf();if(!L0.me2)L0.me2={x:3,y:5,f:0,fl:0};if(!twoF())L0.me2.fl=0;return L0.me2;};
-function occ(except){const o={},pos=roomPos();if(twoF())for(const k of STAIR)o[k]='stairs';
+function occ(except){const o={},pos=roomPos();if(twoF()&&except!=='stair')for(const k of stKeys())o[k]='stairs';
   for(const id in pos){if(id===except||!pos[id]||!FDEF[id]||FDEF[id].flat||FDEF[id].wall||flOf(id)!==roomFloor)continue;const [x,y,r]=pos[id],[w,d]=dims(id,r||0);for(let i=0;i<w;i++)for(let j=0;j<d;j++)o[(x+i)+','+(y+j)]=id;}return o;}
 function fits(id,x,y,r=rotOf(id)){const [w,d]=dims(id,r);if(x<0||y<0||x+w>6||y+d>6)return false;
-  const o=FDEF[id].flat?(twoF()?Object.fromEntries(STAIR.map(k=>[k,1])):{}):occ(id);
+  const o=FDEF[id].flat?(twoF()?Object.fromEntries(stKeys().map(k=>[k,1])):{}):occ(id);
   for(let i=0;i<w;i++)for(let j=0;j<d;j++)if(o[(x+i)+','+(y+j)])return false;return true;}
 function freeSpot(id,r=0){if(FDEF[id].wall)return [3.5,0];const d=FDEFPOS[id];if(d&&fits(id,d[0],d[1],r))return [d[0],d[1],r];
   for(let y=0;y<6;y++)for(let x=0;x<6;x++)if(fits(id,x,y,r))return [x,y,r];return null;}
+function stairFits(x,y,r){const [w,d]=stDims(r);if(x<0||y<0||x+w>6||y+d>6)return false;const ks=stKeys(x,y,r),rf=roomFloor,pos=roomPos();let ok=true;
+  for(const fl of [0,1]){roomFloor=fl;const o=occ('stair');if(pos.rug&&flOf('rug')===fl){const [rx,ry,rr]=pos.rug,[rw,rd]=dims('rug',rr||0);for(let i=0;i<rw;i++)for(let j=0;j<rd;j++)o[(rx+i)+','+(ry+j)]=1;}
+    if(ks.some(k=>o[k]))ok=false;}roomFloor=rf;return ok;}
 function nearSpot(id,x0,y0,r){let best=null,bd=1e9;for(let y=0;y<6;y++)for(let x=0;x<6;x++)if(fits(id,x,y,r)){const dd=Math.abs(x-x0)+Math.abs(y-y0);if(dd<bd){bd=dd;best=[x,y,r];}}return best;}
 function meSpot(){const m=meR(),o=occ();if(!o[m.x+','+m.y])return m;for(let y=5;y>=0;y--)for(let x=5;x>=0;x--)if(!o[x+','+y]){m.x=x;m.y=y;return m;}return m;}
 function ensurePos(){const f=landOf().furn,pos=roomPos();
@@ -2214,7 +2242,7 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
   g+=wallR(3.4,5,30,62,'#7a5a3c')+wallR(3.55,4.85,34,58,'#9ccde6')+wallR(4.17,4.23,34,58,'#7a5a3c')+wallR(3.55,4.85,45,47,'#7a5a3c');
   // clickable floor tiles (+ highlight targets when something is picked)
   const o0=occ();
-  for(let y=0;y<6;y++)for(let x=0;x<6;x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick&&!FDEF[roomPick].wall&&fits(roomPick,x,y);
+  for(let y=0;y<6;y++)for(let x=0;x<6;x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&!FDEF[roomPick].wall&&fits(roomPick,x,y);
     g+=`<polygon class="ft" data-g="${x},${y}" points="${PT([P(x,y),P(x+1,y),P(x+1,y+1),P(x,y+1)])}" fill="${ok?'rgba(154,216,110,.45)':'rgba(0,0,0,0)'}" stroke="${ok?'rgba(255,255,255,.5)':'rgba(0,0,0,.06)'}" stroke-width="1"/>`;}
   // wall frame (left wall along y, or right wall along x)
   if(f.frame&&pos.frame&&flOf('frame')===roomFloor){const [t,wl]=pos.frame,fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],W=wl?wallR:wallL,c=wl?P(t+.9,0,47):P(0,t+.9,47);
@@ -2234,17 +2262,21 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
       else if(p.puff){const [u,v,z]=p.puff,q=rotP(u,v,D.w,D.d,r);add({x0:x+q[0]-.2,x1:x+q[0]+.2,y0:y+q[1]-.2,y1:y+q[1]+.2,z0:z-8,z1:z+14},puffs3(P(x+q[0],y+q[1],z)),cls);}
       else if(p.icon){const [u,v,z]=p.icon,q=rotP(u,v,D.w,D.d,r),s=P(x+q[0],y+q[1],z);add({x0:x+q[0]-.15,x1:x+q[0]+.15,y0:y+q[1]-.15,y1:y+q[1]+.15,z0:z,z1:z+12},`<g transform="translate(${s[0]-6},${s[1]-12}) scale(.3)">${relicIcon(p.r,true,40).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g>`,cls);}
     }}
-  if(twoF()){const sc='class="stair"';
-    if(!roomFloor){for(let i=0;i<6;i++){const y0=4+i/3;add({x0:5.02,x1:5.98,y0,y1:y0+1/3,z0:0,z1:(6-i)*12},wbox(5.02,y0,5.98,y0+1/3,0,(6-i)*12,'#b98250','#7f5a34','#d8a46c'),sc);}}
-    else{add({x0:5,x1:6,y0:4,y1:6,z0:0,z1:.4},poly([P(5,4,.4),P(6,4,.4),P(6,6,.4),P(5,6,.4)],'#2a1e14')+wbox(5.04,4,5.96,4.33,0,1,'#b98250','#7f5a34','#d8a46c'),sc);
-      for(const [a,b] of[[4.0,4.06],[5.94,6]])add({x0:4.9,x1:4.98,y0:a,y1:b,z0:0,z1:24},wbox(4.9,a,4.98,b,0,24,'#6a4a2a','#5a3a1a','#7a5a3c'),sc);
-      add({x0:4.9,x1:4.98,y0:4,y1:6,z0:24,z1:27},wbox(4.9,4,4.98,6,24,3,'#7a5a3c','#5a3a1a','#9a7a4c'),sc);}
+  if(twoF()){const sc='class="stair"',st=stairR(),SB=(u0,v0,u1,v1)=>{const A=rotP(u0,v0,1,2,st.r),B2=rotP(u1,v1,1,2,st.r);return [st.x+Math.min(A[0],B2[0]),st.y+Math.min(A[1],B2[1]),st.x+Math.max(A[0],B2[0]),st.y+Math.max(A[1],B2[1])];};
+    const sb=(u0,v0,u1,v1,z0,hh,cy,cx,ct)=>{const [x0,y0,x1,y1]=SB(u0,v0,u1,v1);add({x0,y0,x1,y1,z0,z1:z0+hh},wbox(x0,y0,x1,y1,z0,hh,cy,cx,ct),sc);};
+    const [W2,D2]=stDims(st.r);
+    if(roomPick==='stair')add({x0:st.x,y0:st.y,x1:st.x+W2,y1:st.y+D2,z0:0,z1:.9},poly([P(st.x,st.y,.8),P(st.x+W2,st.y,.8),P(st.x+W2,st.y+D2,.8),P(st.x,st.y+D2,.8)],'rgba(255,213,106,.35)','stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"'),sc);
+    if(!roomFloor){for(let i=0;i<6;i++)sb(.02,i/3,.98,(i+1)/3,0,(6-i)*12,'#b98250','#7f5a34','#d8a46c');}
+    else{add({x0:st.x,y0:st.y,x1:st.x+W2,y1:st.y+D2,z0:0,z1:.4},poly([P(st.x,st.y,.4),P(st.x+W2,st.y,.4),P(st.x+W2,st.y+D2,.4),P(st.x,st.y+D2,.4)],'#2a1e14'),sc);
+      sb(.04,0,.96,.33,0,1,'#b98250','#7f5a34','#d8a46c');
+      for(const [u,v] of[[0,.3],[.94,.3],[0,1.94],[.94,1.94]])sb(u,v,u+.06,v+.06,0,24,'#6a4a2a','#5a3a1a','#7a5a3c');
+      sb(0,.3,.06,2,24,3,'#7a5a3c','#5a3a1a','#9a7a4c');sb(.94,.3,1,2,24,3,'#7a5a3c','#5a3a1a','#9a7a4c');sb(0,1.94,1,2,24,3,'#7a5a3c','#5a3a1a','#9a7a4c');}
   }
   const me=meR();if(me.fl===roomFloor){const m=meSpot(),c=P(m.x+.5,m.y+.5);
     if(roomPick==='me')add({x0:m.x,x1:m.x+1,y0:m.y,y1:m.y+1,z0:0,z1:.9},poly([P(m.x,m.y,.8),P(m.x+1,m.y,.8),P(m.x+1,m.y+1,.8),P(m.x,m.y+1,.8)],'rgba(255,213,106,.35)','stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"'),'class="mech"');
     add({x0:m.x+.3,x1:m.x+.7,y0:m.y+.3,y1:m.y+.7,z0:1,z1:70},fig(ME(),c[0],c[1]+4,70,{expr:'happy',flip:!!m.f}),'class="mech"');}
   let out=isoSort(L).map(p=>`<g ${p.cls}>${p.svg}</g>`).join('');
-  if(twoF()){const lb=P(5.5,6.5,-4);out+=`<text class="stair" x="${lb[0]}" y="${lb[1]}" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" stroke="#000" stroke-width="2.4" paint-order="stroke">${roomFloor?'▼ 1층':'▲ 2층'}</text>`;}
+  if(twoF()){const st=stairR(),q=rotP(.5,roomFloor?1:2.45,1,2,st.r),lb=P(st.x+q[0],st.y+q[1],roomFloor?-6:-4);out+=`<text class="stairlb" style="cursor:pointer" x="${lb[0]}" y="${lb[1]}" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" stroke="#000" stroke-width="2.4" paint-order="stroke">${roomFloor?'▼ 1층':'▲ 2층'}</text>`;}
   return `<svg viewBox="0 0 320 240" role="img" aria-label="집 안 ${roomFloor+1}층">${g}${out}</svg>`;}
 function puffs3(p){return [[-7,0,'#4f9a50'],[7,-1,'#5fb05f'],[0,-8,'#6abf6a']].map(([dx,dy,c])=>`<circle cx="${p[0]+dx}" cy="${p[1]+dy}" r="7" fill="${c}" ${ISK}/>`).join('');}
 function openRoom(){roomPick=null;roomFloor=0;renderRoom();$('#room').hidden=false;}
@@ -2252,17 +2284,21 @@ function renderRoom(){const f=landOf().furn,pos=(ensurePos(),roomPos());$('#room
   const TF=twoF(),B=(a,t)=>`<button class="ghost sm" type="button" data-rb="${a}">${t}</button>`,mv=TF?B('mv',roomFloor?'1층으로':'2층으로'):'';
   $('#roomTitle').textContent=TF?'집 안 꾸미기 · '+(roomFloor+1)+'층':'집 안 꾸미기';
   $('#roomFl').innerHTML=TF?[0,1].map(k=>`<button type="button" class="${roomFloor===k?'on':''}" data-fl="${k}">${k+1}층</button>`).join(''):'';
-  if(roomPick==='me')$('#roomBar').innerHTML=`<span><b>내 캐릭터</b> · 밝은 칸을 누르면 그 자리로 가요</span><div>${B('flip','방향 바꾸기')}${mv}${B('done','완료')}</div>`;
+  if(roomPick==='stair')$('#roomBar').innerHTML=`<span><b>계단</b> · 밝은 칸을 누르면 옮겨요 (1층·2층이 함께 움직여요)</span><div>${B('rot','↻ 회전')}${B('go',roomFloor?'1층으로 내려가기':'2층으로 올라가기')}${B('done','완료')}</div>`;
+  else if(roomPick==='me')$('#roomBar').innerHTML=`<span><b>내 캐릭터</b> · 밝은 칸을 누르면 그 자리로 가요</span><div>${B('flip','방향 바꾸기')}${mv}${B('done','완료')}</div>`;
   else if(roomPick){const pk=FURN.find(x=>x.id===roomPick),wall=FDEF[pk.id].wall;
     $('#roomBar').innerHTML=`<span><b>${pk.n}</b> ${wall?'· 화살표로 벽을 따라 옮기고, 회전하면 반대쪽 벽으로 가요':'· 밝은 칸을 누르면 그 자리로 옮겨요'}</span><div>${wall?B('left','◀')+B('right','▶'):''}${B('rot','↻ 회전')}${mv}${B('store','보관')}${B('done','완료')}</div>`;}
-  else $('#roomBar').innerHTML=`<span>가구나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.${TF?' 위 1층·2층 버튼이나 계단을 눌러 층을 바꿔요.':''}</span>`;
+  else $('#roomBar').innerHTML=`<span>가구나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.${TF?' 계단도 눌러서 옮기거나 돌릴 수 있고, 위 1층·2층 버튼이나 계단 표시를 눌러 층을 바꿔요.':''}</span>`;
   $('#roomList').innerHTML=FURN.map(i=>{const own=f[i.id],placed=own&&pos[i.id];return `<button class="lp ${roomPick===i.id?'on':''}" type="button" data-fu="${i.id}"><span>${i.n}</span><em class="${own?'own':S.money>=i.p?'':'no'}">${!own?won(i.p):placed?(TF?(flOf(i.id)+1)+'층 · 옮기기':'배치됨 · 옮기기'):'보관 중 · 배치'}</em></button>`;}).join('');}
 $('#roomFl').addEventListener('click',e=>{const b=e.target.closest('[data-fl]');if(!b)return;roomFloor=+b.dataset.fl;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();});
 $('#roomArt').addEventListener('click',e=>{
-  if(e.target.closest('.stair')){roomFloor=1-roomFloor;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();return;}
+  if(e.target.closest('.stairlb')){roomFloor=1-roomFloor;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();return;}
+  if(e.target.closest('.stair')){roomPick=roomPick==='stair'?null:'stair';renderRoom();return;}
   if(e.target.closest('.mech')){roomPick=roomPick==='me'?null:'me';renderRoom();return;}
   const fu=e.target.closest('.fu');if(fu){roomPick=roomPick===fu.dataset.fu?null:fu.dataset.fu;renderRoom();return;}
   const t=e.target.closest('.ft');if(!t||!roomPick)return;const [x,y]=t.dataset.g.split(',').map(Number);
+  if(roomPick==='stair'){const st=stairR(),[w,d]=stDims(st.r),cx=Math.min(Math.max(0,x),6-w),cy=Math.min(Math.max(0,y),6-d);
+    if(!stairFits(cx,cy,st.r)){toast('1층이나 2층 가구와 겹쳐요. 밝은 칸을 골라 주세요');return;}st.x=cx;st.y=cy;save();renderRoom();return;}
   if(roomPick==='me'){if(occ()[x+','+y]){toast('가구가 있는 칸이에요. 밝은 칸을 골라 주세요');return;}const m=meR();m.x=x;m.y=y;save();renderRoom();return;}
   if(FDEF[roomPick].wall)return;const r=rotOf(roomPick),[w,d]=dims(roomPick,r);
   const cx=Math.min(Math.max(0,x),6-w),cy=Math.min(Math.max(0,y),6-d);
@@ -2270,6 +2306,11 @@ $('#roomArt').addEventListener('click',e=>{
   roomPos()[roomPick]=[cx,cy,r];save();renderRoom();});
 $('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]');if(!b||!roomPick)return;const pos=roomPos(),a=b.dataset.rb,id=roomPick;
   if(a==='done')roomPick=null;
+  else if(id==='stair'){const st=stairR();
+    if(a==='go')roomFloor=1-roomFloor;
+    else if(a==='rot'){const nr=(st.r+1)%4;let sp=stairFits(st.x,st.y,nr)?[st.x,st.y]:null;
+      if(!sp){let bd=1e9;for(let y=0;y<6;y++)for(let x=0;x<6;x++)if(stairFits(x,y,nr)){const dd=Math.abs(x-st.x)+Math.abs(y-st.y);if(dd<bd){bd=dd;sp=[x,y];}}}
+      if(sp){st.x=sp[0];st.y=sp[1];st.r=nr;}else toast('회전할 공간이 없어요. 주변 가구를 옮겨 주세요');}}
   else if(id==='me'){const m=meR();if(a==='flip')m.f=m.f?0:1;
     else if(a==='mv'){const to=1-roomFloor;roomFloor=to;m.fl=to;meSpot();}}
   else if(a==='mv'){const to=1-roomFloor,from=roomFloor;roomFloor=to;const old=flOf(id);setFl(id,to);const sp=freeSpot(id,rotOf(id));
@@ -2344,17 +2385,22 @@ function hud(){
     $('#eHaul').innerHTML=`${ric(r.res)}${r.res} ${(S.res[r.res]||0).toLocaleString('ko-KR')}`;}}
 
 // ---------------- boot & loop ----------------
-(()=>{const el=Math.min((4+2*setPow('neo')+(S.land?houseBonus():0))*3600,(Date.now()-(S.last||Date.now()))/1000);
-  if(el>30){const m0=S.depth;if(!gateAt())boreAdvance(boreDps()*el*.5,false);let msg=S.depth-m0>=1?'본공 '+fmtD(S.depth-m0):'';
-    if(S.ex.active){const r=regById(S.ex.active),i0=digOf(r.id).i,n0=relicCount();exDamage(r,expDps()*el*.5,false);
-      const di=digOf(r.id).i-i0,dn=relicCount()-n0;if(di>0)msg+=(msg?', ':'')+r.n+' '+di+'칸'+(dn?` · 새 유물 ${dn}개`:'');}
-    if(msg)setTimeout(()=>toast('자리를 비운 동안 '+msg+' 더 뚫었습니다'),400);}})();
+const offCap=()=>(4+2*setPow('neo')+(S.land?houseBonus():0))*3600;
+// catch up on time the loop did not run (app closed = 50% rate, window minimised / tab in background = full rate)
+function catchUp(sec,rate,quiet){const el=Math.min(offCap(),sec);if(el<=0)return;
+  const m0=S.depth;if(!gateAt())boreAdvance(boreDps()*el*rate,false);let msg=S.depth-m0>=1?'본공 '+fmtD(S.depth-m0):'';
+  if(S.ex.active){const r=regById(S.ex.active),i0=digOf(r.id).i,n0=relicCount();exDamage(r,expDps()*el*rate,false);
+    const di=digOf(r.id).i-i0,dn=relicCount()-n0;if(di>0)msg+=(msg?', ':'')+r.n+' '+di+'칸'+(dn?` · 새 유물 ${dn}개`:'');}
+  save();if(msg&&!quiet)setTimeout(()=>toast((rate<1?'자리를 비운 동안 ':'창을 내려둔 동안 ')+msg+' 더 뚫었습니다'),400);}
+{const el=(Date.now()-(S.last||Date.now()))/1000;if(el>30)catchUp(el,.5);}
 buildMap();buildGauge();renderAvatar();show('map');
 if(S.story){$('#tStart').textContent='START';$('#tStory').hidden=false;$('#tReset').hidden=false;}
 checkInvest();
 let last=performance.now(),hudT=0,saveT=0;
 function loop(t){try{frame(t);}catch(err){console.error(err);}requestAnimationFrame(loop);}
-function frame(t){const dt=Math.min(.05,(t-last)/1000);last=t;
+let hidAt=0;
+function frame(t){const raw=(t-last)/1000,dt=Math.min(.05,raw);last=t;
+  if(raw>1.5&&!hidAt)catchUp(raw-dt,1,raw<30);
   boreTick(dt);
   exTick(dt);popTick(dt);chestTick(dt);alertTick(dt);liveRefresh(dt);
   const blocked=S.done||!!gateAt();
@@ -2367,6 +2413,11 @@ function frame(t){const dt=Math.min(.05,(t-last)/1000);last=t;
   saveT-=dt;if(saveT<=0){saveT=3;save();}
   }
 requestAnimationFrame(loop);
-addEventListener('visibilitychange',()=>{if(document.hidden)save();});
+let hid0=0,hidD=0,hidI=0;
+document.addEventListener('visibilitychange',()=>{if(document.hidden){hidAt=hid0=Date.now();hidD=S.depth;hidI=S.ex.active?digOf(S.ex.active).i:0;save();}
+  else if(hidAt){const el=(Date.now()-hidAt)/1000,tot=(Date.now()-hid0)/1000;hidAt=0;last=performance.now();if(el>1)catchUp(el,1,true);
+    if(tot>20){const d=S.depth-hidD,di=S.ex.active?digOf(S.ex.active).i-hidI:0,m=[d>=1?'본공 '+fmtD(d):'',di>0?regById(S.ex.active).n+' '+di+'칸':''].filter(Boolean).join(', ');if(m)toast('창을 내려둔 동안 '+m+' 더 뚫었습니다');}}});
+// keep digging while the window is minimised: browsers pause animation frames, so tick on a timer instead
+setInterval(()=>{if(!document.hidden||!hidAt)return;const now=Date.now(),el=(now-hidAt)/1000;if(el<5)return;hidAt=now;catchUp(el,1,true);},5000);
 })();
 </script>
