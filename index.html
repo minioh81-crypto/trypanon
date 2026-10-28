@@ -48,6 +48,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .node.locked .dot{fill:#3a4549}
 .node text{font:600 10.5px var(--f-body);fill:var(--fg);paint-order:stroke;stroke:var(--sea);stroke-width:3px;stroke-linejoin:round}
 .node.locked text{fill:#6c7a7d}
+.node text.rlab,.node tspan.rlab{font:700 7.6px var(--f-body);stroke-width:2.4px}.node .rcnt{fill:#e8e2d6;font-weight:500}.node.locked .rlab{opacity:.55}.node .ricon{overflow:visible;filter:drop-shadow(0 0 1.5px #0e1315) drop-shadow(0 0 1px #0e1315)}.node.locked .ricon{opacity:.45;filter:grayscale(1) drop-shadow(0 0 1.5px #0e1315)}
 .node .ring{fill:none;stroke:var(--amber2);stroke-width:1.5;opacity:0}
 .node.sel .ring{opacity:1}
 .card{display:grid;gap:12px}
@@ -167,7 +168,9 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .tbot{padding-top:40px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 34px);background:linear-gradient(rgba(7,9,10,0),rgba(7,9,10,.9) 40%)}
 .tlogo{font-family:var(--f-latin);font-weight:700;font-size:clamp(38px,12.5vw,62px);letter-spacing:.14em;color:var(--amber);line-height:1;
   text-shadow:0 3px 0 #5e3f0e,0 0 34px rgba(232,169,58,.35);margin-right:-.14em}
-.tkr{font-family:var(--f-kr);font-size:30px;line-height:1.15}
+.tkr{font-family:var(--f-kr);font-size:30px;line-height:1.15;text-shadow:0 2px 0 #000,0 0 14px rgba(0,0,0,.9)}
+.ttop::before{content:'';position:absolute;inset:-20px -10px -24px;background:radial-gradient(ellipse at 50% 55%,rgba(7,9,10,.88),rgba(7,9,10,.6) 55%,rgba(7,9,10,0) 75%);z-index:-1;pointer-events:none}
+.tslogan{text-shadow:0 1px 4px #000}
 .tkr span{display:block;font-size:19px;color:#d9cdb8;margin-top:4px;letter-spacing:.08em}
 .tslogan{font-family:var(--f-latin);font-size:11px;letter-spacing:.32em;color:var(--mute);margin-top:6px}
 .tstart{width:min(320px,100%);height:60px;border-radius:16px;background:var(--amber);color:#1a1206;font-family:var(--f-latin);font-weight:700;font-size:22px;letter-spacing:.32em;
@@ -357,7 +360,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .foss{display:grid;gap:10px;margin-bottom:6px}
 .fos{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--panel)}
 .fos.done{border-color:var(--amber)}
-.galbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+.galbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}.galbtns.lock button{opacity:.6}
 .fpn{display:flex;flex-wrap:wrap;gap:3px;margin:4px 0}.fpn span{font-size:10.5px;padding:1px 6px;border-radius:999px;border:1px dashed var(--line);color:var(--mute)}.fpn span.on{border-style:solid;border-color:#c9b48a;color:#efe3c6;background:rgba(239,227,198,.08)}
 .fos svg{width:130px;height:auto;background:#0e1315;border-radius:8px}
 .fi{display:grid;gap:3px;min-width:0}
@@ -423,7 +426,7 @@ nav.tabs button{font-size:12px}
   <section class="view" id="v-map">
     <div class="mapwrap" id="map"></div>
     <div class="mapinfo" id="mapInfo"></div>
-    <div class="mlegend"><span><i style="background:var(--amber)"></i>육상 명산</span><span><i style="background:var(--cool)"></i>해상 시추</span><span><i class="sq"></i>양구 본공</span><span><i style="background:#3a4549"></i>잠김</span><span class="mhint">지형을 눌러 보세요</span></div>
+    <div class="mlegend"><span>아이콘 = 그 지역 재료</span><span><i class="sq"></i>양구 본공</span><span style="opacity:.55">흐림 = 잠김</span><span class="mhint">지형을 눌러 보세요</span></div>
     <div class="rpop" id="rpop" hidden><div class="rsheet" role="dialog" aria-modal="true" aria-label="지형 정보">
       <button class="rclose" id="rClose" type="button" aria-label="닫기"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
       <div class="card" id="card"></div></div></div>
@@ -1290,14 +1293,14 @@ function buildMap(){let g='';
   const d='M'+COAST.map(p=>PX(p[0]).toFixed(1)+','+PY(p[1]).toFixed(1)).join('L')+'Z';
   g+=`<path class="landp" d="${d}"/><ellipse class="landp" cx="${PX(126.55)}" cy="${PY(33.38)}" rx="17" ry="8"/>
    <circle class="landp" cx="${PX(130.87)}" cy="${PY(37.5)}" r="3"/><circle class="landp" cx="${PX(131.87)}" cy="${PY(37.24)}" r="1.6"/>`;
-  const node=(id,cls,x,y,label,lx,la,ly)=>`<g class="node ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}">
+  const node=(id,cls,x,y,label,lx,la,ly,res)=>`<g class="node ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}">
     <circle class="hit" cx="${x}" cy="${y}" r="16"/><circle class="ring" cx="${x}" cy="${y}" r="10"/>
-    ${cls==='base'?`<rect class="dot" x="${x-6}" y="${y-6}" width="12" height="12" transform="rotate(45 ${x} ${y})"/>`:`<circle class="dot" cx="${x}" cy="${y}" r="6"/>`}
-    <text x="${x+lx}" y="${y+ly}" text-anchor="${la}">${label}</text></g>`;
-  for(const r of REG){const x=+PX(r.lon).toFixed(1),y=+PY(r.lat).toFixed(1);g+=r.t==='sea'?node(r.id,'sea',x,y,r.n,0,'middle',19):node(r.id,'land',x,y,r.n,r.lx,r.la,4);}
+    ${cls==='base'?`<rect class="dot" x="${x-6}" y="${y-6}" width="12" height="12" transform="rotate(45 ${x} ${y})"/>`:res?`<svg class="ricon" x="${x-8}" y="${y-8}" width="16" height="16" viewBox="0 0 16 16">${RIC[res]||''}</svg>`:`<circle class="dot" cx="${x}" cy="${y}" r="6"/>`}
+    <text x="${x+lx}" y="${y+ly}" text-anchor="${la}">${label}</text>${res&&cls!=='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9.5}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}${res&&cls==='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}</g>`;
+  for(const r of REG){const x=+PX(r.lon).toFixed(1),y=+PY(r.lat).toFixed(1);g+=r.t==='sea'?node(r.id,'sea',x,y,r.n,0,'middle',19,r.res):node(r.id,'land',x,y,r.n,r.lx,r.la,4,r.res);}
   g+=node('yanggu','base',+PX(127.99).toFixed(1),+PY(38.11).toFixed(1),'양구 본공',-11,'end',4);
   $('#map').innerHTML=`<svg viewBox="34 2 318 322" role="img" aria-label="대한민국 시추 지도">${g}</svg>`;}
-function updateMap(){document.querySelectorAll('.node').forEach(n=>{const r=REG.find(x=>x.id===n.dataset.id);
+function updateMap(){document.querySelectorAll('#map .rcnt').forEach(t=>{t.textContent=(S.res[t.dataset.r]||0).toLocaleString('ko-KR');});document.querySelectorAll('.node').forEach(n=>{const r=REG.find(x=>x.id===n.dataset.id);
   n.classList.toggle('locked',!!r&&!isUnl(r));n.classList.toggle('sel',n.dataset.id===sel);n.classList.toggle('act',n.dataset.id===S.ex.active);});renderCard();}
 function openRegion(id){sel=id;updateMap();$('#rpop').hidden=false;const sh=$('#rpop .rsheet');sh.scrollTop=0;}
 function closeRegion(){$('#rpop').hidden=true;}
@@ -1392,7 +1395,7 @@ function renderStore(){
       <div class="rgrid">${rs.map(x=>`<div class="rel ${hasRelic(x.id)?'':'no'}" style="--g:${hasRelic(x.id)?GR[S.relic[x.id]].c:'#26323a'}">${relicIcon(x,hasRelic(x.id))}${hasRelic(x.id)?gBadge(S.relic[x.id]):''}<span>${hasRelic(x.id)?x.n:'???'}</span></div>`).join('')}</div>
       <div class="eb"><span class="${lv>=1?'on':''}">3개 세트 · ${e.b(1*gm)}</span><span class="${lv>=2?'on':''}">4개 완성 · ${e.b(1.4*gm)}</span><span>등급 보너스 ×${gm.toFixed(2)} (평균 등급이 높을수록 최대 ×1.30)</span></div></div>`;}).join('');
   const fos=FOSSILS.map(f=>{const n=fosGot(f.id).length;return `<div class="fos ${n>=5?'done':''}">${fossilSVG(f)}<div class="fi"><div class="en">${f.n}</div><div class="ed">${f.where}</div><div class="fpn">${f.pn.map((x,i)=>`<span class="${fosGot(f.id).includes(i)?'on':''}">${x}</span>`).join('')}</div><div class="eb"><span class="${n>=5?'on':''}">복원 ${n}/5 · ${f.eff}</span></div></div></div>`;}).join('');
-  $('#storeList').innerHTML=`<div class="galbtns"><button class="primary" type="button" data-gal="fos">화석관 열기</button><button class="ghost" type="button" data-gal="rel">유물관 열기</button></div><h2 class="h3">본공 화석 복원</h2><p class="sub">본공이 지각(지표~35km)을 지나는 동안 화석 조각이 나옵니다. 조각 5개를 모으면 화석이 복원되고 효과가 생겨요.</p><div class="foss">${fos}</div>
+  $('#storeList').innerHTML=`<div class="galbtns ${hasMuseum()?'':'lock'}"><button class="primary" type="button" data-gal="fos">${hasMuseum()?'':'🔒 '}화석관 열기</button><button class="ghost" type="button" data-gal="rel">${hasMuseum()?'':'🔒 '}유물관 열기</button>${hasMuseum()?'':'<p class="sub" style="grid-column:1/-1;margin:0">내 땅에 유물 전시관을 지으면 열 수 있어요.</p>'}</div><h2 class="h3">본공 화석 복원</h2><p class="sub">본공이 지각(지표~35km)을 지나는 동안 화석 조각이 나옵니다. 조각 5개를 모으면 화석이 복원되고 효과가 생겨요.</p><div class="foss">${fos}</div>
    <h2 class="h3" style="margin-top:22px">유물 도감</h2><p class="sub">원정에서 깊이 팔수록 더 오래된 시대가 나옵니다. 같은 시대 유물을 3개 모으면 드릴에 세트 효과가 붙어요. 더 높은 등급이 나오면 자동으로 바꾸고, 같거나 낮은 등급은 감정가에 팝니다. 발견 ${relicCount()}/${RELICS.length}</p>${eras}
    <h2 class="h3" style="margin-top:22px">창고</h2><p class="sub">본공 ${fmtD(S.depth)} · 보유 ${won(S.money)}</p>
    <div class="sect">육상 자원</div><div class="inv">${REG.filter(r=>r.t==='land').map(r=>item(r.res)).join('')}</div>
@@ -1459,7 +1462,8 @@ function drawTitle(dt){const r=tcv.getBoundingClientRect();if(!r.width)return;co
   const depth=((t*.06)%1)*R*.78;tc.strokeStyle='rgba(10,8,7,.85)';tc.lineWidth=10;tc.beginPath();tc.moveTo(cx,top);tc.lineTo(cx,top+depth);tc.stroke();
   tc.setLineDash([3,6]);tc.strokeStyle='rgba(246,199,106,.35)';tc.lineWidth=1.5;tc.beginPath();tc.moveTo(cx,top+depth);tc.lineTo(cx,cy);tc.stroke();tc.setLineDash([]);
   tSpin+=dt*10;
-  drawDrill(tc,cx,top+8,Math.min(1.45,W/300),{bit:9,housing:8,bearing:6,shock:4,sensor:5,heat:3,press:3,insul:4,cool:6,cable:5},{t,spin:tSpin,rodTop:top-150,dl:48});
+  const tb=$('#title .ttop').getBoundingClientRect(),txtB=tb.bottom-r.top+18,kk=Math.max(.55,Math.min(1.45,W/300,(top+8-txtB)/185));
+  drawDrill(tc,cx,top+8,kk,{bit:9,housing:8,bearing:6,shock:4,sensor:5,heat:3,press:3,insul:4,cool:6,cable:5},{t,spin:tSpin,rodTop:Math.max(txtB,top-150),dl:48});
   if(Math.random()<.6)tParts.push({x:cx+(Math.random()-.5)*20,y:top+8,vx:(Math.random()-.5)*200,vy:-Math.random()*160-40,l:.7,c:Math.random()<.5?'#ffe9a8':'#6e3a24'});
   for(const p of tParts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=500*dt;p.l-=dt;}tParts=tParts.filter(p=>p.l>0);
   for(const p of tParts){tc.globalAlpha=Math.min(1,p.l*2);tc.fillStyle=p.c;tc.fillRect(p.x-1.5,p.y-1.5,3,3);}tc.globalAlpha=1;}
@@ -2112,7 +2116,7 @@ function isoItem(id,cx,cy){let g='';
       +[.2,.4,.6,.8].map(t=>{const a=[L[0]+(B[0]-L[0])*t,L[1]+(B[1]-L[1])*t];return `<path d="M${a[0]},${a[1]} L${(a[0]*.55+cx*.45).toFixed(1)},${(a[1]*.55+(cy-53)*.45).toFixed(1)}" stroke="#4a4a54" stroke-width="1"/>`;}).join('')
       +`<path d="M${cx-14},${cy-53} Q${cx},${cy-56} ${cx+14},${cy-53}" stroke="#1e1e24" stroke-width="3" fill="none"/><circle cx="${cx+20}" cy="${cy-12}" r="3.4" fill="#f2c14e" ${ISK}/><path d="M${cx+20},${cy-16} v-6" stroke="#2b211c"/>`;break;}
   case 'fountain':g+=fountainArt(cx,cy);break;
-  case 'dog':case 'cat':g+=shadowE(cx,cy,13,5)+petArt(id,cx-2,cy+2,.95);break;
+  case 'dog':case 'cat':g+=petHome(id,cx,cy);break;
   case 'tree':{g+=shadowE(cx,cy,14,6)+`<rect x="${cx-2.5}" y="${cy-12}" width="5" height="12" fill="#7a5a3c" ${ISK}/>`;
     for(const [w,y0,h] of [[16,-12,16],[13,-22,15],[9,-31,13]]){const tY=cy+y0-h;g+=`<polygon points="${PT([[cx,tY],[cx-w,cy+y0],[cx,cy+y0+3]])}" fill="#3f8a4a" ${ISK}/><polygon points="${PT([[cx,tY],[cx+w,cy+y0],[cx,cy+y0+3]])}" fill="#2a6233" ${ISK}/>`;}break;}
   case 'cherry':{g+=shadowE(cx,cy,16,7)+`<path d="M${cx},${cy} V${cy-16} M${cx},${cy-10} l-6,-6 M${cx},${cy-12} l5,-7" stroke="#7a5a3c" stroke-width="4" stroke-linecap="round"/>`;
@@ -2148,10 +2152,10 @@ function isoTile(x,y,own,can){const [cx,cy]=isoC(x,y),f=foot(cx,cy,1),d=7,alt=(x
 function landSVG(){const L0=landOf(),n=landSize();let tiles='',items=[];
   for(let s=0;s<=10;s++)for(let x=0;x<6;x++){const y=s-x;if(y<0||y>5)continue;const own=x<n&&y<n,it=L0.tiles[x+','+y];tiles+=isoTile(x,y,own,own&&!it&&!!(landSel||landPick));if(it)items.push([x,y,it]);}
   const me=landMe(),RT=landRot();if(me.x>=0)items.push([me.x,me.y,'me']);items.sort((a,b)=>(a[0]+a[1])-(b[0]+b[1])||(a[0]-b[0]));
-  const its=items.map(([x,y,it])=>{const [cx,cy]=isoC(x,y);if(it==='me'){const pm=landPick==='me',f=foot(cx,cy,1);return `<g class="mech" style="cursor:pointer">${pm?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<ellipse cx="${cx}" cy="${cy+3}" rx="11" ry="4" fill="rgba(0,0,0,.25)"/>${fig(ME(),cx,cy+4,48,{expr:'happy',flip:!!me.f})}</g>`;}
-    const pk=landPick===x+','+y,f=foot(cx,cy,1),mr=!!RT[x+','+y];ISO_MIR=mr?1:0;const art=isoItem(it,cx,cy);ISO_MIR=0;return `<g class="ii${pk?' pk':''}" data-xy="${x},${y}">${pk?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<g transform="${pk?'translate(0,-5) ':''}${mr?`translate(${2*cx},0) scale(-1,1)`:''}">${art}</g></g>`;}).join('');
-  return `<svg class="isoland" viewBox="0 0 360 280" role="img" aria-label="내 땅 지도">${tiles}${its}</svg>`;}
-function isoIcon(id){return `<svg viewBox="-34 -58 68 80" aria-hidden="true"><polygon points="${PT([[-28,0],[0,-14],[28,0],[0,14]])}" fill="#74b052" ${ISK}/>${isoItem(id,0,0)}</svg>`;}
+  const its=items.map(([x,y,it])=>{const [cx,cy]=isoC(x,y);if(it==='me'){const pm=landPick==='me',f=foot(cx,cy,1);return `<g class="mech" data-d="${x+y+1}" style="cursor:pointer">${pm?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<ellipse cx="${cx}" cy="${cy+3}" rx="11" ry="4" fill="rgba(0,0,0,.25)"/>${fig(ME(),cx,cy+4,48,{expr:'happy',flip:!!me.f})}</g>`;}
+    const pk=landPick===x+','+y,f=foot(cx,cy,1),mr=!!RT[x+','+y];ISO_MIR=mr?1:0;const art=isoItem(it,cx,cy);ISO_MIR=0;return `<g class="ii${pk?' pk':''}" data-xy="${x},${y}" data-d="${x+y+1}">${pk?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<g transform="${pk?'translate(0,-5) ':''}${mr?`translate(${2*cx},0) scale(-1,1)`:''}">${art}</g></g>`;}).join('');
+  return `<svg class="isoland" viewBox="0 0 360 280" role="img" aria-label="내 땅 지도">${tiles}<g id="lItems">${its}</g></svg>`;}
+function isoIcon(id){NOBUB=1;const pet=id==='dog'||id==='cat'?`<g transform="translate(${id==='dog'?10:4},10) scale(.8)">${petPose(id,'sit')}</g>`:'';NOBUB=0;return `<svg viewBox="-34 -58 68 80" aria-hidden="true"><polygon points="${PT([[-28,0],[0,-14],[28,0],[0,14]])}" fill="#74b052" ${ISK}/>${isoItem(id,0,0)}${pet}</svg>`;}
 
 let landSel=null,landDel=false,landPick=null;
 const landRot=()=>{const L0=landOf();L0.rot=L0.rot||{};return L0.rot;};
@@ -2181,6 +2185,7 @@ $('#landView').addEventListener('click',e=>{const L0=landOf();
   if(e.target.closest('#lpDel')){removeTile(landPick);landPick=null;renderLand();return;}
   if(e.target.closest('#lpRoom')){landPick=null;openRoom();renderLand();return;}
   if(e.target.closest('#lpGal')){openGal('fos');return;}
+  const pg=e.target.closest('.petg');if(pg&&!landSel&&!landDel){petPoke(pg.dataset.pet);return;}
   const p=e.target.closest('[data-it]');if(p){landSel=landSel===p.dataset.it?null:p.dataset.it;landDel=false;landPick=null;renderLand();return;}
   if(e.target.closest('.mech')){if(landDel)return;landSel=null;landPick=landPick==='me'?null:'me';renderLand();return;}
   const t=e.target.closest('.it.own,.ii');if(!t)return;const k=t.dataset.xy,cur=L0.tiles[k];
@@ -2294,11 +2299,17 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
           :wbox(bb.x0,bb.y0,bb.x1,bb.y1,z0,hh,p.o[FACEY[r]]||shade(p.c,-.04),p.o[FACEX[r]]||shade(p.c,-.26),p.o.t||shade(p.c,.14));
         add(bb,svg,cls);}
       else if(p.fish){const [u0,u1,v,z]=p.fish,A=rotP(u0,v,D.w,D.d,r),Bq=rotP(u1,v,D.w,D.d,r),pa=P(x+A[0],y+A[1],z+8),pb=P(x+Bq[0],y+Bq[1],z+8),dx=pb[0]-pa[0],dy=pb[1]-pa[1];
-        const fish=(col,dur,off,dz,sc2)=>`<g><animateTransform attributeName="transform" type="translate" values="${pa[0]},${pa[1]-dz};${pb[0]},${pb[1]-dz};${pa[0]},${pa[1]-dz}" dur="${dur}s" begin="${off}s" repeatCount="indefinite"/><g><animateTransform attributeName="transform" type="scale" values="${dx>=0?1:-1} 1;${dx>=0?-1:1} 1" keyTimes="0;.5" calcMode="discrete" dur="${dur}s" begin="${off}s" repeatCount="indefinite"/><g transform="scale(${sc2})"><path d="M-6,0 Q-1,-4 4,0 Q-1,4 -6,0Z M-6,0 L-10,-3 L-10,3Z" fill="${col}" stroke="#2b211c" stroke-width=".6"/><circle cx="2" cy="-.6" r=".7" fill="#111"/></g></g></g>`;
-        const bub=(bx,by,dl)=>`<circle cx="${bx}" cy="${by}" r="1.2" fill="none" stroke="#e8f8ff" stroke-width=".7"><animate attributeName="cy" values="${by};${by-18*SC}" dur="2.2s" begin="${dl}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="2.2s" begin="${dl}s" repeatCount="indefinite"/></circle>`;
-        const wx=pa[0]+dx*.15,wy=pa[1]+dy*.15,weed=`<path d="M${wx},${wy+6*SC} q-3,-6 0,-12 q3,-6 0,-11" stroke="#3f9a50" stroke-width="2" fill="none"><animateTransform attributeName="transform" type="skewX" values="-6;6;-6" dur="3s" repeatCount="indefinite"/></path>`;
-        add({x0:x+Math.min(A[0],Bq[0])-.05,x1:x+Math.max(A[0],Bq[0])+.05,y0:y+Math.min(A[1],Bq[1])-.05,y1:y+Math.max(A[1],Bq[1])+.05,z0:z,z1:z+14},weed+fish('#ff8a3a',6,0,0,SC)+fish('#ffd56a',8.5,-3,5*SC,.8*SC)+fish('#4fc3f7',7,-5,-4*SC,.7*SC)+bub(pa[0]+dx*.7,pa[1]+dy*.7,0)+bub(pa[0]+dx*.4,pa[1]+dy*.4,1.1),cls);}
-      else if(p.pet){const c2=P(x+.5,y+.5);add({x0:x+.2,x1:x+.8,y0:y+.2,y1:y+.8,z0:0,z1:34},`<ellipse cx="${c2[0]}" cy="${c2[1]}" rx="${11*SC}" ry="${4.5*SC}" fill="rgba(0,0,0,.25)"/>`+petArt(p.pet,c2[0]-2*SC,c2[1]+2*SC,.95*SC),cls);}
+        const FISH={gold:`<g>${AT('rotate','-14 -4 0;14 -4 0;-14 -4 0','.45')}<path d="M-4,0 Q-9,-6 -13,-5 Q-11,0 -13,5 Q-9,6 -4,0Z" fill="#ff9a3a" stroke="#b5501a" stroke-width=".6" opacity=".92"/><path d="M-11,-3 Q-8,-1 -5,0 M-11,3 Q-8,1 -5,0" stroke="#ffd0a0" stroke-width=".5"/></g><path d="M-2,-3 Q1,-7 4,-3.4Z" fill="#ff8a2a" stroke="#b5501a" stroke-width=".5"/><ellipse cx="0" cy="0" rx="6" ry="3.8" fill="#ff7a1a" stroke="#a8461a" stroke-width=".7"/><ellipse cx=".6" cy="1.2" rx="4" ry="1.8" fill="#ffc07a"/><path d="M-1,1 q1,2 2.6,1.6" fill="#ff9a3a" stroke="#a8461a" stroke-width=".4"/><circle cx="3.4" cy="-1" r="1.2" fill="#fff"/><circle cx="3.7" cy="-1" r=".6" fill="#111"/>`,
+          neon:`<g>${AT('rotate','-10 -4 0;10 -4 0;-10 -4 0','.3')}<path d="M-4,0 L-8,-2.6 L-7,0 L-8,2.6Z" fill="#cfd8de" stroke="#6a7a84" stroke-width=".4"/></g><ellipse cx="0" cy="0" rx="5" ry="1.9" fill="#dbe4ea" stroke="#6a7a84" stroke-width=".5"/><path d="M-4,-.5 H3.6" stroke="#2fb6ff" stroke-width="1.1"/><path d="M-4,.8 H0" stroke="#ff3a4e" stroke-width="1.1"/><circle cx="3.4" cy="-.5" r=".7" fill="#111"/>`,
+          guppy:`<g>${AT('rotate','-12 -3 0;12 -3 0;-12 -3 0','.4')}<path d="M-3,0 Q-8,-6 -11,-4 Q-12,0 -11,4 Q-8,6 -3,0Z" fill="#8a5aff" stroke="#4a2aa0" stroke-width=".5"/><path d="M-10,-2.6 l1,1 M-10,0 h1.4 M-10,2.6 l1,-1" stroke="#ffd56a" stroke-width=".7"/></g><ellipse cx="0" cy="0" rx="3.8" ry="2" fill="#b6e07a" stroke="#5a8a3a" stroke-width=".5"/><circle cx="2.2" cy="-.4" r=".7" fill="#111"/>`};
+        const fish=(k,dur,off,dz,sc2)=>`<g><animateTransform attributeName="transform" type="translate" values="${pa[0]},${pa[1]-dz};${(pa[0]+pb[0])/2},${(pa[1]+pb[1])/2-dz-3*SC};${pb[0]},${pb[1]-dz};${(pa[0]+pb[0])/2},${(pa[1]+pb[1])/2-dz+2*SC};${pa[0]},${pa[1]-dz}" dur="${dur}s" begin="${off}s" repeatCount="indefinite"/><g><animateTransform attributeName="transform" type="scale" values="${dx>=0?1:-1} 1;${dx>=0?-1:1} 1" keyTimes="0;.5" calcMode="discrete" dur="${dur}s" begin="${off}s" repeatCount="indefinite"/><g transform="scale(${sc2})">${FISH[k]}</g></g></g>`;
+        const bub=(bx,by,dl)=>`<circle cx="${bx}" cy="${by}" r="${1.2*SC}" fill="none" stroke="#e8f8ff" stroke-width=".7"><animate attributeName="cy" values="${by};${by-20*SC}" dur="2.2s" begin="${dl}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="2.2s" begin="${dl}s" repeatCount="indefinite"/></circle>`;
+        const fl=(u,vv)=>{const q=rotP(u,vv,D.w,D.d,r);return P(x+q[0],y+q[1],21);};
+        let peb='';for(let i=0;i<22;i++){const q=fl(.14+hsh(i,41)*1.72,.3+hsh(i,43)*.46);peb+=`<ellipse cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" rx="${((1+hsh(i,45)*1.2)*SC).toFixed(2)}" ry="${((.7+hsh(i,47)*.6)*SC).toFixed(2)}" fill="${['#9a8f84','#c9bfae','#6e6a66','#d8a87a','#8a9aa8','#f2efe8'][i%6]}" stroke="#4a4038" stroke-width=".3"/>`;}
+        const weed=(u,h,col,d)=>{const b0=fl(u,.42);return `<g><animateTransform attributeName="transform" type="rotate" values="-9 ${b0[0]} ${b0[1]};9 ${b0[0]} ${b0[1]};-9 ${b0[0]} ${b0[1]}" dur="${d}s" repeatCount="indefinite"/><path d="M${b0[0]},${b0[1]} q${-3*SC},${-h*.25} 0,${-h*.5} q${3*SC},${-h*.25} 0,${-h*.5}" stroke="${col}" stroke-width="${2.2*SC}" fill="none" stroke-linecap="round"/><path d="M${b0[0]},${b0[1]-h*.3} q${4*SC},${-2*SC} ${5*SC},${-6*SC} M${b0[0]},${b0[1]-h*.6} q${-4*SC},${-2*SC} ${-5*SC},${-6*SC}" stroke="${col}" stroke-width="${1.6*SC}" fill="none" stroke-linecap="round"/></g>`;};
+        const rock=fl(1.3,.5);
+        add({x0:x+Math.min(A[0],Bq[0])-.05,x1:x+Math.max(A[0],Bq[0])+.05,y0:y+Math.min(A[1],Bq[1])-.05,y1:y+Math.max(A[1],Bq[1])+.05,z0:z,z1:z+14},peb+`<path d="M${rock[0]-6*SC},${rock[1]} q${2*SC},${-8*SC} ${7*SC},${-7*SC} q${5*SC},0 ${5*SC},${7*SC}Z" fill="#7a746c" stroke="#3a342e" stroke-width=".6"/>`+weed(.3,20*SC,'#3f9a50',2.6)+weed(.5,14*SC,'#5ab86a',3.2)+weed(1.65,17*SC,'#2f8a48',2.9)+fish('gold',7,0,0,SC)+fish('neon',5.5,-2,6*SC,.9*SC)+fish('neon',6,-4,4*SC,.85*SC)+fish('guppy',8,-3,-3*SC,SC)+bub(pa[0]+dx*.72,pa[1]+dy*.72,0)+bub(pa[0]+dx*.4,pa[1]+dy*.4,1.1)+bub(pa[0]+dx*.74,pa[1]+dy*.74,1.6),cls);}
+      else if(p.pet){const c2=P(x+.5,y+.5);NOBUB=1;const art=petPose(p.pet,p.pet==='dog'?'sit':'sleep');NOBUB=0;add({x0:x+.2,x1:x+.8,y0:y+.2,y1:y+.8,z0:0,z1:34},`<ellipse cx="${c2[0]}" cy="${c2[1]}" rx="${11*SC}" ry="${4.5*SC}" fill="rgba(0,0,0,.25)"/><g transform="translate(${c2[0]},${c2[1]+2*SC}) scale(${(.9*SC).toFixed(3)})">${art}</g>`,cls);}
       else if(p.puff){const [u,v,z]=p.puff,q=rotP(u,v,D.w,D.d,r);add({x0:x+q[0]-.2,x1:x+q[0]+.2,y0:y+q[1]-.2,y1:y+q[1]+.2,z0:z-8,z1:z+14},puffs3(P(x+q[0],y+q[1],z),SC),cls);}
       else if(p.icon){const [u,v,z]=p.icon,q=rotP(u,v,D.w,D.d,r),s=P(x+q[0],y+q[1],z);add({x0:x+q[0]-.15,x1:x+q[0]+.15,y0:y+q[1]-.15,y1:y+q[1]+.15,z0:z,z1:z+12},`<g transform="translate(${s[0]-6*SC},${s[1]-12*SC}) scale(${(.3*SC).toFixed(3)})">${relicIcon(p.r,true,40).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g>`,cls);}
     }}
@@ -2368,24 +2379,84 @@ $('#roomList').addEventListener('click',e=>{const b=e.target.closest('[data-fu]'
   roomPick=roomPick===i.id?null:i.id;renderRoom();});
 $('#roomClose').addEventListener('click',()=>{roomPick=null;$('#room').hidden=true;});
 
+// ---------------- pets: art (facing right, feet at 0,0) ----------------
+const POL='stroke="#2b211c" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"';
+const AT=(type,vals,dur,extra='')=>`<animateTransform attributeName="transform" type="${type}" values="${vals}" dur="${dur}s" repeatCount="indefinite" ${extra}/>`;
+let NOBUB=0;
+function bubble(t,x,y){if(NOBUB)return '';const w=t.length*8+10;return `<g transform="translate(${x},${y})"><animateTransform attributeName="transform" type="translate" values="${x},${y};${x},${y-2};${x},${y}" dur=".6s" repeatCount="indefinite"/><rect x="${-w/2}" y="-12" width="${w}" height="14" rx="7" fill="#fff" stroke="#2b211c" stroke-width="1"/><path d="M-3,2 L0,6 L3,2" fill="#fff" stroke="#2b211c" stroke-width="1"/><path d="M-2.6,1.6 H2.6" stroke="#fff" stroke-width="1.6"/><text x="0" y="-1.6" text-anchor="middle" font-size="8.5" font-weight="800" fill="#2b211c">${t}</text></g>`;}
+const DOG={c:'#e39444',s:'#c2732c',w:'#fff6ea',p:'#f7a7b4'},CAT={c:'#c3c3cf',s:'#8a8a98',w:'#fbfbfd',e:'#7cc35a',p:'#f7a7b4'};
+function dogHead(mouth,eyes='open'){const {c,s,w,p}=DOG;
+  const eye=eyes==='closed'?`<path d="M1.8,-3 q1.6,-1.8 3.2,0" stroke="#2b211c" stroke-width="1.2" fill="none"/>`:`<ellipse cx="3.4" cy="-2.6" rx="1.5" ry="1.8" fill="#2b211c"/><circle cx="3.9" cy="-3.3" r=".55" fill="#fff"/>`;
+  const m=mouth==='open'?`<path d="M7,3.4 q3,4.4 6.4,.6 Z" fill="#7a2a2a" stroke="#2b211c" stroke-width=".9"/><path d="M8.6,4.6 q2,3.6 3.4,.4" fill="${p}"/>`
+    :mouth==='pant'?`<path d="M7,3.2 q3,3.6 6.4,.4" fill="#7a2a2a" stroke="#2b211c" stroke-width=".9"/><g>${AT('translate','0 0;0 1.4;0 0','.32')}<path d="M9,4.4 q1.6,6.6 3.4,0" fill="${p}" stroke="#c4566a" stroke-width=".7"/></g>`
+    :`<path d="M8.4,4 q1.8,1.4 3.6,0" stroke="#2b211c" stroke-width="1" fill="none"/>`;
+  return `<path d="M-6,-5 L-4.4,-15.5 L1,-8.5Z M2.4,-8.8 L7.6,-15.6 L8.4,-4.6Z" fill="${c}" ${POL}/><path d="M-4.2,-7 L-3.6,-12.6 L-.6,-8.6Z M3.8,-8.6 L6.8,-12.6 L7,-6.2Z" fill="${p}"/>
+    <path d="M-8.5,-.5 Q-9,-10 0,-10.6 Q9,-10.8 10,-2 Q10.6,6 2,7.4 Q-8,8 -8.5,-.5Z" fill="${c}" ${POL}/><path d="M-6,3 Q-2,8.4 4,7.2 Q1,4 -1,1.4Z" fill="${w}"/>
+    <path d="M3,1 Q4.4,-2.6 9.6,-1.4 Q15.6,-.4 15,3.6 Q14.4,7 8.6,6.6 Q3.6,6 3,1Z" fill="${w}" ${POL}/><ellipse cx="14.2" cy="1.2" rx="1.8" ry="1.4" fill="#2b211c"/>
+    ${eye}<ellipse cx="-.6" cy="2" rx="2.2" ry="1.2" fill="${p}" opacity=".8"/>${m}`;}
+function dogLegs(spd){const {c,s}=DOG,leg=(x,col,ph)=>`<g><animateTransform attributeName="transform" type="rotate" values="${spd?`${-spd} ${x} -9;${spd} ${x} -9;${-spd} ${x} -9`:`0 ${x} -9`}" dur="${spd>25?.26:.48}s" begin="${ph}s" repeatCount="indefinite"/><rect x="${x-2.3}" y="-10" width="4.6" height="10.4" rx="2" fill="${col}" ${POL}/><ellipse cx="${x+.8}" cy="0" rx="3" ry="1.4" fill="${col}" ${POL}/></g>`;
+  return {far:leg(-10,s,0)+leg(8,s,spd>25?-.13:-.24),near:leg(-7,c,spd>25?-.13:-.24)+leg(11,c,0)};}
+function dogArt(pose){const {c,s,w}=DOG;const tail=`<g>${AT('rotate',pose==='belly'?'-25 -15 -16;25 -15 -16;-25 -15 -16':'-14 -15 -16;16 -15 -16;-14 -15 -16',pose==='run'?'.2':'.42')}<path d="M-14,-15 Q-24,-18 -21,-27 Q-17,-31 -14,-26 Q-13,-22 -17,-21" fill="none" stroke="#2b211c" stroke-width="6.4" stroke-linecap="round"/><path d="M-14,-15 Q-24,-18 -21,-27 Q-17,-31 -14,-26 Q-13,-22 -17,-21" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round"/><path d="M-20.4,-26 Q-17,-30 -14.6,-26" stroke="${w}" stroke-width="2" fill="none" stroke-linecap="round"/></g>`;
+  if(pose==='walk'||pose==='run'||pose==='bark'||pose==='stand'){const L=dogLegs(pose==='walk'?20:pose==='run'?34:0),bob=pose==='walk'||pose==='run'?AT('translate','0 0;0 -1.2;0 0',pose==='run'?'.26':'.48'):'';
+    const hd=pose==='bark'?`<g transform="translate(13,-22)"><g>${AT('rotate','0;-10;0;-10;0','.7')}${dogHead('open')}</g></g>`:`<g transform="translate(13,-21)">${dogHead(pose==='run'?'pant':'')}</g>`;
+    return `${L.far}<g>${bob}${tail}<path d="M-17,-13 Q-17,-23 -6,-23.4 H6 Q16,-23.4 16.6,-14 Q16.8,-8 9,-7.6 H-10 Q-17,-7.6 -17,-13Z" fill="${c}" ${POL}/><path d="M-9,-8.4 Q0,-5 9,-8.4 Q0,-10.4 -9,-8.4Z" fill="${w}"/>${hd}</g>${L.near}${pose==='bark'?bubble('멍멍!',20,-44):''}`;}
+  if(pose==='sit'){return `${tail}<path d="M-12,-1 Q-15,-12 -8,-20 Q0,-27 8,-20 Q12,-12 9,-1Z" fill="${c}" ${POL}/><path d="M-3,-20 Q4,-14 3,-2 Q-3,-2 -5,-10Z" fill="${w}"/><rect x="2" y="-12" width="4.4" height="12.4" rx="2" fill="${c}" ${POL}/><rect x="6.6" y="-12" width="4.4" height="12.4" rx="2" fill="${c}" ${POL}/>
+      <ellipse cx="-9" cy="-1" rx="6" ry="2.6" fill="${s}" ${POL}/><g transform="translate(6,-27)"><g>${AT('translate','0 0;0 -.8;0 0','.32')}${dogHead('pant')}</g></g>${bubble('헤헤헤',14,-48)}`;}
+  if(pose==='belly'){const leg=(x,ph)=>`<g>${AT('rotate',`-18 ${x} -12;18 ${x} -12;-18 ${x} -12`,'.5',`begin="${ph}s"`)}<rect x="${x-2.2}" y="-21" width="4.4" height="10" rx="2" fill="${c}" ${POL}/><ellipse cx="${x}" cy="-21" rx="2.8" ry="2" fill="${w}" ${POL}/></g>`;
+    return `<g transform="translate(0,2)">${tail}${leg(-9,0)}${leg(-3,-.25)}${leg(5,-.1)}${leg(10,-.35)}<path d="M-17,-6 Q-17,-15 -4,-15 H6 Q16,-15 16,-6 Q16,0 6,0 H-8 Q-17,0 -17,-6Z" fill="${c}" ${POL}/><path d="M-11,-12 Q0,-16 11,-12 Q12,-7 0,-6.4 Q-12,-7 -11,-12Z" fill="${w}"/><ellipse cx="-2" cy="-10" rx="1" ry=".8" fill="${DOG.p}"/><ellipse cx="4" cy="-10" rx="1" ry=".8" fill="${DOG.p}"/>
+      <g transform="translate(19,-6) rotate(160)">${dogHead('pant','closed')}</g></g>${bubble('♥ 배 만져줘',4,-30)}`;}
+  if(pose==='sleep')return `<path d="M-15,-1 Q-16,-12 -4,-13 H8 Q17,-12 16,-1Z" fill="${c}" ${POL}/><g transform="translate(12,-7) scale(.86)">${dogHead('','closed')}</g><path d="M-15,-3 Q-22,-3 -20,-9" stroke="${c}" stroke-width="4" fill="none" stroke-linecap="round"/>${zzz(8,-22)}`;
+  return '';}
+function zzz(x,y){return [0,.8,1.6].map(d=>`<text x="${x}" y="${y}" font-size="8" font-weight="800" fill="#e8f2ff" stroke="#2b211c" stroke-width=".6" paint-order="stroke">z<animate attributeName="y" values="${y};${y-14}" dur="2.4s" begin="${d}s" repeatCount="indefinite"/><animate attributeName="x" values="${x};${x+8}" dur="2.4s" begin="${d}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="${d}s" repeatCount="indefinite"/></text>`).join('');}
+function catHead(mouth,eyes='open'){const {c,s,w,e,p}=CAT;
+  const eye=eyes==='closed'?`<path d="M-4.6,-1.6 q1.8,1.6 3.6,0 M2.6,-1.6 q1.8,1.6 3.6,0" stroke="#2b211c" stroke-width="1.1" fill="none"/>`:`<ellipse cx="-2.8" cy="-1.8" rx="2" ry="2.4" fill="${e}" stroke="#2b211c" stroke-width=".7"/><ellipse cx="-2.6" cy="-1.8" rx=".7" ry="1.8" fill="#1a1412"/><ellipse cx="4.4" cy="-1.8" rx="2" ry="2.4" fill="${e}" stroke="#2b211c" stroke-width=".7"/><ellipse cx="4.6" cy="-1.8" rx=".7" ry="1.8" fill="#1a1412"/><circle cx="-2" cy="-2.8" r=".5" fill="#fff"/><circle cx="5.2" cy="-2.8" r=".5" fill="#fff"/>`;
+  const m=mouth==='open'?`<path d="M.4,3.2 q1,3.4 2.4,0Z" fill="#7a2a2a" stroke="#2b211c" stroke-width=".7"/>`:mouth==='tongue'?`<path d="M.6,3 q1,1.2 2,0" stroke="#2b211c" stroke-width=".8" fill="none"/><ellipse cx="1.6" cy="4.4" rx="1" ry="1.3" fill="${p}"/>`:`<path d="M-.4,3 q1,1 2,0 q1,1 2,0" stroke="#2b211c" stroke-width=".8" fill="none"/>`;
+  return `<path d="M-7.6,-3.6 L-7,-13.6 L-1.6,-7.6Z M3.6,-7.8 L9,-13.6 L9.6,-3.4Z" fill="${c}" ${POL}/><path d="M-6.4,-5.6 L-6,-10.8 L-3.2,-7.6Z M5,-7.8 L8,-10.8 L8.4,-5.4Z" fill="${p}"/>
+    <path d="M-9,1 Q-9.4,-9 1,-9.4 Q11,-9.6 11,.6 Q11,7.6 1,7.8 Q-9,7.8 -9,1Z" fill="${c}" ${POL}/><path d="M-1.6,-9 v3.6 M1,-9.4 v4 M3.6,-9 v3.6" stroke="${s}" stroke-width="1.2"/><path d="M-4,3.6 Q1,8.4 6,3.6 Q1,1.6 -4,3.6Z" fill="${w}"/>
+    ${eye}<path d="M.6,1.4 L2.6,1.4 L1.6,2.6Z" fill="${p}" stroke="#2b211c" stroke-width=".5"/>${m}<path d="M-6,2 H-12 M-6,3.4 L-11.6,5 M9,2 H15 M9,3.4 L14.6,5" stroke="#2b211c" stroke-width=".5"/>`;}
+function catArt(pose){const {c,s,w}=CAT;const tailUp=`<g>${AT('rotate','-8 -14 -14;10 -14 -14;-8 -14 -14','1.6')}<path d="M-14,-14 Q-22,-20 -19,-32 Q-18,-36 -15,-34" fill="none" stroke="#2b211c" stroke-width="5.4" stroke-linecap="round"/><path d="M-14,-14 Q-22,-20 -19,-32 Q-18,-36 -15,-34" fill="none" stroke="${c}" stroke-width="3.4" stroke-linecap="round"/><path d="M-20.4,-24 h2.4 M-20,-29 h2.4" stroke="${s}" stroke-width="1.4"/></g>`;
+  const leg=(x,col,ph,spd)=>`<g>${spd?AT('rotate',`${-spd} ${x} -9;${spd} ${x} -9;${-spd} ${x} -9`,'.5',`begin="${ph}s"`):''}<rect x="${x-1.8}" y="-10" width="3.6" height="10.4" rx="1.6" fill="${col}" ${POL}/><ellipse cx="${x+.6}" cy="0" rx="2.4" ry="1.2" fill="${w}" ${POL}/></g>`;
+  const stripes=`<path d="M-8,-21 q1,3 0,6 M-3,-22 q1,3 0,6 M2,-22 q1,3 0,6" stroke="${s}" stroke-width="1.6" fill="none"/>`;
+  if(pose==='walk'||pose==='meowstand'){const sp=pose==='walk'?18:0;
+    return `${leg(-10,s,0,sp)+leg(7,s,-.25,sp)}<g>${sp?AT('translate','0 0;0 -.8;0 0','.5'):''}${tailUp}<path d="M-15,-13 Q-15,-22 -5,-22.4 H5 Q14,-22 14.4,-14 Q14.6,-8.6 8,-8.4 H-9 Q-15,-8.4 -15,-13Z" fill="${c}" ${POL}/>${stripes}<path d="M-6,-9.2 Q2,-6.6 8,-9.2" stroke="${w}" stroke-width="2.4" fill="none"/><g transform="translate(14,-23)">${catHead(pose==='meowstand'?'open':'')}</g></g>${leg(-7,c,-.25,sp)+leg(10,c,0,sp)}${pose==='meowstand'?bubble('야옹~',18,-42):''}`;}
+  if(pose==='sit'||pose==='groom'||pose==='meow'){const paw=pose==='groom'?`<g>${AT('translate','0 0;-1 -6;0 0','.7')}<ellipse cx="6" cy="-12" rx="2.8" ry="2.4" fill="${w}" ${POL}/></g>`:'';
+    const tail=`<g>${AT('rotate','0 -8 -2;-10 -8 -2;0 -8 -2','2')}<path d="M-8,-2 Q-20,-1 -19,-10" fill="none" stroke="#2b211c" stroke-width="5.2" stroke-linecap="round"/><path d="M-8,-2 Q-20,-1 -19,-10" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round"/></g>`;
+    return `${tail}<path d="M-10,-1 Q-12,-13 -5,-20 Q2,-25 7,-19 Q11,-11 8,-1Z" fill="${c}" ${POL}/><path d="M-1,-18 Q5,-12 4,-2 Q-2,-2 -3,-10Z" fill="${w}"/><path d="M-8,-12 q2,1 4,0 M-9,-7 q2,1 4,0" stroke="${s}" stroke-width="1.4" fill="none"/><rect x="0" y="-9" width="3.6" height="9.4" rx="1.6" fill="${c}" ${POL}/><rect x="4" y="-9" width="3.6" height="9.4" rx="1.6" fill="${c}" ${POL}/>
+      <g transform="translate(3,-26)"><g>${pose==='groom'?AT('rotate','0;12;0','.7'):AT('rotate','0;-4;0;0','3')}${catHead(pose==='groom'?'tongue':pose==='meow'?'open':'',pose==='groom'?'closed':'open')}</g></g>${paw}${pose==='meow'?bubble('야옹~',12,-44):pose==='groom'?bubble('핥핥',14,-44):''}`;}
+  if(pose==='stretch')return `<g>${AT('translate','0 0;0 1;0 0','1.6')}${tailUp}<path d="M-14,-16 Q-12,-24 -4,-20 L10,-10 Q14,-7 12,-5 L-8,-8 Q-15,-9 -14,-16Z" fill="${c}" ${POL}/>${leg(-11,c,0,0)}${leg(-6,c,0,0)}<rect x="6" y="-4" width="14" height="3.6" rx="1.6" fill="${c}" ${POL}/><g transform="translate(15,-9) rotate(8)">${catHead('open','closed')}</g></g>${bubble('쭈욱~',8,-36)}`;
+  if(pose==='sleep')return `<g>${AT('scale','1 1;1.03 1.05;1 1','2.2')}<path d="M-14,-1 Q-16,-14 0,-15 Q15,-14 14,-1Z" fill="${c}" ${POL}/><path d="M-6,-12 q2,2 0,5 M0,-13 q2,2 0,5" stroke="${s}" stroke-width="1.6" fill="none"/><path d="M14,-2 Q4,1 -8,-1" stroke="${c}" stroke-width="4.4" fill="none" stroke-linecap="round"/><g transform="translate(8,-6) scale(.8)">${catHead('','closed')}</g></g>${zzz(6,-20)}`;
+  return '';}
+function petPose(kind,pose){return kind==='dog'?dogArt(pose):catArt(pose);}
+// homes on the tile (dog house / cat cushion)
+function petHome(kind,cx,cy){if(kind==='dog'){const b=isoBox(cx-4,cy-2,.42,18,'#b07a44');return shadowE(cx-4,cy-2,18,8)+b.svg+facePoly(b,'r',.3,.72,0,12,'#3a2a1a',ISK)+isoRoof(cx-4,cy-2,.42,18,12,'#c94a2a',1.25)+`<ellipse cx="${cx+14}" cy="${cy+6}" rx="6" ry="2.6" fill="#3a5a9a" ${ISK}/><ellipse cx="${cx+14}" cy="${cy+5.4}" rx="4" ry="1.4" fill="#c9a06a"/>`;}
+  return shadowE(cx,cy,18,7)+`<ellipse cx="${cx}" cy="${cy-2}" rx="18" ry="8.6" fill="#b25a7a" ${ISK}/><ellipse cx="${cx}" cy="${cy-4}" rx="14" ry="6.2" fill="#e88aa8"/><path d="M${cx-6},${cy-5} q6,3 12,0" stroke="#c9668a" stroke-width="1" fill="none"/><ellipse cx="${cx+16}" cy="${cy+6}" rx="5.4" ry="2.4" fill="#e8e2d6" ${ISK}/><circle cx="${cx-10}" cy="${cy+5}" r="3" fill="#7bd88f" ${ISK}/>`;}
+// ---------------- pets: behaviour on the land ----------------
+let PETS=[],petsKey='';
+const PACT={dog:[['walk',30],['run',14],['bark',14],['sit',14],['belly',12],['sleep',8],['stand',8]],cat:[['walk',30],['groom',16],['stretch',12],['meow',12],['sleep',16],['sit',14]]};
+function petSync(){const L0=landOf(),homes=Object.entries(L0.tiles).filter(([k,v])=>v==='dog'||v==='cat'),key=homes.map(h=>h.join(':')).join('|');
+  if(key===petsKey)return;petsKey=key;const old=PETS;PETS=homes.map(([k,v])=>{const o=old.find(p=>p.home===k&&p.kind===v);if(o)return o;const [x,y]=k.split(',').map(Number);
+    return {home:k,kind:v,x:x+.5+(v==='dog'?.3:.25),y:y+.5+.3,tx:0,ty:0,pose:'sit',t:1+Math.random()*2,face:1,drawn:''};});}
+function petPick(p){const n=landSize(),L0=landOf(),list=PACT[p.kind];let r=Math.random()*list.reduce((a,b)=>a+b[1],0),act='sit';for(const [a,w] of list){r-=w;if(r<=0){act=a;break;}}
+  if(act==='walk'||act==='run'){for(let i=0;i<8;i++){const x=.25+Math.random()*(n-.5),y=.25+Math.random()*(n-.5),it=L0.tiles[Math.floor(x)+','+Math.floor(y)];if(!it||['flower','veg','dog','cat','bench'].includes(it)){p.tx=x;p.ty=y;break;}}}
+  if(act==='sleep'){const [hx,hy]=p.home.split(',').map(Number);p.tx=hx+.5+(p.kind==='dog'?.32:0);p.ty=hy+.5+(p.kind==='dog'?.32:.05);act='gohome';}
+  p.pose=act;p.t=act==='walk'||act==='run'||act==='gohome'?20:act==='belly'||act==='sleep'?5+Math.random()*3:2.4+Math.random()*2;}
+function petTick(dt){if(view!=='land'||!$('#room').hidden||!$('#gal').hidden)return;const layer=document.getElementById('lItems');if(!layer)return;petSync();
+  for(const p of PETS){p.t-=dt;
+    if(p.pose==='walk'||p.pose==='run'||p.pose==='gohome'){const sp=p.pose==='run'?2.1:.75,dx=p.tx-p.x,dy=p.ty-p.y,d=Math.hypot(dx,dy);
+      if(d<.05){if(p.pose==='gohome'){p.pose='sleep';p.t=6+Math.random()*4;}else p.t=0;}else{const st=Math.min(d,sp*dt);p.x+=dx/d*st;p.y+=dy/d*st;const sx=dx-dy;if(Math.abs(sx)>.02)p.face=sx>0?1:-1;}}
+    if(p.t<=0)petPick(p);
+    let el=layer.querySelector(`[data-pet="${p.home}"]`);
+    if(!el){el=document.createElementNS('http://www.w3.org/2000/svg','g');el.setAttribute('class','petg');el.dataset.pet=p.home;el.style.cursor='pointer';layer.appendChild(el);p.drawn='';}
+    const pose=p.pose==='gohome'?'walk':p.pose==='stand'?'stand':p.pose,dk=pose+p.face;
+    if(p.drawn!==dk){p.drawn=dk;const art=p.kind==='dog'?(pose==='meowstand'?'stand':pose):pose;el.innerHTML=`<ellipse cx="0" cy="1" rx="12" ry="4" fill="rgba(0,0,0,.25)"/><g transform="scale(${p.face*1.08},1.08)">${petPose(p.kind,art)}</g>`;
+      el.querySelectorAll('text').forEach(t=>{if(p.face<0)t.setAttribute('transform',`scale(-1,1)`);});}
+    const sx=ISO.ox+(p.x-p.y)*ISO.hw,sy=ISO.oy+(p.x+p.y)*ISO.hh;el.setAttribute('transform',`translate(${sx.toFixed(1)},${sy.toFixed(1)})`);
+    const dep=p.x+p.y;el.dataset.d=dep;let before=null;for(const c of layer.children){if(c!==el&&+c.dataset.d>dep){before=c;break;}}
+    if(el.nextSibling!==before&&el!==before)layer.insertBefore(el,before);}
+  for(const el of [...layer.querySelectorAll('.petg')])if(!PETS.find(p=>p.home===el.dataset.pet))el.remove();}
+function petPoke(home){const p=PETS.find(q=>q.home===home);if(!p)return;p.pose=p.kind==='dog'?(Math.random()<.5?'bark':'belly'):(Math.random()<.5?'meow':'groom');p.t=3;}
+
 // ---------------- pets / animated land art ----------------
-function petArt(kind,x,y,k=1){const O='stroke="#2b211c" stroke-width="1.3" stroke-linejoin="round"';let g='';
-  if(kind==='dog'){const c='#d98a3a',w='#fff4e6';
-    g=`<g><path d="M-13,-15 q-9,-5 -5,-14 q5,3 3,11" fill="${c}" ${O}><animateTransform attributeName="transform" type="rotate" values="-10 -13 -15;14 -13 -15;-10 -13 -15" dur=".55s" repeatCount="indefinite"/></path>
-      <rect x="-12" y="-8" width="4" height="8" rx="1.5" fill="${c}" ${O}/><rect x="-5" y="-8" width="4" height="8" rx="1.5" fill="${c}" ${O}/><rect x="3" y="-8" width="4" height="8" rx="1.5" fill="${c}" ${O}/><rect x="9" y="-8" width="4" height="8" rx="1.5" fill="${c}" ${O}/>
-      <ellipse cx="-1" cy="-12" rx="15" ry="8.5" fill="${c}" ${O}/><ellipse cx="3" cy="-9" rx="8" ry="4" fill="${w}"/>
-      <g><animateTransform attributeName="transform" type="translate" values="0 0;0 -1.4;0 0" dur="1.3s" repeatCount="indefinite"/>
-      <path d="M5,-29 L7,-38 L12,-31Z M15,-31 L19,-38 L20,-29Z" fill="${c}" ${O}/><circle cx="13" cy="-24" r="9" fill="${c}" ${O}/><ellipse cx="18" cy="-20.5" rx="6" ry="4.2" fill="${w}" ${O}/><circle cx="23.2" cy="-21.6" r="1.6" fill="#2b211c"/>
-      <circle cx="14.5" cy="-26" r="1.5" fill="#2b211c"/><path d="M18,-17.6 q2,1.6 4,0" stroke="#2b211c" stroke-width="1" fill="none"/><ellipse cx="10" cy="-21" rx="2" ry="1.2" fill="#f2a39a" opacity=".8"/></g></g>`;}
-  else{const c='#a8a8b4',d='#6e6e7a',w='#f4f4f6';
-    g=`<g><path d="M8,-3 q12,0 11,-12" stroke="${d}" stroke-width="4.4" fill="none" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" values="0 8 -3;-16 8 -3;0 8 -3" dur="1.8s" repeatCount="indefinite"/></path>
-      <ellipse cx="0" cy="-12" rx="10" ry="12" fill="${c}" ${O}/><ellipse cx="0" cy="-9" rx="5.5" ry="7" fill="${w}"/><path d="M-6,-20 q3,-1.5 6,0 M-8,-15 q4,-1.5 8,0" stroke="${d}" stroke-width="1.4" fill="none"/>
-      <rect x="-6" y="-4" width="4" height="4" rx="1.5" fill="${w}" ${O}/><rect x="2" y="-4" width="4" height="4" rx="1.5" fill="${w}" ${O}/>
-      <g><animateTransform attributeName="transform" type="rotate" values="0 0 -24;-6 0 -24;0 0 -24;0 0 -24" dur="3s" repeatCount="indefinite"/>
-      <path d="M-8,-30 L-8,-41 L-2,-35Z M8,-30 L8,-41 L2,-35Z" fill="${c}" ${O}/><circle cx="0" cy="-29" r="9" fill="${c}" ${O}/><path d="M-3,-36 l1,3 M0,-37 v3 M3,-36 l-1,3" stroke="${d}" stroke-width="1.2"/>
-      <ellipse cx="-3.4" cy="-29" rx="1.4" ry="2" fill="#3a7a3a"/><ellipse cx="3.4" cy="-29" rx="1.4" ry="2" fill="#3a7a3a"/><path d="M-1,-25.4 l1,1 l1,-1" fill="#f2a39a" stroke="#2b211c" stroke-width=".6"/>
-      <path d="M-10,-26 h-5 M-10,-24 l-5,1 M10,-26 h5 M10,-24 l5,1" stroke="#2b211c" stroke-width=".6"/></g></g>`;}
-  return `<g transform="translate(${x},${y}) scale(${k})">${g}</g>`;}
 function fountainArt(cx,cy){const st='#b8b3aa',sd='#8f8a80',wt='#4fa3d9',O=ISK;let g=shadowE(cx,cy,26,11);
   g+=`<path d="M${cx-25},${cy-7} v7 a25,12.5 0 0 0 50,0 v-7Z" fill="${sd}" ${O}/><ellipse cx="${cx}" cy="${cy-7}" rx="25" ry="12.5" fill="${st}" ${O}/><ellipse cx="${cx}" cy="${cy-7}" rx="21" ry="10" fill="${wt}"/>`;
   for(const dl of[0,.8])g+=`<ellipse cx="${cx}" cy="${cy-7}" rx="4" ry="2" fill="none" stroke="#d8f2ff" stroke-width="1.2"><animate attributeName="rx" values="4;19" dur="1.6s" begin="${dl}s" repeatCount="indefinite"/><animate attributeName="ry" values="2;9" dur="1.6s" begin="${dl}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;0" dur="1.6s" begin="${dl}s" repeatCount="indefinite"/></ellipse>`;
@@ -2415,7 +2486,8 @@ function renderGal(){const nf=FOSSILS.filter(f=>fosDone(f.id)).length;
   if(galTab==='fos')$('#galBody').innerHTML=`<p class="sub" style="margin:0">찾은 뼈로 골격을 세워 전시해요. 비어 있는 부분은 아직 못 찾은 부위예요. 복원 완료 ${nf}/${FOSSILS.length}</p><div class="gxs">${FOSSILS.map(fossilExhibit).join('')}</div>`;
   else $('#galBody').innerHTML=`<p class="sub" style="margin:0">원정에서 발굴한 유물을 시대별 진열장에 전시해요. 발굴 ${relicCount()}/${RELICS.length}</p>`+ERAS.map(e=>{const rs=relicsOf(e.id),n=setCount(e.id);
     return `<div class="vera"><div class="vhd"><b>${e.n}</b><span>${n}/${rs.length}${setLv(e.id)?' · 세트 효과 '+e.b(setPow(e.id)):''}</span></div><div class="vrow">${rs.map(relicCase).join('')}</div></div>`;}).join('');}
-function openGal(t){if(t)galTab=t;renderGal();$('#gal').hidden=false;$('#gal .dsheet').scrollTop=0;}
+const hasMuseum=()=>Object.values(landOf().tiles).includes('museum');
+function openGal(t){if(!hasMuseum()){toast('내 땅에 유물 전시관을 먼저 지어 주세요 (₩10,000)');return;}if(t)galTab=t;renderGal();$('#gal').hidden=false;$('#gal .dsheet').scrollTop=0;}
 $('#galTab').addEventListener('click',e=>{const b=e.target.closest('[data-gt]');if(!b)return;galTab=b.dataset.gt;renderGal();$('#gal .dsheet').scrollTop=0;});
 $('#galClose').addEventListener('click',()=>{$('#gal').hidden=true;});
 
@@ -2444,7 +2516,8 @@ addEventListener('pointerdown',()=>pressing=true,true);addEventListener('pointer
 function liveRefresh(dt){liveT-=dt;if(liveT>0||pressing)return;liveT=.4;
   if(view!=='craft'&&view!=='store'&&view!=='land')return;
   const key=view+JSON.stringify(S.res)+Math.floor(S.money/(view==='store'?1:10))+JSON.stringify(S.parts)+S.dl+relicCount();if(key===liveKey)return;liveKey=key;
-  if(view==='craft')renderCraft(true);else if(view==='store')renderStore();else renderLand();}
+  if(view==='craft')renderCraft(true);else if(view==='store')renderStore();else landAfford();}
+function landAfford(){document.querySelectorAll('#landView .lp[data-it]').forEach(b=>{const it=LITEM.find(i=>i.id===b.dataset.it),em=b.querySelector('em');if(em)em.classList.toggle('no',S.money<it.p);});const lb=$('#landBuy');if(lb){const L0=landOf();lb.disabled=S.money<LAND_COST[L0.lv];}}
 function hud(){
   $('#money').textContent=won(S.money);
   $('#expBadge').hidden=!S.ex.active;
@@ -2493,7 +2566,7 @@ let hidAt=0;
 function frame(t){const raw=(t-last)/1000,dt=Math.min(.05,raw);last=t;
   if(raw>1.5&&!hidAt)catchUp(raw-dt,1,raw<30);
   boreTick(dt);
-  exTick(dt);popTick(dt);chestTick(dt);alertTick(dt);liveRefresh(dt);
+  exTick(dt);popTick(dt);petTick(dt);chestTick(dt);alertTick(dt);liveRefresh(dt);
   const blocked=S.done||!!gateAt();
   if(titleOn){}
   else if(exp){const g=digOf(exp.r.id);ex.draw(dt,{abs0:g.i,frac:1-g.hp/expHP(exp.r,g.i),active:S.ex.active===exp.r.id,boost:boostM()});}
