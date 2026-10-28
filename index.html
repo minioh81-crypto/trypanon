@@ -390,7 +390,7 @@ nav.tabs button{font-size:12px}
 .lp svg{width:56px;height:66px}
 .isoland{display:block;width:100%;height:auto}.isoland .it.own,.isoland .ii{cursor:pointer}.isoland .it.own:hover polygon:nth-child(3){filter:brightness(1.12)}.lp span{font-size:12px;font-weight:600}.lp em{font-style:normal;font-size:11px;font-family:var(--f-num);color:var(--mute)}.lp em.no{color:var(--hot)}.lp em.own{color:var(--ok)}
 .lp.on{border-color:var(--amber);background:var(--panel2)}
-.pickbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;border:1px solid var(--amber);border-radius:12px;background:var(--panel2);padding:6px 10px;font-size:13px}.pickbar>span{display:flex;align-items:center;gap:6px}.pickbar>span svg{width:34px;height:40px}.pickbar>div{display:flex;gap:6px;flex-wrap:wrap}#roomBar:not(:has(button)){border-color:var(--line);background:transparent;color:var(--mute)}.roomart .fu,.roomart .ft{cursor:pointer}
+.pickbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;border:1px solid var(--amber);border-radius:12px;background:var(--panel2);padding:6px 10px;font-size:13px}.pickbar>span{display:flex;align-items:center;gap:6px}.pickbar>span svg{width:34px;height:40px}.pickbar>div{display:flex;gap:6px;flex-wrap:wrap}#roomBar:not(:has(button)){border-color:var(--line);background:transparent;color:var(--mute)}.roomart .fu,.roomart .ft,.roomart .stair{cursor:pointer}.flt{display:flex;gap:6px;margin-left:auto;margin-right:8px}.flt:empty{display:none}.flt button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}.flt button.on{border-color:var(--amber);background:var(--amber);color:#1a1206}
 #room{position:fixed;inset:0;z-index:55;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}
 #room .dsheet{max-height:92vh;overflow-y:auto}
 .roomart{border-radius:12px;overflow:hidden;line-height:0;border:1px solid var(--line)}.roomart svg{width:100%;height:auto}
@@ -525,7 +525,7 @@ nav.tabs button{font-size:12px}
   <h3 class="nhead" id="nHead"></h3><div class="nart" id="nArt"></div><p class="nbody" id="nBody"></p>
   <div class="nreward" id="nReward"></div><button class="primary" type="button" id="nOk">받기</button></div></section>
 <section id="room" hidden><div class="dsheet">
-  <div class="ehd"><div class="iname" style="font-size:18px">집 안 꾸미기</div><button class="skip" id="roomClose" type="button">닫기</button></div>
+  <div class="ehd"><div class="iname" style="font-size:18px" id="roomTitle">집 안 꾸미기</div><div class="flt" id="roomFl"></div><button class="skip" id="roomClose" type="button">닫기</button></div>
   <div class="roomart" id="roomArt"></div><div class="pickbar" id="roomBar"></div><div class="lpal" id="roomList"></div></div></section>
 <section id="deal" hidden><div class="dsheet" id="dSheet"></div></section>
 <div id="toast" hidden></div>
@@ -2034,12 +2034,15 @@ $('#landView').addEventListener('click',e=>{const L0=landOf();
 // ---------------- interior (grid placement) ----------------
 const FDEF={rug:{w:3,d:2,flat:1},bed:{w:2,d:3},sofa:{w:2,d:1},desk:{w:2,d:1},tv:{w:2,d:1},shelf:{w:1,d:1},plant:{w:1,d:1},case:{w:1,d:2},frame:{wall:1}};
 const FDEFPOS={rug:[2,2],bed:[0,3],sofa:[2,4],desk:[4,0],tv:[2,0],shelf:[5,2],plant:[1,0],case:[0,0],frame:[3.5]};
-let roomPick=null;
+let roomPick=null,roomFloor=0;
+const twoF=()=>houseTile()?.[1]==='house_b',STAIR=['5,4','5,5'];
+const flMap=()=>{const L0=landOf();L0.fl=L0.fl||{};return L0.fl;},flOf=id=>flMap()[id]||0;
+function setFl(id,v){const m=flMap();if(v)m[id]=v;else delete m[id];}
 const roomPos=()=>{const L0=landOf();L0.pos=L0.pos||{};return L0.pos;};
-function occ(except){const o={},pos=roomPos();for(const id in pos){if(id===except||!pos[id]||FDEF[id].flat||FDEF[id].wall)continue;const [x,y]=pos[id],D=FDEF[id];for(let i=0;i<D.w;i++)for(let j=0;j<D.d;j++)o[(x+i)+','+(y+j)]=id;}return o;}
-function fits(id,x,y){const D=FDEF[id];if(x<0||y<0||x+D.w>6||y+D.d>6)return false;if(D.flat)return true;const o=occ(id);for(let i=0;i<D.w;i++)for(let j=0;j<D.d;j++)if(o[(x+i)+','+(y+j)])return false;return true;}
+function occ(except){const o={},pos=roomPos();if(twoF())for(const k of STAIR)o[k]='stairs';for(const id in pos){if(id===except||!pos[id]||FDEF[id].flat||FDEF[id].wall||flOf(id)!==roomFloor)continue;const [x,y]=pos[id],D=FDEF[id];for(let i=0;i<D.w;i++)for(let j=0;j<D.d;j++)o[(x+i)+','+(y+j)]=id;}return o;}
+function fits(id,x,y){const D=FDEF[id];if(x<0||y<0||x+D.w>6||y+D.d>6)return false;if(D.flat){if(!twoF())return true;for(let i=0;i<D.w;i++)for(let j=0;j<D.d;j++)if(STAIR.includes((x+i)+','+(y+j)))return false;return true;}const o=occ(id);for(let i=0;i<D.w;i++)for(let j=0;j<D.d;j++)if(o[(x+i)+','+(y+j)])return false;return true;}
 function freeSpot(id){const D=FDEF[id];if(D.wall)return [3.5];const d=FDEFPOS[id];if(d&&fits(id,d[0],d[1]))return d;for(let y=0;y<6;y++)for(let x=0;x<6;x++)if(fits(id,x,y))return [x,y];return null;}
-function ensurePos(){const f=landOf().furn,pos=roomPos();for(const id in f)if(f[id]&&!(id in pos)){pos[id]=freeSpot(id);}}
+function ensurePos(){const f=landOf().furn,pos=roomPos();if(!twoF()){roomFloor=0;for(const id in flMap()){setFl(id,0);if(pos[id]&&!FDEF[id].wall)pos[id]=freeSpot(id);}}else{const rf=roomFloor;for(const id in pos){if(!pos[id]||FDEF[id].wall)continue;roomFloor=flOf(id);if(!fits(id,pos[id][0],pos[id][1]))pos[id]=freeSpot(id);}roomFloor=rf;}for(const id in f)if(f[id]&&!(id in pos)){pos[id]=freeSpot(id);}}
 function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()?.[1]||'house_s';
   const WL={house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee'}[h],FL={house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a'}[h];
   const TX=160,TY=66,U=24,V=12,WH=78;
@@ -2062,7 +2065,7 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
   for(let y=0;y<6;y++)for(let x=0;x<6;x++){const ok=roomPick&&!FDEF[roomPick].wall&&fits(roomPick,x,y);
     g+=`<polygon class="ft" data-g="${x},${y}" points="${PT([P(x,y),P(x+1,y),P(x+1,y+1),P(x,y+1)])}" fill="${ok?'rgba(154,216,110,.45)':'rgba(0,0,0,0)'}" stroke="${ok?'rgba(255,255,255,.5)':'rgba(0,0,0,.06)'}" stroke-width="1"/>`;}
   // wall frame
-  if(f.frame&&pos.frame){const y0=pos.frame[0],fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],c=P(0,y0+.9,47);
+  if(f.frame&&pos.frame&&flOf('frame')===roomFloor){const y0=pos.frame[0],fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],c=P(0,y0+.9,47);
     g+=`<g class="fu" data-fu="frame">${wallL(y0,y0+1.8,34,60,roomPick==='frame'?'#ffd56a':'#a0703c')+wallL(y0+.12,y0+1.68,37,57,'#f4ece0')}<g transform="translate(${c[0]-16},${c[1]-8}) skewY(-26.6) scale(.32)"><path d="${fo.d}" fill="${fosDone(fo.id)?'#8a7a62':'#d8cfbf'}"/></g></g>`;}
   const DRAW={
    rug:(x,y)=>poly([P(x+.1,y+.1,.5),P(x+2.9,y+.1,.5),P(x+2.9,y+1.9,.5),P(x+.1,y+1.9,.5)],'#c94a5a')+poly([P(x+.35,y+.35,.6),P(x+2.65,y+.35,.6),P(x+2.65,y+1.65,.6),P(x+.35,y+1.65,.6)],'#d86a76','stroke="#f2d06a" stroke-width="1.4"'),
@@ -2077,21 +2080,32 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
    case:(x,y)=>{let s2=box(x+.5,y+1,.42,.92,46,'#7a5a3c',0,{r:'#bfe3ee'});RELICS.filter(r=>hasRelic(r.id)).slice(0,3).forEach((r,i)=>{const p=P(x+.95,y+.4+i*.6,8+i*12);s2+=`<g transform="translate(${p[0]-6},${p[1]-12}) scale(.3)">${relicIcon(r,true,40).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g>`;});return s2;},
   };
   const L=[];
-  for(const id in DRAW){if(!f[id]||!pos[id])continue;const [x,y]=pos[id],D=FDEF[id];let s2=DRAW[id](x,y);
+  for(const id in DRAW){if(!f[id]||!pos[id]||flOf(id)!==roomFloor)continue;const [x,y]=pos[id],D=FDEF[id];let s2=DRAW[id](x,y);
     if(roomPick===id)s2=poly([P(x,y,.8),P(x+D.w,y,.8),P(x+D.w,y+D.d,.8),P(x,y+D.d,.8)],'rgba(255,213,106,.35)','stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"')+s2;
     L.push([D.flat?-1:0,x+D.w/2+y+D.d/2,`<g class="fu" data-fu="${id}">${s2}</g>`]);}
-  const o=occ();let ch=[4,4];if(o['4,4']){outer:for(let y=5;y>=0;y--)for(let x=5;x>=0;x--)if(!o[x+','+y]){ch=[x,y];break outer;}}
+  if(twoF()){let st='';
+    if(!roomFloor){for(let i=5;i>=0;i--){const y0=4+i/3;st+=box(5.5,y0+1/6,.48,1/6,(6-i)*12,'#a0703c');}
+      const a=P(5.02,6,18),b2=P(5.02,4,82);st+=`<path d="M${a[0]},${a[1]} L${b2[0]},${b2[1]}" stroke="#6a4a2a" stroke-width="3" stroke-linecap="round"/>`;}
+    else{st+=poly([P(5,4,.4),P(6,4,.4),P(6,6,.4),P(5,6,.4)],'#2a1e14')+box(5.5,4.17,.48,1/6,1,'#a0703c');
+      for(const [a,b2] of[[P(4.95,4.05,0),P(4.95,4.05,22)],[P(4.95,5.95,0),P(4.95,5.95,22)],[P(5.95,4.05,0),P(5.95,4.05,22)]])st+=`<path d="M${a[0]},${a[1]} L${b2[0]},${b2[1]}" stroke="#6a4a2a" stroke-width="2.4"/>`;
+      const r1=P(4.95,4.05,22),r2=P(4.95,5.95,22),r3=P(5.95,4.05,22);st+=`<path d="M${r2[0]},${r2[1]} L${r1[0]},${r1[1]} L${r3[0]},${r3[1]}" stroke="#7a5a3c" stroke-width="3.4" fill="none" stroke-linecap="round"/>`;}
+    const lb=P(5.5,6.5,-4);st+=`<text x="${lb[0]}" y="${lb[1]}" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" stroke="#000" stroke-width="2.4" paint-order="stroke">${roomFloor?'▼ 1층':'▲ 2층'}</text>`;
+    L.push([0,10.4,`<g class="stair">${st}</g>`]);}
+  const o=occ();let ch=twoF()?[3,5]:[4,4];if(o[ch.join(',')]){outer:for(let y=5;y>=0;y--)for(let x=5;x>=0;x--)if(!o[x+','+y]){ch=[x,y];break outer;}}
   const me=P(ch[0]+.5,ch[1]+.5);L.push([0,ch[0]+ch[1]+1,`<g style="pointer-events:none">${fig(ME(),me[0],me[1]+4,70,{expr:'happy'})}</g>`]);
   L.sort((a,b)=>(a[0]-b[0])||(a[1]-b[1]));
-  return `<svg viewBox="0 0 320 240" role="img" aria-label="집 안">${g}${L.map(x=>x[2]).join('')}</svg>`;}
+  return `<svg viewBox="0 0 320 240" role="img" aria-label="집 안 ${roomFloor+1}층">${g}${L.map(x=>x[2]).join('')}</svg>`;}
 function puffs3(p){return [[-7,0,'#4f9a50'],[7,-1,'#5fb05f'],[0,-8,'#6abf6a']].map(([dx,dy,c])=>`<circle cx="${p[0]+dx}" cy="${p[1]+dy}" r="7" fill="${c}" ${ISK}/>`).join('');}
-function openRoom(){roomPick=null;renderRoom();$('#room').hidden=false;}
+function openRoom(){roomPick=null;roomFloor=0;renderRoom();$('#room').hidden=false;}
 function renderRoom(){const f=landOf().furn,pos=(ensurePos(),roomPos());$('#roomArt').innerHTML=roomSVG();
-  const pk=roomPick?FURN.find(x=>x.id===roomPick):null;
-  $('#roomBar').innerHTML=pk?`<span><b>${pk.n}</b> ${FDEF[pk.id].wall?'· 화살표로 벽을 따라 옮겨요':'· 밝은 칸을 누르면 그 자리로 옮겨요'}</span><div>${FDEF[pk.id].wall?'<button class="ghost sm" type="button" data-rb="left">◀</button><button class="ghost sm" type="button" data-rb="right">▶</button>':''}<button class="ghost sm" type="button" data-rb="store">보관</button><button class="ghost sm" type="button" data-rb="done">완료</button></div>`
-    :`<span>놓인 가구를 누르면 옮길 수 있어요. 보관한 가구는 아래에서 다시 배치해요.</span>`;
-  $('#roomList').innerHTML=FURN.map(i=>{const own=f[i.id],placed=own&&pos[i.id];return `<button class="lp ${roomPick===i.id?'on':''}" type="button" data-fu="${i.id}"><span>${i.n}</span><em class="${own?'own':S.money>=i.p?'':'no'}">${!own?won(i.p):placed?'배치됨 · 옮기기':'보관 중 · 배치'}</em></button>`;}).join('');}
-$('#roomArt').addEventListener('click',e=>{const fu=e.target.closest('.fu');
+  const pk=roomPick?FURN.find(x=>x.id===roomPick):null,TF=twoF();
+  $('#roomTitle').textContent=TF?'집 안 꾸미기 · '+(roomFloor+1)+'층':'집 안 꾸미기';
+  $('#roomFl').innerHTML=TF?[0,1].map(k=>`<button type="button" class="${roomFloor===k?'on':''}" data-fl="${k}">${k+1}층</button>`).join(''):'';
+  $('#roomBar').innerHTML=pk?`<span><b>${pk.n}</b> ${FDEF[pk.id].wall?'· 화살표로 벽을 따라 옮겨요':'· 밝은 칸을 누르면 그 자리로 옮겨요'}</span><div>${FDEF[pk.id].wall?'<button class="ghost sm" type="button" data-rb="left">◀</button><button class="ghost sm" type="button" data-rb="right">▶</button>':''}${TF?`<button class="ghost sm" type="button" data-rb="mv">${roomFloor?'1층으로':'2층으로'}</button>`:''}<button class="ghost sm" type="button" data-rb="store">보관</button><button class="ghost sm" type="button" data-rb="done">완료</button></div>`
+    :`<span>놓인 가구를 누르면 옮길 수 있어요.${TF?' 위 1층·2층 버튼이나 계단을 눌러 층을 바꿔요.':''} 보관한 가구는 아래에서 다시 배치해요.</span>`;
+  $('#roomList').innerHTML=FURN.map(i=>{const own=f[i.id],placed=own&&pos[i.id];return `<button class="lp ${roomPick===i.id?'on':''}" type="button" data-fu="${i.id}"><span>${i.n}</span><em class="${own?'own':S.money>=i.p?'':'no'}">${!own?won(i.p):placed?(TF?(flOf(i.id)+1)+'층 · 옮기기':'배치됨 · 옮기기'):'보관 중 · 배치'}</em></button>`;}).join('');}
+$('#roomFl').addEventListener('click',e=>{const b=e.target.closest('[data-fl]');if(!b)return;roomFloor=+b.dataset.fl;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();});
+$('#roomArt').addEventListener('click',e=>{if(e.target.closest('.stair')){roomFloor=1-roomFloor;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();return;}const fu=e.target.closest('.fu');
   if(fu){roomPick=roomPick===fu.dataset.fu?null:fu.dataset.fu;renderRoom();return;}
   const t=e.target.closest('.ft');if(!t||!roomPick||FDEF[roomPick].wall)return;const [x,y]=t.dataset.g.split(',').map(Number),D=FDEF[roomPick];
   const cx=Math.min(Math.max(0,x),6-D.w),cy=Math.min(Math.max(0,y),6-D.d);
@@ -2099,12 +2113,15 @@ $('#roomArt').addEventListener('click',e=>{const fu=e.target.closest('.fu');
   roomPos()[roomPick]=[cx,cy];save();renderRoom();});
 $('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]');if(!b||!roomPick)return;const pos=roomPos(),a=b.dataset.rb;
   if(a==='done')roomPick=null;
+  else if(a==='mv'){const to=1-roomFloor,from=roomFloor,id=roomPick;roomFloor=to;const old=flOf(id);setFl(id,to);const sp=freeSpot(id);
+    if(!sp){setFl(id,old);roomFloor=from;toast((to+1)+'층에 놓을 자리가 없어요');}else{pos[id]=sp;toast(FURN.find(x=>x.id===id).n+' → '+(to+1)+'층');}}
   else if(a==='store'){pos[roomPick]=null;toast(FURN.find(x=>x.id===roomPick).n+' 보관');roomPick=null;}
   else if(pos[roomPick]){pos[roomPick]=[Math.max(0,Math.min(4.2,pos[roomPick][0]+(a==='left'?-.6:.6)))];}
   save();renderRoom();});
 $('#roomList').addEventListener('click',e=>{const b=e.target.closest('[data-fu]');if(!b)return;const f=landOf().furn,pos=roomPos(),i=FURN.find(x=>x.id===b.dataset.fu);
-  if(!f[i.id]){if(S.money<i.p){toast('자금이 부족해요');return;}const sp=freeSpot(i.id);if(!sp){toast('놓을 자리가 없어요. 가구를 보관하거나 옮겨 주세요');return;}S.money-=i.p;f[i.id]=1;pos[i.id]=sp;roomPick=i.id;save();toast(i.n+' 배치 · 원하는 칸을 눌러 옮길 수 있어요');renderRoom();return;}
-  if(!pos[i.id]){const sp=freeSpot(i.id);if(!sp){toast('놓을 자리가 없어요');return;}pos[i.id]=sp;roomPick=i.id;save();renderRoom();return;}
+  if(!f[i.id]){if(S.money<i.p){toast('자금이 부족해요');return;}const sp=freeSpot(i.id);if(!sp){toast('놓을 자리가 없어요. 가구를 보관하거나 옮겨 주세요');return;}S.money-=i.p;f[i.id]=1;setFl(i.id,roomFloor);pos[i.id]=sp;roomPick=i.id;save();toast(i.n+' 배치 · 원하는 칸을 눌러 옮길 수 있어요');renderRoom();return;}
+  if(!pos[i.id]){const sp=freeSpot(i.id);if(!sp){toast('놓을 자리가 없어요');return;}setFl(i.id,roomFloor);pos[i.id]=sp;roomPick=i.id;save();renderRoom();return;}
+  if(flOf(i.id)!==roomFloor){roomFloor=flOf(i.id);roomPick=i.id;renderRoom();return;}
   roomPick=roomPick===i.id?null:i.id;renderRoom();});
 $('#roomClose').addEventListener('click',()=>{roomPick=null;$('#room').hidden=true;});
 
