@@ -1943,10 +1943,11 @@ const PT=a=>a.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
 const ISK='stroke="#2b211c" stroke-width="1.2" stroke-linejoin="round"';
 const up=(p,h)=>[p[0],p[1]-h];
 function foot(cx,cy,s){return {L:[cx-ISO.hw*s,cy],B:[cx,cy+ISO.hh*s],R:[cx+ISO.hw*s,cy],T:[cx,cy-ISO.hh*s]};}
+let ISO_MIR=0;
 function isoBox(cx,cy,s,h,col,o={}){const f=foot(cx,cy,s);
-  return {f,h,svg:`<polygon points="${PT([f.L,f.B,up(f.B,h),up(f.L,h)])}" fill="${o.left||shade(col,-.04)}" ${ISK}/><polygon points="${PT([f.B,f.R,up(f.R,h),up(f.B,h)])}" fill="${o.right||shade(col,-.26)}" ${ISK}/><polygon points="${PT([up(f.T,h),up(f.R,h),up(f.B,h),up(f.L,h)])}" fill="${o.top||shade(col,.14)}" ${ISK}/>`};}
+  return {f,h,svg:`<polygon points="${PT([f.L,f.B,up(f.B,h),up(f.L,h)])}" fill="${o.left||shade(col,ISO_MIR?-.26:-.04)}" ${ISK}/><polygon points="${PT([f.B,f.R,up(f.R,h),up(f.B,h)])}" fill="${o.right||shade(col,ISO_MIR?-.04:-.26)}" ${ISK}/><polygon points="${PT([up(f.T,h),up(f.R,h),up(f.B,h),up(f.L,h)])}" fill="${o.top||shade(col,.14)}" ${ISK}/>`};}
 function isoRoof(cx,cy,s,h,rh,col,over=1.15){const f=foot(cx,cy,s*over),a=[cx,cy-h-rh],L=up(f.L,h),B=up(f.B,h),R=up(f.R,h),T=up(f.T,h);
-  return `<polygon points="${PT([L,T,a])}" fill="${shade(col,.12)}" ${ISK}/><polygon points="${PT([T,R,a])}" fill="${shade(col,-.08)}" ${ISK}/><polygon points="${PT([L,B,a])}" fill="${shade(col,.02)}" ${ISK}/><polygon points="${PT([B,R,a])}" fill="${shade(col,-.3)}" ${ISK}/>`;}
+  return `<polygon points="${PT([L,T,a])}" fill="${shade(col,ISO_MIR?-.08:.12)}" ${ISK}/><polygon points="${PT([T,R,a])}" fill="${shade(col,ISO_MIR?.12:-.08)}" ${ISK}/><polygon points="${PT([L,B,a])}" fill="${shade(col,ISO_MIR?-.3:.02)}" ${ISK}/><polygon points="${PT([B,R,a])}" fill="${shade(col,ISO_MIR?.02:-.3)}" ${ISK}/>`;}
 // parallelogram on a face: face 'l' runs L->B, 'r' runs B->R; u along edge 0..1, v height px
 function facePoly(b,face,u0,u1,v0,v1,col,extra=''){const f=b.f,A=face==='l'?f.L:f.B,Z=face==='l'?f.B:f.R;
   const p=(u,v)=>[A[0]+(Z[0]-A[0])*u,A[1]+(Z[1]-A[1])*u-v];
@@ -1999,57 +2000,110 @@ function isoTile(x,y,own,can){const [cx,cy]=isoC(x,y),f=foot(cx,cy,1),d=7,alt=(x
   return g+'</g>';}
 function landSVG(){const L0=landOf(),n=landSize();let tiles='',items=[];
   for(let s=0;s<=10;s++)for(let x=0;x<6;x++){const y=s-x;if(y<0||y>5)continue;const own=x<n&&y<n,it=L0.tiles[x+','+y];tiles+=isoTile(x,y,own,own&&!it&&!!(landSel||landPick));if(it)items.push([x,y,it]);}
-  const its=items.map(([x,y,it])=>{const [cx,cy]=isoC(x,y);const pk=landPick===x+','+y,f=foot(cx,cy,1);return `<g class="ii${pk?' pk':''}" data-xy="${x},${y}">${pk?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<g ${pk?'transform="translate(0,-5)"':''}>${isoItem(it,cx,cy)}</g></g>`;}).join('');
+  const me=landMe(),RT=landRot();if(me.x>=0)items.push([me.x,me.y,'me']);items.sort((a,b)=>(a[0]+a[1])-(b[0]+b[1])||(a[0]-b[0]));
+  const its=items.map(([x,y,it])=>{const [cx,cy]=isoC(x,y);if(it==='me'){const pm=landPick==='me',f=foot(cx,cy,1);return `<g class="mech" style="cursor:pointer">${pm?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<ellipse cx="${cx}" cy="${cy+3}" rx="11" ry="4" fill="rgba(0,0,0,.25)"/>${fig(ME(),cx,cy+4,48,{expr:'happy',flip:!!me.f})}</g>`;}
+    const pk=landPick===x+','+y,f=foot(cx,cy,1),mr=!!RT[x+','+y];ISO_MIR=mr?1:0;const art=isoItem(it,cx,cy);ISO_MIR=0;return `<g class="ii${pk?' pk':''}" data-xy="${x},${y}">${pk?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<g transform="${pk?'translate(0,-5) ':''}${mr?`translate(${2*cx},0) scale(-1,1)`:''}">${art}</g></g>`;}).join('');
   return `<svg class="isoland" viewBox="0 0 360 280" role="img" aria-label="내 땅 지도">${tiles}${its}</svg>`;}
 function isoIcon(id){return `<svg viewBox="-34 -58 68 80" aria-hidden="true"><polygon points="${PT([[-28,0],[0,-14],[28,0],[0,14]])}" fill="#74b052" ${ISK}/>${isoItem(id,0,0)}</svg>`;}
 
 let landSel=null,landDel=false,landPick=null;
+const landRot=()=>{const L0=landOf();L0.rot=L0.rot||{};return L0.rot;};
+function landMe(){const L0=landOf(),n=landSize(),ok=(x,y)=>x>=0&&y>=0&&x<n&&y<n&&!L0.tiles[x+','+y];
+  if(!L0.me)L0.me={x:n-1,y:n-1,f:0};const m=L0.me;if(ok(m.x,m.y))return m;
+  for(let s=2*n-2;s>=0;s--)for(let x=n-1;x>=0;x--){const y=s-x;if(ok(x,y)){m.x=x;m.y=y;return m;}}m.x=-1;return m;}
 function renderLand(){const L0=landOf(),n=landSize(),hb=houseBonus();
-  const nx=L0.lv<4?LAND_COST[L0.lv]:0,pk=landPick&&L0.tiles[landPick]?LITEM.find(i=>i.id===L0.tiles[landPick]):null;if(!pk)landPick=null;
+  const nx=L0.lv<4?LAND_COST[L0.lv]:0;if(landPick&&landPick!=='me'&&!L0.tiles[landPick])landPick=null;
+  const pk=landPick&&landPick!=='me'?LITEM.find(i=>i.id===L0.tiles[landPick]):null,isMe=landPick==='me';
   const msg=landDel?'철거할 물건을 누르세요. 산 값의 절반을 돌려받아요.':landSel?`<b>${LITEM.find(i=>i.id===landSel).n}</b>을(를) 놓을 빈 땅을 누르세요. 다시 누르면 선택이 풀려요.`
-    :pk?`<b>${pk.n}</b> 선택됨 · 옮길 빈 땅(밝은 칸)을 누르세요.`:hb?`놓인 물건을 누르면 옮길 수 있어요. 집을 고르면 실내도 꾸밀 수 있어요. 집이 있으면 앱을 닫아도 ${hb}시간 더 팝니다.`:'아래에서 물건을 고르고 빈 땅을 눌러 놓으세요. 놓인 물건을 누르면 다른 칸으로 옮길 수 있어요.';
+    :isMe?'캐릭터를 세울 빈 땅(밝은 칸)을 누르세요.':pk?`<b>${pk.n}</b> 선택됨 · 옮길 빈 땅(밝은 칸)을 누르세요.`
+    :hb?`물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요. 집이 있으면 앱을 닫아도 ${hb}시간 더 팝니다.`:'아래에서 물건을 고르고 빈 땅을 눌러 놓으세요. 놓인 물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.';
+  const B=(id,t,c='ghost')=>`<button class="${c} sm" type="button" id="${id}">${t}</button>`;
   $('#landView').innerHTML=`<div class="lhead"><div><div class="tk">내 땅 · ${n}×${n}칸</div><div class="tn">양구 국토정중앙 옆 부지</div></div>
      <div class="lbtns">${nx?`<button class="ghost sm" type="button" id="landBuy" ${S.money>=nx?'':'disabled'}>땅 넓히기 ${won(nx)}</button>`:''}<button class="ghost sm ${landDel?'on':''}" type="button" id="landDel">${landDel?'철거 중':'철거'}</button></div></div>
-   <div class="lgrid-wrap">${landSVG()}<div class="lchar"><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg></div></div>
-   ${pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?'<button class="primary sm" type="button" id="lpRoom">집 안 꾸미기</button>':''}<button class="ghost sm" type="button" id="lpDel">철거</button><button class="ghost sm" type="button" id="lpCancel">선택 해제</button></div></div>`:''}
+   <div class="lgrid-wrap">${landSVG()}</div>
+   ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
+     :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
    <p class="sub" style="margin:0">${msg}</p>
    <div class="lpal">${LITEM.map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${isoIcon(i.id)}<span>${i.n}</span><em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;}
-function removeTile(k){const L0=landOf(),it=LITEM.find(i=>i.id===L0.tiles[k]);if(!it)return;S.money+=Math.floor(it.p/2);delete L0.tiles[k];save();toast(it.n+' 철거 · '+won(it.p/2)+' 환급');}
+function removeTile(k){const L0=landOf(),it=LITEM.find(i=>i.id===L0.tiles[k]);if(!it)return;S.money+=Math.floor(it.p/2);delete L0.tiles[k];delete landRot()[k];save();toast(it.n+' 철거 · '+won(it.p/2)+' 환급');}
 $('#landView').addEventListener('click',e=>{const L0=landOf();
   if(e.target.closest('#landBuy')){const c=LAND_COST[L0.lv];if(S.money<c)return;S.money-=c;L0.lv++;save();toast('땅을 넓혔어요 · '+landSize()+'×'+landSize());renderLand();return;}
   if(e.target.closest('#landDel')){landDel=!landDel;landSel=null;landPick=null;renderLand();return;}
   if(e.target.closest('#lpCancel')){landPick=null;renderLand();return;}
+  if(e.target.closest('#lpFlip')){if(landPick==='me'){const m=landMe();m.f=m.f?0:1;}else{const R=landRot();if(R[landPick])delete R[landPick];else R[landPick]=1;}save();renderLand();return;}
   if(e.target.closest('#lpDel')){removeTile(landPick);landPick=null;renderLand();return;}
   if(e.target.closest('#lpRoom')){landPick=null;openRoom();renderLand();return;}
   const p=e.target.closest('[data-it]');if(p){landSel=landSel===p.dataset.it?null:p.dataset.it;landDel=false;landPick=null;renderLand();return;}
+  if(e.target.closest('.mech')){if(landDel)return;landSel=null;landPick=landPick==='me'?null:'me';renderLand();return;}
   const t=e.target.closest('.it.own,.ii');if(!t)return;const k=t.dataset.xy,cur=L0.tiles[k];
   if(landDel){if(cur){removeTile(k);renderLand();}return;}
   if(cur){landSel=null;landPick=landPick===k?null:k;renderLand();return;}
-  if(landPick){L0.tiles[k]=L0.tiles[landPick];delete L0.tiles[landPick];landPick=null;save();renderLand();return;}
+  if(landPick==='me'){const [x,y]=k.split(',').map(Number),m=landMe();m.x=x;m.y=y;landPick=null;save();renderLand();return;}
+  if(landPick){const R=landRot();L0.tiles[k]=L0.tiles[landPick];delete L0.tiles[landPick];if(R[landPick]){R[k]=1;delete R[landPick];}landPick=null;landMe();save();renderLand();return;}
   if(!landSel)return;const it=LITEM.find(i=>i.id===landSel);
   if(it.house&&houseTile()){toast('집은 하나만 지을 수 있어요. 기존 집을 옮기거나 철거해 주세요');return;}
   if(S.money<it.p){toast('자금이 부족해요');return;}
-  S.money-=it.p;L0.tiles[k]=it.id;save();renderLand();});
+  S.money-=it.p;L0.tiles[k]=it.id;landMe();save();renderLand();});
 
 // ---------------- interior (grid placement) ----------------
 const FDEF={rug:{w:3,d:2,flat:1},bed:{w:2,d:3},sofa:{w:2,d:1},desk:{w:2,d:1},tv:{w:2,d:1},shelf:{w:1,d:1},plant:{w:1,d:1},case:{w:1,d:2},frame:{wall:1}};
-const FDEFPOS={rug:[2,2],bed:[0,3],sofa:[2,4],desk:[4,0],tv:[2,0],shelf:[5,2],plant:[1,0],case:[0,0],frame:[3.5]};
+const FDEFPOS={rug:[2,2],bed:[0,3],sofa:[2,4],desk:[4,0],tv:[2,0],shelf:[5,2],plant:[1,0],case:[0,0],frame:[3.5,0]};
 let roomPick=null,roomFloor=0;
 const twoF=()=>houseTile()?.[1]==='house_b',STAIR=['5,4','5,5'];
-const flMap=()=>{const L0=landOf();L0.fl=L0.fl||{};return L0.fl;},flOf=id=>flMap()[id]||0;
+const flMap=()=>{const L0=landOf();L0.fl=L0.fl||{};return L0.fl;},flOf=id=>id==='me'?meR().fl:(flMap()[id]||0);
 function setFl(id,v){const m=flMap();if(v)m[id]=v;else delete m[id];}
 const roomPos=()=>{const L0=landOf();L0.pos=L0.pos||{};return L0.pos;};
-function occ(except){const o={},pos=roomPos();if(twoF())for(const k of STAIR)o[k]='stairs';for(const id in pos){if(id===except||!pos[id]||FDEF[id].flat||FDEF[id].wall||flOf(id)!==roomFloor)continue;const [x,y]=pos[id],D=FDEF[id];for(let i=0;i<D.w;i++)for(let j=0;j<D.d;j++)o[(x+i)+','+(y+j)]=id;}return o;}
-function fits(id,x,y){const D=FDEF[id];if(x<0||y<0||x+D.w>6||y+D.d>6)return false;if(D.flat){if(!twoF())return true;for(let i=0;i<D.w;i++)for(let j=0;j<D.d;j++)if(STAIR.includes((x+i)+','+(y+j)))return false;return true;}const o=occ(id);for(let i=0;i<D.w;i++)for(let j=0;j<D.d;j++)if(o[(x+i)+','+(y+j)])return false;return true;}
-function freeSpot(id){const D=FDEF[id];if(D.wall)return [3.5];const d=FDEFPOS[id];if(d&&fits(id,d[0],d[1]))return d;for(let y=0;y<6;y++)for(let x=0;x<6;x++)if(fits(id,x,y))return [x,y];return null;}
-function ensurePos(){const f=landOf().furn,pos=roomPos();if(!twoF()){roomFloor=0;for(const id in flMap()){setFl(id,0);if(pos[id]&&!FDEF[id].wall)pos[id]=freeSpot(id);}}else{const rf=roomFloor;for(const id in pos){if(!pos[id]||FDEF[id].wall)continue;roomFloor=flOf(id);if(!fits(id,pos[id][0],pos[id][1]))pos[id]=freeSpot(id);}roomFloor=rf;}for(const id in f)if(f[id]&&!(id in pos)){pos[id]=freeSpot(id);}}
+const rotOf=id=>(roomPos()[id]||[])[2]||0;
+const dims=(id,r)=>{const D=FDEF[id];return r%2?[D.d,D.w]:[D.w,D.d];};
+const meR=()=>{const L0=landOf();if(!L0.me2)L0.me2={x:3,y:5,f:0,fl:0};if(!twoF())L0.me2.fl=0;return L0.me2;};
+function occ(except){const o={},pos=roomPos();if(twoF())for(const k of STAIR)o[k]='stairs';
+  for(const id in pos){if(id===except||!pos[id]||!FDEF[id]||FDEF[id].flat||FDEF[id].wall||flOf(id)!==roomFloor)continue;const [x,y,r]=pos[id],[w,d]=dims(id,r||0);for(let i=0;i<w;i++)for(let j=0;j<d;j++)o[(x+i)+','+(y+j)]=id;}return o;}
+function fits(id,x,y,r=rotOf(id)){const [w,d]=dims(id,r);if(x<0||y<0||x+w>6||y+d>6)return false;
+  const o=FDEF[id].flat?(twoF()?Object.fromEntries(STAIR.map(k=>[k,1])):{}):occ(id);
+  for(let i=0;i<w;i++)for(let j=0;j<d;j++)if(o[(x+i)+','+(y+j)])return false;return true;}
+function freeSpot(id,r=0){if(FDEF[id].wall)return [3.5,0];const d=FDEFPOS[id];if(d&&fits(id,d[0],d[1],r))return [d[0],d[1],r];
+  for(let y=0;y<6;y++)for(let x=0;x<6;x++)if(fits(id,x,y,r))return [x,y,r];return null;}
+function nearSpot(id,x0,y0,r){let best=null,bd=1e9;for(let y=0;y<6;y++)for(let x=0;x<6;x++)if(fits(id,x,y,r)){const dd=Math.abs(x-x0)+Math.abs(y-y0);if(dd<bd){bd=dd;best=[x,y,r];}}return best;}
+function meSpot(){const m=meR(),o=occ();if(!o[m.x+','+m.y])return m;for(let y=5;y>=0;y--)for(let x=5;x>=0;x--)if(!o[x+','+y]){m.x=x;m.y=y;return m;}return m;}
+function ensurePos(){const f=landOf().furn,pos=roomPos();
+  if(pos.frame&&pos.frame.length<2)pos.frame=[pos.frame[0],0];
+  if(!twoF()){roomFloor=0;for(const id in flMap()){setFl(id,0);if(pos[id]&&!FDEF[id].wall)pos[id]=freeSpot(id,rotOf(id));}}
+  else{const rf=roomFloor;for(const id in pos){if(!pos[id]||!FDEF[id]||FDEF[id].wall)continue;roomFloor=flOf(id);if(!fits(id,pos[id][0],pos[id][1]))pos[id]=freeSpot(id,rotOf(id));}roomFloor=rf;}
+  for(const id in f)if(f[id]&&!(id in pos))pos[id]=freeSpot(id);}
+// furniture model in local units: u = width (0..w), v = depth (0..d, v=d is the front), z/h in px
+const FB=(u0,v0,u1,v1,z,h,c,o)=>({b:[u0,v0,u1,v1,z,h],c,o:o||{}});
+const BOOKS=['#c94a2a','#3a5a9a','#e8a93a','#5aa050'];
+function partsOf(id){switch(id){
+  case 'bed':return [FB(.04,.04,1.96,.18,0,28,'#7a5a3c'),FB(.08,.18,1.92,2.86,0,8,'#8a5a3c'),FB(.12,.2,1.88,2.84,8,6,'#f4f2ee'),FB(.42,.32,1.58,.8,14,5,'#ffffff'),FB(.1,1.02,1.9,2.84,14,3,'#5aa0d6'),FB(.04,2.86,1.96,2.98,0,13,'#7a5a3c')];
+  case 'sofa':return [FB(0,.04,2,.32,0,27,'#7d4fb2'),FB(.26,.32,1.74,.95,0,10,'#6b3fa0'),FB(.28,.34,1.72,.92,10,4,'#9a70d0'),FB(0,.32,.26,.96,0,17,'#7d4fb2'),FB(1.74,.32,2,.96,0,17,'#7d4fb2')];
+  case 'desk':{const L=[];for(const [a,b] of[[.1,.1],[1.8,.1],[.1,.8],[1.8,.8]])L.push(FB(a,b,a+.1,b+.1,0,22,'#6a4a2a'));
+    return L.concat([FB(.04,.06,1.96,.94,22,3,'#a0703c'),FB(.74,.22,.86,.3,25,6,'#3a3a40'),FB(.42,.16,1.18,.24,31,17,'#1c2226',{f:'#6fc3e0'}),FB(.55,.5,1.25,.74,25,2,'#3a3a40'),FB(1.5,.44,1.64,.58,25,7,'#ece4d4')]);}
+  case 'tv':return [FB(.06,.36,1.94,.96,0,10,'#7a5a3c'),FB(.9,.56,1.1,.66,10,4,'#2a2a2a'),FB(.12,.48,1.88,.58,14,30,'#1c2226',{f:'#1d5a76'}),FB(.3,.7,.7,.9,10,3,'#c94a2a')];
+  case 'shelf':{const L=[FB(.05,.05,.95,.15,0,54,'#8a603a'),FB(.05,.15,.15,.93,0,54,'#a0703c'),FB(.85,.15,.95,.93,0,54,'#a0703c'),FB(.05,.05,.95,.93,54,3,'#a0703c')];
+    for(const z of[0,18,36]){L.push(FB(.15,.15,.85,.9,z,2,'#a0703c'));BOOKS.forEach((c,i)=>L.push(FB(.18+i*.16,.24,.3+i*.16,.74,z+2,13-(i%2)*3,c)));}return L;}
+  case 'plant':return [FB(.28,.28,.72,.72,0,12,'#c97a4a'),{puff:[.5,.5,20]}];
+  case 'case':{const L=[FB(.08,.08,.92,1.92,0,10,'#7a5a3c')];RELICS.filter(r=>hasRelic(r.id)).slice(0,3).forEach((r,i)=>L.push({icon:[.5,.42+i*.56,10],r}));
+    L.push({b:[.08,.08,.92,1.92,10,30],glass:1},FB(.06,.06,.94,1.94,40,3,'#7a5a3c'));return L;}
+  }return [];}
+// rotate a local point into room coords
+function rotP(u,v,w,d,r){return r===1?[d-v,u]:r===2?[w-u,d-v]:r===3?[v,w-u]:[u,v];}
+const FACEY=['f','e','k','w'],FACEX=['e','k','w','f'];
+// draw-order: A must be drawn before B?
+function isoBefore(A,B){const e=.001,ox=A.x0<B.x1-e&&B.x0<A.x1-e,oy=A.y0<B.y1-e&&B.y0<A.y1-e;
+  if(ox&&oy){if(B.glass&&!A.glass)return true;if(A.glass&&!B.glass)return false;return A.z1<=B.z0+e;}
+  if(A.x1<=B.x0+e&&!(B.y1<=A.y0+e))return true;if(A.y1<=B.y0+e&&!(B.x1<=A.x0+e))return true;return false;}
+function isoSort(L){const n=L.length,pre=L.map(()=>0),nx=L.map(()=>[]);
+  for(let i=0;i<n;i++)for(let j=0;j<n;j++)if(i!==j&&isoBefore(L[i],L[j])){nx[i].push(j);pre[j]++;}
+  const out=[],done=new Array(n).fill(false),key=a=>a.x0+a.x1+a.y0+a.y1+a.z0*.001;
+  while(out.length<n){let k=-1;for(let i=0;i<n;i++)if(!done[i]&&pre[i]===0&&(k<0||key(L[i])<key(L[k])))k=i;
+    if(k<0)for(let i=0;i<n;i++)if(!done[i]&&(k<0||key(L[i])<key(L[k])))k=i;
+    done[k]=true;out.push(L[k]);for(const j of nx[k])pre[j]--;}return out;}
 function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()?.[1]||'house_s';
   const WL={house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee'}[h],FL={house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a'}[h];
   const TX=160,TY=66,U=24,V=12,WH=78;
   const P=(x,y,z=0)=>[TX+(x-y)*U,TY+(x+y)*V-z];
   const poly=(pts,col,ex='')=>`<polygon points="${PT(pts)}" fill="${col}" ${ISK} ${ex}/>`;
-  const box=(gx,gy,ax,ay,hh,col,z=0,o={})=>{const q=(a,b,zz)=>P(gx+a,gy+b,z+zz);
-    return poly([q(-ax,ay,0),q(ax,ay,0),q(ax,ay,hh),q(-ax,ay,hh)],o.l||shade(col,-.04))+poly([q(ax,-ay,0),q(ax,ay,0),q(ax,ay,hh),q(ax,-ay,hh)],o.r||shade(col,-.26))+poly([q(-ax,-ay,hh),q(ax,-ay,hh),q(ax,ay,hh),q(-ax,ay,hh)],o.t||shade(col,.14));};
+  const wbox=(x0,y0,x1,y1,z0,hh,cy,cx,ct,ex='')=>{const z1=z0+hh;return poly([P(x0,y1,z0),P(x1,y1,z0),P(x1,y1,z1),P(x0,y1,z1)],cy,ex)+poly([P(x1,y0,z0),P(x1,y1,z0),P(x1,y1,z1),P(x1,y0,z1)],cx,ex)+poly([P(x0,y0,z1),P(x1,y0,z1),P(x1,y1,z1),P(x0,y1,z1)],ct,ex);};
   const wallR=(x0,x1,z0,z1,col,ex='')=>poly([P(x0,0,z0),P(x1,0,z0),P(x1,0,z1),P(x0,0,z1)],col,ex);
   const wallL=(y0,y1,z0,z1,col,ex='')=>poly([P(0,y0,z0),P(0,y1,z0),P(0,y1,z1),P(0,y0,z1)],col,ex);
   let g=`<rect width="320" height="240" fill="#141b1e"/>`;
@@ -2062,61 +2116,72 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
     for(let i=0;i<4;i++)for(let j=0;j<3;j++)g+=wallL(2.3+i*.4,2.6+i*.4,20+j*14,32+j*14,'#fbf6ea');}
   g+=wallR(3.4,5,30,62,'#7a5a3c')+wallR(3.55,4.85,34,58,'#9ccde6')+wallR(4.17,4.23,34,58,'#7a5a3c')+wallR(3.55,4.85,45,47,'#7a5a3c');
   // clickable floor tiles (+ highlight targets when something is picked)
-  for(let y=0;y<6;y++)for(let x=0;x<6;x++){const ok=roomPick&&!FDEF[roomPick].wall&&fits(roomPick,x,y);
+  const o0=occ();
+  for(let y=0;y<6;y++)for(let x=0;x<6;x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick&&!FDEF[roomPick].wall&&fits(roomPick,x,y);
     g+=`<polygon class="ft" data-g="${x},${y}" points="${PT([P(x,y),P(x+1,y),P(x+1,y+1),P(x,y+1)])}" fill="${ok?'rgba(154,216,110,.45)':'rgba(0,0,0,0)'}" stroke="${ok?'rgba(255,255,255,.5)':'rgba(0,0,0,.06)'}" stroke-width="1"/>`;}
-  // wall frame
-  if(f.frame&&pos.frame&&flOf('frame')===roomFloor){const y0=pos.frame[0],fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],c=P(0,y0+.9,47);
-    g+=`<g class="fu" data-fu="frame">${wallL(y0,y0+1.8,34,60,roomPick==='frame'?'#ffd56a':'#a0703c')+wallL(y0+.12,y0+1.68,37,57,'#f4ece0')}<g transform="translate(${c[0]-16},${c[1]-8}) skewY(-26.6) scale(.32)"><path d="${fo.d}" fill="${fosDone(fo.id)?'#8a7a62':'#d8cfbf'}"/></g></g>`;}
-  const DRAW={
-   rug:(x,y)=>poly([P(x+.1,y+.1,.5),P(x+2.9,y+.1,.5),P(x+2.9,y+1.9,.5),P(x+.1,y+1.9,.5)],'#c94a5a')+poly([P(x+.35,y+.35,.6),P(x+2.65,y+.35,.6),P(x+2.65,y+1.65,.6),P(x+.35,y+1.65,.6)],'#d86a76','stroke="#f2d06a" stroke-width="1.4"'),
-   bed:(x,y)=>box(x+1,y+1.55,.9,1.4,8,'#8a5a3c')+box(x+1,y+1.55,.85,1.35,6,'#f4f2ee',8)+box(x+1,y+1.95,.87,.95,2,'#5aa0d6',14)+box(x+1,y+.5,.55,.22,4,'#ffffff',14)+box(x+1,y+.12,.92,.08,22,'#7a5a3c'),
-   sofa:(x,y)=>box(x+1,y+.22,1,.15,24,'#7d4fb2')+box(x+1,y+.62,1,.33,10,'#6b3fa0')+box(x+1,y+.6,.85,.28,3,'#8a5fc2',10)+box(x+.1,y+.5,.1,.45,16,'#7d4fb2')+box(x+1.9,y+.5,.1,.45,16,'#7d4fb2'),
-   desk:(x,y)=>{let s2='';for(const [a,b] of[[.15,.15],[1.85,.15],[.15,.85],[1.85,.85]]){const p=P(x+a,y+b),q=P(x+a,y+b,22);s2+=`<path d="M${p[0]},${p[1]} L${q[0]},${q[1]}" stroke="#6a4a2a" stroke-width="2.4"/>`;}
-     return s2+box(x+1,y+.5,.95,.45,3,'#a0703c',22)+box(x+.8,y+.25,.3,.06,14,'#1c2226',25,{l:'#6fc3e0'})+box(x+1.3,y+.65,.15,.12,2,'#3a3a40',25);},
-   tv:(x,y)=>box(x+1,y+.55,.9,.3,9,'#7a5a3c')+box(x+1,y+.45,.8,.07,30,'#1c2226',9,{l:'#0d2b38'})+poly([P(x+.3,y+.52,14),P(x+1.7,y+.52,14),P(x+1.7,y+.52,19),P(x+.3,y+.52,19)],'#b3261e'),
-   shelf:(x,y)=>{let s2=box(x+.5,y+.5,.45,.4,52,'#a0703c');for(const z of[14,28,42]){const a=P(x+.05,y+.9,z),b2=P(x+.95,y+.9,z);s2+=`<path d="M${a[0]},${a[1]} L${b2[0]},${b2[1]}" stroke="#6a4a2a" stroke-width="2"/>`;
-     ['#c94a2a','#3a5a9a','#e8a93a','#5aa050'].forEach((c2,i)=>{const p=P(x+.15+i*.2,y+.9,z);s2+=`<rect x="${p[0]}" y="${p[1]-10}" width="3.4" height="10" fill="${c2}"/>`;});}return s2;},
-   plant:(x,y)=>box(x+.5,y+.5,.25,.25,10,'#c97a4a')+puffs3(P(x+.5,y+.5,20)),
-   case:(x,y)=>{let s2=box(x+.5,y+1,.42,.92,46,'#7a5a3c',0,{r:'#bfe3ee'});RELICS.filter(r=>hasRelic(r.id)).slice(0,3).forEach((r,i)=>{const p=P(x+.95,y+.4+i*.6,8+i*12);s2+=`<g transform="translate(${p[0]-6},${p[1]-12}) scale(.3)">${relicIcon(r,true,40).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g>`;});return s2;},
-  };
+  // wall frame (left wall along y, or right wall along x)
+  if(f.frame&&pos.frame&&flOf('frame')===roomFloor){const [t,wl]=pos.frame,fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],W=wl?wallR:wallL,c=wl?P(t+.9,0,47):P(0,t+.9,47);
+    g+=`<g class="fu" data-fu="frame">${W(t,t+1.8,34,60,roomPick==='frame'?'#ffd56a':'#a0703c')+W(t+.12,t+1.68,37,57,'#f4ece0')}<g transform="translate(${c[0]-16},${c[1]-(wl?24:8)}) skewY(${wl?26.6:-26.6}) scale(.32)"><path d="${fo.d}" fill="${fosDone(fo.id)?'#8a7a62':'#d8cfbf'}"/></g></g>`;}
+  // collect primitives with world bounding boxes, then depth-sort them all together
   const L=[];
-  for(const id in DRAW){if(!f[id]||!pos[id]||flOf(id)!==roomFloor)continue;const [x,y]=pos[id],D=FDEF[id];let s2=DRAW[id](x,y);
-    if(roomPick===id)s2=poly([P(x,y,.8),P(x+D.w,y,.8),P(x+D.w,y+D.d,.8),P(x,y+D.d,.8)],'rgba(255,213,106,.35)','stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"')+s2;
-    L.push([D.flat?-1:0,x+D.w/2+y+D.d/2,`<g class="fu" data-fu="${id}">${s2}</g>`]);}
-  if(twoF()){let st='';
-    if(!roomFloor){for(let i=5;i>=0;i--){const y0=4+i/3;st+=box(5.5,y0+1/6,.48,1/6,(6-i)*12,'#a0703c');}
-      const a=P(5.02,6,18),b2=P(5.02,4,82);st+=`<path d="M${a[0]},${a[1]} L${b2[0]},${b2[1]}" stroke="#6a4a2a" stroke-width="3" stroke-linecap="round"/>`;}
-    else{st+=poly([P(5,4,.4),P(6,4,.4),P(6,6,.4),P(5,6,.4)],'#2a1e14')+box(5.5,4.17,.48,1/6,1,'#a0703c');
-      for(const [a,b2] of[[P(4.95,4.05,0),P(4.95,4.05,22)],[P(4.95,5.95,0),P(4.95,5.95,22)],[P(5.95,4.05,0),P(5.95,4.05,22)]])st+=`<path d="M${a[0]},${a[1]} L${b2[0]},${b2[1]}" stroke="#6a4a2a" stroke-width="2.4"/>`;
-      const r1=P(4.95,4.05,22),r2=P(4.95,5.95,22),r3=P(5.95,4.05,22);st+=`<path d="M${r2[0]},${r2[1]} L${r1[0]},${r1[1]} L${r3[0]},${r3[1]}" stroke="#7a5a3c" stroke-width="3.4" fill="none" stroke-linecap="round"/>`;}
-    const lb=P(5.5,6.5,-4);st+=`<text x="${lb[0]}" y="${lb[1]}" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" stroke="#000" stroke-width="2.4" paint-order="stroke">${roomFloor?'▼ 1층':'▲ 2층'}</text>`;
-    L.push([0,10.4,`<g class="stair">${st}</g>`]);}
-  const o=occ();let ch=twoF()?[3,5]:[4,4];if(o[ch.join(',')]){outer:for(let y=5;y>=0;y--)for(let x=5;x>=0;x--)if(!o[x+','+y]){ch=[x,y];break outer;}}
-  const me=P(ch[0]+.5,ch[1]+.5);L.push([0,ch[0]+ch[1]+1,`<g style="pointer-events:none">${fig(ME(),me[0],me[1]+4,70,{expr:'happy'})}</g>`]);
-  L.sort((a,b)=>(a[0]-b[0])||(a[1]-b[1]));
-  return `<svg viewBox="0 0 320 240" role="img" aria-label="집 안 ${roomFloor+1}층">${g}${L.map(x=>x[2]).join('')}</svg>`;}
+  const add=(bb,svg,cls)=>L.push(Object.assign(bb,{svg,cls}));
+  for(const id in FDEF){if(FDEF[id].wall||!f[id]||!pos[id]||flOf(id)!==roomFloor)continue;const [x,y,r0]=pos[id],r=r0||0,D=FDEF[id],[W,Dd]=dims(id,r),cls=`class="fu" data-fu="${id}"`;
+    if(roomPick===id)add({x0:x,y0:y,x1:x+W,y1:y+Dd,z0:0,z1:.9,glass:0},poly([P(x,y,.8),P(x+W,y,.8),P(x+W,y+Dd,.8),P(x,y+Dd,.8)],'rgba(255,213,106,.35)','stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"'),cls);
+    if(id==='rug'){add({x0:x,y0:y,x1:x+W,y1:y+Dd,z0:0,z1:.6},poly([P(x+.1,y+.1,.5),P(x+W-.1,y+.1,.5),P(x+W-.1,y+Dd-.1,.5),P(x+.1,y+Dd-.1,.5)],'#c94a5a')+poly([P(x+.35,y+.35,.6),P(x+W-.35,y+.35,.6),P(x+W-.35,y+Dd-.35,.6),P(x+.35,y+Dd-.35,.6)],'#d86a76','stroke="#f2d06a" stroke-width="1.4"'),cls);continue;}
+    for(const p of partsOf(id)){
+      if(p.b){const [u0,v0,u1,v1,z0,hh]=p.b,a=rotP(u0,v0,D.w,D.d,r),b=rotP(u1,v1,D.w,D.d,r);
+        const bb={x0:x+Math.min(a[0],b[0]),x1:x+Math.max(a[0],b[0]),y0:y+Math.min(a[1],b[1]),y1:y+Math.max(a[1],b[1]),z0,z1:z0+hh,glass:p.glass};
+        const svg=p.glass?wbox(bb.x0,bb.y0,bb.x1,bb.y1,z0,hh,'rgba(190,230,245,.28)','rgba(160,210,230,.32)','rgba(220,245,255,.22)','stroke-opacity=".5"')
+          :wbox(bb.x0,bb.y0,bb.x1,bb.y1,z0,hh,p.o[FACEY[r]]||shade(p.c,-.04),p.o[FACEX[r]]||shade(p.c,-.26),p.o.t||shade(p.c,.14));
+        add(bb,svg,cls);}
+      else if(p.puff){const [u,v,z]=p.puff,q=rotP(u,v,D.w,D.d,r);add({x0:x+q[0]-.2,x1:x+q[0]+.2,y0:y+q[1]-.2,y1:y+q[1]+.2,z0:z-8,z1:z+14},puffs3(P(x+q[0],y+q[1],z)),cls);}
+      else if(p.icon){const [u,v,z]=p.icon,q=rotP(u,v,D.w,D.d,r),s=P(x+q[0],y+q[1],z);add({x0:x+q[0]-.15,x1:x+q[0]+.15,y0:y+q[1]-.15,y1:y+q[1]+.15,z0:z,z1:z+12},`<g transform="translate(${s[0]-6},${s[1]-12}) scale(.3)">${relicIcon(p.r,true,40).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g>`,cls);}
+    }}
+  if(twoF()){const sc='class="stair"';
+    if(!roomFloor){for(let i=0;i<6;i++){const y0=4+i/3;add({x0:5.02,x1:5.98,y0,y1:y0+1/3,z0:0,z1:(6-i)*12},wbox(5.02,y0,5.98,y0+1/3,0,(6-i)*12,'#b98250','#7f5a34','#d8a46c'),sc);}}
+    else{add({x0:5,x1:6,y0:4,y1:6,z0:0,z1:.4},poly([P(5,4,.4),P(6,4,.4),P(6,6,.4),P(5,6,.4)],'#2a1e14')+wbox(5.04,4,5.96,4.33,0,1,'#b98250','#7f5a34','#d8a46c'),sc);
+      for(const [a,b] of[[4.0,4.06],[5.94,6]])add({x0:4.9,x1:4.98,y0:a,y1:b,z0:0,z1:24},wbox(4.9,a,4.98,b,0,24,'#6a4a2a','#5a3a1a','#7a5a3c'),sc);
+      add({x0:4.9,x1:4.98,y0:4,y1:6,z0:24,z1:27},wbox(4.9,4,4.98,6,24,3,'#7a5a3c','#5a3a1a','#9a7a4c'),sc);}
+  }
+  const me=meR();if(me.fl===roomFloor){const m=meSpot(),c=P(m.x+.5,m.y+.5);
+    if(roomPick==='me')add({x0:m.x,x1:m.x+1,y0:m.y,y1:m.y+1,z0:0,z1:.9},poly([P(m.x,m.y,.8),P(m.x+1,m.y,.8),P(m.x+1,m.y+1,.8),P(m.x,m.y+1,.8)],'rgba(255,213,106,.35)','stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"'),'class="mech"');
+    add({x0:m.x+.3,x1:m.x+.7,y0:m.y+.3,y1:m.y+.7,z0:1,z1:70},fig(ME(),c[0],c[1]+4,70,{expr:'happy',flip:!!m.f}),'class="mech"');}
+  let out=isoSort(L).map(p=>`<g ${p.cls}>${p.svg}</g>`).join('');
+  if(twoF()){const lb=P(5.5,6.5,-4);out+=`<text class="stair" x="${lb[0]}" y="${lb[1]}" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" stroke="#000" stroke-width="2.4" paint-order="stroke">${roomFloor?'▼ 1층':'▲ 2층'}</text>`;}
+  return `<svg viewBox="0 0 320 240" role="img" aria-label="집 안 ${roomFloor+1}층">${g}${out}</svg>`;}
 function puffs3(p){return [[-7,0,'#4f9a50'],[7,-1,'#5fb05f'],[0,-8,'#6abf6a']].map(([dx,dy,c])=>`<circle cx="${p[0]+dx}" cy="${p[1]+dy}" r="7" fill="${c}" ${ISK}/>`).join('');}
 function openRoom(){roomPick=null;roomFloor=0;renderRoom();$('#room').hidden=false;}
 function renderRoom(){const f=landOf().furn,pos=(ensurePos(),roomPos());$('#roomArt').innerHTML=roomSVG();
-  const pk=roomPick?FURN.find(x=>x.id===roomPick):null,TF=twoF();
+  const TF=twoF(),B=(a,t)=>`<button class="ghost sm" type="button" data-rb="${a}">${t}</button>`,mv=TF?B('mv',roomFloor?'1층으로':'2층으로'):'';
   $('#roomTitle').textContent=TF?'집 안 꾸미기 · '+(roomFloor+1)+'층':'집 안 꾸미기';
   $('#roomFl').innerHTML=TF?[0,1].map(k=>`<button type="button" class="${roomFloor===k?'on':''}" data-fl="${k}">${k+1}층</button>`).join(''):'';
-  $('#roomBar').innerHTML=pk?`<span><b>${pk.n}</b> ${FDEF[pk.id].wall?'· 화살표로 벽을 따라 옮겨요':'· 밝은 칸을 누르면 그 자리로 옮겨요'}</span><div>${FDEF[pk.id].wall?'<button class="ghost sm" type="button" data-rb="left">◀</button><button class="ghost sm" type="button" data-rb="right">▶</button>':''}${TF?`<button class="ghost sm" type="button" data-rb="mv">${roomFloor?'1층으로':'2층으로'}</button>`:''}<button class="ghost sm" type="button" data-rb="store">보관</button><button class="ghost sm" type="button" data-rb="done">완료</button></div>`
-    :`<span>놓인 가구를 누르면 옮길 수 있어요.${TF?' 위 1층·2층 버튼이나 계단을 눌러 층을 바꿔요.':''} 보관한 가구는 아래에서 다시 배치해요.</span>`;
+  if(roomPick==='me')$('#roomBar').innerHTML=`<span><b>내 캐릭터</b> · 밝은 칸을 누르면 그 자리로 가요</span><div>${B('flip','방향 바꾸기')}${mv}${B('done','완료')}</div>`;
+  else if(roomPick){const pk=FURN.find(x=>x.id===roomPick),wall=FDEF[pk.id].wall;
+    $('#roomBar').innerHTML=`<span><b>${pk.n}</b> ${wall?'· 화살표로 벽을 따라 옮기고, 회전하면 반대쪽 벽으로 가요':'· 밝은 칸을 누르면 그 자리로 옮겨요'}</span><div>${wall?B('left','◀')+B('right','▶'):''}${B('rot','↻ 회전')}${mv}${B('store','보관')}${B('done','완료')}</div>`;}
+  else $('#roomBar').innerHTML=`<span>가구나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.${TF?' 위 1층·2층 버튼이나 계단을 눌러 층을 바꿔요.':''}</span>`;
   $('#roomList').innerHTML=FURN.map(i=>{const own=f[i.id],placed=own&&pos[i.id];return `<button class="lp ${roomPick===i.id?'on':''}" type="button" data-fu="${i.id}"><span>${i.n}</span><em class="${own?'own':S.money>=i.p?'':'no'}">${!own?won(i.p):placed?(TF?(flOf(i.id)+1)+'층 · 옮기기':'배치됨 · 옮기기'):'보관 중 · 배치'}</em></button>`;}).join('');}
 $('#roomFl').addEventListener('click',e=>{const b=e.target.closest('[data-fl]');if(!b)return;roomFloor=+b.dataset.fl;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();});
-$('#roomArt').addEventListener('click',e=>{if(e.target.closest('.stair')){roomFloor=1-roomFloor;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();return;}const fu=e.target.closest('.fu');
-  if(fu){roomPick=roomPick===fu.dataset.fu?null:fu.dataset.fu;renderRoom();return;}
-  const t=e.target.closest('.ft');if(!t||!roomPick||FDEF[roomPick].wall)return;const [x,y]=t.dataset.g.split(',').map(Number),D=FDEF[roomPick];
-  const cx=Math.min(Math.max(0,x),6-D.w),cy=Math.min(Math.max(0,y),6-D.d);
-  if(!fits(roomPick,cx,cy)){toast('다른 가구와 겹쳐요. 밝은 칸을 골라 주세요');return;}
-  roomPos()[roomPick]=[cx,cy];save();renderRoom();});
-$('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]');if(!b||!roomPick)return;const pos=roomPos(),a=b.dataset.rb;
+$('#roomArt').addEventListener('click',e=>{
+  if(e.target.closest('.stair')){roomFloor=1-roomFloor;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();return;}
+  if(e.target.closest('.mech')){roomPick=roomPick==='me'?null:'me';renderRoom();return;}
+  const fu=e.target.closest('.fu');if(fu){roomPick=roomPick===fu.dataset.fu?null:fu.dataset.fu;renderRoom();return;}
+  const t=e.target.closest('.ft');if(!t||!roomPick)return;const [x,y]=t.dataset.g.split(',').map(Number);
+  if(roomPick==='me'){if(occ()[x+','+y]){toast('가구가 있는 칸이에요. 밝은 칸을 골라 주세요');return;}const m=meR();m.x=x;m.y=y;save();renderRoom();return;}
+  if(FDEF[roomPick].wall)return;const r=rotOf(roomPick),[w,d]=dims(roomPick,r);
+  const cx=Math.min(Math.max(0,x),6-w),cy=Math.min(Math.max(0,y),6-d);
+  if(!fits(roomPick,cx,cy,r)){toast('다른 가구와 겹쳐요. 밝은 칸을 골라 주세요');return;}
+  roomPos()[roomPick]=[cx,cy,r];save();renderRoom();});
+$('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]');if(!b||!roomPick)return;const pos=roomPos(),a=b.dataset.rb,id=roomPick;
   if(a==='done')roomPick=null;
-  else if(a==='mv'){const to=1-roomFloor,from=roomFloor,id=roomPick;roomFloor=to;const old=flOf(id);setFl(id,to);const sp=freeSpot(id);
+  else if(id==='me'){const m=meR();if(a==='flip')m.f=m.f?0:1;
+    else if(a==='mv'){const to=1-roomFloor;roomFloor=to;m.fl=to;meSpot();}}
+  else if(a==='mv'){const to=1-roomFloor,from=roomFloor;roomFloor=to;const old=flOf(id);setFl(id,to);const sp=freeSpot(id,rotOf(id));
     if(!sp){setFl(id,old);roomFloor=from;toast((to+1)+'층에 놓을 자리가 없어요');}else{pos[id]=sp;toast(FURN.find(x=>x.id===id).n+' → '+(to+1)+'층');}}
-  else if(a==='store'){pos[roomPick]=null;toast(FURN.find(x=>x.id===roomPick).n+' 보관');roomPick=null;}
-  else if(pos[roomPick]){pos[roomPick]=[Math.max(0,Math.min(4.2,pos[roomPick][0]+(a==='left'?-.6:.6)))];}
+  else if(a==='store'){pos[id]=null;toast(FURN.find(x=>x.id===id).n+' 보관');roomPick=null;}
+  else if(a==='rot'&&pos[id]){
+    if(FDEF[id].wall){const [t,wl]=pos[id];pos[id]=[Math.min(t,wl?4.2:1.5),wl?0:1];}
+    else{const [x,y,r]=pos[id],nr=((r||0)+1)%4,sp=fits(id,x,y,nr)?[x,y,nr]:nearSpot(id,x,y,nr);if(sp)pos[id]=sp;else toast('회전할 공간이 없어요. 주변 가구를 옮겨 주세요');}}
+  else if((a==='left'||a==='right')&&pos[id]){const [t,wl]=pos[id];pos[id]=[Math.max(0,Math.min(wl?1.5:4.2,t+(a==='left'?-.6:.6)*(wl?-1:1))),wl];}
   save();renderRoom();});
 $('#roomList').addEventListener('click',e=>{const b=e.target.closest('[data-fu]');if(!b)return;const f=landOf().furn,pos=roomPos(),i=FURN.find(x=>x.id===b.dataset.fu);
   if(!f[i.id]){if(S.money<i.p){toast('자금이 부족해요');return;}const sp=freeSpot(i.id);if(!sp){toast('놓을 자리가 없어요. 가구를 보관하거나 옮겨 주세요');return;}S.money-=i.p;f[i.id]=1;setFl(i.id,roomFloor);pos[i.id]=sp;roomPick=i.id;save();toast(i.n+' 배치 · 원하는 칸을 눌러 옮길 수 있어요');renderRoom();return;}
