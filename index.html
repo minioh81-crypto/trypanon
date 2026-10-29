@@ -43,7 +43,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .mapwrap svg{display:block;width:100%;height:100%}
 .grat{stroke:#1a3440;stroke-width:.5}
 .gl{fill:#3d5d69;font:500 7px var(--f-num)}
-#map .wx2,#map .wx3{opacity:0;transition:opacity 2.5s}#map.wx-wind .wx2,#map.wx-storm .wx2,#map.wx-storm .wx3{opacity:1}#map.wx-storm .flash{animation:mflash 7s infinite}@keyframes mflash{0%,90%,94%,100%{opacity:0}91%{opacity:.5}93%{opacity:.15}92.5%{opacity:.45}}#map .wxb{pointer-events:none}
+#map.wx-storm .flash{animation:mflash 7s infinite}@keyframes mflash{0%,90%,94%,100%{opacity:0}91%{opacity:.5}93%{opacity:.15}92.5%{opacity:.45}}#map #mWx{pointer-events:none}
 .landp{fill:var(--land);stroke:#8a7444;stroke-width:.8;stroke-linejoin:round}
 .node{cursor:pointer;transition:transform .18s ease,filter .18s ease;transform-box:fill-box;transform-origin:center}
 .node:hover,.node:focus-visible{transform:scale(1.18);filter:drop-shadow(0 0 4px rgba(246,199,106,.75))}
@@ -337,7 +337,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .mchip em{font-style:normal;color:var(--hot)}
 .mlegend{position:relative;flex:none;padding:7px max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px));background:var(--panel);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11px;color:var(--mute);pointer-events:none}
 .mlegend span{display:inline-flex;align-items:center;gap:5px}.mlegend i{width:8px;height:8px;border-radius:50%;display:inline-block}
-.mlegend i.sq{border-radius:1px;background:#fff4dc;transform:rotate(45deg)}
+.mlegend .mwx{color:#eaf4f8;font-weight:700;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:1px 8px}.mlegend i.sq{border-radius:1px;background:#fff4dc;transform:rotate(45deg)}
 .mhint{margin-left:auto;color:var(--amber2)}
 .rpop{position:fixed;inset:0;z-index:30;background:rgba(5,7,8,.62);display:flex;align-items:flex-end;justify-content:center}
 .rsheet{position:relative;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0;
@@ -456,7 +456,7 @@ nav.tabs button{font-size:12px}
   <section class="view" id="v-map">
     <div class="mapwrap" id="map"></div>
     <div class="mapinfo" id="mapInfo"></div>
-    <div class="mlegend"><span>아이콘 = 그 지역 재료</span><span><i class="sq"></i>양구 본공</span><span style="opacity:.55">흐림 = 잠김</span><span class="mhint">지형을 눌러 보세요</span></div>
+    <div class="mlegend"><span>아이콘 = 그 지역 재료</span><span><i class="sq"></i>양구 본공</span><span class="mwx" id="wxT"></span><span style="opacity:.55">흐림 = 잠김</span><span class="mhint">지형을 눌러 보세요</span></div>
     <div class="rpop" id="rpop" hidden><div class="rsheet" role="dialog" aria-modal="true" aria-label="지형 정보">
       <button class="rclose" id="rClose" type="button" aria-label="닫기"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
       <div class="card" id="card"></div></div></div>
@@ -1459,13 +1459,14 @@ const COAST=[[126.15,37.72],[126.55,37.78],[126.68,37.95],[127.0,38.2],[127.4,38
  [128.85,35.05],[128.6,34.85],[128.3,34.9],[128.0,34.85],[127.75,34.75],[127.6,34.65],[127.35,34.7],[127.1,34.55],[126.8,34.5],[126.55,34.3],[126.35,34.45],
  [126.3,34.75],[126.4,35.05],[126.35,35.3],[126.5,35.6],[126.7,35.95],[126.55,36.15],[126.5,36.45],[126.25,36.65],[126.15,36.85],[126.45,36.95],[126.75,36.95],
  [126.65,37.15],[126.6,37.4],[126.55,37.55]];
-// coastal swells: a wave line rolls toward the shore and breaks into spray. Built only for the current weather to keep it light.
-function surfMarks(lv){let g='';const pip=(x,y)=>{let c=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++){const [xi,yi]=pts[i],[xj,yj]=pts[j];if((yi>y)!==(yj>y)&&x<(xj-xi)*(y-yi)/(yj-yi)+xi)c=!c;}return c;};const cX=PX(127.9),cY=PY(36.4),pts=COAST.map(p=>[PX(p[0]),PY(p[1])]),N=[9,14,20][lv],K=[.9,1.15,1.4][lv],DU=[7,5,3.6][lv],seed=Math.floor(Date.now()/120000);
-  for(let i=0;i<N;i++){const r=k=>hsh(seed*97+i,k),n=pts.length,j=Math.floor(r(1)*n),p=pts[j],q=pts[(j+1)%n],t=r(2),x=p[0]+(q[0]-p[0])*t,y=p[1]+(q[1]-p[1])*t;
-    let tx=q[0]-p[0],ty=q[1]-p[1];const tl=Math.hypot(tx,ty)||1;let nx=-ty/tl,ny=tx/tl;if(pip(x+nx*4,y+ny*4)){nx=-nx;ny=-ny;}const ang=Math.atan2(ny,nx)*180/Math.PI-90,d=(DU*(.8+r(3)*.6)).toFixed(1),b=(-r(4)*DU*1.5).toFixed(1),k=(K*(.8+r(5)*.4)).toFixed(2),kt='0;.15;.55;.62;.8;1',A=`dur="${d}s" begin="${b}s" repeatCount="indefinite" keyTimes="${kt}"`,w=7+lv*1.2;
-    g+=`<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${ang.toFixed(0)}) scale(${k})"><g opacity="0"><animate attributeName="opacity" values="0;.85;.95;1;0;0" ${A}/>
-      <path d="M${-w},0 C${-w/2},-2.6 ${w/2},-2.6 ${w},0" stroke="#d8f2ff" stroke-width="1.5" fill="none" stroke-linecap="round"><animateTransform attributeName="transform" type="translate" values="0 16;0 13;0 2;0 0;0 0;0 16" ${A}/></path>
-      <path d="M${-w*.8},2 C${-w/2},4 ${w/2},4 ${w*.8},2 Q${w*.3},-6 0,-3 Q${-w*.3},-7 ${-w*.8},2Z" fill="rgba(240,252,255,.85)"><animateTransform attributeName="transform" type="scale" values=".1;.1;.1;.5;1.2;.1" ${A}/></path></g></g>`;}
+// shore wash: one foam line along the coast that washes in and out (cheap: 2 animations). Storms add rain, lightning and breaking spray.
+function washSVG(d,lv){const W=[[1.6,4,.35,7],[2.2,5.5,.42,4.6],[3,8,.5,2.2]][lv],[w0,w1,op,du]=W;
+  return `<path d="${d}" fill="none" stroke="#e6f6ff" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="${lv<2?'.5 4':'2 5'}" opacity="${op}" stroke-width="${w0}"><animate attributeName="stroke-width" values="${w0};${w1};${w0}" dur="${du}s" repeatCount="indefinite"/><animate attributeName="stroke-dashoffset" values="0;22" dur="${du*3}s" repeatCount="indefinite"/></path>`
+    +(lv===2?`<path d="${d}" fill="none" stroke="rgba(200,236,250,.35)" stroke-linejoin="round" stroke-width="16"><animate attributeName="stroke-width" values="8;20;8" dur="1.7s" repeatCount="indefinite"/><animate attributeName="opacity" values=".15;.45;.15" dur="1.7s" repeatCount="indefinite"/></path>`:'');}
+function stormSVG(){let g=`<rect x="30" y="0" width="326" height="330" fill="rgba(10,20,30,.22)"/><rect x="30" y="0" width="326" height="330" fill="url(#mRain)" opacity=".3"/><rect class="flash" x="30" y="0" width="326" height="330" fill="#eaf6ff" opacity="0"/>`;
+  const cX=PX(127.9),cY=PY(36.4),pts=COAST.map(p=>[PX(p[0]),PY(p[1])]),seed=Math.floor(Date.now()/120000);
+  for(let i=0;i<10;i++){const r=k=>hsh(seed*97+i,k),j=Math.floor(r(1)*pts.length),[x,y]=pts[j],d=(2.4+r(3)*1.4).toFixed(1),b=(-r(4)*3).toFixed(1),A=`dur="${d}s" begin="${b}s" repeatCount="indefinite"`;
+    g+=`<g transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><g><animateTransform attributeName="transform" type="scale" values=".1;1.6;.1" keyTimes="0;.35;1" ${A}/><animate attributeName="opacity" values="0;1;0" keyTimes="0;.3;1" ${A}/><path d="M-6,2 Q-4,-6 -1,-2 Q1,-8 3,-2 Q6,-6 6,2Z" fill="rgba(245,252,255,.9)"/><circle cx="-5" cy="-7" r="1" fill="#fff"/><circle cx="4" cy="-8" r="1.1" fill="#fff"/></g></g>`;}
   return g;}
 function buildMap(){let g='';
   for(let la=34;la<=38;la++){const y=PY(la).toFixed(1);g+=`<line class="grat" x1="0" x2="350" y1="${y}" y2="${y}"/><text class="gl" x="346" y="${y-3}" text-anchor="end">${la}°N</text>`;}
@@ -1479,23 +1480,21 @@ function buildMap(){let g='';
   g=`<defs><radialGradient id="mSea" cx=".55" cy=".45" r=".8"><stop offset="0" stop-color="#1a4152"/><stop offset="1" stop-color="#0b1c25"/></radialGradient>
     <linearGradient id="mLand" gradientUnits="userSpaceOnUse" x1="${PX(126.1)}" y1="0" x2="${PX(129.3)}" y2="0"><stop offset="0" stop-color="#b9c890"/><stop offset=".3" stop-color="#93ad6c"/><stop offset=".6" stop-color="#5d8a4c"/><stop offset="1" stop-color="#2f6438"/></linearGradient>
     <linearGradient id="mShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,255,230,.10)"/><stop offset="1" stop-color="rgba(0,20,0,.18)"/></linearGradient>
-    <filter id="mBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter><filter id="mBlur2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4"/></filter>
     <clipPath id="mClip"><path d="${d}"/></clipPath>
     <pattern id="mRain" width="14" height="20" patternUnits="userSpaceOnUse"><path d="M10,0 l-5,12" stroke="rgba(200,225,240,.55)" stroke-width=".8"/><animateTransform attributeName="patternTransform" type="translate" from="0 0" to="-7 20" dur=".35s" repeatCount="indefinite"/></pattern></defs>
     <rect x="34" y="2" width="318" height="322" fill="url(#mSea)"/>
     `+g;
-  g+=`<path d="${d}" fill="none" stroke="rgba(170,230,255,.2)" stroke-width="5" stroke-linejoin="round"/><path class="landp" d="${d}" style="fill:url(#mLand);stroke:#d9e6b0;stroke-opacity:.6"/>
-    <g clip-path="url(#mClip)"><path d="M${P(RID)}" fill="none" stroke="#1e5128" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" filter="url(#mBlur)" opacity=".85"/>
-    ${BR.map(b=>`<path d="M${P(b)}" fill="none" stroke="#2c6a35" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" filter="url(#mBlur2)" opacity=".7"/>`).join('')}
-    <path d="M${P(RID)}" fill="none" stroke="#173f20" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#mBlur2)" opacity=".9"/>
+  g+=`<g id="mWash" data-d="${d}"></g><path class="landp" d="${d}" style="fill:url(#mLand);stroke:#d9e6b0;stroke-opacity:.6"/>
+    <g clip-path="url(#mClip)">${[[30,.22],[22,.3],[14,.4]].map(([w,o])=>`<path d="M${P(RID)}" fill="none" stroke="#1e5128" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" opacity="${o}"/>`).join('')}
+    ${BR.map(b=>[[14,.25],[9,.3],[5,.35]].map(([w,o])=>`<path d="M${P(b)}" fill="none" stroke="#2c6a35" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" opacity="${o}"/>`).join('')).join('')}
+    ${[[7,.35],[4,.5]].map(([w,o])=>`<path d="M${P(RID)}" fill="none" stroke="#173f20" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" opacity="${o}"/>`).join('')}
     <path d="${d}" fill="url(#mShade)"/></g>`
     +RID.map(p=>[PX(p[0]),PY(p[1])]).map(([x,y],i)=>`<path d="M${(x-6).toFixed(1)},${(y+3).toFixed(1)} l6,-7.5 l6,7.5Z" fill="#245c2e" stroke="#123a1a" stroke-width=".7"/><path d="M${(x-2).toFixed(1)},${(y-2).toFixed(1)} l2,-2.5 l2,2.5 l-1,-.6 l-1,.8 l-1,-.8Z" fill="#eef5e0" opacity=".85"/>`).join('')
     +BR.flatMap(b=>b.slice(1)).map(p=>[PX(p[0]),PY(p[1])]).map(([x,y])=>`<path d="M${(x-4).toFixed(1)},${(y+2).toFixed(1)} l4,-5 l4,5Z" fill="#3d7a40" stroke="#1d4a24" stroke-width=".6"/>`).join('')
     +`<path class="landp" d="${d}" style="fill:none;stroke:#e6f0c8;stroke-opacity:.55"/>`;
-  g+='<g id="mSurf"></g>';
-  g+=`<ellipse class="landp" cx="${PX(126.55)}" cy="${PY(33.38)}" rx="17" ry="8" style="fill:#86a866;stroke:#e6f0c8;stroke-opacity:.55"/><ellipse cx="${PX(126.55)}" cy="${PY(33.38)}" rx="8" ry="4" fill="#2f6438" opacity=".8" filter="url(#mBlur2)"/>
+  g+=`<ellipse class="landp" cx="${PX(126.55)}" cy="${PY(33.38)}" rx="17" ry="8" style="fill:#86a866;stroke:#e6f0c8;stroke-opacity:.55"/><ellipse cx="${PX(126.55)}" cy="${PY(33.38)}" rx="10" ry="5" fill="#2f6438" opacity=".35"/><ellipse cx="${PX(126.55)}" cy="${PY(33.38)}" rx="6" ry="3" fill="#2f6438" opacity=".5"/>
    <circle class="landp" cx="${PX(130.87)}" cy="${PY(37.5)}" r="3" style="fill:#3d7a40;stroke:#e6f0c8"/><circle class="landp" cx="${PX(131.87)}" cy="${PY(37.24)}" r="1.6" style="fill:#7a8a6a;stroke:#e6f0c8"/>`;
-  g+=`<g class="wx3"><rect x="30" y="0" width="326" height="330" fill="rgba(10,20,30,.22)"/><rect x="30" y="0" width="326" height="330" fill="url(#mRain)" opacity=".3"/><rect class="flash" x="30" y="0" width="326" height="330" fill="#eaf6ff" opacity="0"/></g><g class="wxb" transform="translate(40,10)"><rect width="92" height="20" rx="10" fill="rgba(8,18,24,.78)" stroke="rgba(255,255,255,.25)"/><text id="wxT" x="46" y="13.6" text-anchor="middle" fill="#eaf4f8" font-size="9.5" font-weight="700"></text></g>`;
+  g+='<g id="mWx"></g>';
   const node=(id,cls,x,y,label,lx,la,ly,res)=>`<g class="node ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}">
     <circle class="hit" cx="${x}" cy="${y}" r="16"/><circle class="ring" cx="${x}" cy="${y}" r="10"/>
     ${cls==='base'?`<rect class="dot" x="${x-6}" y="${y-6}" width="12" height="12" transform="rotate(45 ${x} ${y})"/>`:res?`<svg class="ricon" x="${x-8}" y="${y-8}" width="16" height="16" viewBox="0 0 16 16">${RIC[res]||''}</svg>`:`<circle class="dot" cx="${x}" cy="${y}" r="6"/>`}
@@ -1505,7 +1504,7 @@ function buildMap(){let g='';
   $('#map').innerHTML=`<svg viewBox="34 2 318 322" role="img" aria-label="대한민국 시추 지도">${g}</svg>`;wxSet(true);}
 const WX=[['☀️ 맑음 · 잔잔','calm'],['💨 바람 · 너울','wind'],['⛈️ 폭풍 · 거친 파도','storm']];let wxCur=-1;
 function wxNow(){const p=Math.floor(Date.now()/120000),h=Math.abs(Math.sin(p*12.9898)*43758.5453)%1;return h<.5?0:h<.8?1:2;}
-function wxSet(f){const w=wxNow();if(!f&&w===wxCur)return;const m=$('#map');m.classList.remove('wx-calm','wx-wind','wx-storm');m.classList.add('wx-'+WX[w][1]);const t=$('#wxT');if(t)t.textContent=WX[w][0];{const ms=$('#mSurf');if(ms)ms.innerHTML=surfMarks(w);}if(!f&&wxCur>=0&&w===2)toast('⛈️ 바다에 폭풍이 몰려와요 — 파도가 거세요');wxCur=w;}
+function wxSet(f){const w=wxNow();if(!f&&w===wxCur)return;const m=$('#map');m.classList.remove('wx-calm','wx-wind','wx-storm');m.classList.add('wx-'+WX[w][1]);const t=$('#wxT');if(t)t.textContent=WX[w][0];{const mw=$('#mWash');if(mw)mw.innerHTML=washSVG(mw.dataset.d,w);const mx=$('#mWx');if(mx)mx.innerHTML=w===2?stormSVG():'';}if(!f&&wxCur>=0&&w===2)toast('⛈️ 바다에 폭풍이 몰려와요 — 파도가 거세요');wxCur=w;}
 setInterval(()=>wxSet(false),5000);
 function updateMap(){document.querySelectorAll('#map .rcnt').forEach(t=>{t.textContent=(S.res[t.dataset.r]||0).toLocaleString('ko-KR');});document.querySelectorAll('.node').forEach(n=>{const r=REG.find(x=>x.id===n.dataset.id);
   n.classList.toggle('locked',!!r&&!isUnl(r));n.classList.toggle('sel',n.dataset.id===sel);n.classList.toggle('act',n.dataset.id===S.ex.active);n.classList.toggle('evt',evtOn()&&n.dataset.id===S.evt.rid);});renderCard();}
@@ -2257,7 +2256,7 @@ $('#wBuy').addEventListener('click',e=>{if(!e.target.closest('#wBuyBtn')||!wTry)
 
 // ---------------- tabs ----------------
 let hudCache='';
-function show(v){view=v;{const sv=$('#map svg');if(sv&&sv.pauseAnimations){if(v==='map')sv.unpauseAnimations();else sv.pauseAnimations();}}
+function show(v){view=v;for(const [sel,on] of [['#map svg','map'],['#lgWrap svg','land']]){const sv=$(sel);if(sv&&sv.pauseAnimations){if(v===on)sv.unpauseAnimations();else sv.pauseAnimations();}}
   for(const id of ['map','bore','craft','store','shop','invest','land'])$('#v-'+id).hidden=id!==v;
   document.querySelectorAll('nav.tabs button').forEach(b=>{if(b.dataset.tab===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
   if(v==='map')updateMap();if(v==='craft')renderCraft();if(v==='store')renderStore();if(v==='invest')renderInvest();if(v==='shop')renderShop();if(v==='land')renderLand();if(v==='bore'){hudCache='';}}
