@@ -365,6 +365,8 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .shrow.lock{opacity:.5}.shn{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:6px}.shn b{font-size:15px}.shn span{grid-column:1/-1;font-size:11.5px;color:var(--mute)}
 .shp{font-size:12px;color:var(--mute);align-self:center;text-align:right}.shp b{color:var(--fg);font-family:var(--f-num)}
 .shq{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.shq button{display:grid;gap:1px;height:auto;padding:6px 4px;font-weight:700}.shq em{font-style:normal;font-size:10.5px;font-family:var(--f-num);opacity:.85}
+.finds{border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:grid;gap:6px;background:var(--panel2)}.finds .fh{font-size:12px;font-weight:700;color:var(--amber2)}.finds ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.finds li{display:grid;grid-template-columns:36px minmax(0,1fr);column-gap:8px;align-items:center;font-size:12.5px;opacity:.75}.finds li.ok{opacity:1}.finds li .fi2{grid-row:span 2;display:grid;place-items:center}.finds li em{font-style:normal;font-size:11px;color:var(--mute)}
 .galbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}.galbtns.lock button{opacity:.6}
 .fpn{display:flex;flex-wrap:wrap;gap:3px;margin:4px 0}.fpn span{font-size:10.5px;padding:1px 6px;border-radius:999px;border:1px dashed var(--line);color:var(--mute)}.fpn span.on{border-style:solid;border-color:#c9b48a;color:#efe3c6;background:rgba(239,227,198,.08)}
 .fos svg{width:130px;height:auto;background:#0e1315;border-radius:8px}
@@ -602,8 +604,9 @@ const TIERS=[{n:'견습 쇠송곳',lv:0,cost:0,mul:1},{n:'트리파논 Mk.I',lv:
 const GRADE_N=['견습','초급','중급','상급','숙련','전문가','장인','명장','달인','마스터','그랜드마스터','영웅','전설','신화','초월','불멸','천상','절대','창조','무한'];
 const GRADE_G=['초보','초보','초보','초보','숙련자','숙련자','숙련자','숙련자','고수','고수','고수','전설','전설','전설','초월','초월','초월','궁극','궁극','궁극'];
 const DLMAX=100,DLOPEN=50;
-const dlGrade=dl=>Math.ceil(dl/5),dlStep=dl=>(dl-1)%5+1;
-const dlName=dl=>GRADE_N[dlGrade(dl)-1]+' '+dlStep(dl);
+const DSTEP=10,GRADE_T=['견습','초급','중급','숙련','마스터','그랜드마스터','영웅','전설','신화','무한'],GRADE_TG=['초보','초보','숙련자','숙련자','고수','고수','전설','전설','초월','궁극'];
+const dlGrade=dl=>Math.ceil(dl/DSTEP),dlStep=dl=>(dl-1)%DSTEP+1,dlStyle=dl=>Math.min(19,Math.ceil(dl/5)-1);
+const dlName=dl=>GRADE_T[dlGrade(dl)-1]+' '+dlStep(dl);
 const dlMul=dl=>Math.pow(1.1,dl-1);
 const dlPartReq=dl=>dl>=50?10:Math.floor((dl-1)/5);
 const dlCost=dl=>Math.round(150*Math.pow(1.2,dl-2));
@@ -658,7 +661,7 @@ const fresh=()=>({money:0,depth:0,dl:1,res:{},parts:{},unl:[],boost:{m:1,until:0
 let S=fresh();
 try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&typeof d==='object'&&(typeof d.seg==='number'||typeof d.depth==='number'))S=Object.assign(S,d);}catch(e){}
 if(S.seg!=null){S.depth=Math.max(S.depth||0,Math.min(segTop(S.seg),14999));}if(S.tier!=null&&(S.dl||1)===1)S.dl=[1,6,16,26,36,46][S.tier]||1;S.dl=S.dl||1;delete S.tier;delete S.seg;delete S.hp;
-S.char=Object.assign({},DEFCHAR_,S.char||{});S.ex=Object.assign({active:null,dig:{}},S.ex||{});S.relic=S.relic||{};if(!S.bv5){for(const k in (S.ex.dig||{})){const g0=S.ex.dig[k];g0.i=Math.round(g0.i*2/5);g0.hp=0;}S.bv5=1;}if(!S.rv){for(const k in S.relic)S.relic[k]=0;S.rv=2;}if(S.rv===2){const mp=[0,1,2,4,5,6,7,8,12];for(const k in S.relic)S.relic[k]=mp[S.relic[k]]??0;S.rv=3;}S.own=S.own||[];S.inv=S.inv||{};S.invN=S.invN||[];S.st=Object.assign({exp:0,sea:0},S.st||{});
+S.char=Object.assign({},DEFCHAR_,S.char||{});S.ex=Object.assign({active:null,dig:{}},S.ex||{});S.relic=S.relic||{};if(!S.bv5){for(const k in (S.ex.dig||{})){const g0=S.ex.dig[k];g0.i=Math.round(g0.i*2/5);g0.hp=0;}S.bv5=1;}if(!S.rv){for(const k in S.relic)S.relic[k]=0;S.rv=2;}if(S.rv===2){const mp=[0,1,2,4,5,6,7,8,12];for(const k in S.relic)S.relic[k]=mp[S.relic[k]]??0;S.rv=3;}if(S.rv===3){for(const k in S.relic){const g0=S.relic[k];S.relic[k]=Math.floor(g0/4)*6+g0%4;}S.rv=4;}S.own=S.own||[];S.inv=S.inv||{};S.invN=S.invN||[];S.st=Object.assign({exp:0,sea:0},S.st||{});
 const save=()=>{S.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const L=id=>S.parts[id]||0;
 const levels=()=>Object.fromEntries(PARTS.map(p=>[p.id,L(p.id)]));
@@ -671,7 +674,7 @@ const extraP=()=>Math.min(.9,.08+.05*L('sensor')+.1*setPow('goryeo'));
 const boostM=()=>S.boost&&S.boost.until>Date.now()?S.boost.m:1;
 const isUnl=r=>r.un===0||S.unl.includes(r.id);
 function gateAt(){const l=layerAt(S.depth);return !S.done&&l.req>S.dl?l:null;}
-const boreDps=()=>dps()*dlMul(S.dl)*boostM()*(1+.15*setPow('paleoz'))*(fosDone('kcera')?1.1:1)*(fosDone('cavebear')?1.05:1);
+const boreDps=()=>dps()*dlMul(S.dl)*boostM()*(1+.15*setPow('paleoz'))*(fosDone('kcera')?1.05:1)*(fosDone('cavebear')?1.03:1);
 const tierName=()=>dlName(S.dl)+' · Lv.'+S.dl;
 const GSTY=[
  ['#8a5a3a','#5e3a24','#b07a4a','#e8a93a','#8a8f94',null],['#7d8288','#52575c','#a3a9ae','#e8a93a','#a3adb4',null],
@@ -721,7 +724,7 @@ function drawDrill(c,cx,tipY,k,P,o){
       c.fillStyle=i%2?'#b4573a':'#c96a42';c.fillRect(x,bodyTop+i*th+1,D.pw,th-2);
       c.fillStyle='rgba(0,0,0,.25)';c.fillRect(x,bodyTop+i*th+th-3,D.pw,1.5);}
     R.heat={x:cx-D.bw/2-D.pw-4,y:bodyTop-4,w:D.bw+D.pw*2+8,h:D.bh+8};}
-  const dl=o.dl??S.dl,gi=dlGrade(dl)-1,stp=dlStep(dl),SY=GSTY[gi],TC=SY[3],hl=P.housing;
+  const dl=o.dl??S.dl,gi=dlStyle(dl),stp=dlStep(dl),SY=GSTY[gi],TC=SY[3],hl=P.housing;
   // boosters: smoke stacks (low grades) -> energy jets
   for(const s2 of[-1,1]){const px=cx+s2*D.bw*.3,ph=(16+1.2*hl)*k;
     if(!SY[5]){c.fillStyle='#3a4248';c.fillRect(px-4*k,bodyTop-ph,8*k,ph);c.fillStyle='#596770';c.fillRect(px-5.5*k,bodyTop-ph-3*k,11*k,4*k);
@@ -742,7 +745,7 @@ function drawDrill(c,cx,tipY,k,P,o){
   if(gi>=3){c.strokeStyle=SY[2];c.lineWidth=(1.4+gi*.08)*k;c.beginPath();c.roundRect(cx-D.bw/2+1,bodyTop+1,D.bw-2,D.bh-2,8*k);c.stroke();}
   for(let i=0;i<Math.min(10,hl);i++){c.fillStyle='rgba(255,255,255,.55)';c.beginPath();c.arc(cx-D.bw/2+8*k+i*(D.bw-16*k)/9,bodyTop+4.5*k,1.4*k,0,7);c.fill();}
   // step pips (1..5) on the right shoulder
-  for(let i=0;i<5;i++){c.fillStyle=i<stp?SY[2]:'rgba(0,0,0,.35)';c.fillRect(cx+D.bw/2-(8+i*5)*k,bodyBot-14*k,3.4*k,3.4*k);}
+  for(let i=0;i<DSTEP;i++){c.fillStyle=i<stp?SY[2]:'rgba(0,0,0,.35)';c.fillRect(cx+D.bw/2-(7+i*3.4)*k,bodyBot-13*k,2.4*k,2.4*k);}
   // crest (grade 8+)
   if(gi>=7){c.fillStyle=SY[2];c.beginPath();c.moveTo(cx-8*k,bodyTop);c.lineTo(cx,bodyTop-(8+gi)*k);c.lineTo(cx+8*k,bodyTop);c.closePath();c.fill();}
   // band: hazard stripes (low) or energy band (high)
@@ -886,7 +889,7 @@ class Shaft{
       if(i===0&&st.frac>0)this.cracks(abs,y,bh,W,st.frac,holeW);}
     const jit=this.kick>0?(Math.random()-.5)*(this.kick>.2?14:this.kick>.1?7:3):0;this.kick=Math.max(0,this.kick-dt);
     this.spin+=dt*(st.active?14*(1+.12*L('bearing')):1.5);
-    if(S.dl>5){const gi=dlGrade(S.dl)-1,hx=GSTY[gi][3],n=parseInt(hx.slice(1),16),col=`${n>>16},${n>>8&255},${n&255}`,gy=blockTop-DD.cl-DD.bh*.5;
+    if(S.dl>5){const gi=dlStyle(S.dl),hx=GSTY[gi][3],n=parseInt(hx.slice(1),16),col=`${n>>16},${n>>8&255},${n&255}`,gy=blockTop-DD.cl-DD.bh*.5;
       const gr=c.createRadialGradient(W/2,gy,10,W/2,gy,DD.bw*1.2);gr.addColorStop(0,`rgba(${col},${Math.min(.4,.1+.03*gi)})`);gr.addColorStop(1,`rgba(${col},0)`);c.fillStyle=gr;c.fillRect(0,gy-DD.bw*1.2,W,DD.bw*2.4);}
     if(this.lamp){const lg2=c.createRadialGradient(W/2,blockTop,10,W/2,blockTop,W*.6);lg2.addColorStop(0,'rgba(255,220,150,.22)');lg2.addColorStop(1,'rgba(255,220,150,0)');c.fillStyle=lg2;c.fillRect(0,0,W,H);}
     drawDrill(c,W/2+jit,blockTop+16*k,k,P,{t:performance.now()/1000,spin:this.spin});
@@ -912,20 +915,22 @@ function boreBlock(abs){if(abs<0)return{sky:true};const t=absToDepth(abs),l=laye
 const bore=new Shaft($('#bCv'),boreBlock);bore.bg='#2a1f17';bore.hole='#3b2a1e';bore.strata=true;bore.lamp=true;bore.labelX=88;
 function expBlock(abs){if(!exp||abs<0)return{sky:true};const r=exp.r;
   if(r.t==='sea'&&abs<r.water)return{water:true,label:altText(r,abs)};
-  const below=belowOf(r,abs),e=eraAt(r,below),start=below===e.from||(r.t==='sea'&&below===WB);
+  const below=belowOf(r,abs),e=eraAt(r,below),start=below===e.from||(r.t==='sea'&&(below===WRECK[0]||below===WRECK[1]));
   return{c:shade(r.rock,-Math.min(.45,below*.004)),ore:RES[r.res],res:r.res,label:altText(r,abs)+(start?' · '+eraAt(r,below).n+' 지층':''),warn:start};}
 const ex=new Shaft($('#eCv'),expBlock);ex.bg='#1c1712';ex.mild=1;ex.hole='#2e2218';ex.strata=true;ex.lamp=true;
 
 // ---------------- fossils (bore, crust only) ----------------
 const FOSSILS=[
- {id:'kcera',n:'코리아케라톱스',where:'경기 화성에서 발견된 한국 각룡류',eff:'본공 굴착력 +10%',pn:['꼬리뼈(높은 가시돌기)','골반·뒷다리뼈','등뼈·갈비뼈','목뼈·앞다리뼈','머리뼈(부리·프릴)']},
- {id:'kano',n:'코리아노사우루스',where:'전남 보성에서 발견된 소형 조각류 공룡',eff:'본공 굴착 보상 +20%',pn:['꼬리뼈','골반·뒷다리뼈','등뼈·갈비뼈','목뼈·앞발뼈','머리뼈']},
- {id:'puk',n:'부경고사우루스',where:'경남 하동에서 발견된 목 긴 용각류',eff:'원정 굴착력 +10%',pn:['꼬리뼈','골반·뒷다리뼈','등뼈·갈비뼈','긴 목뼈·앞다리뼈','머리뼈']},
- {id:'haenam',n:'해남이크누스',where:'전남 해남 우항리의 익룡 발자국 화석',eff:'보물 상자 등장 +50%',pn:['첫째 앞발자국','첫째 뒷발자국','둘째 앞발자국','둘째 뒷발자국','셋째 앞발자국']},
- {id:'goseong',n:'고성 공룡 발자국',where:'경남 고성 덕명리 해안의 조각류 공룡 보행렬',eff:'원정 자원 추가 획득 확률 +25%',pn:['첫째 발자국','둘째 발자국','셋째 발자국','넷째 발자국','다섯째 발자국']},
- {id:'eggnest',n:'화성 공룡알 둥지',where:'경기 화성 시화호 공룡알 화석 산지',eff:'유물 감정가 +15%',pn:['왼쪽 알','윗쪽 알','오른쪽 알','아래 왼쪽 알','아래 오른쪽 알']},
- {id:'ura',n:'우항리 물갈퀴새 발자국',where:'전남 해남 우항리의 물갈퀴 새 발자국 (우항리크누스)',eff:'원정 굴착력 +5%',pn:['첫째 발자국','둘째 발자국','셋째 발자국','넷째 발자국','다섯째 발자국']},
- {id:'cavebear',n:'단양 동굴곰',where:'충북 단양 구낭굴에서 나온 동굴곰 뼈',eff:'본공 굴착력 +5%',pn:['뒷다리뼈','골반·꼬리뼈','등뼈·갈비뼈','앞다리뼈','머리뼈(송곳니)']},
+ {id:'kcera',rg:'bukhan',e:'meso',n:'코리아케라톱스',where:'경기 화성에서 발견된 한국 각룡류',eff:'본공 굴착력 +5%',pn:['꼬리뼈(높은 가시돌기)','골반·뒷다리뼈','등뼈·갈비뼈','목뼈·앞다리뼈','머리뼈(부리·프릴)']},
+ {id:'kano',rg:'mudeung',e:'meso',n:'코리아노사우루스',where:'전남 보성에서 발견된 소형 조각류 공룡',eff:'본공 굴착 보상 +10%',pn:['꼬리뼈','골반·뒷다리뼈','등뼈·갈비뼈','목뼈·앞발뼈','머리뼈']},
+ {id:'puk',rg:'jiri',e:'meso',n:'부경고사우루스',where:'경남 하동에서 발견된 목 긴 용각류',eff:'원정 굴착력 +5%',pn:['꼬리뼈','골반·뒷다리뼈','등뼈·갈비뼈','긴 목뼈·앞다리뼈','머리뼈']},
+ {id:'haenam',rg:'mudeung',e:'meso',n:'해남이크누스',where:'전남 해남 우항리의 익룡 발자국 화석',eff:'보물 상자 등장 +30%',pn:['첫째 앞발자국','첫째 뒷발자국','둘째 앞발자국','둘째 뒷발자국','셋째 앞발자국']},
+ {id:'goseong',rg:'jiri',e:'meso',n:'고성 공룡 발자국',where:'경남 고성 덕명리 해안의 조각류 공룡 보행렬',eff:'원정 자원 추가 획득 확률 +15%',pn:['첫째 발자국','둘째 발자국','셋째 발자국','넷째 발자국','다섯째 발자국']},
+ {id:'eggnest',rg:'bukhan',e:'meso',n:'화성 공룡알 둥지',where:'경기 화성 시화호 공룡알 화석 산지',eff:'유물 감정가 +8%',pn:['왼쪽 알','윗쪽 알','오른쪽 알','아래 왼쪽 알','아래 오른쪽 알']},
+ {id:'ura',rg:'mudeung',e:'meso',n:'우항리 물갈퀴새 발자국',where:'전남 해남 우항리의 물갈퀴 새 발자국 (우항리크누스)',eff:'원정 굴착력 +3%',pn:['첫째 발자국','둘째 발자국','셋째 발자국','넷째 발자국','다섯째 발자국']},
+ {id:'cavebear',rg:'taebaek',e:'paleo',n:'단양 동굴곰',where:'충북 단양 구낭굴에서 나온 동굴곰 뼈',eff:'본공 굴착력 +3%',pn:['뒷다리뼈','골반·꼬리뼈','등뼈·갈비뼈','앞다리뼈','머리뼈(송곳니)']},
+ {id:'whale',rg:'east',sea:1,n:'포항 고래 화석',where:'동해 해저 신생대 지층의 고래 뼈 (경북 포항 일대 산지)',eff:'해상 원정 자원 +1 (20% 확률)',pn:['꼬리뼈·꼬리지느러미','허리뼈','등뼈·갈비뼈','앞지느러미뼈','머리뼈']},
+ {id:'shell',rg:'west',sea:1,n:'서해 조개 화석',where:'서해 해저 퇴적층의 조개·굴 화석 판',eff:'보급 상자 재료 +20%',pn:['가리비 화석','굴 화석','백합 화석','꼬막 화석','고둥 화석']},
 ];
 const fosGot=id=>(S.fos&&S.fos[id])||[];
 const fosDone=id=>fosGot(id).length>=5;
@@ -945,7 +950,13 @@ function triP(cx,cy){return ['P',fpath(cx,cy,1.45,[[-8,0],[-8.6,-4],[-3,-6],[5,-
 function webP(cx,cy){return ['P',fpath(cx,cy,1.5,[[-3,0],[7,-8.5],[8,-7.6],[5.4,-2],[10.5,-.6],[10.5,.6],[5.4,2],[8,7.6],[7,8.5]])];}
 const EGG='#d9c9a8',CRK='#6a5a44';
 const eggOps=(x,y)=>[['E',x,y,13,10,-12,EGG],['L',[[x-7,y-3],[x-3,y],[x+1,y-4],[x+5,y-1]],.8,CRK],['L',[[x+2,y+4],[x+6,y+6]],.7,CRK]];
+function shellOps(cx,cy,k=1){const P2=(x,y)=>[cx+x*k,cy+y*k];return [['F',`M${P2(0,8)} L${P2(-9,-2)} Q${P2(0,-13)} ${P2(9,-2)} Z`],['F',`M${P2(-3,8)} L${P2(3,8)} L${P2(2,11)} L${P2(-2,11)}Z`],...[-6,-3,0,3,6].map(x=>['L',[P2(0,7),P2(x,-6+Math.abs(x)*.4)],.6,'#8a7a5a'])];}
 const FOSPARTS={
+ whale:()=>[[...fchain([[12,58],[32,54],[52,50]],10,1.6,3.6,1,3,0),['F','M8,58 Q0,47 4,43 Q11,51 15,56 Q11,62 4,71 Q0,67 8,58Z']],
+  fchain([[54,49],[80,46]],6,3.8,4.4,4,5,3),[...fchain([[82,45],[118,44]],7,4.6,4.6,5,5),...fribs(7,84,5,44,0,22,1.8)],
+  [['F','M113,46 Q124,41 129,50 Q123,58 116,56Z'],['L',[[121,53],[125,64]],3.4],['L',[[125,64],[131,73]],2.6],['L',[[131,73],[137,79]],2]],
+  [['F','M120,42 Q132,32 150,36 L192,44 Q196,46 192,48 L150,54 Q132,56 122,50Z'],['L',[[132,54],[192,49]],2.4],['H',140,44,3,2.6],['H',146,38,2.4,1.4]]],
+ shell:()=>[shellOps(40,58,1.3),shellOps(72,40,1.1),shellOps(104,62,1.4),shellOps(136,42,1.2),shellOps(168,60,1.3)],
  goseong:()=>[[triP(30,62)],[triP(64,38)],[triP(100,62)],[triP(136,38)],[triP(170,62)]],
  ura:()=>[[webP(34,58)],[webP(66,44)],[webP(100,60)],[webP(132,44)],[webP(164,58)]],
  eggnest:()=>[eggOps(68,50),eggOps(98,36),eggOps(130,48),eggOps(84,72),eggOps(116,72)],
@@ -1000,12 +1011,14 @@ function fossilArt(f,got,hl,slab=true,mount=null){const parts=FOSPARTS[f.id](),B
   parts.forEach((ops,i)=>{const have=got.includes(i);if(!have){g+=draw(ops,'miss');return;}if(i===hl)g+=draw(ops,'glow');g+=draw(ops,'out')+draw(ops,'fill');});
   return g;}
 function fossilSVG(f,hl=-1){return `<svg viewBox="0 0 200 100" aria-hidden="true">${fossilArt(f,fosGot(f.id),hl)}</svg>`;}
-function dropFossil(fx){S.fos=S.fos||{};const open=FOSSILS.filter(f=>!fosDone(f.id));
-  if(!open.length){const v=Math.round(300+S.depth/50);S.money+=v;if(fx)bore.pop('화석 판매 +'+won(v),'#e9dfc8');return;}
-  const f=open[Math.floor(Math.random()*open.length)],got=fosGot(f.id),miss=[0,1,2,3,4].filter(i=>!got.includes(i)),pc=miss[Math.floor(Math.random()*miss.length)];
-  S.fos[f.id]=[...got,pc];const pn=f.pn[pc];
-  pushAlert({kind:'fossil',icon:fossilSVG(f,pc),wide:1,title:fosDone(f.id)?`화석 복원 완료! ${f.n}`:`화석 발견 · ${f.n}의 ${pn}`,text:fosDone(f.id)?`마지막 조각: ${pn} · 효과 발동: ${f.eff}`:`본공 지하 ${fmtD(S.depth)} · 빛나는 부분이 이번에 찾은 ${pn}이에요 · 조각 ${S.fos[f.id].length}/5 · 완성하면 ${f.eff}`,ttl:fosDone(f.id)?7:6});
-  if(fx)bore.pop(pn+' 발견','#e9dfc8');}
+function fosTry(reg,below,vis){const mine=FOSSILS.filter(f=>f.rg===reg.id&&!fosDone(f.id));if(!mine.length)return;
+  const inb=mine.filter(f=>{const [a,b]=fosBand(f);return below>=a&&below<b;}),missed=mine.filter(f=>below>=fosBand(f)[1]);
+  let f=null;if(inb.length&&Math.random()<.05)f=inb[Math.floor(Math.random()*inb.length)];else if(!inb.length&&missed.length&&Math.random()<.008)f=missed[Math.floor(Math.random()*missed.length)];
+  if(f)dropFossilFor(f,vis,reg);}
+function dropFossilFor(f,vis,reg){S.fos=S.fos||{};const got=fosGot(f.id),miss=[0,1,2,3,4].filter(i=>!got.includes(i));if(!miss.length)return;const pc=miss[Math.floor(Math.random()*miss.length)];
+  S.fos[f.id]=[...got,pc];const pn=f.pn[pc],where=reg.n+' '+altText(reg,digOf(reg.id).i);
+  pushAlert({kind:'fossil',icon:fossilSVG(f,pc),wide:1,title:fosDone(f.id)?`화석 복원 완료! ${f.n}`:`화석 발견 · ${f.n}의 ${pn}`,text:fosDone(f.id)?`마지막 조각: ${pn} · 효과 발동: ${f.eff}`:`${where} · 빛나는 부분이 이번에 찾은 ${pn}이에요 · 조각 ${S.fos[f.id].length}/5 · 완성하면 ${f.eff}`,ttl:fosDone(f.id)?7:6});
+  if(vis)ex.pop(pn+' 발견','#e9dfc8');}
 
 // ---------------- global alert card ----------------
 let alertQ=[],alertCur=null,alertT=0;
@@ -1022,7 +1035,7 @@ $('#alert').addEventListener('click',e=>{const b=e.target.closest('[data-al]');i
 let chest=null,chestT=40+Math.random()*40;
 const CHEST={cash:{c:'#8a5a3a',lid:'#6a4128',n:'현금 뭉치'},coin:{c:'#7a6a4a',lid:'#5a4a30',n:'엽전 항아리'},gold:{c:'#d9a63a',lid:'#a87a1e',n:'금괴 상자'},supply:{c:'#9aa3a8',lid:'#6b7a83',n:'보급 상자'}};
 function chestSVG(t){const C=CHEST[t];return `<svg viewBox="0 0 40 34" aria-hidden="true"><rect x="3" y="14" width="34" height="18" rx="2" fill="${C.c}" stroke="#2b211c" stroke-width="2"/><path d="M3,15 Q3,4 20,4 Q37,4 37,15Z" fill="${C.lid}" stroke="#2b211c" stroke-width="2"/><rect x="17" y="13" width="6" height="7" rx="1" fill="#f2c14e" stroke="#2b211c" stroke-width="1.4"/><path d="M8,20 V30 M32,20 V30" stroke="rgba(0,0,0,.25)" stroke-width="2"/></svg>`;}
-function incomePerSec(){const l=layerAt(S.depth);return gateAt()?0:boreDps()/l.H*l.v*(perk('tuber')?1.2:1)*(1+.15*setPow('joseon'))*(fosDone('kano')?1.2:1);}
+function incomePerSec(){const l=layerAt(S.depth);return gateAt()?0:boreDps()/l.H*l.v*(perk('tuber')?1.2:1)*(1+.15*setPow('joseon'))*(fosDone('kano')?1.1:1);}
 function spawnChest(){const d=S.depth,r=Math.random();
   const t=d<15000?(r<.55?'cash':r<.75?'coin':r<.95?'supply':'gold'):d<35000?(r<.45?'coin':r<.9?'supply':'gold'):(r<.88?'supply':'gold');
   chest={t,until:30};const b=$('#chest');b.innerHTML=chestSVG(t)+`<span class="cbar"><i id="cbarI"></i></span>`;
@@ -1032,7 +1045,7 @@ function chestTick(dt){if(titleOn||!$('#story').hidden||!$('#pick').hidden)retur
   $('#chest').hidden=!(chest&&view==='bore'&&!exp);
   if(chest){chest.until-=dt;const pct=Math.max(0,chest.until/30*100)+'%',i=$('#cbarI'),j=$('#alBar');if(i)i.style.width=pct;if(j&&alertCur&&alertCur.kind==='chest')j.style.width=pct;
     if(chest.until<=0){chest=null;$('#chest').hidden=true;if(alertCur&&alertCur.kind==='chest')closeAlert();toast('보물 상자가 땅속으로 다시 묻혀 버렸어요');}return;}
-  if(S.done||gateAt())return;chestT-=dt*(fosDone('haenam')?1.5:1);if(chestT<=0){chestT=120+Math.random()*120;spawnChest();}}
+  if(S.done||gateAt())return;chestT-=dt*(fosDone('haenam')?1.3:1);if(chestT<=0){chestT=120+Math.random()*120;spawnChest();}}
 const NEWS={
  cash:[d=>[`양구 시추 현장 지하 ${d}에서 현금 뭉치 발견`,'비닐로 꽁꽁 싼 5만원권 다발이 시추 드릴에 딸려 올라왔습니다. 경찰은 "오래전 누군가 밭에 몰래 묻어 둔 돈으로 보인다"며 주인을 찾았지만 끝내 나타나지 않았습니다. 시추팀에 발견 보상금이 지급됐습니다.'],
        d=>[`"논에 묻은 비상금이었나" 지하 ${d} 현금 다발`,'녹슨 김치통 안에서 돈다발이 나왔습니다. 마을 어르신들은 "옛날엔 논두렁에 돈을 묻어 두는 사람도 있었다"고 말합니다. 주인이 나타나지 않아 보상금은 시추팀 몫이 됐습니다.']],
@@ -1048,7 +1061,7 @@ function openChest(){if(!chest)return;const t=chest.t;chest=null;$('#chest').hid
   if(t==='coin')money=Math.round(Math.min(cap*1.2,Math.max(120,ips*90)));
   if(t==='gold')money=Math.round(Math.min(cap*2,Math.max(250,ips*150)));
   if(t==='supply'){money=Math.round(ips*60);const pool=[...new Set(REG.filter(isUnl).map(x=>x.res))].sort(()=>Math.random()-.5),k=2+(Math.random()<.4?1:0);
-    for(const rs of pool.slice(0,k)){const ps=PARTS.filter(q=>q.res===rs||q.sub===rs),lv=ps.length?Math.min(...ps.map(q=>Math.min(L(q.id),9))):Math.min(9,Math.floor(S.dl/5));res.push([rs,Math.max(20,Math.round(RESC[lv]*(.25+Math.random()*.2)))]);}}
+    for(const rs of pool.slice(0,k)){const ps=PARTS.filter(q=>q.res===rs||q.sub===rs),lv=ps.length?Math.min(...ps.map(q=>Math.min(L(q.id),9))):Math.min(9,Math.floor(S.dl/5));res.push([rs,Math.round(Math.min(400,Math.max(10,RESC[lv]*(.06+Math.random()*.06)))*(fosDone('shell')?1.2:1))]);}}
   const v=NEWS[t][Math.floor(Math.random()*NEWS[t].length)](d);
   $('#nHead').textContent=v[0];$('#nBody').textContent=v[1];$('#nTime').textContent=new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
   $('#nArt').innerHTML=chestSVG(t);
@@ -1073,10 +1086,9 @@ function boreAdvance(d,fx){const a0=depthToAbs(S.depth);let gain=0,n=0;
     else{gain+=(l.to-S.depth)*l.v;S.depth=l.to;d-=need;
       if(S.depth>=CORE){S.depth=CORE;S.done=true;toast('지구 중심 도달! 아다마스 완성');}
       else{const nl=layerAt(S.depth);if(nl.req>S.dl)toast(nl.gate+' 도달 · 드릴 Lv.'+nl.req+' ('+dlName(nl.req)+')가 필요합니다');}}}
-  gain*=(perk('tuber')?1.2:1)*(1+.15*setPow('joseon'))*(fosDone('kano')?1.2:1);bMoneyAcc+=gain;const w=Math.floor(bMoneyAcc);S.money+=w;bMoneyAcc-=w;bgPop+=gain;
+  gain*=(perk('tuber')?1.2:1)*(1+.15*setPow('joseon'))*(fosDone('kano')?1.1:1);bMoneyAcc+=gain;const w=Math.floor(bMoneyAcc);S.money+=w;bMoneyAcc-=w;bgPop+=gain;
   checkUnlocks();
   const broke=Math.floor(depthToAbs(S.depth))-Math.floor(a0);
-  if(broke>0&&S.depth<35000)for(let i=0;i<Math.min(broke,6);i++)if(Math.random()<.008)dropFossil(fx);
   const big=Math.floor(S.depth/5)>Math.floor(absToDepth(a0)/5);
   if(fx&&broke>0){bore.broke(layerAt(S.depth).c,big);if(bgPop>=1){bore.pop('+'+won(bgPop),'#f6c76a');bgPop=0;}}
   return broke;}
@@ -1106,8 +1118,8 @@ const ERAS=[
  {id:'wreck',n:'난파선 지층',from:0,sea:1,b:p=>`해상 원정 자원 +${p.toFixed(1)}`},
 ];
 const GR=[];
-[['노멀','#a3acb1',[1,1.15,1.3,1.45],[30,18,11,7]],['레어','#4f9dff',[2,2.3,2.6,3],[5,3.5,2.5,1.7]],
- ['에픽','#b67cff',[4.5,5.2,6,7],[1.1,.75,.5,.33]],['전설','#ffb340',[10,12,14,17],[.2,.12,.07,.04]]].forEach(([n,c,ms,ws])=>
+[['노멀','#a3acb1',[1,1.08,1.16,1.25,1.35,1.45],[30,22,16,11,8,6]],['레어','#4f9dff',[2,2.2,2.4,2.6,2.8,3],[5,4,3.2,2.5,1.9,1.4]],
+ ['에픽','#b67cff',[4.5,5,5.5,6,6.5,7],[1.1,.85,.65,.5,.38,.28]],['전설','#ffb340',[10,11.4,12.8,14.2,15.6,17],[.2,.14,.1,.07,.05,.035]]].forEach(([n,c,ms,ws])=>
   ms.forEach((m,k)=>GR.push({n:k?n+' '+k:n,c,m,w:ws[k]})));
 const RELICS=[
  {id:'moonjar',n:'백자 달항아리',e:'joseon',ic:'moon',c:'#f1ede3',v:120},{id:'yeop',n:'상평통보 엽전',e:'joseon',ic:'coin',c:'#a7814a',v:40},
@@ -1133,21 +1145,34 @@ const RELICS=[
  {id:'strom',n:'스트로마톨라이트',e:'precam',ic:'strom',c:'#a89070',v:1500},{id:'bif',n:'호상철광층',e:'precam',ic:'bif',c:'#9a3f2c',v:1400},
  {id:'zircon',n:'지르콘 결정',e:'precam',ic:'zircon',c:'#e8956a',v:1800},{id:'meteor',n:'운석 조각',e:'precam',ic:'meteor',c:'#5a5650',v:2500},
 ];
+const REL_RG={moonjar:'bukhan',yeop:'gyeryong',yugi:'mai',rain:'songni',maebyeong:'mudeung',type:'songni',eunbyeong:'bukhan',najeon:'gyeryong',pagoda:'seorak',
+ crown:'juwang',earring:'jiri',armor:'jiri',tou:'juwang',ingot:'jiri',ironaxe:'taebaek',slim:'mai',mold:'gyeryong',bipa:'mudeung',halfmoon:'songni',plain:'bukhan',mirror:'mai',
+ comb:'seorak',grind:'taebaek',spindle:'halla',hook:'seorak',handaxe:'bukhan',chopper:'taebaek',tang:'songni',scraper:'halla',foot:'jiri',egg:'mudeung',ptero:'halla',bone:'juwang',
+ trilo:'taebaek',fish:'juwang',crinoid:'seorak',fern:'taebaek',strom:'bukhan',bif:'seorak',zircon:'jiri',meteor:'halla',goldbar:'east',silver:'south',cargo:'west',anchor:'south'};
+RELICS.forEach(r=>r.rg=REL_RG[r.id]);
+const WRECK=[M(150),M(900)],SEAFOS=[M(300),M(1200)];
+function eraBand(eid){if(eid==='wreck')return WRECK;const L2=ERAS.filter(x=>!x.sea),i=L2.findIndex(x=>x.id===eid);return [L2[i].from,i+1<L2.length?L2[i+1].from:Infinity];}
+const relBand=r=>eraBand(r.e),fosBand=f=>f.sea?SEAFOS:eraBand(f.e);
+const bandTxt=(reg,[a,b])=>reg.t==='sea'?`해저 아래 ${(a*BLK).toLocaleString('ko-KR')}~${(b*BLK).toLocaleString('ko-KR')}m`:`출발점에서 ${(a*BLK).toLocaleString('ko-KR')}${b===Infinity?'m 이상':'~'+(b*BLK).toLocaleString('ko-KR')+'m'}`;
+function pickRelic(reg,below){const mine=RELICS.filter(x=>x.rg===reg.id),rnd=a=>a[Math.floor(Math.random()*a.length)];
+  const inb=mine.filter(x=>{const [a,b]=relBand(x);return below>=a&&below<b;});
+  if(inb.length){const miss=inb.filter(x=>!hasRelic(x.id));return rnd(miss.length&&Math.random()<.6?miss:inb);}
+  const missed=mine.filter(x=>!hasRelic(x.id)&&below>=relBand(x)[1]);return missed.length&&Math.random()<.3?rnd(missed):null;}
 const eraOf=id=>ERAS.find(e=>e.id===id);
 const relicsOf=e=>RELICS.filter(r=>r.e===e);
 const hasRelic=id=>!!S.relic&&S.relic[id]!=null;
 const gradeOf=id=>hasRelic(id)?S.relic[id]:-1;
 const setCount=e=>relicsOf(e).filter(r=>hasRelic(r.id)).length;
 const setLv=e=>{const n=setCount(e);return n>=4?2:n>=3?1:0;};
-const gradeMul=e=>{const g=relicsOf(e).filter(r=>hasRelic(r.id)).map(r=>S.relic[r.id]);return g.length?1+.02*g.reduce((a,b)=>a+b,0)/g.length:1;};
-const setPow=e=>{const l=setLv(e);return (l===2?1.4:l)*gradeMul(e);};
-const relicVal=(rl,g)=>Math.round(rl.v*GR[g].m*(1+.15*setPow('joseon'))*(fosDone('eggnest')?1.15:1));
-function rollGrade(belowM){const f=(1+belowM/2000)*(1+.25*setPow('precam'));const ws=GR.map((g,i)=>g.w*Math.pow(f,i/6));let x=Math.random()*ws.reduce((a,b)=>a+b);
+const gradeMul=e=>{const g=relicsOf(e).filter(r=>hasRelic(r.id)).map(r=>S.relic[r.id]);return g.length?1+.008*g.reduce((a,b)=>a+b,0)/g.length:1;};
+const setPow=e=>{const l=setLv(e);return (l===2?.8:l*.5)*gradeMul(e);};
+const relicVal=(rl,g)=>Math.round(rl.v*GR[g].m*(1+.15*setPow('joseon'))*(fosDone('eggnest')?1.08:1));
+function rollGrade(belowM){const f=(1+belowM/2000)*(1+.25*setPow('precam'));const ws=GR.map((g,i)=>g.w*Math.pow(f,i/9));let x=Math.random()*ws.reduce((a,b)=>a+b);
   for(let i=0;i<GR.length;i++){x-=ws[i];if(x<=0)return i;}return 0;}
 const gBadge=g=>`<span class="gbadge" style="--g:${GR[g].c}">${GR[g].n}</span>`;
 const relicCount=()=>RELICS.filter(r=>hasRelic(r.id)).length;
 function eraAt(r,below){if(below<0)return null;
-  if(r.t==='sea'&&below<WB)return eraOf('wreck');
+  if(r.t==='sea'&&below>=WRECK[0]&&below<WRECK[1])return eraOf('wreck');
   let e=ERAS[0];for(const x of ERAS)if(!x.sea&&below>=x.from)e=x;return e;}
 function nextEraFrom(below){return ERAS.find(x=>!x.sea&&x.from>below)||null;}
 function relicIcon(rl,found=true,sz=40){const u='ri'+(++UID),k=rl.ic,c=rl.c;let defs='',gi=0,g='';
@@ -1234,7 +1259,7 @@ function digOf(id){S.ex.dig[id]=S.ex.dig[id]||{i:0,hp:0};const g=S.ex.dig[id];if
 const belowOf=(r,i)=>r.t==='sea'?i-r.water:i;
 function altText(r,i){if(r.t==='sea')return i<r.water?'수심 '+(i*r.ws).toLocaleString('ko-KR')+'m':'해저 아래 '+((i-r.water)*BLK).toLocaleString('ko-KR')+'m';
   const a=PEAK[r.id][1]-i*BLK;return a>=0?'해발 '+a.toLocaleString('ko-KR')+'m':'해수면 아래 '+(-a).toLocaleString('ko-KR')+'m';}
-const expDps=()=>dps()*boostM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.1:1)*(fosDone('ura')?1.05:1);
+const expDps=()=>dps()*boostM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.05:1)*(fosDone('ura')?1.03:1);
 const relicP=()=>.15+.004*L('sensor')+(perk('prof')?.02:0);
 const critMul=()=>5+setPow('paleo');
 let exAcc=0,popQ=[],popT=0;
@@ -1243,15 +1268,15 @@ function addRelic(rl,vis,belowM){S.relic=S.relic||{};const g=rollGrade(belowM||0
   const before=setLv(rl.e),pw0=setPow(rl.e);let sold=0;if(cur>=0){sold=relicVal(rl,cur);S.money+=sold;}
   S.relic[rl.id]=g;const after=setLv(rl.e),e=eraOf(rl.e);
   const msg=after>before?`세트 효과 발동 · ${e.b(setPow(rl.e))}`:(after&&setPow(rl.e)>pw0?`세트 효과 강화 · ${e.b(setPow(rl.e))}`:'');
-  if(vis)popQ.push({rl,g,cur,sold,msg});else if(g>=4||cur<0)toast(`${cur<0?'유물 발견':'등급 상승'}: ${GR[g].n} ${rl.n}`);}
+  if(vis)popQ.push({rl,g,cur,sold,msg});else if(g>=6||cur<0)toast(`${cur<0?'유물 발견':'등급 상승'}: ${GR[g].n} ${rl.n}`);}
 function expBreak(r,vis){const g=digOf(r.id),below=belowOf(r,g.i);
   if(r.t==='land'&&PEAK[r.id][1]-g.i*BLK>0&&PEAK[r.id][1]-(g.i+1)*BLK<=0)toast(r.n+' 해수면 도달 · 이제부터 땅속으로 계속 내려갑니다');
-  if(below>=0){const wp=r.t==='sea'?setPow('wreck'):0,amt=Math.max(2,Math.round(2*Math.pow(expHP(r,g.i)/(100*r.diff),.55)))+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.25?1:0)+(r.t==='sea'?(perk('sea')?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
+  if(below>=0){const wp=r.t==='sea'?setPow('wreck'):0,amt=Math.max(2,Math.round(2*Math.pow(expHP(r,g.i)/(100*r.diff),.55)))+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.15?1:0)+(r.t==='sea'&&fosDone('whale')&&Math.random()<.2?1:0)+(r.t==='sea'?(perk('sea')?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
     S.res[r.res]=(S.res[r.res]||0)+amt;const m=Math.round(5*r.diff*(1+.15*setPow('joseon')));S.money+=m;
     if(vis&&!expPopped){ex.pop('+'+amt+' '+r.res,RES[r.res]);expPopped=1;}
     S.st.exp++;if(r.t==='sea')S.st.sea++;
-    if(Math.random()<relicP()){const e=eraAt(r,below),pool=relicsOf(e.id),miss=pool.filter(x=>!hasRelic(x.id));
-      const src=miss.length&&Math.random()<.6?miss:pool;addRelic(src[Math.floor(Math.random()*src.length)],vis,below*BLK);}}
+    if(Math.random()<relicP()){const pk=pickRelic(r,below);if(pk)addRelic(pk,vis,below*BLK);}
+    fosTry(r,below,vis);}
   g.i++;g.hp=expHP(r,g.i);if(vis){const wet=r.t==='sea'&&g.i<=r.water;exBroke++;ex.broke(wet?'#4a8aa0':r.rock,!wet);}}
 let exBroke=0;
 let expPopped=0;
@@ -1286,12 +1311,12 @@ $('#eResult').addEventListener('click',e=>{const a=e.target.closest('[data-act]'
   if(a.dataset.act==='restart'){S.ex.dig[exp.r.id]={i:0,hp:expHP(exp.r,0)};S.ex.active=exp.r.id;ex.scroll=0;save();toast(exp.r.n+' 처음부터 다시 시추');}
   $('#eResult').hidden=true;});
 function showPop(){if(popT>0||!popQ.length)return;const {rl,g,cur,sold,msg}=popQ.shift(),e=eraOf(rl.e),n=setCount(rl.e);
-  const box=$('#relicPop');box.style.setProperty('--g',GR[g].c);box.className='relicpop'+(g>=8?' hi':'');
+  const box=$('#relicPop');box.style.setProperty('--g',GR[g].c);box.className='relicpop'+(g>=12?' hi':'');
   box.innerHTML=`<div class="rp-eyebrow">${cur<0?'유물 발견!':'등급 상승!'}</div><div class="rp-ic">${relicIcon(rl,true,84)}</div>${gBadge(g)}<div class="rp-name">${rl.n}</div>
    ${cur>=0?`<div class="rp-era">${GR[cur].n} → ${GR[g].n} · 이전 유물 ${won(sold)}에 판매</div>`:''}
    <div class="rp-era">${e.n} · 세트 ${n}/${relicsOf(rl.e).length}</div><div class="rp-set">${relicsOf(rl.e).map(x=>`<i class="${hasRelic(x.id)?'f':''}"></i>`).join('')}</div>
    ${msg?`<div class="rp-bonus">${msg}</div>`:''}`;
-  box.hidden=false;popT=msg||g>=8?3.4:2.4;}
+  box.hidden=false;popT=msg||g>=12?3.4:2.4;}
 function popTick(dt){if(popT>0){popT-=dt;if(popT<=0){$('#relicPop').hidden=true;popT=0;}}else if(exp)showPop();}
 $('#relicPop').addEventListener('click',()=>{popT=0;$('#relicPop').hidden=true;});
 
@@ -1341,13 +1366,16 @@ function renderCard(){const el=$('#card');
     <dl class="facts"><dt>지질</dt><dd>${r.geo}</dd><dt>자원</dt><dd>${ric(r.res)}${r.res}</dd>
      <dt>쓰임</dt><dd>${uses.join(', ')}</dd><dt>난이도</dt><dd><span class="pips">${Array.from({length:5},(_,i)=>`<i class="${i<stars?'f':''}"></i>`).join('')}</span></dd>
      ${r.t==='sea'?`<dt>수심 구간</dt><dd>${r.water*r.ws}m 통과 후 해저 시추</dd>`:''}</dl>
+    ${(()=>{const rs=RELICS.filter(x=>x.rg===r.id),fs=FOSSILS.filter(x=>x.rg===r.id);if(!rs.length&&!fs.length)return '';
+      const it=(ic,n,band,ok)=>`<li class="${ok?'ok':''}"><span class="fi2">${ic}</span><b>${n}</b><em>${bandTxt(r,band)}</em></li>`;
+      return `<div class="finds"><div class="fh">이 지형에서 나오는 유물·화석</div><ul>${fs.map(f=>it('<svg viewBox="0 0 200 100" width="34" height="17">'+fossilArt(f,fosGot(f.id),-1,true)+'</svg>',f.n+(fosDone(f.id)?' ✓':` ${fosGot(f.id).length}/5`),fosBand(f),fosDone(f.id))).join('')}${rs.map(x=>it(relicIcon(x,hasRelic(x.id),22),x.n+(hasRelic(x.id)?' ✓':''),relBand(x),hasRelic(x.id))).join('')}</ul><p class="sub" style="margin:0">해당 깊이에서만 나와요. 구간을 지나치면 더 깊은 곳에서 낮은 확률로 나와요.</p></div>`;})()}
     ${(()=>{const g=S.ex.dig[r.id],act=S.ex.active===r.id;return g&&g.i?`<div class="estat">${act?'● 시추 중':'일시 정지'} · ${altText(r,g.i)} · ${(eraAt(r,belowOf(r,g.i))||{n:'수심 구간'}).n}</div>`:'';})()}
     <button class="primary" type="button" data-act="go" ${u?'':'disabled'}>${!u?`본공 ${fmtD(r.un)} 도달 시 해금`:S.ex.active===r.id?'원정 현장 보기':S.ex.dig[r.id]&&S.ex.dig[r.id].i?'이어서 시추':'원정 출발'}</button>`;}
 $('#card').addEventListener('click',e=>{const a=e.target.closest('[data-act]');if(!a||a.disabled)return;
   closeRegion();if(a.dataset.act==='bore')show('bore');else{const r=REG.find(x=>x.id===sel);if(isUnl(r))openExp(r);}});
 
 // ---------------- workshop ----------------
-const RESC=[5,12,40,110,260,520,950,1600,2500,3800],MONC=[100,300,1200,3500,9000,22000,50000,110000,230000,450000];
+const RESC=[5,10,30,90,270,600,1250,2500,5000,9600],MONC=[100,300,1200,3500,9000,22000,50000,110000,230000,450000];
 function costOf(p){const l=Math.min(L(p.id),9),c={};const rm=Math.max(.5,1-.1*setPow('iron'));c[p.res]=Math.ceil(RESC[l]*rm);if(p.sub)c[p.sub]=Math.ceil(RESC[l]*.5*rm);c.money=Math.round(MONC[l]*(perk('kim')?.9:1));return c;}
 const have=k=>k==='money'?S.money:(S.res[k]||0);
 const canPay=c=>Object.entries(c).every(([k,v])=>have(k)>=v);
@@ -1363,9 +1391,9 @@ function renderCraft(live){if(!live)setTimeout(()=>{const cur=document.querySele
   $('#craftList').innerHTML=tierCard()+`<h2 class="h3">드릴 부품 제작</h2><p class="sub">부품을 누르면 위 그림에 다음 레벨 모습이 미리 보입니다. 만든 부품은 본공과 원정 드릴에 바로 적용됩니다.</p><div class="parts">${rows}</div>`;
   updatePreviewInfo();}
 function tierCard(){const dl=S.dl,g=dlGrade(dl),nx=dl+1;
-  const pips=Array.from({length:5},(_,i)=>`<i class="${i<dlStep(dl)?'f':''}"></i>`).join('');
-  const ladder=GRADE_N.map((n,i)=>{const lo=i*5+1;return `<span class="${i+1<g?'done':i+1===g?'cur':lo>DLOPEN?'lock':''}">${n}<small>${lo}~${lo+4}</small></span>`;}).join('');
-  const head=`<div class="th"><div><div class="tk">드릴 Lv.${dl} / ${DLMAX} · ${GRADE_G[g-1]} 구간</div><div class="tn">${GRADE_N[g-1]} <span class="tpips">${pips}</span></div></div><div class="tm">본공 굴착력<br>×${fmtN(dlMul(dl))}</div></div><div class="ladder" id="ladder">${ladder}</div>`;
+  const pips=Array.from({length:DSTEP},(_,i)=>`<i class="${i<dlStep(dl)?'f':''}"></i>`).join('');
+  const ladder=GRADE_T.map((n,i)=>{const lo=i*DSTEP+1;return `<span class="${i+1<g?'done':i+1===g?'cur':lo>DLOPEN?'lock':''}">${n}<small>${lo}~${lo+DSTEP-1}</small></span>`;}).join('');
+  const head=`<div class="th"><div><div class="tk">드릴 Lv.${dl} / ${DLMAX} · ${GRADE_TG[g-1]} 구간</div><div class="tn">${GRADE_T[g-1]} <span class="tpips">${pips}</span></div></div><div class="tm">본공 굴착력<br>×${fmtN(dlMul(dl))}</div></div><div class="ladder" id="ladder">${ladder}</div>`;
   if(dl>=DLOPEN)return `<div class="tier ready">${head}<p class="sub" style="margin:0">마스터 5단계 달성! 그랜드마스터(Lv.51)부터는 다음 업데이트에서 열립니다.</p></div>`;
   const req=dlPartReq(nx),cost=dlCost(nx),ok=PARTS.filter(p=>L(p.id)>=req).length,all=ok===PARTS.length,money=S.money>=cost,promo=dlStep(nx)===1,un=LAY.find(l=>l.req===nx);
   return `<div class="tier ${all&&money?'ready':''}">${head}
@@ -1406,11 +1434,11 @@ function renderStore(){
   const item=k=>{const r=regOf(k),n=have(k);return `<div class="item ${n?'':'zero'}"><div class="in">${ric(k)}${k}</div><div class="ic">${n.toLocaleString('ko-KR')}</div><div class="is">${r.n} · ${r.area}</div></div>`;};
   const eras=ERAS.map(e=>{const n=setCount(e.id),lv=setLv(e.id),rs=relicsOf(e.id);
     const gm=gradeMul(e.id);
-    return `<div class="era ${lv?'on'+lv:''}"><div class="ehd"><div><div class="en">${e.n}</div><div class="ed">${e.sea?`해상 원정 · 해저 0~${WB*BLK}m`:`지표 아래 ${(e.from*BLK).toLocaleString('ko-KR')}m부터`}</div></div><div class="cset">${rs.map(x=>`<i class="${hasRelic(x.id)?'f':''}"></i>`).join('')}</div></div>
+    return `<div class="era ${lv?'on'+lv:''}"><div class="ehd"><div><div class="en">${e.n}</div><div class="ed">${e.sea?`해상 원정 · 해저 아래 ${WRECK[0]*BLK}~${WRECK[1]*BLK}m`:`출발점에서 ${(e.from*BLK).toLocaleString('ko-KR')}m부터`}</div></div><div class="cset">${rs.map(x=>`<i class="${hasRelic(x.id)?'f':''}"></i>`).join('')}</div></div>
       <div class="rgrid">${rs.map(x=>`<div class="rel ${hasRelic(x.id)?'':'no'}" style="--g:${hasRelic(x.id)?GR[S.relic[x.id]].c:'#26323a'}">${relicIcon(x,hasRelic(x.id))}${hasRelic(x.id)?gBadge(S.relic[x.id]):''}<span>${hasRelic(x.id)?x.n:'???'}</span></div>`).join('')}</div>
       <div class="eb"><span class="${lv>=1?'on':''}">3개 세트 · ${e.b(1*gm)}</span><span class="${lv>=2?'on':''}">4개 완성 · ${e.b(1.4*gm)}</span><span>등급 보너스 ×${gm.toFixed(2)} (평균 등급이 높을수록 최대 ×1.30)</span></div></div>`;}).join('');
   const fos=FOSSILS.map(f=>{const n=fosGot(f.id).length;return `<div class="fos ${n>=5?'done':''}">${fossilSVG(f)}<div class="fi"><div class="en">${f.n}</div><div class="ed">${f.where}</div><div class="fpn">${f.pn.map((x,i)=>`<span class="${fosGot(f.id).includes(i)?'on':''}">${x}</span>`).join('')}</div><div class="eb"><span class="${n>=5?'on':''}">복원 ${n}/5 · ${f.eff}</span></div></div></div>`;}).join('');
-  $('#storeList').innerHTML=`<div class="galbtns ${hasMuseum()?'':'lock'}"><button class="primary" type="button" data-gal="fos">${hasMuseum()?'':'🔒 '}화석관 열기</button><button class="ghost" type="button" data-gal="rel">${hasMuseum()?'':'🔒 '}유물관 열기</button>${hasMuseum()?'':'<p class="sub" style="grid-column:1/-1;margin:0">내 땅에 유물 전시관을 지으면 열 수 있어요.</p>'}</div><h2 class="h3">본공 화석 복원</h2><p class="sub">본공이 지각(지표~35km)을 지나는 동안 화석 조각이 나옵니다. 조각 5개를 모으면 화석이 복원되고 효과가 생겨요.</p><div class="foss">${fos}</div>
+  $('#storeList').innerHTML=`<div class="galbtns ${hasMuseum()?'':'lock'}"><button class="primary" type="button" data-gal="fos">${hasMuseum()?'':'🔒 '}화석관 열기</button><button class="ghost" type="button" data-gal="rel">${hasMuseum()?'':'🔒 '}유물관 열기</button>${hasMuseum()?'':'<p class="sub" style="grid-column:1/-1;margin:0">내 땅에 유물 전시관을 지으면 열 수 있어요.</p>'}</div><h2 class="h3">화석 복원</h2><p class="sub">화석은 정해진 원정 지형의 정해진 깊이에서만 조각이 나와요(지도에서 지형을 누르면 보여요). 조각 5개를 모으면 복원되고 효과가 생겨요.</p><div class="foss">${fos}</div>
    <h2 class="h3" style="margin-top:22px">유물 도감</h2><p class="sub">원정에서 깊이 팔수록 더 오래된 시대가 나옵니다. 같은 시대 유물을 3개 모으면 드릴에 세트 효과가 붙어요. 더 높은 등급이 나오면 자동으로 바꾸고, 같거나 낮은 등급은 감정가에 팝니다. 발견 ${relicCount()}/${RELICS.length}</p>${eras}
    <h2 class="h3" style="margin-top:22px">창고</h2><p class="sub">본공 ${fmtD(S.depth)} · 보유 ${won(S.money)}</p>
    <div class="sect">육상 자원</div><div class="inv">${REG.filter(r=>r.t==='land').map(r=>item(r.res)).join('')}</div>
@@ -2490,8 +2518,8 @@ function fountainArt(cx,cy){const st='#b8b3aa',sd='#8f8a80',wt='#4fa3d9',O=ISK;l
   g+=`<circle cx="${cx}" cy="${cy-42}" r="2.4" fill="#eaf8ff"><animate attributeName="r" values="1.6;3;1.6" dur=".5s" repeatCount="indefinite"/></circle>`;
   return g;}
 // ---------------- exhibition hall ----------------
-const MOUNT={kcera:[[90,46],[132,48]],kano:[[88,46],[118,38]],puk:[[70,48],[108,44],[148,22]],cavebear:[[60,40],[124,34]]};
-const TRACE={haenam:1,goseong:1,ura:1};
+const MOUNT={whale:[[60,48],[100,44]],kcera:[[90,46],[132,48]],kano:[[88,46],[118,38]],puk:[[70,48],[108,44],[148,22]],cavebear:[[60,40],[124,34]]};
+const TRACE={haenam:1,goseong:1,ura:1,shell:1};
 let galTab='fos';
 function fossilExhibit(f){const u='bx'+(++UID),got=fosGot(f.id),n=got.length;let art;
   const bg=`<defs><linearGradient id="${u}" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#fdf6e2"/><stop offset=".6" stop-color="#ecdcb6"/><stop offset="1" stop-color="#cdb486"/></linearGradient>
@@ -2592,10 +2620,11 @@ function hud(){
     $('#eSub').textContent=(act?'● 자동 시추 중':'일시 정지')+' · 굴착력 '+fmtN(expDps())+'/초';
     $('#eAlt').textContent=altText(r,g.i);
     let et='';if(!e)et=`수심 구간 · 해저까지 ${((r.water-g.i)*r.ws).toLocaleString('ko-KR')}m`;
-    else{const sw=r.t==='sea'&&below<WB,nn=sw?(ERAS.find(x=>!x.sea&&x.from>WB)):nextEraFrom(below),nx=nn?nn.from:0;
-      et=e.n+' 지층 · 세트 '+setCount(e.id)+'/4'+(nn?` · ${nn.n}까지 ${((nx-below)*BLK).toLocaleString('ko-KR')}m`:'');}
+    let f0=0,f1=r.water;
+    if(e){const sea=r.t==='sea',nn=sea&&below<WRECK[0]?{n:'난파선 지층',from:WRECK[0]}:e.id==='wreck'?{n:'심해 퇴적층',from:WRECK[1]}:nextEraFrom(below),nx=nn?nn.from:0;
+      et=e.n+' 지층 · 세트 '+setCount(e.id)+'/'+relicsOf(e.id).length+(nn?` · ${nn.n}까지 ${((nx-below)*BLK).toLocaleString('ko-KR')}m`:'');
+      f0=e.id==='wreck'?WRECK[0]:sea&&below<WRECK[0]?0:e.from;f1=nn?nn.from:below+1;}
     $('#eEra').textContent=et;
-    const f0=e?(r.t==='sea'&&below<WB?0:e.from):0,f1=e?(r.t==='sea'&&below<WB?WB:((nextEraFrom(below)||{from:below+1}).from)):r.water;
     $('#eBar').style.width=(Math.min(1,e?(below-f0)/(f1-f0):g.i/r.water)*100).toFixed(1)+'%';
     $('#eHaul').innerHTML=`${ric(r.res)}${r.res} ${(S.res[r.res]||0).toLocaleString('ko-KR')}`;}}
 
