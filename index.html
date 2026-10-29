@@ -778,12 +778,19 @@ function drawDrill(c,cx,tipY,k,P,o){
   if(P.press){const n=Math.min(5,Math.ceil(P.press/2));
     for(let i=0;i<n;i++){const y=bodyBot-9*k-i*7*k;c.fillStyle='#2b3338';c.fillRect(cx-D.bw/2,y,D.bw,3.6*k);c.fillStyle='rgba(255,255,255,.18)';c.fillRect(cx-D.bw/2,y,D.bw,1);}
     R.press={x:cx-D.bw/2-3,y:bodyBot-(12+n*7)*k,w:D.bw+6,h:(n*7+12)*k};}
-  // sensor
-  if(P.sensor){const mx=cx+D.bw*.3,mh=(14+2.2*P.sensor)*k;c.strokeStyle='#8c979c';c.lineWidth=2*k;c.beginPath();c.moveTo(mx,bodyTop);c.lineTo(mx,bodyTop-mh);c.stroke();
-    if(P.sensor>=5){c.strokeStyle='#c7d0d4';c.lineWidth=2.2*k;c.beginPath();c.arc(mx,bodyTop-mh+2*k,8*k,Math.PI*1.1,Math.PI*1.9);c.stroke();}
-    const on=Math.sin(t*5)>0;c.fillStyle=on?'#7cf0ff':'#2b5f6a';c.beginPath();c.arc(mx,bodyTop-mh,3*k,0,7);c.fill();
-    if(on){c.fillStyle='rgba(124,240,255,.25)';c.beginPath();c.arc(mx,bodyTop-mh,7*k,0,7);c.fill();}
-    R.sensor={x:mx-12*k,y:bodyTop-mh-10*k,w:24*k,h:mh+12*k};}
+  // sensor: glass radar dome on the top-centre of the housing (rod passes through it)
+  if(P.sensor){const dr=(9+.5*P.sensor)*k,dy=bodyTop,pw2=dr*1.5;
+    c.fillStyle='#3a4248';c.beginPath();c.roundRect(cx-pw2,dy-4*k,pw2*2,5*k,2*k);c.fill();
+    const dg=c.createRadialGradient(cx-dr*.35,dy-dr*.6,1,cx,dy,dr);dg.addColorStop(0,'rgba(210,250,255,.85)');dg.addColorStop(.6,'rgba(90,190,210,.55)');dg.addColorStop(1,'rgba(30,80,100,.75)');
+    c.fillStyle=dg;c.beginPath();c.arc(cx,dy-4*k,dr,Math.PI,0);c.closePath();c.fill();c.strokeStyle='#c7d0d4';c.lineWidth=1.4*k;c.stroke();
+    c.save();c.beginPath();c.arc(cx,dy-4*k,dr-1.5*k,Math.PI,0);c.closePath();c.clip();
+    for(let i=1;i<=2;i++){c.strokeStyle='rgba(124,240,255,.35)';c.lineWidth=.8*k;c.beginPath();c.arc(cx,dy-4*k,dr*i/3,Math.PI,0);c.stroke();}
+    const sw=(t*2.4)%(Math.PI*2),sg=c.createConicGradient?c.createConicGradient(sw,cx,dy-4*k):null;
+    if(sg){sg.addColorStop(0,'rgba(124,240,255,.75)');sg.addColorStop(.12,'rgba(124,240,255,0)');sg.addColorStop(1,'rgba(124,240,255,0)');c.fillStyle=sg;c.fillRect(cx-dr,dy-4*k-dr,dr*2,dr);}
+    c.strokeStyle='#7cf0ff';c.lineWidth=1.2*k;c.beginPath();c.moveTo(cx,dy-4*k);c.lineTo(cx+Math.cos(sw)*dr,dy-4*k+Math.min(0,Math.sin(sw))*dr);c.stroke();c.restore();
+    for(let i=0;i<Math.min(5,Math.ceil(P.sensor/2));i++){const on=Math.sin(t*5+i)>0;c.fillStyle=on?'#7cf0ff':'#2b5f6a';c.beginPath();c.arc(cx-pw2+4*k+i*((pw2*2-8*k)/4),dy-1.6*k,1.3*k,0,7);c.fill();}
+    if(P.sensor>=5){c.save();c.translate(cx,dy-4*k-dr);c.rotate(Math.sin(t*1.5)*.5);c.strokeStyle='#c7d0d4';c.lineWidth=1.6*k;c.beginPath();c.moveTo(0,0);c.lineTo(0,-5*k);c.stroke();c.beginPath();c.arc(0,-5*k,5*k,Math.PI*1.15,Math.PI*1.85);c.stroke();c.restore();}
+    R.sensor={x:cx-pw2-2,y:dy-4*k-dr-12*k,w:pw2*2+4,h:dr+16*k};}
   // bearing rings
   for(let i=0;i<D.rg;i++){const y=bodyBot+i*6*k,w=D.cw*(1.04-i*.06);
     c.fillStyle='#ecebe2';c.fillRect(cx-w/2,y,w,5*k);c.fillStyle='rgba(0,0,0,.18)';
@@ -2125,31 +2132,41 @@ function isoItem(id,cx,cy){let g='';
       +`<path d="M${cx-14},${cy-53} Q${cx},${cy-56} ${cx+14},${cy-53}" stroke="#1e1e24" stroke-width="3" fill="none"/><circle cx="${cx+20}" cy="${cy-12}" r="3.4" fill="#f2c14e" ${ISK}/><path d="M${cx+20},${cy-16} v-6" stroke="#2b211c"/>`;break;}
   case 'fountain':g+=fountainArt(cx,cy);break;
   case 'dog':case 'cat':g+=petHome(id,cx,cy);break;
-  case 'tree':{g+=shadowE(cx,cy,14,6)+`<rect x="${cx-2.5}" y="${cy-12}" width="5" height="12" fill="#7a5a3c" ${ISK}/>`;
-    for(const [w,y0,h] of [[16,-12,16],[13,-22,15],[9,-31,13]]){const tY=cy+y0-h;g+=`<polygon points="${PT([[cx,tY],[cx-w,cy+y0],[cx,cy+y0+3]])}" fill="#3f8a4a" ${ISK}/><polygon points="${PT([[cx,tY],[cx+w,cy+y0],[cx,cy+y0+3]])}" fill="#2a6233" ${ISK}/>`;}break;}
-  case 'cherry':{g+=shadowE(cx,cy,16,7)+`<path d="M${cx},${cy} V${cy-16} M${cx},${cy-10} l-6,-6 M${cx},${cy-12} l5,-7" stroke="#7a5a3c" stroke-width="4" stroke-linecap="round"/>`;
-    g+=puff(cx-9,cy-22,9,'#f3a9c3')+puff(cx+9,cy-23,9,'#f0a0bc')+puff(cx,cy-31,10,'#f7c6d6');break;}
-  case 'flower':{const b=isoBox(cx,cy,.72,5,'#7a5a3c',{top:'#8a6a44'});g+=b.svg;
-    [[-12,-6,'#ff6b8a'],[-4,-9,'#ffd56a'],[5,-6,'#b67cff'],[12,-8,'#ff8a3a'],[-2,-3,'#fff'],[8,-11,'#ff6b8a'],[-8,-11,'#fff']].forEach(([dx,dy,c])=>{g+=`<path d="M${cx+dx},${cy+dy} v-4" stroke="#3f8a4a" stroke-width="1.4"/><circle cx="${cx+dx}" cy="${cy+dy-5}" r="2.6" fill="${c}" ${ISK}/>`;});break;}
-  case 'veg':{const b=isoBox(cx,cy,.78,6,'#6e5232',{top:'#7a5a3c'});g+=b.svg;
-    for(let r=-1;r<=1;r++)for(let q=-2;q<=2;q++){const x=cx+q*7+r*-7,y=cy-6+q*3.5+r*3.5;g+=`<path d="M${x},${y} l-3,-6 M${x},${y} l3,-6 M${x},${y} v-7" stroke="#6ab04c" stroke-width="1.8" stroke-linecap="round"/>`;}break;}
-  case 'pond':{const r=foot(cx,cy,.82),w=foot(cx,cy+1,.66);g+=`<polygon points="${PT([r.L,r.T,r.R,r.B])}" fill="#a8a29a" ${ISK}/><polygon points="${PT([w.L,w.T,w.R,w.B])}" fill="#3f8fb8"/>
-    <polygon points="${PT([w.L,w.T,w.R,[w.R[0],w.R[1]+2],[w.T[0],w.T[1]+5],[w.L[0],w.L[1]+2]])}" fill="#2a6a8e"/><ellipse cx="${cx-6}" cy="${cy}" rx="5" ry="2.4" fill="#7bd88f" ${ISK}/><circle cx="${cx+7}" cy="${cy+3}" r="1.8" fill="#ff8aa8"/>
-    <path d="M${cx-2},${cy+5} q4,-2 8,0" stroke="#bfe8f8" stroke-width="1.2" fill="none"/>`;break;}
+  case 'tree':{const A=(t,v,d)=>`<animateTransform attributeName="transform" type="${t}" values="${v}" dur="${d}s" repeatCount="indefinite"/>`;g+=shadowE(cx,cy,20,8)+`<rect x="${cx-3.5}" y="${cy-16}" width="7" height="16" fill="#7a5a3c" ${ISK}/>`;
+    let cn='';for(const [w,y0,h] of [[22,-14,20],[18,-27,19],[14,-39,17],[9,-50,14]]){const tY=cy+y0-h;cn+=`<polygon points="${PT([[cx,tY],[cx-w,cy+y0],[cx,cy+y0+4]])}" fill="#3f8a4a" ${ISK}/><polygon points="${PT([[cx,tY],[cx+w,cy+y0],[cx,cy+y0+4]])}" fill="#2a6233" ${ISK}/><path d="M${cx-w*.5},${cy+y0-2} l${w*.25},-3" stroke="#5fae5f" stroke-width="1.4"/>`;}
+    g+=`<g>${A('rotate',`-1.6 ${cx} ${cy-14};1.6 ${cx} ${cy-14};-1.6 ${cx} ${cy-14}`,'4.2')}${cn}</g>`;break;}
+  case 'cherry':{const A=(t,v,d,b=0)=>`<animateTransform attributeName="transform" type="${t}" values="${v}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/>`;g+=shadowE(cx,cy,22,9)+`<path d="M${cx},${cy} V${cy-20} M${cx},${cy-13} l-9,-8 M${cx},${cy-16} l8,-9" stroke="#6a4a2c" stroke-width="5" stroke-linecap="round"/>`;
+    g+=`<g>${A('rotate',`-1.4 ${cx} ${cy-18};1.4 ${cx} ${cy-18};-1.4 ${cx} ${cy-18}`,'4.6')}`+puff(cx-13,cy-28,12,'#f3a9c3')+puff(cx+13,cy-29,12,'#f0a0bc')+puff(cx,cy-41,13,'#f7c6d6')+puff(cx-4,cy-31,9,'#fbd3e0')+`</g>`;
+    for(let i=0;i<5;i++){const sx=cx-16+i*8,d=3+i*.7;g+=`<ellipse cx="0" cy="0" rx="1.8" ry="1.1" fill="#ffc6d8"><animateMotion dur="${d}s" begin="${-i*.9}s" repeatCount="indefinite" path="M${sx},${cy-30} q6,10 -2,20 q-6,8 2,${12+i}"/><animate attributeName="opacity" values="0;1;1;0" dur="${d}s" begin="${-i*.9}s" repeatCount="indefinite"/></ellipse>`;}break;}
+  case 'flower':{const b=isoBox(cx,cy,.94,5,'#7a5a3c',{top:'#8a6a44'});g+=b.svg;
+    for(let r2=-2;r2<=2;r2++)for(let q=-2;q<=2;q++){if(Math.abs(r2)+Math.abs(q)>3)continue;const x=cx+(q-r2)*9,y=cy-5+(q+r2)*4.5,c2=['#ff6b8a','#ffd56a','#b67cff','#ff8a3a','#fff','#ff4f6e'][(q*3+r2*5+15)%6];
+      g+=`<g><animateTransform attributeName="transform" type="rotate" values="-6 ${x} ${y};6 ${x} ${y};-6 ${x} ${y}" dur="${2.2+((q+r2+6)%3)*.4}s" repeatCount="indefinite"/><path d="M${x},${y} v-6" stroke="#3f8a4a" stroke-width="1.6"/><path d="M${x},${y-3} l-3,-1.6" stroke="#5aa050" stroke-width="1.4"/>${[0,72,144,216,288].map(a=>`<circle cx="${(x+Math.cos(a*Math.PI/180)*2.2).toFixed(1)}" cy="${(y-8+Math.sin(a*Math.PI/180)*2.2).toFixed(1)}" r="1.7" fill="${c2}"/>`).join('')}<circle cx="${x}" cy="${y-8}" r="1.3" fill="#ffd56a"/></g>`;}
+    g+=`<g><animateMotion dur="7s" repeatCount="indefinite" path="M${cx-20},${cy-18} q12,-14 22,-4 q10,10 20,-6 q-10,-12 -22,0 q-10,10 -20,10Z"/><g><animateTransform attributeName="transform" type="scale" values="1 1;.2 1;1 1" dur=".25s" repeatCount="indefinite"/><path d="M0,0 L-3.4,-3 L-3.4,2Z M0,0 L3.4,-3 L3.4,2Z" fill="#7cc8ff" stroke="#2b211c" stroke-width=".5"/></g></g>`;break;}
+  case 'veg':{const b=isoBox(cx,cy,.96,6,'#6e5232',{top:'#7a5a3c'});g+=b.svg;
+    for(let r2=-1;r2<=1;r2++)for(let q=-3;q<=3;q++){const x=cx+q*7.5+r2*-9,y=cy-6+q*3.75+r2*4.5,k2=(q+r2+9)%3;
+      g+=`<g><animateTransform attributeName="transform" type="rotate" values="-5 ${x} ${y};5 ${x} ${y};-5 ${x} ${y}" dur="${2.6+k2*.5}s" repeatCount="indefinite"/>`+(k2===0?`<path d="M${x},${y} l-4,-8 M${x},${y} l4,-8 M${x},${y} v-10" stroke="#6ab04c" stroke-width="2.2" stroke-linecap="round"/>`:k2===1?`<circle cx="${x}" cy="${y-4}" r="3.6" fill="#ff5a3a" stroke="#2b211c" stroke-width=".6"/><path d="M${x},${y-8} l-2,-2 M${x},${y-8} l2,-2" stroke="#3f8a4a" stroke-width="1.4"/>`:`<path d="M${x-4},${y} q4,-12 8,0Z" fill="#7bd88f" stroke="#2b211c" stroke-width=".6"/><path d="M${x},${y-1} v-7" stroke="#4a9a4a"/>`)+`</g>`;}break;}
+  case 'pond':{const r=foot(cx,cy,.98),w=foot(cx,cy+1,.82);g+=`<polygon points="${PT([r.L,r.T,r.R,r.B])}" fill="#a8a29a" ${ISK}/>`+[[-.7,0],[.7,0],[0,-.7],[0,.7],[-.4,-.4],[.4,.4],[-.4,.4],[.4,-.4]].map(([a,b2])=>`<ellipse cx="${cx+(a-b2)*ISO.hw*.86}" cy="${cy+(a+b2)*ISO.hh*.86}" rx="4" ry="2.4" fill="#bdb6aa" stroke="#7a746c" stroke-width=".6"/>`).join('')
+    +`<polygon points="${PT([w.L,w.T,w.R,w.B])}" fill="#3f8fb8"/><polygon points="${PT([w.L,w.T,w.R,[w.R[0],w.R[1]+2],[w.T[0],w.T[1]+5],[w.L[0],w.L[1]+2]])}" fill="#2a6a8e"/>
+    <ellipse cx="${cx-9}" cy="${cy-1}" rx="6" ry="2.8" fill="#7bd88f" ${ISK}/><path d="M${cx-9},${cy-1} l5,-1" stroke="#3f8fb8" stroke-width="1"/><ellipse cx="${cx+10}" cy="${cy+4}" rx="4.4" ry="2" fill="#6ac87e" ${ISK}/><circle cx="${cx+10}" cy="${cy+2.6}" r="2" fill="#ff8aa8"/>`
+    +[0,1].map(i=>`<g><animateMotion dur="${9+i*3}s" begin="${-i*4}s" repeatCount="indefinite" rotate="auto" path="M${cx-14},${cy+1} a14,6 0 1 1 28,0 a14,6 0 1 1 -28,0"/><path d="M-4,0 Q0,-2.4 4,0 Q0,2.4 -4,0Z M-4,0 L-7,-2 L-7,2Z" fill="${i?'#fff4e6':'#ff8a3a'}" stroke="#a8461a" stroke-width=".4"/>${i?'<circle cx="0" cy="0" r="1" fill="#ff5a3a"/>':''}</g>`).join('')
+    +[0,1.2].map(d=>`<ellipse cx="${cx+3}" cy="${cy+1}" rx="2" ry="1" fill="none" stroke="#d8f2ff" stroke-width=".9"><animate attributeName="rx" values="2;12" dur="2.4s" begin="${d}s" repeatCount="indefinite"/><animate attributeName="ry" values="1;5" dur="2.4s" begin="${d}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;0" dur="2.4s" begin="${d}s" repeatCount="indefinite"/></ellipse>`).join('');break;}
   case 'cairn':{g+=shadowE(cx,cy,12,5);[[11,0],[9,6],[8,11],[6.5,15.5],[5,19.5],[3.5,23]].forEach(([r,y],i)=>{const col=i%2?'#9a958c':'#b8b3aa';
     g+=`<rect x="${cx-r}" y="${cy-y-5}" width="${r*2}" height="5" fill="${shade(col,-.15)}" ${ISK}/><ellipse cx="${cx}" cy="${cy-y-5}" rx="${r}" ry="${r*.45}" fill="${col}" ${ISK}/>`;});break;}
   case 'bench':{g+=shadowE(cx,cy,16,6);const ex=[1,.5],ey=[-1,.5],c=[cx,cy-8],q=(a,b)=>[c[0]+ex[0]*a+ey[0]*b,c[1]+ex[1]*a+ey[1]*b];
     for(const [a,b] of [[-11,-3],[11,-3],[-11,3],[11,3]]){const p=q(a,b);g+=`<path d="M${p[0]},${p[1]} v8" stroke="#3a3a40" stroke-width="2"/>`;}
     const bk=[q(-13,-4),q(13,-4)];g+=`<polygon points="${PT([bk[0],bk[1],up(bk[1],9),up(bk[0],9)])}" fill="#8a5a2c" ${ISK}/>`;
     g+=`<polygon points="${PT([q(-13,4),q(13,4),[q(13,4)[0],q(13,4)[1]+2.5],[q(-13,4)[0],q(-13,4)[1]+2.5]])}" fill="#7a4a24" ${ISK}/><polygon points="${PT([q(-13,-4),q(13,-4),q(13,4),q(-13,4)])}" fill="#b07a44" ${ISK}/>`;break;}
-  case 'lamp':{g+=`<circle cx="${cx}" cy="${cy-30}" r="14" fill="#fff3b0" opacity=".25"/>`+shadowE(cx,cy,7,3)+`<rect x="${cx-2}" y="${cy-28}" width="4" height="28" fill="#3a3a40" ${ISK}/><rect x="${cx-1}" y="${cy-27}" width="1.2" height="26" fill="#6b7a83"/>`
-    +isoBox(cx,cy-28,.16,7,'#fff3b0',{left:'#ffe58a',right:'#f2c14e',top:'#3a3a40'}).svg+`<ellipse cx="${cx}" cy="${cy}" rx="5" ry="2.2" fill="#3a3a40"/>`;break;}
-  case 'monument':{g+=shadowE(cx,cy,16,7);const b=isoBox(cx,cy,.48,12,'#a8a29a');g+=b.svg;const d=isoBox(cx,cy-12,.24,12,'#e8a93a');g+=d.svg;
-    const tY=cy-24-ISO.hh*.24;g+=`<polygon points="${PT([[cx-7,tY+4],[cx,tY+8],[cx,tY-14]])}" fill="#d6dde2" ${ISK}/><polygon points="${PT([[cx,tY+8],[cx+7,tY+4],[cx,tY-14]])}" fill="#9aa3a8" ${ISK}/>`
-      +facePoly(b,'r',.2,.8,4,8,'#f2c14e');break;}
+  case 'lamp':{g+=`<ellipse cx="${cx}" cy="${cy}" rx="22" ry="10" fill="#fff3b0" opacity=".18"><animate attributeName="opacity" values=".12;.24;.12" dur="2.6s" repeatCount="indefinite"/></ellipse><circle cx="${cx}" cy="${cy-38}" r="16" fill="#fff3b0" opacity=".25"><animate attributeName="r" values="14;19;14" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".18;.38;.18" dur="2.6s" repeatCount="indefinite"/></circle>`+shadowE(cx,cy,7,3)+`<rect x="${cx-2.4}" y="${cy-36}" width="4.8" height="36" fill="#3a3a40" ${ISK}/><rect x="${cx-1}" y="${cy-35}" width="1.2" height="34" fill="#6b7a83"/><path d="M${cx},${cy-36} q8,-2 8,-6" stroke="#3a3a40" stroke-width="2" fill="none"/>`
+    +isoBox(cx,cy-36,.2,9,'#fff3b0',{left:'#ffe58a',right:'#f2c14e',top:'#3a3a40'}).svg+`<ellipse cx="${cx}" cy="${cy}" rx="5" ry="2.2" fill="#3a3a40"/>`
+    +[0,1].map(i=>`<circle r="1.2" fill="#f4f0e0"><animateMotion dur="${2.2+i}s" begin="${-i}s" repeatCount="indefinite" path="M${cx-9},${cy-40} q9,-10 18,0 q-9,10 -18,0Z"/></circle>`).join('');break;}
+  case 'monument':{g+=`<circle cx="${cx}" cy="${cy-34}" r="16" fill="#ffd56a" opacity=".2"><animate attributeName="opacity" values=".1;.35;.1" dur="2s" repeatCount="indefinite"/><animate attributeName="r" values="14;20;14" dur="2s" repeatCount="indefinite"/></circle>`+shadowE(cx,cy,18,8);const b=isoBox(cx,cy,.52,12,'#a8a29a');g+=b.svg;const d=isoBox(cx,cy-12,.26,14,'#e8a93a');g+=d.svg;
+    const tY=cy-26-ISO.hh*.26,cone=`<polygon points="${PT([[cx-8,tY+4],[cx,tY+9],[cx,tY-18]])}" fill="#d6dde2" ${ISK}/><polygon points="${PT([[cx,tY+9],[cx+8,tY+4],[cx,tY-18]])}" fill="#9aa3a8" ${ISK}/>`;
+    g+=cone+`<g><path d="M${cx-6},${tY+3} L${cx+5},${tY-1} M${cx-4},${tY-4} L${cx+4},${tY-7} M${cx-2},${tY-11} L${cx+2},${tY-13}" stroke="#f2f4f6" stroke-width="1.2"><animate attributeName="stroke-dashoffset" values="0;6" dur=".4s" repeatCount="indefinite"/></path></g>`
+      +facePoly(b,'r',.2,.8,4,8,'#f2c14e')+facePoly(b,'l',.25,.75,4,8,'#f2c14e')
+      +[0,1,2].map(i=>`<path d="M0,-3 L.8,-.8 L3,0 L.8,.8 L0,3 L-.8,.8 L-3,0 L-.8,-.8Z" fill="#fff6c8" transform="translate(${cx+[-12,12,4][i]},${cy-[30,22,44][i]})"><animate attributeName="opacity" values="0;1;0" dur="1.8s" begin="${i*.6}s" repeatCount="indefinite"/></path>`).join('');break;}
   case 'museum':{g+=shadowE(cx,cy,30,12);g+=isoBox(cx,cy,.82,4,'#bdb6aa').svg;const b=isoBox(cx,cy-4,.7,24,'#f1e8d4');g+=b.svg;
     for(const u of[.12,.37,.62,.87]){g+=facePoly(b,'r',u-.05,u+.05,0,24,'#fffaf0',ISK);g+=facePoly(b,'l',u-.05,u+.05,0,24,'#fffaf0',ISK);}
-    g+=isoRoof(cx,cy-4,.7,24,12,'#b8a46a',1.1)+facePoly(b,'l',.3,.7,26,30,'#b3261e');break;}}
+    g+=isoRoof(cx,cy-4,.7,24,12,'#b8a46a',1.1)+facePoly(b,'l',.3,.7,26,30,'#b3261e')+`<path d="M${cx},${cy-40} V${cy-58}" stroke="#3a3a40" stroke-width="1.4"/><path d="M${cx},${cy-58} q5,-2 10,0 q5,2 10,0 v7 q-5,2 -10,0 q-5,-2 -10,0Z" fill="#b3261e" ${ISK}><animate attributeName="d" values="M${cx},${cy-58} q5,-2 10,0 q5,2 10,0 v7 q-5,2 -10,0 q-5,-2 -10,0Z;M${cx},${cy-58} q5,2 10,0 q5,-2 10,0 v7 q-5,-2 -10,0 q-5,2 -10,0Z;M${cx},${cy-58} q5,-2 10,0 q5,2 10,0 v7 q-5,2 -10,0 q-5,-2 -10,0Z" dur="1.2s" repeatCount="indefinite"/></path>`;break;}}
   return g;}
 function isoTile(x,y,own,can){const [cx,cy]=isoC(x,y),f=foot(cx,cy,1),d=7,alt=(x+y)%2;
   const top=own?(can?(alt?'#9ad86e':'#92d065'):(alt?'#7dbb5a':'#74b052')):'#5d6b58',lf=own?'#8a6a44':'#4a4a44',rf=own?'#6e5232':'#3a3a36';
@@ -2210,7 +2227,7 @@ $('#landView').addEventListener('click',e=>{const L0=landOf();
 const FDEF={rug:{w:3,d:2,flat:1},bed:{w:2,d:3},sofa:{w:2,d:1},desk:{w:2,d:1},tv:{w:2,d:1},shelf:{w:1,d:1},plant:{w:1,d:1},case:{w:1,d:2},frame:{wall:1},tank:{w:2,d:1},dog:{w:1,d:1},cat:{w:1,d:1}};
 const FDEFPOS={rug:[2,2],bed:[0,3],sofa:[2,4],desk:[4,0],tv:[2,0],shelf:[5,2],plant:[1,0],case:[0,0],frame:[3.5,0]};
 let roomPick=null,roomFloor=0;
-const ROOMN={house_s:5,house_h:6,house_b:6,house_d:7,house_y:8},RN=()=>ROOMN[houseTile()?.[1]]||6;
+const ROOMN={house_s:5,house_h:6,house_b:6,house_d:7,house_y:10},RN=()=>ROOMN[houseTile()?.[1]]||6;
 const FRMAX=wl=>wl?Math.max(0,RN()-4.5):RN()-1.8;
 const twoF=()=>['house_b','house_d'].includes(houseTile()?.[1]);
 const stairR=()=>{const L0=landOf();if(!L0.stair){const N=RN();L0.stair={x:N-1,y:N-2,r:0};}return L0.stair;};
