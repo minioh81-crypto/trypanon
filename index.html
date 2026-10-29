@@ -948,7 +948,11 @@ class Shaft{
     if(k==='sed'||k==='lime'){for(let q=0;q<4;q++){c.fillStyle=q%2?'rgba(255,240,210,.10)':'rgba(60,40,20,.14)';const yy=y+bh*q/4;c.beginPath();c.moveTo(0,yy);for(let x=0;x<=W;x+=20)c.lineTo(x,yy+Math.sin(x*.02+abs+q)*3);c.lineTo(W,yy+bh/4);c.lineTo(0,yy+bh/4);c.fill();}
       if(k==='lime'){c.strokeStyle='rgba(250,240,220,.6)';c.lineWidth=1.4;for(let i=0;i<5;i++){const x=h(i,1)*W,yy=y+h(i,2)*bh,r=3+h(i,3)*3;c.beginPath();c.arc(x,yy,r,Math.PI,0);c.stroke();for(let a=-2;a<=2;a++){c.beginPath();c.moveTo(x,yy);c.lineTo(x+a*r*.4,yy-r);c.stroke();}}}}
     else if(k==='granite'||k==='perid'){for(let i=0;i<26;i++){c.fillStyle=k==='perid'?['#8ab04a','#4a6a2a','#c8d27a'][i%3]:['#2b2622','#e8a0a0','#f4efe6'][i%3];c.fillRect(h(i,4)*W,y+h(i,5)*bh,2+h(i,6)*2,2+h(i,7)*2);}}
-    else if(k==='ore'){c.lineWidth=2.4;for(let v=0;v<2;v++){c.strokeStyle=v?'rgba(220,226,232,.85)':'rgba(242,193,78,.9)';c.beginPath();let x=h(v,8)*W*.3,yy=y+h(v,9)*bh;c.moveTo(x,yy);for(let q=0;q<8;q++){x+=W/8;yy=y+(.2+h(v*10+q,10)*.6)*bh;c.lineTo(x,yy);}c.stroke();}
+    else if(k==='ore'){for(let v=0;v<4;v++){const x=W*(.1+v*.24+(h(v,8)-.5)*.1),yy=y+(.25+h(v,9)*.5)*bh,len=26+h(v,10)*34,th=3+h(v,17)*3.5,an=(h(v,18)-.5)*.7,gold=v%2===0;
+        c.save();c.translate(x,yy);c.rotate(an);const nn=4+Math.floor(h(v,21)*3);for(let q=0;q<nn;q++){const qx=(h(v*9+q,22)-.5)*len*.8,qy=(h(v*9+q,23)-.5)*th*2.4,r=th*.7+h(v*9+q,24)*th*.8,m=6;
+          c.fillStyle=gold?'#c99a34':'#9aa4ae';c.strokeStyle='rgba(30,20,10,.6)';c.lineWidth=1;c.beginPath();for(let e=0;e<m;e++){const aa=e/m*6.283+h(q,25),rr=r*(.7+h(v*9+q*7+e,26)*.45);e?c.lineTo(qx+Math.cos(aa)*rr,qy+Math.sin(aa)*rr):c.moveTo(qx+Math.cos(aa)*rr,qy+Math.sin(aa)*rr);}c.closePath();c.fill();c.stroke();
+          c.fillStyle=gold?'#f6d870':'#e8eef4';c.beginPath();c.moveTo(qx-r*.5,qy-r*.1);c.lineTo(qx-r*.1,qy-r*.6);c.lineTo(qx+r*.2,qy-r*.2);c.closePath();c.fill();}
+        const a2=.5+.5*Math.sin(t*3+v*2);c.fillStyle=`rgba(255,250,220,${a2})`;c.fillRect(-2,-th,3,3);c.restore();}
       for(let i=0;i<3;i++){const x=W*(.15+i*.33+(h(i,11)-.5)*.1),yy=y+(.35+h(i,12)*.35)*bh,r=bh*(.12+h(i,27)*.06);if(i%2){xcluster(c,x,y+bh-3,bh*.5,['#f4f2ee','#dcd8d0','#c8c2b8'],t,abs*5+i,1);}else{c.fillStyle='#d8a838';c.fillRect(x-r,yy-r,r*2,r*2);c.fillStyle='#f6d46a';c.beginPath();c.moveTo(x-r,yy-r);c.lineTo(x-r*.4,yy-r*1.5);c.lineTo(x+r*1.6,yy-r*1.5);c.lineTo(x+r,yy-r);c.fill();c.fillStyle='#a87a1e';c.beginPath();c.moveTo(x+r,yy-r);c.lineTo(x+r*1.6,yy-r*1.5);c.lineTo(x+r*1.6,yy+r*.5);c.lineTo(x+r,yy+r);c.fill();c.strokeStyle='rgba(60,40,10,.6)';c.lineWidth=1;c.strokeRect(x-r,yy-r,r*2,r*2);
         const a=.5+.5*Math.sin(t*3+i*2);c.fillStyle=`rgba(255,250,210,${a})`;c.fillRect(x-r*.6,yy-r*.6,3,3);}}}
     else if(k==='crystal'){c.fillStyle='rgba(20,10,40,.35)';c.fillRect(0,y,W,bh);const n=3;for(let i=0;i<n;i++){const x=W*(.12+i*.36+(h(i,13)-.5)*.12),sz=bh*(.62+h(i,15)*.2),up=(i+Math.floor(abs))%2?1:-1;
@@ -1010,7 +1014,7 @@ class Shaft{
     this.parts=this.parts.filter(p=>p.l>0);
     for(const p of this.parts){c.globalAlpha=Math.min(1,p.l*2);c.fillStyle=p.c;c.fillRect(p.x-2,p.y-2,4,4);}
     c.globalAlpha=1;
-    if(this.strata){const sk=stratumAt(absToDepth(Math.max(0,st.abs0))).k;if(this.curK&&sk!==this.curK)this.ban={k:sk,l:4.2};this.curK=sk;}
+    if(this.banOn){const sk=stratumAt(absToDepth(Math.max(0,st.abs0))).k;if(this.curK&&sk!==this.curK)this.ban={k:sk,l:4.2};this.curK=sk;}
     if(this.ban&&this.ban.l>0){this.ban.l-=dt;const b2=this.ban,a=Math.min(1,b2.l*1.6,(4.2-b2.l)*4),sc=1+.12*Math.max(0,1-(4.2-b2.l)*3),nm=STK[b2.k][1],col=STK[b2.k][0],cy=Math.min(H-70,this.tipY+125),lx=this.labelX||12,cx2=(W+lx-8)/2;
       c.save();c.globalAlpha=a;c.translate(cx2,cy);c.scale(sc,sc);const bw=Math.min(W-lx-4,340),bh2=78;
       c.fillStyle='rgba(10,8,6,.86)';c.beginPath();c.roundRect?c.roundRect(-bw/2,-bh2/2,bw,bh2,16):c.rect(-bw/2,-bh2/2,bw,bh2);c.fill();
@@ -1036,7 +1040,7 @@ function stratumAt(d){let from=0;for(const [to,band,ks] of STSEQ){if(d<to){if(!b
 function boreBlock(abs){if(abs<0)return{sky:true};const t=absToDepth(abs),l=layerAt(t),st=l.gate&&Math.abs(t-l.from)<.5;
   const sk=stratumAt(t),pk=stratumAt(Math.max(0,absToDepth(abs-1))),newSk=sk.k!==pk.k||sk.bi!==pk.bi;
   return{c:shade(STK[sk.k][0],l.req>S.dl?-.35:0),k:sk.k,sk:newSk&&abs>0&&!st?sk.k:null,label:fmtD(t)+(st?' · '+l.gate+(l.req>S.dl?' · 드릴 Lv.'+l.req+' 필요':''):''),warn:!!st};}
-const bore=new Shaft($('#bCv'),boreBlock);bore.bg='#2a1f17';bore.hole='#3b2a1e';bore.strata=true;bore.lamp=true;bore.labelX=88;
+const bore=new Shaft($('#bCv'),boreBlock);bore.bg='#2a1f17';bore.hole='#3b2a1e';bore.strata=true;bore.banOn=true;bore.lamp=true;bore.labelX=88;
 function expBlock(abs){if(!exp||abs<0)return{sky:true};const r=exp.r;
   if(r.t==='sea'&&abs<r.water)return{water:true,label:altText(r,abs)};
   const below=belowOf(r,abs),e=eraAt(r,below),start=below===e.from||(r.t==='sea'&&(below===WRECK[0]||below===WRECK[1]));
@@ -1455,11 +1459,21 @@ const COAST=[[126.15,37.72],[126.55,37.78],[126.68,37.95],[127.0,38.2],[127.4,38
  [126.3,34.75],[126.4,35.05],[126.35,35.3],[126.5,35.6],[126.7,35.95],[126.55,36.15],[126.5,36.45],[126.25,36.65],[126.15,36.85],[126.45,36.95],[126.75,36.95],
  [126.65,37.15],[126.6,37.4],[126.55,37.55]];
 function waveMarks(){let g='';const rnd=(i,k)=>hsh(i*31+7,k*17+3);
-  const mk=(i,cls,n,w,a,col,sw,dur,foam)=>{const x=36+rnd(i,n)*314,y=6+rnd(i,n+1)*316,d=(dur*(.8+rnd(i,n+2)*.6)).toFixed(1),b=(-rnd(i,n+3)*dur*1.4).toFixed(1);
-    return `<g class="${cls}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.35;.5;.62;.78;1" dur="${d}s" begin="${b}s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="-3 0;-3 0;0 0;2 0;4 0;4 0" keyTimes="0;.35;.5;.62;.78;1" dur="${d}s" begin="${b}s" repeatCount="indefinite"/><path d="M${-w},0 q${w/2},${-a} ${w},0 q${w/2},${-a} ${w},0" stroke="${col}" stroke-width="${sw}" fill="none" stroke-linecap="round"/>${foam?`<path d="M${-w*.2},${-a*.6} q${w*.2},${-a*.5} ${w*.45},${-a*.1}" stroke="#f2fbff" stroke-width="${sw*.8}" fill="none" stroke-linecap="round"/>`:''}</g></g>`;};
-  for(let i=0;i<34;i++)g+=mk(i,'wv1',1,5,2,'#3d7d93',.9,9,0);
-  for(let i=0;i<26;i++)g+=mk(i+100,'wx2',5,8,3.6,'#5aa3bd',1.2,6,1);
-  for(let i=0;i<30;i++)g+=mk(i+200,'wx3',9,11,5.5,'#8ccbe0',1.5,4,1);
+  const mk=(i,cls,L,A,dur,foam,col)=>{const x=36+rnd(i,1)*314,y=6+rnd(i,2)*316,l=L*(.75+rnd(i,3)*.5),d=(dur*(.8+rnd(i,4)*.5)).toFixed(1),b=(-rnd(i,5)*dur*1.5).toFixed(1),dx=(l*.5).toFixed(1);
+    const crest=`M${-l/2},0 C${-l/4},0 ${-l/10},${-A} ${l/7},${-A} C${l/3},${-A} ${l*.42},${-A*.35} ${l/2},0`;
+    return `<g class="${cls}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><g opacity="0"><animate attributeName="opacity" values="0;0;.95;.95;0;0" keyTimes="0;.2;.42;.66;.86;1" dur="${d}s" begin="${b}s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="-${dx} 0;-${dx} 0;0 0;${dx/2} 0;${dx} 0;${dx} 0" keyTimes="0;.2;.42;.66;.86;1" dur="${d}s" begin="${b}s" repeatCount="indefinite"/>
+      <path d="M${-l/2+2},${A*.5} q${l*.35},${-A*.5} ${l*.8},0" stroke="rgba(8,30,40,.55)" stroke-width="${A*.5+.8}" fill="none" stroke-linecap="round"/><path d="${crest}" stroke="${col}" stroke-width="${A*.35+.7}" fill="none" stroke-linecap="round"/>${foam?`<path d="M${l/10},${-A} C${l/4},${-A*1.15} ${l*.36},${-A*.6} ${l/4},${-A*.25}" stroke="#f4fcff" stroke-width="${A*.3+.6}" fill="none" stroke-linecap="round"/><circle cx="${l*.33}" cy="${-A*1.1}" r="${A*.18+.4}" fill="#f4fcff"/>`:`<path d="M${-l/12},${-A*.7} q${l/6},${-A*.45} ${l/3},${-A*.2}" stroke="rgba(230,248,255,.75)" stroke-width=".7" fill="none" stroke-linecap="round"/>`}</g></g>`;};
+  for(let i=0;i<80;i++)g+=mk(i,'wv1',14,2.4,8,0,'#4f93ab');
+  for(let i=0;i<40;i++)g+=mk(i+200,'wx2',24,4,5.5,1,'#6fb4cc');
+  for(let i=0;i<40;i++)g+=mk(i+400,'wx3',46,7,3.6,1,'#9ad6ea');
+  return g;}
+function surfMarks(){let g='';const cX=PX(127.9),cY=PY(36.4),pts=COAST.map(p=>[PX(p[0]),PY(p[1])]);
+  const one=(i,cls,k,dur)=>{const n=pts.length,j=Math.floor(hsh(i,61)*n),p=pts[j],q=pts[(j+1)%n],t=hsh(i,62),x=p[0]+(q[0]-p[0])*t,y=p[1]+(q[1]-p[1])*t;
+    let nx=x-cX,ny=y-cY;const nl=Math.hypot(nx,ny)||1;nx/=nl;ny/=nl;const ang=Math.atan2(ny,nx)*180/Math.PI-90,d=(dur*(.8+hsh(i,63)*.6)).toFixed(1),b=(-hsh(i,64)*dur*1.4).toFixed(1),kt='0;.3;.5;.58;.75;1';
+    return `<g class="${cls}" transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${ang.toFixed(0)}) scale(${k})"><g opacity="0"><animate attributeName="opacity" values="0;0;.9;1;0;0" keyTimes="${kt}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/>
+      <path d="M-7,0 Q0,-2.4 7,0" stroke="#e8f8ff" stroke-width="1.6" fill="none" stroke-linecap="round"><animateTransform attributeName="transform" type="translate" values="0 9;0 9;0 2;0 0;0 0;0 0" keyTimes="${kt}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/></path>
+      <g><animateTransform attributeName="transform" type="scale" values=".2;.2;.2;.6;1.3;1.3" keyTimes="${kt}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/><path d="M-6,1 Q-3,-5 0,-1 Q3,-6 6,1" fill="rgba(240,252,255,.85)"/><circle cx="-5" cy="-5" r="1" fill="#fff"/><circle cx="1" cy="-7" r="1.2" fill="#fff"/><circle cx="5" cy="-4" r=".9" fill="#fff"/></g></g></g>`;};
+  for(let i=0;i<26;i++)g+=one(i,'sf1',.9,6);for(let i=0;i<20;i++)g+=one(i+100,'wx2',1.3,4.5);for(let i=0;i<22;i++)g+=one(i+200,'wx3',1.9,3.2);
   return g;}
 function buildMap(){let g='';
   for(let la=34;la<=38;la++){const y=PY(la).toFixed(1);g+=`<line class="grat" x1="0" x2="350" y1="${y}" y2="${y}"/><text class="gl" x="346" y="${y-3}" text-anchor="end">${la}°N</text>`;}
@@ -1486,6 +1500,7 @@ function buildMap(){let g='';
     +RID.map(p=>[PX(p[0]),PY(p[1])]).map(([x,y],i)=>`<path d="M${(x-6).toFixed(1)},${(y+3).toFixed(1)} l6,-7.5 l6,7.5Z" fill="#245c2e" stroke="#123a1a" stroke-width=".7"/><path d="M${(x-2).toFixed(1)},${(y-2).toFixed(1)} l2,-2.5 l2,2.5 l-1,-.6 l-1,.8 l-1,-.8Z" fill="#eef5e0" opacity=".85"/>`).join('')
     +BR.flatMap(b=>b.slice(1)).map(p=>[PX(p[0]),PY(p[1])]).map(([x,y])=>`<path d="M${(x-4).toFixed(1)},${(y+2).toFixed(1)} l4,-5 l4,5Z" fill="#3d7a40" stroke="#1d4a24" stroke-width=".6"/>`).join('')
     +`<path class="landp" d="${d}" style="fill:none;stroke:#e6f0c8;stroke-opacity:.55"/>`;
+  g+=surfMarks();
   g+=`<ellipse class="landp" cx="${PX(126.55)}" cy="${PY(33.38)}" rx="17" ry="8" style="fill:#86a866;stroke:#e6f0c8;stroke-opacity:.55"/><ellipse cx="${PX(126.55)}" cy="${PY(33.38)}" rx="8" ry="4" fill="#2f6438" opacity=".8" filter="url(#mBlur2)"/>
    <circle class="landp" cx="${PX(130.87)}" cy="${PY(37.5)}" r="3" style="fill:#3d7a40;stroke:#e6f0c8"/><circle class="landp" cx="${PX(131.87)}" cy="${PY(37.24)}" r="1.6" style="fill:#7a8a6a;stroke:#e6f0c8"/>`;
   g+=`<g class="wx3"><rect x="30" y="0" width="326" height="330" fill="rgba(10,20,30,.22)"/><rect x="30" y="0" width="326" height="330" fill="url(#mRain)" opacity=".3"/><rect class="flash" x="30" y="0" width="326" height="330" fill="#eaf6ff" opacity="0"/></g><g class="wxb" transform="translate(40,10)"><rect width="92" height="20" rx="10" fill="rgba(8,18,24,.78)" stroke="rgba(255,255,255,.25)"/><text id="wxT" x="46" y="13.6" text-anchor="middle" fill="#eaf4f8" font-size="9.5" font-weight="700"></text></g>`;
@@ -2463,19 +2478,32 @@ function yiFigure(x,y,k){const B='#5b7664',BL='#93b39d',BD='#34483d',BK='#1e2a24
   // left-side sunlight sheen
   return `<g transform="translate(${x},${y}) scale(${k})"><defs><linearGradient id="yiShine" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>${s}</g>`;}
 function yiMuseum(cx,cy){let g=shadowE(cx,cy,80,30)+lotPad(cx,cy,2.94,'#d9d3c6','#8f8a80');
+  // plaza tiles
   for(let i=-4;i<=4;i++){const a=ip(cx,cy,-1.46,i*.33),b=ip(cx,cy,1.46,i*.33),c=ip(cx,cy,i*.33,-1.46),d=ip(cx,cy,i*.33,1.46);g+=`<path d="M${a[0]},${a[1]} L${b[0]},${b[1]} M${c[0]},${c[1]} L${d[0]},${d[1]}" stroke="#c4bdae" stroke-width=".8"/>`;}
-  // 수(帥)자기 banner behind-left
-  const [fx,fy]=ip(cx,cy,-1.25,.75);g+=`<path d="M${fx},${fy} V${fy-84}" stroke="#4a3a2a" stroke-width="2"/><circle cx="${fx}" cy="${fy-85}" r="2" fill="#c9a03a"/><path d="M${fx},${fy-82} h24 v28 h-24Z" fill="#f2ead2" ${ISK}><animate attributeName="d" values="M${fx},${fy-82} h24 v28 h-24Z;M${fx},${fy-82} q12,4 24,0 v28 q-12,4 -24,0Z;M${fx},${fy-82} h24 v28 h-24Z" dur="1.6s" repeatCount="indefinite"/></path><text x="${fx+12}" y="${fy-62}" text-anchor="middle" font-size="16" font-weight="900" fill="#1e1e24" font-family="serif">帥</text>`;
-  const [bx,by]=ip(cx,cy,-.2,-.2);
-  g+=rBox(bx,by,1.02,1.02,5,'#cfc8ba').svg+rBox(bx,by-5,.88,.88,5,'#ddd6c8').svg+rBox(bx,by-10,.74,.74,5,'#e9e3d6').svg;
-  const P=rBox(bx,by-15,.46,.46,36,'#d6cebe');g+=P.svg+rFace(P,'l',0,1,0,3,'#b8b0a0')+rFace(P,'r',0,1,0,3,'#a8a090')+rFace(P,'l',.1,.9,9,29,'#2a3240',ISK)+rFace(P,'r',.12,.88,11,27,'#2a3240',ISK);
-  const pl=(face,txt,fs)=>{const A=face==='l'?P.L:P.B,Z=face==='l'?P.B:P.R,m=[A[0]+(Z[0]-A[0])*.5,A[1]+(Z[1]-A[1])*.5-19+fs*.35];return `<text x="${m[0]}" y="${m[1]}" text-anchor="middle" font-size="${fs}" font-weight="900" fill="#f2c14e" font-family="serif" transform="matrix(1,${face==='l'?.5:-.5},0,1,0,${face==='l'?-m[0]*.5:m[0]*.5})">${txt}</text>`;};
-  const plv=(face,txt,fs)=>{const A=face==='l'?P.L:P.B,Z=face==='l'?P.B:P.R;return [...txt].map((ch,i)=>{const t=.5,m=[A[0]+(Z[0]-A[0])*t,A[1]+(Z[1]-A[1])*t-31+i*(fs+1)];return `<text x="${m[0]}" y="${m[1]}" text-anchor="middle" font-size="${fs}" font-weight="900" fill="#f2c14e" font-family="serif" transform="matrix(1,${face==='l'?.5:-.5},0,1,0,${face==='l'?-m[0]*.5:m[0]*.5})">${ch}</text>`;}).join('');};
-  g+=pl('l','이순신',9)+pl('r','忠武公',7);
-  const C=rBox(bx,by-51,.52,.52,4,'#c9c1b0');g+=C.svg;
-  const top=[bx,by-55];g+=yiFigure(top[0],top[1],.88);
-  // turtle ship in a basin at the front
-  const [sx,sy]=ip(cx,cy,.95,.72);g+=isoDiamond(sx,sy,.46,.3,'#8f8a80',ISK)+isoDiamond(sx,sy+1,.4,.24,'#3f8fb8')+`<path d="M${sx-12},${sy+2} q4,-2 8,0 t8,0" stroke="#d8f2ff" stroke-width=".9" fill="none"><animateTransform attributeName="transform" type="translate" values="0 0;5 1;0 0" dur="2.4s" repeatCount="indefinite"/></path>`+turtleShip(sx,sy-2);
+  const [bx,by]=ip(cx,cy,-.32,-.32);
+  // stylobate steps
+  g+=rBox(bx,by,1.1,1.1,4,'#cfc8ba').svg+rBox(bx,by-4,1.02,1.02,4,'#ddd6c8').svg+rBox(bx,by-8,.94,.94,4,'#e9e3d6').svg;
+  // inner hall wall
+  const H=40,W=rBox(bx,by-12,.68,.68,H,'#efe6d2');g+=W.svg;
+  g+=rFace(W,'l',.36,.64,0,24,'#6b4a26',ISK)+rFace(W,'l',.495,.505,0,24,'#3a2814')+rFace(W,'l',.36,.64,22,24,'#c9a03a');
+  for(const u of[.15,.85])g+=rFace(W,'l',u-.06,u+.06,8,22,'#4a3a2a',ISK);
+  g+=rFace(W,'r',.36,.64,4,22,'#4a3a2a',ISK);
+  g+=rFace(W,'l',0,1,0,H,'rgba(0,0,0,.12)')+rFace(W,'r',0,1,0,H,'rgba(0,0,0,.18)');
+  // colonnade along the two front edges
+  const P=rBox(bx,by-12,.88,.88,0,'#000'),col=(p)=>{const [x,y]=p;return `<rect x="${x-4.6}" y="${y-2}" width="9.2" height="3" fill="#cfc8ba" ${ISK}/><rect x="${x-3.4}" y="${y-H+3}" width="6.8" height="${H-5}" fill="#f6f1e6" ${ISK}/><rect x="${x-3.4}" y="${y-H+3}" width="2.4" height="${H-5}" fill="#fffdf8"/><rect x="${x+1.2}" y="${y-H+3}" width="2.2" height="${H-5}" fill="#d8cfbe"/><path d="M${x-1},${y-H+4} V${y-2} M${x+.8},${y-H+4} V${y-2}" stroke="#d8cfbe" stroke-width=".6"/><rect x="${x-4.8}" y="${y-H}" width="9.6" height="3.4" fill="#e9e3d6" ${ISK}/>`;};
+  const pts=[];for(let i=0;i<=5;i++){const t=i/5;pts.push([P.L[0]+(P.B[0]-P.L[0])*t,P.L[1]+(P.B[1]-P.L[1])*t]);}for(let i=1;i<=5;i++){const t=i/5;pts.push([P.B[0]+(P.R[0]-P.B[0])*t,P.B[1]+(P.R[1]-P.B[1])*t]);}
+  pts.sort((a,b)=>a[1]-b[1]);g+=pts.map(col).join('');
+  // entablature + frieze + plaques
+  const E=rBox(bx,by-12-H,.94,.94,9,'#ece5d6');g+=E.svg+rFace(E,'l',0,1,0,1.4,'#c9a03a')+rFace(E,'r',0,1,0,1.4,'#c9a03a');
+  g+=rFace(E,'l',.28,.72,2,8,'#20283a',ISK)+rFace(E,'r',.3,.7,2,8,'#20283a',ISK);
+  const pl=(face,txt)=>{const A=face==='l'?E.L:E.B,Z=face==='l'?E.B:E.R,m=[A[0]+(Z[0]-A[0])*.5,A[1]+(Z[1]-A[1])*.5-3];return `<text x="${m[0]}" y="${m[1]}" text-anchor="middle" font-size="5.6" font-weight="800" fill="#f2c14e" font-family="serif" transform="matrix(1,${face==='l'?.5:-.5},0,1,0,${face==='l'?-m[0]*.5:m[0]*.5})">${txt}</text>`;};
+  g+=pl('l','忠武公')+pl('r','유물관');
+  // flat roof terrace with the admiral's statue
+  const Rf=rBox(bx,by-12-H-9,.98,.98,3,'#ddd6c8');g+=Rf.svg;const rt=by-12-H-12;
+  for(const [u,v] of[[-.9,-.9],[.9,-.9],[-.9,.9],[.9,.9]]){const [x,y]=ip(bx,rt,u,v);g+=`<rect x="${x-1.6}" y="${y-5}" width="3.2" height="5" fill="#c9c1b0" ${ISK}/>`;}
+  g+=rBox(bx,rt,.3,.3,4,'#c9c1b0').svg+rBox(bx,rt-4,.2,.2,12,'#d6cebe').svg+yiFigure(bx,rt-16,.45);
+  // 수(帥)자기 banner
+  const [fx,fy]=ip(cx,cy,-1.32,1.25);g+=`<path d="M${fx},${fy} V${fy-74}" stroke="#4a3a2a" stroke-width="2"/><circle cx="${fx}" cy="${fy-75}" r="2" fill="#c9a03a"/><path d="M${fx},${fy-72} h22 v26 h-22Z" fill="#f2ead2" ${ISK}><animate attributeName="d" values="M${fx},${fy-72} h22 v26 h-22Z;M${fx},${fy-72} q11,4 22,0 v26 q-11,4 -22,0Z;M${fx},${fy-72} h22 v26 h-22Z" dur="1.6s" repeatCount="indefinite"/></path><text x="${fx+11}" y="${fy-54}" text-anchor="middle" font-size="15" font-weight="900" fill="#1e1e24" font-family="serif">帥</text>`;
   return g;}
 function isoItem(id,cx,cy){let g='';
   switch(id){
@@ -2556,7 +2584,7 @@ function rotA(x,y,nb){const a=rotC(x,y),b=rotC(x+nb-1,y+nb-1);return [Math.min(a
 function rotPt(px,py){const N=LNS,r=landView();return r===1?[N-py,px]:r===2?[N-px,N-py]:r===3?[py,N-px]:[px,py];}
 function landSVG(){const L0=landOf(),n=landSize(),O=landOcc();let tiles=[],items=[];
   const li=LAND_SIZE.indexOf(n),Ns=LNS=Math.min(LAND_SIZE[LAND_SIZE.length-1],li+1<LAND_SIZE.length?LAND_SIZE[li+1]:n);
-  ISO.ox=Ns*ISO.hw+16;ISO.oy=Object.values(L0.tiles).includes('museum')?150:96;const VW=Ns*2*ISO.hw+32,VH=Ns*2*ISO.hh+ISO.oy+20;
+  ISO.ox=Ns*ISO.hw+16;ISO.oy=Object.values(L0.tiles).includes('museum')?112:96;const VW=Ns*2*ISO.hw+32,VH=Ns*2*ISO.hh+ISO.oy+20;
   const pkId=landPick&&landPick!=='me'?L0.tiles[landPick]:null;
   for(let x=0;x<Ns;x++)for(let y=0;y<Ns;y++){const own=x<n&&y<n,k=x+','+y,it=L0.tiles[k],[dx,dy]=rotC(x,y);
     const can=own&&(landSel?landFits(landSel,x,y):pkId?landFits(pkId,x,y,landPick):landPick==='me'?!O[k]:false);tiles.push([dx+dy,isoTile(x,y,own,can,dx,dy)]);if(it)items.push([x,y,it]);}
