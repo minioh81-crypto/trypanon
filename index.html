@@ -43,6 +43,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .mapwrap svg{display:block;width:100%;height:100%}
 .grat{stroke:#1a3440;stroke-width:.5}
 .gl{fill:#3d5d69;font:500 7px var(--f-num)}
+#map .wx2,#map .wx3{opacity:0;transition:opacity 2.5s}#map.wx-wind .wx2,#map.wx-storm .wx2,#map.wx-storm .wx3{opacity:1}#map.wx-storm .flash{animation:mflash 7s infinite}@keyframes mflash{0%,90%,94%,100%{opacity:0}91%{opacity:.5}93%{opacity:.15}92.5%{opacity:.45}}#map .wxb{pointer-events:none}
 .landp{fill:var(--land);stroke:#8a7444;stroke-width:.8;stroke-linejoin:round}
 .node{cursor:pointer;transition:transform .18s ease,filter .18s ease;transform-box:fill-box;transform-origin:center}
 .node:hover,.node:focus-visible{transform:scale(1.18);filter:drop-shadow(0 0 4px rgba(246,199,106,.75))}
@@ -414,7 +415,9 @@ nav.tabs button{font-size:12px}
 #landView{display:grid;gap:12px;align-content:start;grid-auto-rows:max-content}
 .lhead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
 .lbtns{display:flex;gap:6px}.ghost.sm{height:36px;padding:0 12px;font-size:12px;border-radius:10px}.ghost.sm.on{border-color:var(--hot);color:var(--hot)}
-.lgrid-wrap{position:relative;background:linear-gradient(#8cc4e8,#d8eccf 55%,#bfdcae);border:1px solid var(--line);border-radius:16px;padding:6px 4px 8px;overflow:hidden}
+.lgrid-wrap{touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;position:relative;background:linear-gradient(#8cc4e8,#d8eccf 55%,#bfdcae);border:1px solid var(--line);border-radius:16px;padding:6px 4px 8px;overflow:hidden}
+.lpw{display:grid;gap:3px}.lpplus{font-size:11px;font-weight:700;border-radius:8px;padding:4px 2px;background:rgba(246,199,106,.16);color:var(--amber2);border:1px dashed rgba(246,199,106,.5)}.lpplus.no{opacity:.5}.lp small{font-size:10px;opacity:.7}
+.lgrid-wrap .lrot{position:absolute;right:8px;top:8px;font-size:11px;font-weight:700;color:#2b3a22;background:rgba(255,255,255,.7);border-radius:999px;padding:3px 9px;pointer-events:none}.lgrid-wrap svg{transform-origin:50% 55%}
 .lgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;transform:perspective(600px) rotateX(18deg);transform-origin:50% 100%}
 .lt{position:relative;display:block;width:100%;height:0;padding:0 0 100% 0;border-radius:4px;line-height:0;min-width:0}
 .lt.own{background:#6a9a50;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}.lt.own.alt{background:#74a656}
@@ -958,7 +961,10 @@ class Shaft{
       if(b.k)this.deco(b.k,abs,y,bh,W);
       if(b.seaLine){c.fillStyle='rgba(80,170,220,.35)';c.fillRect(0,y,W,6);c.strokeStyle='#bfe8ff';c.lineWidth=2;c.beginPath();for(let x=0;x<=W;x+=10)c.lineTo(x,y+2+Math.sin(x*.08+performance.now()/400)*2);c.stroke();}
       if(b.ore){for(let k=0;k<6;k++){const x=hsh(abs,60+k)*W,yy=y+(.15+hsh(abs,70+k)*.7)*bh,r=4+hsh(abs,80+k)*4;oreShape(c,b.res,x,yy,r,b.ore);}}}
-    if(b.label){c.fillStyle=b.warn?'#ffb3a0':'rgba(255,250,240,.75)';c.font="500 11px 'IBM Plex Mono',monospace";c.fillText(b.label,this.labelX||12,y+16);}
+    if(b.label){c.fillStyle=b.warn?'#ffb3a0':'rgba(255,250,240,.75)';c.font=b.warn?"700 13.5px 'IBM Plex Sans KR',sans-serif":"500 11px 'IBM Plex Mono',monospace";c.fillText(b.label,this.labelX||12,y+16);}
+    if(b.sk){const nm=STK[b.sk][1],col=STK[b.sk][0];c.save();c.fillStyle='rgba(255,236,170,.9)';c.fillRect(0,y,W,3);c.setLineDash([10,6]);c.strokeStyle='rgba(255,255,255,.55)';c.lineWidth=1.5;c.beginPath();c.moveTo(0,y+5);c.lineTo(W,y+5);c.stroke();c.setLineDash([]);
+      c.font="800 15px 'IBM Plex Sans KR',sans-serif";const tw=c.measureText(nm).width,x=W-tw-34,yy=y+8;c.fillStyle='rgba(12,10,8,.78)';c.beginPath();c.roundRect?c.roundRect(x-8,yy,tw+36,26,13):c.rect(x-8,yy,tw+36,26);c.fill();c.strokeStyle='rgba(255,236,170,.85)';c.lineWidth=1.5;c.stroke();
+      c.fillStyle=col;c.beginPath();c.arc(x+7,yy+13,7,0,7);c.fill();c.strokeStyle='#fff';c.lineWidth=1.5;c.stroke();c.fillStyle='#fff6dc';c.fillText(nm,x+20,yy+19);c.restore();}
   }
   draw(dt,st){if(!this.size())return;const c=this.c,W=this.W,H=this.H,bh=this.bh();c.setTransform(this.d,0,0,this.d,0,0);
     if(this.shk>0){this.shk=Math.max(0,this.shk-dt);const a=(this.mild?4:8)*this.shk/.45;c.fillStyle=this.bg||'#0b0f10';c.fillRect(0,0,W,H);c.setTransform(this.d,0,0,this.d,Math.sin(this.shk*70)*a*this.d,Math.cos(this.shk*55)*a*.5*this.d);}
@@ -987,6 +993,15 @@ class Shaft{
     this.parts=this.parts.filter(p=>p.l>0);
     for(const p of this.parts){c.globalAlpha=Math.min(1,p.l*2);c.fillStyle=p.c;c.fillRect(p.x-2,p.y-2,4,4);}
     c.globalAlpha=1;
+    if(this.strata){const sk=stratumAt(absToDepth(Math.max(0,st.abs0))).k;if(this.curK&&sk!==this.curK)this.ban={k:sk,l:4.2};this.curK=sk;}
+    if(this.ban&&this.ban.l>0){this.ban.l-=dt;const b2=this.ban,a=Math.min(1,b2.l*1.6,(4.2-b2.l)*4),sc=1+.12*Math.max(0,1-(4.2-b2.l)*3),nm=STK[b2.k][1],col=STK[b2.k][0],cy=Math.min(H-70,this.tipY+125),lx=this.labelX||12,cx2=(W+lx-8)/2;
+      c.save();c.globalAlpha=a;c.translate(cx2,cy);c.scale(sc,sc);const bw=Math.min(W-lx-4,340),bh2=78;
+      c.fillStyle='rgba(10,8,6,.86)';c.beginPath();c.roundRect?c.roundRect(-bw/2,-bh2/2,bw,bh2,16):c.rect(-bw/2,-bh2/2,bw,bh2);c.fill();
+      const gg=c.createLinearGradient(-bw/2,0,bw/2,0);gg.addColorStop(0,col);gg.addColorStop(1,'#ffe08a');c.strokeStyle=gg;c.lineWidth=3;c.stroke();
+      c.fillStyle=col;c.fillRect(-bw/2+10,-bh2/2+10,12,bh2-20);c.strokeStyle='rgba(255,255,255,.6)';c.lineWidth=1;c.strokeRect(-bw/2+10,-bh2/2+10,12,bh2-20);
+      c.textAlign='left';c.fillStyle='#ffd56a';c.font="700 11px 'IBM Plex Sans KR',sans-serif";c.fillText('▼ 새 지층 진입',-bw/2+32,-bh2/2+20);
+      c.fillStyle='#fff';let fs=24;c.font=`800 ${fs}px 'IBM Plex Sans KR',sans-serif`;while(c.measureText(nm).width>bw-48&&fs>14){fs--;c.font=`800 ${fs}px 'IBM Plex Sans KR',sans-serif`;}c.fillText(nm,-bw/2+32,6);
+      c.fillStyle='rgba(255,246,220,.8)';c.font="500 11.5px 'IBM Plex Sans KR',sans-serif";c.fillText(STKD[b2.k]||'',-bw/2+32,28);c.restore();c.textAlign='start';}
     for(const f of this.fl){f.y-=40*dt;f.l-=dt;}
     this.fl=this.fl.filter(f=>f.l>0);
     c.font="600 13px 'IBM Plex Sans KR',sans-serif";c.textAlign='right';
@@ -998,10 +1013,12 @@ const STK={soil:['#8f6440','표토층'],sed:['#9a7a56','퇴적층'],lime:['#bdb3
  basalt:['#4a4a52','현무암 주상절리'],diamond:['#34424e','다이아몬드 킴벌라이트'],magma:['#4e2418','마그마 방'],perid:['#5e6e44','감람암층'],lava:['#44170e','용암 흐름'],bridg:['#7a4a3a','브리지머나이트층'],liqfe:['#b85e1c','액체 철 바다'],ironx:['#d8a840','철 결정']};
 const STSEQ=[[30,0,['soil']],[15000,600,['sed','lime','sed','granite','ore','water','granite','crystal','sed','cave','ore','granite']],[35000,900,['basalt','ore','diamond','basalt','magma','crystal','cave']],
  [660000,25000,['perid','lava','diamond','perid','magma','perid']],[2900000,80000,['bridg','lava','bridg','perid']],[5150000,150000,['liqfe']],[6371000,150000,['ironx']]];
+const STKD={soil:'흙과 풀뿌리가 섞인 가장 얕은 층',sed:'오랜 세월 쌓인 모래·진흙이 굳은 층',lime:'옛 바다 생물의 껍데기가 쌓인 층',granite:'마그마가 땅속에서 천천히 식은 단단한 암석',ore:'금속 광물이 줄무늬처럼 박힌 맥',crystal:'반짝이는 수정이 자라는 동굴',cave:'텅 빈 지하 공간, 종유석이 매달려 있어요',water:'암석 틈을 채운 지하수',
+ basalt:'용암이 식으며 육각 기둥으로 갈라진 층',diamond:'깊은 곳에서 솟은 다이아몬드 원석 암맥',magma:'녹은 암석이 고여 있는 뜨거운 방',perid:'맨틀을 이루는 초록빛 암석',lava:'붉게 흐르는 용암 줄기',bridg:'하부 맨틀의 초고압 광물',liqfe:'외핵 — 녹아서 흐르는 철',ironx:'내핵 — 거대한 철 결정'};
 function stratumAt(d){let from=0;for(const [to,band,ks] of STSEQ){if(d<to){if(!band)return {k:ks[0],start:false};const bi=Math.floor((d-from)/band),k=ks[bi%ks.length];return {k,start:Math.abs((d-from)-bi*band)<1e-6||false,bi};}from=to;}return {k:'ironx'};}
 function boreBlock(abs){if(abs<0)return{sky:true};const t=absToDepth(abs),l=layerAt(t),st=l.gate&&Math.abs(t-l.from)<.5;
   const sk=stratumAt(t),pk=stratumAt(Math.max(0,absToDepth(abs-1))),newSk=sk.k!==pk.k||sk.bi!==pk.bi;
-  return{c:shade(STK[sk.k][0],l.req>S.dl?-.35:0),k:sk.k,label:fmtD(t)+(st?' · '+l.gate+(l.req>S.dl?' · 드릴 Lv.'+l.req+' 필요':''):newSk&&abs>0?' · '+STK[sk.k][1]:''),warn:!!st};}
+  return{c:shade(STK[sk.k][0],l.req>S.dl?-.35:0),k:sk.k,sk:newSk&&abs>0&&!st?sk.k:null,label:fmtD(t)+(st?' · '+l.gate+(l.req>S.dl?' · 드릴 Lv.'+l.req+' 필요':''):''),warn:!!st};}
 const bore=new Shaft($('#bCv'),boreBlock);bore.bg='#2a1f17';bore.hole='#3b2a1e';bore.strata=true;bore.lamp=true;bore.labelX=88;
 function expBlock(abs){if(!exp||abs<0)return{sky:true};const r=exp.r;
   if(r.t==='sea'&&abs<r.water)return{water:true,label:altText(r,abs)};
@@ -1425,19 +1442,45 @@ function buildMap(){let g='';
   for(let lo=125;lo<=131;lo++){const x=PX(lo).toFixed(1);g+=`<line class="grat" y1="0" y2="335" x1="${x}" x2="${x}"/><text class="gl" x="${+x+3}" y="330">${lo}°E</text>`;}
   const d='M'+COAST.map(p=>PX(p[0]).toFixed(1)+','+PY(p[1]).toFixed(1)).join('L')+'Z';
   const ridge=[[128.35,38.45],[128.45,38.1],[128.62,37.75],[128.75,37.45],[128.85,37.15],[128.62,36.9],[128.2,36.75],[127.95,36.55],[127.85,36.2],[127.75,35.85],[127.7,35.5]].map(p=>[PX(p[0]),PY(p[1])]);
-  g=`<defs><radialGradient id="mSea" cx=".55" cy=".45" r=".8"><stop offset="0" stop-color="#173644"/><stop offset="1" stop-color="#0b1a21"/></radialGradient><linearGradient id="mLand" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3a2a"/><stop offset=".55" stop-color="#2c2c20"/><stop offset="1" stop-color="#23231a"/></linearGradient>
-    <pattern id="mWave" width="18" height="10" patternUnits="userSpaceOnUse"><path d="M0,5 q4.5,-3 9,0 t9,0" stroke="#1d4250" stroke-width=".7" fill="none"/></pattern></defs><rect x="34" y="2" width="318" height="322" fill="url(#mSea)"/><rect x="34" y="2" width="318" height="322" fill="url(#mWave)" opacity=".6"/>`+g;
-  g+=`<path d="${d}" fill="none" stroke="rgba(246,199,106,.18)" stroke-width="5" stroke-linejoin="round"/><path class="landp" d="${d}" style="fill:url(#mLand)"/>`
-    +ridge.map(([x,y],i)=>`<path d="M${(x-6).toFixed(1)},${(y+3).toFixed(1)} l6,-7 l6,7" fill="#4a4632" stroke="#6a6448" stroke-width=".7"/><path d="M${(x-1.5).toFixed(1)},${(y-2.4).toFixed(1)} l1.5,-1.6 l1.5,1.6" fill="#d8d0b8" opacity=".55"/>`).join('')+`<path class="landp" d="${d}" style="fill:none"/>`;
-  g+=`<ellipse class="landp" cx="${PX(126.55)}" cy="${PY(33.38)}" rx="17" ry="8"/>
-   <circle class="landp" cx="${PX(130.87)}" cy="${PY(37.5)}" r="3"/><circle class="landp" cx="${PX(131.87)}" cy="${PY(37.24)}" r="1.6"/>`;
+  const P=a=>a.map(p=>PX(p[0]).toFixed(1)+','+PY(p[1]).toFixed(1)).join(' L');
+  const RID=[[128.35,38.45],[128.45,38.1],[128.62,37.75],[128.75,37.45],[128.85,37.15],[128.62,36.9],[128.2,36.75],[127.95,36.55],[127.85,36.2],[127.75,35.85],[127.7,35.5],[127.55,35.3]];
+  const BR=[[[128.85,37.15],[129.05,36.7],[129.1,36.2],[129.05,35.8],[129.0,35.45]],[[127.95,36.55],[127.5,36.65],[127.0,36.75],[126.5,36.8]],[[127.75,35.85],[127.35,35.6],[127.15,35.2],[127.3,34.9]],[[128.2,38.35],[127.7,38.05],[127.3,37.85]],[[128.62,37.75],[128.2,37.55],[127.7,37.45]]];
+  const wl=(w,h,a)=>`M0,${h/2} q${w/4},${-a} ${w/2},0 t${w/2},0`;
+  g=`<defs><radialGradient id="mSea" cx=".55" cy=".45" r=".8"><stop offset="0" stop-color="#1a4152"/><stop offset="1" stop-color="#0b1c25"/></radialGradient>
+    <linearGradient id="mLand" gradientUnits="userSpaceOnUse" x1="${PX(126.1)}" y1="0" x2="${PX(129.3)}" y2="0"><stop offset="0" stop-color="#b9c890"/><stop offset=".3" stop-color="#93ad6c"/><stop offset=".6" stop-color="#5d8a4c"/><stop offset="1" stop-color="#2f6438"/></linearGradient>
+    <linearGradient id="mShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,255,230,.10)"/><stop offset="1" stop-color="rgba(0,20,0,.18)"/></linearGradient>
+    <filter id="mBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter><filter id="mBlur2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <clipPath id="mClip"><path d="${d}"/></clipPath>
+    <pattern id="mWave" width="18" height="10" patternUnits="userSpaceOnUse"><path d="${wl(18,10,2.6)}" stroke="#2c6378" stroke-width=".8" fill="none"/><animateTransform attributeName="patternTransform" type="translate" from="0 0" to="18 0" dur="5s" repeatCount="indefinite"/></pattern>
+    <pattern id="mWave2" width="30" height="16" patternUnits="userSpaceOnUse"><path d="${wl(30,16,6)}" stroke="#4d93ad" stroke-width="1.2" fill="none"/><path d="M6,6 q2,-2 4,0" stroke="#d8f3ff" stroke-width="1" fill="none" opacity=".8"/><animateTransform attributeName="patternTransform" type="translate" from="0 0" to="30 0" dur="2.2s" repeatCount="indefinite"/></pattern>
+    <pattern id="mWave3" width="40" height="22" patternUnits="userSpaceOnUse"><path d="${wl(40,22,10)}" stroke="#7cc0d8" stroke-width="1.6" fill="none"/><path d="M8,7 q3,-4 7,-1 M28,15 q3,-3 6,0" stroke="#f2fbff" stroke-width="1.4" fill="none"/><animateTransform attributeName="patternTransform" type="translate" from="0 0" to="40 0" dur="1.1s" repeatCount="indefinite"/></pattern>
+    <pattern id="mRain" width="14" height="20" patternUnits="userSpaceOnUse"><path d="M10,0 l-5,12" stroke="rgba(200,225,240,.55)" stroke-width=".8"/><animateTransform attributeName="patternTransform" type="translate" from="0 0" to="-7 20" dur=".35s" repeatCount="indefinite"/></pattern></defs>
+    <rect x="34" y="2" width="318" height="322" fill="url(#mSea)"/>
+    <g><animateTransform attributeName="transform" type="translate" values="0 0;0 1.2;0 0" dur="3.2s" repeatCount="indefinite"/><rect x="30" y="0" width="326" height="330" fill="url(#mWave)" opacity=".75"/></g>
+    <g class="wx2"><animateTransform attributeName="transform" type="translate" values="0 0;-2 2.4;0 0" dur="1.6s" repeatCount="indefinite"/><rect x="30" y="0" width="326" height="330" fill="url(#mWave2)" opacity=".8"/></g>
+    <g class="wx3"><animateTransform attributeName="transform" type="translate" values="0 0;-3 4;1 -1;0 0" dur="1s" repeatCount="indefinite"/><rect x="30" y="0" width="326" height="330" fill="url(#mWave3)" opacity=".6"/></g>`+g;
+  g+=`<path d="${d}" fill="none" stroke="rgba(170,230,255,.22)" stroke-width="6" stroke-linejoin="round"><animate attributeName="stroke-width" values="4;8;4" dur="3s" repeatCount="indefinite"/></path><path class="landp" d="${d}" style="fill:url(#mLand);stroke:#d9e6b0;stroke-opacity:.6"/>
+    <g clip-path="url(#mClip)"><path d="M${P(RID)}" fill="none" stroke="#1e5128" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" filter="url(#mBlur)" opacity=".85"/>
+    ${BR.map(b=>`<path d="M${P(b)}" fill="none" stroke="#2c6a35" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" filter="url(#mBlur2)" opacity=".7"/>`).join('')}
+    <path d="M${P(RID)}" fill="none" stroke="#173f20" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#mBlur2)" opacity=".9"/>
+    <path d="${d}" fill="url(#mShade)"/></g>`
+    +RID.map(p=>[PX(p[0]),PY(p[1])]).map(([x,y],i)=>`<path d="M${(x-6).toFixed(1)},${(y+3).toFixed(1)} l6,-7.5 l6,7.5Z" fill="#245c2e" stroke="#123a1a" stroke-width=".7"/><path d="M${(x-2).toFixed(1)},${(y-2).toFixed(1)} l2,-2.5 l2,2.5 l-1,-.6 l-1,.8 l-1,-.8Z" fill="#eef5e0" opacity=".85"/>`).join('')
+    +BR.flatMap(b=>b.slice(1)).map(p=>[PX(p[0]),PY(p[1])]).map(([x,y])=>`<path d="M${(x-4).toFixed(1)},${(y+2).toFixed(1)} l4,-5 l4,5Z" fill="#3d7a40" stroke="#1d4a24" stroke-width=".6"/>`).join('')
+    +`<path class="landp" d="${d}" style="fill:none;stroke:#e6f0c8;stroke-opacity:.55"/>`;
+  g+=`<ellipse class="landp" cx="${PX(126.55)}" cy="${PY(33.38)}" rx="17" ry="8" style="fill:#86a866;stroke:#e6f0c8;stroke-opacity:.55"/><ellipse cx="${PX(126.55)}" cy="${PY(33.38)}" rx="8" ry="4" fill="#2f6438" opacity=".8" filter="url(#mBlur2)"/>
+   <circle class="landp" cx="${PX(130.87)}" cy="${PY(37.5)}" r="3" style="fill:#3d7a40;stroke:#e6f0c8"/><circle class="landp" cx="${PX(131.87)}" cy="${PY(37.24)}" r="1.6" style="fill:#7a8a6a;stroke:#e6f0c8"/>`;
+  g+=`<g class="wx3"><rect x="30" y="0" width="326" height="330" fill="rgba(10,20,30,.22)"/><rect x="30" y="0" width="326" height="330" fill="url(#mRain)" opacity=".6"/><rect class="flash" x="30" y="0" width="326" height="330" fill="#eaf6ff" opacity="0"/></g><g class="wxb" transform="translate(40,10)"><rect width="92" height="20" rx="10" fill="rgba(8,18,24,.78)" stroke="rgba(255,255,255,.25)"/><text id="wxT" x="46" y="13.6" text-anchor="middle" fill="#eaf4f8" font-size="9.5" font-weight="700"></text></g>`;
   const node=(id,cls,x,y,label,lx,la,ly,res)=>`<g class="node ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}">
     <circle class="hit" cx="${x}" cy="${y}" r="16"/><circle class="ring" cx="${x}" cy="${y}" r="10"/>
     ${cls==='base'?`<rect class="dot" x="${x-6}" y="${y-6}" width="12" height="12" transform="rotate(45 ${x} ${y})"/>`:res?`<svg class="ricon" x="${x-8}" y="${y-8}" width="16" height="16" viewBox="0 0 16 16">${RIC[res]||''}</svg>`:`<circle class="dot" cx="${x}" cy="${y}" r="6"/>`}
     <text x="${x+lx}" y="${y+ly}" text-anchor="${la}">${label}</text>${res&&cls!=='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9.5}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}${res&&cls==='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}</g>`;
   for(const r of REG){const x=+PX(r.lon).toFixed(1),y=+PY(r.lat).toFixed(1);g+=r.t==='sea'?node(r.id,'sea',x,y,r.n,0,'middle',19,r.res):node(r.id,'land',x,y,r.n,r.lx,r.la,4,r.res);}
   g+=node('yanggu','base',+PX(127.99).toFixed(1),+PY(38.11).toFixed(1),'양구 본공',-11,'end',4);
-  $('#map').innerHTML=`<svg viewBox="34 2 318 322" role="img" aria-label="대한민국 시추 지도">${g}</svg>`;}
+  $('#map').innerHTML=`<svg viewBox="34 2 318 322" role="img" aria-label="대한민국 시추 지도">${g}</svg>`;wxSet(true);}
+const WX=[['☀️ 맑음 · 잔잔','calm'],['💨 바람 · 너울','wind'],['⛈️ 폭풍 · 거친 파도','storm']];let wxCur=-1;
+function wxNow(){const p=Math.floor(Date.now()/120000),h=Math.abs(Math.sin(p*12.9898)*43758.5453)%1;return h<.5?0:h<.8?1:2;}
+function wxSet(f){const w=wxNow();if(!f&&w===wxCur)return;const m=$('#map');m.classList.remove('wx-calm','wx-wind','wx-storm');m.classList.add('wx-'+WX[w][1]);const t=$('#wxT');if(t)t.textContent=WX[w][0];if(!f&&wxCur>=0&&w===2)toast('⛈️ 바다에 폭풍이 몰려와요 — 파도가 거세요');wxCur=w;}
+setInterval(()=>wxSet(false),5000);
 function updateMap(){document.querySelectorAll('#map .rcnt').forEach(t=>{t.textContent=(S.res[t.dataset.r]||0).toLocaleString('ko-KR');});document.querySelectorAll('.node').forEach(n=>{const r=REG.find(x=>x.id===n.dataset.id);
   n.classList.toggle('locked',!!r&&!isUnl(r));n.classList.toggle('sel',n.dataset.id===sel);n.classList.toggle('act',n.dataset.id===S.ex.active);n.classList.toggle('evt',evtOn()&&n.dataset.id===S.evt.rid);});renderCard();}
 function openRegion(id){sel=id;updateMap();$('#rpop').hidden=false;const sh=$('#rpop .rsheet');sh.scrollTop=0;}
@@ -1771,7 +1814,7 @@ const PXAN={
  fox:{fur:'#e8762e',lt:'#fff6ea',paw:'#2a1f1a',dk:'#2a1f1a'},
 };
 function pixelChar(c,o={}){
-  const G={},OX=1,OY=PXAN[c.sex]?3:0;
+  const G={},OX=1,OY=PXAN[c.sex]?3:0,EYE=[];
   const set=(x,y,col)=>{x+=OX;y+=OY;if(!col||x<0||y<0||x>=PXW||y>=PXH)return;G[x+','+y]=col;};
   const del=(x,y)=>{delete G[(x+OX)+','+(y+OY)];};
   const R=(x,y,w,h,col)=>{for(let j=0;j<h;j++)for(let i=0;i<w;i++)set(x+i,y+j,col);};
@@ -1786,7 +1829,7 @@ function pixelChar(c,o={}){
     if(ex==='shock'){R(ex1-1,ey,2,2,'#fff');R(ex2,ey,2,2,'#fff');set(ex1,ey+1,ink);set(ex2,ey+1,ink);R(10,mouthY,2,2,'#5a2a22');return;}
     if(ex==='happy'||eyes==='smile'){P([[ex1-1,ey+1],[ex1,ey],[ex1+1,ey+1],[ex2-1,ey+1],[ex2,ey],[ex2+1,ey+1]],ink);}
     else if(eyes==='sharp'){R(ex1,ey+1,2,1,ink);R(ex2-1,ey+1,2,1,ink);}
-    else{R(ex1,ey,1,2,ink);R(ex2,ey,1,2,ink);}
+    else{R(ex1,ey,1,2,ink);R(ex2,ey,1,2,ink);EYE.push([ex1,ey],[ex2,ey]);}
     if(ex==='happy')R(10,mouthY,2,2,'#5a2a22');
     else if(ex==='think')R(10,mouthY,3,1,'#5a2a22');
     else R(10,mouthY,2,1,lip||'#7a3a2a');};
@@ -1906,24 +1949,26 @@ function pixelChar(c,o={}){
     if(of.hood&&(!hat||hat==='none'))hood(2);
     hatTop(3);
   }
-  // outline
-  const add=[];
-  for(const key in G){const [x,y]=key.split(',').map(Number);
-    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=PXW||ny>=PXH)continue;if(!G[nx+','+ny])add.push(nx+','+ny);}}
-  for(const key of add)G[key]='#2b211c';
-  // soft pixel shading: light rim on top/left edges, shadow on right/bottom edges (skip eyes and tiny details)
-  const OUTC='#2b211c',KEEP={'#2b211c':1,'#1a1412':1,'#fff':1,'#ffffff':1},isO=(x,y)=>G[x+','+y]===OUTC||!G[x+','+y],sh2={};
-  for(const key in G){const col=G[key];if(KEEP[col]||col[0]!=='#'||col.length!==7)continue;const [x,y]=key.split(',').map(Number);
-    const same=[[1,0],[-1,0],[0,1],[0,-1]].filter(([dx,dy])=>G[(x+dx)+','+(y+dy)]===col).length;if(same<2)continue;
-    if(isO(x+1,y)||isO(x,y+1))sh2[key]=shade(col,-.16);else if(isO(x,y-1)||isO(x-1,y))sh2[key]=shade(col,.13);}
-  Object.assign(G,sh2);
-  // light rim so the sprite reads on dark backgrounds
-  const rim=[];for(const key in G){if(G[key]!==OUTC)continue;const [x,y]=key.split(',').map(Number);
-    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=PXW||ny>=PXH)continue;if(!G[nx+','+ny])rim.push(nx+','+ny);}}
-  for(const key of rim)G[key]='rgba(255,244,222,.38)';
+  // 2x supersample: round convex corners, thin outline, gentle edge shading, eye highlights
+  const OUTC='#2b211c',H={},W2=PXW*2,H2=PXH*2,has=(x,y)=>!!G[x+','+y];
+  for(const key in G){const [x,y]=key.split(',').map(Number),col=G[key];for(let j=0;j<2;j++)for(let i=0;i<2;i++)H[(2*x+i)+','+(2*y+j)]=col;}
+  for(const key in G){const [x,y]=key.split(',').map(Number),l=has(x-1,y),r=has(x+1,y),u=has(x,y-1),d=has(x,y+1);
+    if(!l&&!u)delete H[(2*x)+','+(2*y)];if(!r&&!u)delete H[(2*x+1)+','+(2*y)];if(!l&&!d)delete H[(2*x)+','+(2*y+1)];if(!r&&!d)delete H[(2*x+1)+','+(2*y+1)];}
+  const KEEP={'#1a1412':1,'#fff':1,'#ffffff':1},sh2={},hs=(x,y)=>!!H[x+','+y];
+  for(const key in H){const col=H[key];if(KEEP[col]||col[0]!=='#'||col.length!==7)continue;const [x,y]=key.split(',').map(Number);
+    const n=[[1,0],[-1,0],[0,1],[0,-1]].filter(([dx,dy])=>H[(x+dx)+','+(y+dy)]===col).length;if(n<3)continue;
+    if(!hs(x+1,y)||!hs(x,y+1))sh2[key]=shade(col,-.08);else if(!hs(x,y-1)||!hs(x-1,y))sh2[key]=shade(col,.07);}
+  Object.assign(H,sh2);
+  const add=[];for(const key in H){const [x,y]=key.split(',').map(Number);
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W2||ny>=H2)continue;if(!H[nx+','+ny])add.push(nx+','+ny);}}
+  for(const key of add)H[key]=OUTC;
+  for(const [x,y] of EYE){const k=(2*(x+OX))+','+(2*(y+OY));if(H[k]==='#1a1412')H[k]='#ffffff';}
+  const rim=[];for(const key of add){const [x,y]=key.split(',').map(Number);if(!H[x+','+(y-1)]&&y>0)rim.push(x+','+(y-1));}
+  for(const key of rim)H[key]='rgba(255,244,222,.22)';
+  const G0=G;for(const k in G0)delete G0[k];Object.assign(G,H);
   const by={};for(const key in G)(by[G[key]]=by[G[key]]||[]).push(key);
   let s='';for(const col in by)s+=`<path d="${by[col].map(key=>{const [x,y]=key.split(',');return `M${x} ${y}h1v1h-1z`;}).join('')}" fill="${col}"/>`;
-  const g=`<g transform="translate(${PXOX.toFixed(2)},${PXOY.toFixed(2)}) scale(${PXS})" shape-rendering="crispEdges">${s}</g>`,sd=o.noShadow?'':`<ellipse cx="50" cy="170" rx="34" ry="5.5" fill="rgba(0,0,0,.3)"/>`;
+  const g=`<g transform="translate(${PXOX.toFixed(2)},${PXOY.toFixed(2)}) scale(${PXS/2})" shape-rendering="crispEdges">${s}</g>`,sd=o.noShadow?'':`<ellipse cx="50" cy="170" rx="34" ry="5.5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);
 }
 
@@ -2198,7 +2243,7 @@ const FURN=[
  {id:'shelf',n:'책장',p:700},{id:'plant',n:'화분',p:200},{id:'case',n:'유물 진열장',p:3000},{id:'frame',n:'화석 액자',p:2000},{id:'tank',n:'어항',p:2500},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800}];
 const landOf=()=>{S.land=S.land||{lv:1,tiles:{},furn:{}};return S.land;};
 const landSize=()=>LAND_SIZE[landOf().lv-1];
-const BIG={house_s:2,house_h:2,house_b:2,house_d:2,house_y:2,museum:2,pond:2,fountain:2},BIGS={house_s:1.75,house_h:1.75,house_b:1.7,house_d:1.75,house_y:1.75,museum:1.8,pond:2,fountain:1.75};
+const BIG={house_s:2,house_h:2,house_b:2,house_d:3,house_y:3,museum:3,pond:2,fountain:2},BIGS={house_s:1.75,house_h:1.75,house_b:1.7,house_d:1,house_y:1,museum:1,pond:2,fountain:1.75},GRAND={house_d:1,house_y:1,museum:1};
 const bsz=id=>BIG[id]||1;
 function landOcc(except){const o={},T=landOf().tiles;for(const k in T){if(k===except)continue;const [x,y]=k.split(',').map(Number),n=bsz(T[k]);for(let i=0;i<n;i++)for(let j=0;j<n;j++)o[(x+i)+','+(y+j)]=k;}return o;}
 function landFits(id,x,y,except){const n=bsz(id),N=landSize();if(x<0||y<0||x+n>N||y+n>N)return false;const o=landOcc(except);for(let i=0;i<n;i++)for(let j=0;j<n;j++)if(o[(x+i)+','+(y+j)])return false;return true;}
@@ -2206,7 +2251,7 @@ function fixBig(){const L0=landOf(),T=L0.tiles,N=landSize();let ch=0;
   for(const k of Object.keys(T)){const id=T[k];if(bsz(id)<2)continue;const [x,y]=k.split(',').map(Number);if(landFits(id,x,y,k))continue;
     let to=null;for(let yy=0;yy<N&&!to;yy++)for(let xx=0;xx<N&&!to;xx++)if(landFits(id,xx,yy,k))to=xx+','+yy;
     if(!to){// free room by moving small items that block the original spot
-      const o=landOcc(k);for(let i=0;i<2;i++)for(let j=0;j<2;j++){const kk=(x+i)+','+(y+j),b=o[kk];if(b&&bsz(T[b])===1){const oc=landOcc();let sp=null;for(let yy=0;yy<N&&!sp;yy++)for(let xx=0;xx<N&&!sp;xx++){const q=xx+','+yy;if(!oc[q]&&!(xx>=x&&xx<x+2&&yy>=y&&yy<y+2))sp=q;}if(sp){T[sp]=T[b];delete T[b];}}}
+      const o=landOcc(k),nb=bsz(id);for(let i=0;i<nb;i++)for(let j=0;j<nb;j++){const kk=(x+i)+','+(y+j),b=o[kk];if(b&&bsz(T[b])===1){const oc=landOcc();let sp=null;for(let yy=0;yy<N&&!sp;yy++)for(let xx=0;xx<N&&!sp;xx++){const q=xx+','+yy;if(!oc[q]&&!(xx>=x&&xx<x+nb&&yy>=y&&yy<y+nb))sp=q;}if(sp){T[sp]=T[b];delete T[b];}}}
       if(landFits(id,x,y,k))continue;}
     if(to){T[to]=id;delete T[k];const RT=landRot();if(RT[k]){RT[to]=1;delete RT[k];}ch=1;}
     else if(!landFits(id,x,y,k)){const it=LITEM.find(i=>i.id===id);S.money+=it.p;delete T[k];ch=1;toast(it.n+' 자리가 없어 보관 · '+won(it.p)+' 환급');}}
@@ -2236,7 +2281,7 @@ const PT=a=>a.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
 const ISK='stroke="#2b211c" stroke-width="1.2" stroke-linejoin="round"';
 const up=(p,h)=>[p[0],p[1]-h];
 function foot(cx,cy,s){return {L:[cx-ISO.hw*s,cy],B:[cx,cy+ISO.hh*s],R:[cx+ISO.hw*s,cy],T:[cx,cy-ISO.hh*s]};}
-let ISO_MIR=0;
+let ISO_MIR=0,NOGRAND=0;
 function isoBox(cx,cy,s,h,col,o={}){const f=foot(cx,cy,s);
   return {f,h,svg:`<polygon points="${PT([f.L,f.B,up(f.B,h),up(f.L,h)])}" fill="${o.left||shade(col,ISO_MIR?-.26:-.04)}" ${ISK}/><polygon points="${PT([f.B,f.R,up(f.R,h),up(f.B,h)])}" fill="${o.right||shade(col,ISO_MIR?-.04:-.26)}" ${ISK}/><polygon points="${PT([up(f.T,h),up(f.R,h),up(f.B,h),up(f.L,h)])}" fill="${o.top||shade(col,.14)}" ${ISK}/>`};}
 function isoRoof(cx,cy,s,h,rh,col,over=1.15){const f=foot(cx,cy,s*over),a=[cx,cy-h-rh],L=up(f.L,h),B=up(f.B,h),R=up(f.R,h),T=up(f.T,h);
@@ -2247,6 +2292,148 @@ function facePoly(b,face,u0,u1,v0,v1,col,extra=''){const f=b.f,A=face==='l'?f.L:
   return `<polygon points="${PT([p(u0,v0),p(u1,v0),p(u1,v1),p(u0,v1)])}" fill="${col}" ${extra}/>`;}
 const shadowE=(cx,cy,rx,ry)=>`<ellipse cx="${cx+5}" cy="${cy+3}" rx="${rx}" ry="${ry}" fill="rgba(0,0,0,.22)"/>`;
 function puff(x,y,r,col){return `<circle cx="${x}" cy="${y}" r="${r}" fill="${shade(col,-.18)}" ${ISK}/><circle cx="${x-r*.15}" cy="${y-r*.15}" r="${r*.8}" fill="${col}"/><circle cx="${x-r*.35}" cy="${y-r*.4}" r="${r*.35}" fill="${shade(col,.25)}"/>`;}
+// ---------------- grand 3x3 buildings ----------------
+const ip=(cx,cy,u,v)=>[cx+(u-v)*ISO.hw,cy+(u+v)*ISO.hh];
+function lotPad(cx,cy,s,top,side){const f=foot(cx,cy,s);return `<polygon points="${PT([f.L,f.B,f.R,[f.R[0],f.R[1]+3],[f.B[0],f.B[1]+3],[f.L[0],f.L[1]+3]])}" fill="${side}" ${ISK}/><polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="${top}" ${ISK}/>`;}
+function isoDiamond(cx,cy,su,sv,col,ex=''){const a=ip(cx,cy,-su,-sv),b=ip(cx,cy,su,-sv),c=ip(cx,cy,su,sv),d=ip(cx,cy,-su,sv);return `<polygon points="${PT([a,b,c,d])}" fill="${col}" ${ex}/>`;}
+// rectangular iso box: half extents su (x axis, toward R) and sv (y axis, toward L)
+function rBox(cx,cy,su,sv,h,col,o={}){const T=ip(cx,cy,-su,-sv),R=ip(cx,cy,su,-sv),B=ip(cx,cy,su,sv),L=ip(cx,cy,-su,sv);
+  const lc=o.left||shade(col,ISO_MIR?-.24:-.04),rc=o.right||shade(col,ISO_MIR?-.04:-.24),tc=o.top||shade(col,.14);
+  return {T,R,B,L,h,svg:`<polygon points="${PT([L,B,up(B,h),up(L,h)])}" fill="${lc}" ${ISK}/><polygon points="${PT([B,R,up(R,h),up(B,h)])}" fill="${rc}" ${ISK}/><polygon points="${PT([up(T,h),up(R,h),up(B,h),up(L,h)])}" fill="${tc}" ${ISK}/>`};}
+// quad on a face of rBox: face 'l' L->B, 'r' B->R
+function rFace(b,face,u0,u1,v0,v1,col,ex=''){const A=face==='l'?b.L:b.B,Z=face==='l'?b.B:b.R,p=(u,v)=>[A[0]+(Z[0]-A[0])*u,A[1]+(Z[1]-A[1])*u-v];return `<polygon points="${PT([p(u0,v0),p(u1,v0),p(u1,v1),p(u0,v1)])}" fill="${col}" ${ex}/>`;}
+function rWin(b,face,u0,u1,v0,v1,lit){const A=face==='l'?b.L:b.B,Z=face==='l'?b.B:b.R,p=(u,v)=>[A[0]+(Z[0]-A[0])*u,A[1]+(Z[1]-A[1])*u-v],m=(u0+u1)/2;
+  return rFace(b,face,u0-.012,u1+.012,v0-1,v1+1,'#e9e4da',ISK)+rFace(b,face,u0,u1,v0,v1,lit?'#ffe9a8':'#8ec6e2')+`<polygon points="${PT([p(u0,v1),p(u0+(u1-u0)*.35,v1),p(u0,v0+(v1-v0)*.4)])}" fill="rgba(255,255,255,.55)"/><path d="M${p(m,v0)[0]},${p(m,v0)[1]} L${p(m,v1)[0]},${p(m,v1)[1]}" stroke="#e9e4da" stroke-width="1"/>`
+    +(lit?`<polygon points="${PT([p(u0,v0),p(u1,v0),p(u1,v1),p(u0,v1)])}" fill="#fff6c8"><animate attributeName="opacity" values=".0;.45;.0" dur="${3+u0*4}s" repeatCount="indefinite"/></polygon>`:'');}
+function bush(x,y,r,c='#4f9a48'){return `<ellipse cx="${x+2}" cy="${y+1}" rx="${r}" ry="${r*.5}" fill="rgba(0,0,0,.2)"/>`+puff(x,y-r*.6,r,c);}
+function miniPine(x,y,k=1){let g=`<rect x="${x-2*k}" y="${y-12*k}" width="${4*k}" height="${12*k}" fill="#7a5a3c" ${ISK}/>`;for(const [w,y0,h] of [[14,-9,13],[11,-17,12],[7,-25,10]])g+=`<polygon points="${PT([[x,y+(y0-h)*k],[x-w*k,y+y0*k],[x+w*k,y+y0*k]])}" fill="#2f7a3a" ${ISK}/><polygon points="${PT([[x,y+(y0-h)*k],[x+w*k,y+y0*k],[x,y+(y0+2)*k]])}" fill="#22602c"/>`;return g;}
+
+function grandVilla(cx,cy){let g=shadowE(cx,cy,78,30)+lotPad(cx,cy,2.92,'#86c060','#6e5232');
+  // stone path & driveway
+  g+=isoDiamond(...ip(cx,cy,-.1,1.08),.13,.4,'#d8d2c4',ISK)+isoDiamond(...ip(cx,cy,.98,.22),.45,.36,'#b9b4aa',ISK);
+  // pool with deck
+  const [px,py]=ip(cx,cy,.82,1.05);g+=isoDiamond(px,py,.5,.4,'#b88a5a',ISK)+isoDiamond(px,py+1,.4,.31,'#3fa3d6',ISK)+isoDiamond(px,py+2,.33,.25,'#5cc0ea');
+  for(const d of[0,1.3])g+=`<ellipse cx="${px}" cy="${py+2}" rx="3" ry="1.4" fill="none" stroke="#e6f8ff" stroke-width="1"><animate attributeName="rx" values="3;16" dur="2.6s" begin="${d}s" repeatCount="indefinite"/><animate attributeName="ry" values="1.4;7" dur="2.6s" begin="${d}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;0" dur="2.6s" begin="${d}s" repeatCount="indefinite"/></ellipse>`;
+  g+=`<path d="M${px-10},${py-1} q4,-2 8,0 t8,0" stroke="#e6f8ff" stroke-width="1" fill="none"><animateTransform attributeName="transform" type="translate" values="0 0;4 2;0 0" dur="2s" repeatCount="indefinite"/></path>`;
+  // main block (ground floor)
+  const [mx,my]=ip(cx,cy,-.3,-.3),M=rBox(mx,my,1.12,.92,34,'#f4f2ee');g+=M.svg;
+  g+=rWin(M,'l',.08,.42,5,28,1)+rFace(M,'l',.5,.68,0,24,'#5b3d24',ISK)+rFace(M,'l',.585,.595,10,13,'#f2c14e')+rWin(M,'l',.75,.94,9,28,0);
+  g+=rWin(M,'r',.06,.3,7,28,0)+rWin(M,'r',.36,.6,7,28,1)+rWin(M,'r',.66,.92,7,28,0);
+  g+=rFace(M,'l',0,1,0,3,'#9a958c')+rFace(M,'r',0,1,0,3,'#7a766e');
+  // wood-clad wing (garage)
+  const [wx,wy]=ip(cx,cy,.98,-.72),W=rBox(wx,wy,.46,.6,26,'#b07a44');g+=W.svg;
+  for(let i=1;i<6;i++)g+=rFace(W,'l',0,1,i*4.4,i*4.4+.6,'rgba(60,35,15,.45)')+rFace(W,'r',0,1,i*4.4,i*4.4+.6,'rgba(60,35,15,.45)');
+  g+=rFace(W,'l',.12,.88,0,17,'#d8dcde',ISK)+[3,6,9,12,15].map(v=>rFace(W,'l',.12,.88,v,v+.6,'#9aa3a8')).join('');
+  g+=rBox(wx,wy-26,.52,.66,2.6,'#3a3e44').svg;
+  // upper floor glass box with cantilever
+  const [ux,uy]=ip(cx,cy,-.35,-.35),Ub=rBox(ux,uy-34,1.16,1.0,2.6,'#3a3e44');g+=Ub.svg;
+  const U=rBox(ux-2,uy-37,.92,.8,26,'#e9e6e0');g+=U.svg+rWin(U,'l',.06,.6,3,21,0)+rWin(U,'l',.68,.94,5,20,1)+rWin(U,'r',.08,.46,5,20,1)+rWin(U,'r',.54,.92,3,21,0);
+  // balcony rail on cantilever front
+  const bl=up(Ub.L,2.6),bb=up(Ub.B,2.6),br=up(Ub.R,2.6);g+=`<path d="M${bl[0]},${bl[1]} L${bb[0]},${bb[1]} L${br[0]},${br[1]}" stroke="rgba(170,215,235,.75)" stroke-width="6" fill="none"/><path d="M${bl[0]},${bl[1]-6} L${bb[0]},${bb[1]-6} L${br[0]},${br[1]-6}" stroke="#3a3e44" stroke-width="1.4" fill="none"/>`;
+  g+=rBox(ux-2,uy-63,1.0,.88,3,'#2f3338').svg;
+  // solar panels + chimney
+  const [sx,sy]=ip(ux-2,uy-66,-.2,-.15);g+=isoDiamond(sx,sy,.42,.28,'#2a3d6a',ISK)+`<path d="M${sx-10},${sy-2} L${sx+10},${sy+2}" stroke="#7a9ad8" stroke-width=".8"/>`;
+  const C=rBox(...ip(ux-2,uy-66,.6,-.5),.11,.11,12,'#8a5a3a');g+=C.svg;
+  for(const d of[0,1.6])g+=`<circle cx="${C.T[0]}" cy="${C.T[1]-14}" r="2.4" fill="#e8e8e8"><animate attributeName="cy" values="${C.T[1]-14};${C.T[1]-34}" dur="3.2s" begin="${d}s" repeatCount="indefinite"/><animate attributeName="r" values="2;5.5" dur="3.2s" begin="${d}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;0" dur="3.2s" begin="${d}s" repeatCount="indefinite"/></circle>`;
+  // garden: hedges, tree, lamps
+  for(const [u,v] of[[-.65,1.3],[1.42,1.32],[1.42,-.1]]){const [x,y]=ip(cx,cy,u,v);g+=bush(x,y,6,'#4a9a44');}
+  const [tx,ty]=ip(cx,cy,-1.2,1.0);g+=miniPine(tx,ty,1.15);
+  const [lx,ly]=ip(cx,cy,.3,1.42);g+=`<rect x="${lx-1}" y="${ly-18}" width="2" height="18" fill="#3a3a40"/><circle cx="${lx}" cy="${ly-19}" r="2.6" fill="#fff3b0"><animate attributeName="opacity" values=".6;1;.6" dur="2.4s" repeatCount="indefinite"/></circle>`;
+  return g;}
+
+function giwaWall(A,Z,h,col='#d9cdb4'){return `<polygon points="${PT([A,Z,up(Z,h),up(A,h)])}" fill="${col}" ${ISK}/>`+[.15,.35,.55,.75].map(t=>{const x=A[0]+(Z[0]-A[0])*t,y=A[1]+(Z[1]-A[1])*t;return `<circle cx="${x.toFixed(1)}" cy="${(y-h*.5).toFixed(1)}" r="1.6" fill="#a89a80"/>`;}).join('')
+  +`<polygon points="${PT([up(A,h),up(Z,h),up(Z,h+4),up(A,h+4)])}" fill="#3a3a44" ${ISK}/><path d="M${A[0]},${A[1]-h-4} L${Z[0]},${Z[1]-h-4}" stroke="#5a5a66" stroke-width="1.4"/>`;}
+function hanokHall(cx,cy,su,sv,h,rh,base=6){let g=rBox(cx,cy,su+.12,sv+.12,base,'#a8a29a').svg;const B=rBox(cx,cy-base,su,sv,h,'#f3e8d0');g+=B.svg;
+  const nl=Math.max(2,Math.round(sv*4)),nr=Math.max(2,Math.round(su*4));
+  for(let i=0;i<=nl;i++){const u=i/nl;g+=rFace(B,'l',Math.max(0,u-.02),Math.min(1,u+.02),0,h,'#6a4a2c');}
+  for(let i=0;i<=nr;i++){const u=i/nr;g+=rFace(B,'r',Math.max(0,u-.02),Math.min(1,u+.02),0,h,'#6a4a2c');}
+  for(let i=0;i<nr;i++){const u0=i/nr+.03,u1=(i+1)/nr-.03;g+=rFace(B,'r',u0,u1,2,h-5,'#efe0bc',ISK)+rFace(B,'r',(u0+u1)/2-.004,(u0+u1)/2+.004,2,h-5,'#8a6a44')+rFace(B,'r',u0,u1,(h-3)/2,(h-3)/2+.7,'#b89a6a');}
+  for(let i=0;i<nl;i++){const u0=i/nl+.03,u1=(i+1)/nl-.03;g+=rFace(B,'l',u0,u1,h*.35,h-5,'#e8d8b0',ISK);}
+  g+=rFace(B,'l',0,1,h-4,h,'#6a4a2c')+rFace(B,'r',0,1,h-4,h,'#6a4a2c');
+  // hipped-gable tiled roof (팔작지붕)
+  const y0=cy-base-h,o=.2,T=ip(cx,y0,-su-o,-sv-o),R=ip(cx,y0,su+o,-sv-o),Bp=ip(cx,y0,su+o,sv+o),L=ip(cx,y0,-su-o,sv+o);
+  const k1=ip(cx,y0-rh,-su*.55,0),k2=ip(cx,y0-rh,su*.55,0);
+  const lift=(p,d)=>[p[0],p[1]-d];
+  g+=`<polygon points="${PT([lift(T,4),lift(R,4),k2,k1])}" fill="#4a4a54" ${ISK}/><polygon points="${PT([lift(L,4),T,k1])}" fill="#3e3e48" ${ISK}/>`;
+  g+=`<path d="M${lift(L,6)[0]},${lift(L,6)[1]} Q${(L[0]+Bp[0])/2},${(L[1]+Bp[1])/2+3} ${lift(Bp,2)[0]},${lift(Bp,2)[1]} L${k2[0]},${k2[1]} L${k1[0]},${k1[1]}Z" fill="#33333c" ${ISK}/>`;
+  g+=`<path d="M${lift(Bp,2)[0]},${lift(Bp,2)[1]} Q${(Bp[0]+R[0])/2},${(Bp[1]+R[1])/2+3} ${lift(R,6)[0]},${lift(R,6)[1]} L${k2[0]},${k2[1]}Z" fill="#26262e" ${ISK}/>`;
+  for(let i=1;i<9;i++){const t=i/9,a=[L[0]+(Bp[0]-L[0])*t,L[1]+(Bp[1]-L[1])*t+Math.sin(t*Math.PI)*3-4],b=[k1[0]+(k2[0]-k1[0])*t,k1[1]+(k2[1]-k1[1])*t];g+=`<path d="M${a[0].toFixed(1)},${a[1].toFixed(1)} L${b[0].toFixed(1)},${b[1].toFixed(1)}" stroke="#55555f" stroke-width=".9"/>`;}
+  g+=`<path d="M${k1[0]},${k1[1]} L${k2[0]},${k2[1]}" stroke="#1e1e24" stroke-width="3.4" stroke-linecap="round"/><path d="M${k1[0]},${k1[1]} q-3,-1 -4,-5 M${k2[0]},${k2[1]} q3,-1 4,-5" stroke="#1e1e24" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  g+=`<path d="M${L[0]},${L[1]-6} q-6,-2 -7,-9 M${R[0]},${R[1]-6} q6,-2 7,-9" stroke="#1e1e24" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  return g;}
+function grandYangban(cx,cy){let g=shadowE(cx,cy,80,30)+lotPad(cx,cy,2.94,'#cbb995','#8a6a44');
+  const s=1.44,Tp=ip(cx,cy,-s,-s),Rp=ip(cx,cy,s,-s),Bp=ip(cx,cy,s,s),Lp=ip(cx,cy,-s,s);
+  // courtyard sand + stepping stones
+  g+=isoDiamond(...ip(cx,cy,.15,.45),.6,.5,'#e6d8b4');
+  g+=giwaWall(Lp,Tp,12)+giwaWall(Tp,Rp,12);
+  // 장독대
+  for(const [u,v,r] of[[-1.05,.35,4.5],[-.88,.5,5.5],[-1.15,.62,4],[-.98,.75,5]]){const [x,y]=ip(cx,cy,u,v);g+=`<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r*.45}" fill="#3a2418"/><path d="M${x-r},${y} q0,-${r*1.5} ${r},-${r*1.5} q${r},0 ${r},${r*1.5}Z" fill="#6a3e24" ${ISK}/><ellipse cx="${x}" cy="${y-r*1.5}" rx="${r*.6}" ry="${r*.25}" fill="#4a2a18" ${ISK}/><path d="M${x-r*.6},${y-r*1.1} q${r*.3},-${r*.3} ${r*.5},-${r*.3}" stroke="#a87a54" stroke-width=".8" fill="none"/>`;}
+  // 안채 (main hall)
+  g+=hanokHall(...ip(cx,cy,-.3,-.62),.75,.36,24,24);
+  // 사랑채 (side hall)
+  g+=hanokHall(...ip(cx,cy,.78,.18),.3,.55,20,19,5);
+  // pine & lanterns
+  const [tx,ty]=ip(cx,cy,-1.15,-.05);g+=miniPine(tx,ty,1.2);
+  for(const [u,v] of[[-.25,.45],[.55,1.0]]){const [x,y]=ip(cx,cy,u,v);g+=`<rect x="${x-2.4}" y="${y-12}" width="4.8" height="12" fill="#a8a29a" ${ISK}/><rect x="${x-4}" y="${y-19}" width="8" height="7" fill="#fff3b0" ${ISK}><animate attributeName="fill" values="#fff3b0;#ffe08a;#fff3b0" dur="2s" repeatCount="indefinite"/></rect><path d="M${x-6},${y-19} L${x},${y-24} L${x+6},${y-19}Z" fill="#3a3a44" ${ISK}/>`;}
+  // front walls with 솟을대문 gate on left-front wall
+  const gm=[Lp[0]+(Bp[0]-Lp[0])*.5,Lp[1]+(Bp[1]-Lp[1])*.5],ga=[Lp[0]+(Bp[0]-Lp[0])*.38,Lp[1]+(Bp[1]-Lp[1])*.38],gb=[Lp[0]+(Bp[0]-Lp[0])*.62,Lp[1]+(Bp[1]-Lp[1])*.62];
+  g+=giwaWall(Lp,ga,12)+giwaWall(gb,Bp,12)+giwaWall(Bp,Rp,12);
+  g+=`<polygon points="${PT([ga,gb,up(gb,22),up(ga,22)])}" fill="#5b3a22" ${ISK}/><polygon points="${PT([[gm[0]-1,gm[1]-.5],gb,up(gb,20),[gm[0]-1,gm[1]-20.5]])}" fill="#7a4a2a" ${ISK}/><circle cx="${gm[0]-4}" cy="${gm[1]-10}" r="1.2" fill="#f2c14e"/><circle cx="${gm[0]+3}" cy="${gm[1]-8.5}" r="1.2" fill="#f2c14e"/>`;
+  for(const p of[ga,gb])g+=`<rect x="${p[0]-2.4}" y="${p[1]-24}" width="4.8" height="24" fill="#6a4a2c" ${ISK}/>`;
+  const r1=up(ga,24),r2=up(gb,24);g+=`<path d="M${r1[0]-10},${r1[1]+2} Q${(r1[0]+r2[0])/2},${(r1[1]+r2[1])/2+4} ${r2[0]+10},${r2[1]+2} L${r2[0]+4},${r2[1]-10} L${r1[0]-2},${r1[1]-12}Z" fill="#33333c" ${ISK}/><path d="M${r1[0]-2},${r1[1]-12} L${r2[0]+4},${r2[1]-10}" stroke="#1e1e24" stroke-width="2.6" stroke-linecap="round"/>`;
+  g+=`<rect x="${gm[0]-6}" y="${gm[1]-30}" width="12" height="5" fill="#2b211c" transform="skewY(26.57)" transform-origin="${gm[0]} ${gm[1]-28}"/>`;
+  return g;}
+
+function yiStatue(x,y){const bz='#5d7266',bl='#86a090',bd='#3c4c44';let g=rBox(x,y,.17,.17,8,'#a8a29a').svg+rBox(x,y-8,.12,.12,26,'#d6d0c4').svg;
+  const t=y-8-26-ISO.hh*.24;g+=`<rect x="${x-5}" y="${t-6}" width="10" height="4" fill="#2b211c" opacity=".5" transform="skewY(26.57)" transform-origin="${x} ${t}"/>`;
+  const f=t+4;g+=`<g><path d="M${x-8},${f} L${x-6},${f-16} L${x+6},${f-16} L${x+8},${f}Z" fill="${bz}" ${ISK}/><path d="M${x-1},${f} L${x},${f-14}" stroke="${bd}" stroke-width="1"/>
+   <path d="M${x-7},${f-15} L${x-8},${f-29} Q${x},${f-33} ${x+8},${f-29} L${x+7},${f-15}Z" fill="${bz}" ${ISK}/>
+   ${[18,21,24,27].map(d=>`<path d="M${x-7},${f-d} H${x+7}" stroke="${bd}" stroke-width=".7"/>`).join('')}
+   <path d="M${x-8},${f-29} q-3,6 -1,12 M${x+8},${f-29} q3,6 1,12" stroke="${bz}" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+   <path d="M${x},${f-46} V${f-9}" stroke="#c9d1d5" stroke-width="2.2"/><path d="M${x},${f-46} V${f-9}" stroke="${bd}" stroke-width=".6"/><rect x="${x-4}" y="${f-24}" width="8" height="2.4" fill="${bd}"/><rect x="${x-2.4}" y="${f-22}" width="4.8" height="5" rx="1.6" fill="${bl}" ${ISK}/>
+   <circle cx="${x}" cy="${f-34}" r="4.6" fill="${bz}" ${ISK}/><path d="M${x-5.6},${f-35} Q${x},${f-43} ${x+5.6},${f-35}Z" fill="${bd}" ${ISK}/><path d="M${x},${f-41} V${f-47}" stroke="${bd}" stroke-width="1.6"/><circle cx="${x}" cy="${f-47.5}" r="1.2" fill="${bl}"/>
+   <path d="M${x-7},${f-35} H${x+7}" stroke="${bd}" stroke-width="1.6"/><path d="M${x-1.6},${f-32} q1.6,1.6 3.2,0" stroke="${bd}" stroke-width=".7" fill="none"/>
+   <path d="M${x-6},${f-28} L${x-4},${f-18}" stroke="${bl}" stroke-width="1.2" opacity=".7"/></g>`;
+  g+=`<path d="M${x-3},${f-44} l1.4,-3 l1.4,3Z" fill="#fff6c8" opacity="0"><animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite"/></path>`;
+  return g;}
+function turtleShip(x,y){let g=`<g><animateTransform attributeName="transform" type="rotate" values="-2 ${x} ${y};2 ${x} ${y};-2 ${x} ${y}" dur="3.4s" repeatCount="indefinite"/>`;
+  g+=`<path d="M${x-22},${y-4} Q${x-20},${y+5} ${x-4},${y+8} L${x+16},${y+4} Q${x+24},${y} ${x+24},${y-6} Z" fill="#7a4a24" ${ISK}/>`;
+  for(let i=0;i<6;i++)g+=`<path d="M${x-14+i*6},${y+5} l-3,8" stroke="#5a3a1a" stroke-width="1.4"><animateTransform attributeName="transform" type="rotate" values="-10 ${x-14+i*6} ${y+5};14 ${x-14+i*6} ${y+5};-10 ${x-14+i*6} ${y+5}" dur="1.4s" repeatCount="indefinite"/></path>`;
+  g+=`<path d="M${x-20},${y-4} Q${x+2},${y-22} ${x+22},${y-6} Z" fill="#4a6a5a" ${ISK}/>`;
+  for(let r=0;r<3;r++)for(let i=0;i<6-r;i++){const px=x-14+i*6.2+r*3,py=y-7-r*4.5-Math.sin((i+.5)/(6-r)*Math.PI)*3;g+=`<path d="M${px.toFixed(1)},${py.toFixed(1)} l1,-2.6 l1,2.6Z" fill="#c9d1d5"/>`;}
+  g+=`<path d="M${x-24},${y-5} q-4,-6 -1,-12 q4,0 5,4 q2,4 -1,8Z" fill="#c9a03a" ${ISK}/><circle cx="${x-24}" cy="${y-13}" r="1" fill="#2b211c"/><path d="M${x-27},${y-10} q-3,1 -5,-1" stroke="#e0533a" stroke-width="1.4" fill="none"><animate attributeName="opacity" values="0;1;0" dur="1.6s" repeatCount="indefinite"/></path>`;
+  g+=`<path d="M${x+4},${y-15} V${y-28}" stroke="#5a3a1a" stroke-width="1.6"/><path d="M${x+4},${y-28} h10 v8 h-10Z" fill="#c43a2a" ${ISK}><animate attributeName="d" values="M${x+4},${y-28} h10 v8 h-10Z;M${x+4},${y-28} q5,2 10,0 v8 q-5,2 -10,0Z;M${x+4},${y-28} h10 v8 h-10Z" dur="1.2s" repeatCount="indefinite"/></path>`;
+  return g+`</g>`;}
+function yiMuseum(cx,cy){let g=shadowE(cx,cy,80,30)+lotPad(cx,cy,2.94,'#d9d3c6','#8f8a80');
+  // plaza tiles
+  for(let i=-4;i<=4;i++){const a=ip(cx,cy,-1.46,i*.33),b=ip(cx,cy,1.46,i*.33),c=ip(cx,cy,i*.33,-1.46),d=ip(cx,cy,i*.33,1.46);g+=`<path d="M${a[0]},${a[1]} L${b[0]},${b[1]} M${c[0]},${c[1]} L${d[0]},${d[1]}" stroke="#c4bdae" stroke-width=".8"/>`;}
+  const [bx,by]=ip(cx,cy,-.32,-.32);
+  // stylobate steps
+  g+=rBox(bx,by,1.1,1.1,4,'#cfc8ba').svg+rBox(bx,by-4,1.02,1.02,4,'#ddd6c8').svg+rBox(bx,by-8,.94,.94,4,'#e9e3d6').svg;
+  // inner hall wall
+  const H=40,W=rBox(bx,by-12,.68,.68,H,'#efe6d2');g+=W.svg;
+  g+=rFace(W,'l',.36,.64,0,24,'#6b4a26',ISK)+rFace(W,'l',.495,.505,0,24,'#3a2814')+rFace(W,'l',.36,.64,22,24,'#c9a03a');
+  for(const u of[.15,.85])g+=rFace(W,'l',u-.06,u+.06,8,22,'#4a3a2a',ISK);
+  g+=rFace(W,'r',.36,.64,4,22,'#4a3a2a',ISK);
+  g+=rFace(W,'l',0,1,0,H,'rgba(0,0,0,.12)')+rFace(W,'r',0,1,0,H,'rgba(0,0,0,.18)');
+  // colonnade along the two front edges
+  const P=rBox(bx,by-12,.88,.88,0,'#000'),col=(p)=>{const [x,y]=p;return `<rect x="${x-4.6}" y="${y-2}" width="9.2" height="3" fill="#cfc8ba" ${ISK}/><rect x="${x-3.4}" y="${y-H+3}" width="6.8" height="${H-5}" fill="#f6f1e6" ${ISK}/><rect x="${x-3.4}" y="${y-H+3}" width="2.4" height="${H-5}" fill="#fffdf8"/><rect x="${x+1.2}" y="${y-H+3}" width="2.2" height="${H-5}" fill="#d8cfbe"/><path d="M${x-1},${y-H+4} V${y-2} M${x+.8},${y-H+4} V${y-2}" stroke="#d8cfbe" stroke-width=".6"/><rect x="${x-4.8}" y="${y-H}" width="9.6" height="3.4" fill="#e9e3d6" ${ISK}/>`;};
+  const pts=[];for(let i=0;i<=5;i++){const t=i/5;pts.push([P.L[0]+(P.B[0]-P.L[0])*t,P.L[1]+(P.B[1]-P.L[1])*t]);}for(let i=1;i<=5;i++){const t=i/5;pts.push([P.B[0]+(P.R[0]-P.B[0])*t,P.B[1]+(P.R[1]-P.B[1])*t]);}
+  pts.sort((a,b)=>a[1]-b[1]);g+=pts.map(col).join('');
+  // entablature + frieze + plaques
+  const E=rBox(bx,by-12-H,.94,.94,9,'#ece5d6');g+=E.svg+rFace(E,'l',0,1,0,1.4,'#c9a03a')+rFace(E,'r',0,1,0,1.4,'#c9a03a');
+  g+=rFace(E,'l',.28,.72,2,8,'#20283a',ISK)+rFace(E,'r',.3,.7,2,8,'#20283a',ISK);
+  const pl=(face,txt)=>{const A=face==='l'?E.L:E.B,Z=face==='l'?E.B:E.R,m=[A[0]+(Z[0]-A[0])*.5,A[1]+(Z[1]-A[1])*.5-3];return `<text x="${m[0]}" y="${m[1]}" text-anchor="middle" font-size="5.6" font-weight="800" fill="#f2c14e" font-family="serif" transform="matrix(1,${face==='l'?.5:-.5},0,1,0,${face==='l'?-m[0]*.5:m[0]*.5})">${txt}</text>`;};
+  g+=pl('l','忠武公')+pl('r','유물관');
+  // korean tiled roof (low hipped) over the hall
+  g+=isoRoof(bx,by-12-H-9,1.88,0,18,'#3e4450',1.06)+(()=>{const f=foot(bx,by-12-H-9,1.88*1.06),L=f.L,R=f.R,B=f.B;return `<path d="M${L[0]},${L[1]} q-7,-2 -8,-9 M${R[0]},${R[1]} q7,-2 8,-9" stroke="#262a33" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;})();
+  const top=[bx,by-12-H-9-18];g+=`<path d="M${top[0]-12},${top[1]+5} L${top[0]+12},${top[1]+5}" stroke="#262a33" stroke-width="3" stroke-linecap="round"/>`;
+  // 수(帥)자기 banner
+  const [fx,fy]=ip(cx,cy,-1.3,.95);g+=`<path d="M${fx},${fy} V${fy-74}" stroke="#4a3a2a" stroke-width="2"/><circle cx="${fx}" cy="${fy-75}" r="2" fill="#c9a03a"/><path d="M${fx},${fy-72} h22 v26 h-22Z" fill="#f2ead2" ${ISK}><animate attributeName="d" values="M${fx},${fy-72} h22 v26 h-22Z;M${fx},${fy-72} q11,4 22,0 v26 q-11,4 -22,0Z;M${fx},${fy-72} h22 v26 h-22Z" dur="1.6s" repeatCount="indefinite"/></path><text x="${fx+11}" y="${fy-54}" text-anchor="middle" font-size="15" font-weight="900" fill="#1e1e24" font-family="serif">帥</text>`;
+  // turtle ship in a small basin, statue at front
+  const [sx,sy]=ip(cx,cy,1.18,-.3);g+=isoDiamond(sx,sy,.42,.3,'#8f8a80',ISK)+isoDiamond(sx,sy+1,.36,.24,'#3f8fb8')+`<path d="M${sx-12},${sy+2} q4,-2 8,0 t8,0" stroke="#d8f2ff" stroke-width=".9" fill="none"><animateTransform attributeName="transform" type="translate" values="0 0;5 1;0 0" dur="2.4s" repeatCount="indefinite"/></path>`+turtleShip(sx,sy-2);
+  const [qx,qy]=ip(cx,cy,1.2,1.2);g+=yiStatue(qx,qy);
+  return g;}
 function isoItem(id,cx,cy){let g='';
   switch(id){
   case 'house_s':{g+=shadowE(cx,cy,26,11);const b=isoBox(cx,cy,.62,26,'#efe2c6');g+=b.svg+facePoly(b,'r',.3,.62,0,15,'#8a5a3a',ISK)+facePoly(b,'l',.25,.6,9,18,'#9cd0ea',ISK)+facePoly(b,'r',.72,.92,10,18,'#9cd0ea',ISK);
@@ -2259,10 +2446,10 @@ function isoItem(id,cx,cy){let g='';
   case 'house_b':{g+=shadowE(cx,cy,26,11);const b=isoBox(cx,cy,.6,48,'#d6dde2');g+=b.svg;
     for(const v of[8,30])for(const [u0,u1] of [[.15,.4],[.6,.85]]){g+=facePoly(b,'l',u0,u1,v,v+10,'#9cd0ea',ISK);if(v>10||u0>.5)g+=facePoly(b,'r',u0,u1,v,v+10,'#9cd0ea',ISK);}
     g+=facePoly(b,'r',.15,.42,0,17,'#7a5a3c',ISK)+facePoly(b,'l',0,1,24,26,'#b8c2c8')+facePoly(b,'r',0,1,24,26,'#8a969c')+isoRoof(cx,cy,.6,48,16,'#3a5a9a',1.12);break;}
-  case 'house_d':{g+=shadowE(cx,cy,30,12);const b=isoBox(cx,cy,.7,30,'#f3f1ec');g+=b.svg+facePoly(b,'l',.1,.48,5,26,'#9cd0ea',ISK)+facePoly(b,'l',.29,.31,5,26,'#4a4f55')+facePoly(b,'r',.12,.38,0,20,'#a0703c',ISK)+facePoly(b,'r',.5,.88,12,24,'#9cd0ea',ISK)+facePoly(b,'l',.6,.92,0,10,'#6a6e74',ISK);
+  case 'house_d':if(!NOGRAND){g+=grandVilla(cx,cy);break;}{g+=shadowE(cx,cy,30,12);const b=isoBox(cx,cy,.7,30,'#f3f1ec');g+=b.svg+facePoly(b,'l',.1,.48,5,26,'#9cd0ea',ISK)+facePoly(b,'l',.29,.31,5,26,'#4a4f55')+facePoly(b,'r',.12,.38,0,20,'#a0703c',ISK)+facePoly(b,'r',.5,.88,12,24,'#9cd0ea',ISK)+facePoly(b,'l',.6,.92,0,10,'#6a6e74',ISK);
     g+=isoBox(cx,cy-30,.78,3,'#4a4f55').svg;const u=isoBox(cx-5,cy-35,.42,16,'#e6e2da');g+=u.svg+facePoly(u,'l',.2,.8,4,12,'#9cd0ea',ISK)+facePoly(u,'r',.3,.7,4,12,'#9cd0ea',ISK)+isoBox(cx-5,cy-51,.48,3,'#4a4f55').svg
       +`<rect x="${cx+16}" y="${cy-44}" width="5" height="10" fill="#9a5a3a" ${ISK}/>`;break;}
-  case 'house_y':{g+=shadowE(cx,cy,34,14);g+=isoBox(cx,cy,.9,7,'#a8a29a').svg+isoBox(cx,cy-7,.84,2,'#8f8a80').svg;const b=isoBox(cx,cy-9,.7,24,'#f3e8d0');g+=b.svg;
+  case 'house_y':if(!NOGRAND){g+=grandYangban(cx,cy);break;}{g+=shadowE(cx,cy,34,14);g+=isoBox(cx,cy,.9,7,'#a8a29a').svg+isoBox(cx,cy-7,.84,2,'#8f8a80').svg;const b=isoBox(cx,cy-9,.7,24,'#f3e8d0');g+=b.svg;
     for(const u of[.06,.36,.64,.94]){g+=facePoly(b,'l',u-.03,u+.03,0,24,'#6a4a2c');g+=facePoly(b,'r',u-.03,u+.03,0,24,'#6a4a2c');}
     for(const [u0,u1] of[[.1,.32],[.4,.6],[.68,.9]]){g+=facePoly(b,'r',u0,u1,2,18,'#e8d8b0',ISK);g+=facePoly(b,'r',u0+.1,u0+.12,2,18,'#8a6a44');}
     g+=facePoly(b,'l',.1,.9,14,19,'#6a4a2c')+facePoly(b,'l',.12,.88,2,13,'#c9a67a',ISK);
@@ -2309,7 +2496,7 @@ function isoItem(id,cx,cy){let g='';
       +`<g><animateTransform attributeName="transform" type="rotate" values="0 ${cx} ${tY+20};360 ${cx} ${tY+20}" dur="3s" repeatCount="indefinite"/><circle cx="${cx+11}" cy="${tY+20}" r="1.6" fill="#ffd56a"/><circle cx="${cx-11}" cy="${tY+20}" r="1.6" fill="#ffd56a"/></g>`
       +facePoly(b,'r',.2,.8,4,8,'#f2c14e')+facePoly(b,'l',.25,.75,4,8,'#f2c14e')
       +[0,1,2].map(i=>`<path d="M0,-3 L.8,-.8 L3,0 L.8,.8 L0,3 L-.8,.8 L-3,0 L-.8,-.8Z" fill="#fff6c8" transform="translate(${cx+[-12,12,4][i]},${cy-[30,22,44][i]})"><animate attributeName="opacity" values="0;1;0" dur="1.8s" begin="${i*.6}s" repeatCount="indefinite"/></path>`).join('');break;}
-  case 'museum':{g+=shadowE(cx,cy,30,12);g+=isoBox(cx,cy,.82,4,'#bdb6aa').svg;const b=isoBox(cx,cy-4,.7,24,'#f1e8d4');g+=b.svg;
+  case 'museum':if(!NOGRAND){g+=yiMuseum(cx,cy);break;}{g+=shadowE(cx,cy,30,12);g+=isoBox(cx,cy,.82,4,'#bdb6aa').svg;const b=isoBox(cx,cy-4,.7,24,'#f1e8d4');g+=b.svg;
     for(const u of[.12,.37,.62,.87]){g+=facePoly(b,'r',u-.05,u+.05,0,24,'#fffaf0',ISK);g+=facePoly(b,'l',u-.05,u+.05,0,24,'#fffaf0',ISK);}
     g+=isoRoof(cx,cy-4,.7,24,12,'#b8a46a',1.1)+facePoly(b,'l',.3,.7,26,30,'#b3261e')+`<path d="M${cx},${cy-40} V${cy-58}" stroke="#3a3a40" stroke-width="1.4"/><path d="M${cx},${cy-58} q5,-2 10,0 q5,2 10,0 v7 q-5,2 -10,0 q-5,-2 -10,0Z" fill="#b3261e" ${ISK}><animate attributeName="d" values="M${cx},${cy-58} q5,-2 10,0 q5,2 10,0 v7 q-5,2 -10,0 q-5,-2 -10,0Z;M${cx},${cy-58} q5,2 10,0 q5,-2 10,0 v7 q-5,-2 -10,0 q-5,2 -10,0Z;M${cx},${cy-58} q5,-2 10,0 q5,2 10,0 v7 q-5,2 -10,0 q-5,-2 -10,0Z" dur="1.2s" repeatCount="indefinite"/></path>`;break;}}
   return g;}
@@ -2337,7 +2524,7 @@ function landSVG(){const L0=landOf(),n=landSize(),O=landOcc();let tiles=[],items
     if(nb>1){cx=ISO.ox+(ax-ay)*ISO.hw;cy=ISO.oy+(ax+ay+nb)*ISO.hh;}
     const pk=landPick===x+','+y,f=foot(cx,cy,nb),mr=!!RT[x+','+y];ISO_MIR=mr?1:0;let art=isoItem(it,cx,cy);ISO_MIR=0;if(nb>1)art=`<g transform="translate(${cx},${cy}) scale(${BIGS[it]||1.8}) translate(${-cx},${-cy})">${art}</g>`;return `<g class="ii${pk?' pk':''}" data-xy="${x},${y}" data-d="${dd}">${pk?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<g transform="${pk?'translate(0,-5) ':''}${mr?`translate(${2*cx},0) scale(-1,1)`:''}">${art}</g></g>`;}).join('');
   return `<svg class="isoland" viewBox="0 0 ${VW} ${VH}" role="img" aria-label="내 땅 지도">${tiles.map(t=>t[1]).join('')}<g id="lItems">${its}</g></svg>`;}
-function isoIcon(id){NOBUB=1;const pet=id==='dog'||id==='cat'?`<g transform="translate(${id==='dog'?10:4},10) scale(.8)">${petPose(id,'sit')}</g>`:'';NOBUB=0;return `<svg viewBox="-34 -58 68 80" aria-hidden="true"><polygon points="${PT([[-28,0],[0,-14],[28,0],[0,14]])}" fill="#74b052" ${ISK}/>${isoItem(id,0,0)}${pet}</svg>`;}
+function isoIcon(id){NOBUB=1;const pet=id==='dog'||id==='cat'?`<g transform="translate(${id==='dog'?10:4},10) scale(.8)">${petPose(id,'sit')}</g>`:'';NOBUB=0;return GRAND[id]?`<svg viewBox="-84 -118 168 170" aria-hidden="true">${isoItem(id,0,0)}</svg>`:`<svg viewBox="-34 -58 68 80" aria-hidden="true"><polygon points="${PT([[-28,0],[0,-14],[28,0],[0,14]])}" fill="#74b052" ${ISK}/>${isoItem(id,0,0)}${pet}</svg>`;}
 
 let landSel=null,landDel=false,landPick=null;
 const landRot=()=>{const L0=landOf();L0.rot=L0.rot||{};return L0.rot;};
@@ -2352,13 +2539,22 @@ function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
     :hb?`물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요. 집이 있으면 앱을 닫아도 ${hb}시간 더 팝니다.`:'아래에서 물건을 고르고 빈 땅을 눌러 놓으세요. 놓인 물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.';
   const B=(id,t,c='ghost')=>`<button class="${c} sm" type="button" id="${id}">${t}</button>`;
   $('#landView').innerHTML=`<div class="lhead"><div><div class="tk">내 땅 · ${n}×${n}칸</div><div class="tn">양구 국토정중앙 옆 부지</div></div>
-     <div class="lbtns">${nx?`<button class="ghost sm" type="button" id="landBuy" ${S.money>=nx?'':'disabled'}>땅 넓히기 ${won(nx)}</button>`:''}<button class="ghost sm" type="button" id="landRL" aria-label="왼쪽으로 돌리기">⟲</button><button class="ghost sm" type="button" id="landRR" aria-label="오른쪽으로 돌리기">⟳</button><button class="ghost sm ${landDel?'on':''}" type="button" id="landDel">${landDel?'철거 중':'철거'}</button></div></div>
-   <div class="lgrid-wrap">${landSVG()}</div>
+     <div class="lbtns">${nx?`<button class="ghost sm" type="button" id="landBuy" ${S.money>=nx?'':'disabled'}>땅 넓히기 ${won(nx)}</button>`:''}<button class="ghost sm ${landDel?'on':''}" type="button" id="landDel">${landDel?'철거 중':'철거'}</button></div></div>
+   <div class="lgrid-wrap" id="lgWrap">${landSVG()}<span class="lrot">⟲ 좌우로 끌어서 돌리기 ⟳</span></div>
    ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
      :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${pk.id==='museum'?B('lpGal','전시관 들어가기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
    <p class="sub" style="margin:0">${msg}</p>
    <div class="lpal">${LITEM.map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${isoIcon(i.id)}<span>${i.n}</span><em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;}
 function removeTile(k){const L0=landOf(),it=LITEM.find(i=>i.id===L0.tiles[k]);if(!it)return;S.money+=Math.floor(it.p/2);delete L0.tiles[k];delete landRot()[k];save();toast(it.n+' 철거 · '+won(it.p/2)+' 환급');}
+let lgD=null,lgSup=false;
+function lgTurn(d){const L1=landOf();L1.view=((L1.view||0)+(d>0?1:3))%4;save();renderLand();}
+$('#landView').addEventListener('pointerdown',e=>{const w=e.target.closest('#lgWrap');if(!w||e.button>0)return;lgD={x:e.clientX,y:e.clientY,on:false,id:e.pointerId};});
+$('#landView').addEventListener('pointermove',e=>{if(!lgD||e.pointerId!==lgD.id)return;const dx=e.clientX-lgD.x;if(!lgD.on){if(Math.abs(dx)<10||Math.abs(dx)<Math.abs(e.clientY-lgD.y))return;lgD.on=true;try{$('#lgWrap').setPointerCapture(e.pointerId);}catch(_){}}
+  const sv=$('#lgWrap svg');if(Math.abs(dx)>80){lgTurn(dx);lgD.x=e.clientX;const s2=$('#lgWrap svg');if(s2){s2.style.transition='none';s2.style.transform=`rotate(${dx>0?-22:22}deg) scale(.96)`;requestAnimationFrame(()=>{s2.style.transition='transform .25s';s2.style.transform='';});}return;}
+  if(sv){sv.style.transition='none';sv.style.transform=`rotate(${dx*.28}deg) scale(${1-Math.abs(dx)/1600})`;}e.preventDefault();});
+function lgEnd(e){if(!lgD)return;const on=lgD.on;lgD=null;const sv=$('#lgWrap svg');if(sv){sv.style.transition='transform .25s';sv.style.transform='';}if(on){lgSup=true;setTimeout(()=>{lgSup=false;},60);}}
+$('#landView').addEventListener('pointerup',lgEnd);$('#landView').addEventListener('pointercancel',lgEnd);
+$('#landView').addEventListener('click',e=>{if(lgSup){lgSup=false;e.stopImmediatePropagation();}},true);
 $('#landView').addEventListener('click',e=>{const L0=landOf();
   if(e.target.closest('#landBuy')){const c=LAND_COST[L0.lv];if(S.money<c)return;S.money-=c;L0.lv++;save();toast('땅을 넓혔어요 · '+landSize()+'×'+landSize());renderLand();return;}
   if(e.target.closest('#landRL')||e.target.closest('#landRR')){const L1=landOf();L1.view=((L1.view||0)+(e.target.closest('#landRR')?1:3))%4;save();renderLand();toast('땅을 '+[0,90,180,270][L1.view]+'° 돌려 봐요');return;}
@@ -2375,14 +2571,15 @@ $('#landView').addEventListener('click',e=>{const L0=landOf();
   if(landDel){if(cur){removeTile(k);renderLand();}return;}
   if(cur&&!(landPick&&landPick!=='me'&&k===landPick&&k0!==landPick)){landSel=null;landPick=landPick===k?null:k;renderLand();return;}
   if(landPick==='me'){const m=landMe();m.x=tx;m.y=ty;landPick=null;save();renderLand();return;}
-  if(landPick){const id=L0.tiles[landPick];if(!landFits(id,tx,ty,landPick)){toast(bsz(id)>1?'2×2칸이 비어 있는 곳을 골라 주세요':'빈 칸을 골라 주세요');return;}const R=landRot();delete L0.tiles[landPick];L0.tiles[k0]=id;if(R[landPick]){R[k0]=1;delete R[landPick];}landPick=null;landMe();save();renderLand();return;}
-  if(!landSel)return;const it=LITEM.find(i=>i.id===landSel);if(!landFits(it.id,tx,ty)){toast(bsz(it.id)>1?it.n+'은(는) 2×2칸이 필요해요. 밝은 칸(왼쪽 위 모서리)을 골라 주세요':'빈 칸을 골라 주세요');return;}
+  if(landPick){const id=L0.tiles[landPick];if(!landFits(id,tx,ty,landPick)){toast(bsz(id)>1?bsz(id)+'×'+bsz(id)+'칸이 비어 있는 곳을 골라 주세요':'빈 칸을 골라 주세요');return;}const R=landRot();delete L0.tiles[landPick];L0.tiles[k0]=id;if(R[landPick]){R[k0]=1;delete R[landPick];}landPick=null;landMe();save();renderLand();return;}
+  if(!landSel)return;const it=LITEM.find(i=>i.id===landSel);if(!landFits(it.id,tx,ty)){toast(bsz(it.id)>1?it.n+'은(는) '+bsz(it.id)+'×'+bsz(it.id)+'칸이 필요해요. 밝은 칸(왼쪽 위 모서리)을 골라 주세요':'빈 칸을 골라 주세요');return;}
   if(it.house&&houseTile()){toast('집은 하나만 지을 수 있어요. 기존 집을 옮기거나 철거해 주세요');return;}
   if(S.money<it.p){toast('자금이 부족해요');return;}
   S.money-=it.p;L0.tiles[k0]=it.id;landMe();save();renderLand();});
 
 // ---------------- interior (grid placement) ----------------
 const FDEF={rug:{w:3,d:2,flat:1},bed:{w:2,d:3},sofa:{w:2,d:1},desk:{w:2,d:1},tv:{w:2,d:1},shelf:{w:1,d:1},plant:{w:1,d:1},case:{w:1,d:2},frame:{wall:1},tank:{w:2,d:1},dog:{w:1,d:1},cat:{w:1,d:1}};
+const bid=id=>String(id).split('#')[0],FD=id=>FDEF[bid(id)],FMAX=id=>id==='frame'?1:2,fCopies=id=>[id,id+'#2'].slice(0,FMAX(id));
 const FDEFPOS={rug:[2,2],bed:[0,3],sofa:[2,4],desk:[4,0],tv:[2,0],shelf:[5,2],plant:[1,0],case:[0,0],frame:[3.5,0]};
 let roomPick=null,roomFloor=0;
 const ROOMN={house_s:5,house_h:6,house_b:6,house_d:7,house_y:10},RN=()=>ROOMN[houseTile()?.[1]]||6;
@@ -2395,14 +2592,14 @@ const flMap=()=>{const L0=landOf();L0.fl=L0.fl||{};return L0.fl;},flOf=id=>id===
 function setFl(id,v){const m=flMap();if(v)m[id]=v;else delete m[id];}
 const roomPos=()=>{const L0=landOf();L0.pos=L0.pos||{};return L0.pos;};
 const rotOf=id=>(roomPos()[id]||[])[2]||0;
-const dims=(id,r)=>{const D=FDEF[id];return r%2?[D.d,D.w]:[D.w,D.d];};
+const dims=(id,r)=>{const D=FD(id);return r%2?[D.d,D.w]:[D.w,D.d];};
 const meR=()=>{const L0=landOf();if(!L0.me2)L0.me2={x:3,y:5,f:0,fl:0};if(!twoF())L0.me2.fl=0;return L0.me2;};
 function occ(except){const o={},pos=roomPos();if(twoF()&&except!=='stair')for(const k of stKeys())o[k]='stairs';
-  for(const id in pos){if(id===except||!pos[id]||!FDEF[id]||FDEF[id].flat||FDEF[id].wall||flOf(id)!==roomFloor)continue;const [x,y,r]=pos[id],[w,d]=dims(id,r||0);for(let i=0;i<w;i++)for(let j=0;j<d;j++)o[(x+i)+','+(y+j)]=id;}return o;}
+  for(const id in pos){if(id===except||!pos[id]||!FD(id)||FD(id).flat||FD(id).wall||flOf(id)!==roomFloor)continue;const [x,y,r]=pos[id],[w,d]=dims(id,r||0);for(let i=0;i<w;i++)for(let j=0;j<d;j++)o[(x+i)+','+(y+j)]=id;}return o;}
 function fits(id,x,y,r=rotOf(id)){const [w,d]=dims(id,r);if(x<0||y<0||x+w>RN()||y+d>RN())return false;
-  const o=FDEF[id].flat?(twoF()?Object.fromEntries(stKeys().map(k=>[k,1])):{}):occ(id);
+  const o=FD(id).flat?(twoF()?Object.fromEntries(stKeys().map(k=>[k,1])):{}):occ(id);
   for(let i=0;i<w;i++)for(let j=0;j<d;j++)if(o[(x+i)+','+(y+j)])return false;return true;}
-function freeSpot(id,r=0){if(FDEF[id].wall)return [3.5,0];const d=FDEFPOS[id];if(d&&fits(id,d[0],d[1],r))return [d[0],d[1],r];
+function freeSpot(id,r=0){if(FD(id).wall)return [3.5,0];const d=FDEFPOS[bid(id)];if(d&&fits(id,d[0],d[1],r))return [d[0],d[1],r];
   for(let y=0;y<RN();y++)for(let x=0;x<RN();x++)if(fits(id,x,y,r))return [x,y,r];return null;}
 function stairFits(x,y,r){const [w,d]=stDims(r);if(x<0||y<0||x+w>RN()||y+d>RN())return false;const ks=stKeys(x,y,r),rf=roomFloor,pos=roomPos();let ok=true;
   for(const fl of [0,1]){roomFloor=fl;const o=occ('stair');if(pos.rug&&flOf('rug')===fl){const [rx,ry,rr]=pos.rug,[rw,rd]=dims('rug',rr||0);for(let i=0;i<rw;i++)for(let j=0;j<rd;j++)o[(rx+i)+','+(ry+j)]=1;}
@@ -2411,24 +2608,24 @@ function nearSpot(id,x0,y0,r){let best=null,bd=1e9;for(let y=0;y<RN();y++)for(le
 function meSpot(){const m=meR(),o=occ();if(!o[m.x+','+m.y]&&m.x<RN()&&m.y<RN())return m;for(let y=RN()-1;y>=0;y--)for(let x=RN()-1;x>=0;x--)if(!o[x+','+y]){m.x=x;m.y=y;return m;}return m;}
 function ensurePos(){const f=landOf().furn,pos=roomPos();
   if(pos.frame&&pos.frame.length<2)pos.frame=[pos.frame[0],0];if(pos.frame)pos.frame[0]=Math.min(pos.frame[0],FRMAX(pos.frame[1]));
-  if(!twoF()){roomFloor=0;for(const id in flMap()){setFl(id,0);if(pos[id]&&!FDEF[id].wall)pos[id]=freeSpot(id,rotOf(id));}}
+  if(!twoF()){roomFloor=0;for(const id in flMap()){setFl(id,0);if(pos[id]&&!FD(id).wall)pos[id]=freeSpot(id,rotOf(id));}}
   else{const st=stairR();if(!stairFits(st.x,st.y,st.r)){let done=0;for(let y=RN()-1;y>=0&&!done;y--)for(let x=RN()-1;x>=0&&!done;x--)for(const r of[0,1])if(!done&&stairFits(x,y,r)){st.x=x;st.y=y;st.r=r;done=1;}}
-    const rf=roomFloor;for(const id in pos){if(!pos[id]||!FDEF[id]||FDEF[id].wall)continue;roomFloor=flOf(id);if(!fits(id,pos[id][0],pos[id][1]))pos[id]=freeSpot(id,rotOf(id));}roomFloor=rf;}
+    const rf=roomFloor;for(const id in pos){if(!pos[id]||!FD(id)||FD(id).wall)continue;roomFloor=flOf(id);if(!fits(id,pos[id][0],pos[id][1]))pos[id]=freeSpot(id,rotOf(id));}roomFloor=rf;}
   for(const id in f)if(f[id]&&!(id in pos))pos[id]=freeSpot(id);}
 // furniture model in local units: u = width (0..w), v = depth (0..d, v=d is the front), z/h in px
 const FB=(u0,v0,u1,v1,z,h,c,o)=>({b:[u0,v0,u1,v1,z,h],c,o:o||{}});
 const BOOKS=['#c94a2a','#3a5a9a','#e8a93a','#5aa050'];
 function partsOf(id){switch(id){
-  case 'bed':return [FB(.04,.04,1.96,.18,0,28,'#7a5a3c'),FB(.08,.18,1.92,2.86,0,8,'#8a5a3c'),FB(.12,.2,1.88,2.84,8,6,'#f4f2ee'),FB(.42,.32,1.58,.8,14,5,'#ffffff'),FB(.1,1.02,1.9,2.84,14,3,'#5aa0d6'),FB(.04,2.86,1.96,2.98,0,13,'#7a5a3c')];
-  case 'sofa':return [FB(0,.04,2,.32,0,27,'#7d4fb2'),FB(.26,.32,1.74,.95,0,10,'#6b3fa0'),FB(.28,.34,1.72,.92,10,4,'#9a70d0'),FB(0,.32,.26,.96,0,17,'#7d4fb2'),FB(1.74,.32,2,.96,0,17,'#7d4fb2')];
+  case 'bed':return [FB(.04,.04,1.96,.18,0,32,'#7a5a3c'),FB(.2,.17,1.8,.19,12,16,'#9a704a'),FB(.02,.02,1.98,.2,32,3,'#5f4228'),FB(.08,.18,1.92,2.86,0,8,'#8a5a3c'),FB(.12,.2,1.88,2.84,8,6,'#f4f2ee'),FB(.2,.3,.96,.78,14,5,'#ffffff'),FB(1.04,.3,1.8,.78,14,5,'#fffaf0'),FB(.1,1.02,1.9,2.84,14,3,'#5aa0d6'),FB(.1,1.02,1.9,1.24,17,1.4,'#f4f2ee'),FB(.4,1.6,1.6,2.5,17,.6,'#7cbbe6'),FB(.04,2.86,1.96,2.98,0,15,'#7a5a3c'),FB(.02,2.84,1.98,3,15,2,'#5f4228')];
+  case 'sofa':return [FB(.06,.08,.14,.16,0,3,'#3a2a1a'),FB(1.86,.08,1.94,.16,0,3,'#3a2a1a'),FB(0,.04,2,.32,3,25,'#7d4fb2'),FB(.04,.06,.98,.32,20,8,'#8f63c4'),FB(1.02,.06,1.96,.32,20,8,'#8f63c4'),FB(.26,.32,1.74,.95,3,8,'#6b3fa0'),FB(.28,.34,.99,.93,11,5,'#9a70d0'),FB(1.01,.34,1.72,.93,11,5,'#9a70d0'),FB(.36,.34,.72,.46,16,10,'#f2c14e'),FB(1.3,.34,1.64,.46,16,10,'#5ab0c8'),FB(0,.32,.26,.96,3,15,'#7d4fb2'),FB(1.74,.32,2,.96,3,15,'#7d4fb2'),FB(0,.32,.26,.96,18,2,'#9a70d0'),FB(1.74,.32,2,.96,18,2,'#9a70d0')];
   case 'desk':{const L=[];for(const [a,b] of[[.1,.1],[1.8,.1],[.1,.8],[1.8,.8]])L.push(FB(a,b,a+.1,b+.1,0,22,'#6a4a2a'));
-    return L.concat([FB(.04,.06,1.96,.94,22,3,'#a0703c'),FB(.74,.22,.86,.3,25,6,'#3a3a40'),FB(.42,.16,1.18,.24,31,17,'#1c2226',{f:'#6fc3e0'}),FB(.55,.5,1.25,.74,25,2,'#3a3a40'),FB(1.5,.44,1.64,.58,25,7,'#ece4d4')]);}
-  case 'tv':return [FB(.06,.36,1.94,.96,0,10,'#7a5a3c'),FB(.9,.56,1.1,.66,10,4,'#2a2a2a'),FB(.12,.48,1.88,.58,14,30,'#1c2226',{f:'#1d5a76'}),FB(.3,.7,.7,.9,10,3,'#c94a2a')];
+    return L.concat([FB(.04,.06,1.96,.94,22,3,'#a0703c'),FB(.74,.22,.86,.3,25,6,'#3a3a40'),FB(.42,.16,1.18,.24,31,17,'#1c2226',{f:'#6fc3e0'}),FB(.55,.5,1.25,.74,25,2,'#3a3a40'),FB(1.5,.44,1.64,.58,25,7,'#ece4d4'),FB(1.72,.14,1.9,.32,25,1.6,'#3a3a40'),FB(1.79,.2,1.83,.24,26.6,14,'#3a3a40'),FB(1.68,.12,1.94,.36,40,5,'#f2c14e',{t:'#fff3b0'}),FB(.16,.56,.44,.76,25,1.4,'#f4f2ee'),FB(.06,.12,.12,.9,4,2,'#5a3a1a')]);}
+  case 'tv':return [FB(.06,.36,1.94,.96,0,12,'#7a5a3c'),FB(.1,.94,.96,.97,2,8,'#6a4a2c'),FB(1.04,.94,1.9,.97,2,8,'#6a4a2c'),FB(.9,.56,1.1,.66,12,4,'#2a2a2a'),FB(.12,.48,1.88,.58,16,32,'#1c2226',{f:'#2b7aa0'}),FB(.18,.58,1.82,.6,19,26,'#1c2226',{f:'#4aa8d0'}),FB(.5,.72,1.5,.86,12,3,'#2a2a2a'),FB(.12,.66,.3,.86,12,14,'#2a2a2a'),FB(1.7,.66,1.88,.86,12,14,'#2a2a2a'),FB(.36,.66,.56,.82,12,6,'#c94a2a')];
   case 'shelf':{const L=[FB(.05,.05,.95,.15,0,54,'#8a603a'),FB(.05,.15,.15,.93,0,54,'#a0703c'),FB(.85,.15,.95,.93,0,54,'#a0703c'),FB(.05,.05,.95,.93,54,3,'#a0703c')];
     for(const z of[0,18,36]){L.push(FB(.15,.15,.85,.9,z,2,'#a0703c'));BOOKS.forEach((c,i)=>L.push(FB(.18+i*.16,.24,.3+i*.16,.74,z+2,13-(i%2)*3,c)));}return L;}
   case 'tank':return [FB(.04,.18,1.96,.88,0,18,'#5a4632'),FB(.1,.26,1.9,.8,18,3,'#d8c49a'),{fish:[.2,1.8,.53,23]},{b:[.08,.24,1.92,.82,18,28],glass:1,water:1}];
   case 'dog':case 'cat':return [{pet:id}];
-  case 'plant':return [FB(.28,.28,.72,.72,0,12,'#c97a4a'),{puff:[.5,.5,20]}];
+  case 'plant':return [FB(.26,.26,.74,.74,0,14,'#c97a4a'),FB(.23,.23,.77,.77,14,3,'#b5683a'),FB(.3,.3,.7,.7,17,.6,'#5a3a1a'),{puff:[.5,.5,22]}];
   case 'case':{const L=[FB(.08,.08,.92,1.92,0,10,'#7a5a3c')];RELICS.filter(r=>hasRelic(r.id)).slice(0,3).forEach((r,i)=>L.push({icon:[.5,.42+i*.56,10],r}));
     L.push({b:[.08,.08,.92,1.92,10,30],glass:1},FB(.06,.06,.94,1.94,40,3,'#7a5a3c'));return L;}
   }return [];}
@@ -2464,7 +2661,7 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
   {const d=N-6;g+=wallR(3.4+d,5+d,30,62,'#7a5a3c')+wallR(3.55+d,4.85+d,34,58,'#9ccde6')+wallR(4.17+d,4.23+d,34,58,'#7a5a3c')+wallR(3.55+d,4.85+d,45,47,'#7a5a3c');}
   // clickable floor tiles (+ highlight targets when something is picked)
   const o0=occ();
-  for(let y=0;y<RN();y++)for(let x=0;x<RN();x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&!FDEF[roomPick].wall&&fits(roomPick,x,y);
+  for(let y=0;y<RN();y++)for(let x=0;x<RN();x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&!FD(roomPick).wall&&fits(roomPick,x,y);
     g+=`<polygon class="ft" data-g="${x},${y}" points="${PT([P(x,y),P(x+1,y),P(x+1,y+1),P(x,y+1)])}" fill="${ok?'rgba(154,216,110,.45)':'rgba(0,0,0,0)'}" stroke="${ok?'rgba(255,255,255,.5)':'rgba(0,0,0,.06)'}" stroke-width="1"/>`;}
   // wall frame (left wall along y, or right wall along x)
   if(f.frame&&pos.frame&&flOf('frame')===roomFloor){const [t,wl]=pos.frame,fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],W=wl?wallR:wallL,c=wl?P(t+.9,0,47):P(0,t+.9,47),fs=16*SC;
@@ -2472,10 +2669,10 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
   // collect primitives with world bounding boxes, then depth-sort them all together
   const L=[];
   const add=(bb,svg,cls)=>L.push(Object.assign(bb,{svg,cls}));
-  for(const id in FDEF){if(FDEF[id].wall||!f[id]||!pos[id]||flOf(id)!==roomFloor)continue;const [x,y,r0]=pos[id],r=r0||0,D=FDEF[id],[W,Dd]=dims(id,r),cls=`class="fu" data-fu="${id}"`;
+  for(const id of Object.keys(f)){if(!FD(id)||FD(id).wall||!f[id]||!pos[id]||flOf(id)!==roomFloor)continue;const [x,y,r0]=pos[id],r=r0||0,D=FD(id),[W,Dd]=dims(id,r),cls=`class="fu" data-fu="${id}"`;
     if(roomPick===id)add({x0:x,y0:y,x1:x+W,y1:y+Dd,z0:0,z1:.9,glass:0},poly([P(x,y,.8),P(x+W,y,.8),P(x+W,y+Dd,.8),P(x,y+Dd,.8)],'rgba(255,213,106,.35)','stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"'),cls);
-    if(id==='rug'){add({x0:x,y0:y,x1:x+W,y1:y+Dd,z0:0,z1:.6},poly([P(x+.1,y+.1,.5),P(x+W-.1,y+.1,.5),P(x+W-.1,y+Dd-.1,.5),P(x+.1,y+Dd-.1,.5)],'#c94a5a')+poly([P(x+.35,y+.35,.6),P(x+W-.35,y+.35,.6),P(x+W-.35,y+Dd-.35,.6),P(x+.35,y+Dd-.35,.6)],'#d86a76','stroke="#f2d06a" stroke-width="1.4"'),cls);continue;}
-    for(const p of partsOf(id)){
+    if(bid(id)==='rug'){add({x0:x,y0:y,x1:x+W,y1:y+Dd,z0:0,z1:.6},poly([P(x+.1,y+.1,.5),P(x+W-.1,y+.1,.5),P(x+W-.1,y+Dd-.1,.5),P(x+.1,y+Dd-.1,.5)],'#c94a5a')+poly([P(x+.35,y+.35,.6),P(x+W-.35,y+.35,.6),P(x+W-.35,y+Dd-.35,.6),P(x+.35,y+Dd-.35,.6)],'#d86a76','stroke="#f2d06a" stroke-width="1.4"')+poly([P(x+W/2,y+.55,.7),P(x+W-.6,y+Dd/2,.7),P(x+W/2,y+Dd-.55,.7),P(x+.6,y+Dd/2,.7)],'#f2d06a','stroke-width=".6"')+poly([P(x+W/2,y+.8,.8),P(x+W-.9,y+Dd/2,.8),P(x+W/2,y+Dd-.8,.8),P(x+.9,y+Dd/2,.8)],'#3a5a9a','stroke-width=".4"')+Array.from({length:9},(_,i)=>{const t=.15+i*(W-.3)/8,q1=P(x+t,y+Dd-.1,.5),q2=P(x+t,y+Dd+.05,.5);return `<path d="M${q1[0]},${q1[1]} L${q2[0]},${q2[1]}" stroke="#f4ece0" stroke-width="1"/>`;}).join(''),cls);continue;}
+    for(const p of partsOf(bid(id))){
       if(p.b){const [u0,v0,u1,v1,z0,hh]=p.b,a=rotP(u0,v0,D.w,D.d,r),b=rotP(u1,v1,D.w,D.d,r);
         const bb={x0:x+Math.min(a[0],b[0]),x1:x+Math.max(a[0],b[0]),y0:y+Math.min(a[1],b[1]),y1:y+Math.max(a[1],b[1]),z0,z1:z0+hh,glass:p.glass};
         const svg=p.water?wbox(bb.x0,bb.y0,bb.x1,bb.y1,z0,hh,'rgba(70,160,220,.36)','rgba(50,130,190,.42)','rgba(150,215,245,.4)','stroke-opacity=".55"'):p.glass?wbox(bb.x0,bb.y0,bb.x1,bb.y1,z0,hh,'rgba(190,230,245,.28)','rgba(160,210,230,.32)','rgba(220,245,255,.22)','stroke-opacity=".5"')
@@ -2512,7 +2709,7 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
   let out=isoSort(L).map(p=>`<g ${p.cls}>${p.svg}</g>`).join('');
   if(twoF()){const st=stairR(),q=rotP(.5,roomFloor?1:2.45,1,2,st.r),lb=P(st.x+q[0],st.y+q[1],roomFloor?-6:-4);out+=`<text class="stairlb" style="cursor:pointer" x="${lb[0]}" y="${lb[1]}" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" stroke="#000" stroke-width="2.4" paint-order="stroke">${roomFloor?'▼ 1층':'▲ 2층'}</text>`;}
   return `<svg viewBox="0 0 320 240" role="img" aria-label="집 안 ${roomFloor+1}층">${g}${out}</svg>`;}
-function puffs3(p,k=1){return [[-7,0,'#4f9a50'],[7,-1,'#5fb05f'],[0,-8,'#6abf6a']].map(([dx,dy,c])=>`<circle cx="${p[0]+dx*k}" cy="${p[1]+dy*k}" r="${7*k}" fill="${c}" ${ISK}/>`).join('');}
+function puffs3(p,k=1){const L=[[-9,2,-40],[9,1,40],[-5,-8,-20],[5,-9,22],[0,-15,0],[-11,-6,-60],[11,-5,60]];return `<g>${AT('rotate',`-3 ${p[0]} ${p[1]+8*k};3 ${p[0]} ${p[1]+8*k};-3 ${p[0]} ${p[1]+8*k}`,'3.4')}`+L.map(([dx,dy,a],i)=>`<g transform="translate(${p[0]+dx*k},${p[1]+dy*k}) rotate(${a}) scale(${k})"><path d="M0,8 Q-6,0 0,-9 Q6,0 0,8Z" fill="${['#3f8a48','#5fb05f','#4f9a50','#6abf6a'][i%4]}" ${ISK}/><path d="M0,7 V-7" stroke="#2f6b3a" stroke-width=".8"/></g>`).join('')+`<circle cx="${p[0]+4*k}" cy="${p[1]-12*k}" r="${2.2*k}" fill="#ff8aa8" ${ISK}/><circle cx="${p[0]-6*k}" cy="${p[1]-4*k}" r="${1.8*k}" fill="#ffd56a" ${ISK}/></g>`;}
 function openRoom(){roomPick=null;roomFloor=0;renderRoom();$('#room').hidden=false;}
 function renderRoom(){const f=landOf().furn,pos=(ensurePos(),roomPos());$('#roomArt').innerHTML=roomSVG();
   const TF=twoF(),B=(a,t)=>`<button class="ghost sm" type="button" data-rb="${a}">${t}</button>`,mv=TF?B('mv',roomFloor?'1층으로':'2층으로'):'';
@@ -2520,10 +2717,12 @@ function renderRoom(){const f=landOf().furn,pos=(ensurePos(),roomPos());$('#room
   $('#roomFl').innerHTML=TF?[0,1].map(k=>`<button type="button" class="${roomFloor===k?'on':''}" data-fl="${k}">${k+1}층</button>`).join(''):'';
   if(roomPick==='stair')$('#roomBar').innerHTML=`<span><b>계단</b> · 밝은 칸을 누르면 옮겨요 (1층·2층이 함께 움직여요)</span><div>${B('rot','↻ 회전')}${B('go',roomFloor?'1층으로 내려가기':'2층으로 올라가기')}${B('done','완료')}</div>`;
   else if(roomPick==='me')$('#roomBar').innerHTML=`<span><b>내 캐릭터</b> · 밝은 칸을 누르면 그 자리로 가요</span><div>${B('flip','방향 바꾸기')}${mv}${B('done','완료')}</div>`;
-  else if(roomPick){const pk=FURN.find(x=>x.id===roomPick),wall=FDEF[pk.id].wall;
+  else if(roomPick){const pk=FURN.find(x=>x.id===bid(roomPick)),wall=FD(pk.id).wall;
     $('#roomBar').innerHTML=`<span><b>${pk.n}</b> ${wall?'· 화살표로 벽을 따라 옮기고, 회전하면 반대쪽 벽으로 가요':'· 밝은 칸을 누르면 그 자리로 옮겨요'}</span><div>${wall?B('left','◀')+B('right','▶'):''}${B('rot','↻ 회전')}${mv}${B('store','보관')}${B('done','완료')}</div>`;}
   else $('#roomBar').innerHTML=`<span>가구나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.${TF?' 계단도 눌러서 옮기거나 돌릴 수 있고, 위 1층·2층 버튼이나 계단 표시를 눌러 층을 바꿔요.':''}</span>`;
-  $('#roomList').innerHTML=FURN.map(i=>{const own=f[i.id],placed=own&&pos[i.id];return `<button class="lp ${roomPick===i.id?'on':''}" type="button" data-fu="${i.id}"><span>${i.n}</span><em class="${own?'own':S.money>=i.p?'':'no'}">${!own?won(i.p):placed?(TF?(flOf(i.id)+1)+'층 · 옮기기':'배치됨 · 옮기기'):'보관 중 · 배치'}</em></button>`;}).join('');}
+  $('#roomList').innerHTML=FURN.map(i=>{const cs=fCopies(i.id),n=cs.filter(c=>f[c]).length,pl=cs.filter(c=>f[c]&&pos[c]),st=n-pl.length,mx=cs.length;
+    const stat=!n?won(i.p):st?`보관 ${st} · 배치`:(TF?pl.map(c=>(flOf(c)+1)+'층').join('·')+' · 옮기기':`${n}개 · 옮기기`);
+    return `<div class="lpw"><button class="lp ${bid(roomPick||'')===i.id?'on':''}" type="button" data-fu="${i.id}"><span>${i.n}${mx>1?` <small>${n}/${mx}</small>`:''}</span><em class="${n?'own':S.money>=i.p?'':'no'}">${stat}</em></button>${n&&n<mx?`<button class="lpplus ${S.money>=i.p?'':'no'}" type="button" data-fbuy="${i.id}">+1 구매 ${won(i.p)}</button>`:''}</div>`;}).join('');}
 $('#roomFl').addEventListener('click',e=>{const b=e.target.closest('[data-fl]');if(!b)return;roomFloor=+b.dataset.fl;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();});
 $('#roomArt').addEventListener('click',e=>{
   if(e.target.closest('.stairlb')){roomFloor=1-roomFloor;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();return;}
@@ -2534,7 +2733,7 @@ $('#roomArt').addEventListener('click',e=>{
   if(roomPick==='stair'){const st=stairR(),[w,d]=stDims(st.r),cx=Math.min(Math.max(0,x),RN()-w),cy=Math.min(Math.max(0,y),RN()-d);
     if(!stairFits(cx,cy,st.r)){toast('1층이나 2층 가구와 겹쳐요. 밝은 칸을 골라 주세요');return;}st.x=cx;st.y=cy;save();renderRoom();return;}
   if(roomPick==='me'){if(occ()[x+','+y]){toast('가구가 있는 칸이에요. 밝은 칸을 골라 주세요');return;}const m=meR();m.x=x;m.y=y;save();renderRoom();return;}
-  if(FDEF[roomPick].wall)return;const r=rotOf(roomPick),[w,d]=dims(roomPick,r);
+  if(FD(roomPick).wall)return;const r=rotOf(roomPick),[w,d]=dims(roomPick,r);
   const cx=Math.min(Math.max(0,x),RN()-w),cy=Math.min(Math.max(0,y),RN()-d);
   if(!fits(roomPick,cx,cy,r)){toast('다른 가구와 겹쳐요. 밝은 칸을 골라 주세요');return;}
   roomPos()[roomPick]=[cx,cy,r];save();renderRoom();});
@@ -2548,18 +2747,22 @@ $('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]')
   else if(id==='me'){const m=meR();if(a==='flip')m.f=m.f?0:1;
     else if(a==='mv'){const to=1-roomFloor;roomFloor=to;m.fl=to;meSpot();}}
   else if(a==='mv'){const to=1-roomFloor,from=roomFloor;roomFloor=to;const old=flOf(id);setFl(id,to);const sp=freeSpot(id,rotOf(id));
-    if(!sp){setFl(id,old);roomFloor=from;toast((to+1)+'층에 놓을 자리가 없어요');}else{pos[id]=sp;toast(FURN.find(x=>x.id===id).n+' → '+(to+1)+'층');}}
-  else if(a==='store'){pos[id]=null;toast(FURN.find(x=>x.id===id).n+' 보관');roomPick=null;}
+    if(!sp){setFl(id,old);roomFloor=from;toast((to+1)+'층에 놓을 자리가 없어요');}else{pos[id]=sp;toast(FURN.find(x=>x.id===bid(id)).n+' → '+(to+1)+'층');}}
+  else if(a==='store'){pos[id]=null;toast(FURN.find(x=>x.id===bid(id)).n+' 보관');roomPick=null;}
   else if(a==='rot'&&pos[id]){
-    if(FDEF[id].wall){const [t,wl]=pos[id];pos[id]=[Math.min(t,FRMAX(wl?0:1)),wl?0:1];}
+    if(FD(id).wall){const [t,wl]=pos[id];pos[id]=[Math.min(t,FRMAX(wl?0:1)),wl?0:1];}
     else{const [x,y,r]=pos[id],nr=((r||0)+1)%4,sp=fits(id,x,y,nr)?[x,y,nr]:nearSpot(id,x,y,nr);if(sp)pos[id]=sp;else toast('회전할 공간이 없어요. 주변 가구를 옮겨 주세요');}}
   else if((a==='left'||a==='right')&&pos[id]){const [t,wl]=pos[id];pos[id]=[Math.max(0,Math.min(FRMAX(wl),t+(a==='left'?-.6:.6)*(wl?-1:1))),wl];}
   save();renderRoom();});
-$('#roomList').addEventListener('click',e=>{const b=e.target.closest('[data-fu]');if(!b)return;const f=landOf().furn,pos=roomPos(),i=FURN.find(x=>x.id===b.dataset.fu);
-  if(!f[i.id]){if(S.money<i.p){toast('자금이 부족해요');return;}const sp=freeSpot(i.id);if(!sp){toast('놓을 자리가 없어요. 가구를 보관하거나 옮겨 주세요');return;}S.money-=i.p;f[i.id]=1;setFl(i.id,roomFloor);pos[i.id]=sp;roomPick=i.id;save();toast(i.n+' 배치 · 원하는 칸을 눌러 옮길 수 있어요');renderRoom();return;}
-  if(!pos[i.id]){const sp=freeSpot(i.id);if(!sp){toast('놓을 자리가 없어요');return;}setFl(i.id,roomFloor);pos[i.id]=sp;roomPick=i.id;save();renderRoom();return;}
-  if(flOf(i.id)!==roomFloor){roomFloor=flOf(i.id);roomPick=i.id;renderRoom();return;}
-  roomPick=roomPick===i.id?null:i.id;renderRoom();});
+function furnBuy(i,c){const f=landOf().furn,pos=roomPos();if(S.money<i.p){toast('자금이 부족해요');return;}setFl(c,roomFloor);const sp=freeSpot(c);if(!sp){setFl(c,0);toast('놓을 자리가 없어요. 가구를 보관하거나 옮겨 주세요');return;}
+  S.money-=i.p;f[c]=1;pos[c]=sp;roomPick=c;save();toast(i.n+(c.includes('#')?' 1개 더':'')+' 배치 · 원하는 칸을 눌러 옮길 수 있어요');renderRoom();}
+$('#roomList').addEventListener('click',e=>{const f=landOf().furn,pos=roomPos();
+  const pb=e.target.closest('[data-fbuy]');if(pb){const i=FURN.find(x=>x.id===pb.dataset.fbuy),c=fCopies(i.id).find(c=>!f[c]);if(c)furnBuy(i,c);return;}
+  const b=e.target.closest('[data-fu]');if(!b)return;const i=FURN.find(x=>x.id===b.dataset.fu),cs=fCopies(i.id),own=cs.filter(c=>f[c]);
+  if(!own.length){furnBuy(i,cs[0]);return;}
+  const stored=own.find(c=>!pos[c]);if(stored){setFl(stored,roomFloor);const sp=freeSpot(stored);if(!sp){toast('놓을 자리가 없어요');return;}pos[stored]=sp;roomPick=stored;save();renderRoom();return;}
+  const cur=own.indexOf(roomPick),nx=own[(cur+1)%own.length];if(cur>=0&&own.length===1){roomPick=null;renderRoom();return;}
+  if(flOf(nx)!==roomFloor)roomFloor=flOf(nx);roomPick=nx;renderRoom();});
 $('#roomClose').addEventListener('click',()=>{roomPick=null;$('#room').hidden=true;});
 
 // ---------------- pets: art (facing right, feet at 0,0) ----------------
