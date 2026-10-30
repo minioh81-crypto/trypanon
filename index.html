@@ -49,9 +49,12 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .gl{fill:#bfe6ff;opacity:.7;font:500 7px var(--f-num)}
 #map.wx-storm .flash{animation:mflash 7s infinite}@keyframes mflash{0%,90%,94%,100%{opacity:0}91%{opacity:.5}93%{opacity:.15}92.5%{opacity:.45}}#map #mWx{pointer-events:none}
 .landp{fill:var(--land);stroke:#8a7444;stroke-width:.8;stroke-linejoin:round}
-.node{cursor:pointer;transition:transform .18s ease,filter .18s ease;transform-box:fill-box;transform-origin:center}
-.node:hover,.node:focus-visible{transform:scale(1.18);filter:drop-shadow(0 0 4px rgba(246,199,106,.75))}
-.node:hover text{fill:#fff}
+/* hover: enlarge the vector text itself (no CSS scale/filter, which rasterises the label and blurs it) */
+.node{cursor:pointer;outline:none}
+.node text{transition:font-size .15s ease}
+.node:hover text,.node:focus-visible text{fill:#fff;font-size:12.6px;stroke:#0b2238;stroke-width:3.4px}
+.node:hover text.rlab,.node:focus-visible text.rlab{font-size:9px;stroke-width:2.8px}
+.node:hover .ring,.node:focus-visible .ring{opacity:1;stroke:#ffd56a;stroke-width:2}
 .node .hit{fill:transparent}
 .node .dot{stroke:#0e1315;stroke-width:1.5}
 .node.land .dot{fill:var(--amber)}
