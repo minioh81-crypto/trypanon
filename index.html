@@ -1542,16 +1542,20 @@ function wxIcon(id){const A=(t,v,d,b=0)=>`<animateTransform attributeName="trans
   return '';}
 const WXB={jiri:[2,13],mai:[-10,-9]};
 function wxIcons(){return REG.map(r=>{const x=+PX(r.lon),y=+PY(r.lat),w=wxOf(r.id);return `<g class="wxi" data-w="${w.id}" data-r="${r.id}" transform="translate(${(x+(WXB[r.id]||[9.5,-10])[0]).toFixed(1)},${(y+(WXB[r.id]||[9.5,-10])[1]).toFixed(1)})"><circle r="7.4" fill="rgba(12,18,22,.85)" stroke="rgba(255,255,255,.45)" stroke-width=".7"/><g transform="scale(.6)">${wxIcon(w.id)}</g></g>`;}).join('');}
-function rainbowSVG(){const cx=PX(127.9),cy=PY(34.6),cols=['#ff4d4d','#ff9a3a','#ffe14a','#5fd06a','#4aa8ff','#4a62e0','#a64aff'];let g=`<g opacity=".0"><animate attributeName="opacity" values=".32;.5;.32" dur="3s" repeatCount="indefinite"/>`;
-  cols.forEach((c,i)=>{const r=130-i*3.6;g+=`<path d="M${cx-r},${cy} A${r},${r*.92} 0 0 1 ${cx+r},${cy}" fill="none" stroke="${c}" stroke-width="3.8" stroke-linecap="round"/>`;});
-  g+=`<path d="M${cx-130},${cy} A130,120 0 0 1 ${cx+130},${cy}" fill="none" stroke="#fff" stroke-width="2.6" stroke-dasharray="18 400" opacity=".7"><animate attributeName="stroke-dashoffset" values="0;-420" dur="4s" repeatCount="indefinite"/></path></g>`;
-  for(let i=0;i<5;i++){const a=Math.PI*(.15+i*.17),x=cx-Math.cos(a)*120,y=cy-Math.sin(a)*110;g+=`<path d="M0,-5 L1.2,-1.2 L5,0 L1.2,1.2 L0,5 L-1.2,1.2 L-5,0 L-1.2,-1.2Z" fill="#fff" transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><animate attributeName="opacity" values="0;1;0" dur="1.8s" begin="${i*.36}s" repeatCount="indefinite"/></path>`;}
+function rainbowSVG(){// diagonal rainbow: rises out of the west sea and comes down between Seoraksan and Taebaeksan
+  const A=[PX(125.35),PY(35.15)],B=[PX(128.72),PY(37.62)],dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy);let nx=-dy/L,ny=dx/L;if(ny>0){nx=-nx;ny=-ny;}
+  const M=[(A[0]+B[0])/2,(A[1]+B[1])/2],H=L*.42,cols=['#ff4d4d','#ff9a3a','#ffe14a','#5fd06a','#4aa8ff','#4a62e0','#a64aff'],q=(o,k=1)=>{const a=[A[0]+nx*o,A[1]+ny*o],b=[B[0]+nx*o,B[1]+ny*o],c=[M[0]+nx*(H+o*k),M[1]+ny*(H+o*k)];return [a,b,c];};
+  let g=`<g opacity=".42"><animate attributeName="opacity" values=".32;.52;.32" dur="3s" repeatCount="indefinite"/>`;
+  cols.forEach((c,i)=>{const [a,b,cc]=q((3-i)*3.6,1.5);g+=`<path d="M${a[0].toFixed(1)},${a[1].toFixed(1)} Q${cc[0].toFixed(1)},${cc[1].toFixed(1)} ${b[0].toFixed(1)},${b[1].toFixed(1)}" fill="none" stroke="${c}" stroke-width="3.8" stroke-linecap="round"/>`;});
+  {const [a,b,cc]=q(10.8,1.5);g+=`<path d="M${a[0].toFixed(1)},${a[1].toFixed(1)} Q${cc[0].toFixed(1)},${cc[1].toFixed(1)} ${b[0].toFixed(1)},${b[1].toFixed(1)}" fill="none" stroke="#fff" stroke-width="2.4" stroke-dasharray="16 420" opacity=".8"><animate attributeName="stroke-dashoffset" values="0;-436" dur="4s" repeatCount="indefinite"/></path>`;}
+  g+='</g>';const [a,b,cc]=q(0);
+  for(let i=0;i<5;i++){const t=.15+i*.17,x=(1-t)*(1-t)*a[0]+2*(1-t)*t*cc[0]+t*t*b[0],y=(1-t)*(1-t)*a[1]+2*(1-t)*t*cc[1]+t*t*b[1];g+=`<path d="M0,-5 L1.2,-1.2 L5,0 L1.2,1.2 L0,5 L-1.2,1.2 L-5,0 L-1.2,-1.2Z" fill="#fff" opacity="0" transform="translate(${x.toFixed(1)},${(y-8).toFixed(1)})"><animate attributeName="opacity" values="0;1;0" dur="1.8s" begin="${i*.36}s" repeatCount="indefinite"/></path>`;}
   return g;}
 function wxSet(f){const slot=Math.floor(Date.now()/WX_MS);if(!f&&slot===wxSlot)return;const rb0=wxSlot>=0&&rbAt((wxSlot)*WX_MS);wxSlot=slot;
   {const mr=$('#mRb');if(mr)mr.innerHTML=rbOn()?rainbowSVG():'';if(!f&&rbOn()&&!rb0&&S.story)toast('🌈 지도에 무지개가 떴어요! 3분 동안 '+rbFx());}
   const mw=$('#mWash');if(mw&&!mw.innerHTML)mw.innerHTML=washSVG(mw.dataset.d);const mi=$('#mWxI');if(mi)mi.innerHTML=wxIcons();
   const a=S.ex.active;if(a){const w=wxOf(a);if(!f&&wxSeen[a]&&wxSeen[a]!==w.id&&S.story)toast(`${w.ic} ${regById(a).n} 날씨가 ${w.n}(으)로 바뀌었어요 — ${wxFx(w)}`);}
-  for(const r of REG)wxSeen[r.id]=wxOf(r.id).id;mapInfoKey='';if(typeof sel!=='undefined'&&!$('#rpop').hidden)renderCard();}
+  for(const r of REG)wxSeen[r.id]=wxOf(r.id).id;mapInfoKey='';if(!f){if(!$('#rpop').hidden)renderCard();if(exp){const r=exp.r;$('#eArt').innerHTML=regionArt(r.id,{withChar:true,rx:0,label:r.n+' 풍경',cx:r.t==='sea'?44:64,cy:168,ch:r.t==='sea'?70:84});}}}
 setInterval(()=>wxSet(false),5000);
 
 
@@ -2202,7 +2206,30 @@ function seasonOverlay(se,sea,u){const R=(i,k)=>hsh(i,k);
   return cloud(230,30,1.3,.7);}
 function scSeason(id,u){const r=REG.find(x=>x.id===id),sea=!!r&&r.t==='sea',se=seasonNow();
   return SC[id](u).replace(/fill="(#[0-9a-fA-F]{6})"/g,(m,c)=>`fill="${seasonColor(c,se,sea)}"`)+seasonOverlay(se,sea,u);}
-function regionArt(id,o={}){const u='a'+(++UID),inner=scSeason(id,u)+(o.withChar?fig(ME(),o.cx||70,o.cy||166,o.ch||84,{expr:o.expr||''}):'');
+// weather layer for a region's landscape picture (320x170)
+function artWx(id,u){if(!REG.find(r=>r.id===id))return '';const w=wxOf(id),k=w.id,R='width="320" height="170"';let g='';
+  const pat=(pid,pw,ph,body,dx,dy,dur)=>`<defs><pattern id="${u}${pid}" width="${pw}" height="${ph}" patternUnits="userSpaceOnUse">${body}<animateTransform attributeName="patternTransform" type="translate" from="0 0" to="${dx} ${dy}" dur="${dur}s" repeatCount="indefinite"/></pattern></defs><rect ${R} fill="url(#${u}${pid})"/>`;
+  const sky=(c,op,to=105)=>`<defs><linearGradient id="${u}sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}" stop-opacity="${op}"/><stop offset="${to/170}" stop-color="${c}" stop-opacity="${op*.55}"/><stop offset="1" stop-color="${c}" stop-opacity="${op*.15}"/></linearGradient></defs><rect ${R} fill="url(#${u}sk)"/>`;
+  const clouds=(c,n,y0,dark)=>`<g>${`<animateTransform attributeName="transform" type="translate" values="-20 0;20 0;-20 0" dur="${dark?14:26}s" repeatCount="indefinite"/>`}${Array.from({length:n},(_,i)=>{const x=-10+i*(340/(n-1||1)),y=y0+(i%2)*10,s2=.9+(i%3)*.25;return `<g transform="translate(${x},${y}) scale(${s2})"><ellipse cx="0" cy="8" rx="38" ry="12" fill="${c}"/><ellipse cx="-14" cy="0" rx="18" ry="13" fill="${c}"/><ellipse cx="10" cy="-4" rx="22" ry="16" fill="${c}"/>${dark?'':`<ellipse cx="6" cy="-10" rx="10" ry="5" fill="#fff" opacity=".35"/>`}</g>`;}).join('')}</g>`;
+  const rain=(op,dense)=>pat('r',dense?10:16,dense?18:24,`<path d="M12,0 l-5,13" stroke="rgba(210,230,245,${op})" stroke-width="1"/>${dense?'<path d="M5,8 l-4,10" stroke="rgba(210,230,245,.45)" stroke-width=".9"/>':''}`,dense?-9:-6,dense?36:24,dense?.3:.42);
+  const snow=dense=>pat('s',dense?20:30,dense?20:30,`<circle cx="5" cy="6" r="${dense?1.6:1.4}" fill="#fff"/><circle cx="${dense?14:20}" cy="${dense?14:19}" r="${dense?1.2:1.8}" fill="#fff" opacity=".85"/>`,dense?-40:-8,dense?20:30,dense?.7:3.4);
+  const wind=fast=>pat('w',fast?120:170,fast?40:56,`<path d="M0,12 q25,-7 50,0 t40,-3" stroke="rgba(255,255,255,${fast?.6:.45})" stroke-width="1.3" fill="none" stroke-linecap="round"/>${fast?'<path d="M40,30 q20,-6 40,0" stroke="rgba(255,255,255,.5)" stroke-width="1.1" fill="none" stroke-linecap="round"/>':''}`,fast?120:170,0,fast?1:2.8);
+  const leaves=n=>Array.from({length:n},(_,i)=>`<ellipse rx="2.4" ry="1.3" fill="${['#e0a03a','#c8602a','#7ab04a'][i%3]}"><animateMotion dur="${2.4+i*.5}s" begin="${-i*.7}s" repeatCount="indefinite" path="M-10,${40+i*22} q80,-30 170,10 t170,-20"/><animateTransform attributeName="transform" type="rotate" values="0;360" dur="1s" repeatCount="indefinite" additive="sum"/></ellipse>`).join('');
+  switch(k){
+   case 'sunny':g=`<defs><radialGradient id="${u}sn" cx=".85" cy=".1" r=".7"><stop offset="0" stop-color="#fff6c8" stop-opacity=".55"/><stop offset="1" stop-color="#fff6c8" stop-opacity="0"/></radialGradient></defs><rect ${R} fill="url(#${u}sn)"><animate attributeName="opacity" values=".7;1;.7" dur="4s" repeatCount="indefinite"/></rect>`;break;
+   case 'hot':g=`<rect ${R} fill="rgba(255,120,40,.16)"/><defs><radialGradient id="${u}sn" cx=".85" cy=".1" r=".8"><stop offset="0" stop-color="#ffe08a" stop-opacity=".75"/><stop offset="1" stop-color="#ff8a3a" stop-opacity="0"/></radialGradient></defs><rect ${R} fill="url(#${u}sn)"><animate attributeName="opacity" values=".6;1;.6" dur="1.6s" repeatCount="indefinite"/></rect>`
+     +[120,140,158].map((y,i)=>`<path d="M0,${y} q20,-3 40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0" stroke="rgba(255,240,210,.35)" stroke-width="1.4" fill="none"><animateTransform attributeName="transform" type="translate" values="0 0;-20 -2;0 0" dur="${1.4+i*.3}s" repeatCount="indefinite"/></path>`).join('');break;
+   case 'cloud':g=sky('#8a96a2',.55)+clouds('#dfe5ea',5,6,false);break;
+   case 'wind':g=sky('#9aa8b4',.25)+wind(false)+leaves(4);break;
+   case 'gale':g=sky('#6e7c88',.5)+clouds('#b8c2ca',4,4,true)+wind(true)+leaves(6);break;
+   case 'rain':g=sky('#5e6a76',.6)+clouds('#9aa6b0',5,2,true)+`<rect ${R} fill="rgba(20,30,40,.12)"/>`+rain(.55,false);break;
+   case 'hrain':g=sky('#3e4a56',.75)+clouds('#6e7a86',6,0,true)+`<rect ${R} fill="rgba(10,20,30,.25)"/>`+rain(.7,true);break;
+   case 'storm':g=sky('#2e3842',.82)+clouds('#55606c',6,0,true)+`<rect ${R} fill="rgba(10,15,25,.28)"/>`+rain(.65,true)+`<g opacity="0"><animate attributeName="opacity" values="0;0;1;0;.8;0;0" keyTimes="0;.7;.72;.75;.78;.82;1" dur="4s" repeatCount="indefinite"/><rect ${R} fill="rgba(235,245,255,.35)"/><path d="M210,10 l-14,30 h10 l-16,34 h9 l-20,40" stroke="#fff6b0" stroke-width="2.6" fill="none" stroke-linejoin="round"/></g>`;break;
+   case 'snow':g=sky('#c8d4de',.5)+clouds('#e8eef2',5,4,false)+`<rect ${R} fill="rgba(235,242,248,.12)"/>`+snow(false);break;
+   case 'bliz':g=sky('#d8e2ea',.7)+`<rect ${R} fill="rgba(235,242,248,.3)"/>`+snow(true)+wind(true);break;}
+  if(rbOn()){const cols=['#ff4d4d','#ff9a3a','#ffe14a','#5fd06a','#4aa8ff','#4a62e0','#a64aff'];g+=`<g opacity=".5"><animate attributeName="opacity" values=".4;.65;.4" dur="3s" repeatCount="indefinite"/>${cols.map((c,i)=>{const r=150-i*5;return `<path d="M${40-r*.2},${190} A${r},${r} 0 0 1 ${40+r*1.8},${190-r*.6}" fill="none" stroke="${c}" stroke-width="5"/>`;}).join('')}</g>`;}
+  return g;}
+function regionArt(id,o={}){const u='a'+(++UID),inner=scSeason(id,u)+artWx(id,u)+(o.withChar?fig(ME(),o.cx||70,o.cy||166,o.ch||84,{expr:o.expr||''}):'');
   return `<svg viewBox="0 0 320 170" role="img" aria-label="${o.label||'풍경'}"><clipPath id="${u}c"><rect width="320" height="170" rx="${o.rx??12}"/></clipPath><g clip-path="url(#${u}c)">${inner}</g></svg>`;}
 
 // ---------------- story ----------------
