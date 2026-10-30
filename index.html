@@ -316,7 +316,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 @media (max-width:440px){.brand span{display:none}}
 
 .art{position:relative}
-.schip.wxs{left:auto;right:8px}#map .wxi{pointer-events:none}.schip{position:absolute;top:8px;left:8px;font-size:11px;line-height:1;padding:5px 9px;border-radius:999px;background:rgba(11,15,16,.7);color:#ece6da}
+.schipw{position:absolute;top:8px;left:8px;right:56px;display:flex;flex-wrap:wrap;gap:5px;pointer-events:none}.schipw .schip{position:static}.schip.rbs{background:linear-gradient(90deg,rgba(255,90,90,.85),rgba(255,200,60,.85),rgba(90,200,120,.85),rgba(80,140,255,.85),rgba(170,100,255,.85));color:#fff;font-weight:700}#map .wxi{pointer-events:none}.schip{position:absolute;top:8px;left:8px;font-size:11px;line-height:1;padding:5px 9px;border-radius:999px;background:rgba(11,15,16,.7);color:#ece6da}
 #pick{position:fixed;inset:0;z-index:59;background:var(--bg);display:flex;align-items:center;justify-content:center;max-width:560px;margin:0 auto;overflow-y:auto}
 .pickin{display:grid;gap:12px;width:100%;padding-block:calc(env(safe-area-inset-top,0px) + 20px) calc(env(safe-area-inset-bottom,0px) + 20px);
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -339,7 +339,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .mchip em{font-style:normal;color:var(--hot)}
 .mlegend{position:relative;flex:none;padding:7px max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px));background:var(--panel);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11px;color:var(--mute);pointer-events:none}
 .mlegend span{display:inline-flex;align-items:center;gap:5px}.mlegend i{width:8px;height:8px;border-radius:50%;display:inline-block}
-.mchip.wxc.good b{color:#9be37a}.mchip.wxc.bad b{color:#ff9f86}.mlegend .mwx{color:#eaf4f8;font-weight:700;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:1px 8px}.mlegend i.sq{border-radius:1px;background:#fff4dc;transform:rotate(45deg)}
+.mchip.rbc{background:linear-gradient(90deg,rgba(255,90,90,.35),rgba(255,200,60,.35),rgba(90,200,120,.35),rgba(80,140,255,.35),rgba(170,100,255,.35)),rgba(14,19,21,.85)}.mchip.rbc b{color:#fff}.mchip.wxc.good b{color:#9be37a}.mchip.wxc.bad b{color:#ff9f86}.mlegend .mwx{color:#eaf4f8;font-weight:700;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:1px 8px}.mlegend i.sq{border-radius:1px;background:#fff4dc;transform:rotate(45deg)}
 .mhint{margin-left:auto;color:var(--amber2)}
 .rpop{position:fixed;inset:0;z-index:30;background:rgba(5,7,8,.62);display:flex;align-items:flex-end;justify-content:center}
 .rsheet{position:relative;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0;
@@ -1488,13 +1488,14 @@ function buildMap(){let g='';
     +`<path class="landp" d="${d}" style="fill:none;stroke:#e6f0c8;stroke-opacity:.55"/>`;
   g+=`<ellipse class="landp" cx="${PX(126.55)}" cy="${PY(33.38)}" rx="17" ry="8" style="fill:#86a866;stroke:#e6f0c8;stroke-opacity:.55"/><ellipse cx="${PX(126.55)}" cy="${PY(33.38)}" rx="10" ry="5" fill="#2f6438" opacity=".35"/><ellipse cx="${PX(126.55)}" cy="${PY(33.38)}" rx="6" ry="3" fill="#2f6438" opacity=".5"/>
    <circle class="landp" cx="${PX(130.87)}" cy="${PY(37.5)}" r="3" style="fill:#3d7a40;stroke:#e6f0c8"/><circle class="landp" cx="${PX(131.87)}" cy="${PY(37.24)}" r="1.6" style="fill:#7a8a6a;stroke:#e6f0c8"/>`;
-  g+='<g id="mWxI"></g>';
+  g+='<g id="mRb" style="pointer-events:none"></g>';
   const node=(id,cls,x,y,label,lx,la,ly,res)=>`<g class="node ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}">
     <circle class="hit" cx="${x}" cy="${y}" r="16"/><circle class="ring" cx="${x}" cy="${y}" r="10"/>
     ${cls==='base'?`<g transform="translate(${x},${y})" class="bdrill"><circle r="9.5" fill="rgba(14,19,21,.75)" stroke="#ffd56a" stroke-width="1.4"/><rect x="-1" y="-9" width="2" height="4" fill="#c9d1d5"/><rect x="-5.5" y="-6" width="11" height="5" rx="1.2" fill="#d9573a" stroke="#2b211c" stroke-width=".8"/><circle cx="0" cy="-3.5" r="1.3" fill="#fff3b0"/><path d="M-4.5,-1 L4.5,-1 L0,8Z" fill="#f2c14e" stroke="#2b211c" stroke-width=".8" stroke-linejoin="round"/><path d="M-3,1.4 L3,.6 M-2,3.8 L2,3 M-1,6 L1,5.6" stroke="#8a6a1e" stroke-width=".8"/></g>`:res?`<svg class="ricon" x="${x-8}" y="${y-8}" width="16" height="16" viewBox="0 0 16 16">${RIC[res]||''}</svg>`:`<circle class="dot" cx="${x}" cy="${y}" r="6"/>`}
     <text x="${x+lx}" y="${y+ly}" text-anchor="${la}">${label}</text>${res&&cls!=='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9.5}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}${res&&cls==='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}</g>`;
   for(const r of REG){const x=+PX(r.lon).toFixed(1),y=+PY(r.lat).toFixed(1);g+=r.t==='sea'?node(r.id,'sea',x,y,r.n,0,'middle',19,r.res):node(r.id,'land',x,y,r.n,r.lx,r.la,4,r.res);}
   g+=node('yanggu','base',+PX(127.99).toFixed(1),+PY(38.11).toFixed(1),'양구 본공',-11,'end',4);
+  g+='<g id="mWxI"></g>';
   $('#map').innerHTML=`<svg viewBox="34 2 318 322" role="img" aria-label="대한민국 시추 지도">${g}</svg>`;wxSet(true);}
 // ---------------- weather: each expedition region has its own weather (changes every 3 minutes) ----------------
 // y: material yield %, g: dig speed %, w: weight by season [spring,summer,autumn,winter]
@@ -1515,8 +1516,11 @@ const wxOf=rid=>wxAt(Date.now(),rid);
 // hard mode: penalties x1.4, bonus x0.6. Heat shield softens scorching heat.
 const wxY=w=>w.y>0?w.y*(S.mode==='hard'?.6:1):w.y*(S.mode==='hard'?1.4:1)*(w.id==='hot'?1-Math.min(1,L('heat')/MAXLV):1);
 const wxG=w=>w.g*(S.mode==='hard'?1.4:1)*(w.id==='hot'?1-Math.min(1,L('heat')/MAXLV):1);
-const wxDig=rid=>rid?1+wxG(wxOf(rid))/100:1;
-function wxAmt(amt,rid){const p=wxY(wxOf(rid))/100;if(!p)return amt;const d=Math.max(1,Math.round(Math.abs(p)*amt));return Math.max(1,amt+(p>0?d:-d));}
+// rare map-wide rainbow: boosts every expedition regardless of local weather
+const rbAt=t=>hsh(Math.floor(t/WX_MS),4242)<.06,rbOn=()=>rbAt(Date.now()),RBY=()=>S.mode==='hard'?20:30,RBG=()=>S.mode==='hard'?12:20;
+const rbFx=()=>`모든 원정 재료 +${RBY()}% · 굴착 +${RBG()}%`;
+const wxDig=rid=>rid?(1+wxG(wxOf(rid))/100)*(rbOn()?1+RBG()/100:1):1;
+function wxAmt(amt,rid){const p=wxY(wxOf(rid))/100+(rbOn()?RBY()/100:0);if(!p)return amt;const d=Math.max(1,Math.round(Math.abs(p)*amt));return Math.max(1,amt+(p>0?d:-d));}
 function wxFx(w){const y=Math.round(wxY(w)),g=Math.round(wxG(w));return [y?`재료 ${y>0?'+':''}${y}%`:'재료 그대로',g?`굴착 ${g}%`:''].filter(Boolean).join(' · ');}
 function washSVG(d){return `<path d="${d}" fill="none" stroke="#e6f6ff" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=".5 4" opacity=".35" stroke-width="1.6"><animate attributeName="stroke-width" values="1.6;4;1.6" dur="7s" repeatCount="indefinite"/></path>`;}
 // small animated weather icon (about 16px), drawn next to each region on the map
@@ -1536,8 +1540,15 @@ function wxIcon(id){const A=(t,v,d,b=0)=>`<animateTransform attributeName="trans
    case 'bliz':return cloud('#c4d0da',0,-3)+flakes(5,true)+wind(1,true);
    case 'storm':return cloud('#6e7c88',0,-2)+drops(4,'#5ab0f0',true)+`<path d="M1,0 l-2.6,4 h2.2 l-1.6,4" stroke="#ffe066" stroke-width="1.3" fill="none" stroke-linejoin="round"><animate attributeName="opacity" values="0;0;1;0;1;0;0" keyTimes="0;.6;.65;.7;.74;.8;1" dur="2.4s" repeatCount="indefinite"/></path>`;}
   return '';}
-function wxIcons(){return REG.map(r=>{const x=+PX(r.lon),y=+PY(r.lat),w=wxOf(r.id),ox=r.t==='sea'?14:(r.la==='end'?14:-15);return `<g class="wxi" transform="translate(${(x+ox).toFixed(1)},${(y-13).toFixed(1)})"><title>${r.n} 날씨: ${w.n} · ${wxFx(w)}</title>${wxIcon(w.id)}</g>`;}).join('');}
-function wxSet(f){const slot=Math.floor(Date.now()/WX_MS);if(!f&&slot===wxSlot)return;wxSlot=slot;
+const WXB={jiri:[2,13],mai:[-10,-9]};
+function wxIcons(){return REG.map(r=>{const x=+PX(r.lon),y=+PY(r.lat),w=wxOf(r.id);return `<g class="wxi" data-w="${w.id}" data-r="${r.id}" transform="translate(${(x+(WXB[r.id]||[9.5,-10])[0]).toFixed(1)},${(y+(WXB[r.id]||[9.5,-10])[1]).toFixed(1)})"><circle r="7.4" fill="rgba(12,18,22,.85)" stroke="rgba(255,255,255,.45)" stroke-width=".7"/><g transform="scale(.6)">${wxIcon(w.id)}</g></g>`;}).join('');}
+function rainbowSVG(){const cx=PX(127.9),cy=PY(34.6),cols=['#ff4d4d','#ff9a3a','#ffe14a','#5fd06a','#4aa8ff','#4a62e0','#a64aff'];let g=`<g opacity=".0"><animate attributeName="opacity" values=".32;.5;.32" dur="3s" repeatCount="indefinite"/>`;
+  cols.forEach((c,i)=>{const r=130-i*3.6;g+=`<path d="M${cx-r},${cy} A${r},${r*.92} 0 0 1 ${cx+r},${cy}" fill="none" stroke="${c}" stroke-width="3.8" stroke-linecap="round"/>`;});
+  g+=`<path d="M${cx-130},${cy} A130,120 0 0 1 ${cx+130},${cy}" fill="none" stroke="#fff" stroke-width="2.6" stroke-dasharray="18 400" opacity=".7"><animate attributeName="stroke-dashoffset" values="0;-420" dur="4s" repeatCount="indefinite"/></path></g>`;
+  for(let i=0;i<5;i++){const a=Math.PI*(.15+i*.17),x=cx-Math.cos(a)*120,y=cy-Math.sin(a)*110;g+=`<path d="M0,-5 L1.2,-1.2 L5,0 L1.2,1.2 L0,5 L-1.2,1.2 L-5,0 L-1.2,-1.2Z" fill="#fff" transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><animate attributeName="opacity" values="0;1;0" dur="1.8s" begin="${i*.36}s" repeatCount="indefinite"/></path>`;}
+  return g;}
+function wxSet(f){const slot=Math.floor(Date.now()/WX_MS);if(!f&&slot===wxSlot)return;const rb0=wxSlot>=0&&rbAt((wxSlot)*WX_MS);wxSlot=slot;
+  {const mr=$('#mRb');if(mr)mr.innerHTML=rbOn()?rainbowSVG():'';if(!f&&rbOn()&&!rb0&&S.story)toast('🌈 지도에 무지개가 떴어요! 3분 동안 '+rbFx());}
   const mw=$('#mWash');if(mw&&!mw.innerHTML)mw.innerHTML=washSVG(mw.dataset.d);const mi=$('#mWxI');if(mi)mi.innerHTML=wxIcons();
   const a=S.ex.active;if(a){const w=wxOf(a);if(!f&&wxSeen[a]&&wxSeen[a]!==w.id&&S.story)toast(`${w.ic} ${regById(a).n} 날씨가 ${w.n}(으)로 바뀌었어요 — ${wxFx(w)}`);}
   for(const r of REG)wxSeen[r.id]=wxOf(r.id).id;mapInfoKey='';if(typeof sel!=='undefined'&&!$('#rpop').hidden)renderCard();}
@@ -1564,7 +1575,7 @@ function renderCard(){const el=$('#card');
   const r=REG.find(x=>x.id===sel),u=isUnl(r);
   const uses=PARTS.filter(p=>p.res===r.res||p.sub===r.res).map(p=>p.n);const f=FUEL.find(x=>x.res===r.res);if(f)uses.push('부스터 연료 ×'+f.m);
   const stars=Math.min(5,Math.ceil(r.diff/1.4));
-  el.innerHTML=`<div class="art ${u?'':'locked'}">${regionArt(r.id,{label:r.n+' 풍경'})}<span class="schip">${seasonName(seasonNow())}</span>${REG.find(x=>x.id===r.id)?(()=>{const w=wxOf(r.id);return `<span class="schip wxs">${w.ic} ${w.n} · ${wxFx(w)}</span>`;})():''}</div><div class="ctop"><div><div class="ckind">${r.t==='sea'?'해상 시추':'육상 원정'} · ${r.area}</div><h2>${r.n}</h2></div>
+  el.innerHTML=`<div class="art ${u?'':'locked'}">${regionArt(r.id,{label:r.n+' 풍경'})}<div class="schipw"><span class="schip">${seasonName(seasonNow())}</span>${REG.find(x=>x.id===r.id)?(()=>{const w=wxOf(r.id),rb=rbOn();return `<span class="schip wxs">${w.ic} ${w.n} · ${wxFx(w)}</span>${rb?`<span class="schip rbs">🌈 무지개 · ${rbFx()}</span>`:''}`;})():''}</div></div><div class="ctop"><div><div class="ckind">${r.t==='sea'?'해상 시추':'육상 원정'} · ${r.area}</div><h2>${r.n}</h2></div>
      <div class="cside">보유<br><b style="color:var(--fg);font-size:18px">${S.res[r.res]||0}</b></div></div>
     <p class="cdesc">${r.fl}</p>
     <dl class="facts"><dt>지질</dt><dd>${r.geo}</dd><dt>자원</dt><dd>${ric(r.res)}${r.res}</dd>
@@ -1682,7 +1693,7 @@ const IRND=[
   ct:'드릴 레벨',cur:()=>S.dl,tgt:r=>3+4*r,fmt:n=>'Lv.'+n,k:.18},
  {id:'org',n:'단체 후원',ic:'🎓',c:'#97abc2',who:['지역 역사 문화 협회','한국 고생물 학회','문화유산 보존 재단','자연사 박물관 후원회','국제 지질 학회','세계 유산 위원회'],
   ct:'유물·화석 조각 발견',cur:()=>relicCount()+fosPieces(),tgt:r=>2+3*r,fmt:n=>n+'개',k:.12},
- {id:'mid',n:'중견·중소기업',ic:'🏭',c:'#7cc6e6',who:['강원 정밀 공구','한빛 굴착기계','동해 해양 플랜트','남도 특수강','신성 베어링','미래 센서 테크','대한 케이블'],
+ {id:'mid',n:'중소·중견기업',ic:'🏭',c:'#7cc6e6',who:['강원 정밀 공구','한빛 굴착기계','동해 해양 플랜트','남도 특수강','신성 베어링','미래 센서 테크','대한 케이블'],
   ct:'원정 누적 칸',cur:()=>S.st.exp||0,tgt:r=>Math.round(60*Math.pow(1.75,r)),fmt:n=>n.toLocaleString('ko-KR')+'칸',k:.14},
  {id:'big',n:'대기업 투자',ic:'🏢',c:'#9a86c8',who:['한라 중공업','대한 에너지 그룹','코리아 테크 홀딩스','글로벌 소재 그룹','미래 모빌리티 그룹','우주 항공 그룹'],
   ct:'부품 레벨 합계',cur:()=>sumLv(),tgt:r=>12+8*r,fmt:n=>n+'레벨',k:.2}];
@@ -3210,7 +3221,7 @@ function hud(){
   $('#money').textContent=won(S.money);
   $('#expBadge').hidden=!S.ex.active;
   if(view==='map'){const ex_=S.ex.active?regById(S.ex.active):null;
-    const k=`<span class="mchip"><b class="modechip ${S.mode==='hard'?'hard':''}">${MD().n}</b></span><span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${gateAt()?' · <em>승급 필요</em>':''}</span>`+(ex_?`<span class="mchip cool"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}</span>`:'<span class="mchip dim">진행 중인 원정 없음</span>')+(ex_?(()=>{const w=wxOf(ex_.id),y=wxY(w);return `<span class="mchip wxc ${y>0?'good':y<0?'bad':''}" title="원정지 날씨"><b>${w.ic} ${ex_.n} ${w.n}</b> ${wxFx(w)}</span>`;})():'');
+    const k=`<span class="mchip"><b class="modechip ${S.mode==='hard'?'hard':''}">${MD().n}</b></span><span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${gateAt()?' · <em>승급 필요</em>':''}</span>`+(ex_?`<span class="mchip cool"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}</span>`:'<span class="mchip dim">진행 중인 원정 없음</span>')+(rbOn()?`<span class="mchip rbc"><b>🌈 무지개</b> ${rbFx()}</span>`:'')+(ex_?(()=>{const w=wxOf(ex_.id),y=wxY(w);return `<span class="mchip wxc ${y>0?'good':y<0?'bad':''}" title="원정지 날씨"><b>${w.ic} ${ex_.n} ${w.n}</b> ${wxFx(w)}</span>`;})():'');
     if(k!==mapInfoKey){mapInfoKey=k;$('#mapInfo').innerHTML=k;}}
   if(view==='bore'&&!exp){const m=S.depth,bm=boostM(),l=layerAt(m),sp=boreDps()/l.H;
     $('#bDepth').textContent=fmtD(m);updateGauge();
