@@ -1507,7 +1507,7 @@ function wxNow(){const p=Math.floor(Date.now()/120000),h=Math.abs(Math.sin(p*12.
 function wxSet(f){const w=wxNow();if(!f&&w===wxCur)return;const m=$('#map');m.classList.remove('wx-calm','wx-wind','wx-storm');m.classList.add('wx-'+WX[w][1]);const t=$('#wxT');if(t)t.textContent=WX[w][0];{const mw=$('#mWash');if(mw)mw.innerHTML=washSVG(mw.dataset.d,w);const mx=$('#mWx');if(mx)mx.innerHTML=w===2?stormSVG():'';}if(!f&&wxCur>=0&&w===2)toast('⛈️ 바다에 폭풍이 몰려와요 — 파도가 거세요');wxCur=w;}
 setInterval(()=>wxSet(false),5000);
 function updateMap(){document.querySelectorAll('#map .rcnt').forEach(t=>{t.textContent=(S.res[t.dataset.r]||0).toLocaleString('ko-KR');});document.querySelectorAll('.node').forEach(n=>{const r=REG.find(x=>x.id===n.dataset.id);
-  n.classList.toggle('locked',!!r&&!isUnl(r));n.classList.toggle('sel',n.dataset.id===sel);n.classList.toggle('act',n.dataset.id===S.ex.active);n.classList.toggle('evt',evtOn()&&n.dataset.id===S.evt.rid);});renderCard();}
+  n.classList.toggle('locked',!!r&&!isUnl(r));n.classList.toggle('sel',n.dataset.id===sel);n.classList.toggle('act',n.dataset.id===S.ex.active);n.classList.toggle('evt',!!(evtOn()&&n.dataset.id===S.evt.rid));});renderCard();}
 function openRegion(id){sel=id;updateMap();$('#rpop').hidden=false;const sh=$('#rpop .rsheet');sh.scrollTop=0;}
 function closeRegion(){$('#rpop').hidden=true;}
 $('#map').addEventListener('click',e=>{const n=e.target.closest('.node');if(!n)return;openRegion(n.dataset.id);});
