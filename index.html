@@ -337,7 +337,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .mchip em{font-style:normal;color:var(--hot)}
 .mlegend{position:relative;flex:none;padding:7px max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px));background:var(--panel);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11px;color:var(--mute);pointer-events:none}
 .mlegend span{display:inline-flex;align-items:center;gap:5px}.mlegend i{width:8px;height:8px;border-radius:50%;display:inline-block}
-.mlegend .mwx{color:#eaf4f8;font-weight:700;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:1px 8px}.mlegend i.sq{border-radius:1px;background:#fff4dc;transform:rotate(45deg)}
+.mchip.wxc.good b{color:#9be37a}.mchip.wxc.bad b{color:#ff9f86}.mlegend .mwx{color:#eaf4f8;font-weight:700;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:1px 8px}.mlegend i.sq{border-radius:1px;background:#fff4dc;transform:rotate(45deg)}
 .mhint{margin-left:auto;color:var(--amber2)}
 .rpop{position:fixed;inset:0;z-index:30;background:rgba(5,7,8,.62);display:flex;align-items:flex-end;justify-content:center}
 .rsheet{position:relative;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0;
@@ -456,7 +456,7 @@ nav.tabs button{font-size:12px}
   <section class="view" id="v-map">
     <div class="mapwrap" id="map"></div>
     <div class="mapinfo" id="mapInfo"></div>
-    <div class="mlegend"><span>아이콘 = 그 지역 재료</span><span><i class="sq"></i>양구 본공</span><span class="mwx" id="wxT"></span><span style="opacity:.55">흐림 = 잠김</span><span class="mhint">지형을 눌러 보세요</span></div>
+    <div class="mlegend"><span>아이콘 = 그 지역 재료</span><span><svg width="12" height="12" viewBox="-6 -10 12 19" aria-hidden="true"><rect x="-5.5" y="-6" width="11" height="5" rx="1.2" fill="#d9573a"/><path d="M-4.5,-1 L4.5,-1 L0,8Z" fill="#f2c14e"/></svg>양구 본공</span><span style="opacity:.55">흐림 = 잠김</span><span class="mhint">지형을 눌러 보세요</span></div>
     <div class="rpop" id="rpop" hidden><div class="rsheet" role="dialog" aria-modal="true" aria-label="지형 정보">
       <button class="rclose" id="rClose" type="button" aria-label="닫기"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
       <div class="card" id="card"></div></div></div>
@@ -1390,7 +1390,7 @@ function digOf(id){S.ex.dig[id]=S.ex.dig[id]||{i:0,hp:0};const g=S.ex.dig[id];if
 const belowOf=(r,i)=>r.t==='sea'?i-r.water:i;
 function altText(r,i){if(r.t==='sea')return i<r.water?'수심 '+(i*r.ws).toLocaleString('ko-KR')+'m':'해저 아래 '+((i-r.water)*BLK).toLocaleString('ko-KR')+'m';
   const a=PEAK[r.id][1]-i*BLK;return a>=0?'해발 '+a.toLocaleString('ko-KR')+'m':'해수면 아래 '+(-a).toLocaleString('ko-KR')+'m';}
-const expDps=()=>dps()*boostM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.05:1)*(fosDone('ura')?1.03:1);
+const expDps=()=>wxDig()*dps()*boostM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.05:1)*(fosDone('ura')?1.03:1);
 const relicP=()=>.15+.004*L('sensor')+(perk('prof')?.02:0);
 const critMul=()=>5+setPow('paleo');
 let exAcc=0,popQ=[],popT=0;
@@ -1403,7 +1403,7 @@ function addRelic(rl,vis,belowM){S.relic=S.relic||{};const g=rollGrade(belowM||0
 function expBreak(r,vis){const g=digOf(r.id),below=belowOf(r,g.i);
   if(r.t==='land'&&PEAK[r.id][1]-g.i*BLK>0&&PEAK[r.id][1]-(g.i+1)*BLK<=0)toast(r.n+' 해수면 도달 · 이제부터 땅속으로 계속 내려갑니다');
   if(below>=0){let wp=r.t==='sea'?setPow('wreck'):0,amt=Math.max(2,Math.round(2*Math.pow(expHP(r,g.i)/(MD().expBase*r.diff),.55)))+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.15?1:0)+(r.t==='sea'&&fosDone('whale')&&Math.random()<.2?1:0)+(r.t==='sea'?(perk('sea')?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
-    if(evtOn()&&S.evt.rid===r.id)amt*=2;
+    amt=wxAmt(amt);if(evtOn()&&S.evt.rid===r.id)amt*=2;
     S.res[r.res]=(S.res[r.res]||0)+amt;const m=Math.round(5*r.diff*Math.pow(expHP(r,g.i)/(MD().expBase*r.diff),.6)*(1+.15*setPow('joseon')));S.money+=m;
     if(vis&&!expPopped){ex.pop('+'+amt+' '+r.res,RES[r.res]);expPopped=1;}
     S.st.exp++;if(r.t==='sea')S.st.sea++;
@@ -1460,14 +1460,6 @@ const COAST=[[126.15,37.72],[126.55,37.78],[126.68,37.95],[127.0,38.2],[127.4,38
  [126.3,34.75],[126.4,35.05],[126.35,35.3],[126.5,35.6],[126.7,35.95],[126.55,36.15],[126.5,36.45],[126.25,36.65],[126.15,36.85],[126.45,36.95],[126.75,36.95],
  [126.65,37.15],[126.6,37.4],[126.55,37.55]];
 // shore wash: one foam line along the coast that washes in and out (cheap: 2 animations). Storms add rain, lightning and breaking spray.
-function washSVG(d,lv){const W=[[1.6,4,.35,7],[2.2,5.5,.42,4.6],[3,8,.5,2.2]][lv],[w0,w1,op,du]=W;
-  return `<path d="${d}" fill="none" stroke="#e6f6ff" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="${lv<2?'.5 4':'2 5'}" opacity="${op}" stroke-width="${w0}"><animate attributeName="stroke-width" values="${w0};${w1};${w0}" dur="${du}s" repeatCount="indefinite"/><animate attributeName="stroke-dashoffset" values="0;22" dur="${du*3}s" repeatCount="indefinite"/></path>`
-    +(lv===2?`<path d="${d}" fill="none" stroke="rgba(200,236,250,.35)" stroke-linejoin="round" stroke-width="16"><animate attributeName="stroke-width" values="8;20;8" dur="1.7s" repeatCount="indefinite"/><animate attributeName="opacity" values=".15;.45;.15" dur="1.7s" repeatCount="indefinite"/></path>`:'');}
-function stormSVG(){let g=`<rect x="30" y="0" width="326" height="330" fill="rgba(10,20,30,.22)"/><rect x="30" y="0" width="326" height="330" fill="url(#mRain)" opacity=".3"/><rect class="flash" x="30" y="0" width="326" height="330" fill="#eaf6ff" opacity="0"/>`;
-  const cX=PX(127.9),cY=PY(36.4),pts=COAST.map(p=>[PX(p[0]),PY(p[1])]),seed=Math.floor(Date.now()/120000);
-  for(let i=0;i<10;i++){const r=k=>hsh(seed*97+i,k),j=Math.floor(r(1)*pts.length),[x,y]=pts[j],d=(2.4+r(3)*1.4).toFixed(1),b=(-r(4)*3).toFixed(1),A=`dur="${d}s" begin="${b}s" repeatCount="indefinite"`;
-    g+=`<g transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><g><animateTransform attributeName="transform" type="scale" values=".1;1.6;.1" keyTimes="0;.35;1" ${A}/><animate attributeName="opacity" values="0;1;0" keyTimes="0;.3;1" ${A}/><path d="M-6,2 Q-4,-6 -1,-2 Q1,-8 3,-2 Q6,-6 6,2Z" fill="rgba(245,252,255,.9)"/><circle cx="-5" cy="-7" r="1" fill="#fff"/><circle cx="4" cy="-8" r="1.1" fill="#fff"/></g></g>`;}
-  return g;}
 function buildMap(){let g='';
   for(let la=34;la<=38;la++){const y=PY(la).toFixed(1);g+=`<line class="grat" x1="0" x2="350" y1="${y}" y2="${y}"/><text class="gl" x="346" y="${y-3}" text-anchor="end">${la}°N</text>`;}
   for(let lo=125;lo<=131;lo++){const x=PX(lo).toFixed(1);g+=`<line class="grat" y1="0" y2="335" x1="${x}" x2="${x}"/><text class="gl" x="${+x+3}" y="330">${lo}°E</text>`;}
@@ -1481,7 +1473,7 @@ function buildMap(){let g='';
     <linearGradient id="mLand" gradientUnits="userSpaceOnUse" x1="${PX(126.1)}" y1="0" x2="${PX(129.3)}" y2="0"><stop offset="0" stop-color="#b9c890"/><stop offset=".3" stop-color="#93ad6c"/><stop offset=".6" stop-color="#5d8a4c"/><stop offset="1" stop-color="#2f6438"/></linearGradient>
     <linearGradient id="mShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,255,230,.10)"/><stop offset="1" stop-color="rgba(0,20,0,.18)"/></linearGradient>
     <clipPath id="mClip"><path d="${d}"/></clipPath>
-    <pattern id="mRain" width="14" height="20" patternUnits="userSpaceOnUse"><path d="M10,0 l-5,12" stroke="rgba(200,225,240,.55)" stroke-width=".8"/><animateTransform attributeName="patternTransform" type="translate" from="0 0" to="-7 20" dur=".35s" repeatCount="indefinite"/></pattern></defs>
+</defs>
     <rect x="34" y="2" width="318" height="322" fill="url(#mSea)"/>
     `+g;
   g+=`<g id="mWash" data-d="${d}"></g><path class="landp" d="${d}" style="fill:url(#mLand);stroke:#d9e6b0;stroke-opacity:.6"/>
@@ -1497,15 +1489,60 @@ function buildMap(){let g='';
   g+='<g id="mWx"></g>';
   const node=(id,cls,x,y,label,lx,la,ly,res)=>`<g class="node ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}">
     <circle class="hit" cx="${x}" cy="${y}" r="16"/><circle class="ring" cx="${x}" cy="${y}" r="10"/>
-    ${cls==='base'?`<rect class="dot" x="${x-6}" y="${y-6}" width="12" height="12" transform="rotate(45 ${x} ${y})"/>`:res?`<svg class="ricon" x="${x-8}" y="${y-8}" width="16" height="16" viewBox="0 0 16 16">${RIC[res]||''}</svg>`:`<circle class="dot" cx="${x}" cy="${y}" r="6"/>`}
+    ${cls==='base'?`<g transform="translate(${x},${y})" class="bdrill"><circle r="9.5" fill="rgba(14,19,21,.75)" stroke="#ffd56a" stroke-width="1.4"/><rect x="-1" y="-9" width="2" height="4" fill="#c9d1d5"/><rect x="-5.5" y="-6" width="11" height="5" rx="1.2" fill="#d9573a" stroke="#2b211c" stroke-width=".8"/><circle cx="0" cy="-3.5" r="1.3" fill="#fff3b0"/><path d="M-4.5,-1 L4.5,-1 L0,8Z" fill="#f2c14e" stroke="#2b211c" stroke-width=".8" stroke-linejoin="round"/><path d="M-3,1.4 L3,.6 M-2,3.8 L2,3 M-1,6 L1,5.6" stroke="#8a6a1e" stroke-width=".8"/></g>`:res?`<svg class="ricon" x="${x-8}" y="${y-8}" width="16" height="16" viewBox="0 0 16 16">${RIC[res]||''}</svg>`:`<circle class="dot" cx="${x}" cy="${y}" r="6"/>`}
     <text x="${x+lx}" y="${y+ly}" text-anchor="${la}">${label}</text>${res&&cls!=='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9.5}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}${res&&cls==='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}</g>`;
   for(const r of REG){const x=+PX(r.lon).toFixed(1),y=+PY(r.lat).toFixed(1);g+=r.t==='sea'?node(r.id,'sea',x,y,r.n,0,'middle',19,r.res):node(r.id,'land',x,y,r.n,r.lx,r.la,4,r.res);}
   g+=node('yanggu','base',+PX(127.99).toFixed(1),+PY(38.11).toFixed(1),'양구 본공',-11,'end',4);
   $('#map').innerHTML=`<svg viewBox="34 2 318 322" role="img" aria-label="대한민국 시추 지도">${g}</svg>`;wxSet(true);}
-const WX=[['☀️ 맑음 · 잔잔','calm'],['💨 바람 · 너울','wind'],['⛈️ 폭풍 · 거친 파도','storm']];let wxCur=-1;
-function wxNow(){const p=Math.floor(Date.now()/120000),h=Math.abs(Math.sin(p*12.9898)*43758.5453)%1;return h<.5?0:h<.8?1:2;}
-function wxSet(f){const w=wxNow();if(!f&&w===wxCur)return;const m=$('#map');m.classList.remove('wx-calm','wx-wind','wx-storm');m.classList.add('wx-'+WX[w][1]);const t=$('#wxT');if(t)t.textContent=WX[w][0];{const mw=$('#mWash');if(mw)mw.innerHTML=washSVG(mw.dataset.d,w);const mx=$('#mWx');if(mx)mx.innerHTML=w===2?stormSVG():'';}if(!f&&wxCur>=0&&w===2)toast('⛈️ 바다에 폭풍이 몰려와요 — 파도가 거세요');wxCur=w;}
+// ---------------- weather (changes every 3 minutes, affects expedition material yield and digging) ----------------
+// y: material yield %, g: dig speed %, lv: shore wave level, w: weight by season [spring,summer,autumn,winter]
+const WXT=[
+ {id:'sunny',n:'맑음',ic:'☀️',y:25,g:0,lv:0,w:[24,16,26,18]},
+ {id:'cloud',n:'흐림',ic:'☁️',y:0,g:0,lv:0,w:[18,14,18,18]},
+ {id:'hot',n:'땡볕',ic:'🥵',y:-10,g:-10,lv:0,w:[4,16,2,0]},
+ {id:'wind',n:'바람',ic:'🍃',y:0,g:-5,lv:1,w:[12,8,14,12]},
+ {id:'rain',n:'비',ic:'🌧️',y:-15,g:-10,lv:1,w:[12,16,10,2]},
+ {id:'snow',n:'눈',ic:'🌨️',y:-15,g:-10,lv:1,w:[0,0,0,16]},
+ {id:'gale',n:'거센 바람',ic:'💨',y:-20,g:-15,lv:2,w:[5,4,6,6]},
+ {id:'hrain',n:'거센 비',ic:'🌧️',y:-25,g:-20,lv:2,w:[4,10,3,0]},
+ {id:'storm',n:'거센 폭풍',ic:'⛈️',y:-30,g:-25,lv:2,w:[3,8,4,0]},
+ {id:'bliz',n:'거센 눈보라',ic:'❄️',y:-30,g:-30,lv:2,w:[0,0,0,8]}];
+const WX_MS=180000;let wxCur=null;
+function wxAt(t){const p=Math.floor(t/WX_MS),si=['spring','summer','autumn','winter'].indexOf(autoSeason()),tot=WXT.reduce((a,w)=>a+w.w[si],0);let r=hsh(p,911)*tot;for(const w of WXT){r-=w.w[si];if(r<0)return w;}return WXT[0];}
+const wxNowT=()=>wxAt(Date.now());
+// hard mode: penalties x1.4, bonus x0.6
+const wxY=w=>w.y>0?w.y*(S.mode==='hard'?.6:1):w.y*(S.mode==='hard'?1.4:1),wxG=w=>w.g*(S.mode==='hard'?1.4:1);
+const wxDig=()=>1+wxG(wxNowT())/100;
+function wxAmt(amt){const p=wxY(wxNowT())/100;if(!p)return amt;const d=Math.max(1,Math.round(Math.abs(p)*amt));return Math.max(1,amt+(p>0?d:-d));}
+function wxFx(w){const y=Math.round(wxY(w)),g=Math.round(wxG(w));return [y?`재료 ${y>0?'+':''}${y}%`:'재료 그대로',g?`굴착 ${g}%`:''].filter(Boolean).join(' · ');}
+function washSVG(d,lv){const W=[[1.6,4,.35,7],[2.2,5.5,.42,4.6],[3,8,.5,2.2]][lv],[w0,w1,op,du]=W;
+  return `<path d="${d}" fill="none" stroke="#e6f6ff" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="${lv<2?'.5 4':'2 5'}" opacity="${op}" stroke-width="${w0}"><animate attributeName="stroke-width" values="${w0};${w1};${w0}" dur="${du}s" repeatCount="indefinite"/><animate attributeName="stroke-dashoffset" values="0;22" dur="${du*3}s" repeatCount="indefinite"/></path>`
+    +(lv===2?`<path d="${d}" fill="none" stroke="rgba(200,236,250,.35)" stroke-linejoin="round" stroke-width="16"><animate attributeName="stroke-width" values="8;20;8" dur="1.7s" repeatCount="indefinite"/><animate attributeName="opacity" values=".15;.45;.15" dur="1.7s" repeatCount="indefinite"/></path>`:'');}
+const WR=`x="30" y="0" width="326" height="330"`;
+const wxPat=(id,w,h,body,dx,dy,dur)=>`<defs><pattern id="${id}" width="${w}" height="${h}" patternUnits="userSpaceOnUse">${body}<animateTransform attributeName="patternTransform" type="translate" from="0 0" to="${dx} ${dy}" dur="${dur}s" repeatCount="indefinite"/></pattern></defs><rect ${WR} fill="url(#${id})"/>`;
+function sprayG(n){let g='';const pts=COAST.map(p=>[PX(p[0]),PY(p[1])]),seed=Math.floor(Date.now()/WX_MS);
+  for(let i=0;i<n;i++){const r=k=>hsh(seed*97+i,k),[x,y]=pts[Math.floor(r(1)*pts.length)],d=(2.4+r(3)*1.4).toFixed(1),b=(-r(4)*3).toFixed(1),A=`dur="${d}s" begin="${b}s" repeatCount="indefinite"`;
+    g+=`<g transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><g><animateTransform attributeName="transform" type="scale" values=".1;1.6;.1" keyTimes="0;.35;1" ${A}/><animate attributeName="opacity" values="0;1;0" keyTimes="0;.3;1" ${A}/><path d="M-6,2 Q-4,-6 -1,-2 Q1,-8 3,-2 Q6,-6 6,2Z" fill="rgba(245,252,255,.9)"/><circle cx="-5" cy="-7" r="1" fill="#fff"/><circle cx="4" cy="-8" r="1.1" fill="#fff"/></g></g>`;}return g;}
+const RAIN=(op,dense)=>wxPat('wxR',dense?9:14,dense?16:20,`<path d="M10,0 l-5,12" stroke="rgba(200,225,240,${op})" stroke-width="${dense?1:.8}"/>${dense?'<path d="M4,6 l-4,9" stroke="rgba(200,225,240,.4)" stroke-width=".8"/>':''}`,dense?-8:-7,dense?32:20,dense?.28:.35);
+const SNOW=(dense)=>wxPat('wxS',dense?18:26,dense?18:26,`<circle cx="4" cy="5" r="${dense?1.3:1.1}" fill="#fff" opacity=".9"/><circle cx="${dense?13:17}" cy="${dense?12:16}" r="${dense?1:1.4}" fill="#fff" opacity=".75"/>${dense?'<circle cx="9" cy="2" r=".8" fill="#fff"/>':''}`,dense?-36:-6,dense?18:26,dense?.6:3.2);
+const WIND=(fast)=>wxPat('wxW',fast?90:130,fast?34:48,`<path d="M0,10 q20,-6 40,0 t30,-2" stroke="rgba(235,245,250,${fast?.55:.4})" stroke-width="1" fill="none" stroke-linecap="round"/>${fast?'<path d="M30,26 q16,-5 32,0" stroke="rgba(235,245,250,.45)" stroke-width=".9" fill="none" stroke-linecap="round"/>':''}`,fast?90:130,0,fast?1.1:3.4);
+function wxOverlay(w){const id=w.id;let g='';
+  if(id==='sunny'||id==='hot'){const hot=id==='hot';g+=`<defs><radialGradient id="wxSun"><stop offset="0" stop-color="${hot?'#fff2b0':'#fff8d8'}" stop-opacity="${hot?.75:.5}"/><stop offset=".35" stop-color="${hot?'#ffb050':'#ffe9a0'}" stop-opacity="${hot?.35:.18}"/><stop offset="1" stop-color="#ffb050" stop-opacity="0"/></radialGradient></defs>`
+    +(hot?`<rect ${WR} fill="rgba(255,140,40,.13)"/>`:'')+`<circle cx="345" cy="12" r="${hot?120:80}" fill="url(#wxSun)"><animate attributeName="r" values="${hot?'110;130;110':'74;86;74'}" dur="${hot?3:5}s" repeatCount="indefinite"/></circle>`;}
+  else if(id==='cloud'){g+=`<rect ${WR} fill="rgba(120,130,140,.16)"/><g opacity=".5"><animateTransform attributeName="transform" type="translate" values="-30 0;30 0;-30 0" dur="40s" repeatCount="indefinite"/>${[[90,40,1],[230,90,1.3],[150,230,1.1],[300,260,.9]].map(([x,y,k])=>`<g transform="translate(${x},${y}) scale(${k})"><ellipse cx="0" cy="0" rx="26" ry="9" fill="#c8d0d6"/><ellipse cx="-10" cy="-6" rx="12" ry="9" fill="#d8dee2"/><ellipse cx="8" cy="-8" rx="14" ry="11" fill="#e2e7ea"/></g>`).join('')}</g>`;}
+  else if(id==='wind')g+=WIND(false);
+  else if(id==='gale')g+=`<rect ${WR} fill="rgba(80,100,110,.12)"/>`+WIND(true)+sprayG(6);
+  else if(id==='rain')g+=`<rect ${WR} fill="rgba(20,30,40,.12)"/>`+RAIN(.45,false);
+  else if(id==='hrain')g+=`<rect ${WR} fill="rgba(10,20,30,.25)"/>`+RAIN(.6,true)+sprayG(5);
+  else if(id==='snow')g+=`<rect ${WR} fill="rgba(220,235,245,.08)"/>`+SNOW(false);
+  else if(id==='bliz')g+=`<rect ${WR} fill="rgba(225,238,248,.22)"/>`+SNOW(true)+WIND(true);
+  else if(id==='storm')g+=`<rect ${WR} fill="rgba(10,20,30,.25)"/>`+RAIN(.5,true)+`<rect class="flash" ${WR} fill="#eaf6ff" opacity="0"/>`+sprayG(10);
+  return g;}
+function wxSet(f){const w=wxNowT();if(!f&&wxCur&&w.id===wxCur.id)return;const m=$('#map');m.className=m.className.replace(/\bwx-\w+/g,'').trim()+' wx-'+w.id;
+  const mw=$('#mWash');if(mw)mw.innerHTML=washSVG(mw.dataset.d,w.lv);const mx=$('#mWx');if(mx)mx.innerHTML=wxOverlay(w);
+  if(!f&&wxCur&&S.story)toast(`${w.ic} 날씨가 ${w.n}(으)로 바뀌었어요 — 원정 ${wxFx(w)}`);wxCur=w;mapInfoKey='';}
 setInterval(()=>wxSet(false),5000);
+
 function updateMap(){document.querySelectorAll('#map .rcnt').forEach(t=>{t.textContent=(S.res[t.dataset.r]||0).toLocaleString('ko-KR');});document.querySelectorAll('.node').forEach(n=>{const r=REG.find(x=>x.id===n.dataset.id);
   n.classList.toggle('locked',!!r&&!isUnl(r));n.classList.toggle('sel',n.dataset.id===sel);n.classList.toggle('act',n.dataset.id===S.ex.active);n.classList.toggle('evt',!!(evtOn()&&n.dataset.id===S.evt.rid));});renderCard();}
 function openRegion(id){sel=id;updateMap();$('#rpop').hidden=false;const sh=$('#rpop .rsheet');sh.scrollTop=0;}
@@ -1634,6 +1671,29 @@ const INV=[
 ];
 const invAmt=v=>Math.round(v.amt*MD().inv);
 const ready=v=>{const[c,t]=v.cond();return !S.inv[v.id]&&c>=t;};
+// repeatable investment rounds (5 kinds). Each completed round opens the next with a higher bar.
+// Reward = share of the next drill upgrade cost, so it stays useful at every stage without breaking the balance.
+const fosPieces=()=>Object.values(S.fos||{}).reduce((a,v)=>a+v.length,0);
+const IRND=[
+ {id:'priv',n:'민간 투자',ic:'🙋',c:'#f2c79c',who:['동네 상인 모임','개인 엔젤 투자자','크라우드펀딩 후원자들','은퇴한 광산 기술자','부동산 큰손','IT 창업가 출신 엔젤','해외 교포 투자 모임','유명 배우 개인 투자'],
+  ct:'본공 깊이',cur:()=>S.depth,tgt:r=>Math.round(300*Math.pow(2.3,r)),fmt:fmtD,k:.1},
+ {id:'gov',n:'정부 지원',ic:'🏛️',c:'#78d39a',who:['양구군청 지역 사업','강원특별자치도 과제','산업통상자원부 R&D','한국지질자원연구원 공동 과제','과학기술정보통신부 국책 과제','국가 전략 기술 지원'],
+  ct:'드릴 레벨',cur:()=>S.dl,tgt:r=>3+4*r,fmt:n=>'Lv.'+n,k:.18},
+ {id:'org',n:'단체 후원',ic:'🎓',c:'#97abc2',who:['지역 역사 문화 협회','한국 고생물 학회','문화유산 보존 재단','자연사 박물관 후원회','국제 지질 학회','세계 유산 위원회'],
+  ct:'유물·화석 조각 발견',cur:()=>relicCount()+fosPieces(),tgt:r=>2+3*r,fmt:n=>n+'개',k:.12},
+ {id:'mid',n:'중견·중소기업',ic:'🏭',c:'#7cc6e6',who:['강원 정밀 공구','한빛 굴착기계','동해 해양 플랜트','남도 특수강','신성 베어링','미래 센서 테크','대한 케이블'],
+  ct:'원정 누적 칸',cur:()=>S.st.exp||0,tgt:r=>Math.round(60*Math.pow(1.75,r)),fmt:n=>n.toLocaleString('ko-KR')+'칸',k:.14},
+ {id:'big',n:'대기업 투자',ic:'🏢',c:'#9a86c8',who:['한라 중공업','대한 에너지 그룹','코리아 테크 홀딩스','글로벌 소재 그룹','미래 모빌리티 그룹','우주 항공 그룹'],
+  ct:'부품 레벨 합계',cur:()=>sumLv(),tgt:r=>12+8*r,fmt:n=>n+'레벨',k:.2}];
+const irOf=id=>{S.ir=S.ir||{};return S.ir[id]||0;};
+const irReady=d=>d.cur()>=d.tgt(irOf(d.id));
+const irAmt=d=>Math.max(200,Math.round(d.k*dlCost(Math.min(DLOPEN,S.dl+1))*MD().inv*(1+.04*irOf(d.id))/10)*10);
+function irWho(d){const r=irOf(d.id);return d.who[r%d.who.length]+(r>=d.who.length?' '+(Math.floor(r/d.who.length)+1)+'차':'');}
+function irRows(){return IRND.map(d=>{const r=irOf(d.id),t=d.tgt(r),c=d.cur(),rd=c>=t,pct=Math.min(100,c/t*100);
+  return `<div class="investor ${rd?'ready':''}"><div class="ava" style="--c:${d.c}">${d.ic}</div><div style="min-width:0"><div class="iname">${d.n} · ${r+1}차</div><div class="irole">${irWho(d)} · 약 ${won(irAmt(d))}</div>
+    <div class="icond">${d.ct} ${d.fmt(Math.min(c,t))} / ${d.fmt(t)}</div><div class="ibar"><div style="width:${pct}%"></div></div></div>
+    <button class="ibtn" type="button" data-ir="${d.id}" ${rd?'':'disabled'}>${rd?'투자 받기':'조건 미달'}</button></div>`;}).join('');}
+function irClaim(id){const d=IRND.find(x=>x.id===id);if(!d||!irReady(d))return;const a=irAmt(d),who=irWho(d);S.money+=a;S.ir[id]=irOf(id)+1;save();toast(`${d.ic} ${who} 투자 유치 · +${won(a)} — 다음 ${d.n} 조건이 열렸어요`);renderInvest();}
 function renderInvest(){
   const total=INV.filter(v=>S.inv[v.id]).reduce((a,v)=>a+invAmt(v),0);
   const rows=INV.map(v=>{const[c,t]=v.cond(),done=!!S.inv[v.id],rd=!done&&c>=t,pct=Math.min(100,c/t*100);
@@ -1643,15 +1703,15 @@ function renderInvest(){
        <div class="icond">${done?'투자 완료':v.ct+(v.fmt?` · ${v.fmt(Math.min(c,t))} / ${v.fmt(t)}`:'')}</div>
        ${done||!v.fmt?'':`<div class="ibar"><div style="width:${pct}%"></div></div>`}</div>
       <button class="ibtn" type="button" data-inv="${v.id}" ${rd?'':'disabled'}>${done?'완료':rd?'제안 보기':'조건 미달'}</button></div>`;}).join('');
-  $('#investList').innerHTML=`<h2 class="h3">투자자 모집</h2><p class="sub">돈이 없습니다. 땅을 파서 실력을 증명하면 투자자들이 찾아옵니다. 누적 투자금 ${won(total)}</p><div class="invs">${rows}</div>`;}
-$('#investList').addEventListener('click',e=>{const b=e.target.closest('[data-inv]');if(!b||b.disabled)return;showDeal(INV.find(v=>v.id===b.dataset.inv));});
+  $('#investList').innerHTML=`<h2 class="h3">투자자 모집</h2><p class="sub">돈이 없습니다. 땅을 파서 실력을 증명하면 투자자들이 찾아옵니다. 누적 투자금 ${won(total)}</p><div class="invs">${rows}</div><h2 class="h3" style="margin-top:18px">투자 라운드</h2><p class="sub">조건을 채울 때마다 투자를 받고, 받으면 더 높은 조건의 다음 라운드가 열려요. 투자금은 그때 드릴 승급 비용에 맞춰 정해져요.</p><div class="invs">${irRows()}</div>`;}
+$('#investList').addEventListener('click',e=>{const ir=e.target.closest('[data-ir]');if(ir&&!ir.disabled){irClaim(ir.dataset.ir);return;}const b=e.target.closest('[data-inv]');if(!b||b.disabled)return;showDeal(INV.find(v=>v.id===b.dataset.inv));});
 let dealAfter=null;
 function showDeal(v){$('#dSheet').innerHTML=`<div class="dtop"><div class="ava" style="--c:${v.c}">${v.ini}</div><div><div class="iname">${v.n}</div><div class="irole">${v.role}</div></div></div>
    <p class="dq">“${v.q}”</p><div><div class="damt">+${won(invAmt(v))}</div>${v.perk?`<div class="dperk">혜택: ${v.perk}</div>`:''}</div>
    <button class="primary" type="button" id="dOk">투자 받기</button>`;
   $('#deal').hidden=false;$('#dOk').onclick=()=>{if(!S.inv[v.id]){S.inv[v.id]=1;S.money+=invAmt(v);save();toast(v.n+' 투자 유치 · +'+won(invAmt(v)));}
     $('#deal').hidden=true;if(view==='invest')renderInvest();if(view==='craft')renderCraft();if(dealAfter){const f=dealAfter;dealAfter=null;f();}};}
-function checkInvest(){let any=false;for(const v of INV)if(ready(v)){any=true;if(!S.invN.includes(v.id)){S.invN.push(v.id);if(S.story&&v.id!=='mom')toast('투자 제안 도착: '+v.n);}}
+function checkInvest(){let any=false;for(const d of IRND)if(irReady(d)){any=true;const k=d.id+irOf(d.id);S.irN=S.irN||[];if(!S.irN.includes(k)){S.irN.push(k);if(S.story)toast(`${d.ic} 투자 제안 도착: ${irWho(d)} (${d.n})`);}}for(const v of INV)if(ready(v)){any=true;if(!S.invN.includes(v.id)){S.invN.push(v.id);if(S.story&&v.id!=='mom')toast('투자 제안 도착: '+v.n);}}
   $('#invBadge').hidden=!any;}
 
 // ---------------- title ----------------
@@ -2523,7 +2583,11 @@ function isoItem(id,cx,cy){let g='';
   case 'dog':case 'cat':g+=petHome(id,cx,cy);break;
   case 'tree':{const A=(t,v,d)=>`<animateTransform attributeName="transform" type="${t}" values="${v}" dur="${d}s" repeatCount="indefinite"/>`;g+=shadowE(cx,cy,20,8)+`<rect x="${cx-3.5}" y="${cy-16}" width="7" height="16" fill="#7a5a3c" ${ISK}/>`;
     let cn='';for(const [w,y0,h] of [[22,-14,20],[18,-27,19],[14,-39,17],[9,-50,14]]){const tY=cy+y0-h;cn+=`<polygon points="${PT([[cx,tY],[cx-w,cy+y0],[cx,cy+y0+4]])}" fill="#3f8a4a" ${ISK}/><polygon points="${PT([[cx,tY],[cx+w,cy+y0],[cx,cy+y0+4]])}" fill="#2a6233" ${ISK}/><path d="M${cx-w*.5},${cy+y0-2} l${w*.25},-3" stroke="#5fae5f" stroke-width="1.4"/>`;}
-    g+=`<g>${A('rotate',`-1.6 ${cx} ${cy-14};1.6 ${cx} ${cy-14};-1.6 ${cx} ${cy-14}`,'4.2')}${cn}</g>`;break;}
+    const cone=(x,y)=>`<g transform="translate(${x},${y})"><ellipse rx="2.3" ry="3.1" fill="#8a5a2c" stroke="#3a2412" stroke-width=".6"/><path d="M-2,-1 h4 M-2.2,.8 h4.4 M0,-3 v6" stroke="#5a3a1a" stroke-width=".5"/></g>`;
+    g+=`<g>${A('rotate',`-1.6 ${cx} ${cy-14};1.6 ${cx} ${cy-14};-1.6 ${cx} ${cy-14}`,'4.2')}${cn}${cone(cx-9,cy-24)}${cone(cx+8,cy-37)}</g>`;
+    for(const [i,sx,sy,ex2] of [[0,-9,-24,-16],[1,8,-37,14]]){const d=7+i*2.5,b=-i*3.3,kt='0;.62;.72;.78;.83;.95;1';
+      g+=`<g opacity="0"><animate attributeName="opacity" values="0;0;1;1;1;0;0" keyTimes="${kt}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="${cx+sx},${cy+sy};${cx+sx},${cy+sy};${cx+(sx+ex2)/2},${cy+sy/3};${cx+ex2},${cy+2};${cx+ex2+2},${cy-1};${cx+ex2+3},${cy+2};${cx+ex2+3},${cy+2}" keyTimes="${kt}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/><g><animateTransform attributeName="transform" type="rotate" values="0;0;120;260;300;330;330" keyTimes="${kt}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/>${cone(0,0)}</g></g>`;}
+    break;}
   case 'cherry':{const A=(t,v,d,b=0)=>`<animateTransform attributeName="transform" type="${t}" values="${v}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/>`;g+=shadowE(cx,cy,22,9)+`<path d="M${cx},${cy} V${cy-20} M${cx},${cy-13} l-9,-8 M${cx},${cy-16} l8,-9" stroke="#6a4a2c" stroke-width="5" stroke-linecap="round"/>`;
     g+=`<g>${A('rotate',`-1.4 ${cx} ${cy-18};1.4 ${cx} ${cy-18};-1.4 ${cx} ${cy-18}`,'4.6')}`+puff(cx-13,cy-28,12,'#f3a9c3')+puff(cx+13,cy-29,12,'#f0a0bc')+puff(cx,cy-41,13,'#f7c6d6')+puff(cx-4,cy-31,9,'#fbd3e0')+`</g>`;
     for(let i=0;i<5;i++){const sx=cx-16+i*8,d=3+i*.7;g+=`<ellipse cx="0" cy="0" rx="1.8" ry="1.1" fill="#ffc6d8"><animateMotion dur="${d}s" begin="${-i*.9}s" repeatCount="indefinite" path="M${sx},${cy-30} q6,10 -2,20 q-6,8 2,${12+i}"/><animate attributeName="opacity" values="0;1;1;0" dur="${d}s" begin="${-i*.9}s" repeatCount="indefinite"/></ellipse>`;}break;}
@@ -2545,10 +2609,20 @@ function isoItem(id,cx,cy){let g='';
       const rf=isoBox(cx,y,w+.16,2.6,'#8f8a80');g+=rf.svg;const f2=foot(cx,y-2.6,w+.16);g+=`<path d="M${f2.L[0]},${f2.L[1]} q-3,-1 -4,-4 M${f2.R[0]},${f2.R[1]} q3,-1 4,-4" stroke="#6e6a62" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;y-=2.6;}
     g+=`<rect x="${cx-1.4}" y="${y-14}" width="2.8" height="14" fill="#7a746c" ${ISK}/>`+[4,8,11].map(d=>`<ellipse cx="${cx}" cy="${y-d}" rx="3" ry="1.2" fill="#9a958c" ${ISK}/>`).join('')+`<circle cx="${cx}" cy="${y-16}" r="2.4" fill="#ffd56a" ${ISK}><animate attributeName="fill" values="#ffd56a;#fff6c8;#ffd56a" dur="1.4s" repeatCount="indefinite"/></circle>`
       +[0,1,2].map(i=>`<path d="M0,-3 L.8,-.8 L3,0 L.8,.8 L0,3 L-.8,.8 L-3,0 L-.8,-.8Z" fill="#fff6c8" transform="translate(${cx+[-14,14,-6][i]},${cy-[20,34,52][i]})"><animate attributeName="opacity" values="0;1;0" dur="2.2s" begin="${i*.7}s" repeatCount="indefinite"/></path>`).join('');break;}
-  case 'bench':{g+=shadowE(cx,cy,16,6);const ex=[1,.5],ey=[-1,.5],c=[cx,cy-8],q=(a,b)=>[c[0]+ex[0]*a+ey[0]*b,c[1]+ex[1]*a+ey[1]*b];
-    for(const [a,b] of [[-11,-3],[11,-3],[-11,3],[11,3]]){const p=q(a,b);g+=`<path d="M${p[0]},${p[1]} v8" stroke="#3a3a40" stroke-width="2"/>`;}
-    const bk=[q(-13,-4),q(13,-4)];g+=`<polygon points="${PT([bk[0],bk[1],up(bk[1],9),up(bk[0],9)])}" fill="#8a5a2c" ${ISK}/>`;
-    g+=`<polygon points="${PT([q(-13,4),q(13,4),[q(13,4)[0],q(13,4)[1]+2.5],[q(-13,4)[0],q(-13,4)[1]+2.5]])}" fill="#7a4a24" ${ISK}/><polygon points="${PT([q(-13,-4),q(13,-4),q(13,4),q(-13,4)])}" fill="#b07a44" ${ISK}/>`;break;}
+  case 'bench':{g+=shadowE(cx,cy,20,7);const ex=[1,.5],ey=[-1,.5],c=[cx,cy-9],q=(a,b,h=0)=>[c[0]+ex[0]*a+ey[0]*b,c[1]+ex[1]*a+ey[1]*b-h],IR='#2f3438',IRL='#4a5258';
+    const leg=(a,b)=>{const p=q(a,b);return `<path d="M${p[0]},${p[1]} l0,9" stroke="${IR}" stroke-width="2.4" stroke-linecap="round"/><path d="M${p[0]-.5},${p[1]+1} l0,6" stroke="${IRL}" stroke-width=".7"/>`;};
+    g+=leg(-12,-4)+leg(12,-4);
+    // backrest: two iron posts + three wooden slats
+    for(const a of[-12,12]){const p0=q(a,-4.6),p1=q(a,-4.6,15);g+=`<path d="M${p0[0]},${p0[1]} L${p1[0]},${p1[1]}" stroke="${IR}" stroke-width="2.2" stroke-linecap="round"/>`;}
+    for(const [h0,h1] of[[4,7.2],[8.4,11.6],[12.8,16]]){const A=q(-14.5,-4.8,h0),B=q(14.5,-4.8,h0),C=q(14.5,-4.8,h1),D=q(-14.5,-4.8,h1);g+=`<polygon points="${PT([A,B,C,D])}" fill="#b5793e" ${ISK}/><path d="M${D[0]+1},${D[1]+.8} L${C[0]-1},${C[1]+.8}" stroke="#d9a05c" stroke-width=".8"/>`;}
+    // seat slats with gaps
+    for(const [b0,b1,col] of[[-4.4,-2.4,'#b5793e'],[-2,0,'#c4874a'],[.4,2.4,'#b5793e'],[2.8,4.6,'#c4874a']]){const A=q(-15,b0),B=q(15,b0),C=q(15,b1),D=q(-15,b1);
+      g+=`<polygon points="${PT([D,C,[C[0],C[1]+1.6],[D[0],D[1]+1.6]])}" fill="#7a4a24" ${ISK}/><polygon points="${PT([A,B,C,D])}" fill="${col}" ${ISK}/><path d="M${A[0]+3},${A[1]+.6} L${B[0]-3},${B[1]+.6}" stroke="#e0aa68" stroke-width=".6"/>`;}
+    g+=leg(-12,4.4)+leg(12,4.4);
+    // curled iron armrests
+    for(const a of[-13.6,13.6]){const p0=q(a,4.6),p1=q(a,4.6,6),p2=q(a,-3,7);g+=`<path d="M${p0[0]},${p0[1]+8} L${p0[0]},${p0[1]} Q${p1[0]},${p1[1]-1} ${(p1[0]+p2[0])/2},${(p1[1]+p2[1])/2} T${p2[0]},${p2[1]}" stroke="${IR}" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="${p1[0]}" cy="${p1[1]+1}" r="1.5" fill="none" stroke="${IR}" stroke-width="1.2"/>`;}
+    const bk=q(6,0,1.5);g+=`<g transform="translate(${bk[0]},${bk[1]})"><path d="M-4,0 h7 l-1,-2.6 h-5Z" fill="#c94a2a" ${ISK}/><path d="M-3,-2.6 q2,-3 4,0" fill="#f2c14e" stroke="#2b211c" stroke-width=".6"/></g>`;
+    break;}
   case 'lamp':{g+=`<ellipse cx="${cx}" cy="${cy}" rx="22" ry="10" fill="#fff3b0" opacity=".18"><animate attributeName="opacity" values=".12;.24;.12" dur="2.6s" repeatCount="indefinite"/></ellipse><circle cx="${cx}" cy="${cy-38}" r="16" fill="#fff3b0" opacity=".25"><animate attributeName="r" values="14;19;14" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".18;.38;.18" dur="2.6s" repeatCount="indefinite"/></circle>`+shadowE(cx,cy,7,3)+`<rect x="${cx-2.4}" y="${cy-36}" width="4.8" height="36" fill="#3a3a40" ${ISK}/><rect x="${cx-1}" y="${cy-35}" width="1.2" height="34" fill="#6b7a83"/><path d="M${cx},${cy-36} q8,-2 8,-6" stroke="#3a3a40" stroke-width="2" fill="none"/>`
     +isoBox(cx,cy-36,.2,9,'#fff3b0',{left:'#ffe58a',right:'#f2c14e',top:'#3a3a40'}).svg+`<ellipse cx="${cx}" cy="${cy}" rx="5" ry="2.2" fill="#3a3a40"/>`
     +[0,1].map(i=>`<circle r="1.2" fill="#f4f0e0"><animateMotion dur="${2.2+i}s" begin="${-i}s" repeatCount="indefinite" path="M${cx-9},${cy-40} q9,-10 18,0 q-9,10 -18,0Z"/></circle>`).join('');break;}
@@ -2569,6 +2643,20 @@ function isoTile(x,y,own,can,dx=x,dy=y){const [cx,cy]=isoC(dx,dy),f=foot(cx,cy,1
   else g+=`<path d="M${f.L[0]+10},${f.L[1]} L${f.T[0]},${f.T[1]+5} M${f.B[0]},${f.B[1]-5} L${f.R[0]-10},${f.R[1]}" stroke="rgba(0,0,0,.25)" stroke-width="2"/>`;
   return g+'</g>';}
 const landView=()=>landOf().view||0;
+let LANG=0;// extra continuous rotation (radians) while the land is being dragged
+function rotG(gx,gy,th=LANG){const c=LNS/2,dx=gx-c,dy=gy-c,co=Math.cos(th),si=Math.sin(th);return [c+dx*co-dy*si,c+dx*si+dy*co];}
+const projG=(gx,gy)=>[ISO.ox+(gx-gy)*ISO.hw,ISO.oy+(gx+gy)*ISO.hh];
+function tilesAt(th){const L0=landOf(),n=landSize(),N=LNS,P=(a,b)=>projG(...rotG(a,b,th));let g='';
+  const C=[P(0,0),P(N,0),P(N,N),P(0,N)],ctr=projG(N/2,N/2);
+  for(let i=0;i<4;i++){const a=C[i],b=C[(i+1)%4],my=(a[1]+b[1])/2;if(my<=ctr[1])continue;const dk=(a[0]+b[0])/2<ctr[0];g+=`<polygon points="${PT([a,b,up(b,-7),up(a,-7)])}" fill="${dk?'#8a6a44':'#6e5232'}" ${ISK}/>`;}
+  for(let x=0;x<N;x++)for(let y=0;y<N;y++){const own=x<n&&y<n,[dx,dy]=rotC(x,y),alt=(x+y)%2;g+=`<polygon points="${PT([P(dx,dy),P(dx+1,dy),P(dx+1,dy+1),P(dx,dy+1)])}" fill="${own?(alt?'#7dbb5a':'#74b052'):'#5d6b58'}" ${ISK}/>`;}
+  return g;}
+let lgRaf=0;
+function landRotFrame(){lgRaf=0;const t=$('#lTiles'),L=$('#lItems');if(!t||!L)return;t.innerHTML=tilesAt(LANG);
+  const els=[...L.children];for(const el of els){if(el.classList.contains('petg'))continue;const c=el.dataset.c;if(!c)continue;const [gx,gy]=c.split(',').map(Number),s0=projG(gx,gy),r=rotG(gx,gy),s1=projG(...r);
+    el.setAttribute('transform',`translate(${(s1[0]-s0[0]).toFixed(1)},${(s1[1]-s0[1]).toFixed(1)})`);el.dataset.d=r[0]+r[1];}
+  els.sort((a,b)=>+a.dataset.d-+b.dataset.d).forEach(e=>L.appendChild(e));}
+const landRotReq=()=>{if(!lgRaf)lgRaf=requestAnimationFrame(landRotFrame);};
 let LNS=6;
 function rotC(x,y){const N=LNS,r=landView();return r===1?[N-1-y,x]:r===2?[N-1-x,N-1-y]:r===3?[y,N-1-x]:[x,y];}
 function rotA(x,y,nb){const a=rotC(x,y),b=rotC(x+nb-1,y+nb-1);return [Math.min(a[0],b[0]),Math.min(a[1],b[1])];}
@@ -2582,10 +2670,10 @@ function landSVG(){const L0=landOf(),n=landSize(),O=landOcc();let tiles=[],items
   tiles.sort((a,b)=>a[0]-b[0]);
   const me=landMe(),RT=landRot();if(me.x>=0)items.push([me.x,me.y,'me']);
   const its=items.map(([x,y,it])=>{const nb=it==='me'?1:bsz(it),[ax,ay]=rotA(x,y,nb);return [ax+ay+nb,ax,x,y,it,nb,ay];}).sort((a,b)=>a[0]-b[0]||a[1]-b[1]).map(([dd,ax,x,y,it,nb,ay])=>{
-    let [cx,cy]=isoC(ax,ay);if(it==='me'){const pm=landPick==='me',f=foot(cx,cy,1);return `<g class="mech" data-d="${dd}" style="cursor:pointer">${pm?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<ellipse cx="${cx}" cy="${cy+3}" rx="11" ry="4" fill="rgba(0,0,0,.25)"/>${fig(ME(),cx,cy+4,48,{expr:'happy',flip:!!me.f})}</g>`;}
+    let [cx,cy]=isoC(ax,ay);if(it==='me'){const pm=landPick==='me',f=foot(cx,cy,1);return `<g class="mech" data-d="${dd}" data-c="${ax+.5},${ay+.5}" style="cursor:pointer">${pm?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<ellipse cx="${cx}" cy="${cy+3}" rx="11" ry="4" fill="rgba(0,0,0,.25)"/>${fig(ME(),cx,cy+4,48,{expr:'happy',flip:!!me.f})}</g>`;}
     if(nb>1){cx=ISO.ox+(ax-ay)*ISO.hw;cy=ISO.oy+(ax+ay+nb)*ISO.hh;}
-    const pk=landPick===x+','+y,f=foot(cx,cy,nb),mr=!!RT[x+','+y];ISO_MIR=mr?1:0;let art=isoItem(it,cx,cy);ISO_MIR=0;if(nb>1)art=`<g transform="translate(${cx},${cy}) scale(${BIGS[it]||1.8}) translate(${-cx},${-cy})">${art}</g>`;return `<g class="ii${pk?' pk':''}" data-xy="${x},${y}" data-d="${dd}">${pk?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<g transform="${pk?'translate(0,-5) ':''}${mr?`translate(${2*cx},0) scale(-1,1)`:''}">${art}</g></g>`;}).join('');
-  return `<svg class="isoland" viewBox="0 0 ${VW} ${VH}" role="img" aria-label="내 땅 지도">${tiles.map(t=>t[1]).join('')}<g id="lItems">${its}</g></svg>`;}
+    const pk=landPick===x+','+y,f=foot(cx,cy,nb),mr=!!RT[x+','+y];ISO_MIR=mr?1:0;let art=isoItem(it,cx,cy);ISO_MIR=0;if(nb>1)art=`<g transform="translate(${cx},${cy}) scale(${BIGS[it]||1.8}) translate(${-cx},${-cy})">${art}</g>`;return `<g class="ii${pk?' pk':''}" data-xy="${x},${y}" data-d="${dd}" data-c="${ax+nb/2},${ay+nb/2}">${pk?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<g transform="${pk?'translate(0,-5) ':''}${mr?`translate(${2*cx},0) scale(-1,1)`:''}">${art}</g></g>`;}).join('');
+  return `<svg class="isoland" viewBox="0 0 ${VW} ${VH}" role="img" aria-label="내 땅 지도"><g id="lTiles">${tiles.map(t=>t[1]).join('')}</g><g id="lItems">${its}</g></svg>`;}
 function isoIcon(id){NOBUB=1;const pet=id==='dog'||id==='cat'?`<g transform="translate(${id==='dog'?10:4},10) scale(.8)">${petPose(id,'sit')}</g>`:'';NOBUB=0;return GRAND[id]?`<svg viewBox="-84 -118 168 170" aria-hidden="true">${isoItem(id,0,0)}</svg>`:`<svg viewBox="-34 -58 68 80" aria-hidden="true"><polygon points="${PT([[-28,0],[0,-14],[28,0],[0,14]])}" fill="#74b052" ${ISK}/>${isoItem(id,0,0)}${pet}</svg>`;}
 
 let landSel=null,landDel=false,landPick=null;
@@ -2602,7 +2690,7 @@ function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
   const B=(id,t,c='ghost')=>`<button class="${c} sm" type="button" id="${id}">${t}</button>`;
   $('#landView').innerHTML=`<div class="lhead"><div><div class="tk">내 땅 · ${n}×${n}칸</div><div class="tn">양구 국토정중앙 옆 부지</div></div>
      <div class="lbtns">${nx?`<button class="ghost sm" type="button" id="landBuy" ${S.money>=nx?'':'disabled'}>땅 넓히기 ${won(nx)}</button>`:''}<button class="ghost sm ${landDel?'on':''}" type="button" id="landDel">${landDel?'철거 중':'철거'}</button></div></div>
-   <div class="lgrid-wrap" id="lgWrap">${landSVG()}<span class="lrot">⟲ 좌우로 끌어서 돌리기 ⟳</span></div>
+   <div class="lgrid-wrap" id="lgWrap">${landSVG()}<span class="lrot">⟲ 좌우로 끌어서 360° 돌리기 ⟳</span></div>
    ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
      :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${pk.id==='museum'?B('lpGal','전시관 들어가기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
    <p class="sub" style="margin:0">${msg}</p>
@@ -2610,11 +2698,13 @@ function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
 function removeTile(k){const L0=landOf(),it=LITEM.find(i=>i.id===L0.tiles[k]);if(!it)return;S.money+=Math.floor(it.p/2);delete L0.tiles[k];delete landRot()[k];save();toast(it.n+' 철거 · '+won(it.p/2)+' 환급');}
 let lgD=null,lgSup=false;
 function lgTurn(d){const L1=landOf();L1.view=((L1.view||0)+(d>0?1:3))%4;save();renderLand();}
-$('#landView').addEventListener('pointerdown',e=>{const w=e.target.closest('#lgWrap');if(!w||e.button>0)return;lgD={x:e.clientX,y:e.clientY,on:false,id:e.pointerId};});
-$('#landView').addEventListener('pointermove',e=>{if(!lgD||e.pointerId!==lgD.id)return;const dx=e.clientX-lgD.x;if(!lgD.on){if(Math.abs(dx)<10||Math.abs(dx)<Math.abs(e.clientY-lgD.y))return;lgD.on=true;try{$('#lgWrap').setPointerCapture(e.pointerId);}catch(_){}}
-  const sv=$('#lgWrap svg');if(Math.abs(dx)>80){lgTurn(dx);lgD.x=e.clientX;const s2=$('#lgWrap svg');if(s2){s2.style.transition='none';s2.style.transform=`rotate(${dx>0?-22:22}deg) scale(.96)`;requestAnimationFrame(()=>{s2.style.transition='transform .25s';s2.style.transform='';});}return;}
-  if(sv){sv.style.transition='none';sv.style.transform=`rotate(${dx*.28}deg) scale(${1-Math.abs(dx)/1600})`;}e.preventDefault();});
-function lgEnd(e){if(!lgD)return;const on=lgD.on;lgD=null;const sv=$('#lgWrap svg');if(sv){sv.style.transition='transform .25s';sv.style.transform='';}if(on){lgSup=true;setTimeout(()=>{lgSup=false;},60);}}
+$('#landView').addEventListener('pointerdown',e=>{const w=e.target.closest('#lgWrap');if(!w||e.button>0||lgD&&lgD.anim)return;lgD={x:e.clientX,y:e.clientY,on:false,id:e.pointerId};});
+$('#landView').addEventListener('pointermove',e=>{if(!lgD||lgD.anim||e.pointerId!==lgD.id)return;const dx=e.clientX-lgD.x;if(!lgD.on){if(Math.abs(dx)<8||Math.abs(dx)<Math.abs(e.clientY-lgD.y))return;lgD.on=true;lgD.x=e.clientX;try{$('#lgWrap').setPointerCapture(e.pointerId);}catch(_){}}
+  LANG=-(e.clientX-lgD.x)*Math.PI/360;landRotReq();e.preventDefault();});
+function lgEnd(e){if(!lgD||lgD.anim)return;const on=lgD.on;if(!on){lgD=null;return;}lgSup=true;setTimeout(()=>{lgSup=false;},60);
+  const q=Math.round(LANG/(Math.PI/2)),to=q*Math.PI/2,from=LANG,t0=performance.now(),D=220;lgD.anim=true;
+  const step=t=>{const k=Math.min(1,(t-t0)/D),e2=1-Math.pow(1-k,3);LANG=from+(to-from)*e2;landRotFrame();
+    if(k<1)requestAnimationFrame(step);else{LANG=0;lgD=null;const L1=landOf();L1.view=(((L1.view||0)+q)%4+4)%4;save();renderLand();}};requestAnimationFrame(step);}
 $('#landView').addEventListener('pointerup',lgEnd);$('#landView').addEventListener('pointercancel',lgEnd);
 $('#landView').addEventListener('click',e=>{if(lgSup){lgSup=false;e.stopImmediatePropagation();}},true);
 $('#landView').addEventListener('click',e=>{const L0=landOf();
@@ -2898,7 +2988,7 @@ function petTick(dt){if(view!=='land'||!$('#room').hidden||!$('#gal').hidden)ret
     const pose=p.pose==='gohome'?'walk':p.pose==='stand'?'stand':p.pose,dk=pose+p.face;
     if(p.drawn!==dk){p.drawn=dk;const art=p.kind==='dog'?(pose==='meowstand'?'stand':pose):pose;el.innerHTML=`<ellipse cx="0" cy="1" rx="9" ry="3" fill="rgba(0,0,0,.25)"/><g transform="scale(${p.face*.8},.8)">${petPose(p.kind,art)}</g>`;
       el.querySelectorAll('text').forEach(t=>{if(p.face<0)t.setAttribute('transform',`scale(-1,1)`);});}
-    const [qx,qy]=rotPt(p.x,p.y),sx=ISO.ox+(qx-qy)*ISO.hw,sy=ISO.oy+(qx+qy)*ISO.hh;el.setAttribute('transform',`translate(${sx.toFixed(1)},${sy.toFixed(1)})`);
+    const [qx,qy]=LANG?rotG(...rotPt(p.x,p.y)):rotPt(p.x,p.y),sx=ISO.ox+(qx-qy)*ISO.hw,sy=ISO.oy+(qx+qy)*ISO.hh;el.setAttribute('transform',`translate(${sx.toFixed(1)},${sy.toFixed(1)})`);
     const dep=qx+qy;el.dataset.d=dep;let before=null;for(const c of layer.children){if(c!==el&&+c.dataset.d>dep){before=c;break;}}
     if(el.nextSibling!==before&&el!==before)layer.insertBefore(el,before);}
   for(const el of [...layer.querySelectorAll('.petg')])if(!PETS.find(p=>p.home===el.dataset.pet))el.remove();}
@@ -3045,7 +3135,7 @@ $('#recClose').addEventListener('click',()=>$('#recDlg').hidden=true);
 function openTitleModes(){S.needMode=true;save();titleOn=true;$('#title').hidden=false;syncTitle();}
 function syncTitle(){const nm=!!S.needMode;$('#tStart').hidden=nm;$('#tModes').hidden=!nm;const hard=document.querySelector('.tmode.hard'),ok=(S.ends||[]).length>0;
   hard.disabled=!ok;$('#tHardTxt').textContent=ok?'엔딩까지 약 1달 · 부품 20단계 · 드릴 무한(Lv.100)까지':'🔒 엔딩을 한 번 보면 열려요';}
-function startRun(mode){Object.assign(S,{mode,money:0,res:{},parts:{},dl:1,depth:0,done:false,endDone:false,ex:{active:null,dig:{}},inv:{},boost:{m:1,until:0},unl:REG.filter(r=>r.un<=0).map(r=>r.id),st:{exp:0,sea:0},shopDay:null,evt:null,needMode:false,runStart:Date.now(),ng:(S.ng||1)+1});
+function startRun(mode){Object.assign(S,{mode,money:0,res:{},parts:{},dl:1,depth:0,done:false,endDone:false,ex:{active:null,dig:{}},inv:{},ir:{},irN:[],boost:{m:1,until:0},unl:REG.filter(r=>r.un<=0).map(r=>r.id),st:{exp:0,sea:0},shopDay:null,evt:null,needMode:false,runStart:Date.now(),ng:(S.ng||1)+1});
   applyMode();save();closeTitle();show('map');toast(`${S.ng}회차 · ${MD().n} 모드 시작! 다시 지구 중심을 향해`);}
 $('#tModes').addEventListener('click',e=>{const b=e.target.closest('[data-mode]');if(!b||b.disabled)return;startRun(b.dataset.mode);});
 // ---------------- double-material event ----------------
@@ -3119,7 +3209,7 @@ function hud(){
   $('#money').textContent=won(S.money);
   $('#expBadge').hidden=!S.ex.active;
   if(view==='map'){const ex_=S.ex.active?regById(S.ex.active):null;
-    const k=`<span class="mchip"><b class="modechip ${S.mode==='hard'?'hard':''}">${MD().n}</b></span><span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${gateAt()?' · <em>승급 필요</em>':''}</span>`+(ex_?`<span class="mchip cool"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}</span>`:'<span class="mchip dim">진행 중인 원정 없음</span>');
+    const k=`<span class="mchip"><b class="modechip ${S.mode==='hard'?'hard':''}">${MD().n}</b></span><span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${gateAt()?' · <em>승급 필요</em>':''}</span>`+(ex_?`<span class="mchip cool"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}</span>`:'<span class="mchip dim">진행 중인 원정 없음</span>')+(()=>{const w=wxNowT(),y=wxY(w);return `<span class="mchip wxc ${y>0?'good':y<0?'bad':''}" title="원정 재료 채취에 영향"><b>${w.ic} ${w.n}</b> ${wxFx(w)}</span>`;})();
     if(k!==mapInfoKey){mapInfoKey=k;$('#mapInfo').innerHTML=k;}}
   if(view==='bore'&&!exp){const m=S.depth,bm=boostM(),l=layerAt(m),sp=boreDps()/l.H;
     $('#bDepth').textContent=fmtD(m);updateGauge();
@@ -3135,7 +3225,7 @@ function hud(){
     const bb=$('#bBoost');if(bm>1){bb.hidden=false;bb.textContent='부스터 ×'+bm+' · '+Math.ceil((S.boost.until-Date.now())/1000)+'초';}else bb.hidden=true;
     const fk=FUEL.map(f=>have(f.res)).join()+L('cool');if(fk!==hudCache){hudCache=fk;renderFuels();}}
   if(exp){const r=exp.r,g=digOf(r.id),below=belowOf(r,g.i),e=eraAt(r,below),act=S.ex.active===r.id;
-    $('#eSub').textContent=(act?'● 자동 시추 중':'일시 정지')+' · 굴착력 '+fmtN(expDps())+'/초';
+    {const w=wxNowT();$('#eSub').textContent=(act?'● 자동 시추 중':'일시 정지')+' · 굴착력 '+fmtN(expDps())+'/초 · '+w.ic+' '+w.n+' '+wxFx(w);}
     $('#eAlt').textContent=altText(r,g.i);
     let et='';if(!e)et=`수심 구간 · 해저까지 ${((r.water-g.i)*r.ws).toLocaleString('ko-KR')}m`;
     let f0=0,f1=r.water;
