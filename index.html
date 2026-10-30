@@ -503,7 +503,7 @@ nav.tabs button{font-size:12px}
     <button type="button" data-tab="map" aria-current="page">지도</button>
     <button type="button" data-tab="bore">본공</button>
     <button type="button" data-tab="exp">원정<i class="badge cool" id="expBadge" hidden></i></button>
-    <button type="button" data-tab="craft">제작</button>
+    <button type="button" data-tab="craft">제작<i class="badge" id="craftBadge" hidden></i></button>
     <button type="button" data-tab="store">창고</button>
     <button type="button" data-tab="shop">상점</button>
     <button type="button" data-tab="invest">투자<i class="badge" id="invBadge" hidden></i></button>
@@ -719,11 +719,11 @@ const save=()=>{S.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S)
 const L=id=>S.parts[id]||0;
 const levels=()=>Object.fromEntries(PARTS.map(p=>[p.id,L(p.id)]));
 const dpsOf=P=>(3+2*P.housing)*(1+.6*P.bit)*(1+.12*P.bearing)*(1+.25*P.cable);
-const perk=id=>!!S.inv[id];
-const dpsPerk=()=>(perk('vc')?1.15:1)*(perk('inst')?1.25:1)*(1+.1*setPow('samguk'));
+const perk=id=>!!S.inv[id];const pm=()=>S.mode==='hard'?.6:1;const PK=(id,v)=>perk(id)?v*pm():0;const rp=id=>Math.min(20,(S.ir&&S.ir[id])||0)*pm();
+const dpsPerk=()=>(1+PK('vc',.15))*(1+PK('inst',.25))*(1+PK('space',.1))*(1+.01*rp('gov'))*(1+.1*setPow('samguk'));
 const dps=()=>dpsOf(levels())*dpsPerk();
-const critP=()=>.04*L('shock')+.05*setPow('bronze');
-const extraP=()=>Math.min(.9,.08+.05*L('sensor')+.1*setPow('goryeo'));
+const critP=()=>.04*L('shock')+PK('miner',.03)+.05*setPow('bronze');
+const extraP=()=>Math.min(.9,.08+.05*L('sensor')+PK('farm',.04)+.005*rp('mid')+.1*setPow('goryeo'));
 const boostM=()=>S.boost&&S.boost.until>Date.now()?S.boost.m:1;
 const isUnl=r=>r.un===0||S.unl.includes(r.id);
 function gateAt(){const l=layerAt(S.depth);return !S.done&&l.req>S.dl?l:null;}
@@ -1168,7 +1168,7 @@ $('#alert').addEventListener('click',e=>{const b=e.target.closest('[data-al]');i
 let chest=null,chestT=40+Math.random()*40;
 const CHEST={cash:{c:'#8a5a3a',lid:'#6a4128',n:'현금 뭉치'},coin:{c:'#7a6a4a',lid:'#5a4a30',n:'엽전 항아리'},gold:{c:'#d9a63a',lid:'#a87a1e',n:'금괴 상자'},supply:{c:'#9aa3a8',lid:'#6b7a83',n:'보급 상자'}};
 function chestSVG(t){const C=CHEST[t];return `<svg viewBox="0 0 40 34" aria-hidden="true"><rect x="3" y="14" width="34" height="18" rx="2" fill="${C.c}" stroke="#2b211c" stroke-width="2"/><path d="M3,15 Q3,4 20,4 Q37,4 37,15Z" fill="${C.lid}" stroke="#2b211c" stroke-width="2"/><rect x="17" y="13" width="6" height="7" rx="1" fill="#f2c14e" stroke="#2b211c" stroke-width="1.4"/><path d="M8,20 V30 M32,20 V30" stroke="rgba(0,0,0,.25)" stroke-width="2"/></svg>`;}
-function incomePerSec(){const l=layerAt(S.depth);return gateAt()?0:boreDps()/l.H*l.v*(perk('tuber')?1.2:1)*(1+.15*setPow('joseon'))*(fosDone('kano')?1.1:1);}
+function incomePerSec(){const l=layerAt(S.depth);return gateAt()?0:boreDps()/l.H*l.v*(1+PK('tuber',.2))*(1+.01*rp('priv'))*(1+.15*setPow('joseon'))*(fosDone('kano')?1.1:1);}
 function spawnChest(){const d=S.depth,r=Math.random();
   const t=d<15000?(r<.55?'cash':r<.75?'coin':r<.95?'supply':'gold'):d<35000?(r<.45?'coin':r<.9?'supply':'gold'):(r<.88?'supply':'gold');
   chest={t,until:30};const b=$('#chest');b.innerHTML=chestSVG(t)+`<span class="cbar"><i id="cbarI"></i></span>`;
@@ -1219,7 +1219,7 @@ function boreAdvance(d,fx){const a0=depthToAbs(S.depth);let gain=0,n=0;
     else{gain+=(l.to-S.depth)*l.v;S.depth=l.to;d-=need;
       if(S.depth>=CORE){S.depth=CORE;S.done=true;toast('지구 관통 성공!');}
       else{const nl=layerAt(S.depth);if(nl.req>S.dl)toast(nl.gate+' 도달 · 드릴 Lv.'+nl.req+' ('+dlName(nl.req)+')가 필요합니다');}}}
-  gain*=(perk('tuber')?1.2:1)*(1+.15*setPow('joseon'))*(fosDone('kano')?1.1:1);bMoneyAcc+=gain;const w=Math.floor(bMoneyAcc);S.money+=w;bMoneyAcc-=w;bgPop+=gain;
+  gain*=(1+PK('tuber',.2))*(1+.01*rp('priv'))*(1+.15*setPow('joseon'))*(fosDone('kano')?1.1:1);bMoneyAcc+=gain;const w=Math.floor(bMoneyAcc);S.money+=w;bMoneyAcc-=w;bgPop+=gain;
   checkUnlocks();
   const broke=Math.floor(depthToAbs(S.depth))-Math.floor(a0);
   const big=Math.floor(S.depth/5)>Math.floor(absToDepth(a0)/5);
@@ -1392,8 +1392,8 @@ function digOf(id){S.ex.dig[id]=S.ex.dig[id]||{i:0,hp:0};const g=S.ex.dig[id];if
 const belowOf=(r,i)=>r.t==='sea'?i-r.water:i;
 function altText(r,i){if(r.t==='sea')return i<r.water?'수심 '+(i*r.ws).toLocaleString('ko-KR')+'m':'해저 아래 '+((i-r.water)*BLK).toLocaleString('ko-KR')+'m';
   const a=PEAK[r.id][1]-i*BLK;return a>=0?'해발 '+a.toLocaleString('ko-KR')+'m':'해수면 아래 '+(-a).toLocaleString('ko-KR')+'m';}
-const expDps=(rid=S.ex.active||(exp&&exp.r.id))=>wxDig(rid)*(rid&&regById(rid).t==='sea'?1+.4*L('press')/MAXLV:1)*dps()*boostM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.05:1)*(fosDone('ura')?1.03:1);
-const relicP=()=>.15+.004*L('sensor')+(perk('prof')?.02:0);
+const expDps=(rid=S.ex.active||(exp&&exp.r.id))=>wxDig(rid)*(1+PK('paleo',.1))*(rid&&regById(rid).t==='sea'?1+PK('ship',.15):1)*(rid&&regById(rid).t==='sea'?1+.4*L('press')/MAXLV:1)*dps()*boostM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.05:1)*(fosDone('ura')?1.03:1);
+const relicP=()=>.15+.004*L('sensor')+PK('prof',.02)+PK('museum',.02)+.002*rp('org');
 const critMul=()=>5+setPow('paleo');
 let exAcc=0,popQ=[],popT=0;
 function addRelic(rl,vis,belowM){S.relic=S.relic||{};const g=rollGrade(belowM||0),cur=gradeOf(rl.id);
@@ -1404,7 +1404,7 @@ function addRelic(rl,vis,belowM){S.relic=S.relic||{};const g=rollGrade(belowM||0
   if(vis)popQ.push({rl,g,cur,sold,msg});else if(g>=6||cur<0)toast(`${cur<0?'유물 발견':'등급 상승'}: ${GR[g].n} ${rl.n}`);}
 function expBreak(r,vis){const g=digOf(r.id),below=belowOf(r,g.i);
   if(r.t==='land'&&PEAK[r.id][1]-g.i*BLK>0&&PEAK[r.id][1]-(g.i+1)*BLK<=0)toast(r.n+' 해수면 도달 · 이제부터 땅속으로 계속 내려갑니다');
-  if(below>=0){let wp=r.t==='sea'?setPow('wreck'):0,amt=Math.max(2,Math.round(2*Math.pow(expHP(r,g.i)/(MD().expBase*r.diff),.55)))+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.15?1:0)+(r.t==='sea'&&fosDone('whale')&&Math.random()<.2?1:0)+(r.t==='sea'?(perk('sea')?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
+  if(below>=0){let wp=r.t==='sea'?setPow('wreck'):0,amt=Math.max(2,Math.round(2*Math.pow(expHP(r,g.i)/(MD().expBase*r.diff),.55)))+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.15?1:0)+(r.t==='sea'&&fosDone('whale')&&Math.random()<.2?1:0)+(r.t==='sea'?(perk('sea')&&Math.random()<pm()?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
     amt=wxAmt(amt,r.id);if(evtOn()&&S.evt.rid===r.id)amt*=2;
     S.res[r.res]=(S.res[r.res]||0)+amt;const m=Math.round(5*r.diff*Math.pow(expHP(r,g.i)/(MD().expBase*r.diff),.6)*(1+.15*setPow('joseon')));S.money+=m;
     if(vis&&!expPopped){ex.pop('+'+amt+' '+r.res,RES[r.res]);expPopped=1;}
@@ -1491,7 +1491,7 @@ function buildMap(){let g='';
   g+='<g id="mRb" style="pointer-events:none"></g>';
   const node=(id,cls,x,y,label,lx,la,ly,res)=>`<g class="node ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}">
     <circle class="hit" cx="${x}" cy="${y}" r="16"/><circle class="ring" cx="${x}" cy="${y}" r="10"/>
-    ${cls==='base'?`<g transform="translate(${x},${y})" class="bdrill"><circle r="9.5" fill="rgba(14,19,21,.75)" stroke="#ffd56a" stroke-width="1.4"/><rect x="-1" y="-9" width="2" height="4" fill="#c9d1d5"/><rect x="-5.5" y="-6" width="11" height="5" rx="1.2" fill="#d9573a" stroke="#2b211c" stroke-width=".8"/><circle cx="0" cy="-3.5" r="1.3" fill="#fff3b0"/><path d="M-4.5,-1 L4.5,-1 L0,8Z" fill="#f2c14e" stroke="#2b211c" stroke-width=".8" stroke-linejoin="round"/><path d="M-3,1.4 L3,.6 M-2,3.8 L2,3 M-1,6 L1,5.6" stroke="#8a6a1e" stroke-width=".8"/></g>`:res?`<svg class="ricon" x="${x-8}" y="${y-8}" width="16" height="16" viewBox="0 0 16 16">${RIC[res]||''}</svg>`:`<circle class="dot" cx="${x}" cy="${y}" r="6"/>`}
+    ${cls==='base'?`<g transform="translate(${x},${y})" class="bdrill"><circle r="9.5" fill="rgba(14,19,21,.75)" stroke="#ffd56a" stroke-width="1.4"><animate attributeName="stroke-opacity" values="1;.35;1" dur="1.6s" repeatCount="indefinite"/></circle><g><animateTransform attributeName="transform" type="translate" values="0 -.8;0 .8;0 -.8" dur=".5s" repeatCount="indefinite"/><rect x="-1" y="-9" width="2" height="4" fill="#c9d1d5"/><rect x="-5.5" y="-6" width="11" height="5" rx="1.2" fill="#d9573a" stroke="#2b211c" stroke-width=".8"/><circle cx="0" cy="-3.5" r="1.3" fill="#fff3b0"/><path d="M-4.5,-1 L4.5,-1 L0,8Z" fill="#f2c14e" stroke="#2b211c" stroke-width=".8" stroke-linejoin="round"/><path d="M-3,1.4 L3,.6 M-2,3.8 L2,3 M-1,6 L1,5.6" stroke="#8a6a1e" stroke-width=".8"><animateTransform attributeName="transform" type="translate" values="0 0;0 2.4" dur=".3s" repeatCount="indefinite"/></path><circle cx="-1.6" cy="-3.5" r="1.3" fill="#fff3b0"><animate attributeName="opacity" values="1;.3;1" dur=".8s" repeatCount="indefinite"/></circle></g>${[[-6,8],[6,7],[0,10]].map(([dx,dy],i)=>`<circle r=".9" fill="#ffd56a"><animateMotion dur="${.6+i*.15}s" begin="${-i*.2}s" repeatCount="indefinite" path="M0,7 l${dx},${dy-4}"/><animate attributeName="opacity" values="1;0" dur="${.6+i*.15}s" begin="${-i*.2}s" repeatCount="indefinite"/></circle>`).join('')}</g>`:res?`<svg class="ricon" x="${x-8}" y="${y-8}" width="16" height="16" viewBox="0 0 16 16">${RIC[res]||''}</svg>`:`<circle class="dot" cx="${x}" cy="${y}" r="6"/>`}
     <text x="${x+lx}" y="${y+ly}" text-anchor="${la}">${label}</text>${res&&cls!=='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9.5}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}${res&&cls==='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}</g>`;
   for(const r of REG){const x=+PX(r.lon).toFixed(1),y=+PY(r.lat).toFixed(1);g+=r.t==='sea'?node(r.id,'sea',x,y,r.n,0,'middle',19,r.res):node(r.id,'land',x,y,r.n,r.lx,r.la,4,r.res);}
   g+=node('yanggu','base',+PX(127.99).toFixed(1),+PY(38.11).toFixed(1),'양구 본공',-11,'end',4);
@@ -1595,7 +1595,7 @@ $('#card').addEventListener('click',e=>{const a=e.target.closest('[data-act]');i
 
 // ---------------- workshop ----------------
 
-function costOf(p){const l=Math.min(L(p.id),MAXLV-1),c={};const rm=Math.max(.5,1-.1*setPow('iron'));c[p.res]=Math.ceil(RESC[l]*rm);if(p.sub)c[p.sub]=Math.ceil(RESC[l]*.5*rm);c.money=Math.round(MONC[l]*(perk('kim')?.9:1));return c;}
+function costOf(p){const l=Math.min(L(p.id),MAXLV-1),c={};const rm=Math.max(.5,1-.1*setPow('iron'));c[p.res]=Math.ceil(RESC[l]*rm);if(p.sub)c[p.sub]=Math.ceil(RESC[l]*.5*rm);c.money=Math.round(MONC[l]*(1-PK('kim',.1))*(1-.01*rp('big')));return c;}
 const have=k=>k==='money'?S.money:(S.res[k]||0);
 const canPay=c=>Object.entries(c).every(([k,v])=>have(k)>=v);
 function renderCraft(live){if(!live)setTimeout(()=>{const cur=document.querySelector('#ladder .cur');if(cur&&cur.parentElement)cur.parentElement.scrollLeft=cur.offsetLeft-cur.parentElement.clientWidth/2+cur.clientWidth/2;},0);
@@ -1668,9 +1668,9 @@ $('#storeList').addEventListener('click',e=>{const gb=e.target.closest('[data-ga
   b.dataset.armed='1';b.textContent='한 번 더 누르면 모든 진행이 지워집니다';});
 function renderFuels(){
   $('#fuels').innerHTML=FUEL.map((f,i)=>`<button class="fuel" type="button" data-f="${i}" ${have(f.res)>=f.need?'':'disabled'}>
-    <span class="fn">${ric(f.res)}${f.res} ${f.need}</span><span class="fe">×${f.m} · ${Math.round(f.s*(1+.15*L('cool')))}초 (${have(f.res)})</span></button>`).join('');}
+    <span class="fn">${ric(f.res)}${f.res} ${f.need}</span><span class="fe">×${f.m} · ${Math.round(f.s*(1+.15*L('cool')+PK('energy',.2)))}초 (${have(f.res)})</span></button>`).join('');}
 $('#fuels').addEventListener('click',e=>{const b=e.target.closest('.fuel');if(!b||b.disabled)return;const f=FUEL[+b.dataset.f];
-  if(have(f.res)<f.need)return;S.res[f.res]-=f.need;S.boost={m:f.m,until:Date.now()+f.s*(1+.15*L('cool'))*1000};save();renderFuels();toast(f.res+' 부스터 ×'+f.m+' 가동');});
+  if(have(f.res)<f.need)return;S.res[f.res]-=f.need;S.boost={m:f.m,until:Date.now()+f.s*(1+.15*L('cool')+PK('energy',.2))*1000};save();renderFuels();toast(f.res+' 부스터 ×'+f.m+' 가동');});
 
 // ---------------- investors ----------------
 const depthNow=()=>S.depth;
@@ -1683,7 +1683,14 @@ const INV=[
  {id:'sea',n:'바다건설',ini:'바',role:'해양 플랜트 회사',c:'#7cc6e6',cond:()=>[S.st.sea,100],ct:'해상 원정 누적 100칸',fmt:n=>n+'칸',amt:6000,perk:'해상 원정 자원 +1',q:'바다 밑 시추 실력, 인정합니다. 저희 시추선 정비를 지원하겠습니다.'},
  {id:'vc',n:'심층파트너스',ini:'심',role:'벤처캐피털',c:'#9a86c8',cond:()=>[sumLv(),20],ct:'드릴 등급 Mk.II (부품 레벨 합계 20)',fmt:n=>n+'레벨',amt:15000,perk:'굴착력 +15%',q:'기술력은 확인됐습니다. 시리즈 A, 같이 가시죠.'},
  {id:'inst',n:'국립심부시추연구원',ini:'연',role:'국책 연구 기관',c:'#78d39a',cond:()=>[depthNow(),12262],ct:'콜라 초심층 기록(12,262m) 돌파',fmt:fmtD,amt:60000,perk:'굴착력 +25%',q:'인류 최심 시추 기록을 넘었습니다. 국가 과제로 지원하겠습니다.'},
+ {id:'farm',n:'양구 농협 조합장',ini:'농',role:'지역 농협',c:'#a8d08a',cond:()=>[S.st.exp||0,40],ct:'원정 누적 40칸',fmt:n=>n+'칸',amt:1200,perk:'원정 재료 추가 확률 +4%p',q:'우리 양구 땅에서 뭔가 큰일이 나는구먼. 마을 사람들 마음 모아 보탭니다.'},
+ {id:'miner',n:'태백 광부 협회',ini:'광',role:'은퇴 광부 모임',c:'#b8a48a',cond:()=>[depthNow(),5000],ct:'본공 5km 돌파',fmt:fmtD,amt:9000,perk:'강타 확률 +3%p',q:'평생 갱도에서 보낸 우리 눈에도 대단하오. 요령 하나 알려 주지.'},
+ {id:'museum',n:'국립중앙박물관',ini:'박',role:'국가 박물관',c:'#d8b8e8',cond:()=>[relicCount(),15],ct:'유물 15종 발견',fmt:n=>n+'종',amt:22000,perk:'유물 발견 확률 +2%p',q:'발굴품의 가치가 대단합니다. 특별전을 열고 탐사를 지원하겠습니다.'},
+ {id:'paleo',n:'한국 고생물 연구소',ini:'고',role:'화석 연구 기관',c:'#c8b07a',cond:()=>[fosPieces(),10],ct:'화석 조각 10개',fmt:n=>n+'개',amt:30000,perk:'원정 굴착력 +10%',q:'이 정도 화석 표본이면 논문 몇 편은 나옵니다. 장비를 지원하죠.'},
+ {id:'ship',n:'남해 조선소',ini:'조',role:'시추선 조선사',c:'#6ab0d8',cond:()=>[S.st.sea||0,400],ct:'해상 원정 누적 400칸',fmt:n=>n+'칸',amt:45000,perk:'해상 원정 굴착 +15%',q:'시추선 한 척 새로 뽑아 드리겠습니다. 바다는 저희가 책임지죠.'},
  {id:'global',n:'글로벌 딥 펀드',ini:'G',role:'해외 투자 펀드',c:'#f6c76a',cond:()=>[depthNow(),35000],ct:'모호면(35km) 돌파',fmt:fmtD,amt:500000,perk:'세계 지도 · 고대 보물 탐사 (다음 업데이트)',q:'지각을 처음으로 뚫은 민간 시추팀이군요. 다음 무대는 세계입니다.'},
+ {id:'energy',n:'한국 에너지 공사',ini:'에',role:'에너지 공기업',c:'#ffb050',cond:()=>[depthNow(),200000],ct:'본공 200km 돌파',fmt:fmtD,amt:300000,perk:'부스터 지속 +20%',q:'맨틀 속 지열 데이터, 국가 에너지 정책이 바뀔 수준입니다.'},
+ {id:'space',n:'우주항공 연구원',ini:'우',role:'국책 우주 연구 기관',c:'#9ab8ff',cond:()=>[depthNow(),660000],ct:'하부 맨틀(660km) 돌파',fmt:fmtD,amt:1500000,perk:'굴착력 +10%',q:'행성 내부 탐사 기술은 곧 우주 탐사 기술입니다. 함께 갑시다.'},
 ];
 const invAmt=v=>Math.round(v.amt*MD().inv);
 const ready=v=>{const[c,t]=v.cond();return !S.inv[v.id]&&c>=t;};
@@ -1705,8 +1712,10 @@ const irOf=id=>{S.ir=S.ir||{};return S.ir[id]||0;};
 const irReady=d=>d.cur()>=d.tgt(irOf(d.id));
 const irAmt=d=>Math.max(200,Math.round(d.k*dlCost(Math.min(DLOPEN,S.dl+1))*MD().inv*(1+.04*irOf(d.id))/10)*10);
 function irWho(d){const r=irOf(d.id);return d.who[r%d.who.length]+(r>=d.who.length?' '+(Math.floor(r/d.who.length)+1)+'차':'');}
+const IRP={priv:[1,'본공 보상(₩) +','%'],gov:[1,'굴착력 +','%'],org:[.2,'유물 발견 확률 +','%p'],mid:[.5,'원정 재료 추가 확률 +','%p'],big:[1,'제작 비용(₩) −','%']};
+function irPerkTxt(id){const [v,a,b]=IRP[id],k=pm(),cur=+(rp(id)*v).toFixed(1);return `혜택: 라운드마다 ${a}${+(v*k).toFixed(2)}${b} (최대 20회)${cur?` · 지금 ${a}${cur}${b}`:''}`;}
 function irRows(){return IRND.map(d=>{const r=irOf(d.id),t=d.tgt(r),c=d.cur(),rd=c>=t,pct=Math.min(100,c/t*100);
-  return `<div class="investor ${rd?'ready':''}"><div class="ava" style="--c:${d.c}">${d.ic}</div><div style="min-width:0"><div class="iname">${d.n} · ${r+1}차</div><div class="irole">${irWho(d)} · 약 ${won(irAmt(d))}</div>
+  return `<div class="investor ${rd?'ready':''}"><div class="ava" style="--c:${d.c}">${d.ic}</div><div style="min-width:0"><div class="iname">${d.n} · ${r+1}차</div><div class="irole">${irWho(d)} · 약 ${won(irAmt(d))}</div><div class="iperk">${irPerkTxt(d.id)}</div>
     <div class="icond">${d.ct} ${d.fmt(Math.min(c,t))} / ${d.fmt(t)}</div><div class="ibar"><div style="width:${pct}%"></div></div></div>
     <button class="ibtn" type="button" data-ir="${d.id}" ${rd?'':'disabled'}>${rd?'투자 받기':'조건 미달'}</button></div>`;}).join('');}
 function irClaim(id){const d=IRND.find(x=>x.id===id);if(!d||!irReady(d))return;const a=irAmt(d),who=irWho(d);S.money+=a;S.ir[id]=irOf(id)+1;save();toast(`${d.ic} ${who} 투자 유치 · +${won(a)} — 다음 ${d.n} 조건이 열렸어요`);renderInvest();}
@@ -1719,7 +1728,7 @@ function renderInvest(){
        <div class="icond">${done?'투자 완료':v.ct+(v.fmt?` · ${v.fmt(Math.min(c,t))} / ${v.fmt(t)}`:'')}</div>
        ${done||!v.fmt?'':`<div class="ibar"><div style="width:${pct}%"></div></div>`}</div>
       <button class="ibtn" type="button" data-inv="${v.id}" ${rd?'':'disabled'}>${done?'완료':rd?'제안 보기':'조건 미달'}</button></div>`;}).join('');
-  $('#investList').innerHTML=`<h2 class="h3">투자자 모집</h2><p class="sub">돈이 없습니다. 땅을 파서 실력을 증명하면 투자자들이 찾아옵니다. 누적 투자금 ${won(total)}</p><div class="invs">${rows}</div><h2 class="h3" style="margin-top:18px">투자 라운드</h2><p class="sub">조건을 채울 때마다 투자를 받고, 받으면 더 높은 조건의 다음 라운드가 열려요. 투자금은 그때 드릴 승급 비용에 맞춰 정해져요.</p><div class="invs">${irRows()}</div>`;}
+  $('#investList').innerHTML=`<h2 class="h3">투자자 모집</h2><p class="sub">돈이 없습니다. 땅을 파서 실력을 증명하면 투자자들이 찾아옵니다. 누적 투자금 ${won(total)}${S.mode==='hard'?' · 하드 모드는 혜택 60%':''}</p><div class="invs">${rows}</div><h2 class="h3" style="margin-top:18px">투자 라운드</h2><p class="sub">조건을 채울 때마다 투자를 받고, 받으면 더 높은 조건의 다음 라운드가 열려요. 투자금은 그때 드릴 승급 비용에 맞춰 정해져요.</p><div class="invs">${irRows()}</div>`;}
 $('#investList').addEventListener('click',e=>{const ir=e.target.closest('[data-ir]');if(ir&&!ir.disabled){irClaim(ir.dataset.ir);return;}const b=e.target.closest('[data-inv]');if(!b||b.disabled)return;showDeal(INV.find(v=>v.id===b.dataset.inv));});
 let dealAfter=null;
 function showDeal(v){$('#dSheet').innerHTML=`<div class="dtop"><div class="ava" style="--c:${v.c}">${v.ini}</div><div><div class="iname">${v.n}</div><div class="irole">${v.role}</div></div></div>
@@ -1729,6 +1738,7 @@ function showDeal(v){$('#dSheet').innerHTML=`<div class="dtop"><div class="ava" 
     $('#deal').hidden=true;if(view==='invest')renderInvest();if(view==='craft')renderCraft();if(dealAfter){const f=dealAfter;dealAfter=null;f();}};}
 function checkInvest(){let any=false;for(const d of IRND)if(irReady(d)){any=true;const k=d.id+irOf(d.id);S.irN=S.irN||[];if(!S.irN.includes(k)){S.irN.push(k);if(S.story)toast(`${d.ic} 투자 제안 도착: ${irWho(d)} (${d.n})`);}}for(const v of INV)if(ready(v)){any=true;if(!S.invN.includes(v.id)){S.invN.push(v.id);if(S.story&&v.id!=='mom')toast('투자 제안 도착: '+v.n);}}
   $('#invBadge').hidden=!any;}
+function checkCraft(){const b=$('#craftBadge');if(!b)return;const can=PARTS.some(p=>L(p.id)<MAXLV&&(isUnl(regOf(p.res))||have(p.res)>0)&&canPay(costOf(p)));b.hidden=!can||titleOn;}
 
 // ---------------- title ----------------
 const tcv=$('#tCv'),tc=tcv.getContext('2d');let tSpin=0,tParts=[],titleOn=true;
@@ -1771,7 +1781,7 @@ const OPT={
  eyes:[{v:'round',n:'동글',p:0},{v:'smile',n:'웃는 눈',p:200},{v:'sharp',n:'날카로운 눈',p:200}],
  skin:[{v:0,n:'밝은 톤',p:0},{v:1,n:'중간 톤',p:0},{v:2,n:'짙은 톤',p:0},{v:3,n:'깊은 톤',p:0}],
  body:[{v:'slim',n:'마른 체형',p:0,w:.86},{v:'normal',n:'보통',p:0,w:1},{v:'big',n:'튼튼',p:0,w:1.18}],
- hat:[{v:'none',n:'없음',p:0},{v:'helmet',n:'안전모',p:200},{v:'lamp',n:'랜턴 안전모',p:800},{v:'explorer',n:'탐험 모자',p:2000},{v:'mask',n:'잠수 마스크',p:4000},{v:'crown',n:'아다마스 투구',p:60000}],
+ hat:[{v:'none',n:'없음',p:0},{v:'helmet',n:'안전모',p:200},{v:'lamp',n:'랜턴 안전모',p:800},{v:'explorer',n:'탐험 모자',p:2000},{v:'mask',n:'잠수 마스크',p:4000},{v:'straw',n:'밀짚모자',p:300},{v:'beanie',n:'비니',p:400},{v:'cap',n:'야구 모자',p:500},{v:'flower',n:'꽃 화관',p:900},{v:'bow',n:'리본',p:700},{v:'beret',n:'베레모',p:1200},{v:'bowler',n:'중절모',p:2500},{v:'horns',n:'뿔 머리띠',p:3500},{v:'crown',n:'아다마스 투구',p:60000}],
  outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'dino',n:'공룡옷',p:3000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
  item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:100},{v:'pick',n:'곡괭이',p:500},{v:'tablet',n:'탐사 태블릿',p:2500},{v:'hdrill',n:'휴대용 드릴',p:12000}],
 };
@@ -1949,7 +1959,15 @@ function pixelChar(c,o={}){
     case 'lamp':R(4,base-2,14,4,'#ef8a2a');R(3,base+2,16,1,'#c86d1a');R(9,base-1,4,2,'#cfd6da');R(10,base-1,2,2,'#fff3b0');break;
     case 'explorer':R(6,base-2,10,3,'#c9ab78');R(6,base+1,10,1,'#5a4630');R(2,base+2,18,1,'#b89a68');break;
     case 'mask':R(4,base+2,14,1,'#1c2226');R(6,base+1,10,3,'#2fb5b0');R(7,base+2,3,1,'#bfeff0');R(12,base+2,3,1,'#bfeff0');break;
-    case 'crown':R(5,base-2,12,4,'#d9a63a');R(4,base+2,14,1,'#a87a1e');R(10,base-2,2,2,'#c9f2f8');set(7,base-1,'#f6c76a');set(14,base-1,'#f6c76a');break;}};
+    case 'crown':R(5,base-2,12,4,'#d9a63a');R(4,base+2,14,1,'#a87a1e');R(10,base-2,2,2,'#c9f2f8');set(7,base-1,'#f6c76a');set(14,base-1,'#f6c76a');break;
+    case 'straw':R(6,base-2,10,4,'#efc46c');R(6,base+1,10,1,'#c8402a');R(1,base+2,20,1,'#e2b45a');R(2,base+3,18,1,'#c8963e');P([[8,base-1],[11,base-2],[14,base-1]],'#d8a446');R(7,base-2,3,1,'#f8dc94');break;
+    case 'beanie':R(5,base-2,12,4,'#3a8ad6');R(4,base+1,14,2,'#2a6ab0');P([[7,base-1],[10,base-1],[13,base-1],[8,base-2],[12,base-2]],'#2f74b8');R(10,base-4,2,2,'#ff7a9a');set(10,base-4,'#ffb3c6');break;
+    case 'cap':R(5,base-1,12,3,'#3aa0e0');R(10,base-2,2,1,'#2a80c0');R(15,base+2,6,1,'#2a80c0');R(6,base-1,3,1,'#7cc8f0');break;
+    case 'flower':for(let i=0;i<6;i++){const x=5+i*2;set(x,base+1,'#5aa050');set(x+1,base+1,['#ffd34a','#ff8ab0','#ffffff'][i%3]);set(x+1,base,['#ffd34a','#ff8ab0','#ffffff'][i%3]);}break;
+    case 'bow':P([[15,base-1],[16,base],[15,base+1],[19,base-1],[18,base],[19,base+1],[16,base-1],[18,base-1],[16,base+1],[18,base+1]],'#ff5f8a');set(17,base,'#c43a64');set(15,base,'#ff9ab6');break;
+    case 'beret':R(4,base-1,13,3,'#b5502a');R(3,base,2,2,'#b5502a');R(6,base-1,6,1,'#c86438');set(10,base-2,'#8a3a1e');R(4,base+2,13,1,'#8a3a1e');break;
+    case 'bowler':R(6,base-3,10,5,'#24242a');R(6,base,10,1,'#4a3a2a');R(3,base+2,16,1,'#1c1c20');R(7,base-3,4,1,'#4a4a52');break;
+    case 'horns':P([[4,base-2],[4,base-1],[5,base],[5,base+1],[17,base-2],[17,base-1],[16,base],[16,base+1],[3,base-3],[18,base-3]],'#2a2a30');set(4,base-1,'#4a4a54');set(17,base-1,'#4a4a54');break;}};
   const hood=(base)=>{R(4,base-1,14,4,'#5cae5a');R(4,base+3,2,6,'#5cae5a');R(16,base+3,2,6,'#5cae5a');
     P([[7,base-2],[10,base-2],[11,base-2],[14,base-2]],'#f2c14e');set(7,base,'#fff');set(14,base,'#fff');set(8,base,ink);set(13,base,ink);};
 
@@ -1991,7 +2009,7 @@ function pixelChar(c,o={}){
     if(fem&&!of.hood&&(!hat||hat==='none')){P([[15,0],[18,0],[15,1],[16,1],[17,1],[18,1],[15,2],[18,2]],'#ff6f9a');set(16,1,'#e0457a');set(17,1,'#e0457a');set(16,0,'#ffb3c8');}
     // front hair
     if(!of.hood){
-      const top=()=>{R(5,1,12,3,hc);R(7,1,3,1,hcl);};
+      const top=()=>{R(5,0,12,1,hc);R(4,1,14,3,hc);del(4,1);del(17,1);R(4,4,1,2,hc);R(17,4,1,2,hc);R(7,1,3,1,hcl);};
       if(hair==='short'){top();P([[5,4],[6,4],[7,4],[8,4],[10,4],[11,4],[12,4],[14,4],[15,4],[16,4]],hc);R(5,5,1,3,hc);R(16,5,1,3,hc);}
       else if(hair==='part'||hair==='tail'){top();R(5,4,8,1,hc);R(5,5,4,1,hc);R(16,4,1,4,hc);if(hair==='tail')set(17,3,'#e8a93a');}
       else if(hair==='buzz'){R(5,2,12,2,hcs);}
@@ -2057,14 +2075,21 @@ function pixelChar(c,o={}){
   for(const key in G){const [x,y]=key.split(',').map(Number),col=G[key];for(let j=0;j<2;j++)for(let i=0;i<2;i++)H[(2*x+i)+','+(2*y+j)]=col;}
   for(const key in G){const [x,y]=key.split(',').map(Number),l=has(x-1,y),r=has(x+1,y),u=has(x,y-1),d=has(x,y+1);
     if(!l&&!u)delete H[(2*x)+','+(2*y)];if(!r&&!u)delete H[(2*x+1)+','+(2*y)];if(!l&&!d)delete H[(2*x)+','+(2*y+1)];if(!r&&!d)delete H[(2*x+1)+','+(2*y+1)];}
-  const KEEP={'#1a1412':1,'#fff':1,'#ffffff':1},sh2={},hs=(x,y)=>!!H[x+','+y];
-  for(const key in H){const col=H[key];if(KEEP[col]||col[0]!=='#'||col.length!==7)continue;const [x,y]=key.split(',').map(Number);
-    const n=[[1,0],[-1,0],[0,1],[0,-1]].filter(([dx,dy])=>H[(x+dx)+','+(y+dy)]===col).length;if(n<3)continue;
-    if(!hs(x+1,y)||!hs(x,y+1))sh2[key]=shade(col,-.08);else if(!hs(x,y-1)||!hs(x-1,y))sh2[key]=shade(col,.07);}
-  Object.assign(H,sh2);
-  const add=[];for(const key in H){const [x,y]=key.split(',').map(Number);
-    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W2||ny>=H2)continue;if(!H[nx+','+ny])add.push(nx+','+ny);}}
-  for(const key of add)H[key]=OUTC;
+  const KEEP={'#1a1412':1,'#fff':1,'#ffffff':1,'#5a2a22':1,'#7a3a2a':1,'#c2405a':1,'#f2a39a':1},hs=(x,y)=>!!H[x+','+y];
+  // hair: soft shadow cast on the skin under the fringe, and a glossy highlight band on the crown
+  if(!an){const skd=shade(sk,-.12);for(const key in H){if(H[key]!==sk)continue;const [x,y]=key.split(',').map(Number);if(H[x+','+(y-1)]===hc||H[x+','+(y-1)]===hcs)H[key]=skd;}
+    const hy=2*(1+OY)+1;for(const key in H){const [x,y]=key.split(',').map(Number);if(H[key]!==hc)continue;if(y===hy&&x>=2*(6+OX)&&x<=2*(11+OX))H[key]=hcl;else if(y===hy+1&&x>=2*(7+OX)&&x<=2*(9+OX))H[key]=hcl;
+      else if(H[x+','+(y+1)]&&H[x+','+(y+1)]!==hc&&H[x+','+(y+1)]!==hcl&&y>hy+2&&(x%3===0))H[key]=hcs;}}
+  // cel shading: light from the upper-left — each horizontal run gets a lit left edge and a shaded right side
+  {const rows={};for(const key in H){const [x,y]=key.split(',').map(Number);(rows[y]=rows[y]||[]).push(x);}const sh={};
+    for(const y in rows){const xs=rows[y].sort((a,b)=>a-b);let i=0;while(i<xs.length){let j=i;const col=H[xs[i]+','+y];while(j+1<xs.length&&xs[j+1]===xs[j]+1&&H[xs[j+1]+','+y]===col)j++;
+      const n=j-i+1;if(!an&&(col===sk||col===shade(sk,-.12))){if(n>=4)sh[xs[j]+','+y]=shade(col,-.08);}else if(!KEEP[col]&&col[0]==='#'&&col.length===7&&n>=4){sh[xs[i]+','+y]=shade(col,.09);const d=Math.max(1,Math.round(n*.28));for(let q=0;q<d;q++)sh[xs[j-q]+','+y]=shade(col,q===0?-.2:-.13);}i=j+1;}}
+    for(const key in sh){const [x,y]=key.split(',').map(Number);if(!H[x+','+(y-1)]||!hs(x,y-1))continue;H[key]=sh[key];}
+    for(const key in sh){const [x,y]=key.split(',').map(Number);if(!hs(x,y-1))H[key]=shade(sh[key],.06);}}
+  // coloured outline (sel-out): each outline pixel takes a dark tone of the fill it touches
+  const add=[],oc={};for(const key in H){const [x,y]=key.split(',').map(Number);
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W2||ny>=H2)continue;const nk=nx+','+ny;if(!H[nk]){add.push(nk);if(!oc[nk])oc[nk]=H[key];}}}
+  for(const key of add){const c0=oc[key];const [hh,ss,ll]=c0[0]==='#'&&c0.length===7?hsl(c0):[0,0,.2];H[key]=ll<.22?'#120d0b':hex(hh,Math.min(1,ss*1.05),Math.max(.08,ll*.38));}
   for(const [x,y] of EYE){const k=(2*(x+OX))+','+(2*(y+OY));if(H[k]==='#1a1412')H[k]='#ffffff';}
   if(!an&&FACE.ey!=null&&ex!=='shock'){const sp=(x,y,col)=>{H[x+','+y]=col;},ey2=2*(FACE.ey+OY),hcd=shade(hc,-.35);
     for(const [ex0,sd] of [[FACE.ex1,-1],[FACE.ex2,1]]){const e0=2*(ex0+OX),ox=sd<0?e0-1:e0+2;
@@ -2082,7 +2107,100 @@ function pixelChar(c,o={}){
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);
 }
 
-const charG=(c,o)=>pixelChar(c,o||{});
+// ---------------- chibi animal characters (vector, 100x172 frame, feet at y=168) ----------------
+const ANV={
+ penguin:{f:'#2f4170',d:'#1b2748',l:'#fbfaf6',m:'#fbfaf6',ac:'#f59a2a'},
+ mole:{f:'#7a675d',d:'#4a3c36',l:'#d8c3b3',m:'#e8d6c6',ac:'#f08aa0'},
+ tanuki:{f:'#a08a76',d:'#4a3c32',l:'#f2e8da',m:'#f2e8da',ac:'#2a1f1a'},
+ cat:{f:'#f2a050',d:'#b0601e',l:'#fff6ea',m:'#fff6ea',ac:'#f08aa0'},
+ bear:{f:'#94603e',d:'#5a3820',l:'#e0bd92',m:'#e0bd92',ac:'#2a1f1a'},
+ fox:{f:'#ec7a30',d:'#9a4416',l:'#fff6ea',m:'#fff6ea',ac:'#2a1f1a'}};
+// hats in the old vector frame (crown around x 23-77, brim at y~33); placed on the chibi head by a transform
+const VHAT={helmet:`<path d="M23,33 C23,7 77,7 77,33Z" fill="#f1f1ec"/><path d="M50,9 V31" stroke="#d7d7cf" stroke-width="4"/><rect x="18" y="30" width="64" height="7" rx="3.5" fill="#d6d6ce"/>`,
+ lamp:`<path d="M23,33 C23,7 77,7 77,33Z" fill="#ef8a2a"/><rect x="18" y="30" width="64" height="7" rx="3.5" fill="#c86d1a"/><circle cx="50" cy="22" r="11" fill="#fff3b0" opacity=".25"/><circle cx="50" cy="22" r="6.5" fill="#cfd6da"/><circle cx="50" cy="22" r="4" fill="#fff3b0"/>`,
+ explorer:`<ellipse cx="50" cy="31" rx="40" ry="7" fill="#b89a68"/><path d="M29,31 C29,8 71,8 71,31Z" fill="#c9ab78"/><rect x="29" y="23" width="42" height="5" fill="#5a4630"/>`,
+ mask:`<rect x="20" y="26" width="60" height="5" fill="#1c2226"/><rect x="29" y="15" width="42" height="18" rx="7" fill="#2fb5b0"/><rect x="32" y="18" width="36" height="12" rx="5" fill="#bfeff0" opacity=".75"/>`,
+ crown:`<path d="M22,34 C22,6 78,6 78,34Z" fill="#d9a63a"/><path d="M30,26 C40,18 60,18 70,26" stroke="#f6c76a" stroke-width="2" fill="none"/><path d="M50,0 L57,13 L50,20 L43,13Z" fill="#c9f2f8" stroke="#7cc6e6"/><rect x="18" y="30" width="64" height="7" rx="3.5" fill="#a87a1e"/>`,
+ straw:`<ellipse cx="50" cy="31" rx="44" ry="8" fill="#e2b45a"/><ellipse cx="50" cy="30" rx="44" ry="6" fill="#efc46c"/><path d="M28,30 C28,9 72,9 72,30Z" fill="#efc46c"/><rect x="28" y="22" width="44" height="6" fill="#c8402a"/>${[34,42,50,58,66].map(x=>`<path d="M${x},12 v9" stroke="#d8a446" stroke-width="1.2"/>`).join('')}`,
+ beanie:`<path d="M22,34 C22,4 78,4 78,34Z" fill="#3a8ad6"/>${[30,38,46,54,62,70].map(x=>`<path d="M${x},10 V32" stroke="#2f74b8" stroke-width="2"/>`).join('')}<rect x="20" y="27" width="60" height="9" rx="4" fill="#2a6ab0"/><circle cx="50" cy="4" r="7" fill="#ff7a9a"/><circle cx="48" cy="2" r="2.4" fill="#ffb3c6"/>`,
+ flower:`${[[24,32,'#ffd34a'],[34,26,'#ff8ab0'],[44,23,'#fff'],[56,23,'#ffd34a'],[66,26,'#ff8ab0'],[76,32,'#fff']].map(([x,y,c])=>`<path d="M${x-7},${y+3} q3,-4 7,-1" stroke="#5aa050" stroke-width="2.4" fill="none"/>${[0,72,144,216,288].map(a=>`<circle cx="${(x+Math.cos(a*Math.PI/180)*3.4).toFixed(1)}" cy="${(y+Math.sin(a*Math.PI/180)*3.4).toFixed(1)}" r="2.8" fill="${c}" stroke="rgba(0,0,0,.25)" stroke-width=".5"/>`).join('')}<circle cx="${x}" cy="${y}" r="2" fill="#ffb02a"/>`).join('')}`,
+ bow:`<g transform="translate(70,20)"><path d="M0,0 L-14,-10 Q-18,0 -14,10Z M0,0 L14,-10 Q18,0 14,10Z" fill="#ff5f8a" stroke="#c43a64" stroke-width="1.4"/><path d="M-12,-6 L-6,-2 M12,-6 L6,-2" stroke="#ff9ab6" stroke-width="1.6"/><circle r="4.4" fill="#e0456f" stroke="#c43a64" stroke-width="1.2"/></g>`,
+ beret:`<ellipse cx="46" cy="22" rx="32" ry="13" fill="#b5502a"/><ellipse cx="44" cy="19" rx="22" ry="7" fill="#c86438"/><path d="M50,9 v-5" stroke="#8a3a1e" stroke-width="3" stroke-linecap="round"/><path d="M20,30 Q50,36 78,28" stroke="#8a3a1e" stroke-width="3" fill="none"/>`,
+ bowler:`<ellipse cx="50" cy="32" rx="40" ry="6.5" fill="#1c1c20"/><path d="M27,32 C26,4 74,4 73,32Z" fill="#24242a"/><rect x="27" y="23" width="46" height="6" fill="#4a3a2a"/><path d="M34,12 Q42,7 52,8" stroke="#4a4a52" stroke-width="2" fill="none"/>`,
+ horns:`<path d="M28,30 C14,22 16,6 24,0 C24,12 30,20 38,24Z M72,30 C86,22 84,6 76,0 C76,12 70,20 62,24Z" fill="#2a2a30" stroke="#121216" stroke-width="1.2"/><path d="M24,4 C22,12 26,20 32,24 M76,4 C78,12 74,20 68,24" stroke="#4a4a54" stroke-width="1.4" fill="none"/>`,
+ cap:`<path d="M22,32 C22,6 76,6 76,32Z" fill="#3aa0e0"/><path d="M50,8 V30" stroke="#2a80c0" stroke-width="2"/><path d="M60,30 Q86,26 94,34 Q80,38 60,36Z" fill="#2a80c0"/><circle cx="50" cy="8" r="3" fill="#2a80c0"/>`};
+function animalSVG(c,o={}){const k=c.sex,A=ANV[k]||ANV.penguin,OL=`stroke="${A.d}" stroke-width="2.6" stroke-linejoin="round"`,ex=o.expr||'',
+  of=PXOF[o.outfit||c.outfit]||PXOF.track,hat=o.hat??c.hat,item=o.item??c.item,oc=o.outfit||c.outfit,u='an'+(++UID);let g='';
+  // tail (behind)
+  if(k==='fox')g+=`<path d="M70,148 C96,146 102,112 88,100 C86,118 78,128 66,134Z" fill="${A.f}" ${OL}/><path d="M92,104 C90,112 86,117 82,120 C88,121 95,114 95,104Z" fill="${A.l}"/>`;
+  if(k==='cat')g+=`<path d="M70,150 C92,150 96,124 86,112" stroke="${A.d}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M70,150 C92,150 96,124 86,112" stroke="${A.f}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M90,128 l5,-1 M88,138 l5,1" stroke="${A.d}" stroke-width="2"/>`;
+  if(k==='tanuki')g+=`<ellipse cx="80" cy="140" rx="12" ry="16" transform="rotate(-30 80 140)" fill="${A.f}" ${OL}/><path d="M72,132 l15,-6 M75,141 l15,-6 M78,150 l12,-5" stroke="${A.d}" stroke-width="3" stroke-linecap="round"/>`;
+  if(k==='bear'||k==='mole')g+=`<circle cx="74" cy="152" r="5" fill="${A.f}" ${OL}/>`;
+  // feet
+  const ft=k==='penguin'?A.ac:k==='mole'?A.ac:shade(A.f,-.15);
+  g+=`<ellipse cx="38" cy="163" rx="11" ry="6" fill="${ft}" ${OL}/><ellipse cx="62" cy="163" rx="11" ry="6" fill="${ft}" ${OL}/>`;
+  // body
+  g+=`<defs><clipPath id="${u}b"><ellipse cx="50" cy="132" rx="27" ry="30"/></clipPath></defs><ellipse cx="50" cy="132" rx="27" ry="30" fill="${A.f}" ${OL}/>`;
+  g+=`<ellipse cx="50" cy="138" rx="17" ry="20" fill="${A.l}" clip-path="url(#${u}b)"/>`;
+  // clothes (upper body)
+  if(of.hood){g+=`<g clip-path="url(#${u}b)"><rect x="20" y="100" width="60" height="64" fill="#5cae5a"/><ellipse cx="50" cy="140" rx="15" ry="18" fill="#ece3a4"/></g>`;}
+  else{const top=of.top,d2=shade(top,-.2);g+=`<g clip-path="url(#${u}b)"><rect x="18" y="100" width="64" height="${oc==='apron'?40:36}" fill="${top}"/><rect x="18" y="${oc==='apron'?138:134}" width="64" height="3" fill="${d2}"/><path d="M60,100 V136" stroke="${d2}" stroke-width="10" opacity=".35"/>`;
+    if(oc==='track')g+=`<path d="M50,104 V136" stroke="#eeece6" stroke-width="2.4"/><path d="M42,104 L50,112 L58,104" stroke="#eeece6" stroke-width="2.4" fill="none"/>`;
+    if(oc==='vest')g+=`<rect x="22" y="100" width="14" height="36" fill="#c4ec46"/><rect x="64" y="100" width="14" height="36" fill="#c4ec46"/><rect x="22" y="120" width="56" height="4" fill="#e6eef2"/>`;
+    if(oc==='cover')g+=`<rect x="18" y="122" width="64" height="4" fill="#e9eef0"/><rect x="40" y="108" width="8" height="5" fill="#c9601c"/>`;
+    if(oc==='sport')g+=`<path d="M38,100 L50,116 L62,100" stroke="#f2f2ee" stroke-width="4" fill="none"/><text x="50" y="132" text-anchor="middle" font-size="12" font-weight="900" fill="#f2f2ee">7</text>`;
+    if(oc==='wet')g+=`<path d="M18,126 L82,108" stroke="#2fb5b0" stroke-width="4"/>`;
+    if(oc==='dance')g+=[[30,110],[44,124],[58,108],[70,124],[38,132],[64,132]].map(([x,y])=>`<path d="M${x},${y-3} l1,2 l2,1 l-2,1 l-1,2 l-1,-2 l-2,-1 l2,-1Z" fill="#f6d56a"/>`).join('');
+    if(oc==='suit')g+=`<path d="M40,100 L50,114 L60,100Z" fill="#f4f2ee"/><path d="M50,106 L46,112 L50,130 L54,112Z" fill="#b8322a"/>`;
+    if(oc==='adamas')g+=`<path d="M24,100 L50,122 L76,100" stroke="#f6c76a" stroke-width="3" fill="none"/><path d="M50,118 l5,5 l-5,5 l-5,-5Z" fill="#c9f2f8" stroke="#7cc6e6"/>`;
+    if(oc==='apron')g+=`<path d="M34,106 H66 V138 H34Z" fill="#f4ece0"/><rect x="44" y="118" width="12" height="8" rx="2" fill="#e2d4c0"/>`;
+    g+=`</g>`;}
+  g+=`<ellipse cx="50" cy="132" rx="27" ry="30" fill="none" ${OL}/>`;
+  // arms / flippers
+  const slv=of.hood?'#5cae5a':k==='penguin'?A.f:of.slv,paw=of.glove||(k==='penguin'?A.f:k==='mole'?A.ac:A.f);
+  for(const s of[-1,1]){const x=50+s*26;g+=`<path d="M${x},${112} q${s*12},${10} ${s*6},${26}" stroke="${A.d}" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M${x},${112} q${s*12},${10} ${s*6},${26}" stroke="${slv}" stroke-width="8.4" fill="none" stroke-linecap="round"/><circle cx="${x+s*6}" cy="138" r="5" fill="${paw}" stroke="${A.d}" stroke-width="2"/>`;}
+  // item in the right paw
+  const IX=82,IY=138;
+  const IT={shovel:`<path d="M${IX},${IY+8} V${IY-34}" stroke="#9a6a3a" stroke-width="3.4"/><path d="M${IX-5},${IY-36} h10" stroke="#6a4528" stroke-width="3"/><path d="M${IX-6},${IY+6} h12 l-2,12 l-4,4 l-4,-4Z" fill="#aab3b8" stroke="#5a646a" stroke-width="1.2"/>`,
+    pick:`<path d="M${IX},${IY+12} V${IY-28}" stroke="#9a6a3a" stroke-width="3.4"/><path d="M${IX-16},${IY-22} Q${IX},${IY-34} ${IX+16},${IY-22}" stroke="#8e979c" stroke-width="4.4" fill="none" stroke-linecap="round"/>`,
+    tablet:`<rect x="${IX-4}" y="${IY-24}" width="18" height="24" rx="3" fill="#1c2226" stroke="#0e1214" stroke-width="1.2"/><rect x="${IX-1}" y="${IY-21}" width="12" height="16" fill="#6fc3e0"/>`,
+    hdrill:`<rect x="${IX-6}" y="${IY-14}" width="22" height="10" rx="3" fill="#e8a93a" stroke="#8a5a1a" stroke-width="1.2"/><rect x="${IX-2}" y="${IY-4}" width="6" height="12" fill="#2b3338"/><path d="M${IX+16},${IY-9} h8" stroke="#c9d1d5" stroke-width="3"/>`,
+    gold:`<path d="M${IX-8},${IY-4} l4,-8 h14 l4,8Z" fill="#f2c14e" stroke="#a87a1e" stroke-width="1.2"/>`,
+    phone:`<rect x="${IX-3}" y="${IY-18}" width="10" height="16" rx="2" fill="#1c2226"/><rect x="${IX-1}" y="${IY-16}" width="6" height="10" fill="#ece6da"/>`,
+    envelope:`<rect x="${IX-8}" y="${IY-16}" width="20" height="14" fill="#f4f2ee" stroke="#a8a090" stroke-width="1"/><path d="M${IX-8},${IY-16} l10,8 l10,-8" stroke="#a8a090" fill="none"/><circle cx="${IX+2}" cy="${IY-8}" r="2" fill="#c9302c"/>`,
+    rusty:`<path d="M${IX},${IY+6} V${IY-26}" stroke="#5b4535" stroke-width="3"/><path d="M${IX-6},${IY+4} h12 l-3,10 h-6Z" fill="#8a4b2a"/>`};
+  g+=IT[item]||'';
+  // ears (behind head outline)
+  const E=(d)=>`<path d="${d}" fill="${A.f}" ${OL}/>`;
+  if(k==='cat')g+=E('M22,66 L20,36 L44,52Z')+E('M78,66 L80,36 L56,52Z')+`<path d="M25,58 L24,44 L36,53Z M75,58 L76,44 L64,53Z" fill="#f6b8b8"/>`;
+  if(k==='fox')g+=E('M20,70 L16,30 L46,50Z')+E('M80,70 L84,30 L54,50Z')+`<path d="M18,40 L16,30 L26,36Z M82,40 L84,30 L74,36Z" fill="${A.d}"/><path d="M24,60 L21,42 L38,52Z M76,60 L79,42 L62,52Z" fill="#fff0e0"/>`;
+  if(k==='bear'||k==='tanuki')g+=`<circle cx="22" cy="54" r="11" fill="${A.f}" ${OL}/><circle cx="78" cy="54" r="11" fill="${A.f}" ${OL}/><circle cx="22" cy="54" r="5.5" fill="${k==='tanuki'?A.d:A.l}"/><circle cx="78" cy="54" r="5.5" fill="${k==='tanuki'?A.d:A.l}"/>`;
+  if(k==='mole')g+=`<circle cx="18" cy="70" r="6" fill="${A.f}" ${OL}/><circle cx="82" cy="70" r="6" fill="${A.f}" ${OL}/>`;
+  // head
+  g+=`<ellipse cx="50" cy="80" rx="37" ry="33" fill="${A.f}" ${OL}/>`;
+  if(k==='penguin')g+=`<path d="M50,64 C40,52 18,58 20,82 C21,100 36,108 50,108 C64,108 79,100 80,82 C82,58 60,52 50,64Z" fill="${A.l}"/>`;
+  if(k==='cat')g+=`<path d="M44,50 l2,8 M50,48 v10 M56,50 l-2,8" stroke="${A.d}" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="50" cy="96" rx="15" ry="10" fill="${A.l}"/>`;
+  if(k==='fox')g+=`<path d="M14,84 C26,80 40,92 50,104 C60,92 74,80 86,84 C82,104 66,112 50,112 C34,112 18,104 14,84Z" fill="${A.l}"/>`;
+  if(k==='bear'||k==='mole')g+=`<ellipse cx="50" cy="97" rx="15" ry="10.5" fill="${A.m}"/>`;
+  if(k==='tanuki')g+=`<path d="M22,82 C24,70 38,70 44,80 C44,90 30,94 24,90Z M78,82 C76,70 62,70 56,80 C56,90 70,94 76,90Z" fill="${A.d}"/><ellipse cx="50" cy="98" rx="14" ry="9" fill="${A.l}"/>`;
+  // dino hood over the head
+  if(of.hood&&(!hat||hat==='none'))g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`+[[28,50],[40,43],[52,41],[64,43],[74,50]].map(([x,y])=>`<path d="M${x-5},${y+5} L${x},${y-7} L${x+5},${y+5}Z" fill="#f2c14e" stroke="#c89a2a" stroke-width="1"/>`).join('');
+  // face
+  const eyeY=k==='penguin'?82:83,ex1=37,ex2=63;
+  if(ex==='happy')g+=`<path d="M${ex1-5},${eyeY+1} q5,-7 10,0 M${ex2-5},${eyeY+1} q5,-7 10,0" stroke="#1d2230" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
+  else if(ex==='shock')g+=`<ellipse cx="${ex1}" cy="${eyeY}" rx="6" ry="7" fill="#fff" stroke="#1d2230" stroke-width="2"/><ellipse cx="${ex2}" cy="${eyeY}" rx="6" ry="7" fill="#fff" stroke="#1d2230" stroke-width="2"/><circle cx="${ex1}" cy="${eyeY}" r="2.2" fill="#1d2230"/><circle cx="${ex2}" cy="${eyeY}" r="2.2" fill="#1d2230"/>`;
+  else for(const x of[ex1,ex2])g+=`<ellipse cx="${x}" cy="${eyeY}" rx="4.8" ry="6.2" fill="#1d2230"/><ellipse cx="${x}" cy="${eyeY+2.4}" rx="3.4" ry="2.6" fill="${k==='cat'?'#3a7a3a':'#3a4a6a'}" opacity=".7"/><circle cx="${x-1.6}" cy="${eyeY-2.4}" r="2" fill="#fff"/><circle cx="${x+1.8}" cy="${eyeY+2}" r=".9" fill="#fff"/>`;
+  g+=`<ellipse cx="27" cy="94" rx="6" ry="3.4" fill="#ff8fa3" opacity=".55"/><ellipse cx="73" cy="94" rx="6" ry="3.4" fill="#ff8fa3" opacity=".55"/>`;
+  if(k==='penguin')g+=`<path d="M44,92 Q50,88 56,92 Q50,100 44,92Z" fill="${A.ac}" stroke="#c46a10" stroke-width="1.4" stroke-linejoin="round"/>`;
+  else{const nose=k==='mole'||k==='cat'?A.ac:'#2a1f1a';g+=`<ellipse cx="50" cy="${k==='mole'?92:91}" rx="${k==='mole'?6:3.6}" ry="${k==='mole'?4.6:2.6}" fill="${nose}"/><circle cx="${k==='mole'?48:49}" cy="${k==='mole'?90:90}" r="1.2" fill="#fff" opacity=".7"/>`;
+    g+=ex==='shock'?`<ellipse cx="50" cy="101" rx="3" ry="3.6" fill="#7a2a2a"/>`:`<path d="M44,97 q3,3 6,0 q3,3 6,0" stroke="#3a2a22" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
+    if(k==='cat')g+=`<path d="M30,95 h-12 M30,99 l-11,3 M70,95 h12 M70,99 l11,3" stroke="${A.d}" stroke-width="1.2"/>`;}
+  if(k==='penguin'&&ex==='shock')g+=`<ellipse cx="50" cy="102" rx="3" ry="3" fill="#7a2a2a"/>`;
+  // hat
+  if(hat&&hat!=='none'&&VHAT[hat])g+=`<g transform="translate(50,${hat==='flower'||hat==='bow'||hat==='horns'?58:56}) scale(1.24) translate(-50,-33)">${VHAT[hat]}</g>`;
+  const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="32" ry="5" fill="rgba(0,0,0,.3)"/>`;
+  return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
+const charG=(c,o)=>PXAN[c.sex]?animalSVG(c,o||{}):pixelChar(c,o||{});
 const fig=(c,x,y,h,o={})=>{const s=h/172;return `<g transform="translate(${(x-50*s).toFixed(1)},${(y-172*s).toFixed(1)}) scale(${s.toFixed(3)})">${charG(c,o)}</g>`;};
 const ME=()=>Object.assign({},DEFCHAR,S.char||{});
 const MOM={sex:'f',skin:0,hair:'bob',hcol:5,eyes:'smile',body:'normal',hat:'none',outfit:'apron',item:'envelope'};
@@ -2326,7 +2444,7 @@ const WT=[{k:'sex',n:'주인공'},{k:'hair',n:'헤어'},{k:'hcol',n:'헤어 색'
 let wTab='outfit',wTry=null;
 const owns=(k,o)=>o.p===0||S.own.includes(k+':'+o.v);
 const HEADVB='12 2 76 76',BODYVB='-20 -2 140 178';
-const headVB=c=>PXAN[c.sex]?'12 20 76 76':HEADVB;
+const headVB=c=>PXAN[c.sex]?'11 38 78 78':HEADVB;
 function avatarSVG(c){return `<svg viewBox="${headVB(c)}" aria-hidden="true">${charG(c)}</svg>`;}
 function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());}
 function wardChar(){const c=ME();if(wTry)c[wTry.k]=wTry.v;return c;}
@@ -2694,7 +2812,7 @@ let lgRaf=0;
 function landRotFrame(){lgRaf=0;const t=$('#lTiles'),L=$('#lItems');if(!t||!L)return;t.innerHTML=tilesAt(LANG);
   const els=[...L.children];for(const el of els){if(el.classList.contains('petg'))continue;const c=el.dataset.c;if(!c)continue;const [gx,gy]=c.split(',').map(Number),s0=projG(gx,gy),r=rotG(gx,gy),s1=projG(...r);
     el.setAttribute('transform',`translate(${(s1[0]-s0[0]).toFixed(1)},${(s1[1]-s0[1]).toFixed(1)})`);el.dataset.d=r[0]+r[1];}
-  els.sort((a,b)=>+a.dataset.d-+b.dataset.d).forEach(e=>L.appendChild(e));}
+  const so=[...L.children].sort((a,b)=>+a.dataset.d-+b.dataset.d);so.forEach((e,i)=>{if(L.children[i]!==e)L.insertBefore(e,L.children[i]);});}
 const landRotReq=()=>{if(!lgRaf)lgRaf=requestAnimationFrame(landRotFrame);};
 let LNS=6;
 function rotC(x,y){const N=LNS,r=landView();return r===1?[N-1-y,x]:r===2?[N-1-x,N-1-y]:r===3?[y,N-1-x]:[x,y];}
@@ -3300,7 +3418,7 @@ function frame(t){const raw=(t-last)/1000,dt=Math.min(.05,raw);last=t;
   else if(view==='bore'){const a=depthToAbs(S.depth),a0=Math.floor(a);bore.draw(dt,{abs0:a0,frac:a-a0,active:!blocked,boost:boostM()});}
   else if(view==='craft')drawPreview(dt);
   if(titleOn)drawTitle(dt);
-  hudT-=dt;if(hudT<=0){hudT=.1;hud();checkInvest();}
+  hudT-=dt;if(hudT<=0){hudT=.1;hud();checkInvest();checkCraft();}
   saveT-=dt;if(saveT<=0){saveT=3;save();}
   }
 requestAnimationFrame(loop);
