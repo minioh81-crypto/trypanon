@@ -419,6 +419,7 @@ nav.tabs button{font-size:12px}
 .lbtns{display:flex;gap:6px}.ghost.sm{height:36px;padding:0 12px;font-size:12px;border-radius:10px}.ghost.sm.on{border-color:var(--hot);color:var(--hot)}
 .lgrid-wrap{touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;position:relative;background:linear-gradient(#8cc4e8,#d8eccf 55%,#bfdcae);border:1px solid var(--line);border-radius:16px;padding:6px 4px 8px;overflow:hidden}
 .lpw{display:grid;gap:3px}.lpplus{font-size:11px;font-weight:700;border-radius:8px;padding:4px 2px;background:rgba(246,199,106,.16);color:var(--amber2);border:1px dashed rgba(246,199,106,.5)}.lpplus.no{opacity:.5}.lp small{font-size:10px;opacity:.7}
+.lgrid-wrap .lcam{position:absolute;right:8px;bottom:8px;display:flex;gap:6px}.lgrid-wrap .lcam button{width:30px;height:30px;opacity:.85;border-radius:50%;background:rgba(20,28,32,.78);color:#fff;font-size:17px;border:1px solid rgba(255,255,255,.3)}
 .lgrid-wrap .lrot{position:absolute;right:8px;top:8px;font-size:11px;font-weight:700;color:#2b3a22;background:rgba(255,255,255,.7);border-radius:999px;padding:3px 9px;pointer-events:none}.lgrid-wrap svg{transform-origin:50% 55%}
 .lgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;transform:perspective(600px) rotateX(18deg);transform-origin:50% 100%}
 .lt{position:relative;display:block;width:100%;height:0;padding:0 0 100% 0;border-radius:4px;line-height:0;min-width:0}
@@ -651,7 +652,7 @@ const dlName=dl=>GRADE_T[dlGrade(dl)-1]+' '+dlStep(dl);
 // ---- difficulty modes (balance targets: 보통 ≈ 2주, 하드 ≈ 1달 — see sim notes in CHANGELOG) ----
 const MODES={
  normal:{n:'보통',MAXLV:10,DLOPEN:50,LREQ:[1,1,6,16,26,36,46],Hmul:1.5,vmul:[1,1,1,1.5,2,2,2.5],dlMul:1.1,dlGrow:1.2,expBase:100,expGrow:1.7,inv:1,shop:1,chest:1,set:1,
-  fuel:[10,10,6],RESC:[8,16,48,160,500,1300,3000,6500,13000,24000],MONC:[100,300,1200,3500,10000,30000,80000,200000,450000,900000]},
+  fuel:[10,10,6],RESC:[8,16,48,160,650,1690,3900,8450,16900,31200],MONC:[100,300,1200,3500,10000,30000,80000,200000,450000,900000]},
  hard:{n:'하드',MAXLV:20,DLOPEN:100,LREQ:[1,1,11,31,51,71,91],Hmul:10,vmul:[1,1,2,5,10,10,12],dlMul:1.06,dlGrow:1.115,expBase:200,expGrow:1.75,inv:.5,shop:1.5,chest:.7,set:.5,
   fuel:[20,20,12],RESC:[12,24,60,135,270,500,840,1350,2100,3150,4650,6750,9600,13500,18750,25500,34500,46500,63000,84000],
   MONC:[100,300,900,2200,5000,10000,19000,34000,58000,95000,150000,230000,350000,520000,760000,1100000,1600000,2300000,3300000,4700000]}};
@@ -2800,7 +2801,9 @@ function isoTile(x,y,own,can,dx=x,dy=y){const [cx,cy]=isoC(dx,dy),f=foot(cx,cy,1
   else g+=`<path d="M${f.L[0]+10},${f.L[1]} L${f.T[0]},${f.T[1]+5} M${f.B[0]},${f.B[1]-5} L${f.R[0]-10},${f.R[1]}" stroke="rgba(0,0,0,.25)" stroke-width="2"/>`;
   return g+'</g>';}
 const landView=()=>landOf().view||0;
-let LANG=0;// extra continuous rotation (radians) while the land is being dragged
+let LANG=0;const LCAM={x:0,y:0,z:1};
+const camT=(W,H)=>`translate(${(W/2+LCAM.x).toFixed(1)},${(H/2+LCAM.y).toFixed(1)}) scale(${LCAM.z.toFixed(3)}) translate(${-W/2},${-H/2})`;
+function camApply(){const sv=$('#lgWrap svg'),g=$('#lCam');if(!sv||!g)return;const W=+sv.dataset.w,H=+sv.dataset.h,mx=W*.45*LCAM.z,my=H*.45*LCAM.z;LCAM.z=Math.max(1,Math.min(2.6,LCAM.z));LCAM.x=Math.max(-mx,Math.min(mx,LCAM.x));LCAM.y=Math.max(-my,Math.min(my,LCAM.y));g.setAttribute('transform',camT(W,H));const w=$('#lgWrap');if(w)w.style.touchAction=LCAM.z>1.01?'none':'pan-y';}// extra continuous rotation (radians) while the land is being dragged
 function rotG(gx,gy,th=LANG){const c=LNS/2,dx=gx-c,dy=gy-c,co=Math.cos(th),si=Math.sin(th);return [c+dx*co-dy*si,c+dx*si+dy*co];}
 const projG=(gx,gy)=>[ISO.ox+(gx-gy)*ISO.hw,ISO.oy+(gx+gy)*ISO.hh];
 function tilesAt(th){const L0=landOf(),n=landSize(),N=LNS,P=(a,b)=>projG(...rotG(a,b,th));let g='';
@@ -2830,7 +2833,7 @@ function landSVG(){const L0=landOf(),n=landSize(),O=landOcc();let tiles=[],items
     let [cx,cy]=isoC(ax,ay);if(it==='me'){const pm=landPick==='me',f=foot(cx,cy,1);return `<g class="mech" data-d="${dd}" data-c="${ax+.5},${ay+.5}" style="cursor:pointer">${pm?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<ellipse cx="${cx}" cy="${cy+3}" rx="11" ry="4" fill="rgba(0,0,0,.25)"/>${fig(ME(),cx,cy+4,48,{expr:'happy',flip:!!me.f})}</g>`;}
     if(nb>1){cx=ISO.ox+(ax-ay)*ISO.hw;cy=ISO.oy+(ax+ay+nb)*ISO.hh;}
     const pk=landPick===x+','+y,f=foot(cx,cy,nb),mr=!!RT[x+','+y];ISO_MIR=mr?1:0;let art=isoItem(it,cx,cy);ISO_MIR=0;if(nb>1)art=`<g transform="translate(${cx},${cy}) scale(${BIGS[it]||1.8}) translate(${-cx},${-cy})">${art}</g>`;return `<g class="ii${pk?' pk':''}" data-xy="${x},${y}" data-d="${dd}" data-c="${ax+nb/2},${ay+nb/2}">${pk?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<g transform="${pk?'translate(0,-5) ':''}${mr?`translate(${2*cx},0) scale(-1,1)`:''}">${art}</g></g>`;}).join('');
-  return `<svg class="isoland" viewBox="0 0 ${VW} ${VH}" role="img" aria-label="내 땅 지도"><g id="lTiles">${tiles.map(t=>t[1]).join('')}</g><g id="lItems">${its}</g></svg>`;}
+  return `<svg class="isoland" viewBox="0 0 ${VW} ${VH}" data-w="${VW}" data-h="${VH}" role="img" aria-label="내 땅 지도"><g id="lCam" transform="${camT(VW,VH)}"><g id="lTiles">${tiles.map(t=>t[1]).join('')}</g><g id="lItems">${its}</g></g></svg>`;}
 function isoIcon(id){NOBUB=1;const pet=id==='dog'||id==='cat'?`<g transform="translate(${id==='dog'?10:4},10) scale(.8)">${petPose(id,'sit')}</g>`:'';NOBUB=0;return GRAND[id]?`<svg viewBox="-84 -118 168 170" aria-hidden="true">${isoItem(id,0,0)}</svg>`:`<svg viewBox="-34 -58 68 80" aria-hidden="true"><polygon points="${PT([[-28,0],[0,-14],[28,0],[0,14]])}" fill="#74b052" ${ISK}/>${isoItem(id,0,0)}${pet}</svg>`;}
 
 let landSel=null,landDel=false,landPick=null;
@@ -2847,24 +2850,34 @@ function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
   const B=(id,t,c='ghost')=>`<button class="${c} sm" type="button" id="${id}">${t}</button>`;
   $('#landView').innerHTML=`<div class="lhead"><div><div class="tk">내 땅 · ${n}×${n}칸</div><div class="tn">양구 국토정중앙 옆 부지</div></div>
      <div class="lbtns">${nx?`<button class="ghost sm" type="button" id="landBuy" ${S.money>=nx?'':'disabled'}>땅 넓히기 ${won(nx)}</button>`:''}<button class="ghost sm ${landDel?'on':''}" type="button" id="landDel">${landDel?'철거 중':'철거'}</button></div></div>
-   <div class="lgrid-wrap" id="lgWrap">${landSVG()}<span class="lrot">⟲ 좌우로 끌어서 360° 돌리기 ⟳</span></div>
+   <div class="lgrid-wrap" id="lgWrap">${landSVG()}<span class="lrot">끌어서 이동 · +/− 확대</span><div class="lcam"><button type="button" id="landRL" aria-label="왼쪽으로 돌리기">⟲</button><button type="button" id="landZo" aria-label="축소">−</button><button type="button" id="landZ" aria-label="보기 초기화">⌂</button><button type="button" id="landZi" aria-label="확대">+</button><button type="button" id="landRR" aria-label="오른쪽으로 돌리기">⟳</button></div></div>
    ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
      :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${pk.id==='museum'?B('lpGal','전시관 들어가기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
    <p class="sub" style="margin:0">${msg}</p>
    <div class="lpal">${LITEM.map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${isoIcon(i.id)}<span>${i.n}</span><em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;}
 function removeTile(k){const L0=landOf(),it=LITEM.find(i=>i.id===L0.tiles[k]);if(!it)return;S.money+=Math.floor(it.p/2);delete L0.tiles[k];delete landRot()[k];save();toast(it.n+' 철거 · '+won(it.p/2)+' 환급');}
-let lgD=null,lgSup=false;
-function lgTurn(d){const L1=landOf();L1.view=((L1.view||0)+(d>0?1:3))%4;save();renderLand();}
-$('#landView').addEventListener('pointerdown',e=>{const w=e.target.closest('#lgWrap');if(!w||e.button>0||lgD&&lgD.anim)return;lgD={x:e.clientX,y:e.clientY,on:false,id:e.pointerId};});
-$('#landView').addEventListener('pointermove',e=>{if(!lgD||lgD.anim||e.pointerId!==lgD.id)return;const dx=e.clientX-lgD.x;if(!lgD.on){if(Math.abs(dx)<8||Math.abs(dx)<Math.abs(e.clientY-lgD.y))return;lgD.on=true;lgD.x=e.clientX;try{$('#lgWrap').setPointerCapture(e.pointerId);}catch(_){}}
-  LANG=-(e.clientX-lgD.x)*Math.PI/360;landRotReq();e.preventDefault();});
-function lgEnd(e){if(!lgD||lgD.anim)return;const on=lgD.on;if(!on){lgD=null;return;}lgSup=true;setTimeout(()=>{lgSup=false;},60);
-  const q=Math.round(LANG/(Math.PI/2)),to=q*Math.PI/2,from=LANG,t0=performance.now(),D=220;lgD.anim=true;
-  const step=t=>{const k=Math.min(1,(t-t0)/D),e2=1-Math.pow(1-k,3);LANG=from+(to-from)*e2;landRotFrame();
-    if(k<1)requestAnimationFrame(step);else{LANG=0;lgD=null;const L1=landOf();L1.view=(((L1.view||0)+q)%4+4)%4;save();renderLand();}};requestAnimationFrame(step);}
+let lgD=null,lgSup=false,lgPts=new Map(),lgPinch=null;
+// rotate the view 90 degrees with a short smooth turn (objects stay on their tiles, only the camera turns)
+function lgTurn(d){if(lgD&&lgD.anim)return;const to=d*Math.PI/2,t0=performance.now(),D=320;lgD={anim:true};
+  const step=t=>{const k=Math.min(1,(t-t0)/D),e2=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;LANG=to*e2;landRotFrame();
+    if(k<1)requestAnimationFrame(step);else{LANG=0;lgD=null;const L1=landOf();L1.view=(((L1.view||0)+d)%4+4)%4;save();renderLand();}};requestAnimationFrame(step);}
+const svScale=()=>{const sv=$('#lgWrap svg');return sv?(+sv.dataset.w)/sv.getBoundingClientRect().width:1;};
+$('#landView').addEventListener('pointerdown',e=>{const w=e.target.closest('#lgWrap');if(!w||e.button>0||(lgD&&lgD.anim))return;lgPts.set(e.pointerId,[e.clientX,e.clientY]);
+  if(lgPts.size===2){const [a,b]=[...lgPts.values()];lgPinch={d:Math.hypot(a[0]-b[0],a[1]-b[1]),z:LCAM.z};lgD={on:true,pinch:true};return;}
+  lgD={x:e.clientX,y:e.clientY,cx:LCAM.x,cy:LCAM.y,on:false,id:e.pointerId};});
+$('#landView').addEventListener('pointermove',e=>{if(!lgD||lgD.anim)return;if(lgPts.has(e.pointerId))lgPts.set(e.pointerId,[e.clientX,e.clientY]);
+  if(lgD.pinch&&lgPinch&&lgPts.size===2){const [a,b]=[...lgPts.values()];LCAM.z=lgPinch.z*Math.hypot(a[0]-b[0],a[1]-b[1])/lgPinch.d;camApply();e.preventDefault();return;}
+  if(e.pointerId!==lgD.id)return;const dx=e.clientX-lgD.x,dy=e.clientY-lgD.y;
+  if(!lgD.on){if(Math.hypot(dx,dy)<8)return;if(LCAM.z<=1.01&&Math.abs(dy)>Math.abs(dx)*1.4)return;lgD.on=true;try{$('#lgWrap').setPointerCapture(e.pointerId);}catch(_){}}
+  const k=svScale();LCAM.x=lgD.cx+dx*k;LCAM.y=lgD.cy+dy*k;camApply();e.preventDefault();});
+function lgEnd(e){lgPts.delete(e.pointerId);if(!lgD||lgD.anim)return;if(lgD.pinch){if(lgPts.size<2){lgPinch=null;lgD=null;lgSup=true;setTimeout(()=>{lgSup=false;},60);}return;}
+  if(lgD.on){lgSup=true;setTimeout(()=>{lgSup=false;},60);}lgD=null;}
 $('#landView').addEventListener('pointerup',lgEnd);$('#landView').addEventListener('pointercancel',lgEnd);
+$('#landView').addEventListener('wheel',e=>{if(!e.target.closest('#lgWrap'))return;e.preventDefault();LCAM.z*=e.deltaY<0?1.12:1/1.12;camApply();},{passive:false});
+$('#landView').addEventListener('dblclick',e=>{if(!e.target.closest('#lgWrap'))return;LCAM.x=0;LCAM.y=0;LCAM.z=1;camApply();});
 $('#landView').addEventListener('click',e=>{if(lgSup){lgSup=false;e.stopImmediatePropagation();}},true);
 $('#landView').addEventListener('click',e=>{const L0=landOf();
+  if(e.target.closest('#landRL')||e.target.closest('#landRR')){lgTurn(e.target.closest('#landRR')?1:-1);return;}if(e.target.closest('#landZ')){LCAM.x=0;LCAM.y=0;LCAM.z=1;camApply();return;}if(e.target.closest('#landZi')||e.target.closest('#landZo')){LCAM.z*=e.target.closest('#landZi')?1.25:.8;camApply();return;}
   if(e.target.closest('#landBuy')){const c=LAND_COST[L0.lv];if(S.money<c)return;S.money-=c;L0.lv++;save();toast('땅을 넓혔어요 · '+landSize()+'×'+landSize());renderLand();return;}
   if(e.target.closest('#landRL')||e.target.closest('#landRR')){const L1=landOf();L1.view=((L1.view||0)+(e.target.closest('#landRR')?1:3))%4;save();renderLand();toast('땅을 '+[0,90,180,270][L1.view]+'° 돌려 봐요');return;}
   if(e.target.closest('#landDel')){landDel=!landDel;landSel=null;landPick=null;renderLand();return;}
