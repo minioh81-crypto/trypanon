@@ -7,7 +7,7 @@ function run(C,log=false){
   const S={ir:{priv:0,gov:0,mid:0,big:0,org:0},blocks:0,sea:0,blk:0,depth:0,dl:1,parts:Object.fromEntries(PARTS.map(p=>[p.id,0])),money:0,res:{},dig:{},t:0,inv:{}};
   const L=id=>S.parts[id];
   const dpsOf=()=>(3+2*L('housing'))*(1+C.bitK*L('bit'))*(1+.12*L('bearing'))*(1+.25*L('cable'));
-  const pmv=C.pm||1,perks=()=>(S.inv.vc?1+.15*pmv:1)*(S.inv.inst?1+.25*pmv:1)*(S.inv.space?1+.1*pmv:1)*(C.rounds?1+.01*Math.min(20,S.ir.gov)*pmv:1);
+  const pmv=C.pm||1,perks=()=>(S.inv.vc?1+.15*pmv:1)*(S.inv.inst?1+.25*pmv:1)*(S.inv.space?1+.1*pmv:1)*(C.rounds?1+.01*Math.min(20,S.ir.gov)*pmv:1)*(S.yi?(1+(C.yiP||0))*(1+(C.yiU||0)):1);
   const layerAt=m=>C.LAY.find(l=>m<l.to)||C.LAY[C.LAY.length-1];
   const dlCost=dl=>Math.round(C.dlBase*Math.pow(C.dlGrow,dl-2));
   const partReq=dl=>Math.min(C.MAXLV,Math.floor((dl-1)/C.reqStep));
@@ -22,6 +22,7 @@ function run(C,log=false){
     const l=layerAt(S.depth);
     // investors
     for(const v of INV)if(!S.inv[v.id]&&v.cond(S,L)){S.inv[v.id]=1;S.money+=v.amt*(C.inv||1);}
+    if(C.yiCost&&!S.yi&&S.money>=C.yiCost){S.money-=C.yiCost;S.yi=1;S.yiAt=S.t;}
     if(C.rounds){const sumL=Object.values(S.parts).reduce((a,b)=>a+b,0),ra=(k,r)=>Math.max(200,k*dlCost(Math.min(C.DLOPEN,S.dl+1))*(C.inv||1)*(1+.04*r));
       const RC={priv:[()=>S.depth>=300*Math.pow(2.3,S.ir.priv),.1],gov:[()=>S.dl>=3+4*S.ir.gov,.18],mid:[()=>S.blocks>=60*Math.pow(1.75,S.ir.mid),.14],big:[()=>sumL>=12+8*S.ir.big,.2],org:[()=>S.t/3600*1.2>=2+3*S.ir.org,.12]};
       for(const k in RC){while(RC[k][0]()){S.money+=ra(RC[k][1],S.ir[k]);S.ir[k]++;}}}
@@ -41,6 +42,6 @@ function run(C,log=false){
     const nx=S.dl+1;if(nx<=C.DLOPEN&&PARTS.every(p=>L(p.id)>=partReq(nx))&&S.money>=dlCost(nx)){S.money-=dlCost(nx);S.dl=nx;}
     if(log&&S.dl!==lastDl&&S.dl%10===0){marks.push(`dl${S.dl}@${(S.t/3600).toFixed(1)}h d=${(S.depth/1000).toFixed(1)}km`);}lastDl=S.dl;
     S.t+=dt;}
-  return {h:S.t/3600,blockedH:S.blk/3600,dl:S.dl,parts:Object.values(S.parts).join(','),marks,money:Math.round(S.money),dig:Object.fromEntries(Object.entries(S.dig).map(([k,v])=>[k,v.i]))};
+  return {h:S.t/3600,yiH:S.yiAt?+(S.yiAt/3600).toFixed(1):null,blockedH:S.blk/3600,dl:S.dl,parts:Object.values(S.parts).join(','),marks,money:Math.round(S.money),dig:Object.fromEntries(Object.entries(S.dig).map(([k,v])=>[k,v.i]))};
 }
 module.exports={run,REG,PARTS};
