@@ -45,7 +45,9 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .mapwrap svg{display:block;width:100%;height:100%}
 .grat{stroke:#5ab8ea;stroke-width:.4;opacity:.5}
 .plab{font:800 5.4px var(--f-body);fill:#fff6dc;text-anchor:middle}.plab.sm{font-size:5.4px;fill:#fff;paint-order:stroke;stroke:#14609e;stroke-width:1.6px}
-.mapwrap svg{overflow:visible}
+.mapwrap{position:relative}.mapwrap svg{overflow:visible}.mapwrap .mlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}#mapSvg{position:relative;z-index:1}
+.mtide{opacity:0;will-change:opacity;animation:tide 16s ease-in-out infinite}@keyframes tide{0%,30%{opacity:0}50%,80%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.mtide{animation:none}}
 .gl{fill:#bfe6ff;opacity:.7;font:500 7px var(--f-num)}
 #map.wx-storm .flash{animation:mflash 7s infinite}@keyframes mflash{0%,90%,94%,100%{opacity:0}91%{opacity:.5}93%{opacity:.15}92.5%{opacity:.45}}#map #mWx{pointer-events:none}
 .landp{fill:var(--land);stroke:#8a7444;stroke-width:.8;stroke-linejoin:round}
@@ -1509,14 +1511,16 @@ function buildMap(){let g='';
   const BR=[[[128.85,37.15],[129.05,36.7],[129.1,36.2],[129.05,35.8],[129.0,35.45]],[[127.95,36.55],[127.5,36.65],[127.0,36.75],[126.5,36.8]],[[127.75,35.85],[127.35,35.6],[127.15,35.2],[127.3,34.9]],[[128.2,38.35],[127.7,38.05],[127.3,37.85]],[[128.62,37.75],[128.2,37.55],[127.7,37.45]]];
   const wl=(w,h,a)=>`M0,${h/2} q${w/4},${-a} ${w/2},0 t${w/2},0`;
   const allD=PROV.map(p=>p.d).join('');
-  g=`<defs><radialGradient id="mSea" gradientUnits="userSpaceOnUse" cx="165" cy="150" r="300"><stop offset="0" stop-color="#3fb0ea"/><stop offset=".6" stop-color="#2386cc"/><stop offset="1" stop-color="#14609e"/></radialGradient>
-    <linearGradient id="mShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,255,240,.22)"/><stop offset=".5" stop-color="rgba(255,255,240,0)"/><stop offset="1" stop-color="rgba(0,20,40,.12)"/></linearGradient>
-    <pattern id="mRip" width="26" height="14" patternUnits="userSpaceOnUse"><path d="M2,7 q3,-3 6,0 t6,0" stroke="#bfe8ff" stroke-width=".6" fill="none" opacity=".35"/><path d="M15,13 q2.5,-2.5 5,0" stroke="#bfe8ff" stroke-width=".5" fill="none" opacity=".25"/></pattern>
-</defs>
-    <rect x="-300" y="-300" width="1000" height="1000" fill="#1d78bc"/><rect x="-300" y="-300" width="1000" height="1000" fill="url(#mSea)"/><rect x="-300" y="-300" width="1000" height="1000" fill="url(#mRip)"/>
-    `+g;
+  const seaDefs=`<radialGradient id="mSea" gradientUnits="userSpaceOnUse" cx="165" cy="150" r="300"><stop offset="0" stop-color="#3fb0ea"/><stop offset=".6" stop-color="#2386cc"/><stop offset="1" stop-color="#14609e"/></radialGradient>`;
+  g=`<defs><linearGradient id="mShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,255,240,.22)"/><stop offset=".5" stop-color="rgba(255,255,240,0)"/><stop offset="1" stop-color="rgba(0,20,40,.12)"/></linearGradient>
+    ${seaDefs}<pattern id="mRip" width="26" height="14" patternUnits="userSpaceOnUse"><path d="M2,7 q3,-3 6,0 t6,0" stroke="#bfe8ff" stroke-width=".6" fill="none" opacity=".35"/><path d="M15,13 q2.5,-2.5 5,0" stroke="#bfe8ff" stroke-width=".5" fill="none" opacity=".25"/></pattern>
+</defs>`+g;
   // raised province slabs: drop shadow -> cliffs -> tops (lower slabs first so higher cliffs overlap them)
-  g+=`<path d="${allD}" transform="translate(2.4,7)" fill="#0a3460" opacity=".32"/><g id="mWash" data-d="1" transform="translate(0,5.2)" style="pointer-events:none"></g>`;
+  // sea, drop shadow and tide live in separate layers under the land: the low-tide layer only fades (GPU opacity), so the big land SVG never repaints for the tide
+  const VB='2 2 318 322',sea=`<svg class="mlay" viewBox="${VB}" aria-hidden="true"><defs>${seaDefs}<pattern id="mRip2" width="26" height="14" patternUnits="userSpaceOnUse"><path d="M2,7 q3,-3 6,0 t6,0" stroke="#bfe8ff" stroke-width=".6" fill="none" opacity=".35"/><path d="M15,13 q2.5,-2.5 5,0" stroke="#bfe8ff" stroke-width=".5" fill="none" opacity=".25"/></pattern></defs>
+    <rect x="-300" y="-300" width="1000" height="1000" fill="#1d78bc"/><rect x="-300" y="-300" width="1000" height="1000" fill="url(#mSea)"/><rect x="-300" y="-300" width="1000" height="1000" fill="url(#mRip2)"/>
+    <path d="${allD}" transform="translate(2.4,7)" fill="#0a3460" opacity=".32"/><g transform="translate(0,5.2)">${tideSVG(0)}</g></svg>
+    <svg class="mlay mtide" viewBox="${VB}" aria-hidden="true"><g transform="translate(0,5.2)">${tideSVG(1)}</g></svg>`;
   for(const p of PROV){const c=p.col,top=-p.e;g+=`<path d="${p.d}" transform="translate(0,5.2)" fill="${shade(c,-.42)}" stroke="${shade(c,-.55)}" stroke-width=".5"/><path d="${p.d}" transform="translate(0,${(2.4+top).toFixed(1)})" fill="${shade(c,-.25)}"/>`
     +`<path class="landp prov" data-p="${p.id}" d="${p.d}" transform="translate(0,${top.toFixed(1)})" style="fill:${c};stroke:#fffbe6;stroke-opacity:.85;stroke-width:.6"/>`;}
   g+=`<path d="${allD}" fill="url(#mShade)" style="pointer-events:none"/>`;
@@ -1550,7 +1554,7 @@ function buildMap(){let g='';
   for(const r of REG){const x=+mapX(r).toFixed(1),y=+PY(r.lat).toFixed(1);g+=r.t==='sea'?node(r.id,'sea',x,y,r.n,0,'middle',19,r.res):node(r.id,'land',x,y,r.n,r.lx,r.la,4,r.res);}
   g+=node('yanggu','base',+PX(127.99).toFixed(1),+PY(38.11).toFixed(1),'양구 본공',-11,'end',4);
   g+='<g id="mWxI"></g>';
-  $('#map').innerHTML=`<svg viewBox="2 2 318 322" role="img" aria-label="대한민국 시추 지도">${g}</svg>`;wxSet(true);}
+  $('#map').innerHTML=sea+`<svg id="mapSvg" viewBox="${VB}" role="img" aria-label="대한민국 시추 지도">${g}</svg>`;wxSet(true);}
 // ---------------- weather: each expedition region has its own weather (changes every 3 minutes) ----------------
 // y: material yield %, g: dig speed %, w: weight by season [spring,summer,autumn,winter]
 const WXT=[
@@ -1576,12 +1580,14 @@ const rbFx=()=>`모든 원정 재료 +${RBY()}% · 굴착 +${RBG()}%`;
 const wxDig=rid=>rid?(1+wxG(wxOf(rid))/100)*(rbOn()?1+RBG()/100:1):1;
 function wxAmt(amt,rid){const p=wxY(wxOf(rid))/100+(rbOn()?RBY()/100:0);if(!p)return amt;const d=Math.max(1,Math.round(Math.abs(p)*amt));return Math.max(1,amt+(p>0?d:-d));}
 function wxFx(w){const y=Math.round(wxY(w)),g=Math.round(wxG(w));return [y?`재료 ${y>0?'+':''}${y}%`:'재료 그대로',g?`굴착 ${g}%`:''].filter(Boolean).join(' · ');}
-// tide: slow ebb and flow (16s, holds at high and low water). Low tide widens the shallows and exposes the West Sea mud flats.
-function washSVG(){const d=TIDED,A=(v,k='0;.3;.5;.8;1')=>`dur="16s" keyTimes="${k}" values="${v}" calcMode="spline" keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .6 1;.4 0 .6 1" repeatCount="indefinite"`;
+// tide: static high-water foam (layer 0) + a low-tide layer (1) that fades in and out with a CSS opacity animation (16s, holds at high and low water).
+// Low tide widens the shallows and exposes the West Sea mud flats (Jeju excluded).
+function tideSVG(low){const d=TIDED;
+  if(!low)return `<path d="${d}" fill="none" stroke="#a8e4fa" stroke-linejoin="round" opacity=".55" stroke-width="4"/><path d="${d}" fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=".6 3.2" opacity=".85" stroke-width="2.2"/>`;
   return `<clipPath id="mWest"><rect x="-300" y="-300" width="${(PX(127.05)+300).toFixed(0)}" height="${(PY(34.05)+300).toFixed(0)}"/></clipPath>
-  <path d="${d}" fill="none" stroke="#a8e4fa" stroke-linejoin="round" opacity=".55" stroke-width="3"><animate attributeName="stroke-width" ${A('4;4;10;10;4')}/></path>
-  <path d="${d}" fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=".6 3.2" opacity=".85" stroke-width="1.6"><animate attributeName="stroke-width" ${A('2.2;2.2;8;8;2.2')}/></path>
-  <path d="${d}" fill="none" stroke="#b49a6c" stroke-linejoin="round" clip-path="url(#mWest)" stroke-width="6.4" opacity="0"><animate attributeName="opacity" ${A('0;0;.75;.75;0')}/></path>`;}
+  <path d="${d}" fill="none" stroke="#a8e4fa" stroke-linejoin="round" opacity=".55" stroke-width="10"/>
+  <path d="${d}" fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=".6 3.2" opacity=".85" stroke-width="8"/>
+  <path d="${d}" fill="none" stroke="#b49a6c" stroke-linejoin="round" clip-path="url(#mWest)" stroke-width="6.4" opacity=".75"/>`;}
 // small animated weather icon (about 16px), drawn next to each region on the map
 function wxIcon(id){const A=(t,v,d,b=0)=>`<animateTransform attributeName="transform" type="${t}" values="${v}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/>`;
   const cloud=(c,x=0,y=0)=>`<g transform="translate(${x},${y})"><ellipse cx="0" cy="1" rx="7" ry="3.4" fill="${c}" stroke="#2b3a44" stroke-width=".6"/><circle cx="-2.6" cy="-.8" r="3" fill="${c}"/><circle cx="1.8" cy="-1.6" r="3.6" fill="${c}"/></g>`;
@@ -1612,7 +1618,7 @@ function rainbowSVG(){// diagonal rainbow: rises out of the west sea and comes d
   return g;}
 function wxSet(f){const slot=Math.floor(Date.now()/WX_MS);if(!f&&slot===wxSlot)return;const rb0=wxSlot>=0&&rbAt((wxSlot)*WX_MS);wxSlot=slot;
   {const mr=$('#mRb');if(mr)mr.innerHTML=rbOn()?rainbowSVG():'';if(!f&&rbOn()&&!rb0&&S.story)toast('🌈 지도에 무지개가 떴어요! 3분 동안 '+rbFx());}
-  const mw=$('#mWash');if(mw&&!mw.innerHTML)mw.innerHTML=washSVG();const mi=$('#mWxI');if(mi)mi.innerHTML=wxIcons();
+  const mw=$('#mWash');const mi=$('#mWxI');if(mi)mi.innerHTML=wxIcons();
   const a=S.ex.active;if(a){const w=wxOf(a);if(!f&&wxSeen[a]&&wxSeen[a]!==w.id&&S.story)toast(`${w.ic} ${regById(a).n} 날씨가 ${w.n}(으)로 바뀌었어요 — ${wxFx(w)}`);}
   for(const r of REG)wxSeen[r.id]=wxOf(r.id).id;mapInfoKey='';if(!f){if(!$('#rpop').hidden)renderCard();if(exp){const r=exp.r;$('#eArt').innerHTML=regionArt(r.id,{withChar:true,rx:0,label:r.n+' 풍경',cx:r.t==='sea'?44:64,cy:168,ch:r.t==='sea'?70:84});}}}
 setInterval(()=>wxSet(false),5000);
@@ -2732,7 +2738,7 @@ $('#wBuy').addEventListener('click',e=>{if(!e.target.closest('#wBuyBtn')||!wTry)
 
 // ---------------- tabs ----------------
 let hudCache='';
-function show(v){view=v;if(v==='map'&&yiPend&&yiM()>1){yiPend=false;setTimeout(()=>playYi(),60);}for(const [sel,on] of [['#map svg','map'],['#lgWrap svg','land']]){const sv=$(sel);if(sv&&sv.pauseAnimations){if(v===on)sv.unpauseAnimations();else sv.pauseAnimations();}}
+function show(v){view=v;if(v==='map'&&yiPend&&yiM()>1){yiPend=false;setTimeout(()=>playYi(),60);}for(const [sel,on] of [['#mapSvg','map'],['#lgWrap svg','land']]){const sv=$(sel);if(sv&&sv.pauseAnimations){if(v===on)sv.unpauseAnimations();else sv.pauseAnimations();}}
   for(const id of ['map','bore','craft','store','shop','invest','land'])$('#v-'+id).hidden=id!==v;
   document.querySelectorAll('nav.tabs button').forEach(b=>{if(b.dataset.tab===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
   if(v==='map')updateMap();if(v==='craft')renderCraft();if(v==='store')renderStore();if(v==='invest')renderInvest();if(v==='shop')renderShop();if(v==='land')renderLand();if(v==='bore'){hudCache='';}}
