@@ -45,7 +45,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .mapwrap svg{display:block;width:100%;height:100%}
 .grat{stroke:#5ab8ea;stroke-width:.4;opacity:.5}
 .plab{font:800 5.4px var(--f-body);fill:#fff6dc;text-anchor:middle}.plab.sm{font-size:5.4px;fill:#fff;paint-order:stroke;stroke:#14609e;stroke-width:1.6px}
-.mapwrap svg{transform:perspective(1100px) rotateX(14deg);transform-origin:50% 55%;overflow:visible}
+.mapwrap svg{overflow:visible}
 .gl{fill:#bfe6ff;opacity:.7;font:500 7px var(--f-num)}
 #map.wx-storm .flash{animation:mflash 7s infinite}@keyframes mflash{0%,90%,94%,100%{opacity:0}91%{opacity:.5}93%{opacity:.15}92.5%{opacity:.45}}#map #mWx{pointer-events:none}
 .landp{fill:var(--land);stroke:#8a7444;stroke-width:.8;stroke-linejoin:round}
@@ -1516,8 +1516,8 @@ function buildMap(){let g='';
     <rect x="-300" y="-300" width="1000" height="1000" fill="#1d78bc"/><rect x="-300" y="-300" width="1000" height="1000" fill="url(#mSea)"/><rect x="-300" y="-300" width="1000" height="1000" fill="url(#mRip)"/>
     `+g;
   // raised province slabs: drop shadow -> cliffs -> tops (lower slabs first so higher cliffs overlap them)
-  g+=`<path d="${allD}" transform="translate(2.4,7)" fill="#0a3460" opacity=".32"/><g id="mWash" data-d="1" transform="translate(0,4.2)" style="pointer-events:none"></g>`;
-  for(const p of PROV){const c=p.col,top=-p.e;g+=`<path d="${p.d}" transform="translate(0,4.2)" fill="${shade(c,-.42)}" stroke="${shade(c,-.55)}" stroke-width=".5"/><path d="${p.d}" transform="translate(0,${(1.6+top).toFixed(1)})" fill="${shade(c,-.25)}"/>`
+  g+=`<path d="${allD}" transform="translate(2.4,7)" fill="#0a3460" opacity=".32"/><g id="mWash" data-d="1" transform="translate(0,5.2)" style="pointer-events:none"></g>`;
+  for(const p of PROV){const c=p.col,top=-p.e;g+=`<path d="${p.d}" transform="translate(0,5.2)" fill="${shade(c,-.42)}" stroke="${shade(c,-.55)}" stroke-width=".5"/><path d="${p.d}" transform="translate(0,${(2.4+top).toFixed(1)})" fill="${shade(c,-.25)}"/>`
     +`<path class="landp prov" data-p="${p.id}" d="${p.d}" transform="translate(0,${top.toFixed(1)})" style="fill:${c};stroke:#fffbe6;stroke-opacity:.85;stroke-width:.6"/>`;}
   g+=`<path d="${allD}" fill="url(#mShade)" style="pointer-events:none"/>`;
   {const c='#f07a64',x0=PX(130.5)+EDX,y0=PY(37.78);g+=`<rect x="${x0.toFixed(1)}" y="${y0.toFixed(1)}" width="72" height="58" rx="6" fill="rgba(255,255,255,.05)" stroke="#e6f6ff" stroke-width=".6" stroke-dasharray="3 2" opacity=".55" style="pointer-events:none"/><g transform="translate(${PX(130.87)+EDX},${PY(37.5)}) scale(2) translate(${-PX(130.87)},${-PY(37.5)})" style="pointer-events:none"><path d="${ULLD}" transform="translate(0,1.8)" fill="${shade(c,-.42)}"/><path d="${ULLD}" transform="translate(0,-.6)" fill="${c}" stroke="#fffbe6" stroke-width=".4"/><circle cx="${PX(130.87)}" cy="${PY(37.5)-1}" r=".9" fill="#3d9446"/></g>`;}
