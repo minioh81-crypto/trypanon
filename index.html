@@ -420,6 +420,7 @@ nav.tabs button{font-size:12px}
 .lgrid-wrap{touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;position:relative;background:linear-gradient(#8cc4e8,#d8eccf 55%,#bfdcae);border:1px solid var(--line);border-radius:16px;padding:6px 4px 8px;overflow:hidden}
 .lpw{display:grid;gap:3px}.lpplus{font-size:11px;font-weight:700;border-radius:8px;padding:4px 2px;background:rgba(246,199,106,.16);color:var(--amber2);border:1px dashed rgba(246,199,106,.5)}.lpplus.no{opacity:.5}.lp small{font-size:10px;opacity:.7}
 .witem{position:relative;display:block;width:100%;aspect-ratio:1}.witem>svg:first-child{width:100%;height:100%}.witem .wmini{position:absolute;right:-6px;bottom:-6px;width:34%;height:auto;background:rgba(14,19,21,.75);border-radius:10px;border:1px solid var(--line)}
+.lp .th3{width:64px;height:64px;object-fit:contain;display:block;margin:0 auto}
 .lgrid-wrap.l3{padding:4px;background:linear-gradient(#9fd2f0,#dff0f6 70%,#cfe6c8)}.lgrid-wrap .l3c{display:block;margin:0 auto;border-radius:12px;touch-action:none;cursor:grab}.lgrid-wrap .l3c:active{cursor:grabbing}
 .lgrid-wrap .lcam{position:absolute;right:8px;bottom:8px;display:flex;gap:6px}.lgrid-wrap .lcam button{width:30px;height:30px;opacity:.85;border-radius:50%;background:rgba(20,28,32,.78);color:#fff;font-size:17px;border:1px solid rgba(255,255,255,.3)}
 .lgrid-wrap .lrot{position:absolute;right:8px;top:8px;font-size:11px;font-weight:700;color:#2b3a22;background:rgba(255,255,255,.7);border-radius:999px;padding:3px 9px;pointer-events:none}.lgrid-wrap svg{transform-origin:50% 55%}
@@ -1779,7 +1780,7 @@ $('#tStory').addEventListener('click',()=>{closeTitle();openStory();});
 // ---------------- character ----------------
 const SKIN=['#f3d3b5','#e5b48a','#c58c5e','#8b5a3c'];
 const OPT={
- sex:[{v:'m',n:'남자 주인공',p:0},{v:'f',n:'여자 주인공',p:0},{v:'mole',n:'두더지',p:0},{v:'tanuki',n:'너구리',p:2000},{v:'cat',n:'고양이',p:3000},{v:'bear',n:'곰',p:3000},{v:'penguin',n:'펭귄',p:5000},{v:'fox',n:'여우',p:5000}],
+ sex:[{v:'m',n:'남자 주인공',p:0},{v:'f',n:'여자 주인공',p:0},{v:'mole',n:'두더지',p:0},{v:'tanuki',n:'너구리',p:2000},{v:'cat',n:'고양이',p:3000},{v:'bear',n:'곰',p:3000},{v:'penguin',n:'펭귄',p:5000},{v:'fox',n:'여우',p:5000},{v:'chick',n:'병아리',p:2500},{v:'dog',n:'강아지',p:3000},{v:'rabbit',n:'토끼',p:3000},{v:'squirrel',n:'다람쥐',p:3500},{v:'turtle',n:'거북이',p:3500},{v:'sheep',n:'양',p:4000},{v:'hedgehog',n:'고슴도치',p:4000},{v:'panda',n:'판다',p:6000},{v:'dragon',n:'드래곤',p:20000},{v:'unicorn',n:'유니콘',p:25000}],
  hair:[{v:'short',n:'짧은 머리',p:0},{v:'part',n:'가르마',p:150},{v:'bob',n:'단발',p:150},{v:'tail',n:'묶은 머리',p:200},{v:'buzz',n:'삭발',p:80},{v:'long',n:'긴 생머리',p:0},{v:'pig',n:'양갈래',p:200}],
  hcol:[{v:0,n:'검정',p:0,c:'#1f1814'},{v:1,n:'갈색',p:100,c:'#4a2f20'},{v:2,n:'밝은 갈색',p:150,c:'#8a5a2b'},{v:3,n:'금발',p:300,c:'#c9a15a'},{v:4,n:'남색',p:400,c:'#3b4a78'},{v:5,n:'회색',p:400,c:'#8a8e95'}],
  eyes:[{v:'round',n:'동글',p:0},{v:'smile',n:'웃는 눈',p:200},{v:'sharp',n:'날카로운 눈',p:200}],
@@ -2133,78 +2134,97 @@ const VHAT={helmet:`<path d="M23,33 C23,7 77,7 77,33Z" fill="#f1f1ec"/><path d="
  bowler:`<ellipse cx="50" cy="32" rx="40" ry="6.5" fill="#1c1c20"/><path d="M27,32 C26,4 74,4 73,32Z" fill="#24242a"/><rect x="27" y="23" width="46" height="6" fill="#4a3a2a"/><path d="M34,12 Q42,7 52,8" stroke="#4a4a52" stroke-width="2" fill="none"/>`,
  horns:`<path d="M28,30 C14,22 16,6 24,0 C24,12 30,20 38,24Z M72,30 C86,22 84,6 76,0 C76,12 70,20 62,24Z" fill="#2a2a30" stroke="#121216" stroke-width="1.2"/><path d="M24,4 C22,12 26,20 32,24 M76,4 C78,12 74,20 68,24" stroke="#4a4a54" stroke-width="1.4" fill="none"/>`,
  cap:`<path d="M22,32 C22,6 76,6 76,32Z" fill="#3aa0e0"/><path d="M50,8 V30" stroke="#2a80c0" stroke-width="2"/><path d="M60,30 Q86,26 94,34 Q80,38 60,36Z" fill="#2a80c0"/><circle cx="50" cy="8" r="3" fill="#2a80c0"/>`};
-function animalSVG(c,o={}){const k=c.sex,A=ANV[k]||ANV.penguin,OL=`stroke="${A.d}" stroke-width="2.6" stroke-linejoin="round"`,ex=o.expr||'',
-  of=PXOF[o.outfit||c.outfit]||PXOF.track,hat=o.hat??c.hat,item=o.item??c.item,oc=o.outfit||c.outfit,u='an'+(++UID);let g='';
-  // tail (behind)
-  if(k==='fox')g+=`<path d="M70,148 C96,146 102,112 88,100 C86,118 78,128 66,134Z" fill="${A.f}" ${OL}/><path d="M92,104 C90,112 86,117 82,120 C88,121 95,114 95,104Z" fill="${A.l}"/>`;
-  if(k==='cat')g+=`<path d="M70,150 C92,150 96,124 86,112" stroke="${A.d}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M70,150 C92,150 96,124 86,112" stroke="${A.f}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M90,128 l5,-1 M88,138 l5,1" stroke="${A.d}" stroke-width="2"/>`;
-  if(k==='tanuki')g+=`<ellipse cx="80" cy="140" rx="12" ry="16" transform="rotate(-30 80 140)" fill="${A.f}" ${OL}/><path d="M72,132 l15,-6 M75,141 l15,-6 M78,150 l12,-5" stroke="${A.d}" stroke-width="3" stroke-linecap="round"/>`;
-  if(k==='bear'||k==='mole')g+=`<circle cx="74" cy="152" r="5" fill="${A.f}" ${OL}/>`;
+function animalSVG(c,o={}){const k=c.sex,A=ANS[k]||ANS.dog,ex=o.expr||'',of=PXOF[o.outfit||c.outfit]||PXOF.track,hat=o.hat??c.hat,item=o.item??c.item,oc=o.outfit||c.outfit,u='an'+(++UID);
+  const D=shade(A.f,-.42),OL=`stroke="${D}" stroke-width="1.8" stroke-linejoin="round"`,gr=(id,col,cx=.35,cy=.3)=>`<radialGradient id="${u}${id}" cx="${cx}" cy="${cy}" r=".85"><stop offset="0" stop-color="${shade(col,.28)}"/><stop offset=".55" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,-.2)}"/></radialGradient>`;
+  const F=`url(#${u}f)`,LG=`url(#${u}l)`;let g=`<defs>${gr('f',A.f)}${gr('l',A.l,.45,.35)}${gr('d',A.d)}<clipPath id="${u}b"><ellipse cx="50" cy="134" rx="26" ry="28"/></clipPath></defs>`;
+  const legC=A.legC||A.sock||shade(A.f,-.08);
+  // behind: tails, wings, spikes, shell rim, wool
+  if(A.wing)g+=`<path d="M30,118 L4,96 L10,112 L0,116 L12,124 L6,132 L30,130Z M70,118 L96,96 L90,112 L100,116 L88,124 L94,132 L70,130Z" fill="${A.wing}" ${OL}/>`;
+  if(A.tail==='curl')g+=`<path d="M72,146 q16,-2 14,-16 q-2,-8 -8,-4" stroke="${D}" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M72,146 q16,-2 14,-16 q-2,-8 -8,-4" stroke="${A.f}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  if(A.tail==='long')g+=`<path d="M70,152 C92,152 96,126 86,112" stroke="${D}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M70,152 C92,152 96,126 86,112" stroke="${A.f}" stroke-width="5.6" fill="none" stroke-linecap="round"/>${A.stripe?`<path d="M90,130 l5,-1 M89,140 l5,1" stroke="${A.stripe}" stroke-width="2.4"/>`:''}`;
+  if(A.tail==='bushy')g+=`<path d="M68,150 C98,150 104,112 88,98 C86,118 78,130 64,136Z" fill="${F}" ${OL}/><path d="M92,103 C91,112 87,118 82,121 C89,122 96,114 96,104Z" fill="${A.tailTip}"/>`;
+  if(A.tail==='squirrel')g+=`<path d="M64,150 C100,156 104,108 86,84 C76,74 64,86 74,96 C86,108 84,130 62,136Z" fill="${F}" ${OL}/><path d="M80,92 C88,104 90,122 80,136" stroke="${shade(A.f,.25)}" stroke-width="3" fill="none" opacity=".6"/>`;
+  if(A.tail==='ring')g+=`<ellipse cx="82" cy="140" rx="12" ry="17" transform="rotate(-30 82 140)" fill="${F}" ${OL}/><path d="M74,132 l15,-6 M77,141 l15,-6 M80,150 l12,-5" stroke="${A.d}" stroke-width="3.4" stroke-linecap="round"/>`;
+  if(A.tail==='ball')g+=`<circle cx="74" cy="150" r="7" fill="${LG}" ${OL}/>`;
+  if(A.tail==='dragon')g+=`<path d="M70,152 C92,160 100,144 96,130 L104,124 L94,122 C92,136 86,146 70,144Z" fill="${F}" ${OL}/>`;
+  if(A.tail==='mane')g+=`<path d="M72,140 C96,134 98,156 88,166 C96,150 84,146 74,150Z" fill="${A.mane[0]}" ${OL}/><path d="M74,146 C92,146 92,160 84,166" stroke="${A.mane[1]}" stroke-width="4" fill="none"/>`;
+  if(A.spikes)g+=Array.from({length:13},(_,i)=>{const a=Math.PI*(1.05+i*.07),x=50+Math.cos(a)*44,y=96+Math.sin(a)*44,x2=50+Math.cos(a)*60,y2=96+Math.sin(a)*60,a2=a+.12,x3=50+Math.cos(a2)*44,y3=96+Math.sin(a2)*44;return `<path d="M${x.toFixed(1)},${y.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)} L${x3.toFixed(1)},${y3.toFixed(1)}Z" fill="${A.spikes}" stroke="${shade(A.spikes,-.4)}" stroke-width="1"/>`;}).join('')+`<path d="M8,110 C10,74 90,74 92,110 C96,140 4,140 8,110Z" fill="${A.spikes}"/>`;
+  if(A.shell)g+=`<ellipse cx="50" cy="132" rx="34" ry="30" fill="${A.shell}" stroke="${shade(A.shell,-.4)}" stroke-width="2"/><path d="M28,120 l10,-10 h24 l10,10 M24,138 h52" stroke="${shade(A.shell,-.3)}" stroke-width="2" fill="none"/>`;
   // feet
-  const ft=k==='penguin'?A.ac:k==='mole'?A.ac:shade(A.f,-.15);
-  g+=`<ellipse cx="38" cy="163" rx="11" ry="6" fill="${ft}" ${OL}/><ellipse cx="62" cy="163" rx="11" ry="6" fill="${ft}" ${OL}/>`;
-  // body
-  g+=`<defs><clipPath id="${u}b"><ellipse cx="50" cy="132" rx="27" ry="30"/></clipPath></defs><ellipse cx="50" cy="132" rx="27" ry="30" fill="${A.f}" ${OL}/>`;
-  g+=`<ellipse cx="50" cy="138" rx="17" ry="20" fill="${A.l}" clip-path="url(#${u}b)"/>`;
-  // clothes (upper body)
-  if(of.hood){g+=`<g clip-path="url(#${u}b)"><rect x="20" y="100" width="60" height="64" fill="#5cae5a"/><ellipse cx="50" cy="140" rx="15" ry="18" fill="#ece3a4"/></g>`;}
-  else{const top=of.top,d2=shade(top,-.2);g+=`<g clip-path="url(#${u}b)"><rect x="18" y="100" width="64" height="${oc==='apron'?40:36}" fill="${top}"/><rect x="18" y="${oc==='apron'?138:134}" width="64" height="3" fill="${d2}"/><path d="M60,100 V136" stroke="${d2}" stroke-width="10" opacity=".35"/>`;
-    if(oc==='track')g+=`<path d="M50,104 V136" stroke="#eeece6" stroke-width="2.4"/><path d="M42,104 L50,112 L58,104" stroke="#eeece6" stroke-width="2.4" fill="none"/>`;
-    if(oc==='vest')g+=`<rect x="22" y="100" width="14" height="36" fill="#c4ec46"/><rect x="64" y="100" width="14" height="36" fill="#c4ec46"/><rect x="22" y="120" width="56" height="4" fill="#e6eef2"/>`;
-    if(oc==='cover')g+=`<rect x="18" y="122" width="64" height="4" fill="#e9eef0"/><rect x="40" y="108" width="8" height="5" fill="#c9601c"/>`;
-    if(oc==='sport')g+=`<path d="M38,100 L50,116 L62,100" stroke="#f2f2ee" stroke-width="4" fill="none"/><text x="50" y="132" text-anchor="middle" font-size="12" font-weight="900" fill="#f2f2ee">7</text>`;
-    if(oc==='wet')g+=`<path d="M18,126 L82,108" stroke="#2fb5b0" stroke-width="4"/>`;
-    if(oc==='dance')g+=[[30,110],[44,124],[58,108],[70,124],[38,132],[64,132]].map(([x,y])=>`<path d="M${x},${y-3} l1,2 l2,1 l-2,1 l-1,2 l-1,-2 l-2,-1 l2,-1Z" fill="#f6d56a"/>`).join('');
-    if(oc==='suit')g+=`<path d="M40,100 L50,114 L60,100Z" fill="#f4f2ee"/><path d="M50,106 L46,112 L50,130 L54,112Z" fill="#b8322a"/>`;
-    if(oc==='adamas')g+=`<path d="M24,100 L50,122 L76,100" stroke="#f6c76a" stroke-width="3" fill="none"/><path d="M50,118 l5,5 l-5,5 l-5,-5Z" fill="#c9f2f8" stroke="#7cc6e6"/>`;
-    if(oc==='apron')g+=`<path d="M34,106 H66 V138 H34Z" fill="#f4ece0"/><rect x="44" y="118" width="12" height="8" rx="2" fill="#e2d4c0"/>`;
+  const ft=A.bi?A.feet:legC;g+=A.bi?`<path d="M30,166 l6,-6 l6,6Z M58,166 l6,-6 l6,6Z" fill="${ft}" ${OL}/>`:`<ellipse cx="37" cy="163" rx="11" ry="6.5" fill="${ft}" ${OL}/><ellipse cx="63" cy="163" rx="11" ry="6.5" fill="${ft}" ${OL}/><path d="M33,163 v3 M37,163 v3 M59,163 v3 M63,163 v3" stroke="${D}" stroke-width="1" opacity=".5"/>`;
+  // body + belly
+  g+=`<ellipse cx="50" cy="134" rx="26" ry="28" fill="${A.wool?LG:F}" ${OL}/>`;
+  if(A.wool)g+=Array.from({length:10},(_,i)=>{const a=i/10*Math.PI*2;return `<circle cx="${(50+Math.cos(a)*22).toFixed(1)}" cy="${(134+Math.sin(a)*24).toFixed(1)}" r="8" fill="${LG}" stroke="${shade(A.f,-.2)}" stroke-width="1"/>`;}).join('');
+  else g+=`<ellipse cx="50" cy="140" rx="16" ry="18" fill="${LG}" clip-path="url(#${u}b)"/>`;
+  // clothes
+  if(of.hood)g+=`<g clip-path="url(#${u}b)"><rect x="20" y="104" width="60" height="64" fill="#5cae5a"/><ellipse cx="50" cy="142" rx="15" ry="18" fill="#ece3a4"/></g>`;
+  else if(oc&&oc!=='none'){const top=of.top,d2=shade(top,-.2);g+=`<g clip-path="url(#${u}b)"><rect x="18" y="104" width="64" height="${oc==='apron'?40:34}" fill="${top}"/><rect x="18" y="${oc==='apron'?142:136}" width="64" height="3" fill="${d2}"/><path d="M62,104 V138" stroke="${d2}" stroke-width="10" opacity=".3"/><path d="M34,106 V138" stroke="#fff" stroke-width="6" opacity=".12"/>`;
+    if(oc==='track')g+=`<path d="M50,106 V138" stroke="#eeece6" stroke-width="2.4"/><path d="M42,106 L50,114 L58,106" stroke="#eeece6" stroke-width="2.4" fill="none"/>`;
+    if(oc==='vest')g+=`<rect x="22" y="104" width="14" height="34" fill="#c4ec46"/><rect x="64" y="104" width="14" height="34" fill="#c4ec46"/><rect x="22" y="122" width="56" height="4" fill="#e6eef2"/>`;
+    if(oc==='cover')g+=`<rect x="18" y="124" width="64" height="4" fill="#e9eef0"/>`;
+    if(oc==='sport')g+=`<path d="M38,104 L50,118 L62,104" stroke="#f2f2ee" stroke-width="4" fill="none"/><text x="50" y="134" text-anchor="middle" font-size="12" font-weight="900" fill="#f2f2ee">7</text>`;
+    if(oc==='wet')g+=`<path d="M18,128 L82,110" stroke="#2fb5b0" stroke-width="4"/>`;
+    if(oc==='dance')g+=[[30,112],[44,126],[58,110],[70,126],[38,134],[64,134]].map(([x,y])=>`<path d="M${x},${y-3} l1,2 l2,1 l-2,1 l-1,2 l-1,-2 l-2,-1 l2,-1Z" fill="#f6d56a"/>`).join('');
+    if(oc==='suit')g+=`<path d="M40,104 L50,116 L60,104Z" fill="#f4f2ee"/><path d="M50,108 L46,114 L50,132 L54,114Z" fill="#b8322a"/>`;
+    if(oc==='adamas')g+=`<path d="M24,104 L50,124 L76,104" stroke="#f6c76a" stroke-width="3" fill="none"/><path d="M50,120 l5,5 l-5,5 l-5,-5Z" fill="#c9f2f8" stroke="#7cc6e6"/>`;
+    if(oc==='apron')g+=`<path d="M34,108 H66 V140 H34Z" fill="#f4ece0"/>`;
     g+=`</g>`;}
-  g+=`<ellipse cx="50" cy="132" rx="27" ry="30" fill="none" ${OL}/>`;
-  // arms / flippers
-  const slv=of.hood?'#5cae5a':k==='penguin'?A.f:of.slv,paw=of.glove||(k==='penguin'?A.f:k==='mole'?A.ac:A.f);
-  for(const s of[-1,1]){const x=50+s*26;g+=`<path d="M${x},${112} q${s*12},${10} ${s*6},${26}" stroke="${A.d}" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M${x},${112} q${s*12},${10} ${s*6},${26}" stroke="${slv}" stroke-width="8.4" fill="none" stroke-linecap="round"/><circle cx="${x+s*6}" cy="138" r="5" fill="${paw}" stroke="${A.d}" stroke-width="2"/>`;}
-  // item in the right paw
-  const IX=82,IY=138;
-  const IT={shovel:`<path d="M${IX},${IY+8} V${IY-34}" stroke="#9a6a3a" stroke-width="3.4"/><path d="M${IX-5},${IY-36} h10" stroke="#6a4528" stroke-width="3"/><path d="M${IX-6},${IY+6} h12 l-2,12 l-4,4 l-4,-4Z" fill="#aab3b8" stroke="#5a646a" stroke-width="1.2"/>`,
+  // neck accessory
+  if(A.acc==='collar')g+=`<path d="M30,106 Q50,116 70,106" stroke="${A.accC}" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="50" cy="114" r="4" fill="#f2c14e" stroke="#a87a1e" stroke-width="1"/>`;
+  if(A.acc==='scarf'||A.acc==='bandana')g+=`<path d="M28,104 Q50,118 72,104 L70,110 Q50,124 30,110Z" fill="${A.accC}" stroke="${shade(A.accC,-.35)}" stroke-width="1.2"/><path d="M46,114 L54,114 L50,126Z" fill="${A.accC}" stroke="${shade(A.accC,-.35)}" stroke-width="1"/>`;
+  if(A.acc==='bell')g+=`<path d="M32,106 Q50,114 68,106" stroke="#8a5a3a" stroke-width="3" fill="none"/><circle cx="50" cy="115" r="5" fill="${A.accC}" stroke="#a87a1e" stroke-width="1"/>`;
+  // arms
+  const slv=of.hood?'#5cae5a':(oc&&oc!=='none'&&!A.flipper?of.slv:A.f),paw=of.glove||(A.flipper?A.f:legC);
+  for(const s of[-1,1]){const x=50+s*25;g+=`<path d="M${x},114 q${s*11},10 ${s*6},24" stroke="${D}" stroke-width="12.5" fill="none" stroke-linecap="round"/><path d="M${x},114 q${s*11},10 ${s*6},24" stroke="${slv}" stroke-width="8.6" fill="none" stroke-linecap="round"/><circle cx="${x+s*6}" cy="138" r="5.2" fill="${paw}" stroke="${D}" stroke-width="1.6"/>`;}
+  const IX=82,IY=138;const IT={shovel:`<path d="M${IX},${IY+8} V${IY-34}" stroke="#9a6a3a" stroke-width="3.4"/><path d="M${IX-5},${IY-36} h10" stroke="#6a4528" stroke-width="3"/><path d="M${IX-6},${IY+6} h12 l-2,12 l-4,4 l-4,-4Z" fill="#aab3b8" stroke="#5a646a" stroke-width="1.2"/>`,
     pick:`<path d="M${IX},${IY+12} V${IY-28}" stroke="#9a6a3a" stroke-width="3.4"/><path d="M${IX-16},${IY-22} Q${IX},${IY-34} ${IX+16},${IY-22}" stroke="#8e979c" stroke-width="4.4" fill="none" stroke-linecap="round"/>`,
-    tablet:`<rect x="${IX-4}" y="${IY-24}" width="18" height="24" rx="3" fill="#1c2226" stroke="#0e1214" stroke-width="1.2"/><rect x="${IX-1}" y="${IY-21}" width="12" height="16" fill="#6fc3e0"/>`,
+    tablet:`<rect x="${IX-4}" y="${IY-24}" width="18" height="24" rx="3" fill="#1c2226"/><rect x="${IX-1}" y="${IY-21}" width="12" height="16" fill="#6fc3e0"/>`,
     hdrill:`<rect x="${IX-6}" y="${IY-14}" width="22" height="10" rx="3" fill="#e8a93a" stroke="#8a5a1a" stroke-width="1.2"/><rect x="${IX-2}" y="${IY-4}" width="6" height="12" fill="#2b3338"/><path d="M${IX+16},${IY-9} h8" stroke="#c9d1d5" stroke-width="3"/>`,
-    gold:`<path d="M${IX-8},${IY-4} l4,-8 h14 l4,8Z" fill="#f2c14e" stroke="#a87a1e" stroke-width="1.2"/>`,
-    phone:`<rect x="${IX-3}" y="${IY-18}" width="10" height="16" rx="2" fill="#1c2226"/><rect x="${IX-1}" y="${IY-16}" width="6" height="10" fill="#ece6da"/>`,
-    envelope:`<rect x="${IX-8}" y="${IY-16}" width="20" height="14" fill="#f4f2ee" stroke="#a8a090" stroke-width="1"/><path d="M${IX-8},${IY-16} l10,8 l10,-8" stroke="#a8a090" fill="none"/><circle cx="${IX+2}" cy="${IY-8}" r="2" fill="#c9302c"/>`,
-    rusty:`<path d="M${IX},${IY+6} V${IY-26}" stroke="#5b4535" stroke-width="3"/><path d="M${IX-6},${IY+4} h12 l-3,10 h-6Z" fill="#8a4b2a"/>`};
-  g+=IT[item]||'';
-  // ears (behind head outline)
-  const E=(d)=>`<path d="${d}" fill="${A.f}" ${OL}/>`;
-  if(k==='cat')g+=E('M22,66 L20,36 L44,52Z')+E('M78,66 L80,36 L56,52Z')+`<path d="M25,58 L24,44 L36,53Z M75,58 L76,44 L64,53Z" fill="#f6b8b8"/>`;
-  if(k==='fox')g+=E('M20,70 L16,30 L46,50Z')+E('M80,70 L84,30 L54,50Z')+`<path d="M18,40 L16,30 L26,36Z M82,40 L84,30 L74,36Z" fill="${A.d}"/><path d="M24,60 L21,42 L38,52Z M76,60 L79,42 L62,52Z" fill="#fff0e0"/>`;
-  if(k==='bear'||k==='tanuki')g+=`<circle cx="22" cy="54" r="11" fill="${A.f}" ${OL}/><circle cx="78" cy="54" r="11" fill="${A.f}" ${OL}/><circle cx="22" cy="54" r="5.5" fill="${k==='tanuki'?A.d:A.l}"/><circle cx="78" cy="54" r="5.5" fill="${k==='tanuki'?A.d:A.l}"/>`;
-  if(k==='mole')g+=`<circle cx="18" cy="70" r="6" fill="${A.f}" ${OL}/><circle cx="82" cy="70" r="6" fill="${A.f}" ${OL}/>`;
-  // head
-  g+=`<ellipse cx="50" cy="80" rx="37" ry="33" fill="${A.f}" ${OL}/>`;
-  if(k==='penguin')g+=`<path d="M50,64 C40,52 18,58 20,82 C21,100 36,108 50,108 C64,108 79,100 80,82 C82,58 60,52 50,64Z" fill="${A.l}"/>`;
-  if(k==='cat')g+=`<path d="M44,50 l2,8 M50,48 v10 M56,50 l-2,8" stroke="${A.d}" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="50" cy="96" rx="15" ry="10" fill="${A.l}"/>`;
-  if(k==='fox')g+=`<path d="M14,84 C26,80 40,92 50,104 C60,92 74,80 86,84 C82,104 66,112 50,112 C34,112 18,104 14,84Z" fill="${A.l}"/>`;
-  if(k==='bear'||k==='mole')g+=`<ellipse cx="50" cy="97" rx="15" ry="10.5" fill="${A.m}"/>`;
-  if(k==='tanuki')g+=`<path d="M22,82 C24,70 38,70 44,80 C44,90 30,94 24,90Z M78,82 C76,70 62,70 56,80 C56,90 70,94 76,90Z" fill="${A.d}"/><ellipse cx="50" cy="98" rx="14" ry="9" fill="${A.l}"/>`;
-  // dino hood over the head
-  if(of.hood&&(!hat||hat==='none'))g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`+[[28,50],[40,43],[52,41],[64,43],[74,50]].map(([x,y])=>`<path d="M${x-5},${y+5} L${x},${y-7} L${x+5},${y+5}Z" fill="#f2c14e" stroke="#c89a2a" stroke-width="1"/>`).join('');
-  // face
-  const eyeY=k==='penguin'?82:83,ex1=37,ex2=63;
-  if(ex==='happy')g+=`<path d="M${ex1-5},${eyeY+1} q5,-7 10,0 M${ex2-5},${eyeY+1} q5,-7 10,0" stroke="#1d2230" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
-  else if(ex==='shock')g+=`<ellipse cx="${ex1}" cy="${eyeY}" rx="6" ry="7" fill="#fff" stroke="#1d2230" stroke-width="2"/><ellipse cx="${ex2}" cy="${eyeY}" rx="6" ry="7" fill="#fff" stroke="#1d2230" stroke-width="2"/><circle cx="${ex1}" cy="${eyeY}" r="2.2" fill="#1d2230"/><circle cx="${ex2}" cy="${eyeY}" r="2.2" fill="#1d2230"/>`;
-  else for(const x of[ex1,ex2])g+=`<ellipse cx="${x}" cy="${eyeY}" rx="4.8" ry="6.2" fill="#1d2230"/><ellipse cx="${x}" cy="${eyeY+2.4}" rx="3.4" ry="2.6" fill="${k==='cat'?'#3a7a3a':'#3a4a6a'}" opacity=".7"/><circle cx="${x-1.6}" cy="${eyeY-2.4}" r="2" fill="#fff"/><circle cx="${x+1.8}" cy="${eyeY+2}" r=".9" fill="#fff"/>`;
-  g+=`<ellipse cx="27" cy="94" rx="6" ry="3.4" fill="#ff8fa3" opacity=".55"/><ellipse cx="73" cy="94" rx="6" ry="3.4" fill="#ff8fa3" opacity=".55"/>`;
-  if(k==='penguin')g+=`<path d="M44,92 Q50,88 56,92 Q50,100 44,92Z" fill="${A.ac}" stroke="#c46a10" stroke-width="1.4" stroke-linejoin="round"/>`;
-  else{const nose=k==='mole'||k==='cat'?A.ac:'#2a1f1a';g+=`<ellipse cx="50" cy="${k==='mole'?92:91}" rx="${k==='mole'?6:3.6}" ry="${k==='mole'?4.6:2.6}" fill="${nose}"/><circle cx="${k==='mole'?48:49}" cy="${k==='mole'?90:90}" r="1.2" fill="#fff" opacity=".7"/>`;
+    gold:`<path d="M${IX-8},${IY-4} l4,-8 h14 l4,8Z" fill="#f2c14e" stroke="#a87a1e" stroke-width="1.2"/>`,phone:`<rect x="${IX-3}" y="${IY-18}" width="10" height="16" rx="2" fill="#1c2226"/>`,
+    envelope:`<rect x="${IX-8}" y="${IY-16}" width="20" height="14" fill="#f4f2ee" stroke="#a8a090"/><circle cx="${IX+2}" cy="${IY-8}" r="2" fill="#c9302c"/>`,rusty:`<path d="M${IX},${IY+6} V${IY-26}" stroke="#5b4535" stroke-width="3"/><path d="M${IX-6},${IY+4} h12 l-3,10 h-6Z" fill="#8a4b2a"/>`};
+  g+=IT[item]||(A.acorn?`<ellipse cx="50" cy="136" rx="7" ry="8" fill="#a86a2a" stroke="#6a3a18" stroke-width="1.2"/><path d="M42,132 q8,-8 16,0Z" fill="#6a3a18"/>`:'');
+  // ears behind head
+  const E=d=>`<path d="${d}" fill="${F}" ${OL}/>`;const ein=A.earIn||'#f6c8c8';
+  if(A.ear==='point'){const big=k==='fox';g+=E(big?'M20,72 L14,28 L48,52Z':'M22,68 L20,36 L46,52Z')+E(big?'M80,72 L86,28 L52,52Z':'M78,68 L80,36 L54,52Z')+`<path d="${big?'M24,62 L20,40 L38,52Z M76,62 L80,40 L62,52Z':'M26,60 L25,44 L37,53Z M74,60 L75,44 L63,53Z'}" fill="${ein}"/>`+(A.earTip?`<path d="M16,38 L14,28 L24,34Z M84,38 L86,28 L76,34Z" fill="${A.earTip}"/>`:'');}
+  if(A.ear==='round')g+=`<circle cx="22" cy="54" r="11" fill="${A.earC?A.earC:F}" ${OL}/><circle cx="78" cy="54" r="11" fill="${A.earC?A.earC:F}" ${OL}/>`+(A.earC?'':`<circle cx="22" cy="54" r="5.5" fill="${A.l}"/><circle cx="78" cy="54" r="5.5" fill="${A.l}"/>`);
+  if(A.ear==='long')g+=`<ellipse cx="36" cy="30" rx="9" ry="26" transform="rotate(-10 36 30)" fill="${F}" ${OL}/><ellipse cx="64" cy="30" rx="9" ry="26" transform="rotate(10 64 30)" fill="${F}" ${OL}/><ellipse cx="36" cy="32" rx="4.5" ry="19" transform="rotate(-10 36 32)" fill="${ein}"/><ellipse cx="64" cy="32" rx="4.5" ry="19" transform="rotate(10 64 32)" fill="${ein}"/>`;
+  if(A.ear==='horn')g+=`<path d="M30,56 C22,40 26,30 32,24 C34,36 38,44 42,50Z M70,56 C78,40 74,30 68,24 C66,36 62,44 58,50Z" fill="${A.hornC}" stroke="${shade(A.hornC,-.4)}" stroke-width="1.6"/>`;
+  if(A.ear==='side')g+=`<ellipse cx="14" cy="80" rx="13" ry="7" transform="rotate(20 14 80)" fill="${A.earC}" ${OL}/><ellipse cx="86" cy="80" rx="13" ry="7" transform="rotate(-20 86 80)" fill="${A.earC}" ${OL}/>`;
+  if(A.ear==='tiny')g+=`<circle cx="18" cy="70" r="6" fill="${F}" ${OL}/><circle cx="82" cy="70" r="6" fill="${F}" ${OL}/>`;
+  if(A.ram)g+=`<path d="M20,60 C4,62 4,86 18,88 C26,88 26,78 20,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M80,60 C96,62 96,86 82,88 C74,88 74,78 80,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/>`;
+  // head (big, soft)
+  const hr=k==='chick'?0:1;
+  if(k==='chick')g+=`<ellipse cx="50" cy="112" rx="40" ry="40" fill="${F}" ${OL}/>`;else g+=`<ellipse cx="50" cy="80" rx="37" ry="33" fill="${A.wool?LG:F}" ${OL}/>`;
+  if(A.wool)g+=Array.from({length:9},(_,i)=>`<circle cx="${22+i*7}" cy="${52-Math.sin(i/8*Math.PI)*6}" r="8" fill="${LG}" stroke="${shade(A.f,-.2)}" stroke-width="1"/>`).join('')+`<ellipse cx="50" cy="86" rx="25" ry="22" fill="${shade(A.l,.03)}"/>`;
+  if(A.ear==='tuft')g+=`<path d="M46,74 q-2,-10 4,-12 q-1,6 2,8 q2,-8 8,-6 q-6,4 -4,10Z" fill="${A.f}" ${OL}/>`;
+  if(A.mane)g+=`<path d="M30,52 C34,36 58,34 70,46 C62,44 56,46 52,52 C48,46 40,46 30,52Z" fill="${A.mane[0]}" ${OL}/><path d="M64,48 C80,50 86,68 80,84 C78,70 72,60 64,56Z" fill="${A.mane[1]}" ${OL}/><path d="M38,50 C44,42 52,42 56,48" stroke="${A.mane[2]}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  if(A.horn)g+=`<path d="M44,50 L50,18 L56,50Z" fill="${A.horn}" stroke="${shade(A.horn,-.4)}" stroke-width="1.4"/><path d="M47,40 l6,-3 M46,46 l8,-4 M48,32 l4,-2" stroke="#fff3c8" stroke-width="1.2"/>`;
+  if(A.stripe)g+=`<path d="M44,50 l2,9 M50,48 v11 M56,50 l-2,9" stroke="${A.stripe}" stroke-width="2.8" stroke-linecap="round"/>`;
+  if(A.face==='panda')g+=`<ellipse cx="36" cy="82" rx="10" ry="12" transform="rotate(25 36 82)" fill="${A.d}"/><ellipse cx="64" cy="82" rx="10" ry="12" transform="rotate(-25 64 82)" fill="${A.d}"/>`;
+  if(A.face==='mask')g+=`<path d="M16,80 C24,70 40,74 46,82 C40,90 26,92 18,88Z M84,80 C76,70 60,74 54,82 C60,90 74,92 82,88Z" fill="${A.d}"/>`;
+  if(k==='fox')g+=`<path d="M14,86 C26,82 40,92 50,104 C60,92 74,82 86,86 C82,104 66,112 50,112 C34,112 18,104 14,86Z" fill="${LG}"/>`;
+  if(k==='penguin')g+=`<path d="M50,64 C40,52 18,58 20,82 C21,100 36,108 50,108 C64,108 79,100 80,82 C82,58 60,52 50,64Z" fill="${LG}"/>`;
+  if(!A.bi&&!A.wool&&k!=='fox'&&k!=='turtle')g+=`<ellipse cx="50" cy="97" rx="15" ry="10.5" fill="${LG}"/>`;
+  if(k==='dog')g+=`<ellipse cx="34" cy="70" rx="9" ry="7" fill="${A.patch}" opacity=".8"/>`;
+  // floppy ears in front of the head
+  if(A.ear==='flop')g+=`<path d="M20,58 C8,64 8,92 16,98 C24,100 28,84 28,66Z" fill="${A.earC}" ${OL}/><path d="M80,58 C92,64 92,92 84,98 C76,100 72,84 72,66Z" fill="${A.earC}" ${OL}/>`;
+  // eyes: big glossy
+  const eyeY=k==='chick'?100:83,ex1=37,ex2=63;
+  if(ex==='happy')g+=`<path d="M${ex1-5},${eyeY+1} q5,-7 10,0 M${ex2-5},${eyeY+1} q5,-7 10,0" stroke="#2a1a14" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
+  else if(ex==='shock')g+=[ex1,ex2].map(x=>`<ellipse cx="${x}" cy="${eyeY}" rx="6.4" ry="7.4" fill="#fff" stroke="#2a1a14" stroke-width="2"/><circle cx="${x}" cy="${eyeY}" r="2.4" fill="#2a1a14"/>`).join('');
+  else for(const x of[ex1,ex2])g+=`<ellipse cx="${x}" cy="${eyeY}" rx="5.6" ry="6.8" fill="#1f1410"/><ellipse cx="${x}" cy="${eyeY+2.6}" rx="4" ry="3" fill="${k==='cat'?'#5a8a3a':'#6a4028'}"/><circle cx="${x-1.8}" cy="${eyeY-2.8}" r="2.4" fill="#fff"/><circle cx="${x+2.2}" cy="${eyeY+2.2}" r="1" fill="#fff"/>`;
+  g+=`<ellipse cx="25" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/><ellipse cx="75" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/>`;
+  if(A.beak)g+=`<path d="M44,${eyeY+9} Q50,${eyeY+4} 56,${eyeY+9} Q50,${eyeY+17} 44,${eyeY+9}Z" fill="${A.beak}" stroke="${shade(A.beak,-.35)}" stroke-width="1.2"/>`;
+  else{const big=k==='mole';g+=`<ellipse cx="50" cy="${big?92:91}" rx="${big?6:4}" ry="${big?4.6:2.9}" fill="${A.nose}"/><ellipse cx="${big?48:48.8}" cy="${big?90:90}" rx="1.4" ry="1" fill="#fff" opacity=".7"/>`;
     g+=ex==='shock'?`<ellipse cx="50" cy="101" rx="3" ry="3.6" fill="#7a2a2a"/>`:`<path d="M44,97 q3,3 6,0 q3,3 6,0" stroke="#3a2a22" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
     if(k==='cat')g+=`<path d="M30,95 h-12 M30,99 l-11,3 M70,95 h12 M70,99 l11,3" stroke="${A.d}" stroke-width="1.2"/>`;}
-  if(k==='penguin'&&ex==='shock')g+=`<ellipse cx="50" cy="102" rx="3" ry="3" fill="#7a2a2a"/>`;
-  // hat
-  if(hat&&hat!=='none'&&VHAT[hat])g+=`<g transform="translate(50,${hat==='flower'||hat==='bow'||hat==='horns'?58:56}) scale(1.24) translate(-50,-33)">${VHAT[hat]}</g>`;
+  if(A.flipper)g+='';
+  // hood / hat
+  if(of.hood&&(!hat||hat==='none'))g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`+[[28,50],[40,43],[52,41],[64,43],[74,50]].map(([x,y])=>`<path d="M${x-5},${y+5} L${x},${y-7} L${x+5},${y+5}Z" fill="#f2c14e" stroke="#c89a2a" stroke-width="1"/>`).join('');
+  if(hat&&hat!=='none'&&VHAT[hat])g+=`<g transform="translate(50,${k==='chick'?82:(hat==='flower'||hat==='bow'||hat==='horns'?58:56)}) scale(1.24) translate(-50,-33)">${VHAT[hat]}</g>`;
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="32" ry="5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
-const charG=(c,o)=>PXAN[c.sex]?animalSVG(c,o||{}):pixelChar(c,o||{});
+const charG=(c,o)=>(c.sex!=='m'&&c.sex!=='f'&&ANS[c.sex])?animalSVG(c,o||{}):pixelChar(c,o||{});
 const fig=(c,x,y,h,o={})=>{const s=h/172;return `<g transform="translate(${(x-50*s).toFixed(1)},${(y-172*s).toFixed(1)}) scale(${s.toFixed(3)})">${charG(c,o)}</g>`;};
 const ME=()=>Object.assign({},DEFCHAR,S.char||{});
 const MOM={sex:'f',skin:0,hair:'bob',hcol:5,eyes:'smile',body:'normal',hat:'none',outfit:'apron',item:'envelope'};
@@ -2448,7 +2468,7 @@ const WT=[{k:'sex',n:'주인공'},{k:'hair',n:'헤어'},{k:'hcol',n:'헤어 색'
 let wTab='outfit',wTry=null;
 const owns=(k,o)=>o.p===0||S.own.includes(k+':'+o.v);
 const HEADVB='12 2 76 76',BODYVB='-20 -2 140 178';
-const headVB=c=>PXAN[c.sex]?'11 38 78 78':HEADVB;
+const headVB=c=>(c.sex!=='m'&&c.sex!=='f'&&ANS[c.sex])?(c.sex==='chick'?'11 60 78 78':'11 38 78 78'):HEADVB;
 function avatarSVG(c){return `<svg viewBox="${headVB(c)}" aria-hidden="true">${charG(c)}</svg>`;}
 function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());}
 function wardChar(){const c=ME();if(wTry)c[wTry.k]=wTry.v;return c;}
@@ -2500,10 +2520,11 @@ const LITEM=[
  {id:'house_s',n:'작은 집',p:3000,house:1,off:1},{id:'house_h',n:'한옥',p:15000,house:1,off:2},{id:'house_b',n:'2층 주택',p:60000,house:1,off:3},{id:'house_d',n:'단독 주택',p:150000,house:1,off:4},{id:'house_y',n:'양반 가옥',p:400000,house:1,off:5},
  {id:'tree',n:'소나무',p:200},{id:'cherry',n:'벚나무',p:500},{id:'flower',n:'꽃밭',p:150},{id:'veg',n:'텃밭',p:300},
  {id:'pond',n:'연못',p:800},{id:'cairn',n:'오층 석탑',p:1500},{id:'bench',n:'벤치',p:250},{id:'lamp',n:'가로등',p:300},{id:'fountain',n:'분수',p:2500},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800},
- {id:'monument',n:'드릴 기념비',p:5000},{id:'museum',n:'유물 전시관',p:10000}];
+ {id:'monument',n:'드릴 기념비',p:5000},{id:'museum',n:'유물 전시관',p:10000},
+ {id:'chick',n:'병아리',p:1500},{id:'rabbit',n:'토끼',p:2200},{id:'turtle',n:'거북이',p:2000},{id:'squirrel',n:'다람쥐',p:2000},{id:'hedgehog',n:'고슴도치',p:2400},{id:'sheep',n:'양',p:2500},{id:'raccoon',n:'너구리',p:2600},{id:'fox',n:'여우',p:3000},{id:'penguin',n:'펭귄',p:3000},{id:'bear',n:'곰',p:3500},{id:'panda',n:'판다',p:4000},{id:'dragon',n:'드래곤',p:12000},{id:'unicorn',n:'유니콘',p:15000}];
 const FURN=[
  {id:'rug',n:'러그',p:400},{id:'bed',n:'침대',p:800},{id:'desk',n:'책상',p:500},{id:'sofa',n:'소파',p:1200},{id:'tv',n:'TV',p:1500},
- {id:'shelf',n:'책장',p:700},{id:'plant',n:'화분',p:200},{id:'case',n:'유물 진열장',p:3000},{id:'frame',n:'화석 액자',p:2000},{id:'tank',n:'어항',p:2500},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800}];
+ {id:'shelf',n:'책장',p:700},{id:'plant',n:'화분',p:200},{id:'case',n:'유물 진열장',p:3000},{id:'frame',n:'화석 액자',p:2000},{id:'tank',n:'어항',p:2500},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800},{id:'chick',n:'병아리',p:1500},{id:'rabbit',n:'토끼',p:2200},{id:'turtle',n:'거북이',p:2000},{id:'squirrel',n:'다람쥐',p:2000},{id:'hedgehog',n:'고슴도치',p:2400},{id:'sheep',n:'양',p:2500},{id:'raccoon',n:'너구리',p:2600},{id:'fox',n:'여우',p:3000},{id:'penguin',n:'펭귄',p:3000},{id:'bear',n:'곰',p:3500},{id:'panda',n:'판다',p:4000},{id:'dragon',n:'드래곤',p:12000},{id:'unicorn',n:'유니콘',p:15000}];
 const landOf=()=>{S.land=S.land||{lv:1,tiles:{},furn:{}};return S.land;};
 const landSize=()=>LAND_SIZE[landOf().lv-1];
 const BIG={house_s:2,house_h:2,house_b:2,house_d:3,house_y:3,museum:3,pond:2,fountain:2},BIGS={house_s:1.75,house_h:1.75,house_b:1.7,house_d:1,house_y:1,museum:1,pond:2,fountain:1.75},GRAND={house_d:1,house_y:1,museum:1};
@@ -2516,7 +2537,7 @@ function fixBig(){const L0=landOf(),T=L0.tiles,N=landSize();let ch=0;
     if(!to){// free room by moving small items that block the original spot
       const o=landOcc(k),nb=bsz(id);for(let i=0;i<nb;i++)for(let j=0;j<nb;j++){const kk=(x+i)+','+(y+j),b=o[kk];if(b&&bsz(T[b])===1){const oc=landOcc();let sp=null;for(let yy=0;yy<N&&!sp;yy++)for(let xx=0;xx<N&&!sp;xx++){const q=xx+','+yy;if(!oc[q]&&!(xx>=x&&xx<x+nb&&yy>=y&&yy<y+nb))sp=q;}if(sp){T[sp]=T[b];delete T[b];}}}
       if(landFits(id,x,y,k))continue;}
-    if(to){T[to]=id;delete T[k];const RT=landRot();if(RT[k]){RT[to]=1;delete RT[k];}ch=1;}
+    if(to){T[to]=id;delete T[k];const RT=landRot();if(RT[k]){RT[to]=RT[k];delete RT[k];}ch=1;}
     else if(!landFits(id,x,y,k)){const it=LITEM.find(i=>i.id===id);S.money+=it.p;delete T[k];ch=1;toast(it.n+' 자리가 없어 보관 · '+won(it.p)+' 환급');}}
   if(ch)save();}
 const houseTile=()=>Object.entries(landOf().tiles).find(([k,v])=>LITEM.find(x=>x.id===v)?.house);
@@ -2725,7 +2746,7 @@ function yiMuseum(cx,cy){let g=shadowE(cx,cy,80,30)+lotPad(cx,cy,2.94,'#d9d3c6',
   // 수(帥)자기 banner
   const [fx,fy]=ip(cx,cy,-1.32,1.25);g+=`<path d="M${fx},${fy} V${fy-74}" stroke="#4a3a2a" stroke-width="2"/><circle cx="${fx}" cy="${fy-75}" r="2" fill="#c9a03a"/><path d="M${fx},${fy-72} h22 v26 h-22Z" fill="#f2ead2" ${ISK}><animate attributeName="d" values="M${fx},${fy-72} h22 v26 h-22Z;M${fx},${fy-72} q11,4 22,0 v26 q-11,4 -22,0Z;M${fx},${fy-72} h22 v26 h-22Z" dur="1.6s" repeatCount="indefinite"/></path><text x="${fx+11}" y="${fy-54}" text-anchor="middle" font-size="15" font-weight="900" fill="#1e1e24" font-family="serif">帥</text>`;
   return g;}
-function isoItem(id,cx,cy){let g='';
+function isoItem(id,cx,cy){let g='';if(isPetId(id)&&id!=='dog'&&id!=='cat')return petHome('cat',cx,cy);
   switch(id){
   case 'house_s':{g+=shadowE(cx,cy,26,11);const b=isoBox(cx,cy,.62,26,'#efe2c6');g+=b.svg+facePoly(b,'r',.3,.62,0,15,'#8a5a3a',ISK)+facePoly(b,'l',.25,.6,9,18,'#9cd0ea',ISK)+facePoly(b,'r',.72,.92,10,18,'#9cd0ea',ISK);
     const ch=isoBox(cx+8,cy-30,.12,14,'#9a5a3a');g+=isoRoof(cx,cy,.62,26,20,'#c94a2a')+ch.svg;break;}
@@ -2843,7 +2864,7 @@ function landSVG(){const L0=landOf(),n=landSize(),O=landOcc();let tiles=[],items
   const its=items.map(([x,y,it])=>{const nb=it==='me'?1:bsz(it),[ax,ay]=rotA(x,y,nb);return [ax+ay+nb,ax,x,y,it,nb,ay];}).sort((a,b)=>a[0]-b[0]||a[1]-b[1]).map(([dd,ax,x,y,it,nb,ay])=>{
     let [cx,cy]=isoC(ax,ay);if(it==='me'){const pm=landPick==='me',f=foot(cx,cy,1);return `<g class="mech" data-d="${dd}" data-c="${ax+.5},${ay+.5}" style="cursor:pointer">${pm?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<ellipse cx="${cx}" cy="${cy+3}" rx="11" ry="4" fill="rgba(0,0,0,.25)"/>${fig(ME(),cx,cy+4,48,{expr:'happy',flip:!!me.f})}</g>`;}
     if(nb>1){cx=ISO.ox+(ax-ay)*ISO.hw;cy=ISO.oy+(ax+ay+nb)*ISO.hh;}
-    const pk=landPick===x+','+y,f=foot(cx,cy,nb),mr=!!RT[x+','+y];ISO_MIR=mr?1:0;let art=isoItem(it,cx,cy);ISO_MIR=0;if(nb>1)art=`<g transform="translate(${cx},${cy}) scale(${BIGS[it]||1.8}) translate(${-cx},${-cy})">${art}</g>`;return `<g class="ii${pk?' pk':''}" data-xy="${x},${y}" data-d="${dd}" data-c="${ax+nb/2},${ay+nb/2}">${pk?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<g transform="${pk?'translate(0,-5) ':''}${mr?`translate(${2*cx},0) scale(-1,1)`:''}">${art}</g></g>`;}).join('');
+    const pk=landPick===x+','+y,f=foot(cx,cy,nb),mr=!!((RT[x+','+y]||0)%2);ISO_MIR=mr?1:0;let art=isoItem(it,cx,cy);ISO_MIR=0;if(nb>1)art=`<g transform="translate(${cx},${cy}) scale(${BIGS[it]||1.8}) translate(${-cx},${-cy})">${art}</g>`;return `<g class="ii${pk?' pk':''}" data-xy="${x},${y}" data-d="${dd}" data-c="${ax+nb/2},${ay+nb/2}">${pk?`<polygon points="${PT([f.T,f.R,f.B,f.L])}" fill="rgba(255,213,106,.4)" stroke="#ffd56a" stroke-width="2.4" stroke-dasharray="5 3"/>`:''}<g transform="${pk?'translate(0,-5) ':''}${mr?`translate(${2*cx},0) scale(-1,1)`:''}">${art}</g></g>`;}).join('');
   return `<svg class="isoland" viewBox="0 0 ${VW} ${VH}" data-w="${VW}" data-h="${VH}" role="img" aria-label="내 땅 지도"><g id="lCam" transform="${camT(VW,VH)}"><g id="lTiles">${tiles.map(t=>t[1]).join('')}</g><g id="lItems">${its}</g></g></svg>`;}
 function isoIcon(id){NOBUB=1;const pet=id==='dog'||id==='cat'?`<g transform="translate(${id==='dog'?10:4},10) scale(.8)">${petPose(id,'sit')}</g>`:'';NOBUB=0;return GRAND[id]?`<svg viewBox="-84 -118 168 170" aria-hidden="true">${isoItem(id,0,0)}</svg>`:`<svg viewBox="-34 -58 68 80" aria-hidden="true"><polygon points="${PT([[-28,0],[0,-14],[28,0],[0,14]])}" fill="#74b052" ${ISK}/>${isoItem(id,0,0)}${pet}</svg>`;}
 
@@ -2879,6 +2900,103 @@ function svgSprite(key,svg,vb,scale){let e=L3.tex[key];if(!e){e=L3.tex[key]={mat
 const WIN='#9cd0ea',WOOD='#7a5a3c',CREAM='#efe2c6';
 function windowsOn(g,w,h,y,z,n,c=WIN){for(let i=0;i<n;i++){const x=-w/2+w*(i+.5)/n;g.add(B3(w/n*.5,h,.04,c,x,y,z));}}
 // ---- models: built at the origin, footprint size nb x nb (world units = tiles) ----
+// ---------------- animal species shared by pets (3D) and animal characters (2D) ----------------
+// f body, l belly/muzzle, d dark accent; ear type; tail type; acc accessory
+const ANS={
+ dog:{n:'강아지',f:'#e8c49a',l:'#fff6ea',d:'#8a5a32',ear:'flop',earC:'#a8743e',tail:'curl',acc:'collar',accC:'#d23a3a',nose:'#2a1f1a',patch:'#c48a52'},
+ cat:{n:'고양이',f:'#b9b9c2',l:'#fbfbfd',d:'#6a6a76',ear:'point',earIn:'#f6b8c8',tail:'long',acc:'collar',accC:'#d23a3a',nose:'#f08aa0',stripe:'#7a7a86'},
+ rabbit:{n:'토끼',f:'#fbf0f2',l:'#ffffff',d:'#d8a8b8',ear:'long',earIn:'#f6b8c8',tail:'ball',acc:'scarf',accC:'#4aa04a',nose:'#f08aa0'},
+ fox:{n:'여우',f:'#ee7a30',l:'#fff6ea',d:'#3a2418',ear:'point',earIn:'#fff0e0',earTip:'#3a2418',tail:'bushy',tailTip:'#fff6ea',nose:'#2a1f1a',sock:'#3a2418'},
+ panda:{n:'판다',f:'#fafafa',l:'#fafafa',d:'#262628',ear:'round',earC:'#262628',face:'panda',legC:'#262628',acc:'scarf',accC:'#4aa04a',nose:'#262628'},
+ raccoon:{n:'너구리',f:'#a9a9b2',l:'#eeeeee',d:'#3a3a40',ear:'point',earIn:'#eeeeee',face:'mask',tail:'ring',acc:'scarf',accC:'#4aa04a',nose:'#2a2a2e'},
+ bear:{n:'곰',f:'#8e5c3a',l:'#d9b48a',d:'#4a2c18',ear:'round',acc:'bandana',accC:'#3a7ad6',nose:'#2a1f1a'},
+ dragon:{n:'드래곤',f:'#d8402e',l:'#f6d8a0',d:'#8a2418',ear:'horn',hornC:'#f2c14e',tail:'dragon',wing:'#e8703a',nose:'#8a2418'},
+ chick:{n:'병아리',f:'#ffd84a',l:'#ffe680',d:'#e09a1a',ear:'tuft',beak:'#f59a2a',bi:1,feet:'#f59a2a'},
+ penguin:{n:'펭귄',f:'#2a2e3a',l:'#fbfaf6',d:'#14161c',beak:'#f59a2a',bi:1,feet:'#f59a2a',acc:'scarf',accC:'#3a7ad6',flipper:1},
+ unicorn:{n:'유니콘',f:'#fbf6fb',l:'#ffffff',d:'#d0b8e0',ear:'point',earIn:'#f6c8e0',horn:'#f2c14e',mane:['#c88af0','#f08ac8','#8ab8f0'],tail:'mane',nose:'#f0a0b8'},
+ sheep:{n:'양',f:'#f6eedc',l:'#f8e8d0',d:'#b89878',ear:'side',earC:'#f0d8c0',wool:1,ram:'#b08a5a',acc:'bell',accC:'#e8b830',nose:'#8a6a5a'},
+ squirrel:{n:'다람쥐',f:'#c8702e',l:'#f6d8b0',d:'#7a3a18',ear:'point',earIn:'#f6c8a0',tail:'squirrel',acorn:1,nose:'#2a1f1a'},
+ hedgehog:{n:'고슴도치',f:'#f2d8b0',l:'#f8e8d0',d:'#6a4a2a',ear:'round',earC:'#f2d8b0',spikes:'#7a4a2a',nose:'#2a1f1a'},
+ turtle:{n:'거북이',f:'#6ac85a',l:'#c8f0a0',d:'#3a7a2a',shell:'#a8743e',ear:'none',nose:'#3a7a2a'},
+ mole:{n:'두더지',f:'#7a675d',l:'#e8d6c6',d:'#4a3c36',ear:'tiny',nose:'#f08aa0'},
+ tanuki:{n:'너구리',f:'#a08a76',l:'#f2e8da',d:'#3a2c22',ear:'round',earC:'#a08a76',face:'mask',tail:'ring',nose:'#2a1f1a'}};
+const PETK=['dog','cat','rabbit','fox','panda','raccoon','bear','dragon','chick','penguin','unicorn','sheep','squirrel','hedgehog','turtle'];
+const isPetId=id=>PETK.includes(id);
+// 3D chibi animal facing +z, feet at y=0, ~0.5 tall. Returns group with userData.legs/body/head for animation
+function animal3(k){const A=ANS[k]||ANS.dog,g=new THREE.Group(),body=new THREE.Group(),head=new THREE.Group(),legs=[];g.add(body);
+  const sph=(r,c,x,y,z,sx=1,sy=1,sz=1,par=body)=>{const m=S3(r,c,x,y,z);m.scale.set(sx,sy,sz);par.add(m);return m;};
+  const quad=!A.bi,hy=quad?.42:.36,legC=A.legC||(A.sock?A.sock:shade(A.f,-.05));
+  // legs (pivot at hip)
+  const legPos=quad?[[-.09,.1,.08],[.09,.1,.08],[-.09,.1,-.08],[.09,.1,-.08]]:[[-.07,.1,0],[.07,.1,0]];
+  for(const [x,y,z] of legPos){const p=new THREE.Group();p.position.set(x,y,z);const L=mesh(new THREE.CylinderGeometry(.04,.045,y,10),A.bi?A.feet:legC);L.position.y=-y/2;p.add(L);
+    const f=S3(.05,A.bi?A.feet:legC,0,-y+.02,.02);f.scale.set(1,.55,1.3);p.add(f);g.add(p);legs.push(p);}
+  // body
+  if(k==='chick'){sph(.22,A.f,0,.26,0,1,1,1);}else if(k==='penguin'){sph(.17,A.f,0,.24,0,1,1.25,.95);sph(.13,A.l,0,.22,.06,1,1.2,.8);}
+  else if(k==='turtle'){sph(.15,A.f,0,.16,0,1.2,.7,1.4);const sh=mesh(new THREE.SphereGeometry(.21,16,10,0,Math.PI*2,0,Math.PI/2),A.shell);sh.position.set(0,.16,-.02);sh.scale.set(1,.8,1.15);body.add(sh);
+    for(let i=0;i<6;i++){const a=i/6*Math.PI*2;sph(.045,shade(A.shell,.12),Math.cos(a)*.12,.27,Math.sin(a)*.13-.02,1,.4,1);}sph(.05,shade(A.shell,.15),0,.33,-.02,1,.4,1);}
+  else{sph(.16,A.f,0,.24,0,1,.9,1.15);sph(.11,A.l,0,.24,.09,.9,.95,.6);}
+  if(A.wool){for(let i=0;i<14;i++){const a=i/14*Math.PI*2;sph(.08,A.f,Math.cos(a)*.13,.28+(i%2)*.06,Math.sin(a)*.15);}sph(.12,A.f,0,.36,0);}
+  if(A.spikes){for(let i=0;i<27;i++){const a=(i%9)/9*Math.PI*1.2-Math.PI*.1,r2=Math.floor(i/9);const c=mesh(new THREE.ConeGeometry(.05,.2,6),A.spikes);
+      const th=a,ph=.5+r2*.45;c.position.set(Math.cos(th)*.17*Math.sin(ph+.3),.26+Math.cos(ph)*.12,-Math.sin(th)*.05-.06-r2*.05);c.rotation.set(-1.1+r2*.3,0,(Math.cos(th))*-.9);body.add(c);}
+    for(let i=0;i<12;i++){const a=i/12*Math.PI*2;const c=mesh(new THREE.ConeGeometry(.045,.18,6),A.spikes);c.position.set(Math.cos(a)*.1,hy+.12,Math.sin(a)*.08-.02);c.rotation.set(Math.sin(a)*-.9-.4,0,Math.cos(a)*-.9);head.add(c);}}
+  // tail
+  const T=new THREE.Group();T.position.set(0,.24,-.17);body.add(T);
+  if(A.tail==='curl'){const t=mesh(new THREE.TorusGeometry(.06,.025,8,12,Math.PI*1.4),A.f);t.rotation.set(0,Math.PI/2,0);t.position.y=.05;T.add(t);}
+  if(A.tail==='long'){const t=mesh(new THREE.CylinderGeometry(.022,.026,.26,8),A.f);t.rotation.x=-.9;t.position.set(0,.08,-.08);T.add(t);if(A.stripe)for(let i=0;i<3;i++){const s=mesh(new THREE.CylinderGeometry(.028,.028,.025,8),A.stripe);s.rotation.x=-.9;s.position.set(0,.03+i*.06,-.04-i*.05);T.add(s);}}
+  if(A.tail==='ball')T.add(S3(.055,A.l,0,0,0));
+  if(A.tail==='bushy'||A.tail==='squirrel'){const big=A.tail==='squirrel';const t=S3(big?.13:.09,A.f,0,big?.16:.06,big?-.06:-.1);t.scale.set(.8,big?1.5:1,big?1:1.6);T.add(t);if(A.tailTip)T.add(S3(.05,A.tailTip,0,.04,-.2));}
+  if(A.tail==='ring'){for(let i=0;i<4;i++){const s=S3(.06-i*.004,i%2?A.d:A.f,0,.02+i*.03,-.04-i*.05);T.add(s);}}
+  if(A.tail==='dragon'){for(let i=0;i<4;i++)T.add(S3(.06-i*.012,A.f,0,-.08-i*.02,-.02-i*.06));const s=mesh(new THREE.ConeGeometry(.04,.08,4),A.hornC);s.position.set(0,-.16,-.28);s.rotation.x=-1.5;T.add(s);}
+  if(A.tail==='mane'){for(let i=0;i<3;i++)T.add(S3(.05,A.mane[i],0,-.03-i*.05,-.04-i*.02));}
+  if(A.wing){const W=[];for(const s of[-1,1]){const w=new THREE.Group(),sh=new THREE.Shape();sh.moveTo(0,0);sh.lineTo(.22,.1);sh.lineTo(.18,-.02);sh.lineTo(.12,.02);sh.lineTo(.08,-.06);sh.lineTo(0,0);
+      const m=new THREE.Mesh(new THREE.ShapeGeometry(sh),M3(A.wing,{side:THREE.DoubleSide}));m.scale.x=s;w.add(m);w.position.set(s*.1,.32,-.08);body.add(w);W.push(w);}g.userData.wings=W;}
+  if(A.acc==='collar'){const c=mesh(new THREE.TorusGeometry(.1,.02,8,16),A.accC);c.rotation.x=Math.PI/2;c.position.set(0,hy-.1,.03);body.add(c);body.add(S3(.03,'#f2c14e',0,hy-.13,.13));}
+  if(A.acc==='scarf'||A.acc==='bandana'){const c=mesh(new THREE.TorusGeometry(.105,.035,8,16),A.accC);c.rotation.x=Math.PI/2;c.position.set(0,hy-.1,.02);body.add(c);const t=mesh(new THREE.ConeGeometry(.06,.1,3),A.accC);t.rotation.x=Math.PI;t.position.set(0,hy-.16,.12);body.add(t);}
+  if(A.acc==='bell'){body.add(S3(.035,A.accC,0,hy-.14,.13));}
+  if(A.acorn){const a=S3(.04,'#a86a2a',0,.22,.17);body.add(a,K3(.045,.03,'#6a3a18',0,.24,.17));}
+  if(A.flipper){for(const s of[-1,1]){const f=S3(.05,A.f,s*.17,.24,0);f.scale.set(.4,1.4,.8);f.rotation.z=s*.3;body.add(f);}}
+  // head
+  head.position.set(0,0,k==='turtle'?.18:.02);body.add(head);const hr=k==='chick'?0:.17,HY=k==='turtle'?.18:hy;
+  if(k!=='chick'){sph(hr,A.f,0,HY,0,1.05,.95,1,head);}
+  const fz=k==='chick'?.2:hr*.92,ey=k==='chick'?.3:HY+.01;
+  if(A.face==='panda')for(const s of[-1,1]){const p=S3(.045,A.d,s*.065,ey,fz-.02);p.scale.set(1,1.3,.6);p.rotation.z=s*-.5;head.add(p);}
+  if(A.face==='mask'){const m=S3(.12,A.d,0,ey,fz-.07);m.scale.set(1.25,.45,.6);head.add(m);}
+  if(k!=='chick'&&k!=='penguin'&&k!=='turtle'){const mz=S3(.07,A.l,0,HY-.05,fz-.02);mz.scale.set(1.15,.8,.8);head.add(mz);}
+  if(k==='penguin'){const fm=S3(.12,A.l,0,HY-.02,.08);fm.scale.set(1,.9,.9);head.add(fm);}
+  for(const s of[-1,1]){const e=S3(.032,'#1a1a22',s*.065,ey,fz);e.scale.set(1,1.2,.7);head.add(e,S3(.011,'#fff',s*.065-.01,ey+.015,fz+.02),S3(.006,'#fff',s*.065+.012,ey-.012,fz+.02));
+    const b=S3(.025,'#ff9aa8',s*.11,ey-.045,fz-.03);b.scale.set(1,.55,.4);b.material=M3('#ff9aa8',{transparent:true,opacity:.7});head.add(b);}
+  if(A.beak){const b=mesh(new THREE.ConeGeometry(.035,.07,4),A.beak);b.rotation.x=Math.PI/2;b.position.set(0,ey-.04,fz+.03);head.add(b);}
+  else head.add(S3(.022,A.nose||'#2a1f1a',0,HY-.03,fz+.045));
+  // ears
+  const ear=(geo,c,x,y,z,rx,rz)=>{const m=mesh(geo,c);m.position.set(x,y,z);m.rotation.set(rx||0,0,rz||0);head.add(m);return m;};
+  for(const s of[-1,1]){const ex=s*.11,eyY=HY+.13;
+    if(A.ear==='point'){const z2=k==='fox'?1.35:1;ear(new THREE.ConeGeometry(.06*z2,.13*z2,4),A.f,ex,eyY+(z2-1)*.05,0,0,s*-.3);ear(new THREE.ConeGeometry(.035*z2,.08*z2,4),A.earIn||A.l,ex*.98,eyY-.01+(z2-1)*.04,.02,0,s*-.3);if(A.earTip)ear(new THREE.ConeGeometry(.03*z2,.05*z2,4),A.earTip,ex+s*.022,eyY+.05*z2+.03,0,0,s*-.3);}
+    if(A.ear==='round')ear(new THREE.SphereGeometry(.055,10,8),A.earC||A.f,ex,eyY-.02,-.01);
+    if(A.ear==='flop'){const e=ear(new THREE.SphereGeometry(.06,10,8),A.earC||A.d,s*.16,HY+.02,0,0,s*.4);e.scale.set(.6,1.4,.9);}
+    if(A.ear==='long'){const e=ear(new THREE.CylinderGeometry(.035,.04,.22,10),A.f,s*.06,HY+.24,-.01,0,s*-.12);const i2=ear(new THREE.CylinderGeometry(.02,.022,.17,8),A.earIn,s*.06,HY+.24,.02,0,s*-.12);e.scale.z=.6;i2.scale.z=.4;}
+    if(A.ear==='horn')ear(new THREE.ConeGeometry(.03,.12,8),A.hornC,s*.08,HY+.17,-.02,-.3,s*-.3);
+    if(A.ear==='side'){const e=ear(new THREE.SphereGeometry(.05,10,8),A.earC,s*.17,HY+.03,0,0,s*1.2);e.scale.set(.5,1.3,.8);}
+    if(A.ear==='tiny')ear(new THREE.SphereGeometry(.03,8,6),A.f,s*.13,HY+.08,0);
+    if(A.ear==='tuft'&&s>0)for(let i=0;i<3;i++)ear(new THREE.ConeGeometry(.02,.08,6),A.f,(i-1)*.03,.5,0,0,(i-1)*.4);
+    if(A.ram){const r=mesh(new THREE.TorusGeometry(.05,.022,8,12,Math.PI*1.5),A.ram);r.position.set(s*.13,HY+.06,-.02);r.rotation.set(0,s*Math.PI/2,0);head.add(r);}}
+  if(A.horn){const h=mesh(new THREE.ConeGeometry(.025,.13,8),A.horn);h.position.set(0,HY+.2,.05);h.rotation.x=.2;head.add(h);}
+  if(A.mane)A.mane.forEach((c,i)=>{head.add(S3(.07,c,(i-1)*.03,HY+.14-i*.06,-.1-i*.04));head.add(S3(.05,c,.1-i*.02,HY+.08-i*.05,-.06));});
+  if(A.wool){for(let i=0;i<5;i++)head.add(S3(.045,A.f,(i-2)*.035,HY+.14,.02));}
+  head.scale.setScalar(k==='turtle'||k==='chick'?1:1.16);head.position.y-=k==='turtle'||k==='chick'?0:.07;
+  if(A.stripe)for(let i=-1;i<=1;i++)head.add(B3(.025,.012,.08,A.stripe,i*.04,HY+.165,-.02));
+  g.userData={legs,body,head,k,by:quad?-.03:0};return g;}
+// pose animation: walk/run swing legs, sit lowers rear, sleep lies down, bark/meow hop, belly rolls over
+function animPose(g,pose,t){const u=g.userData,L=u.legs,run=pose==='run',walk=pose==='walk'||run||pose==='gohome';
+  const sp=run?16:9,a=walk?(run?.7:.5):0;L.forEach((l,i)=>{l.rotation.x=Math.sin(t*sp+(i%2===0?0:Math.PI)+(i>1?Math.PI:0))*a;l.visible=true;});
+  u.body.position.y=(u.by||0)+(walk?Math.abs(Math.sin(t*sp))*.025:0);u.body.rotation.set(0,0,0);u.head.rotation.set(0,0,0);g.position.y=0;
+  if(u.wings)u.wings.forEach((w,i)=>w.rotation.y=(i?-1:1)*(.3+Math.sin(t*(walk?14:4))*.35));
+  if(pose==='sit'){u.body.rotation.x=-.18;u.head.rotation.x=.12;if(L.length>2){L[2].rotation.x=-1.2;L[3].rotation.x=-1.2;}}
+  if(pose==='sleep'){u.body.position.y=-.1;L.forEach(l=>l.rotation.x=1.4);u.head.rotation.x=.35;u.body.scale.y=1+Math.sin(t*2)*.02;}else u.body.scale.y=1;
+  if(pose==='bark'||pose==='meow'){g.position.y=Math.max(0,Math.sin(t*10))*.05;u.head.rotation.x=-.2+Math.sin(t*10)*.1;}
+  if(pose==='belly'){u.body.rotation.z=Math.PI*.9;u.body.position.y=.18;L.forEach((l,i)=>l.rotation.x=Math.sin(t*8+i)*.6);}
+  if(pose==='groom'){u.head.rotation.set(.4,Math.sin(t*3)*.3,0);}
+  if(pose==='stretch'){u.body.rotation.x=.25;if(L.length>2){L[0].rotation.x=-.8;L[1].rotation.x=-.8;}}
+  if(pose==='stand'||pose==='meowstand'){u.head.rotation.y=Math.sin(t*1.2)*.3;}}
 function model3(id){const g=new THREE.Group(),A=f=>L3.anims.push(f);
   switch(id){
   case 'house_s':{g.add(B3(1.5,.08,1.4,'#a8a29a'),B3(1.2,.8,1.05,CREAM,0,.08));g.add(gable(1.2,1.05,.55,'#c94a2a',.88,.12));g.add(B3(.22,.42,.04,'#8a5a3a',.25,.08,.54),B3(.26,.22,.04,WIN,-.25,.36,.54),B3(.04,.22,.26,WIN,.61,.36,0),B3(.04,.22,.26,WIN,-.61,.36,0),B3(.14,.4,.14,'#9a5a3a',.32,1.05,-.2));break;}
@@ -2931,6 +3049,7 @@ function model3(id){const g=new THREE.Group(),A=f=>L3.anims.push(f);
     A(t=>dr.forEach((d,i)=>{const a=i/10*Math.PI*2,k=(t*.9+i*.1)%1;d.position.set(Math.cos(a)*(.05+k*.55),.95+Math.sin(k*Math.PI)*.35-k*.6,Math.sin(a)*(.05+k*.55));}));break;}
   case 'dog':{g.add(B3(.5,.35,.45,'#c97a3a',0,0,-.1),gable(.5,.5,.25,'#c94a2a',.35,.04),B3(.18,.22,.02,'#2b211c',0,0,.13),C3(.08,.08,.03,'#3a6aa8',.25,0,.25));break;}
   case 'cat':{g.add(C3(.24,.28,.4,'#e7c9a0',0,0,-.1,10),K3(.28,.25,'#c96a5a',0,.4,-.1,10),C3(.09,.09,.02,'#2b211c',0,.1,.15,10),C3(.08,.08,.03,'#e05a7a',.25,0,.25));break;}
+  default:if(isPetId(id)){const A=ANS[id];g.add(C3(.36,.4,.1,A.accC||'#c94a5a',0,0,-.05,18),C3(.3,.3,.04,shade(A.f,.08),0,.1,-.05,18),B3(.06,.4,.06,'#7a5a3c',.32,0,-.3),B3(.3,.18,.03,'#f4ece0',.32,.3,-.28));}break;
   case 'monument':{g.add(B3(.6,.2,.6,'#a8a29a'),B3(.62,.04,.62,'#f2c14e',0,.12),B3(.26,.3,.26,'#e8a93a',0,.2));const bit=mesh(new THREE.ConeGeometry(.17,.45,10),'#c9d1d5');bit.rotation.x=Math.PI;bit.position.y=.5+.22+.3;
     const bt=G3(bit);g.add(bt,S3(.04,'#ffd56a',.25,.75,0,{emissive:'#ffaa00'}));A(t=>{bt.rotation.y=t*4;});break;}
   }
@@ -2958,7 +3077,7 @@ function l3Build(){const L0=landOf(),n=landSize(),li=LAND_SIZE.indexOf(n),Ns=Mat
   root.add(B3(Ns+.2,.5,Ns+.2,'#7a5a3c',0,-.62,0));
   for(let x=0;x<Ns;x++)for(let y=0;y<Ns;y++){const own=x<n&&y<n,k=x+','+y,alt=(x+y)%2,can=own&&(landSel?landFits(landSel,x,y):pkId?landFits(pkId,x,y,landPick):landPick==='me'?!O[k]:false);
     const [wx,wz]=W(x+.5,y+.5),t=B3(.98,.12,.98,own?(can?(alt?'#b4ec7e':'#a8e070'):(alt?'#7dbb5a':'#74b052')):'#5d6b58',wx,-.12,wz);t.castShadow=false;t.userData.tap={k:'tile',v:k,own};root.add(t);}
-  for(const [k,id] of Object.entries(L0.tiles)){const [x,y]=k.split(',').map(Number),nb=bsz(id),m=model3(id);const [wx,wz]=W(x+nb/2,y+nb/2);const s=nb===1?1:nb===2?.98:1;m.scale.set(RT[k]?-s:s,s,s);m.position.set(wx,0,wz);
+  for(const [k,id] of Object.entries(L0.tiles)){const [x,y]=k.split(',').map(Number),nb=bsz(id),m=model3(id);const [wx,wz]=W(x+nb/2,y+nb/2);const s=nb===1?1:nb===2?.98:1;m.scale.setScalar(s);m.rotation.y=-((RT[k]||0)%4)*Math.PI/2;m.position.set(wx,0,wz);
     if(landPick===k){m.position.y=.08;const ring=new THREE.Mesh(new THREE.RingGeometry(nb*.62,nb*.7,4,1),new THREE.MeshBasicMaterial({color:'#ffd56a',side:THREE.DoubleSide}));ring.rotation.set(-Math.PI/2,0,Math.PI/4);ring.position.set(wx,.005,wz);root.add(ring);}
     m.userData.tap={k:'item',v:k};root.add(m);}
   // my character and pets as camera-facing paper sprites
@@ -2973,14 +3092,22 @@ function l3Tick(dt){if(!L3.on||!L3.ren||!L3.cv.isConnected)return;L3.t+=dt;const
   const cp=Math.cos(L3.pitch),cam=L3.cam;cam.position.set(L3.tx+Math.sin(L3.yaw)*cp*L3.dist,Math.sin(L3.pitch)*L3.dist+.3,L3.tz+Math.cos(L3.yaw)*cp*L3.dist);cam.lookAt(L3.tx,.3,L3.tz);
   for(const f of L3.anims)f(t);
   // pets
-  const Ns=L3.N;for(const p of PETS){const pose=p.pose==='gohome'?'walk':p.pose==='stand'?'stand':p.pose,art=p.kind==='dog'?(pose==='meowstand'?'stand':pose):pose;
-    // face: compare the walk direction with the camera's screen-right vector
-    const key=p.kind+art+p.face;let sp=L3.petSp[p.home];if(!sp||sp.userData.key!==key){if(sp)L3.root.remove(sp);
-      sp=svgSprite('pet'+key,`<g transform="scale(${p.face},1)">${(()=>{NOBUB=1;const a=petPose(p.kind,art);NOBUB=0;return a;})()}</g>`,'-34 -62 68 68',.62);sp.userData.key=key;sp.userData.tap={k:'pet',v:p.home};L3.petSp[p.home]=sp;L3.root.add(sp);}
-    const b=(p.pose==='walk'||p.pose==='run')?Math.abs(Math.sin(t*12))*.03:0;sp.position.set(p.x-Ns/2,b,p.y-Ns/2);}
+  const Ns=L3.N;for(const p of PETS){let m=L3.petSp[p.home];if(!m||m.userData.k!==p.kind){if(m)L3.root.remove(m);m=animal3(p.kind);m.scale.setScalar(.95);m.userData.tap={k:'pet',v:p.home};L3.petSp[p.home]=m;L3.root.add(m);}
+    m.position.set(p.x-Ns/2,0,p.y-Ns/2);m.rotation.y=p.ang||0;animPose(m,p.pose,t);}
   L3.ren.render(L3.scene,cam);}
 // screen-space walking direction for the pet sprites (keeps the art facing the way it walks on screen)
 function l3Face(dx,dy){if(!L3.on)return 0;const rx=Math.cos(L3.yaw),rz=-Math.sin(L3.yaw);const s=dx*rx+dy*rz;return Math.abs(s)>.0005?(s>0?1:-1):0;}
+// 3D thumbnails for the land palette and the room furniture list
+const THUMB={};let thumbRen=null;
+function thumb3(kind,id){const key=kind+id;if(THUMB[key]||!L3OK)return THUMB[key];try{
+  if(!thumbRen){thumbRen=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});thumbRen.setSize(128,128);thumbRen.setPixelRatio(1);}
+  const sc=new THREE.Scene();sc.add(new THREE.HemisphereLight('#ffffff','#7a7a6a',.95));const d=new THREE.DirectionalLight('#fff4dc',.6);d.position.set(-3,6,5);sc.add(d);
+  const save=L3.anims,save2=R3.anims;L3.anims=[];R3.anims=[];let g,sz=1;
+  if(kind==='land'){g=model3(id);const nb=bsz(id);sz=nb;if(isPetId(id)){const a=animal3(id);a.position.set(-.12,.08,.12);animPose(a,'sit',0);g.add(a);sz=1;}}
+  else{const D=FD(id)||{w:1,d:1};g=furn3(id,D.w||1,D.d||1);sz=Math.max(D.w||1,D.d||1);if(isPetId(id))sz=.8;}
+  L3.anims=save;R3.anims=save2;sc.add(g);const box=new THREE.Box3().setFromObject(g);if(box.isEmpty()){THUMB[key]=null;return null;}const c=box.getCenter(new THREE.Vector3()),r=box.getSize(new THREE.Vector3()).length()*.62;
+  const cam=new THREE.PerspectiveCamera(32,1,.01,100);cam.position.set(c.x+r*1.2,c.y+r*1.05,c.z+r*1.6);cam.lookAt(c);thumbRen.render(sc,cam);THUMB[key]=thumbRen.domElement.toDataURL();
+  sc.traverse(o=>{if(o.geometry)o.geometry.dispose();});}catch(e){THUMB[key]=null;}return THUMB[key];}
 function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
   const nx=L0.lv<LAND_SIZE.length?LAND_COST[L0.lv]:0;if(landPick&&landPick!=='me'&&!L0.tiles[landPick])landPick=null;
   const pk=landPick&&landPick!=='me'?LITEM.find(i=>i.id===L0.tiles[landPick]):null,isMe=landPick==='me';
@@ -2994,7 +3121,7 @@ function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
    ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
      :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${pk.id==='museum'?B('lpGal','전시관 들어가기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
    <p class="sub" style="margin:0">${msg}</p>
-   <div class="lpal">${LITEM.map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${isoIcon(i.id)}<span>${i.n}</span><em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;if(L3OK)l3Mount();}
+   <div class="lpal">${LITEM.map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${L3OK&&thumb3('land',i.id)?`<img class="th3" src="${thumb3('land',i.id)}" alt="">`:isoIcon(i.id)}<span>${i.n}</span><em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;if(L3OK)l3Mount();}
 function removeTile(k){const L0=landOf(),it=LITEM.find(i=>i.id===L0.tiles[k]);if(!it)return;S.money+=Math.floor(it.p/2);delete L0.tiles[k];delete landRot()[k];save();toast(it.n+' 철거 · '+won(it.p/2)+' 환급');}
 let lgD=null,lgSup=false,lgPts=new Map(),lgPinch=null;
 // rotate the view 90 degrees with a short smooth turn (objects stay on their tiles, only the camera turns)
@@ -3023,7 +3150,7 @@ function landClick(e){const L0=landOf();
   if(e.target.closest('#landRL')||e.target.closest('#landRR')){const L1=landOf();L1.view=((L1.view||0)+(e.target.closest('#landRR')?1:3))%4;save();renderLand();toast('땅을 '+[0,90,180,270][L1.view]+'° 돌려 봐요');return;}
   if(e.target.closest('#landDel')){landDel=!landDel;landSel=null;landPick=null;renderLand();return;}
   if(e.target.closest('#lpCancel')){landPick=null;renderLand();return;}
-  if(e.target.closest('#lpFlip')){if(landPick==='me'){const m=landMe();m.f=m.f?0:1;}else{const R=landRot();if(R[landPick])delete R[landPick];else R[landPick]=1;}save();renderLand();return;}
+  if(e.target.closest('#lpFlip')){if(landPick==='me'){const m=landMe();m.f=m.f?0:1;}else{const R=landRot();R[landPick]=((R[landPick]||0)+1)%4;if(!R[landPick])delete R[landPick];}save();renderLand();return;}
   if(e.target.closest('#lpDel')){removeTile(landPick);landPick=null;renderLand();return;}
   if(e.target.closest('#lpRoom')){landPick=null;openRoom();renderLand();return;}
   if(e.target.closest('#lpGal')){openGal('fos');return;}
@@ -3034,7 +3161,7 @@ function landClick(e){const L0=landOf();
   if(landDel){if(cur){removeTile(k);renderLand();}return;}
   if(cur&&!(landPick&&landPick!=='me'&&k===landPick&&k0!==landPick)){landSel=null;landPick=landPick===k?null:k;renderLand();return;}
   if(landPick==='me'){const m=landMe();m.x=tx;m.y=ty;landPick=null;save();renderLand();return;}
-  if(landPick){const id=L0.tiles[landPick];if(!landFits(id,tx,ty,landPick)){toast(bsz(id)>1?bsz(id)+'×'+bsz(id)+'칸이 비어 있는 곳을 골라 주세요':'빈 칸을 골라 주세요');return;}const R=landRot();delete L0.tiles[landPick];L0.tiles[k0]=id;if(R[landPick]){R[k0]=1;delete R[landPick];}landPick=null;landMe();save();renderLand();return;}
+  if(landPick){const id=L0.tiles[landPick];if(!landFits(id,tx,ty,landPick)){toast(bsz(id)>1?bsz(id)+'×'+bsz(id)+'칸이 비어 있는 곳을 골라 주세요':'빈 칸을 골라 주세요');return;}const R=landRot();delete L0.tiles[landPick];L0.tiles[k0]=id;if(R[landPick]){R[k0]=R[landPick];delete R[landPick];}landPick=null;landMe();save();renderLand();return;}
   if(!landSel)return;const it=LITEM.find(i=>i.id===landSel);if(!landFits(it.id,tx,ty)){toast(bsz(it.id)>1?it.n+'은(는) '+bsz(it.id)+'×'+bsz(it.id)+'칸이 필요해요. 밝은 칸(왼쪽 위 모서리)을 골라 주세요':'빈 칸을 골라 주세요');return;}
   if(it.house&&houseTile()){toast('집은 하나만 지을 수 있어요. 기존 집을 옮기거나 철거해 주세요');return;}
   if(S.money<it.p){toast('자금이 부족해요');return;}
@@ -3042,7 +3169,7 @@ function landClick(e){const L0=landOf();
 $('#landView').addEventListener('click',landClick);
 
 // ---------------- interior (grid placement) ----------------
-const FDEF={rug:{w:3,d:2,flat:1},bed:{w:2,d:3},sofa:{w:2,d:1},desk:{w:2,d:1},tv:{w:2,d:1},shelf:{w:1,d:1},plant:{w:1,d:1},case:{w:1,d:2},frame:{wall:1},tank:{w:2,d:1},dog:{w:1,d:1},cat:{w:1,d:1}};
+const FDEF={rug:{w:3,d:2,flat:1},bed:{w:2,d:3},sofa:{w:2,d:1},desk:{w:2,d:1},tv:{w:2,d:1},shelf:{w:1,d:1},plant:{w:1,d:1},case:{w:1,d:2},frame:{wall:1},tank:{w:2,d:1},dog:{w:1,d:1},cat:{w:1,d:1},chick:{w:1,d:1},rabbit:{w:1,d:1},turtle:{w:1,d:1},squirrel:{w:1,d:1},hedgehog:{w:1,d:1},sheep:{w:1,d:1},raccoon:{w:1,d:1},fox:{w:1,d:1},penguin:{w:1,d:1},bear:{w:1,d:1},panda:{w:1,d:1},dragon:{w:1,d:1},unicorn:{w:1,d:1}};
 const bid=id=>String(id).split('#')[0],FD=id=>FDEF[bid(id)],FMAX=id=>id==='frame'?1:2,fCopies=id=>[id,id+'#2'].slice(0,FMAX(id));
 const FDEFPOS={rug:[2,2],bed:[0,3],sofa:[2,4],desk:[4,0],tv:[2,0],shelf:[5,2],plant:[1,0],case:[0,0],frame:[3.5,0]};
 let roomPick=null,roomFloor=0;
@@ -3089,6 +3216,7 @@ function partsOf(id){switch(id){
     for(const z of[0,18,36]){L.push(FB(.15,.15,.85,.9,z,2,'#a0703c'));BOOKS.forEach((c,i)=>L.push(FB(.18+i*.16,.24,.3+i*.16,.74,z+2,13-(i%2)*3,c)));}return L;}
   case 'tank':return [FB(.04,.18,1.96,.88,0,18,'#5a4632'),FB(.1,.26,1.9,.8,18,3,'#d8c49a'),{fish:[.2,1.8,.53,23]},{b:[.08,.24,1.92,.82,18,28],glass:1,water:1}];
   case 'dog':case 'cat':return [{pet:id}];
+  default:if(isPetId(id))return [{pet:id}];
   case 'plant':return [FB(.26,.26,.74,.74,0,14,'#c97a4a'),FB(.23,.23,.77,.77,14,3,'#b5683a'),FB(.3,.3,.7,.7,17,.6,'#5a3a1a'),{puff:[.5,.5,22]}];
   case 'case':{const L=[FB(.08,.08,.92,1.92,0,10,'#7a5a3c')];RELICS.filter(r=>hasRelic(r.id)).slice(0,3).forEach((r,i)=>L.push({icon:[.5,.42+i*.56,10],r}));
     L.push({b:[.08,.08,.92,1.92,10,30],glass:1},FB(.06,.06,.94,1.94,40,3,'#7a5a3c'));return L;}
@@ -3106,6 +3234,75 @@ function isoSort(L){const n=L.length,pre=L.map(()=>0),nx=L.map(()=>[]);
   while(out.length<n){let k=-1;for(let i=0;i<n;i++)if(!done[i]&&pre[i]===0&&(k<0||key(L[i])<key(L[k])))k=i;
     if(k<0)for(let i=0;i<n;i++)if(!done[i]&&(k<0||key(L[i])<key(L[k])))k=i;
     done[k]=true;out.push(L[k]);for(const j of nx[k])pre[j]--;}return out;}
+// ---------------- 3D room (house interior) ----------------
+const R3={on:false,cv:null,ren:null,scene:null,cam:null,root:null,anims:[],walls:[],t:0,yaw:Math.PI/4,pitch:.72,dist:0,N:6,
+  home(){this.yaw=Math.PI/4;this.pitch=.72;this.dist=this.N*1.7+2;}};
+// furniture models: local footprint w (x) by d (z), centred at origin, front faces +z
+function furn3(id,w,d){const g=new THREE.Group(),A=f=>R3.anims.push(f),k=bid(id);
+  switch(k){
+  case 'rug':{g.add(B3(w-.2,.02,d-.2,'#c94a5a'),B3(w-.6,.025,d-.6,'#d86a76'),B3(w*.5,.03,d*.32,'#f2d06a'),B3(w*.3,.035,d*.18,'#3a5a9a'));
+    for(let i=0;i<9;i++)g.add(B3(.03,.01,.12,'#f4ece0',-w/2+.2+i*(w-.4)/8,0,d/2-.05));break;}
+  case 'bed':{g.add(B3(1.9,.3,2.85,'#8a5a3c',0,0,.05),B3(1.84,.18,2.7,'#f4f2ee',0,.3,.1),B3(1.95,1.1,.14,'#7a5a3c',0,0,-1.38),B3(1.6,.5,.06,'#9a704a',0,.45,-1.3));
+    g.add(B3(.75,.14,.45,'#ffffff',-.45,.48,-1.0),B3(.75,.14,.45,'#fffaf0',.45,.48,-1.0),B3(1.86,.08,1.75,'#5aa0d6',0,.48,.45),B3(1.86,.1,.22,'#f4f2ee',0,.5,-.35),B3(1.95,.55,.12,'#7a5a3c',0,0,1.43));break;}
+  case 'sofa':{g.add(B3(1.95,.35,.85,'#6b3fa0',0,.06,0),B3(1.95,.55,.25,'#7d4fb2',0,.35,-.32),B3(.25,.45,.85,'#7d4fb2',-.86,.06,0),B3(.25,.45,.85,'#7d4fb2',.86,.06,0));
+    g.add(B3(.72,.12,.6,'#9a70d0',-.37,.41,.08),B3(.72,.12,.6,'#9a70d0',.37,.41,.08),B3(.32,.3,.1,'#f2c14e',-.5,.5,-.12),B3(.32,.3,.1,'#5ab0c8',.5,.5,-.12));for(const x of[-.85,.85])for(const z of[-.35,.35])g.add(B3(.06,.06,.06,'#3a2a1a',x,0,z));break;}
+  case 'desk':{for(const x of[-.88,.88])for(const z of[-.35,.35])g.add(B3(.07,.75,.07,'#6a4a2a',x,0,z));g.add(B3(1.95,.06,.9,'#a0703c',0,.75,0));
+    g.add(B3(.7,.42,.04,'#1c2226',0,.95,-.25),B3(.62,.34,.02,'#6fc3e0',0,.99,-.22,{emissive:'#1a5a76'}),B3(.06,.17,.06,'#3a3a40',0,.81,-.27),B3(.6,.02,.22,'#3a3a40',0,.81,.08),B3(.12,.12,.12,'#ece4d4',.6,.81,.1));
+    g.add(C3(.08,.1,.02,'#3a3a40',-.75,.81,-.25),C3(.012,.012,.4,'#3a3a40',-.75,.83,-.25),K3(.1,.12,'#f2c14e',-.75,1.2,-.25,12,{emissive:'#664400'}));break;}
+  case 'tv':{g.add(B3(1.9,.45,.6,'#7a5a3c',0,0,.1),B3(.85,.38,.02,'#6a4a2c',-.47,.04,.41),B3(.85,.38,.02,'#6a4a2c',.47,.04,.41),B3(.18,.12,.12,'#2a2a2a',0,.45,0));
+    g.add(B3(1.75,1.0,.08,'#1c2226',0,.57,-.05));const sc=B3(1.62,.88,.02,'#2b7aa0',0,.63,0,{emissive:'#1a4a66'});g.add(sc,B3(.2,.5,.2,'#2a2a2a',-.85,.45,.15),B3(.2,.5,.2,'#2a2a2a',.85,.45,.15));
+    A(t=>{sc.material=M3(['#2b7aa0','#3a9a6a','#a05a8a'][Math.floor(t/3)%3],{emissive:'#1a4a66'});});break;}
+  case 'shelf':{g.add(B3(.06,2,.8,'#a0703c',-.42,0,0),B3(.06,2,.8,'#a0703c',.42,0,0),B3(.9,.06,.8,'#a0703c',0,1.94,0),B3(.84,1.94,.04,'#8a603a',0,0,-.38));for(const y of[.05,.68,1.32])g.add(B3(.8,.04,.75,'#c08a50',0,y,.02));
+    ['#c94a2a','#3a5a9a','#e8a93a','#5aa050','#7a4ab0'].forEach((c,i)=>{for(const y of[.09,.72,1.36])g.add(B3(.12,.42-(i%2)*.1,.5,c,-.3+i*.15,y,.05));});break;}
+  case 'plant':{g.add(C3(.26,.2,.45,'#c97a4a'),C3(.28,.28,.06,'#b5683a',0,.45));for(let i=0;i<7;i++){const a=i/7*Math.PI*2,l=mesh(new THREE.SphereGeometry(.14,8,6),i%2?'#4f9a50':'#6abf6a');l.scale.set(.45,1.4,.25);l.position.set(Math.cos(a)*.14,.8,Math.sin(a)*.14);l.rotation.set(Math.sin(a)*.5,0,-Math.cos(a)*.5);g.add(l);}
+    g.add(S3(.06,'#ff8aa8',.1,1.05,.05),S3(.05,'#ffd56a',-.12,.95,-.05));A(t=>{g.rotation.y=Math.sin(t*.8)*.05;});break;}
+  case 'case':{g.add(B3(.9,.45,1.9,'#7a5a3c'),B3(.86,.8,1.86,'#bfe6f5',0,.45,0,{transparent:true,opacity:.28}),B3(.92,.06,1.92,'#7a5a3c',0,1.25));
+    RELICS.filter(r=>hasRelic(r.id)).slice(0,3).forEach((r,i)=>{g.add(C3(.12,.16,.3,['#7fb8a8','#e8e2d6','#c9a03a'][i%3],0,.45,-.55+i*.55,10),S3(.07,'#f2c14e',0,.82,-.55+i*.55,{emissive:'#553300'}));});break;}
+  case 'frame':{g.add(B3(1.6,1.0,.06,'#a0703c',0,0,0),B3(1.4,.8,.02,'#efe2c6',0,.1,.04),B3(.8,.06,.02,'#b8a888',0,.45,.06),B3(.06,.4,.02,'#b8a888',.2,.3,.06));break;}
+  case 'tank':{g.add(B3(1.9,.5,.75,'#5a4632'),B3(1.85,.04,.7,'#d8c49a',0,.5),B3(1.85,.6,.7,'#4aa0dc',0,.54,0,{transparent:true,opacity:.35}),B3(1.9,.04,.75,'#3a3a40',0,1.14));
+    for(let i=0;i<3;i++){const w2=mesh(new THREE.ConeGeometry(.05,.35,5),'#3f9a50');w2.position.set(-.6+i*.55,.72,-.15+i*.1);g.add(w2);A(t=>{w2.rotation.z=Math.sin(t*2+i)*.2;});}
+    const fish=['#ff7a1a','#2fb6ff','#8a5aff'].map(c=>{const f=S3(.05,c);f.scale.set(1.6,.8,.6);g.add(f);return f;});
+    A(t=>fish.forEach((f,i)=>{const a=t*(.5+i*.15)+i*2;f.position.set(Math.sin(a)*.7,.75+Math.sin(t+i)*.08,Math.cos(a*1.3)*.15);f.rotation.y=Math.cos(a)>0?0:Math.PI;}));break;}
+  default:{if(isPetId(k)){const a=animal3(k);a.scale.setScalar(1.6);g.add(a,C3(.36,.4,.08,'#c94a5a',0,0,0,18));A(t=>animPose(a,k==='dog'?'sit':k==='cat'?'sleep':'stand',t));}}}
+  return g;}
+function r3Init(){if(R3.ren)return;R3.cv=document.createElement('canvas');R3.cv.className='l3c';R3.ren=new THREE.WebGLRenderer({canvas:R3.cv,antialias:true,alpha:true});R3.ren.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+  R3.ren.shadowMap.enabled=true;R3.ren.shadowMap.type=THREE.PCFSoftShadowMap;R3.scene=new THREE.Scene();R3.cam=new THREE.PerspectiveCamera(40,1,.05,100);
+  R3.scene.add(new THREE.HemisphereLight('#fff6e8','#8a7050',.8));const l=new THREE.DirectionalLight('#fff4dc',.55);l.position.set(-4,8,5);l.castShadow=true;l.shadow.mapSize.set(1024,1024);
+  Object.assign(l.shadow.camera,{left:-7,right:7,top:7,bottom:-7,near:1,far:30});l.shadow.bias=-.0015;R3.scene.add(l);const pl=new THREE.PointLight('#ffe0b0',.35,14);pl.position.set(0,3.2,0);R3.scene.add(pl);R3.ray=new THREE.Raycaster();
+  let dn=null;const cv=R3.cv;
+  cv.addEventListener('pointerdown',e=>{dn={x:e.clientX,y:e.clientY,yaw:R3.yaw,pitch:R3.pitch,mv:0,id:e.pointerId};try{cv.setPointerCapture(e.pointerId);}catch(_){}e.stopPropagation();});
+  cv.addEventListener('pointermove',e=>{if(!dn||e.pointerId!==dn.id)return;const dx=e.clientX-dn.x,dy=e.clientY-dn.y;dn.mv=Math.max(dn.mv,Math.hypot(dx,dy));R3.yaw=dn.yaw-dx*.008;R3.pitch=Math.max(.08,Math.min(1.5,dn.pitch+dy*.006));e.preventDefault();e.stopPropagation();});
+  cv.addEventListener('pointerup',e=>{if(!dn)return;const tap=dn.mv<6;dn=null;e.stopPropagation();if(tap)r3Tap(e);});cv.addEventListener('pointercancel',()=>{dn=null;});cv.addEventListener('click',e=>e.stopPropagation());
+  cv.addEventListener('wheel',e=>{e.preventDefault();R3.dist=Math.max(2.5,Math.min(R3.N*3+4,R3.dist*(e.deltaY<0?.9:1.1)));},{passive:false});}
+function r3Tap(e){const r=R3.cv.getBoundingClientRect(),v=new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);R3.ray.setFromCamera(v,R3.cam);
+  const hits=R3.ray.intersectObjects(R3.root.children,true);let o=null;for(const h of hits){let x=h.object;if(!x.visible)continue;let hid=false;for(let p=x;p;p=p.parent)if(p.visible===false)hid=true;if(hid)continue;while(x&&!x.userData.tap)x=x.parent;if(x){o=x.userData.tap;break;}}if(!o)return;
+  const fake={target:{closest:s=>{if(o.k==='stair'&&s==='.stair')return {};if(o.k==='me'&&s==='.mech')return {};if(o.k==='fu'&&s==='.fu')return {dataset:{fu:o.v}};if(o.k==='ft'&&s==='.ft')return {dataset:{g:o.v}};return null;}}};roomClick(fake);}
+function r3Build(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()?.[1]||'house_s',N=RN();R3.N=N;if(!R3.dist)R3.home();
+  if(R3.root){R3.scene.remove(R3.root);R3.root.traverse(o=>{if(o.geometry)o.geometry.dispose();});}R3.anims=[];R3.walls=[];const root=R3.root=new THREE.Group();R3.scene.add(root);
+  const WL={house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee',house_d:'#f2efe8',house_y:'#f1e6cc'}[h],FL={house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a',house_d:'#b98a5a',house_y:'#a87a4a'}[h],HN=h==='house_h'||h==='house_y',WH=2.6;
+  const W=(gx,gy)=>[gx-N/2,gy-N/2];root.add(B3(N+.3,.3,N+.3,shade(FL,-.35),0,-.32,0));
+  const o0=occ();for(let y=0;y<N;y++)for(let x=0;x<N;x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&!FD(roomPick).wall&&fits(roomPick,x,y);
+    const [wx,wz]=W(x+.5,y+.5),t=B3(.99,.04,.99,ok?'#b8e88a':(x+y)%2?FL:shade(FL,-.06),wx,-.04,wz);t.castShadow=false;t.userData.tap={k:'ft',v:x+','+y};root.add(t);}
+  // four walls; the ones between the camera and the room are hidden each frame (cut-away view)
+  const wall=(w,x,z,ry,nx,nz)=>{const g=new THREE.Group();g.add(B3(w,WH,.12,WL,0,0,0),B3(w,.2,.14,shade(WL,-.35),0,0,0));if(HN){for(let i=0;i<=w;i+=2)g.add(B3(.1,WH,.16,'#7a5a3c',-w/2+i,0,0));g.add(B3(w,.18,.16,'#7a5a3c',0,WH-.18,0));}
+    g.add(B3(1.3,.9,.03,'#9ccde6',w/4,1.1,.07),B3(1.42,.06,.05,'#7a5a3c',w/4,1.06,.07),B3(.05,.9,.04,'#7a5a3c',w/4,1.1,.08));g.position.set(x,0,z);g.rotation.y=ry;g.userData.n=[nx,nz];root.add(g);R3.walls.push(g);return g;};
+  wall(N,0,-N/2-.06,0,0,-1);wall(N,-N/2-.06,0,Math.PI/2,-1,0);wall(N,0,N/2+.06,Math.PI,0,1);wall(N,N/2+.06,0,-Math.PI/2,1,0);
+  // wall frame (fossil picture)
+  if(f.frame&&pos.frame&&flOf('frame')===roomFloor){const [t,wl]=pos.frame,fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],fr=new THREE.Group();fr.add(B3(1.8,1.1,.06,'#a0703c'),B3(1.62,.92,.02,'#f4ece0',0,.09,.04));
+    const im=new Image(),tx=new THREE.Texture();im.onload=()=>{tx.image=im;tx.needsUpdate=true;};im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="400" height="200"><rect width="200" height="100" fill="#efe2c6"/>${fossilArt(fo,fosGot(fo.id),-1,false)}</svg>`);
+    const pic=new THREE.Mesh(new THREE.PlaneGeometry(1.5,.8),new THREE.MeshBasicMaterial({map:tx}));pic.position.set(0,.55,.06);fr.add(pic);
+    if(wl){fr.position.set(-N/2+t+.9,1.2,-N/2+.02);}else{fr.position.set(-N/2+.02,1.2,-N/2+t+.9);fr.rotation.y=Math.PI/2;}fr.userData.tap={k:'fu',v:'frame'};if(roomPick==='frame')fr.add(B3(1.95,1.25,.03,'#ffd56a',0,-.07,-.03));root.add(fr);}
+  for(const id of Object.keys(f)){if(!FD(id)||FD(id).wall||!f[id]||!pos[id]||flOf(id)!==roomFloor)continue;const [x,y,r0]=pos[id],r=r0||0,D=FD(id),[Wd,Dd]=dims(id,r);
+    const m=furn3(id,D.w,D.d),[wx,wz]=W(x+Wd/2,y+Dd/2),hold=new THREE.Group();hold.add(m);m.rotation.y=-r*Math.PI/2;hold.position.set(wx,roomPick===id?.06:0,wz);hold.userData.tap={k:'fu',v:id};root.add(hold);
+    if(roomPick===id){const ring=new THREE.Mesh(new THREE.PlaneGeometry(Wd,Dd),new THREE.MeshBasicMaterial({color:'#ffd56a',transparent:true,opacity:.45}));ring.rotation.x=-Math.PI/2;ring.position.set(wx,.012,wz);root.add(ring);}}
+  if(twoF()){const st=stairR(),[w2,d2]=stDims(st.r),g=new THREE.Group(),[wx,wz]=W(st.x+w2/2,st.y+d2/2);
+    if(!roomFloor){for(let i=0;i<6;i++)g.add(B3(.96,(6-i)*.4,1/3,'#b98250',0,0,-1+i/3+1/6));}else{g.add(B3(.98,.03,1.98,'#2a1e14'),B3(.06,.9,1.9,'#7a5a3c',-.46,0,0),B3(.06,.9,1.9,'#7a5a3c',.46,0,0),B3(.98,.06,.06,'#9a7a4c',0,.9,.97));}
+    g.rotation.y=-st.r*Math.PI/2;g.position.set(wx,roomPick==='stair'?.05:0,wz);g.userData.tap={k:'stair'};root.add(g);}
+  const me=meR();if(me.fl===roomFloor){const m=meSpot(),[wx,wz]=W(m.x+.5,m.y+.5),sp=svgSprite('me'+JSON.stringify(ME())+m.f,charG(ME(),{expr:'happy',flip:!!m.f,noShadow:true}),'-10 0 120 172',1.9);sp.position.set(wx,0,wz);sp.userData.tap={k:'me'};root.add(sp);
+    if(roomPick==='me'){const ring=new THREE.Mesh(new THREE.RingGeometry(.32,.42,24),new THREE.MeshBasicMaterial({color:'#ffd56a'}));ring.rotation.x=-Math.PI/2;ring.position.set(wx,.015,wz);root.add(ring);}}}
+function r3Mount(){const a=$('#roomArt');if(!a)return;r3Init();a.innerHTML='';a.appendChild(R3.cv);R3.on=true;r3Build();const W=a.clientWidth||320,H=Math.round(Math.min(520,Math.max(260,W*.78)));R3.ren.setSize(W,H,false);R3.cv.style.width='100%';R3.cv.style.height=H+'px';R3.cam.aspect=W/H;R3.cam.updateProjectionMatrix();}
+function r3Tick(dt){if(!R3.on||!R3.cv.isConnected)return;R3.t+=dt;const t=R3.t,cp=Math.cos(R3.pitch),c=R3.cam;c.position.set(Math.sin(R3.yaw)*cp*R3.dist,Math.sin(R3.pitch)*R3.dist+.6,Math.cos(R3.yaw)*cp*R3.dist);c.lookAt(0,.6,0);
+  for(const w of R3.walls){const [nx,nz]=w.userData.n;w.visible=!(c.position.x*nx+c.position.z*nz>R3.N/2-.2);}for(const f of R3.anims)f(t);R3.ren.render(R3.scene,c);}
 function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()?.[1]||'house_s';
   const WL={house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee',house_d:'#f2efe8',house_y:'#f1e6cc'}[h],FL={house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a',house_d:'#b98a5a',house_y:'#a87a4a'}[h];
   const N=RN(),SC=6/N,TX=160,TY=66+(N>6?(N-6)*5:0),U=24*SC,V=12*SC,WH=78,HN=h==='house_h'||h==='house_y';
@@ -3175,7 +3372,7 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
   return `<svg viewBox="0 0 320 240" role="img" aria-label="집 안 ${roomFloor+1}층">${g}${out}</svg>`;}
 function puffs3(p,k=1){const L=[[-9,2,-40],[9,1,40],[-5,-8,-20],[5,-9,22],[0,-15,0],[-11,-6,-60],[11,-5,60]];return `<g>${AT('rotate',`-3 ${p[0]} ${p[1]+8*k};3 ${p[0]} ${p[1]+8*k};-3 ${p[0]} ${p[1]+8*k}`,'3.4')}`+L.map(([dx,dy,a],i)=>`<g transform="translate(${p[0]+dx*k},${p[1]+dy*k}) rotate(${a}) scale(${k})"><path d="M0,8 Q-6,0 0,-9 Q6,0 0,8Z" fill="${['#3f8a48','#5fb05f','#4f9a50','#6abf6a'][i%4]}" ${ISK}/><path d="M0,7 V-7" stroke="#2f6b3a" stroke-width=".8"/></g>`).join('')+`<circle cx="${p[0]+4*k}" cy="${p[1]-12*k}" r="${2.2*k}" fill="#ff8aa8" ${ISK}/><circle cx="${p[0]-6*k}" cy="${p[1]-4*k}" r="${1.8*k}" fill="#ffd56a" ${ISK}/></g>`;}
 function openRoom(){roomPick=null;roomFloor=0;renderRoom();$('#room').hidden=false;}
-function renderRoom(){const f=landOf().furn,pos=(ensurePos(),roomPos());$('#roomArt').innerHTML=roomSVG();
+function renderRoom(){const f=landOf().furn,pos=(ensurePos(),roomPos());if(L3OK)r3Mount();else $('#roomArt').innerHTML=roomSVG();
   const TF=twoF(),B=(a,t)=>`<button class="ghost sm" type="button" data-rb="${a}">${t}</button>`,mv=TF?B('mv',roomFloor?'1층으로':'2층으로'):'';
   $('#roomTitle').textContent=TF?'집 안 꾸미기 · '+(roomFloor+1)+'층':'집 안 꾸미기';
   $('#roomFl').innerHTML=TF?[0,1].map(k=>`<button type="button" class="${roomFloor===k?'on':''}" data-fl="${k}">${k+1}층</button>`).join(''):'';
@@ -3186,9 +3383,9 @@ function renderRoom(){const f=landOf().furn,pos=(ensurePos(),roomPos());$('#room
   else $('#roomBar').innerHTML=`<span>가구나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.${TF?' 계단도 눌러서 옮기거나 돌릴 수 있고, 위 1층·2층 버튼이나 계단 표시를 눌러 층을 바꿔요.':''}</span>`;
   $('#roomList').innerHTML=FURN.map(i=>{const cs=fCopies(i.id),n=cs.filter(c=>f[c]).length,pl=cs.filter(c=>f[c]&&pos[c]),st=n-pl.length,mx=cs.length;
     const stat=!n?won(i.p):st?`보관 ${st} · 배치`:(TF?pl.map(c=>(flOf(c)+1)+'층').join('·')+' · 옮기기':`${n}개 · 옮기기`);
-    return `<div class="lpw"><button class="lp ${bid(roomPick||'')===i.id?'on':''}" type="button" data-fu="${i.id}"><span>${i.n}${mx>1?` <small>${n}/${mx}</small>`:''}</span><em class="${n?'own':S.money>=i.p?'':'no'}">${stat}</em></button>${n&&n<mx?`<button class="lpplus ${S.money>=i.p?'':'no'}" type="button" data-fbuy="${i.id}">+1 구매 ${won(i.p)}</button>`:''}</div>`;}).join('');}
+    return `<div class="lpw"><button class="lp ${bid(roomPick||'')===i.id?'on':''}" type="button" data-fu="${i.id}">${L3OK&&thumb3('room',i.id)?`<img class="th3" src="${thumb3('room',i.id)}" alt="">`:''}<span>${i.n}${mx>1?` <small>${n}/${mx}</small>`:''}</span><em class="${n?'own':S.money>=i.p?'':'no'}">${stat}</em></button>${n&&n<mx?`<button class="lpplus ${S.money>=i.p?'':'no'}" type="button" data-fbuy="${i.id}">+1 구매 ${won(i.p)}</button>`:''}</div>`;}).join('');}
 $('#roomFl').addEventListener('click',e=>{const b=e.target.closest('[data-fl]');if(!b)return;roomFloor=+b.dataset.fl;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();});
-$('#roomArt').addEventListener('click',e=>{
+function roomClick(e){
   if(e.target.closest('.stairlb')){roomFloor=1-roomFloor;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();return;}
   if(e.target.closest('.stair')){roomPick=roomPick==='stair'?null:'stair';renderRoom();return;}
   if(e.target.closest('.mech')){roomPick=roomPick==='me'?null:'me';renderRoom();return;}
@@ -3200,7 +3397,8 @@ $('#roomArt').addEventListener('click',e=>{
   if(FD(roomPick).wall)return;const r=rotOf(roomPick),[w,d]=dims(roomPick,r);
   const cx=Math.min(Math.max(0,x),RN()-w),cy=Math.min(Math.max(0,y),RN()-d);
   if(!fits(roomPick,cx,cy,r)){toast('다른 가구와 겹쳐요. 밝은 칸을 골라 주세요');return;}
-  roomPos()[roomPick]=[cx,cy,r];save();renderRoom();});
+  roomPos()[roomPick]=[cx,cy,r];save();renderRoom();}
+$('#roomArt').addEventListener('click',roomClick);
 $('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]');if(!b||!roomPick)return;const pos=roomPos(),a=b.dataset.rb,id=roomPick;
   if(a==='done')roomPick=null;
   else if(id==='stair'){const st=stairR();
@@ -3282,18 +3480,18 @@ function petHome(kind,cx,cy){if(kind==='dog'){const b=isoBox(cx-4,cy-2,.42,18,'#
   return shadowE(cx,cy,18,7)+`<ellipse cx="${cx}" cy="${cy-2}" rx="18" ry="8.6" fill="#b25a7a" ${ISK}/><ellipse cx="${cx}" cy="${cy-4}" rx="14" ry="6.2" fill="#e88aa8"/><path d="M${cx-6},${cy-5} q6,3 12,0" stroke="#c9668a" stroke-width="1" fill="none"/><ellipse cx="${cx+16}" cy="${cy+6}" rx="5.4" ry="2.4" fill="#e8e2d6" ${ISK}/><circle cx="${cx-10}" cy="${cy+5}" r="3" fill="#7bd88f" ${ISK}/>`;}
 // ---------------- pets: behaviour on the land ----------------
 let PETS=[],petsKey='';
-const PACT={dog:[['walk',30],['run',14],['bark',14],['sit',14],['belly',12],['sleep',8],['stand',8]],cat:[['walk',30],['groom',16],['stretch',12],['meow',12],['sleep',16],['sit',14]]};
-function petSync(){const L0=landOf(),homes=Object.entries(L0.tiles).filter(([k,v])=>v==='dog'||v==='cat'),key=homes.map(h=>h.join(':')).join('|');
+const PACT={dog:[['walk',30],['run',14],['bark',14],['sit',14],['belly',12],['sleep',8],['stand',8]],cat:[['walk',30],['groom',16],['stretch',12],['meow',12],['sleep',16],['sit',14]],other:[['walk',30],['run',10],['sit',18],['sleep',14],['stand',14],['bark',8]]};
+function petSync(){const L0=landOf(),homes=Object.entries(L0.tiles).filter(([k,v])=>isPetId(v)),key=homes.map(h=>h.join(':')).join('|');
   if(key===petsKey)return;petsKey=key;const old=PETS;PETS=homes.map(([k,v])=>{const o=old.find(p=>p.home===k&&p.kind===v);if(o)return o;const [x,y]=k.split(',').map(Number);
     return {home:k,kind:v,x:x+.5+(v==='dog'?.3:.25),y:y+.5+.3,tx:0,ty:0,pose:'sit',t:1+Math.random()*2,face:1,drawn:''};});}
-function petPick(p){const n=landSize(),L0=landOf(),list=PACT[p.kind];let r=Math.random()*list.reduce((a,b)=>a+b[1],0),act='sit';for(const [a,w] of list){r-=w;if(r<=0){act=a;break;}}
-  if(act==='walk'||act==='run'){const O=landOcc();for(let i=0;i<8;i++){const x=.25+Math.random()*(n-.5),y=.25+Math.random()*(n-.5),ok0=O[Math.floor(x)+','+Math.floor(y)],it=ok0?L0.tiles[ok0]:null;if(!it||['flower','veg','dog','cat','bench'].includes(it)){p.tx=x;p.ty=y;break;}}}
+function petPick(p){const n=landSize(),L0=landOf(),list=PACT[p.kind]||PACT.other;let r=Math.random()*list.reduce((a,b)=>a+b[1],0),act='sit';for(const [a,w] of list){r-=w;if(r<=0){act=a;break;}}
+  if(act==='walk'||act==='run'){const O=landOcc();for(let i=0;i<8;i++){const x=.25+Math.random()*(n-.5),y=.25+Math.random()*(n-.5),ok0=O[Math.floor(x)+','+Math.floor(y)],it=ok0?L0.tiles[ok0]:null;if(!it||(['flower','veg','bench'].includes(it)||isPetId(it))){p.tx=x;p.ty=y;break;}}}
   if(act==='sleep'){const [hx,hy]=p.home.split(',').map(Number);p.tx=hx+.5+(p.kind==='dog'?.32:0);p.ty=hy+.5+(p.kind==='dog'?.32:.05);act='gohome';}
   p.pose=act;p.t=act==='walk'||act==='run'||act==='gohome'?20:act==='belly'||act==='sleep'?5+Math.random()*3:2.4+Math.random()*2;}
 function petTick(dt){if(view!=='land'||!$('#room').hidden||!$('#gal').hidden)return;const layer=document.getElementById('lItems');if(!layer&&!L3.on)return;petSync();
   for(const p of PETS){p.t-=dt;
     if(p.pose==='walk'||p.pose==='run'||p.pose==='gohome'){const sp=p.pose==='run'?2.1:.75,dx=p.tx-p.x,dy=p.ty-p.y,d=Math.hypot(dx,dy);
-      if(d<.05){if(p.pose==='gohome'){p.pose='sleep';p.t=6+Math.random()*4;}else p.t=0;}else{const st=Math.min(d,sp*dt);const a0=rotPt(p.x,p.y);p.x+=dx/d*st;p.y+=dy/d*st;const a1=rotPt(p.x,p.y),sx=(a1[0]-a0[0])-(a1[1]-a0[1]);if(L3.on){const f=l3Face(dx/d,dy/d);if(f)p.face=f;}else if(Math.abs(sx)>.0005)p.face=sx>0?1:-1;}}
+      if(d<.05){if(p.pose==='gohome'){p.pose='sleep';p.t=6+Math.random()*4;}else p.t=0;}else{const st=Math.min(d,sp*dt);p.ang=Math.atan2(dx,dy);const a0=rotPt(p.x,p.y);p.x+=dx/d*st;p.y+=dy/d*st;const a1=rotPt(p.x,p.y),sx=(a1[0]-a0[0])-(a1[1]-a0[1]);if(L3.on){const f=l3Face(dx/d,dy/d);if(f)p.face=f;}else if(Math.abs(sx)>.0005)p.face=sx>0?1:-1;}}
     if(p.t<=0)petPick(p);
     if(L3.on)continue;
     let el=layer.querySelector(`[data-pet="${p.home}"]`);
@@ -3305,7 +3503,7 @@ function petTick(dt){if(view!=='land'||!$('#room').hidden||!$('#gal').hidden)ret
     const dep=qx+qy;el.dataset.d=dep;let before=null;for(const c of layer.children){if(c!==el&&+c.dataset.d>dep){before=c;break;}}
     if(el.nextSibling!==before&&el!==before)layer.insertBefore(el,before);}
   if(layer)for(const el of [...layer.querySelectorAll('.petg')])if(!PETS.find(p=>p.home===el.dataset.pet))el.remove();}
-function petPoke(home){const p=PETS.find(q=>q.home===home);if(!p)return;p.pose=p.kind==='dog'?(Math.random()<.5?'bark':'belly'):(Math.random()<.5?'meow':'groom');p.t=3;}
+function petPoke(home){const p=PETS.find(q=>q.home===home);if(!p)return;p.pose=p.kind==='cat'?(Math.random()<.5?'meow':'groom'):(Math.random()<.5?'bark':'belly');p.t=3;}
 
 // ---------------- pets / animated land art ----------------
 function fountainArt(cx,cy){const st='#b8b3aa',sd='#8f8a80',wt='#4fa3d9',O=ISK;let g=shadowE(cx,cy,26,11);
@@ -3574,6 +3772,7 @@ function frame(t){const raw=(t-last)/1000,dt=Math.min(.05,raw);last=t;
   else if(view==='bore'){const a=depthToAbs(S.depth),a0=Math.floor(a);bore.draw(dt,{abs0:a0,frac:a-a0,active:!blocked,boost:boostM()});}
   else if(view==='craft')drawPreview(dt);
   else if(view==='land'&&L3.on&&$('#room').hidden&&$('#gal').hidden)l3Tick(dt);
+  if(!$('#room').hidden&&R3.on)r3Tick(dt);
   if(titleOn)drawTitle(dt);
   hudT-=dt;if(hudT<=0){hudT=.1;hud();checkInvest();checkCraft();}
   saveT-=dt;if(saveT<=0){saveT=3;save();}
