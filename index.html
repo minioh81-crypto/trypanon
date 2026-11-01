@@ -198,6 +198,12 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .tmodes{display:grid;gap:8px;width:min(340px,100%)}.tmh{font-size:12px;letter-spacing:.2em;color:var(--amber2);text-align:center}
 .tmode{display:grid;gap:2px;text-align:left;border:1px solid var(--amber);border-radius:14px;padding:12px 14px;background:rgba(232,169,58,.14);color:var(--fg)}.tmode b{font-size:17px}.tmode span{font-size:12px;color:var(--mute)}
 .tmode.hard{border-color:#ff6b5a;background:rgba(255,91,58,.14)}.tmode.hard b{color:#ff9a8a}.tmode:disabled{opacity:.45}.tmnote{font-size:11.5px;color:var(--mute);margin:0;text-align:center}
+#v-map .mstat{position:absolute;right:10px;bottom:52px;z-index:5;border:1px solid rgba(255,255,255,.35);background:rgba(10,20,30,.62);color:#fff;font-weight:800;font-size:12px;border-radius:999px;padding:6px 12px}
+#statDlg{position:fixed;inset:0;z-index:70;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#statDlg .dsheet{max-height:90vh;overflow-y:auto}
+.st-hero{display:flex;gap:12px;align-items:center;margin-bottom:8px}.st-hero svg{width:64px;height:76px;flex:none}.st-hero b{font-size:16px}.st-hero span{display:block;font-size:12px;color:var(--mute)}
+.st-sec{margin:12px 0 4px;font-size:12px;font-weight:800;color:#ffd56a;letter-spacing:.04em}.st-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.st-c{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:7px 9px}.st-c span{display:block;font-size:11px;color:var(--mute)}.st-c b{font-size:15px;font-family:var(--f-num)}
+.st-l{display:grid;gap:3px}.st-r{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:5px 8px;border-radius:8px;background:rgba(255,255,255,.03)}.st-r em{font-style:normal;color:#7bd88f;font-weight:700;text-align:right}.st-r.off{opacity:.45}.st-r.off em{color:var(--mute)}
 #nameDlg,#recDlg{position:fixed;inset:0;z-index:70;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#recDlg .dsheet{max-height:88vh;overflow-y:auto}
 .namein{height:46px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--fg);font-size:18px;padding:0 14px;width:100%}
 .rect{width:100%;border-collapse:collapse;font-size:12.5px}.rect th{color:var(--mute);font-weight:600;text-align:left;padding:6px 4px;border-bottom:1px solid var(--line)}.rect td{padding:7px 4px;border-bottom:1px solid var(--line)}.rect td.sc{font-family:var(--f-num);color:var(--amber2);font-weight:700}
@@ -432,6 +438,7 @@ nav.tabs button{font-size:12px}
 .lgrid-wrap.l3{padding:4px;background:linear-gradient(#9fd2f0,#dff0f6 70%,#cfe6c8)}.lgrid-wrap .l3c{display:block;margin:0 auto;border-radius:12px;touch-action:none;cursor:grab}.lgrid-wrap .l3c:active{cursor:grabbing}
 .lgrid-wrap .lcam{position:absolute;right:8px;bottom:8px;display:flex;gap:6px}.lgrid-wrap .lcam button{width:30px;height:30px;opacity:.85;border-radius:50%;background:rgba(20,28,32,.78);color:#fff;font-size:17px;border:1px solid rgba(255,255,255,.3)}
 .lgrid-wrap .lcel{position:absolute;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,240,180,.7));transition:left 1s linear,top 1s linear}
+.lgrid-wrap .lcomp{position:absolute;left:8px;right:8px;top:calc(34% + 2px);display:flex;justify-content:space-between;align-items:center;pointer-events:none;font-size:10px;color:rgba(255,255,255,.75);text-shadow:0 1px 2px rgba(0,0,0,.5)}.lcomp b{font-size:11px;background:rgba(10,20,40,.35);border-radius:999px;padding:1px 6px}.lcomp i{font-style:normal;opacity:.0}
 .lgrid-wrap .lsky{position:absolute;left:8px;top:8px;font-size:11px;font-weight:800;color:#fff;background:rgba(10,20,40,.55);border-radius:999px;padding:3px 9px;pointer-events:none}
 .lgrid-wrap .lrot{position:absolute;right:8px;top:8px;font-size:11px;font-weight:700;color:#2b3a22;background:rgba(255,255,255,.7);border-radius:999px;padding:3px 9px;pointer-events:none}.lgrid-wrap svg{transform-origin:50% 55%}
 .lgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;transform:perspective(600px) rotateX(18deg);transform-origin:50% 100%}
@@ -491,6 +498,7 @@ nav.tabs button{font-size:12px}
   <section class="view" id="v-map">
     <div class="mapwrap" id="map"></div>
     <div class="yiev" id="yiEv" hidden></div>
+    <button class="mstat" id="mapStat" type="button">📊 능력치</button>
     <div class="mapinfo" id="mapInfo"></div>
     <div class="mlegend"><span>아이콘 = 그 지역 재료</span><span><svg width="12" height="12" viewBox="-6 -10 12 19" aria-hidden="true"><rect x="-5.5" y="-6" width="11" height="5" rx="1.2" fill="#d9573a"/><path d="M-4.5,-1 L4.5,-1 L0,8Z" fill="#f2c14e"/></svg>양구 본공</span><span style="opacity:.55">흐림 = 잠김</span><span class="mhint">지형을 눌러 보세요</span></div>
     <div class="rpop" id="rpop" hidden><div class="rsheet" role="dialog" aria-modal="true" aria-label="지형 정보">
@@ -599,9 +607,10 @@ nav.tabs button{font-size:12px}
   <input id="nameIn" class="namein" type="text" maxlength="10" autocomplete="off" placeholder="최대 10자">
   <p class="wnote" style="margin:0">언제든 메뉴에서 바꿀 수 있어요. 세계 기록 인증서와 기록실에 이 이름이 올라가요.</p>
   <div class="ebtns"><button class="primary" type="button" id="nameOk">확인</button><button class="ghost" type="button" id="nameCancel">취소</button></div></div></section>
+<section id="statDlg" hidden><div class="dsheet"><div class="ehd"><div class="iname" style="font-size:18px">능력치</div><button class="skip" id="statClose" type="button">닫기</button></div><div id="statBody"></div></div></section>
 <section id="recDlg" hidden><div class="dsheet"><div class="ehd"><div class="iname" style="font-size:18px">기록실</div><button class="skip" id="recClose" type="button">닫기</button></div><div id="recBody"></div></div></section>
 <section id="ward" hidden>
-  <div class="shead"><div class="wtitle">주인공 옷장</div><button class="skip" id="wClose" type="button">닫기</button></div>
+  <div class="shead"><div class="wtitle">주인공 옷장</div><div style="display:flex;gap:6px"><button class="skip" id="wStat" type="button">📊 능력치</button><button class="skip" id="wClose" type="button">닫기</button></div></div>
   <div class="wstage" id="wStage"></div>
   <div class="wbody">
     <div class="wtabs" id="wTabs" role="tablist"></div>
@@ -618,6 +627,7 @@ nav.tabs button{font-size:12px}
   <div class="iname" style="font-size:18px">메뉴</div>
   <button class="ghost" type="button" id="mTitle">타이틀 화면으로</button>
   <button class="ghost" type="button" id="mName">이름 바꾸기</button>
+  <button class="ghost" type="button" id="mStat">📊 능력치 보기</button>
   <button class="ghost" type="button" id="mRec">기록실 (스코어)</button>
   <button class="ghost" type="button" id="mStory">스토리 다시 보기</button>
   <div class="seasonrow"><span>풍경 계절</span><div class="segs" id="mSeason"></div></div>
@@ -3267,7 +3277,7 @@ const ANS={
  cat:{n:'고양이',f:'#b9b9c2',l:'#fbfbfd',d:'#6a6a76',ear:'point',earIn:'#f6b8c8',tail:'long',acc:'collar',accC:'#d23a3a',nose:'#f08aa0',stripe:'#7a7a86'},
  rabbit:{n:'토끼',f:'#fbf0f2',l:'#ffffff',d:'#d8a8b8',ear:'long',earIn:'#f6b8c8',tail:'ball',acc:'scarf',accC:'#4aa04a',nose:'#f08aa0'},
  fox:{n:'여우',f:'#ee7a30',l:'#fff6ea',d:'#3a2418',ear:'point',earIn:'#fff0e0',earTip:'#3a2418',tail:'bushy',tailTip:'#fff6ea',nose:'#2a1f1a',sock:'#3a2418'},
- panda:{n:'판다',f:'#fafafa',l:'#fafafa',d:'#262628',ear:'round',earC:'#262628',face:'panda',legC:'#262628',acc:'scarf',accC:'#4aa04a',nose:'#262628'},
+ panda:{n:'판다',f:'#fafafa',l:'#fafafa',d:'#262628',ear:'round',earC:'#262628',face:'panda',legC:'#262628',tail:'ball',acc:'scarf',accC:'#4aa04a',nose:'#262628'},
  raccoon:{n:'너구리',f:'#a9a9b2',l:'#eeeeee',d:'#3a3a40',ear:'point',earIn:'#eeeeee',face:'mask',tail:'ring',acc:'scarf',accC:'#4aa04a',nose:'#2a2a2e'},
  bear:{n:'곰',f:'#8e5c3a',l:'#d9b48a',d:'#4a2c18',ear:'round',acc:'bandana',accC:'#3a7ad6',nose:'#2a1f1a'},
  dragon:{n:'드래곤',f:'#d8402e',l:'#f6d8a0',d:'#8a2418',ear:'horn',hornC:'#f2c14e',tail:'dragon',wing:'#e8703a',nose:'#8a2418'},
@@ -3307,8 +3317,8 @@ function animal3_(k){const A=ANS[k]||ANS.dog,g=new THREE.Group(),body=new THREE.
       const th=a,ph=.5+r2*.45;c.position.set(Math.cos(th)*.17*Math.sin(ph+.3),.26+Math.cos(ph)*.12,-Math.sin(th)*.05-.06-r2*.05);c.rotation.set(-1.1+r2*.3,0,(Math.cos(th))*-.9);body.add(c);}
     for(let i=0;i<12;i++){const a=i/12*Math.PI*2;const c=mesh(new THREE.ConeGeometry(.045,.18,6),A.spikes);c.position.set(Math.cos(a)*.1,hy+.12,Math.sin(a)*.08-.02);c.rotation.set(Math.sin(a)*-.9-.4,0,Math.cos(a)*-.9);head.add(c);}}
   // tail
-  const T=new THREE.Group();T.position.set(0,.24,-.17);body.add(T);
-  if(A.tail==='curl'){const t=mesh(new THREE.TorusGeometry(.06,.025,8,12,Math.PI*1.4),A.f);t.rotation.set(0,Math.PI/2,0);t.position.y=.05;T.add(t);}
+  const T=new THREE.Group();T.position.set(0,.15,-.2);body.add(T);
+  if(A.tail==='curl'){const t=mesh(new THREE.TorusGeometry(.055,.024,8,12,Math.PI*1.3),A.f);t.rotation.set(0,Math.PI/2,-.6);t.position.set(0,.05,-.04);T.add(t);T.add(S3(.03,A.f,0,.01,0));}
   if(A.tail==='long'){const t=mesh(new THREE.CylinderGeometry(.022,.026,.26,8),A.f);t.rotation.x=-.9;t.position.set(0,.08,-.08);T.add(t);if(A.stripe)for(let i=0;i<3;i++){const s=mesh(new THREE.CylinderGeometry(.028,.028,.025,8),A.stripe);s.rotation.x=-.9;s.position.set(0,.03+i*.06,-.04-i*.05);T.add(s);}}
   if(A.tail==='ball')T.add(S3(.055,A.l,0,0,0));
   if(A.tail==='bushy'||A.tail==='squirrel'){const big=A.tail==='squirrel';const t=S3(big?.13:.09,A.f,0,big?.16:.06,big?-.06:-.1);t.scale.set(.8,big?1.5:1,big?1:1.6);T.add(t);if(A.tailTip)T.add(S3(.05,A.tailTip,0,.04,-.2));}
@@ -3351,16 +3361,16 @@ function animal3_(k){const A=ANS[k]||ANS.dog,g=new THREE.Group(),body=new THREE.
   if(A.wool){for(let i=0;i<5;i++)head.add(S3(.045,A.f,(i-2)*.035,HY+.14,.02));}
   head.scale.setScalar(k==='turtle'||k==='chick'?1:1.16);head.position.y-=k==='turtle'||k==='chick'?0:.07;
   if(A.stripe)for(let i=-1;i<=1;i++)head.add(B3(.025,.012,.08,A.stripe,i*.04,HY+.165,-.02));
-  g.userData={legs,body,head,k,by:quad?-.03:0};return g;}
+  g.rotation.order='YXZ';g.userData={legs,body,head,k,tail:T,by:quad?-.03:0};return g;}
 // pose animation: walk/run swing legs, sit lowers rear, sleep lies down, bark/meow hop, belly rolls over
 function animPose(g,pose,t){const u=g.userData,L=u.legs,run=pose==='run',walk=pose==='walk'||run||pose==='gohome';
   const sp=run?16:9,a=walk?(run?.7:.5):0;L.forEach((l,i)=>{l.rotation.x=Math.sin(t*sp+(i%2===0?0:Math.PI)+(i>1?Math.PI:0))*a;l.visible=true;});
-  u.body.position.y=(u.by||0)+(walk?Math.abs(Math.sin(t*sp))*.025:0);u.body.rotation.set(0,0,0);u.head.rotation.set(0,0,0);g.position.y=0;
+  u.body.position.y=(u.by||0)+(walk?Math.abs(Math.sin(t*sp))*.025:0);u.body.rotation.set(0,0,0);u.head.rotation.set(0,0,0);g.position.y=0;g.rotation.x=0;g.rotation.z=0;if(u.tail)u.tail.visible=pose!=='belly';
   if(u.wings)u.wings.forEach((w,i)=>w.rotation.y=(i?-1:1)*(.3+Math.sin(t*(walk?14:4))*.35));
   if(pose==='sit'){u.body.rotation.x=-.18;u.head.rotation.x=.12;if(L.length>2){L[2].rotation.x=-1.2;L[3].rotation.x=-1.2;}}
   if(pose==='sleep'){u.body.position.y=-.05;L.forEach(l=>{l.rotation.x=1.4;l.visible=false;});u.head.rotation.x=.25;u.body.scale.y=1+Math.sin(t*2)*.02;}else u.body.scale.y=1;
   if(pose==='bark'||pose==='meow'){g.position.y=Math.max(0,Math.sin(t*10))*.05;u.head.rotation.x=-.2+Math.sin(t*10)*.1;}
-  if(pose==='belly'){u.body.rotation.z=1.35;u.body.position.y=.2;L.forEach((l,i)=>{l.rotation.x=Math.sin(t*8+i)*.6;l.visible=false;});}
+  if(pose==='belly'){g.rotation.x=-1.42;g.rotation.z=Math.sin(t*3)*.12;g.position.y=.19;u.head.rotation.x=-.3;L.forEach((l,i)=>{l.rotation.x=Math.sin(t*8+i*1.7)*.5;l.rotation.z=(i%2?-1:1)*.25;});}
   if(pose==='groom'){u.head.rotation.set(.4,Math.sin(t*3)*.3,0);}
   if(pose==='stretch'){u.body.rotation.x=.25;if(L.length>2){L[0].rotation.x=-.8;L[1].rotation.x=-.8;}}
   if(pose==='stand'||pose==='meowstand'){u.head.rotation.y=Math.sin(t*1.2)*.3;}}
@@ -3567,10 +3577,35 @@ function l3EnvTick(dt){const E=L3.env;if(!E)return;const now=new Date(),h=now.ge
   // settled snow: a white ground sheet + a straight-down white light that frosts every upward-facing roof and ledge
   E.snowL.intensity=E.snow*.75;if(L3.snowSheet)L3.snowSheet.material.opacity=E.snow*.6;
   // sun / moon drawn as an overlay arc across the top of the land view (the 3D camera looks down, so a real sky body would never be in frame)
-  const cel=$('#lcel');if(cel){const isDay=sa>0,prog=isDay?(h-6)/12:(((h-18)+24)%24)/12,x=8+prog*84,y=31-Math.sin(Math.PI*Math.max(0,Math.min(1,prog)))*20,key=isDay?'sun'+(kind==='clear'?'':'c'):'moon'+Math.round(f*100)+(kind==='clear'?'':'c');
-    if(cel.dataset.k!==key){cel.dataset.k=key;cel.innerHTML=isDay?'<svg viewBox="-20 -20 40 40" width="44" height="44" aria-hidden="true"><g><animateTransform attributeName="transform" type="rotate" values="0 0 0;360 0 0" dur="18s" repeatCount="indefinite"/>'+Array.from({length:10},(_,i)=>`<path d="M0,-12 V-17" stroke="#ffd34a" stroke-width="2.4" stroke-linecap="round" transform="rotate(${i*36})"/>`).join('')+'</g><circle r="9.5" fill="#ffe066" stroke="#f2a020" stroke-width="1.5"/><circle cx="-3" cy="-3" r="3" fill="#fff6c8" opacity=".8"/></svg>':`<img src="${moonTex(f).image.toDataURL()}" width="40" height="40" alt="">`;}
-    cel.style.left=x+'%';cel.style.top=y+'%';cel.style.opacity=kind==='clear'?1:kind==='cloud'?.7:.25;cel.title=isDay?'낮':'밤 · '+moonName(f);}
-  const chip=$('#lsky');if(chip){const txt=(day>.5?'☀️ 낮':'🌙 밤 · '+moonName(f))+' · '+w.ic+' '+w.n;if(chip.textContent!==txt)chip.textContent=txt;}}
+  // sky body overlay: sun by day / moon (real phase) by night, crossing from east (left) to west (right); clouds, rain, snow and storms cover it
+  const isDay=sa>0,prog=isDay?(h-6)/12:(((h-18)+24)%24)/12,cel=$('#lcel');
+  if(cel){const x=8+prog*84,lowK=Math.sin(Math.PI*Math.max(0,Math.min(1,prog))),y=34-lowK*22,key=(isDay?'d':'n'+Math.round(f*100))+w.id+(lowK<.25?'l':'');
+    if(cel.dataset.k!==key){cel.dataset.k=key;cel.innerHTML=skySVG(isDay,f,w,kind,lowK<.25);}
+    cel.style.left=x+'%';cel.style.top=y+'%';cel.style.opacity=lowK<.08?.55:1;cel.title=(isDay?'낮 · 해':'밤 · '+moonName(f))+' · '+w.n;}
+  const chip=$('#lsky');if(chip){const nightClear=!isDay&&(w.id==='sunny'||w.id==='hot'),txt=(isDay?'☀️ 낮':'🌙 밤 · '+moonName(f))+' · '+(nightClear?'✨ 맑음':w.ic+' '+w.n);if(chip.textContent!==txt)chip.textContent=txt;}
+  const cp=$('#lcomp');if(cp&&cp.hidden)cp.hidden=false;}
+// small SVG sky scene (viewBox 80x60): sun / moon + the current weather in front of it
+function skySVG(isDay,f,w,kind,low){const id=w.id,u='sk'+(++UID);let g='';
+  if(isDay){const hot=id==='hot',r=hot?13:11,c=low?'#ffb060':hot?'#ffb03a':'#ffe066';
+    g+=`<g transform="translate(40,30)">${kind==='clear'?`<circle r="${r+8}" fill="${c}" opacity=".25"><animate attributeName="r" values="${r+5};${r+10};${r+5}" dur="${hot?1:2.4}s" repeatCount="indefinite"/></circle><g><animateTransform attributeName="transform" type="rotate" values="0 0 0;360 0 0" dur="${hot?8:18}s" repeatCount="indefinite"/>${Array.from({length:10},(_,i)=>`<path d="M0,-${r+3} V-${r+8}" stroke="${hot?'#ff7a2a':'#ffd34a'}" stroke-width="2.4" stroke-linecap="round" transform="rotate(${i*36})"/>`).join('')}</g>`:''}
+      <circle r="${r}" fill="${c}" stroke="${hot?'#e05a1a':'#f2a020'}" stroke-width="1.5"/><circle cx="-3.5" cy="-3.5" r="3.4" fill="#fff6c8" opacity=".75"/></g>`;
+    if(hot)g+=[0,1,2].map(i=>`<path d="M${22+i*12},56 q3,-4 0,-8 t0,-8" stroke="#ff9a5a" stroke-width="1.4" fill="none" opacity=".7"><animate attributeName="opacity" values=".2;.8;.2" dur="${1+i*.3}s" repeatCount="indefinite"/></path>`).join('');}
+  else{// moon: lit area = outer half circle + terminator ellipse (waxing lit on the right, waning on the left)
+    const R=12,k=Math.cos(2*Math.PI*f),rx=Math.abs(k)*R,wax=f<.5,lit=f>.03&&f<.97;
+    g+=`<g transform="translate(40,30)"><circle r="${R+7}" fill="#cfdcff" opacity="${(.12+.25*Math.sin(Math.PI*f)).toFixed(2)}"/><circle r="${R}" fill="#26314a" stroke="#56648a" stroke-width="1"/>
+      ${lit?`<g transform="scale(${wax?1:-1},1)"><path d="M0,-${R} A${R},${R} 0 0 1 0,${R} A${rx.toFixed(2)},${R} 0 0 ${k>0?0:1} 0,-${R}Z" fill="#fff6dc"/></g>`:''}
+      <circle cx="-4" cy="-3" r="2.2" fill="#000" opacity=".08"/><circle cx="3" cy="4" r="1.6" fill="#000" opacity=".08"/><circle cx="5" cy="-5" r="1.2" fill="#000" opacity=".07"/></g>`;
+    if(kind==='clear')g+=[[10,10],[70,14],[64,48],[14,46]].map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="1.1" fill="#fff"><animate attributeName="opacity" values=".2;1;.2" dur="${1.4+i*.4}s" repeatCount="indefinite"/></circle>`).join('');}
+  const cloud=(x,y,sc,col,dur)=>`<g transform="translate(${x},${y}) scale(${sc})"><g><animateTransform attributeName="transform" type="translate" values="-3 0;3 0;-3 0" dur="${dur}s" repeatCount="indefinite"/><ellipse cx="0" cy="4" rx="18" ry="7" fill="${col}"/><circle cx="-8" cy="0" r="8" fill="${col}"/><circle cx="4" cy="-3" r="10" fill="${col}"/><circle cx="13" cy="2" r="6" fill="${col}"/></g></g>`;
+  if(kind==='cloud'){// thin clouds drift over half of the disc
+    g+=cloud(30,40,1,isDay?'#eef2f4':'#7a8496',7)+cloud(54,30,.7,isDay?'#dde3e8':'#6a7486',9);
+    if(id==='wind'||id==='gale')g+=[0,1].map(i=>`<path d="M4,${18+i*14} q14,-6 28,0 t26,0" stroke="#fff" stroke-width="1.4" fill="none" stroke-dasharray="14 40" opacity=".8"><animate attributeName="stroke-dashoffset" values="54;0" dur="${id==='gale'?.6:1.2}s" repeatCount="indefinite"/></path>`).join('');}
+  if(kind==='rain'||kind==='snow'){// heavy cloud hides the sun / moon completely
+    const dark=id==='storm'||id==='hrain'||id==='bliz';g+=cloud(40,28,1.55,isDay?(dark?'#6e7782':'#a8b0b8'):(dark?'#3a4252':'#566072'),8);
+    if(kind==='rain')g+=Array.from({length:7},(_,i)=>`<path d="M${16+i*8},44 l-2,7" stroke="#bfe0ff" stroke-width="1.4" stroke-linecap="round"><animateTransform attributeName="transform" type="translate" values="0 -3;-2 6" dur="${dark?.4:.6}s" begin="${-i*.13}s" repeatCount="indefinite"/></path>`).join('');
+    else g+=Array.from({length:8},(_,i)=>`<circle cx="${14+i*7}" cy="46" r="1.4" fill="#fff"><animateTransform attributeName="transform" type="translate" values="0 -3;${id==='bliz'?-6:0} 9" dur="${id==='bliz'?.7:1.6}s" begin="${-i*.25}s" repeatCount="indefinite"/></circle>`).join('');
+    if(id==='storm')g+=`<path d="M44,36 l-6,10 h5 l-4,10 l10,-13 h-5 l4,-7Z" fill="#ffe14a" opacity="0"><animate attributeName="opacity" values="0;0;1;0;1;0" keyTimes="0;.7;.74;.8;.84;1" dur="3s" repeatCount="indefinite"/></path>`;}
+  return `<svg viewBox="0 0 80 60" width="74" height="56" aria-hidden="true">${g}</svg>`;}
 function splash(E,x,y,z){for(let k=0;k<3;k++){E.sp[E.spi]={x,y,z,vx:(Math.random()-.5)*.9,vy:.9+Math.random()*.8,vz:(Math.random()-.5)*.9,l:.32};E.spi=(E.spi+1)%E.SN;}
   if(Math.random()<.35){const r=E.RG[E.rgi];E.rgi=(E.rgi+1)%E.RG.length;r.l=.4;r.m.position.set(x,y+.003,z);}}
 function l3Init(){if(L3.ren)return;L3.cv=document.createElement('canvas');L3.cv.className='l3c';
@@ -3636,8 +3671,8 @@ function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
   const B=(id,t,c='ghost')=>`<button class="${c} sm" type="button" id="${id}">${t}</button>`;
   $('#landView').innerHTML=`<div class="lhead"><div><div class="tk">내 땅 · ${n}×${n}칸</div><div class="tn">양구 국토정중앙 옆 부지</div></div>
      <div class="lbtns">${nx?`<button class="ghost sm" type="button" id="landBuy" ${S.money>=nx?'':'disabled'}>땅 넓히기 ${won(nx)}</button>`:''}<button class="ghost sm ${landDel?'on':''}" type="button" id="landDel">${landDel?'철거 중':'철거'}</button></div></div>
-   <div class="lgrid-wrap ${L3OK?'l3':''}" id="lgWrap">${L3OK?'':landSVG()}<span class="lrot">${L3OK?'끌어서 360° 둘러보기 · ⌂ 처음 시점':'끌어서 이동 · +/− 확대'}</span>${L3OK?'<span class="lsky" id="lsky"></span><span class="lcel" id="lcel"></span>':''}<div class="lcam"><button type="button" id="landRL" aria-label="왼쪽으로 돌리기">⟲</button><button type="button" id="landZo" aria-label="축소">−</button><button type="button" id="landZ" aria-label="보기 초기화">⌂</button><button type="button" id="landZi" aria-label="확대">+</button><button type="button" id="landRR" aria-label="오른쪽으로 돌리기">⟳</button></div></div>
-   ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
+   <div class="lgrid-wrap ${L3OK?'l3':''}" id="lgWrap">${L3OK?'':landSVG()}<span class="lrot">${L3OK?'끌어서 360° 둘러보기 · ⌂ 처음 시점':'끌어서 이동 · +/− 확대'}</span>${L3OK?'<span class="lsky" id="lsky"></span><span class="lcel" id="lcel"></span><span class="lcomp" id="lcomp" hidden><b>동</b><i>해·달이 동쪽에서 떠서 서쪽으로 져요</i><b>서</b></span>':''}<div class="lcam"><button type="button" id="landRL" aria-label="왼쪽으로 돌리기">⟲</button><button type="button" id="landZo" aria-label="축소">−</button><button type="button" id="landZ" aria-label="보기 초기화">⌂</button><button type="button" id="landZi" aria-label="확대">+</button><button type="button" id="landRR" aria-label="오른쪽으로 돌리기">⟳</button></div></div>
+   ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpStat','📊 능력치','primary')}${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
      :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${pk.id==='museum'?B('lpGal','전시관 들어가기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
    <p class="sub" style="margin:0">${msg}</p>
    <div class="lpal">${LITEM.filter(i=>!isPetId(i.id)||petOpen(i.id)).map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${L3OK&&thumb3('land',i.id)?`<img class="th3" src="${thumb3('land',i.id)}" alt="">`:isoIcon(i.id)}<span>${i.n}</span><em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;if(L3OK)l3Mount();}
@@ -3673,6 +3708,7 @@ function landClick(e){const L0=landOf();
   if(e.target.closest('#lpDel')){removeTile(landPick);landPick=null;renderLand();return;}
   if(e.target.closest('#lpRoom')){landPick=null;openRoom();renderLand();return;}
   if(e.target.closest('#lpGal')){openGal('fos');return;}
+  if(e.target.closest('#lpStat')){openStats();return;}
   const pg=e.target.closest('.petg');if(pg&&!landSel&&!landDel){petPoke(pg.dataset.pet);return;}
   const p=e.target.closest('[data-it]');if(p){landSel=landSel===p.dataset.it?null:p.dataset.it;landDel=false;landPick=null;renderLand();return;}
   if(e.target.closest('.mech')){if(landDel)return;landSel=null;landPick=landPick==='me'?null:'me';renderLand();return;}
@@ -4202,6 +4238,34 @@ function recordRun(endK){S.records=S.records||[];const r={name:pName(),mode:S.mo
 function renderRec(){const rs=S.records||[];
   $('#recBody').innerHTML=`<div class="rnow"><span>현재 회차 · <span class="modechip ${S.mode==='hard'?'hard':''}">${MD().n} 모드</span> · ${escH(pName())} · ${S.ng||1}회차 · ${runDays().toFixed(1)}일째</span><b>${runScore(false).toLocaleString('ko-KR')}점</b><span class="sub" style="margin:0">깊이·드릴 레벨·유물·화석으로 쌓이고, 엔딩을 보면 완주 보너스와 빨리 깬 만큼 시간 보너스가 더해져요.</span></div>
     <h3 class="h3" style="margin:14px 0 4px">완주 기록</h3>${rs.length?`<table class="rect"><tr><th>#</th><th>이름</th><th>모드</th><th>점수</th><th>기간</th><th>엔딩</th></tr>${rs.map((r,i)=>`<tr><td>${i+1}</td><td>${escH(r.name)}</td><td class="modechip ${r.mode==='hard'?'hard':''}">${MODES[r.mode].n}</td><td class="sc">${r.score.toLocaleString('ko-KR')}</td><td>${r.days}일</td><td>${ENDS[r.end]?ENDS[r.end].n:'-'}</td></tr>`).join('')}</table>`:'<p class="sub">아직 완주 기록이 없어요. 지구를 관통하면 점수가 기록돼요.</p>'}`;}
+
+// ---------------- hero stats: every number that shapes drilling, plus all perks currently in force ----------------
+function openStats(){renderStats();$('#statDlg').hidden=false;}
+function renderStats(){const c=ME(),l=layerAt(Math.min(S.depth,GOAL()-1)),pc=v=>(v>=0?'+':'')+(Math.round(v*1000)/10)+'%',pp=v=>(v>=0?'+':'')+(Math.round(v*1000)/10)+'%p',w=homeWx();
+  const rid=S.ex.active,er=rid?regById(rid):null,yf=(MD().yf||3)*(S.part===2?MD().y2||1:1);
+  const cards=[['드릴',`Lv.${S.dl} · ${dlName(S.dl)}`],['본공 배수',`×${fmtN(dlMul(S.dl))}`],['기본 굴착력',fmtN(dps())+'/초'],['본공 굴착력',fmtN(boreDps())+'/초'],
+    ['본공 속도',(gateAt()?'관문에서 정지':(v=>v<10?v.toFixed(2)+'m/초':fmtD(v)+'/초')(boreDps()/l.H))],['본공 수입',won(incomePerSec())+'/초'],['원정 굴착력',er?fmtN(expDps(rid))+'/초 · '+er.n:'원정 없음'],['원정 칸당 재료',yf.toFixed(1)+'개 + 추가 '+Math.round(extraP()*100)+'%'],
+    ['강타 확률',Math.round(critP()*1000)/10+'%'],['강타 피해',`×${critMul().toFixed(1)}`],['유물 발견',Math.round(relicP()*1000)/10+'%/칸'],['오프라인',`${(offCap()/3600).toFixed(1)}시간 · 50%`],
+    ['부스터',boostM()>1?`×${boostM()} 작동 중`:'꺼짐'],['날씨(양구)',`${w.ic} ${w.n} · 굴착 ${Math.round((boreWxK(.7)-1)*100)}%`]];
+  const row=(n,v,on=true)=>`<div class="st-r ${on?'':'off'}"><span>${n}</span><em>${v}</em></div>`;
+  const perks=[];
+  if(yiOwn())perks.push(row('★ 이순신 장군 (보유)','굴착력 '+(S.mode==='hard'?'+3%':'+5%')+(yiOn()?' · 출현 이벤트 가능':' · 이벤트는 착용 시')));
+  if(yiM()>1)perks.push(row('⚔ 필사즉생 발동 중','굴착량 ×2'));
+  for(const o of OPT.item)if(o.d&&hasIt(o.v))perks.push(row('소품 · '+o.n,o.d.replace('보유 효과: ','')));
+  for(const v of INV)if(v.perk&&perk(v.id))perks.push(row('투자자 · '+v.n,v.perk+(S.mode==='hard'?' (하드 60%)':'')));
+  const ir=S.ir||{},IRT={priv:'본공 수입 +1%/회',gov:'굴착력 +1%/회',org:'유물 발견 +0.2%p/회',mid:'원정 추가 획득 +0.5%p/회',big:'제작 비용 할인/회'};
+  for(const d of IRND){const n=ir[d.id]||0;if(n)perks.push(row(`투자 라운드 · ${d.n} ${n}회`,IRT[d.id]?IRT[d.id].replace('/회',` × ${Math.min(20,n)}`):''));}
+  for(const e of ERAS){const lv=setLv(e.id);if(lv)perks.push(row(`유물 세트 · ${e.n} ${lv===2?'완성':'3종'}`,e.b(setPow(e.id))));}
+  for(const f of FOSSILS)if(fosDone(f.id))perks.push(row('화석 · '+f.n,f.eff));
+  if(S.land&&houseBonus())perks.push(row('내 땅 · 집','오프라인 +'+houseBonus()+'시간'));
+  const parts=PARTS.map(p=>row(p.n,`Lv.${L(p.id)}/${MAXLV}`,L(p.id)>0)).join('');
+  $('#statBody').innerHTML=`<div class="st-hero"><svg viewBox="-20 -6 140 180" aria-hidden="true">${charG(c,{expr:'happy'})}</svg><div><b>${escH(pName())}</b><span>${MD().n} 모드 · ${S.part===2?'2부':'1부'} · ${fmtD(S.depth)} / ${fmtD(GOAL())}</span><span>유물 ${relicCount()}/${RELICS.length} · 화석 ${FOSSILS.filter(f=>fosDone(f.id)).length}/${FOSSILS.length} · 투자 ${Object.values(ir).reduce((a,b)=>a+b,0)}회</span></div></div>
+    <div class="st-sec">굴착 능력</div><div class="st-grid">${cards.map(([n,v])=>`<div class="st-c"><span>${n}</span><b>${v}</b></div>`).join('')}</div>
+    <div class="st-sec">적용 중인 보유 효과 (${perks.length})</div><div class="st-l">${perks.join('')||'<p class="sub">아직 적용 중인 효과가 없어요. 투자자·유물 세트·화석·소품으로 늘어나요.</p>'}</div>
+    <div class="st-sec">부품</div><div class="st-l">${parts}</div>`;}
+$('#wStat').addEventListener('click',()=>openStats());$('#mapStat').addEventListener('click',()=>openStats());
+$('#statClose').addEventListener('click',()=>$('#statDlg').hidden=true);
+$('#mStat').addEventListener('click',()=>{$('#menu').hidden=true;openStats();});
 $('#recClose').addEventListener('click',()=>$('#recDlg').hidden=true);
 function openTitleModes(){S.needMode=true;save();titleOn=true;$('#title').hidden=false;syncTitle();}
 function syncTitle(){const nm=!!S.needMode;$('#tStart').hidden=nm;$('#tModes').hidden=!nm;const hard=document.querySelector('.tmode.hard'),ok=!!S.hardOK||S.mode==='hard';
