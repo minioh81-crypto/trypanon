@@ -10,15 +10,17 @@ function run(C,log=false){
   const pmv=C.pm||1,perks=()=>(S.inv.vc?1+.15*pmv:1)*(S.inv.inst?1+.25*pmv:1)*(S.inv.space?1+.1*pmv:1)*(C.rounds?1+.01*Math.min(20,S.ir.gov)*pmv:1)*(S.yi?(1+(C.yiP||0))*(1+(C.yiU||0)):1);
   const layerAt=m=>C.LAY.find(l=>m<l.to)||C.LAY[C.LAY.length-1];
   const dlCost=dl=>Math.round(C.dlBase*Math.pow(C.dlGrow,dl-2));
-  const partReq=dl=>Math.min(C.MAXLV,Math.floor((dl-1)/C.reqStep));
+  const partReq=dl=>C.p2base&&dl>C.p2base?Math.min(C.MAXLV,C.p2lv+Math.floor((dl-C.p2base)/C.p2step)):Math.min(C.MAXLV,Math.floor((dl-1)/C.reqStep));
   const cost=p=>{const l=L(p.id),c={};c[p.res]=Math.ceil(C.RESC[l]);if(p.sub)c[p.sub]=Math.ceil(C.RESC[l]*.5);c.money=C.MONC[l];return c;};
   const can=c=>Object.entries(c).every(([k,v])=>k==='money'?S.money>=v:(S.res[k]||0)>=v);
   const pay=c=>{for(const[k,v]of Object.entries(c)){if(k==='money')S.money-=v;else S.res[k]-=v;}};
   const expHP=(r,i)=>r.t==='sea'&&i<r.water?2:C.expBase*r.diff*Math.pow(1+.1*(i-(r.water||0)),C.expGrow);
-  const yieldOf=(r,i)=>(C.yFlat?C.yFlat:Math.max(2,Math.round(C.yBase*Math.pow(expHP(r,i)/(C.expBase*r.diff),C.yExp))))*(1+.08+.05*L('sensor'));
-  const INV=C.INV;let marks=[],lastDl=0,regCur=null,regHP=0;
+  const yieldOf=(r,i)=>(h1!==null&&C.y2mul?C.y2mul:1)*(C.yFlat?C.yFlat:Math.max(2,Math.round(C.yBase*Math.pow(expHP(r,i)/(C.expBase*r.diff),C.yExp))))*(1+.08+.05*L('sensor'));
+  let h1=null;const INV=C.INV;let marks=[],lastDl=0,regCur=null,regHP=0;
   const dt=5;
-  while(S.depth<6371000&&S.t<3e7){
+  const GOAL=C.part2?12742000:6371000;
+  while(S.depth<GOAL&&S.t<6e7){
+    if(C.part2&&h1===null&&S.depth>=6371000){h1=S.t/3600;C.MAXLV=C.MAXLV2;C.DLOPEN=C.DLOPEN2;}
     const l=layerAt(S.depth);
     // investors
     for(const v of INV)if(!S.inv[v.id]&&v.cond(S,L)){S.inv[v.id]=1;S.money+=v.amt*(C.inv||1);}
@@ -42,8 +44,8 @@ function run(C,log=false){
     // buy parts
     for(const p of need){const c=cost(p);if(L(p.id)<C.MAXLV&&can(c)){pay(c);S.parts[p.id]++;}}
     const nx=S.dl+1;if(nx<=C.DLOPEN&&PARTS.every(p=>L(p.id)>=partReq(nx))&&S.money>=dlCost(nx)){S.money-=dlCost(nx);S.dl=nx;}
-    if(log&&S.dl!==lastDl&&S.dl%10===0){marks.push(`dl${S.dl}@${(S.t/3600).toFixed(1)}h d=${(S.depth/1000).toFixed(1)}km`);}lastDl=S.dl;
+    if(log&&S.dl!==lastDl&&S.dl%(C.markStep||10)===0){marks.push(`dl${S.dl}@${(S.t/3600).toFixed(1)}h d=${(S.depth/1000).toFixed(1)}km`);}lastDl=S.dl;
     S.t+=dt;}
-  return {rst:S.rsts||0,h:S.t/3600,yiH:S.yiAt?+(S.yiAt/3600).toFixed(1):null,blockedH:S.blk/3600,dl:S.dl,parts:Object.values(S.parts).join(','),marks,money:Math.round(S.money),dig:Object.fromEntries(Object.entries(S.dig).map(([k,v])=>[k,v.i]))};
+  return {h1,rst:S.rsts||0,h:S.t/3600,yiH:S.yiAt?+(S.yiAt/3600).toFixed(1):null,blockedH:S.blk/3600,dl:S.dl,parts:Object.values(S.parts).join(','),marks,money:Math.round(S.money),dig:Object.fromEntries(Object.entries(S.dig).map(([k,v])=>[k,v.i]))};
 }
 module.exports={run,REG,PARTS};

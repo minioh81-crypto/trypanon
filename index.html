@@ -682,19 +682,19 @@ const TIERS=[{n:'견습 쇠송곳',lv:0,cost:0,mul:1},{n:'트리파논 Mk.I',lv:
 const GRADE_N=['견습','초급','중급','상급','숙련','전문가','장인','명장','달인','마스터','그랜드마스터','영웅','전설','신화','초월','불멸','천상','절대','창조','무한'];
 const GRADE_G=['초보','초보','초보','초보','숙련자','숙련자','숙련자','숙련자','고수','고수','고수','전설','전설','전설','초월','초월','초월','궁극','궁극','궁극'];
 const DLMAX=100;let DLOPEN=50;
-const DSTEP=10,GRADE_T=['견습','초급','중급','숙련','마스터','그랜드마스터','영웅','전설','신화','무한'],GRADE_TG=['초보','초보','숙련자','숙련자','고수','고수','전설','전설','초월','궁극'];
+const DSTEP=10,GRADE_T=['견습','초급','중급','숙련','마스터','그랜드마스터','영웅','전설','신화','무한','초월','창세','태초','우주'],GRADE_TG=['초보','초보','숙련자','숙련자','고수','고수','전설','전설','초월','궁극','초월','초월','초월','초월'];
 const dlGrade=dl=>Math.ceil(dl/DSTEP),dlStep=dl=>(dl-1)%DSTEP+1,dlStyle=dl=>Math.min(19,Math.ceil(dl/5)-1);
 const dlName=dl=>GRADE_T[dlGrade(dl)-1]+' '+dlStep(dl);
 // ---- difficulty modes (balance targets, continuous play: 보통 ≈ 150h (1주), 하드 ≈ 480h (3주) — sim notes in CHANGELOG 32) ----
 const MODES={
- normal:{n:'보통',MAXLV:10,DLOPEN:50,LREQ:[1,1,6,16,26,36,46],Hmul:1.5,Hm:[1,1,1,1.6,1.6,1.6,1.6],vmul:[1,1,1,1.5,2,2,2.5],dlMul:1.07,dlGrow:1.2,expBase:100,expGrow:1.2,yf:3,inv:1,shop:1,chest:1,set:1,
-  fuel:[20,20,12],fs:[6,10,15],fc:[.01,.02,.04],RESC:[10,25,70,170,400,800,1400,2300,3500,5000],MONC:[250,750,3000,8750,25000,75000,200000,500000,1125000,2250000]},
- hard:{n:'하드',MAXLV:20,DLOPEN:100,LREQ:[1,1,11,31,51,71,91],Hmul:10,Hm:[1,1,1.5,2.5,2.5,2.5,2.5],vmul:[1,1,2,5,10,10,12],dlMul:1.06,dlGrow:1.115,expBase:200,expGrow:1.25,yf:2.5,inv:.5,shop:1.5,chest:.7,set:.5,fs:[5,8,12],fc:[.015,.03,.06],
-  fuel:[30,30,18],RESC:[17,26,43,67,103,158,241,362,546,768,1071,1494,2081,2889,4021,5596,7778,10809,15010,20808],
-  MONC:[300,900,2700,6600,15000,30000,57000,102000,174000,285000,450000,690000,1050000,1560000,2280000,3300000,4800000,6900000,9900000,14100000]}};
+ normal:{n:'보통',MAXLV:10,DLOPEN:50,LREQ:[1,1,6,16,26,36,46],Hmul:1.5,Hm:[1,1,1,1.6,1.6,1.6,1.6],vmul:[1,1,1,1.5,2,2,2.5],dlMul:1.07,dlGrow:1.2,expBase:100,expGrow:1.2,yf:3,inv:1,shop:1,chest:1,set:1,MAXLV2:15,DLOPEN2:75,LREQ2:[50,54,59,64,69,73],Hm2:[1.6,1.6,1.6,1.6,1,1],vmul2:[2.5,2,2,1.5,1,1],p2:{base:50,lv:10,step:8},y2:1,
+  fuel:[20,20,12],fs:[6,10,15],fc:[.01,.02,.04],RESC:[10,25,70,170,400,800,1400,2300,3500,5000,5000,5300,5600,5900,6200],MONC:[250,750,3000,8750,25000,75000,200000,500000,1125000,2250000,4200000,7500000,13000000,22000000,36000000]},
+ hard:{n:'하드',MAXLV:20,DLOPEN:100,LREQ:[1,1,11,31,51,71,91],Hmul:10,Hm:[1,1,1.5,2.5,2.5,2.5,2.5],vmul:[1,1,2,5,10,10,12],dlMul:1.06,dlGrow:1.115,expBase:200,expGrow:1.25,yf:2.5,inv:.5,shop:1.5,chest:.7,set:.5,MAXLV2:26,DLOPEN2:140,LREQ2:[92,100,110,120,130,136],Hm2:[2.5,2.5,2.5,2.5,1,1],vmul2:[12,10,10,5,2,1],p2:{base:100,lv:20,step:12},y2:2,fs:[5,8,12],fc:[.015,.03,.06],
+  fuel:[30,30,18],RESC:[17,26,43,67,103,158,241,362,546,768,1071,1494,2081,2889,4021,5596,7778,10809,15010,20808,14000,15000,16000,17000,18000,19000],
+  MONC:[300,900,2700,6600,15000,30000,57000,102000,174000,285000,450000,690000,1050000,1560000,2280000,3300000,4800000,6900000,9900000,14100000,19700000,27600000,38700000,54000000,76000000,106000000]}};
 const MD=()=>MODES[S.mode]||MODES.normal;
 const dlMul=dl=>Math.pow(MD().dlMul,dl-1);
-const dlPartReq=dl=>dl>=MD().DLOPEN?MD().MAXLV:Math.min(MD().MAXLV,Math.floor((dl-1)/5));
+const dlPartReq=dl=>{const m=MD();if(S.part===2&&dl>m.p2.base)return Math.min(MAXLV,m.p2.lv+Math.floor((dl-m.p2.base)/m.p2.step));return dl>=m.DLOPEN?m.MAXLV:Math.min(m.MAXLV,Math.floor((dl-1)/5));};
 const dlCost=dl=>Math.round(150*Math.pow(MD().dlGrow,dl-2));
 const LAY0=[];const LAY=[
  {from:0,to:30,n:'표토',c:'#8f6440',H:36,v:3,u:5,req:1},
@@ -703,12 +703,20 @@ const LAY0=[];const LAY=[
  {from:35000,to:660000,n:'상부 맨틀',c:'#9a5c3a',H:137,v:1,u:20,req:16,gate:'모호면 (지각·맨틀 경계)'},
  {from:660000,to:2900000,n:'하부 맨틀',c:'#b04a2a',H:374,v:.8,u:50,req:26,gate:'상부·하부 맨틀 경계'},
  {from:2900000,to:5150000,n:'외핵 (액체 철·니켈)',c:'#de762c',H:1587,v:2,u:50,req:36,gate:'구텐베르크 불연속면'},
- {from:5150000,to:6371000,n:'내핵 (고체 철·니켈)',c:'#f2bb52',H:2193,v:4,u:50,req:46,gate:'레만 불연속면'}];
+ {from:5150000,to:6371000,n:'내핵 (고체 철·니켈)',c:'#f2bb52',H:2193,v:4,u:50,req:46,gate:'레만 불연속면'},
+ // part 2: the same shells in reverse, ending on the Atlantic sea floor off Uruguay (12,742km = Earth's diameter)
+ {from:6371000,to:7592000,n:'내핵 (반대편)',c:'#f2bb52',H:2193,v:4,u:50,req:50,gate:'지구 중심 통과',p2:1},
+ {from:7592000,to:9842000,n:'외핵 (반대편 · 액체 철)',c:'#de762c',H:1587,v:2,u:50,req:54,gate:'레만 불연속면 (반대편)',p2:1},
+ {from:9842000,to:12082000,n:'하부 맨틀 (반대편)',c:'#b04a2a',H:374,v:.8,u:50,req:59,gate:'구텐베르크 불연속면 (반대편)',p2:1},
+ {from:12082000,to:12707000,n:'상부 맨틀 (반대편)',c:'#9a5c3a',H:137,v:1,u:20,req:64,gate:'상부·하부 맨틀 경계 (반대편)',p2:1},
+ {from:12707000,to:12735000,n:'해양 지각 (대서양 현무암)',c:'#4f5560',H:396,v:4,u:10,req:69,gate:'모호면 (반대편)',p2:1},
+ {from:12735000,to:12742000,n:'대서양 해저 퇴적층',c:'#8a7a5a',H:30,v:3,u:5,req:73,gate:'우루과이 앞바다 해저',p2:1}];
 const CORE=6371000;LAY.forEach(l=>LAY0.push({H:l.H,v:l.v}));
-function applyMode(){const m=MD();MAXLV=m.MAXLV;DLOPEN=m.DLOPEN;RESC=m.RESC;MONC=m.MONC;
-  LAY.forEach((l,i)=>{l.H=LAY0[i].H*(i>=2?m.Hmul:1)*(m.Hm?m.Hm[i]:1);l.v=LAY0[i].v*m.vmul[i];l.req=m.LREQ[i];});
+function applyMode(){const m=MD(),p2=S.part===2;MAXLV=p2?m.MAXLV2:m.MAXLV;DLOPEN=p2?m.DLOPEN2:m.DLOPEN;RESC=m.RESC;MONC=m.MONC;
+  LAY.forEach((l,i)=>{if(i<7){l.H=LAY0[i].H*(i>=2?m.Hmul:1)*(m.Hm?m.Hm[i]:1);l.v=LAY0[i].v*m.vmul[i];l.req=m.LREQ[i];}else{const j=i-7;l.H=LAY0[i].H*m.Hmul*m.Hm2[j];l.v=LAY0[i].v*m.vmul2[j];l.req=m.LREQ2[j];}});
   FUEL.forEach((f,i)=>{f.need=m.fuel[i];f.s=m.fs[i];f.mc=m.fc[i];});}
-const MILES=[{d:1000,n:'첫 1km'},{d:12262,n:'콜라 초심층 시추공 (인류 최심 시추 기록)'},...LAY.filter(l=>l.gate).map(l=>({d:l.from,n:l.gate})),{d:CORE,n:'지구 중심'}];
+const MILES=[{d:1000,n:'첫 1km'},{d:12262,n:'콜라 초심층 시추공 (인류 최심 시추 기록)'},...LAY.filter(l=>l.gate&&!l.p2).map(l=>({d:l.from,n:l.gate})),{d:CORE,n:'지구 중심'},...LAY.filter(l=>l.p2&&l.from>CORE).map(l=>({d:l.from,n:l.gate})),{d:2*CORE,n:'지구 반대편 · 우루과이 앞바다'}];
+const GOAL=()=>S.part===2?2*CORE:CORE,PLAY=()=>S.part===2?LAY.slice(7):LAY.slice(0,7);
 const TICK=.25;
 
 // ---------------- helpers ----------------
@@ -723,7 +731,7 @@ const segHP=s=>Math.round(6*Math.pow(1.045,s));
 const segReward=s=>Math.round(4*Math.pow(1.04,s));
 const layerAt=m=>LAY.find(l=>m<l.to)||LAY[LAY.length-1];
 function depthToAbs(d){let b=0;for(const l of LAY){if(d<l.to)return b+(d-l.from)/l.u;b+=(l.to-l.from)/l.u;}return b;}
-function absToDepth(a){let b=0;for(const l of LAY){const n=(l.to-l.from)/l.u;if(a<b+n)return l.from+(a-b)*l.u;b+=n;}return CORE;}
+function absToDepth(a){let b=0;for(const l of LAY){const n=(l.to-l.from)/l.u;if(a<b+n)return l.from+(a-b)*l.u;b+=n;}return 2*CORE;}
 const RIC={
  '화강암':'<rect x="2" y="4" width="12" height="9" rx="2.5" fill="#d3cabd"/><circle cx="5" cy="7" r="1" fill="#2b2622"/><circle cx="9" cy="9.5" r=".9" fill="#2b2622"/><circle cx="11.5" cy="6.5" r=".8" fill="#e98a8a"/><circle cx="6.5" cy="11" r=".7" fill="#2b2622"/>',
  '장석':'<path d="M3,6 L8,3 L13,6 L13,12 L8,14 L3,12Z" fill="#f2c79c"/><path d="M3,6 L8,8.5 L13,6 M8,8.5 V14" stroke="#c9946a" stroke-width=".9" fill="none"/>',
@@ -751,7 +759,7 @@ let S=fresh();
 try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&typeof d==='object'&&(typeof d.seg==='number'||typeof d.depth==='number'))S=Object.assign(S,d);}catch(e){}
 if(S.seg!=null){S.depth=Math.max(S.depth||0,Math.min(segTop(S.seg),14999));}if(S.tier!=null&&(S.dl||1)===1)S.dl=[1,6,16,26,36,46][S.tier]||1;S.dl=S.dl||1;delete S.tier;delete S.seg;delete S.hp;
 S.char=Object.assign({},DEFCHAR_,S.char||{});S.ex=Object.assign({active:null,dig:{}},S.ex||{});S.relic=S.relic||{};if(!S.bv5){for(const k in (S.ex.dig||{})){const g0=S.ex.dig[k];g0.i=Math.round(g0.i*2/5);g0.hp=0;}S.bv5=1;}if(!S.rv){for(const k in S.relic)S.relic[k]=0;S.rv=2;}if(S.rv===2){const mp=[0,1,2,4,5,6,7,8,12];for(const k in S.relic)S.relic[k]=mp[S.relic[k]]??0;S.rv=3;}if(S.rv===3){for(const k in S.relic){const g0=S.relic[k];S.relic[k]=Math.floor(g0/4)*6+g0%4;}S.rv=4;}S.own=S.own||[];S.inv=S.inv||{};S.invN=S.invN||[];S.st=Object.assign({exp:0,sea:0},S.st||{});
-S.mode=S.mode||'normal';S.ng=S.ng||1;S.runStart=S.runStart||Date.now();applyMode();
+S.mode=S.mode||'normal';S.part=S.part||1;S.ng=S.ng||1;S.runStart=S.runStart||Date.now();applyMode();
 const save=()=>{S.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const L=id=>S.parts[id]||0;
 const levels=()=>Object.fromEntries(PARTS.map(p=>[p.id,L(p.id)]));
@@ -1082,7 +1090,7 @@ const STSEQ=[[30,0,['soil']],[15000,600,['sed','lime','sed','granite','ore','wat
  [660000,25000,['perid','lava','diamond','perid','magma','perid']],[2900000,80000,['bridg','lava','bridg','perid']],[5150000,150000,['liqfe']],[6371000,150000,['ironx']]];
 const STKD={soil:'흙과 풀뿌리가 섞인 가장 얕은 층',sed:'오랜 세월 쌓인 모래·진흙이 굳은 층',lime:'옛 바다 생물의 껍데기가 쌓인 층',granite:'마그마가 땅속에서 천천히 식은 단단한 암석',ore:'금속 광물이 줄무늬처럼 박힌 맥',crystal:'반짝이는 수정이 자라는 동굴',cave:'텅 빈 지하 공간, 종유석이 매달려 있어요',water:'암석 틈을 채운 지하수',
  basalt:'용암이 식으며 육각 기둥으로 갈라진 층',diamond:'깊은 곳에서 솟은 다이아몬드 원석 암맥',magma:'녹은 암석이 고여 있는 뜨거운 방',perid:'맨틀을 이루는 초록빛 암석',lava:'붉게 흐르는 용암 줄기',bridg:'하부 맨틀의 초고압 광물',liqfe:'외핵 — 녹아서 흐르는 철',ironx:'내핵 — 거대한 철 결정'};
-function stratumAt(d){let from=0;for(const [to,band,ks] of STSEQ){if(d<to){if(!band)return {k:ks[0],start:false};const bi=Math.floor((d-from)/band),k=ks[bi%ks.length];return {k,start:Math.abs((d-from)-bi*band)<1e-6||false,bi};}from=to;}return {k:'ironx'};}
+function stratumAt(d){if(d>CORE)d=Math.max(0,2*CORE-d);let from=0;for(const [to,band,ks] of STSEQ){if(d<to){if(!band)return {k:ks[0],start:false};const bi=Math.floor((d-from)/band),k=ks[bi%ks.length];return {k,start:Math.abs((d-from)-bi*band)<1e-6||false,bi};}from=to;}return {k:'ironx'};}
 function boreBlock(abs){if(abs<0)return{sky:true};const t=absToDepth(abs),l=layerAt(t),st=l.gate&&Math.abs(t-l.from)<.5;
   const sk=stratumAt(t),pk=stratumAt(Math.max(0,absToDepth(abs-1))),newSk=sk.k!==pk.k||sk.bi!==pk.bi;
   return{c:shade(STK[sk.k][0],l.req>S.dl?-.35:0),k:sk.k,sk:newSk&&abs>0&&!st?sk.k:null,label:fmtD(t)+(st?' · '+l.gate+(l.req>S.dl?' · 드릴 Lv.'+l.req+' 필요':''):''),warn:!!st};}
@@ -1246,11 +1254,11 @@ $('#chest').addEventListener('click',openChest);
 $('#nOk').addEventListener('click',()=>{if(newsGive){S.money+=newsGive.money;for(const [k,n] of newsGive.res)S.res[k]=(S.res[k]||0)+n;newsGive=null;save();}$('#news').hidden=true;});
 
 // ---------------- earth layer gauge ----------------
-const LSHORT=['표토','상부 지각','하부 지각','상부 맨틀','하부 맨틀','외핵','내핵'];
-function buildGauge(){$('#lgauge').innerHTML=LAY.map((l,i)=>`<div class="lg" style="--c:${l.c}" data-i="${i}"><b>${LSHORT[i]}</b><span>${l.to>=1000?fmtD(l.to):l.to+'m'}</span></div>`).join('')+'<div class="lmark" id="lmark"><i class="lptr"></i><em id="lmarkT"></em></div>';}
-function updateGauge(){const i=LAY.indexOf(layerAt(S.depth)),l=LAY[i],f=Math.min(1,(S.depth-l.from)/(l.to-l.from));
-  document.querySelectorAll('#lgauge .lg').forEach((el,j)=>{el.classList.toggle('cur',j===i);el.classList.toggle('lock',LAY[j].req>S.dl);});
-  $('#lmark').style.top=((i+f)/LAY.length*100).toFixed(2)+'%';$('#lmarkT').textContent=fmtD(S.depth);}
+const LSHORT=['표토','상부 지각','하부 지각','상부 맨틀','하부 맨틀','외핵','내핵','내핵','외핵','하부 맨틀','상부 맨틀','해양 지각','해저']; 
+function buildGauge(){const o=S.part===2?7:0;$('#lgauge').innerHTML=PLAY().map((l,i)=>`<div class="lg" style="--c:${l.c}" data-i="${i}"><b>${LSHORT[i+o]}</b><span>${l.to>=1000?fmtD(l.to):l.to+'m'}</span></div>`).join('')+'<div class="lmark" id="lmark"><i class="lptr"></i><em id="lmarkT"></em></div>';}
+function updateGauge(){const P=PLAY(),i=Math.max(0,P.indexOf(layerAt(Math.min(S.depth,GOAL()-1)))),l=P[i],f=Math.max(0,Math.min(1,(S.depth-l.from)/(l.to-l.from)));
+  document.querySelectorAll('#lgauge .lg').forEach((el,j)=>{el.classList.toggle('cur',j===i);el.classList.toggle('lock',P[j].req>S.dl);});
+  $('#lmark').style.top=((i+f)/P.length*100).toFixed(2)+'%';$('#lmarkT').textContent=fmtD(S.depth);}
 
 // ---------------- bore (automatic) ----------------
 let bgPop=0,bMoneyAcc=0;
@@ -1259,7 +1267,7 @@ function boreAdvance(d,fx){const a0=depthToAbs(S.depth);let gain=0,n=0;
     const need=(l.to-S.depth)*l.H;
     if(d<need){const m=d/l.H;S.depth+=m;gain+=m*l.v;d=0;}
     else{gain+=(l.to-S.depth)*l.v;S.depth=l.to;d-=need;
-      if(S.depth>=CORE){S.depth=CORE;S.done=true;toast('지구 관통 성공!');}
+      if(S.depth>=GOAL()){S.depth=GOAL();S.done=true;toast(S.part===2?'지구 관통 성공! 반대편 바다에 도착!':'지구 중심 도달!');}
       else{const nl=layerAt(S.depth);if(nl.req>S.dl)toast(nl.gate+' 도달 · 드릴 Lv.'+nl.req+' ('+dlName(nl.req)+')가 필요합니다');}}}
   gain*=(1+PK('tuber',.2))*(1+.01*rp('priv'))*(1+.15*setPow('joseon'))*(fosDone('kano')?1.1:1);bMoneyAcc+=gain;const w=Math.floor(bMoneyAcc);S.money+=w;bMoneyAcc-=w;bgPop+=gain;
   checkUnlocks();
@@ -1446,7 +1454,7 @@ function addRelic(rl,vis,belowM){S.relic=S.relic||{};const g=rollGrade(belowM||0
   if(vis)popQ.push({rl,g,cur,sold,msg});else if(g>=6||cur<0)toast(`${cur<0?'유물 발견':'등급 상승'}: ${GR[g].n} ${rl.n}`);}
 function expBreak(r,vis){const g=digOf(r.id),below=belowOf(r,g.i);
   if(r.t==='land'&&PEAK[r.id][1]-g.i*BLK>0&&PEAK[r.id][1]-(g.i+1)*BLK<=0)toast(r.n+' 해발 0m 도달 · 여기부터는 본공 지표(0m)와 같은 지층이 이어집니다');
-  if(below>=0){let wp=r.t==='sea'?setPow('wreck'):0,amt=Math.floor((MD().yf||3)+Math.random())+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.15?1:0)+(r.t==='sea'&&fosDone('whale')&&Math.random()<.2?1:0)+(r.t==='sea'?(perk('sea')&&Math.random()<pm()?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
+  if(below>=0){let wp=r.t==='sea'?setPow('wreck'):0,amt=Math.floor((MD().yf||3)*(S.part===2?MD().y2||1:1)+Math.random())+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.15?1:0)+(r.t==='sea'&&fosDone('whale')&&Math.random()<.2?1:0)+(r.t==='sea'?(perk('sea')&&Math.random()<pm()?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
     amt=wxAmt(amt,r.id);if(evtOn()&&S.evt.rid===r.id)amt*=2;
     S.res[r.res]=(S.res[r.res]||0)+amt;const m=Math.round(5*r.diff*Math.pow(expHP(r,g.i)/(MD().expBase*r.diff),.6)*(1+.15*setPow('joseon')));S.money+=m;
     if(vis&&!expPopped){ex.pop('+'+amt+' '+r.res,RES[r.res]);expPopped=1;sfx('pickup');}
@@ -1792,8 +1800,8 @@ function renderCraft(live){if(!live)setTimeout(()=>{const cur=document.querySele
   updatePreviewInfo();}
 function tierCard(){const dl=S.dl,g=dlGrade(dl),nx=dl+1;
   const pips=Array.from({length:DSTEP},(_,i)=>`<i class="${i<dlStep(dl)?'f':''}"></i>`).join('');
-  const ladder=GRADE_T.map((n,i)=>{const lo=i*DSTEP+1;return `<span class="${i+1<g?'done':i+1===g?'cur':lo>DLOPEN?'lock':''}">${n}<small>${lo}~${lo+DSTEP-1}</small></span>`;}).join('');
-  const head=`<div class="th"><div><div class="tk">드릴 Lv.${dl} / ${DLMAX} · ${GRADE_TG[g-1]} 구간</div><div class="tn">${GRADE_T[g-1]} <span class="tpips">${pips}</span></div></div><div class="tm">본공 굴착력<br>×${fmtN(dlMul(dl))}</div></div><div class="ladder" id="ladder">${ladder}</div>`;
+  const ladder=GRADE_T.slice(0,Math.ceil(DLOPEN/DSTEP)).map((n,i)=>{const lo=i*DSTEP+1;return `<span class="${i+1<g?'done':i+1===g?'cur':lo>DLOPEN?'lock':''}">${n}<small>${lo}~${lo+DSTEP-1}</small></span>`;}).join('');
+  const head=`<div class="th"><div><div class="tk">드릴 Lv.${dl} / ${DLOPEN} · ${GRADE_TG[g-1]} 구간</div><div class="tn">${GRADE_T[g-1]} <span class="tpips">${pips}</span></div></div><div class="tm">본공 굴착력<br>×${fmtN(dlMul(dl))}</div></div><div class="ladder" id="ladder">${ladder}</div>`;
   if(dl>=DLOPEN)return `<div class="tier ready">${head}<p class="sub" style="margin:0">${S.mode==='hard'?'무한 10단계 달성! 드릴이 완전히 진화했어요.':'보통 모드 최고 단계(마스터 10) 달성! 그랜드마스터부터 무한까지는 엔딩 후 하드 모드에서 열려요.'}</p></div>`;
   const req=dlPartReq(nx),cost=dlCost(nx),ok=PARTS.filter(p=>L(p.id)>=req).length,all=ok===PARTS.length,money=S.money>=cost,promo=dlStep(nx)===1,un=LAY.find(l=>l.req===nx);
   return `<div class="tier ${all&&money?'ready':''}">${head}
@@ -4043,6 +4051,35 @@ function crowd(y,n,seed=3){return Array.from({length:n},(_,i)=>{const x=8+i*(304
   return `<g>${EA('translate',`0 0;0 ${-1.5-hsh(i,seed+2)*2};0 0`,(.6+hsh(i,seed+4)*.6).toFixed(2))}<circle cx="${x}" cy="${y-h}" r="5.4" fill="#e8c4a0"/><path d="M${x-6},${y} V${y-h+8} Q${x},${y-h+3} ${x+6},${y-h+8} V${y}Z" fill="${c}"/>${hsh(i,seed+5)>.6?`<path d="M${x+5},${y-h+10} l6,-10" stroke="${c}" stroke-width="3" stroke-linecap="round"/>`:''}</g>`;}).join('');}
 const flashes=n=>Array.from({length:n},(_,i)=>`<circle cx="${(20+hsh(i,31)*280).toFixed(0)}" cy="${(90+hsh(i,33)*40).toFixed(0)}" r="6" fill="#fff"><animate attributeName="opacity" values="0;0;1;0" dur="${(1.2+hsh(i,35)*1.4).toFixed(1)}s" begin="${(hsh(i,37)*2).toFixed(1)}s" repeatCount="indefinite"/></circle>`).join('');
 const EART={
+ // ---- part 1 endings (Earth's centre, 6,371km) ----
+ p1b1:()=>SV(u=>`<rect width="320" height="200" fill="#1a0604"/><circle cx="160" cy="110" r="120" fill="#f6c76a" opacity=".25"/><circle cx="160" cy="110" r="70" fill="#ffd56a" opacity=".5"><animate attributeName="r" values="64;78;64" dur="1s" repeatCount="indefinite"/></circle>
+   ${miniDrill(160,96,1.1)}${[0,1,2,3,4].map(i=>`<path d="M${146+i*7},${118} q2,10 0,${14+i*3}" stroke="#ffb03a" stroke-width="3" stroke-linecap="round" fill="none"><animate attributeName="d" values="M${146+i*7},118 q2,10 0,${14+i*3};M${146+i*7},118 q-2,14 0,${22+i*3};M${146+i*7},118 q2,10 0,${14+i*3}" dur="${(1+i*.2).toFixed(1)}s" repeatCount="indefinite"/></path>`).join('')}
+   <text x="160" y="30" text-anchor="middle" font-size="13" font-weight="900" fill="#ffd56a">핵 온도 5,400℃ · 드릴 비트 녹는 중</text>`),
+ p1b2:()=>SV(u=>`<rect width="320" height="200" fill="#1c0a0a"/>${[0,1,2].map(i=>`<rect x="${20+i*100}" y="30" width="80" height="54" rx="4" fill="#2a1414" stroke="#ff4a3a" stroke-width="2"><animate attributeName="stroke-opacity" values="1;.2;1" dur=".6s" begin="${i*.2}s" repeatCount="indefinite"/></rect><text x="${60+i*100}" y="62" text-anchor="middle" font-size="11" font-weight="800" fill="#ff7a6a">${['자기장 이상','위성 신호 끊김','나침반 오류'][i]}</text>`).join('')}
+   <rect x="0" y="0" width="320" height="200" fill="#ff2a1a" opacity=".12"><animate attributeName="opacity" values=".04;.2;.04" dur=".8s" repeatCount="indefinite"/></rect>${fig(ME(),160,196,100,{expr:'shock'})}`),
+ p1b3:()=>SV(u=>`<rect width="320" height="200" fill="#061226"/>${estars(40,11)}${[0,1,2].map(i=>`<path d="M-20,${70+i*14} Q80,${20+i*16} 160,${60+i*12} T340,${50+i*14}" stroke="${['#5affb0','#7ae0ff','#c08aff'][i]}" stroke-width="${16-i*4}" fill="none" opacity=".45"><animate attributeName="d" values="M-20,${70+i*14} Q80,${20+i*16} 160,${60+i*12} T340,${50+i*14};M-20,${60+i*14} Q90,${36+i*16} 170,${50+i*12} T340,${64+i*14};M-20,${70+i*14} Q80,${20+i*16} 160,${60+i*12} T340,${50+i*14}" dur="${3+i}s" repeatCount="indefinite"/></path>`).join('')}
+   <path d="M0,200 V150 h20 v-30 h16 v30 h12 v-50 h18 v50 h14 v-24 h20 v24 h18 v-60 h12 v60 h22 v-36 h16 v36 h20 v-46 h18 v46 h14 v-20 h22 v20 h20 v-54 h16 v54 h22 V200Z" fill="#0a1424"/>
+   <g transform="translate(272,40)"><circle r="18" fill="#ece6da" stroke="#5a4a3a" stroke-width="2"/><g><animateTransform attributeName="transform" type="rotate" values="0;360" dur="1.2s" repeatCount="indefinite"/><path d="M0,-14 L4,0 L0,14 L-4,0Z" fill="#c8302a"/></g></g>`),
+ p1b4:()=>SV(u=>`<rect width="320" height="200" fill="#20242c"/>${fig(ME(),160,190,120,{expr:'shock'})}<text x="160" y="28" text-anchor="middle" font-size="12" font-weight="800" fill="#ffd56a">"…그래도 여기서 멈출 순 없어. 반대편까지 간다!"</text>`),
+ p1t1:()=>SV(u=>`<radialGradient id="${u}g" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#fff6c8"/><stop offset=".4" stop-color="#f6c76a"/><stop offset="1" stop-color="#b04a2a"/></radialGradient><rect width="320" height="200" fill="url(#${u}g)"/>
+   ${Array.from({length:14},(_,i)=>`<circle cx="${(hsh(i,4)*320).toFixed(0)}" cy="${(hsh(i,5)*200).toFixed(0)}" r="${(1+hsh(i,6)*2.4).toFixed(1)}" fill="#fff"><animate attributeName="cy" values="${(hsh(i,5)*200).toFixed(0)};${(hsh(i,5)*200-30).toFixed(0)}" dur="${(2+hsh(i,7)*2).toFixed(1)}s" repeatCount="indefinite"/></circle>`).join('')}
+   <g>${EA('translate','0 0;0 -8;0 0','2.4')}<g transform="rotate(-12 160 120)">${fig(ME(),160,170,104,{expr:'happy'})}</g></g><text x="160" y="28" text-anchor="middle" font-size="13" font-weight="900" fill="#5a2a10">중력 0 · 지구 한가운데에서 둥실</text>`),
+ p1t2:()=>SV(u=>`<rect width="320" height="200" fill="#2a1e14"/>${[[110,120,30],[150,104,40],[196,124,28],[230,110,22]].map(([x,y,h])=>`<path d="M${x},${y} l10,-${h} l10,${h} l-10,${h*.4}Z" fill="#d8dce0" stroke="#7a8a94" stroke-width="1.4"/><path d="M${x+10},${y-h} V${y+h*.4}" stroke="#fff" stroke-width="1" opacity=".6"/>`).join('')}
+   <rect x="0" y="150" width="320" height="50" fill="#1a120c"/><text x="160" y="182" text-anchor="middle" font-size="12" font-weight="800" fill="#f2e6c8">내핵 철 결정 시료 · 인류 최초 채취</text>`),
+ p1t3:()=>SV(u=>`<rect width="320" height="200" fill="#ece6da"/><rect x="18" y="14" width="284" height="172" fill="#fbf8f2" stroke="#2b211c" stroke-width="1.5"/><text x="160" y="40" text-anchor="middle" font-family="serif" font-size="20" font-weight="900" fill="#1e1e24">THE WORLD TIMES</text><path d="M30,48 H290" stroke="#2b211c" stroke-width="2"/>
+   <text x="160" y="72" text-anchor="middle" font-size="15" font-weight="900" fill="#b3261e">인류 최초, 지구 중심 도달</text><rect x="36" y="84" width="110" height="86" fill="#d8d2c4"/>${fig(ME(),91,168,80,{expr:'happy'})}
+   ${[96,108,120,132,144,156].map(y=>`<path d="M158,${y} H${280-(y%3)*10}" stroke="#8a8478" stroke-width="3"/>`).join('')}`),
+ p1t4:()=>SV(u=>`<rect width="320" height="200" fill="#0b1422"/>${estars(30,2)}<circle cx="160" cy="100" r="74" fill="#2f6fa8" stroke="#0e1a24" stroke-width="2"/><circle cx="160" cy="100" r="40" fill="#d0732a"/><circle cx="160" cy="100" r="16" fill="#f6c76a"/>
+   <path d="M160,26 V100" stroke="#fff6c8" stroke-width="3"/><path d="M160,100 V174" stroke="#7cf0ff" stroke-width="3" stroke-dasharray="6 5"><animate attributeName="stroke-dashoffset" values="0;-11" dur=".6s" repeatCount="indefinite"/></path>
+   <circle cx="160" cy="100" r="5" fill="#fff"/><text x="246" y="180" text-anchor="middle" font-size="11" font-weight="800" fill="#7cf0ff">다음 목표: 우루과이 앞바다</text><text x="246" y="194" text-anchor="middle" font-size="10" fill="#93a0a2">12,742km</text>`),
+ p1h1:()=>SV(u=>`<rect width="320" height="200" fill="#9fd6f2"/><rect x="0" y="150" width="320" height="50" fill="#6aa850"/>${[70,130,190].map((x,i)=>`<path d="M${x-18},150 L${x-12},70 H${x+12} L${x+18},150Z" fill="#dfe4e8" stroke="#8a949c" stroke-width="1.5"/>${[0,1,2].map(k=>`<circle cx="${x}" cy="66" r="${10+k*4}" fill="#fff" opacity=".7"><animate attributeName="cy" values="66;20" dur="${2+k*.5}s" begin="${k*.6+i*.3}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;0" dur="${2+k*.5}s" begin="${k*.6+i*.3}s" repeatCount="indefinite"/></circle>`).join('')}`).join('')}
+   <rect x="232" y="104" width="70" height="46" fill="#f4f2ee" stroke="#8a949c"/><text x="267" y="132" text-anchor="middle" font-size="10" font-weight="800" fill="#b3261e">지열발전</text>`),
+ p1h2:()=>SV(u=>`<rect width="320" height="200" fill="#0c1426"/>${estars(20,9)}<path d="M0,200 V120 h24 v-40 h18 v40 h16 v-70 h22 v70 h16 v-30 h22 v30 h16 v-84 h18 v84 h24 v-50 h20 v50 h22 v-60 h18 v60 h18 v-36 h22 v36 h24 V200Z" fill="#1c2638"/>
+   ${Array.from({length:60},(_,i)=>`<rect x="${(10+hsh(i,3)*300).toFixed(0)}" y="${(60+hsh(i,4)*130).toFixed(0)}" width="3" height="4" fill="#ffd56a"><animate attributeName="opacity" values="0;1" dur=".4s" begin="${(hsh(i,5)*2).toFixed(1)}s" fill="freeze"/></rect>`).join('')}<text x="160" y="30" text-anchor="middle" font-size="12" font-weight="800" fill="#ffd56a">전기 요금 0원 · 대한민국 에너지 독립</text>`),
+ p1h3:()=>SV(u=>`<rect width="320" height="200" fill="#10141a"/><path d="M20,170 H300 M20,170 V30" stroke="#5a6a74" stroke-width="1.5"/><path d="M24,160 L70,150 L110,152 L150,120 L190,110 L230,70 L270,40 L296,24" stroke="#ff4a3a" stroke-width="3.4" fill="none" stroke-linejoin="round"><animate attributeName="stroke-dasharray" values="0 500;500 0" dur="2s" fill="freeze"/></path>
+   <text x="160" y="190" text-anchor="middle" font-size="12" font-weight="800" fill="#ffd56a">트리파논 에너지 · 연일 상한가</text>`),
+ p1h4:()=>SV(u=>`<rect width="320" height="200" fill="#2a2018"/>${crowd(200,14,7)}${fig(ME(),160,170,100,{expr:'happy'})}${Array.from({length:24},(_,i)=>`<rect x="${(hsh(i,2)*320).toFixed(0)}" y="-10" width="5" height="8" fill="${['#ff6b8a','#ffd56a','#7bd88f','#7cc6e6'][i%4]}"><animate attributeName="y" values="-10;210" dur="${(2+hsh(i,3)*2).toFixed(1)}s" begin="${(hsh(i,4)*2).toFixed(1)}s" repeatCount="indefinite"/></rect>`).join('')}
+   <text x="160" y="26" text-anchor="middle" font-size="13" font-weight="900" fill="#ffd56a">"반대편까지 가 봅시다. 투자는 저희가!"</text>`),
  doom1:()=>SV(u=>`<rect width="320" height="200" fill="#05070c"/>${estars(30)}<circle cx="160" cy="100" r="88" fill="#5a5650"/><circle cx="160" cy="100" r="84" fill="#9a3f1c"/><circle cx="160" cy="100" r="54" fill="#d0732a"/><circle cx="160" cy="100" r="30" fill="#f6c76a"><animate attributeName="r" values="28;34;28" dur="1s" repeatCount="indefinite"/></circle>
    <path d="M156,12 H164 V188 H156Z" fill="#0a0807"/><path d="M160,100 V190" stroke="#fff6c8" stroke-width="4" opacity=".8"><animate attributeName="opacity" values=".3;1;.3" dur=".5s" repeatCount="indefinite"/></path>${miniDrill(160,176,.7,0,180)}
    <circle cx="160" cy="192" r="10" fill="#fff6c8" opacity=".7"><animate attributeName="r" values="6;22;6" dur=".8s" repeatCount="indefinite"/></circle>`),
@@ -4090,18 +4127,26 @@ const EART={
    ${Array.from({length:8},(_,i)=>`<path d="M0,-3 L.8,-.8 L3,0 L.8,.8 L0,3 L-.8,.8 L-3,0 L-.8,-.8Z" fill="#fff6c8" transform="translate(${40+hsh(i,3)*240},${20+hsh(i,5)*160})"><animate attributeName="opacity" values="0;1;0" dur="1.6s" begin="${(hsh(i,7)*1.6).toFixed(1)}s" repeatCount="indefinite"/></path>`).join('')}<text x="160" y="196" text-anchor="middle" font-size="12" font-weight="800" fill="#7bd88f" letter-spacing="2">HAPPY END · 세계 부호</text>`),
 };
 const ENDS={
- doom:{n:'지구 멸망',tag:'BAD END',sc:[['doom1','본공 · 지구 중심','지구 중심을 지나 반대편 지각까지 뚫는 순간, 아다마스 드릴이 멈추지 않았다…'],['doom2','관제실','"드릴이 반대편으로 튀어나갔습니다! 그대로… 우주로 날아가고 있어요!"'],['doom3','긴급 속보','뚫린 구멍을 따라 균열이 번지더니, 지구가 반으로 갈라지기 시작했다.'],['doom4','나','…너무 깊이 팠나 봐.']]},
- record:{n:'세계 기록',tag:'TRUE END',sc:[['rec1','지구 반대편','우루과이 몬테비데오 광장 한복판에서 땅이 솟아오르고, 드릴이 고개를 내밀었다.'],['rec2','몬테비데오 시민들','"¡Increíble! 사람이 땅속에서 나왔어!" 순식간에 인파가 몰려들었다.'],['rec3','세계 방송','각국 방송사 카메라가 줄지어 섰다. "한국 시추사, 인류 최초로 지구를 관통하다!"'],['rec4','공식 인증','양구에서 출발해 12,742km. 인증서에 또렷이 새겨진 이름 — 지구를 관통한 최초의 시추사로 세계 기록에 공식 등재되었다.']]},
- rich:{n:'세계 부호',tag:'HAPPY END',sc:[['rich1','투자자 회의','"이 구멍, 그냥 두기엔 아깝습니다." 뚫린 구멍을 보강해 지구 관통 고속 철도를 놓기로 했다.'],['rich2','GTX 지구선 개통','중력으로 떨어지듯 달리는 지구 관통 급행. 서울에서 지구 반대편까지 단 42분.'],['rich3','증권가','운임 수익이 폭발하고 트리파논 주가는 연일 상한가를 찍었다.'],['rich4','올해의 인물','지구를 뚫은 시추사는 이제 세계 최고 부호. 다음 목표는… 달?']]},
+ p1bad:{part:1,n:'자기장 붕괴',tag:'BAD END',sc:[['p1b1','지구 중심','지구 중심에 닿는 순간, 5,400℃의 열이 드릴 비트를 녹이기 시작했다.'],['p1b2','관제실','"자기장 수치가 요동칩니다! 위성 신호가 끊겼어요!"'],['p1b3','그날 밤 서울','하늘 가득 오로라가 번지고, 세상의 나침반이 미친 듯이 돌았다.'],['p1b4','나','…너무 서둘렀나 봐. 그래도 여기서 멈출 순 없어.']]},
+ p1true:{part:1,n:'지구 중심 도달',tag:'TRUE END',sc:[['p1t1','지구 한가운데','중력이 사라졌다. 모든 방향이 위이고, 모든 방향이 아래인 곳.'],['p1t2','내핵','반짝이는 철 결정 시료를 캡슐에 담았다. 인류가 처음 손에 쥔 지구의 심장.'],['p1t3','세계 언론','"한국 시추사, 인류 최초로 지구 중심 도달" — 오래 모은 유물과 화석이 그 길을 증명했다.'],['p1t4','나','여기가 절반이다. 진짜 목표는 반대편, 우루과이 앞바다.']]},
+ p1happy:{part:1,n:'지열 발전소',tag:'HAPPY END',sc:[['p1h1','양구 국토정중앙','지구 중심까지 뚫린 구멍에서 끝없는 지열이 솟구친다. 세계 최대 지열 발전소가 들어섰다.'],['p1h2','대한민국','전국의 불이 공짜 전기로 켜졌다. 에너지 독립의 날.'],['p1h3','증권가','트리파논 에너지 주가는 연일 상한가. 투자자들이 줄을 섰다.'],['p1h4','투자자 회의','"반대편까지 가 봅시다. 이번에도 투자는 저희가!"']]},
+ doom:{part:2,n:'지구 멸망',tag:'BAD END',sc:[['doom1','본공 · 지구 중심','지구 중심을 지나 반대편 지각까지 뚫는 순간, 아다마스 드릴이 멈추지 않았다…'],['doom2','관제실','"드릴이 반대편으로 튀어나갔습니다! 그대로… 우주로 날아가고 있어요!"'],['doom3','긴급 속보','뚫린 구멍을 따라 균열이 번지더니, 지구가 반으로 갈라지기 시작했다.'],['doom4','나','…너무 깊이 팠나 봐.']]},
+ record:{part:2,n:'세계 기록',tag:'TRUE END',sc:[['rec1','지구 반대편','우루과이 몬테비데오 광장 한복판에서 땅이 솟아오르고, 드릴이 고개를 내밀었다.'],['rec2','몬테비데오 시민들','"¡Increíble! 사람이 땅속에서 나왔어!" 순식간에 인파가 몰려들었다.'],['rec3','세계 방송','각국 방송사 카메라가 줄지어 섰다. "한국 시추사, 인류 최초로 지구를 관통하다!"'],['rec4','공식 인증','양구에서 출발해 12,742km. 인증서에 또렷이 새겨진 이름 — 지구를 관통한 최초의 시추사로 세계 기록에 공식 등재되었다.']]},
+ rich:{part:2,n:'세계 부호',tag:'HAPPY END',sc:[['rich1','투자자 회의','"이 구멍, 그냥 두기엔 아깝습니다." 뚫린 구멍을 보강해 지구 관통 고속 철도를 놓기로 했다.'],['rich2','GTX 지구선 개통','중력으로 떨어지듯 달리는 지구 관통 급행. 서울에서 지구 반대편까지 단 42분.'],['rich3','증권가','운임 수익이 폭발하고 트리파논 주가는 연일 상한가를 찍었다.'],['rich4','올해의 인물','지구를 뚫은 시추사는 이제 세계 최고 부호. 다음 목표는… 달?']]},
 };
 const ENDK=Object.keys(ENDS);let endCur=null,endI=0;
-function openEnding(k){S.ends=S.ends||[];const auto=!k;if(!k){const pool=ENDK.filter(x=>!S.ends.includes(x));k=(pool.length?pool:ENDK)[Math.floor(Math.random()*(pool.length?pool:ENDK).length)];}
-  endCur=k;endI=0;if(!S.ends.includes(k))S.ends.push(k);S.endDone=true;if(auto)recordRun(k);save();$('#ending').hidden=false;endScene();}
+const ENDP=p=>ENDK.filter(k=>ENDS[k].part===p);
+// which ending: scholar path (relics + fossils) -> TRUE, investor path (investment rounds) -> HAPPY, neither -> BAD
+function endScores(){const sch=relicCount()/RELICS.length+FOSSILS.filter(f=>fosDone(f.id)).length/FOSSILS.length,ty=Object.values(S.ir||{}).reduce((a,b)=>a+b,0)/(S.part===2?60:35);return {sch,ty};}
+function endPick(){const {sch,ty}=endScores(),p=S.part===2?2:1,K=p===1?['p1bad','p1true','p1happy']:['doom','record','rich'];if(sch>=.5&&sch>=ty)return K[1];if(ty>=.5)return K[2];return K[0];}
+function openEnding(k){S.ends=S.ends||[];const auto=!k;if(!k)k=endPick();
+  endCur=k;endI=0;if(!S.ends.includes(k))S.ends.push(k);S.endDone=true;if(auto){recordRun(k);if(ENDS[k].part===2&&S.mode==='normal')S.hardOK=true;}save();$('#ending').hidden=false;endScene();}
 function endScene(){const E=ENDS[endCur];
-  if(endI>=E.sc.length){const got=S.ends.length;
-    $('#eDots').innerHTML='';$('#eArtE').innerHTML=`<div class="endsum"><div class="etag">${E.tag}</div><h2>${E.n}</h2><p>엔딩 수집 ${got}/${ENDK.length}</p>
-      <div class="elist">${ENDK.map(x=>`<button type="button" class="${S.ends.includes(x)?'seen':''}" data-end="${x}" ${S.ends.includes(x)?'':'disabled'}><b>${ENDS[x].tag}</b>${S.ends.includes(x)?ENDS[x].n:'???'}</button>`).join('')}</div>
-      <p class="sub">${got<ENDK.length?'타이틀에서 새 게임 모드를 고르고 다시 지구를 뚫으면 아직 못 본 엔딩이 나와요. 하드 모드가 열렸어요!':'모든 엔딩을 봤어요! 다음 회차는 무작위 엔딩이 나와요.'}</p>
+  if(endI>=E.sc.length){const got=S.ends.length,p1=E.part===1,{sch,ty}=endScores();
+    $('#eDots').innerHTML='';$('#eArtE').innerHTML=`<div class="endsum"><div class="etag">${p1?'1부':'2부'} · ${E.tag}</div><h2>${E.n}</h2><p>엔딩 수집 ${got}/${ENDK.length}</p>
+      ${[1,2].map(pp=>`<div class="elist"><b style="grid-column:1/-1;font-size:12px;color:var(--mute)">${pp}부 · ${pp===1?'지구 중심':'지구 반대편'}</b>${ENDP(pp).map(x=>`<button type="button" class="${S.ends.includes(x)?'seen':''}" data-end="${x}" ${S.ends.includes(x)?'':'disabled'}><b>${ENDS[x].tag}</b>${S.ends.includes(x)?ENDS[x].n:'???'}</button>`).join('')}</div>`).join('')}
+      <p class="sub">엔딩은 플레이 방식으로 정해져요 · <b>TRUE</b>: 유물·화석을 많이 모으면(조건 달성 ${Math.round(Math.min(1,sch/.5)*100)}%) · <b>HAPPY</b>: 투자 라운드를 많이 받으면(조건 달성 ${Math.round(Math.min(1,ty/.5)*100)}%) · <b>BAD</b>: 둘 다 부족하면</p>
+      ${p1?`<button class="primary" type="button" id="endP2" style="width:100%;margin:6px 0">2부 시작 · 지구 반대편(12,742km)으로</button>`:(S.mode==='normal'?'<p class="sub" style="color:#7bd88f">보통 모드 1·2부 완주! 타이틀에서 하드 모드가 열렸어요.</p>':'')}
       ${S.lastRec&&S.lastRec.end===endCur?`<div class="rnow" style="width:100%"><span>${escH(S.lastRec.name)} · ${MODES[S.lastRec.mode].n} 모드 · ${S.lastRec.days}일 만에 완주</span><b>${S.lastRec.score.toLocaleString('ko-KR')}점</b></div>`:''}
       <div class="ebtns"><button class="primary" type="button" id="endNew">타이틀로</button><button class="ghost" type="button" id="endClose">계속 둘러보기</button></div></div>`;
     $('#eWho').textContent='엔딩';$('#eText').textContent=`${E.tag} · ${E.n}`;$('#eNext').textContent='';return;}
@@ -4111,7 +4156,11 @@ $('#eBox').addEventListener('click',()=>{if(endCur&&endI<ENDS[endCur].sc.length)
 $('#eSkip').addEventListener('click',()=>{if(endCur){endI=ENDS[endCur].sc.length;endScene();}});
 $('#eArtE').addEventListener('click',e=>{const b=e.target.closest('[data-end]');if(b&&!b.disabled){endCur=b.dataset.end;endI=0;endScene();return;}
   if(e.target.closest('#endClose')){$('#ending').hidden=true;return;}
-  if(e.target.closest('#endNew')){$('#ending').hidden=true;openTitleModes();}});
+  if(e.target.closest('#endNew')){$('#ending').hidden=true;openTitleModes();}
+  if(e.target.closest('#endP2'))startPart2();});
+// part 2: keep everything, open the higher part/drill caps and head for the far side
+function startPart2(){if(S.part===2)return;S.part=2;S.done=false;S.endDone=false;applyMode();buildGauge();save();$('#ending').hidden=true;show('bore');
+  toast(`2부 시작! 지구 반대편 우루과이 앞바다까지 ${fmtD(CORE)} · 부품 Lv.${MAXLV} · 드릴 Lv.${DLOPEN}까지 열림`);}
 function endingTick(){if(S.done&&!S.endDone&&!titleOn&&$('#ending').hidden&&$('#story').hidden)openEnding();}
 
 // ---------------- name, score, modes ----------------
@@ -4134,9 +4183,9 @@ function renderRec(){const rs=S.records||[];
     <h3 class="h3" style="margin:14px 0 4px">완주 기록</h3>${rs.length?`<table class="rect"><tr><th>#</th><th>이름</th><th>모드</th><th>점수</th><th>기간</th><th>엔딩</th></tr>${rs.map((r,i)=>`<tr><td>${i+1}</td><td>${escH(r.name)}</td><td class="modechip ${r.mode==='hard'?'hard':''}">${MODES[r.mode].n}</td><td class="sc">${r.score.toLocaleString('ko-KR')}</td><td>${r.days}일</td><td>${ENDS[r.end]?ENDS[r.end].n:'-'}</td></tr>`).join('')}</table>`:'<p class="sub">아직 완주 기록이 없어요. 지구를 관통하면 점수가 기록돼요.</p>'}`;}
 $('#recClose').addEventListener('click',()=>$('#recDlg').hidden=true);
 function openTitleModes(){S.needMode=true;save();titleOn=true;$('#title').hidden=false;syncTitle();}
-function syncTitle(){const nm=!!S.needMode;$('#tStart').hidden=nm;$('#tModes').hidden=!nm;const hard=document.querySelector('.tmode.hard'),ok=(S.ends||[]).length>0;
-  hard.disabled=!ok;$('#tHardTxt').textContent=ok?'엔딩까지 약 1달 · 부품 20단계 · 드릴 무한(Lv.100)까지':'🔒 엔딩을 한 번 보면 열려요';}
-function startRun(mode){Object.assign(S,{mode,money:0,res:{},parts:{},dl:1,depth:0,done:false,endDone:false,ex:{active:null,dig:{}},inv:{},ir:{},irN:[],boost:{m:1,until:0},unl:REG.filter(r=>r.un<=0).map(r=>r.id),st:{exp:0,sea:0},shopDay:null,evt:null,needMode:false,runStart:Date.now(),ng:(S.ng||1)+1});
+function syncTitle(){const nm=!!S.needMode;$('#tStart').hidden=nm;$('#tModes').hidden=!nm;const hard=document.querySelector('.tmode.hard'),ok=!!S.hardOK||S.mode==='hard';
+  hard.disabled=!ok;$('#tHardTxt').textContent=ok?'1부 약 3주 + 2부 · 부품 26단계 · 드릴 Lv.140까지':'🔒 보통 모드 1부·2부를 모두 끝내면 열려요';}
+function startRun(mode){Object.assign(S,{mode,part:1,money:0,res:{},parts:{},dl:1,depth:0,done:false,endDone:false,ex:{active:null,dig:{}},inv:{},ir:{},irN:[],boost:{m:1,until:0},unl:REG.filter(r=>r.un<=0).map(r=>r.id),st:{exp:0,sea:0},shopDay:null,evt:null,needMode:false,runStart:Date.now(),ng:(S.ng||1)+1});
   applyMode();save();closeTitle();show('map');toast(`${S.ng}회차 · ${MD().n} 모드 시작! 다시 지구 중심을 향해`);}
 $('#tModes').addEventListener('click',e=>{const b=e.target.closest('[data-mode]');if(!b||b.disabled)return;startRun(b.dataset.mode);});
 // ---------------- double-material event ----------------
@@ -4218,13 +4267,13 @@ function hud(){
     if(k!==mapInfoKey){mapInfoKey=k;$('#mapInfo').innerHTML=k;}}
   if(view==='bore'&&!exp){const m=S.depth,bm=boostM(),l=layerAt(m),sp=boreDps()/l.H;
     $('#bDepth').textContent=fmtD(m);updateGauge();
-    $('#bLayer').textContent=l.n+' · 지구 중심까지 '+fmtD(CORE-m);
+    $('#bLayer').textContent=l.n+' · '+(S.part===2?'지구 반대편까지 ':'지구 중심까지 ')+fmtD(GOAL()-m);
     $('#bSeg').style.width=(Math.min(1,(m-l.from)/(l.to-l.from))*100).toFixed(1)+'%';
     $('#bRate').textContent='굴착력 '+fmtN(boreDps())+' · '+(gateAt()?'정지':sp>=1?'초당 '+fmtN(sp)+'m':'분당 '+fmtN(sp*60)+'m')+' · 강타 '+Math.round(critP()*100)+'%';
     const nx=MILES.find(x=>x.d>m);$('#bNext').textContent=nx?nx.n.split(' (')[0]+'까지 '+fmtD(nx.d-m):'';
     $('#bTier').textContent=tierName()+' · 본공 ×'+fmtN(dlMul(S.dl));
     const g=gateAt(),gt=$('#bGate');
-    if(S.done){gt.hidden=false;gt.className='gate win';gt.textContent='지구 관통 완료! 여기를 누르면 엔딩과 새 회차를 볼 수 있어요.';gt.onclick=()=>{if(endCur==null)endCur=(S.ends||[])[S.ends.length-1]||'record';endI=99;$('#ending').hidden=false;endI=ENDS[endCur].sc.length;endScene();};}
+    if(S.done){gt.hidden=false;gt.className='gate win';gt.textContent=S.part===2?'지구 관통 완료! 여기를 누르면 엔딩과 새 회차를 볼 수 있어요.':'지구 중심 도달! 여기를 누르면 1부 엔딩과 2부 시작을 볼 수 있어요.';gt.onclick=()=>{if(endCur==null)endCur=(S.ends||[]).filter(k=>ENDS[k]&&ENDS[k].part===(S.part===2?2:1)).pop()||endPick();endI=99;$('#ending').hidden=false;endI=ENDS[endCur].sc.length;endScene();};}
     else if(g){gt.hidden=false;gt.className='gate';gt.textContent='굴착 정지 · '+g.gate+' — 드릴 Lv.'+g.req+' ('+dlName(g.req)+') 필요 (제작 탭, 모든 부품 Lv'+dlPartReq(g.req)+')';}
     else gt.hidden=true;
     {const w=homeWx(),g=Math.round(Math.min(0,wxG(w))*.7),el=$('#bWx'),k=w.id+g;if(el&&el.dataset.k!==k){el.dataset.k=k;el.innerHTML=`<svg class="bwxi" viewBox="-11 -11 22 22" width="22" height="22" aria-hidden="true"><circle r="10.5" fill="rgba(14,19,21,.8)" stroke="rgba(255,255,255,.35)" stroke-width=".8"/>${wxIcon(w.id)}</svg><span>양구 ${w.n} · ${g?`굴착 ${g}% · 강타 ${Math.round(Math.min(0,wxG(w))*1.5)}%`:'굴착·강타 영향 없음'}</span>`;}}
