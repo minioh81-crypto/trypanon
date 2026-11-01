@@ -1687,6 +1687,8 @@ function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.st
    case 'levelup':[60,64,67,72,76,79].forEach((n,i)=>tone({f:NOTE(n),t:now+i*.08,d:.35,type:'square',v:.07,lp:3000}));tone({f:NOTE(84),t:now+.5,d:.9,type:'triangle',v:.14,rev:1});break;
    case 'craft':tone({f:300,f2:900,d:.18,type:'sawtooth',v:.06,lp:2000});noise({f:3000,q:2,d:.15,v:.08,t:now+.12});tone({f:NOTE(84),t:now+.18,d:.4,type:'triangle',v:.12});break;
    case 'event':[67,71,74,79].forEach((n,i)=>tone({f:NOTE(n),t:now+i*.09,d:.3,type:'triangle',v:.12}));break;
+   case 'thunder':noise({f:180,ft:'lowpass',d:2.2,v:.5});noise({f:900,ft:'lowpass',d:.25,v:.35});tone({f:48,f2:30,d:1.6,v:.3});break;
+   case 'paper':noise({f:2200,q:.6,d:.08,v:.25});noise({f:1200,q:.6,t:now+.06,d:.1,v:.18});break;
    case 'rainbow':for(let i=0;i<10;i++)tone({f:NOTE(72+[0,2,4,7,9][i%5]+12*Math.floor(i/5)),t:now+i*.05,d:.6,type:'sine',v:.08,rev:1});break;
    case 'boost':tone({f:180,f2:900,d:.7,type:'sawtooth',v:.08,lp:1600});noise({f:800,ft:'lowpass',d:.8,v:.16});tone({f:60,f2:120,d:.7,v:.3});break;
    case 'yi':{// war drum rolls + gong + horn chord
@@ -3505,6 +3507,11 @@ function l3EnvInit(){const E=L3.env={},sc=L3.scene;
   E.RG=[];for(let i=0;i<24;i++){const m=new THREE.Mesh(new THREE.RingGeometry(.03,.045,14),new THREE.MeshBasicMaterial({color:'#e8f6ff',transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}));m.rotation.x=-Math.PI/2;sc.add(m);E.RG.push({m,l:0});}E.rgi=0;
   E.FN=380;{const gm=new THREE.BufferGeometry();gm.setAttribute('position',new THREE.BufferAttribute(new Float32Array(E.FN*3),3));E.snowP=new THREE.Points(gm,new THREE.PointsMaterial({color:'#ffffff',size:.06,transparent:true,opacity:.95}));E.snowP.frustumCulled=false;sc.add(E.snowP);E.fl=[];}
   E.deb=[];{const cols=['#d9822a','#c9a03a','#8a5a2c','#7bb04a','#e8e2d0','#f4f2ee','#b8c2c8'];for(let i=0;i<34;i++){const trash=i%5===4,m=new THREE.Mesh(trash?new THREE.PlaneGeometry(.16,.12):new THREE.CircleGeometry(.075,5),new THREE.MeshLambertMaterial({color:cols[trash?4+i%3:i%4],side:THREE.DoubleSide}));m.scale.y=trash?1:.6;m.visible=false;sc.add(m);E.deb.push({m,x:0,y:0,z:0,s:Math.random()*10,trash});}}
+  E.bolt=new THREE.PointLight('#dfe8ff',0,60);E.bolt.position.set(0,12,0);sc.add(E.bolt);E.boltT=2;
+  // the newspaper that slaps the hero in the face on windy days
+  {const tx=texFromCanvas(128,96,c=>{c.fillStyle='#f2efe6';c.fillRect(0,0,128,96);c.fillStyle='#1e1e24';c.font='bold 14px serif';c.fillText('양구일보',8,18);c.fillRect(8,24,112,2);
+      c.fillStyle='#8a8478';for(let y=32;y<90;y+=7)c.fillRect(8,y,y<60?54:112,3);c.fillStyle='#b8b2a6';c.fillRect(68,32,52,26);});
+    E.paper=new THREE.Mesh(new THREE.PlaneGeometry(.42,.32,4,1),new THREE.MeshLambertMaterial({map:tx,side:THREE.DoubleSide}));E.paper.visible=false;sc.add(E.paper);E.pst=null;E.pT=12;}
   E.snowL=new THREE.DirectionalLight('#ffffff',0);E.snowL.position.set(0,10,0);sc.add(E.snowL);E.snow=0;}
 // surface height under a point (tile tops from each placed model's bounding box), used for rain splashes and snow landing
 function l3Height(x,z){const H=L3.hmap;if(!H)return 0;const gx=Math.floor(x+L3.N/2),gz=Math.floor(z+L3.N/2);return H[gx+','+gz]||0;}
@@ -3545,9 +3552,18 @@ function l3EnvTick(dt){const E=L3.env;if(!E)return;const now=new Date(),h=now.ge
     for(let i=0;i<E.FN;i++){const f2=E.fl[i];if(i>=n){P[i*3+1]=-99;continue;}f2.y-=(bliz?1.4:.7)*dt;f2.x+=(Math.sin(t*1.3+f2.p)*.25+(bliz?.9:0))*dt;if(f2.x>half)f2.x=-half;
       if(f2.y<=l3Height(f2.x,f2.z)){f2.x=(Math.random()*2-1)*half;f2.z=(Math.random()*2-1)*half;f2.y=6+Math.random()*2;}P[i*3]=f2.x;P[i*3+1]=f2.y;P[i*3+2]=f2.z;}E.snowP.geometry.attributes.position.needsUpdate=true;}
   // wind: trees lean (L3.wind read by their animations) and leaves / paper litter tumble across the yard
-  const WIND={wind:.55,gale:1,storm:1,bliz:.9,hrain:.6,rain:.25};L3.wind=(L3.wind||0)+((WIND[w.id]||0)-(L3.wind||0))*Math.min(1,dt*.8);const wd=L3.wind,nDeb=Math.round(wd*E.deb.length);
+  const WIND={wind:.55,gale:1,storm:1,bliz:.9,hrain:.6,rain:.25};L3.wind=(L3.wind||0)+((WIND[w.id]||0)-(L3.wind||0))*Math.min(1,dt*.8);const wd=L3.wind,nDeb=Math.round(wd*E.deb.length*.4);
   E.deb.forEach((d,i)=>{if(i>=nDeb){d.m.visible=false;return;}if(!d.m.visible||d.x>half+1){d.x=-half-1-Math.random()*2;d.z=(Math.random()*2-1)*half;d.y=.05+Math.random()*.6;d.m.visible=true;}
     d.s+=dt;d.x+=dt*(1.4+wd*2.6)*(d.trash?.8:1);d.y=Math.max(.03,d.y+Math.sin(d.s*3+i)*dt*.9-dt*.15);d.z+=Math.sin(d.s*1.7+i)*dt*.3;d.m.position.set(d.x,d.y,d.z);d.m.rotation.set(d.s*4+i,d.s*5,d.s*3);});
+  // thunderstorm lightning: whole-yard flash + rumble
+  if(w.id==='storm'){E.boltT-=dt;if(E.boltT<=0){E.boltT=3+Math.random()*6;E.boltK=1;if(typeof sfx==='function')sfx('thunder');}}if(E.boltK>0){E.boltK=Math.max(0,E.boltK-dt*2.2);E.bolt.intensity=(E.boltK>.6||(E.boltK>.25&&E.boltK<.4))?3.2*E.boltK:0;}else E.bolt.intensity=0;
+  // newspaper: on windy days a sheet sometimes flies in, sticks to the hero's face for a moment, then blows away
+  {const P=E.paper,me=L3.meSp;if(!E.pst){E.pT-=dt;if(wd>=.45&&me&&E.pT<=0){E.pT=18+Math.random()*25;E.pst={ph:0,t:0,x:-half-1,y:.9,z:me.position.z+(Math.random()-.5)*.6};P.visible=true;}}
+    if(E.pst&&me){const st=E.pst,cam=L3.cam.position,dx=cam.x-me.position.x,dz=cam.z-me.position.z,dl=Math.hypot(dx,dz)||1,fx=me.position.x+dx/dl*.14,fz=me.position.z+dz/dl*.14,fy=.8;st.t+=dt;
+      if(st.ph===0){const k=Math.min(1,st.t/1.4),e=k*k*(3-2*k);P.position.set(st.x+(fx-st.x)*e,st.y+(fy-st.y)*e+Math.sin(k*Math.PI)*.4,st.z+(fz-st.z)*e);P.rotation.set(st.t*5,st.t*3,st.t*4);if(k>=1){st.ph=1;st.t=0;if(typeof sfx==='function')sfx('paper');}}
+      else if(st.ph===1){P.position.set(fx,fy+Math.sin(st.t*14)*.01,fz);P.lookAt(cam.x,fy,cam.z);P.rotation.z=Math.sin(st.t*12)*.12;if(st.t>1.3){st.ph=2;st.t=0;}}
+      else{P.position.set(fx+st.t*3,fy+st.t*1.2+Math.sin(st.t*6)*.1,fz+Math.sin(st.t*2)*.3);P.rotation.set(st.t*6,st.t*4,st.t*5);if(st.t>2.2){E.pst=null;P.visible=false;}}}
+    else if(E.pst&&!me){E.pst=null;P.visible=false;}}
   // settled snow: a white ground sheet + a straight-down white light that frosts every upward-facing roof and ledge
   E.snowL.intensity=E.snow*.75;if(L3.snowSheet)L3.snowSheet.material.opacity=E.snow*.6;
   // sun / moon drawn as an overlay arc across the top of the land view (the 3D camera looks down, so a real sky body would never be in frame)
@@ -3585,7 +3601,7 @@ function l3Build(){const L0=landOf(),n=landSize(),li=LAND_SIZE.indexOf(n),Ns=Mat
     m.userData.tap={k:'item',v:k};root.add(m);}
   // my character and pets as camera-facing paper sprites
   const me=landMe();if(me.x>=0){const sp=svgSprite('me'+JSON.stringify(ME())+me.f,charG(ME(),{expr:'happy',flip:!!me.f,noShadow:true}),'-10 0 120 172',.95);const [wx,wz]=W(me.x+.5,me.y+.5);sp.position.set(wx,0,wz);sp.userData.tap={k:'me'};
-    root.add(sp);if(landPick==='me'){const ring=new THREE.Mesh(new THREE.RingGeometry(.32,.4,24),new THREE.MeshBasicMaterial({color:'#ffd56a'}));ring.rotation.x=-Math.PI/2;ring.position.set(wx,.01,wz);root.add(ring);}
+    root.add(sp);L3.meSp=sp;if(landPick==='me'){const ring=new THREE.Mesh(new THREE.RingGeometry(.32,.4,24),new THREE.MeshBasicMaterial({color:'#ffd56a'}));ring.rotation.x=-Math.PI/2;ring.position.set(wx,.01,wz);root.add(ring);}
     const sh=new THREE.Mesh(new THREE.CircleGeometry(.22,16),new THREE.MeshBasicMaterial({color:'#000',transparent:true,opacity:.22}));sh.rotation.x=-Math.PI/2;sh.position.set(wx,.005,wz);root.add(sh);}
   l3EnvBuild();const sz=Ns*.75+1.5;L3.sun.shadow.camera.left=-sz;L3.sun.shadow.camera.right=sz;L3.sun.shadow.camera.top=sz;L3.sun.shadow.camera.bottom=-sz;L3.sun.shadow.camera.updateProjectionMatrix();}
 function l3Mount(){const w=$('#lgWrap');if(!w)return;l3Init();w.insertBefore(L3.cv,w.firstChild);L3.on=true;l3Build();l3Size();}
