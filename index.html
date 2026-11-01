@@ -3511,7 +3511,7 @@ function l3EnvInit(){const E=L3.env={},sc=L3.scene;
   // the newspaper that slaps the hero in the face on windy days
   {const tx=texFromCanvas(128,96,c=>{c.fillStyle='#f2efe6';c.fillRect(0,0,128,96);c.fillStyle='#1e1e24';c.font='bold 14px serif';c.fillText('양구일보',8,18);c.fillRect(8,24,112,2);
       c.fillStyle='#8a8478';for(let y=32;y<90;y+=7)c.fillRect(8,y,y<60?54:112,3);c.fillStyle='#b8b2a6';c.fillRect(68,32,52,26);});
-    E.paper=new THREE.Mesh(new THREE.PlaneGeometry(.42,.32,4,1),new THREE.MeshLambertMaterial({map:tx,side:THREE.DoubleSide}));E.paper.visible=false;sc.add(E.paper);E.pst=null;E.pT=12;}
+    E.paper=new THREE.Mesh(new THREE.PlaneGeometry(.42,.32,4,1),new THREE.MeshLambertMaterial({map:tx,side:THREE.DoubleSide}));E.paper.visible=false;sc.add(E.paper);E.pst=null;E.pT=5;}
   E.snowL=new THREE.DirectionalLight('#ffffff',0);E.snowL.position.set(0,10,0);sc.add(E.snowL);E.snow=0;}
 // surface height under a point (tile tops from each placed model's bounding box), used for rain splashes and snow landing
 function l3Height(x,z){const H=L3.hmap;if(!H)return 0;const gx=Math.floor(x+L3.N/2),gz=Math.floor(z+L3.N/2);return H[gx+','+gz]||0;}
@@ -3558,10 +3558,10 @@ function l3EnvTick(dt){const E=L3.env;if(!E)return;const now=new Date(),h=now.ge
   // thunderstorm lightning: whole-yard flash + rumble
   if(w.id==='storm'){E.boltT-=dt;if(E.boltT<=0){E.boltT=3+Math.random()*6;E.boltK=1;if(typeof sfx==='function')sfx('thunder');}}if(E.boltK>0){E.boltK=Math.max(0,E.boltK-dt*2.2);E.bolt.intensity=(E.boltK>.6||(E.boltK>.25&&E.boltK<.4))?3.2*E.boltK:0;}else E.bolt.intensity=0;
   // newspaper: on windy days a sheet sometimes flies in, sticks to the hero's face for a moment, then blows away
-  {const P=E.paper,me=L3.meSp;if(!E.pst){E.pT-=dt;if(wd>=.45&&me&&E.pT<=0){E.pT=18+Math.random()*25;E.pst={ph:0,t:0,x:-half-1,y:.9,z:me.position.z+(Math.random()-.5)*.6};P.visible=true;}}
+  {const P=E.paper,me=L3.meSp;if(!E.pst){E.pT-=dt;if(wd>=.45&&me&&E.pT<=0){E.pT=5+Math.random()*5;E.pst={ph:0,t:0,x:-half-1,y:.9,z:me.position.z+(Math.random()-.5)*.6};P.visible=true;}}
     if(E.pst&&me){const st=E.pst,cam=L3.cam.position,dx=cam.x-me.position.x,dz=cam.z-me.position.z,dl=Math.hypot(dx,dz)||1,fx=me.position.x+dx/dl*.14,fz=me.position.z+dz/dl*.14,fy=.8;st.t+=dt;
       if(st.ph===0){const k=Math.min(1,st.t/1.4),e=k*k*(3-2*k);P.position.set(st.x+(fx-st.x)*e,st.y+(fy-st.y)*e+Math.sin(k*Math.PI)*.4,st.z+(fz-st.z)*e);P.rotation.set(st.t*5,st.t*3,st.t*4);if(k>=1){st.ph=1;st.t=0;if(typeof sfx==='function')sfx('paper');}}
-      else if(st.ph===1){P.position.set(fx,fy+Math.sin(st.t*14)*.01,fz);P.lookAt(cam.x,fy,cam.z);P.rotation.z=Math.sin(st.t*12)*.12;if(st.t>1.3){st.ph=2;st.t=0;}}
+      else if(st.ph===1){P.position.set(fx,fy+Math.sin(st.t*14)*.01,fz);P.lookAt(cam.x,fy,cam.z);P.rotation.z=Math.sin(st.t*12)*.12;if(st.t>2){st.ph=2;st.t=0;}}
       else{P.position.set(fx+st.t*3,fy+st.t*1.2+Math.sin(st.t*6)*.1,fz+Math.sin(st.t*2)*.3);P.rotation.set(st.t*6,st.t*4,st.t*5);if(st.t>2.2){E.pst=null;P.visible=false;}}}
     else if(E.pst&&!me){E.pst=null;P.visible=false;}}
   // settled snow: a white ground sheet + a straight-down white light that frosts every upward-facing roof and ledge
