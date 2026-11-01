@@ -15,7 +15,7 @@ function run(C,log=false){
   const can=c=>Object.entries(c).every(([k,v])=>k==='money'?S.money>=v:(S.res[k]||0)>=v);
   const pay=c=>{for(const[k,v]of Object.entries(c)){if(k==='money')S.money-=v;else S.res[k]-=v;}};
   const expHP=(r,i)=>r.t==='sea'&&i<r.water?2:C.expBase*r.diff*Math.pow(1+.1*(i-(r.water||0)),C.expGrow);
-  const yieldOf=(r,i)=>Math.max(2,Math.round(C.yBase*Math.pow(expHP(r,i)/(C.expBase*r.diff),C.yExp)))*(1+.08+.05*L('sensor'));
+  const yieldOf=(r,i)=>(C.yFlat?C.yFlat:Math.max(2,Math.round(C.yBase*Math.pow(expHP(r,i)/(C.expBase*r.diff),C.yExp))))*(1+.08+.05*L('sensor'));
   const INV=C.INV;let marks=[],lastDl=0,regCur=null,regHP=0;
   const dt=5;
   while(S.depth<6371000&&S.t<3e7){
@@ -24,7 +24,7 @@ function run(C,log=false){
     for(const v of INV)if(!S.inv[v.id]&&v.cond(S,L)){S.inv[v.id]=1;S.money+=v.amt*(C.inv||1);}
     if(C.yiCost&&!S.yi&&S.money>=C.yiCost){S.money-=C.yiCost;S.yi=1;S.yiAt=S.t;}
     if(C.rounds){const sumL=Object.values(S.parts).reduce((a,b)=>a+b,0),ra=(k,r)=>Math.max(200,k*dlCost(Math.min(C.DLOPEN,S.dl+1))*(C.inv||1)*(1+.04*r));
-      const RC={priv:[()=>S.depth>=300*Math.pow(2.3,S.ir.priv),.1],gov:[()=>S.dl>=3+4*S.ir.gov,.18],mid:[()=>S.blocks>=60*Math.pow(1.75,S.ir.mid),.14],big:[()=>sumL>=12+8*S.ir.big,.2],org:[()=>S.t/3600*1.2>=2+3*S.ir.org,.12]};
+      const RC={priv:[()=>S.depth>=300*Math.pow(2.3,S.ir.priv),.25],gov:[()=>S.dl>=3+4*S.ir.gov,.4],mid:[()=>S.blocks>=60*Math.pow(1.75,S.ir.mid),.32],big:[()=>sumL>=12+8*S.ir.big,.45],org:[()=>S.t/3600*1.2>=2+3*S.ir.org,.28]};
       for(const k in RC){while(RC[k][0]()){S.money+=ra(RC[k][1],S.ir[k]);S.ir[k]++;}}}
     // bore
     if(l.req>S.dl)S.blk+=dt;if(l.req<=S.dl){const d=dpsOf()*perks()*Math.pow(C.dlMul,S.dl-1)*dt*(S.depth>=35000?1+(C.hk||0)*L('heat'):1)*(S.depth>=660000?1+(C.pk||0)*L('press'):1);const m=Math.min(d/l.H,l.to-S.depth);S.depth+=m;S.money+=m*l.v*C.moneyMul*(C.rounds?1+.01*Math.min(20,S.ir.priv)*pmv:1);}
@@ -35,13 +35,15 @@ function run(C,log=false){
     let target=null;for(const p of need){const c=cost(p);for(const[k,v]of Object.entries(c))if(k!=='money'&&(S.res[k]||0)<v){const r=REG.find(x=>x.res===k);if(r&&S.depth>=r.un){target=r;break;}}if(target)break;}
     if(!target){const un=REG.filter(r=>S.depth>=r.un&&r.t==='land');target=un[un.length-1];}
     if(target){const r=target,g=S.dig[r.id]=S.dig[r.id]||{i:0,hp:0};if(!g.hp)g.hp=expHP(r,g.i);
+      // restarts: 5 per 24h, used when the current block has become much harder than the top
+      if(C.rstAt){const day=Math.floor(S.t/86400);if(S.rd!==day){S.rd=day;S.rn=0;}if(S.rn<5&&expHP(r,g.i)>C.rstAt*expHP(r,r.t==='sea'?r.water:0)){g.i=0;g.hp=expHP(r,0);S.rn++;S.rsts=(S.rsts||0)+1;}}
       let d=dpsOf()*perks()*(1+.1*L('insul'))*C.expDpsMul*dt*(C.wxG||1)*(S.inv.paleo?1+.1*pmv:1)*(r.t==='sea'?(1+(C.sk||0)*L('press'))*(S.inv.ship?1+.15*pmv:1):1);
-      while(d>0){if(g.hp>d){g.hp-=d;d=0;}else{d-=g.hp;const below=r.t==='sea'?g.i-r.water:g.i;if(below>=0){S.res[r.res]=(S.res[r.res]||0)+yieldOf(r,g.i)*(C.wxY||1);S.blocks++;if(r.t==='sea')S.sea++;S.money+=C.exMoney*r.diff*Math.pow(expHP(r,g.i)/(C.expBase*r.diff),C.exMExp);}g.i++;g.hp=expHP(r,g.i);}}}
+      while(d>0){if(g.hp>d){g.hp-=d;d=0;}else{d-=g.hp;const below=r.t==='sea'?g.i-r.water:g.i;if(below>=0){S.res[r.res]=(S.res[r.res]||0)+yieldOf(r,g.i)*(C.wxY||1);S.blocks++;if(r.t==='sea')S.sea++;S.money+=C.exMoney*r.diff*Math.pow(expHP(r,g.i)/(C.expBase*r.diff),C.exMExp);S.blkMoney=(S.blkMoney||0);}g.i++;g.hp=expHP(r,g.i);}}}
     // buy parts
     for(const p of need){const c=cost(p);if(L(p.id)<C.MAXLV&&can(c)){pay(c);S.parts[p.id]++;}}
     const nx=S.dl+1;if(nx<=C.DLOPEN&&PARTS.every(p=>L(p.id)>=partReq(nx))&&S.money>=dlCost(nx)){S.money-=dlCost(nx);S.dl=nx;}
     if(log&&S.dl!==lastDl&&S.dl%10===0){marks.push(`dl${S.dl}@${(S.t/3600).toFixed(1)}h d=${(S.depth/1000).toFixed(1)}km`);}lastDl=S.dl;
     S.t+=dt;}
-  return {h:S.t/3600,yiH:S.yiAt?+(S.yiAt/3600).toFixed(1):null,blockedH:S.blk/3600,dl:S.dl,parts:Object.values(S.parts).join(','),marks,money:Math.round(S.money),dig:Object.fromEntries(Object.entries(S.dig).map(([k,v])=>[k,v.i]))};
+  return {rst:S.rsts||0,h:S.t/3600,yiH:S.yiAt?+(S.yiAt/3600).toFixed(1):null,blockedH:S.blk/3600,dl:S.dl,parts:Object.values(S.parts).join(','),marks,money:Math.round(S.money),dig:Object.fromEntries(Object.entries(S.dig).map(([k,v])=>[k,v.i]))};
 }
 module.exports={run,REG,PARTS};
