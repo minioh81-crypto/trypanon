@@ -477,7 +477,7 @@ nav.tabs button{font-size:12px}
 @keyframes yiShout{from{transform:scale(2.4);opacity:0}to{transform:none;opacity:1}}
 .wnote{grid-column:1/-1;margin:0;padding:8px 10px;border-radius:10px;background:rgba(179,48,42,.18);border:1px solid rgba(242,193,78,.4);color:#ffe6a0;font-size:12px;line-height:1.4}
 #wBuy .primary{white-space:nowrap;flex:none}
-.boost.bwx{background:rgba(20,40,60,.6);color:#cfe8ff;border-color:rgba(120,180,220,.4)}
+.boost.bwx{background:rgba(20,40,60,.6);color:#cfe8ff;border-color:rgba(120,180,220,.4);display:flex;align-items:center;gap:6px}.bwxi{flex:none;overflow:visible}
 .wdesc{display:block;font-size:11px;color:#ffd98a;font-weight:600;margin-top:3px;line-height:1.35}
 </style>
 
@@ -690,7 +690,7 @@ const MODES={
  normal:{n:'보통',MAXLV:10,DLOPEN:50,LREQ:[1,1,6,16,26,36,46],Hmul:1.5,Hm:[1,1,1,1.6,1.6,1.6,1.6],vmul:[1,1,1,1.5,2,2,2.5],dlMul:1.07,dlGrow:1.2,expBase:100,expGrow:1.2,yf:3,inv:1,shop:1,chest:1,set:1,
   fuel:[20,20,12],fs:[6,10,15],fc:[.01,.02,.04],RESC:[10,25,70,170,400,800,1400,2300,3500,5000],MONC:[250,750,3000,8750,25000,75000,200000,500000,1125000,2250000]},
  hard:{n:'하드',MAXLV:20,DLOPEN:100,LREQ:[1,1,11,31,51,71,91],Hmul:10,Hm:[1,1,1.5,2.5,2.5,2.5,2.5],vmul:[1,1,2,5,10,10,12],dlMul:1.06,dlGrow:1.115,expBase:200,expGrow:1.25,yf:2.5,inv:.5,shop:1.5,chest:.7,set:.5,fs:[5,8,12],fc:[.015,.03,.06],
-  fuel:[30,30,18],RESC:[16,25,41,64,99,152,232,348,525,738,1030,1437,2001,2778,3866,5381,7479,10393,14433,20008],
+  fuel:[30,30,18],RESC:[17,26,43,67,103,158,241,362,546,768,1071,1494,2081,2889,4021,5596,7778,10809,15010,20808],
   MONC:[300,900,2700,6600,15000,30000,57000,102000,174000,285000,450000,690000,1050000,1560000,2280000,3300000,4800000,6900000,9900000,14100000]}};
 const MD=()=>MODES[S.mode]||MODES.normal;
 const dlMul=dl=>Math.pow(MD().dlMul,dl-1);
@@ -757,10 +757,12 @@ const L=id=>S.parts[id]||0;
 const levels=()=>Object.fromEntries(PARTS.map(p=>[p.id,L(p.id)]));
 const dpsOf=P=>(3+2*P.housing)*(1+.6*P.bit)*(1+.12*P.bearing)*(1+.25*P.cable);
 const perk=id=>!!S.inv[id];const pm=()=>S.mode==='hard'?.6:1;const PK=(id,v)=>perk(id)?v*pm():0;const rp=id=>Math.min(20,(S.ir&&S.ir[id])||0)*pm();
-const dpsPerk=()=>(1+PK('vc',.15))*(1+PK('inst',.25))*(1+PK('space',.1))*(1+.01*rp('gov'))*(1+.1*setPow('samguk'))*(yiOwn()?(S.mode==='hard'?1.03:1.05):1);
+const dpsPerk=()=>(1+PK('vc',.15))*(1+PK('inst',.25))*(1+PK('space',.1))*(1+.01*rp('gov'))*(1+.1*setPow('samguk'))*(yiOwn()?(S.mode==='hard'?1.03:1.05):1)*(1+itFx('shovel',.03)+itFx('hdrill',.04));
 const dps=()=>dpsOf(levels())*dpsPerk();
-const critP=()=>(.04*L('shock')+PK('miner',.03)+.05*setPow('bronze'))*boreWxK(1.5);
-const extraP=()=>Math.min(.9,.08+.05*L('sensor')+PK('farm',.04)+.005*rp('mid')+.1*setPow('goryeo'));
+const critP=()=>(.04*L('shock')+PK('miner',.03)+.05*setPow('bronze')+itFx('pick',.02)+itFx('hdrill',.02))*boreWxK(1.5);
+// owned wardrobe items give small permanent perks (kept whatever is equipped); hard mode x0.6
+const hasIt=v=>!!(S.own&&S.own.includes('item:'+v)),itFx=(v,x)=>hasIt(v)?x*pm():0;
+const extraP=()=>Math.min(.9,.08+.05*L('sensor')+PK('farm',.04)+.005*rp('mid')+.1*setPow('goryeo')+itFx('tablet',.04));
 const boostM=()=>S.boost&&S.boost.until>Date.now()?S.boost.m:1;
 const yiOwn=()=>S.own.includes('sex:yi');const yiM=()=>S.yiB&&S.yiB>Date.now()?2:1;
 const YI={p:{normal:.054,hard:.04},dur:{normal:60,hard:40}};
@@ -966,7 +968,7 @@ class Shaft{
     const w=Math.round(r.width*d),h=Math.round(r.height*d);if(this.cv.width!==w||this.cv.height!==h){this.cv.width=w;this.cv.height=h;}
     this.W=r.width;this.H=r.height;this.d=d;return true;}
   bh(){return Math.max(48,Math.min(84,this.H/6));}
-  broke(col,big){if(big&&this.cv.offsetParent)sfx('break');this.scroll=Math.min(this.scroll+this.bh(),this.bh()*3);const now=performance.now();if(big&&now-(this.lb||0)>400)this.burst(col||'#8a7a6a');}
+  broke(col,big){if(this.cv.offsetParent){sfx('break');if(this===bore)sfx('coin');}this.scroll=Math.min(this.scroll+this.bh(),this.bh()*3);const now=performance.now();if(big&&now-(this.lb||0)>400)this.burst(col||'#8a7a6a');}
   hit(crit,rock){const W=this.W,y=this.tipY+12,sp=SPARK[bitTier(L('bit'))];
     if(this.parts.length>120)this.parts.splice(0,this.parts.length-120);
     for(let i=0;i<(crit?18:6);i++)this.parts.push({x:W/2+(Math.random()-.5)*W*.12,y,vx:(Math.random()-.5)*(crit?380:220),vy:-Math.random()*220-40,l:.5+Math.random()*.3,c:i%2?sp:rock});
@@ -1219,7 +1221,7 @@ function chestTick(dt){if(titleOn||!$('#story').hidden||!$('#pick').hidden)retur
   $('#chest').hidden=!(chest&&view==='bore'&&!exp);
   if(chest){chest.until-=dt;const pct=Math.max(0,chest.until/30*100)+'%',i=$('#cbarI'),j=$('#alBar');if(i)i.style.width=pct;if(j&&alertCur&&alertCur.kind==='chest')j.style.width=pct;
     if(chest.until<=0){chest=null;$('#chest').hidden=true;if(alertCur&&alertCur.kind==='chest')closeAlert();toast('보물 상자가 땅속으로 다시 묻혀 버렸어요');}return;}
-  if(S.done)return;const wy=typeof homeWx==='function'?1+wxY(homeWx())/100:1;chestT-=dt*(fosDone('haenam')?1.3:1)*Math.max(.4,wy)*(gateAt()?.6:1);if(chestT<=0){chestT=120+Math.random()*120;spawnChest();}}
+  if(S.done)return;chestT-=dt*(fosDone('haenam')?1.3:1)*(gateAt()?.6:1);if(chestT<=0){chestT=120+Math.random()*120;spawnChest();}}
 const NEWS={
  cash:[d=>[`양구 시추 현장 지하 ${d}에서 현금 뭉치 발견`,'비닐로 꽁꽁 싼 5만원권 다발이 시추 드릴에 딸려 올라왔습니다. 경찰은 "오래전 누군가 밭에 몰래 묻어 둔 돈으로 보인다"며 주인을 찾았지만 끝내 나타나지 않았습니다. 시추팀에 발견 보상금이 지급됐습니다.'],
        d=>[`"논에 묻은 비상금이었나" 지하 ${d} 현금 다발`,'녹슨 김치통 안에서 돈다발이 나왔습니다. 마을 어르신들은 "옛날엔 논두렁에 돈을 묻어 두는 사람도 있었다"고 말합니다. 주인이 나타나지 않아 보상금은 시추팀 몫이 됐습니다.']],
@@ -1433,7 +1435,7 @@ const belowOf=(r,i)=>r.t==='sea'?i-r.water:i;
 function altText(r,i){if(r.t==='sea')return i<r.water?'수심 '+(i*r.ws).toLocaleString('ko-KR')+'m':'해저 아래 '+((i-r.water)*BLK).toLocaleString('ko-KR')+'m';
   const a=PEAK[r.id][1]-i*BLK;return a>=0?'해발 '+a.toLocaleString('ko-KR')+'m':'지하 '+(-a).toLocaleString('ko-KR')+'m';}
 const expDps=(rid=S.ex.active||(exp&&exp.r.id))=>wxDig(rid)*(1+PK('paleo',.1))*(rid&&regById(rid).t==='sea'?1+PK('ship',.15):1)*(rid&&regById(rid).t==='sea'?1+.4*L('press')/MAXLV:1)*dps()*boostM()*yiM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.05:1)*(fosDone('ura')?1.03:1);
-const relicP=()=>.15+.004*L('sensor')+PK('prof',.02)+PK('museum',.02)+.002*rp('org');
+const relicP=()=>(.15+.004*L('sensor')+PK('prof',.02)+PK('museum',.02)+.002*rp('org'))*(1+itFx('tablet',.1));
 const critMul=()=>5+setPow('paleo');
 let exAcc=0,popQ=[],popT=0;
 function addRelic(rl,vis,belowM){S.relic=S.relic||{};const g=rollGrade(belowM||0),cur=gradeOf(rl.id);
@@ -1447,7 +1449,7 @@ function expBreak(r,vis){const g=digOf(r.id),below=belowOf(r,g.i);
   if(below>=0){let wp=r.t==='sea'?setPow('wreck'):0,amt=Math.floor((MD().yf||3)+Math.random())+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.15?1:0)+(r.t==='sea'&&fosDone('whale')&&Math.random()<.2?1:0)+(r.t==='sea'?(perk('sea')&&Math.random()<pm()?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
     amt=wxAmt(amt,r.id);if(evtOn()&&S.evt.rid===r.id)amt*=2;
     S.res[r.res]=(S.res[r.res]||0)+amt;const m=Math.round(5*r.diff*Math.pow(expHP(r,g.i)/(MD().expBase*r.diff),.6)*(1+.15*setPow('joseon')));S.money+=m;
-    if(vis&&!expPopped){ex.pop('+'+amt+' '+r.res,RES[r.res]);expPopped=1;}
+    if(vis&&!expPopped){ex.pop('+'+amt+' '+r.res,RES[r.res]);expPopped=1;sfx('pickup');}
     S.st.exp++;if(r.t==='sea')S.st.sea++;
     if(Math.random()<relicP()){const pk=pickRelic(r,below);if(pk)addRelic(pk,vis,below*BLK);}
     fosTry(r,below,vis);}
@@ -1656,12 +1658,21 @@ function tone(o){const c=SND.ctx;if(!c)return;const t=o.t??c.currentTime,g=c.cre
 function noise(o){const c=SND.ctx;if(!c)return;const t=o.t??c.currentTime,s=c.createBufferSource(),g=c.createGain(),f=c.createBiquadFilter();s.buffer=SND.noise;f.type=o.ft||'bandpass';f.frequency.value=o.f||1200;f.Q.value=o.q||1;
   g.gain.setValueAtTime(o.v??.2,t);g.gain.exponentialRampToValueAtTime(.0001,t+o.d);s.connect(f);f.connect(g);g.connect(o.bus||SND.sfxG);s.start(t,Math.random()*.5);s.stop(t+o.d+.02);}
 // ---- effects ----
-function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const now=c.currentTime,gap={dig:.09,break:.12,tick:.05,coin:.06}[k]||0;if(gap&&now-(SND.last[k]||0)<gap)return;SND.last[k]=now;
+function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const now=c.currentTime,gap={dig:.07,break:.15,tick:.05,coin:.35,pickup:.12,tab:.05,select:.05,crit:.08}[k]||0;if(gap&&now-(SND.last[k]||0)<gap)return;SND.last[k]=now;
   switch(k){
-   case 'dig':noise({f:500+Math.random()*300,q:1.4,d:.07,v:.12});tone({f:90,f2:55,d:.08,v:.14});break;
-   case 'crit':noise({f:2400,q:3,d:.12,v:.14});tone({f:1320,f2:880,type:'triangle',d:.18,v:.12});tone({f:70,f2:40,d:.16,v:.3});break;
-   case 'break':noise({f:300,ft:'lowpass',d:.22,v:.25});tone({f:120,f2:50,d:.2,v:.2});break;
-   case 'coin':tone({f:NOTE(88),d:.08,type:'square',v:.06});tone({f:NOTE(93),t:now+.07,d:.18,type:'square',v:.06});break;
+   case 'dig':noise({f:900+Math.random()*900,q:2.5,d:.05,v:.08});noise({f:3200,ft:'highpass',d:.025,v:.05,t:now+.02});break;
+   case 'crit':{// "탕!" — sharp crack, metal ring and a deep boom
+     noise({f:4000,ft:'highpass',d:.04,v:.5});tone({f:1900,f2:500,d:.09,type:'square',v:.16});tone({f:150,f2:42,d:.28,v:.55});
+     tone({f:2460,d:.45,type:'triangle',v:.07,t:now+.01});tone({f:3170,d:.32,type:'triangle',v:.05,t:now+.01});noise({f:700,ft:'lowpass',d:.25,v:.25,t:now+.02});break;}
+   case 'break':{// "꽝! 우르르 쾅쾅" — impact boom then rock debris tumbling
+     tone({f:85,f2:30,d:.45,v:.55});noise({f:500,ft:'lowpass',d:.35,v:.45});noise({f:1800,q:.8,d:.12,v:.18});
+     for(let i=0;i<4;i++){const t=now+.09+i*.07+Math.random()*.05;tone({f:70+Math.random()*50,f2:35,t,d:.16,v:.28-i*.05});noise({f:350+Math.random()*300,ft:'lowpass',t,d:.14,v:.22-i*.04});}
+     for(let i=0;i<6;i++)noise({f:2500+Math.random()*2500,q:3,t:now+.15+Math.random()*.4,d:.03,v:.06});break;}
+   case 'coin':{// 짤랑: small bright coin bells
+     const base=2400+Math.random()*300;[0,.055,.11].forEach((dt,i)=>{tone({f:base*(1+i*.19),t:now+dt,d:.22,type:'sine',v:.09});tone({f:base*2.76*(1+i*.19),t:now+dt,d:.09,type:'sine',v:.03});});noise({f:7000,q:2,d:.05,v:.03});break;}
+   case 'pickup':tone({f:520,f2:1040,d:.12,type:'triangle',v:.1});tone({f:1560,t:now+.07,d:.12,type:'sine',v:.06});noise({f:1200,q:1,d:.04,v:.06});break;
+   case 'tab':tone({f:880,d:.05,type:'triangle',v:.07});tone({f:1320,t:now+.035,d:.07,type:'triangle',v:.05});break;
+   case 'select':tone({f:660,f2:990,d:.09,type:'sine',v:.09});noise({f:4000,ft:'highpass',d:.02,v:.03});break;
    case 'tick':tone({f:1800,d:.03,type:'triangle',v:.05});break;
    case 'chest':[72,76,79,84].forEach((n,i)=>tone({f:NOTE(n),t:now+i*.07,d:.4,type:'triangle',v:.13,rev:1}));noise({f:6000,q:.7,d:.5,v:.05,t:now+.25});break;
    case 'relic':[79,83,86,91,95].forEach((n,i)=>tone({f:NOTE(n),t:now+i*.06,d:.5,type:'sine',v:.12,rev:1}));break;
@@ -1669,12 +1680,31 @@ function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.st
    case 'craft':tone({f:300,f2:900,d:.18,type:'sawtooth',v:.06,lp:2000});noise({f:3000,q:2,d:.15,v:.08,t:now+.12});tone({f:NOTE(84),t:now+.18,d:.4,type:'triangle',v:.12});break;
    case 'event':[67,71,74,79].forEach((n,i)=>tone({f:NOTE(n),t:now+i*.09,d:.3,type:'triangle',v:.12}));break;
    case 'rainbow':for(let i=0;i<10;i++)tone({f:NOTE(72+[0,2,4,7,9][i%5]+12*Math.floor(i/5)),t:now+i*.05,d:.6,type:'sine',v:.08,rev:1});break;
-   case 'boost':tone({f:200,f2:800,d:.5,type:'sawtooth',v:.07,lp:1500});noise({f:800,ft:'lowpass',d:.6,v:.12});break;
+   case 'boost':tone({f:180,f2:900,d:.7,type:'sawtooth',v:.08,lp:1600});noise({f:800,ft:'lowpass',d:.8,v:.16});tone({f:60,f2:120,d:.7,v:.3});break;
    case 'yi':{// war drum rolls + gong + horn chord
      for(let i=0;i<6;i++){tone({f:75,f2:42,t:now+i*.22,d:.35,v:.5});noise({f:180,ft:'lowpass',t:now+i*.22,d:.2,v:.25});}
      tone({f:NOTE(43),t:now+1.35,d:2.6,type:'sine',v:.35,rev:1});tone({f:NOTE(55)*1.007,t:now+1.35,d:2.2,type:'triangle',v:.12,rev:1});noise({f:900,q:.6,t:now+1.35,d:1.8,v:.08});
      [55,62,67].forEach(n=>tone({f:NOTE(n),t:now+1.5,d:1.6,type:'sawtooth',v:.05,lp:1400,a:.12,rev:1}));break;}
   }}
+
+// ---- continuous drilling sound (bore view or an open expedition): grinding grit + motor hum; a booster adds a turbine whine ----
+const DRL={on:false};
+function drillInit(){const c=SND.ctx;if(!c||DRL.g)return;const src=c.createBufferSource();src.buffer=SND.noise;src.loop=true;
+  const bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.value=900;bp.Q.value=1.1;const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=180;
+  const gGrit=c.createGain();gGrit.gain.value=.22;const gRum=c.createGain();gRum.gain.value=.6;src.connect(bp);bp.connect(gGrit);src.connect(lp);lp.connect(gRum);
+  const mot=c.createOscillator();mot.type='sawtooth';mot.frequency.value=48;const mlp=c.createBiquadFilter();mlp.type='lowpass';mlp.frequency.value=260;const gMot=c.createGain();gMot.gain.value=.25;mot.connect(mlp);mlp.connect(gMot);
+  const wh=c.createOscillator();wh.type='sawtooth';wh.frequency.value=900;const wbp=c.createBiquadFilter();wbp.type='bandpass';wbp.frequency.value=1400;wbp.Q.value=4;const gWh=c.createGain();gWh.gain.value=0;wh.connect(wbp);wbp.connect(gWh);
+  const lfo=c.createOscillator();lfo.frequency.value=7;const lg=c.createGain();lg.gain.value=260;lfo.connect(lg);lg.connect(bp.frequency);
+  const g=c.createGain();g.gain.value=0;[gGrit,gRum,gMot,gWh].forEach(n=>n.connect(g));g.connect(SND.sfxG);[src,mot,wh,lfo].forEach(n=>n.start());Object.assign(DRL,{g,mot,wh,gWh,lfo,bp});}
+function drillTick(){const c=SND.ctx;if(!c||c.state!=='running')return;drillInit();const p=sndPref(),t=c.currentTime;
+  const act=p.sfx&&!titleOn&&!document.hidden&&((view==='bore'&&!exp&&!gateAt()&&!S.done)||(!!exp&&S.ex.active===exp.r.id)),bo=boostM()>1;
+  DRL.g.gain.setTargetAtTime(act?.32:0,t,.15);DRL.mot.frequency.setTargetAtTime(bo?78:48,t,.3);DRL.lfo.frequency.setTargetAtTime(bo?12:7,t,.3);DRL.gWh.gain.setTargetAtTime(act&&bo?.05:0,t,.2);DRL.wh.frequency.setTargetAtTime(900+Math.sin(t*3)*120,t,.1);
+  // random stone knocks so it sounds like rock against steel, not just noise
+  if(act&&Math.random()<(bo?.9:.6))noise({f:1500+Math.random()*2500,q:4,d:.02+Math.random()*.03,v:.05+Math.random()*.05,t:t+Math.random()*.1});
+  if(act&&Math.random()<.18)tone({f:120+Math.random()*80,f2:60,d:.06,v:.12,t:t+Math.random()*.1});}
+setInterval(drillTick,110);
+// every tab, region and button gets a light click
+document.addEventListener('click',e=>{const t=e.target;if(t.closest('nav.tabs button'))sfx('tab');else if(t.closest('.node'))sfx('select');else if(t.closest('button,[role="button"],.wopt,.lp,a'))sfx('tick');},true);
 // ---- the admiral's shout ----
 function yiVoice(){const p=sndPref();if(!p.voice||!window.speechSynthesis)return;try{const say=(txt,pitch,rate,delay)=>setTimeout(()=>{const u=new SpeechSynthesisUtterance(txt);u.lang='ko-KR';u.pitch=pitch;u.rate=rate;u.volume=Math.min(1,p.vol+.2);
     const v=speechSynthesis.getVoices().find(x=>/^ko/i.test(x.lang)&&/male|남|injoon|minsu/i.test(x.name))||speechSynthesis.getVoices().find(x=>/^ko/i.test(x.lang));if(v)u.voice=v;speechSynthesis.speak(u);},delay);
@@ -1861,7 +1891,8 @@ const IRND=[
   ct:'부품 레벨 합계',cur:()=>sumLv(),tgt:r=>12+8*r,fmt:n=>n+'레벨',k:.45}];
 const irOf=id=>{S.ir=S.ir||{};return S.ir[id]||0;};
 const irReady=d=>d.cur()>=d.tgt(irOf(d.id));
-const irAmt=d=>Math.max(200,Math.round(d.k*dlCost(Math.min(DLOPEN,S.dl+1))*MD().inv*(1+.04*irOf(d.id))/10)*10);
+// round reward: the larger of (next drill level cost), (cheapest next part upgrade) and a growing base, so early rounds matter too
+const irAmt=d=>{const r=irOf(d.id),lo=Math.min(...PARTS.map(p=>L(p.id))),mon=MONC[Math.min(MAXLV-1,lo)]||0;return Math.round(Math.max(d.k*dlCost(Math.min(DLOPEN,S.dl+1))*(1+.04*r),d.k*2*mon,d.k*4000*(1+.6*r))*MD().inv/10)*10;};
 function irWho(d){const r=irOf(d.id);return d.who[r%d.who.length]+(r>=d.who.length?' '+(Math.floor(r/d.who.length)+1)+'차':'');}
 const IRP={priv:[1,'본공 보상(₩) +','%'],gov:[1,'굴착력 +','%'],org:[.2,'유물 발견 확률 +','%p'],mid:[.5,'원정 재료 추가 확률 +','%p'],big:[1,'제작 비용(₩) −','%']};
 function irPerkTxt(id){const [v,a,b]=IRP[id],k=pm(),cur=+(rp(id)*v).toFixed(1);return `혜택: 라운드마다 ${a}${+(v*k).toFixed(2)}${b} (최대 20회)${cur?` · 지금 ${a}${cur}${b}`:''}`;}
@@ -1937,7 +1968,7 @@ const OPT={
  body:[{v:'slim',n:'마른 체형',p:0,w:.86},{v:'normal',n:'보통',p:0,w:1},{v:'big',n:'튼튼',p:0,w:1.18}],
  hat:[{v:'none',n:'없음',p:0},{v:'helmet',n:'안전모',p:200},{v:'lamp',n:'랜턴 안전모',p:800},{v:'explorer',n:'탐험 모자',p:2000},{v:'mask',n:'잠수 마스크',p:4000},{v:'straw',n:'밀짚모자',p:300},{v:'beanie',n:'비니',p:400},{v:'cap',n:'야구 모자',p:500},{v:'flower',n:'꽃 화관',p:900},{v:'bow',n:'리본',p:700},{v:'beret',n:'베레모',p:1200},{v:'bowler',n:'중절모',p:2500},{v:'horns',n:'뿔 머리띠',p:3500},{v:'crown',n:'아다마스 투구',p:60000}],
  outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'dino',n:'공룡옷',p:3000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
- item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:100},{v:'pick',n:'곡괭이',p:500},{v:'tablet',n:'탐사 태블릿',p:2500},{v:'hdrill',n:'휴대용 드릴',p:12000}],
+ item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:3000,d:'보유 효과: 본공·원정 굴착력 +3% (하드 +1.8%)'},{v:'pick',n:'곡괭이',p:15000,d:'보유 효과: 강타 확률 +2%p (하드 +1.2%p)'},{v:'tablet',n:'탐사 태블릿',p:60000,d:'보유 효과: 원정 재료 추가 획득 +4%p · 유물 발견 +10% (하드 60%)'},{v:'hdrill',n:'휴대용 드릴',p:300000,d:'보유 효과: 굴착력 +4% · 강타 확률 +2%p (하드 60%)'}],
 };
 const DEFCHAR={sex:'m',skin:0,hair:'short',hcol:0,eyes:'round',body:'normal',hat:'none',outfit:'track',item:'none'};
 const OFC={
@@ -2377,6 +2408,20 @@ function animalSVG(c,o={}){const k=c.sex,A=ANS[k]||ANS.dog,ex=o.expr||'',of=PXOF
   if(hat&&hat!=='none'&&VHAT[hat])g+=`<g transform="translate(50,${k==='chick'?82:(hat==='flower'||hat==='bow'||hat==='horns'?58:56)}) scale(1.24) translate(-50,-33)">${VHAT[hat]}</g>`;
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="32" ry="5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
+
+// tools held in both hands by the human heroes (frame 100x172): back = behind the arms, mid = under the hands, front = over the hands
+const HELD={
+ shovel:{h:[[44,132],[60,114]],back:'',
+  mid:`<path d="M66,104 L30,152" stroke="#6a4528" stroke-width="5.4" stroke-linecap="round"/><path d="M66,104 L30,152" stroke="#b07a46" stroke-width="3.4" stroke-linecap="round"/><path d="M60,100 h12 M66,100 v6" stroke="#4a3020" stroke-width="3" stroke-linecap="round"/>
+   <path d="M33,146 L19,156 Q14,166 22,170 Q30,170 36,160 L38,150Z" fill="#b8c2c8" stroke="#56626a" stroke-width="1.3" stroke-linejoin="round"/><path d="M22,160 Q26,154 33,151" stroke="#fff" stroke-width="1.2" fill="none" opacity=".6"/>`},
+ pick:{h:[[42,134],[56,124]],
+  mid:`<path d="M34,142 L80,110" stroke="#6a4528" stroke-width="5.6" stroke-linecap="round"/><path d="M34,142 L80,110" stroke="#b07a46" stroke-width="3.6" stroke-linecap="round"/>
+   <path d="M66,100 Q82,98 96,118" stroke="#55626a" stroke-width="6.4" fill="none" stroke-linecap="round"/><path d="M66,100 Q82,98 96,118" stroke="#a8b4bc" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M70,99 Q80,98 88,106" stroke="#fff" stroke-width="1.1" fill="none" opacity=".6"/><rect x="76" y="102" width="8" height="9" rx="2" fill="#6a7378" transform="rotate(35 80 106)"/>`},
+ tablet:{h:[[35,126],[65,126]],
+  mid:`<g transform="rotate(-6 50 122)"><rect x="34" y="110" width="32" height="23" rx="3.5" fill="#1c2226" stroke="#0a0e10" stroke-width="1.2"/><rect x="37" y="113" width="26" height="17" rx="1.5" fill="#2a8fc8"/><path d="M39,126 L45,120 L50,123 L56,116 L61,119" stroke="#7cf0ff" stroke-width="1.3" fill="none"/><circle cx="56" cy="116" r="1.6" fill="#ffd56a"/><path d="M38,114 h10" stroke="#fff" stroke-width="1" opacity=".5"/></g>`},
+ hdrill:{h:[[46,134],[58,118]],
+  mid:`<path d="M42,138 L48,126" stroke="#2b3338" stroke-width="7" stroke-linecap="round"/><rect x="40" y="110" width="30" height="13" rx="4" fill="#e8a93a" stroke="#8a5a1a" stroke-width="1.2"/><rect x="44" y="113" width="10" height="7" rx="1.5" fill="#2b3338"/><circle cx="62" cy="116.5" r="2" fill="#ffe08a"/>
+   <rect x="70" y="113" width="6" height="7" rx="1" fill="#55626a"/><path d="M76,116.5 H92" stroke="#a8b4bc" stroke-width="3" stroke-linecap="round"/><path d="M78,114.5 l3,4 M82,114.5 l3,4 M86,114.5 l3,4" stroke="#6a7378" stroke-width=".9"/>`}};
 // ---------------- chibi humans (vector, same frame/style as the animals) ----------------
 function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.outfit,of=PXOF[oc]||PXOF.track,hat=o.hat??c.hat,item=o.item??c.item,eyes=o.eyes||c.eyes||'round',u='hm'+(++UID);
   const sk=SKIN[c.skin]??SKIN[0],skD=shade(sk,-.4),hc=(OPT.hcol[c.hcol]||OPT.hcol[0]).c,hcD=shade(hc,-.5),hcL=shade(hc,.45);
@@ -2401,10 +2446,14 @@ function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.out
   g+=`<linearGradient id="${u}t" x1="0" x2="1"><stop offset="0" stop-color="${shade(top,.22)}"/><stop offset=".45" stop-color="${top}"/><stop offset="1" stop-color="${shade(top,-.28)}"/></linearGradient><path d="${T}" fill="url(#${u}t)" stroke="${tD}" stroke-width="1.8" stroke-linejoin="round"/>`;
   g+=`<g clip-path="url(#${u}b)"><rect x="${50+sw-9}" y="104" width="12" height="40" fill="#000" opacity=".12"/><rect x="${50-sw+2}" y="104" width="5" height="40" fill="#fff" opacity=".12"/>${of.hood?`<ellipse cx="50" cy="128" rx="11" ry="13" fill="#ece3a4"/>`:vClothDet(oc)}<rect x="10" y="139" width="80" height="4" fill="${tD}" opacity=".35"/></g>`;
   if(fem&&!of.hood)g+=`<path d="M42,104 Q50,112 58,104" stroke="#fff" stroke-width="1.6" fill="none" opacity=".55"/>`;
-  // arms
-  const slv=of.slv||top,hand=of.glove||sk;
-  for(const s of[-1,1]){const x=50+s*(sw+1.5);g+=`<path d="M${x},110 q${s*9},10 ${s*5},24" stroke="${shade(slv,-.45)}" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M${x},110 q${s*9},10 ${s*5},24" stroke="${slv}" stroke-width="8.4" fill="none" stroke-linecap="round"/><circle cx="${x+s*5}" cy="136" r="5" fill="${hand}" stroke="${of.glove?shade(hand,-.4):skD}" stroke-width="1.5"/>`;}
-  g+=vItem(item);
+  // arms: relaxed, or both hands on the held tool
+  const slv=of.slv||top,hand=of.glove||sk,HI=HELD[item],armP=(x,hx,hy,s)=>`M${x},110 Q${x+s*7},${(110+hy)/2+6} ${hx},${hy}`;
+  if(HI)g+=HI.back||'';
+  for(const s of[-1,1]){const x=50+s*(sw+1.5),[hx,hy]=HI?HI.h[s<0?0:1]:[x+s*5,136],d=HI?armP(x,hx,hy,s):`M${x},110 q${s*9},10 ${s*5},24`;
+    g+=`<path d="${d}" stroke="${shade(slv,-.45)}" stroke-width="12" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${slv}" stroke-width="8.4" fill="none" stroke-linecap="round"/>`;
+    if(!HI)g+=`<circle cx="${hx}" cy="${hy}" r="5" fill="${hand}" stroke="${of.glove?shade(hand,-.4):skD}" stroke-width="1.5"/>`;}
+  if(HI){g+=HI.mid||'';for(const [hx,hy] of HI.h)g+=`<circle cx="${hx}" cy="${hy}" r="5.2" fill="${hand}" stroke="${of.glove?shade(hand,-.4):skD}" stroke-width="1.5"/><path d="M${hx-3},${hy-1} h6 M${hx-2.6},${hy+1.4} h5.2" stroke="${of.glove?shade(hand,-.4):skD}" stroke-width=".8" opacity=".7"/>`;g+=HI.front||'';}
+  else g+=vItem(item);
   // ears + head
   if(hs!=='bob'&&hs!=='long')g+=`<ellipse cx="16.5" cy="88" rx="5.5" ry="7" fill="${SF}" ${OL}/><ellipse cx="83.5" cy="88" rx="5.5" ry="7" fill="${SF}" ${OL}/><path d="M16,85 q2,3 0,6 M84,85 q-2,3 0,6" stroke="${skD}" stroke-width="1" fill="none"/>`;
   g+=`<ellipse cx="50" cy="80" rx="34" ry="31" fill="${SF}" ${OL}/><path d="M24,96 Q30,106 42,109" stroke="#fff" stroke-width="2" fill="none" opacity=".18" stroke-linecap="round"/>`;
@@ -2430,13 +2479,15 @@ function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.out
   // front hair
   const hairOn=!(of.hood&&(!hat||hat==='none'));
   if(hairOn){
-    if(hs==='buzz')g+=`<path d="M17,80 C14,40 86,40 83,80 C80,62 66,55 50,55 C34,55 20,62 17,80Z" fill="${hc}" opacity=".9" ${HO}/>`+[[30,60],[40,54],[50,52],[60,54],[70,60],[36,66],[64,66]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".9" fill="${hcD}" opacity=".6"/>`).join('');
+    if(hs==='buzz')g+=`<ellipse cx="40" cy="60" rx="11" ry="6" fill="#fff" opacity=".28" transform="rotate(-18 40 60)"/><path d="M30,56 Q36,51 44,50" stroke="#fff" stroke-width="2" fill="none" opacity=".35" stroke-linecap="round"/>`;
+    else if(hs==='bob'||hs==='long'){// one continuous front shape: crown + fringe + side locks (no seams at the temples)
+      g+=hs==='long'?`<path d="M50,38 C80,38 93,52 88,74 Q92,100 87,122 Q84,132 77,130 Q80,112 78,96 Q77,82 72,70 Q66,66 58,63 Q52,59 50,55 Q48,59 42,63 Q34,66 28,70 Q23,82 22,96 Q20,112 23,130 Q16,132 13,122 Q8,100 12,74 C7,52 20,38 50,38Z" fill="${HF}" ${HO}/><path d="M17,92 Q15,108 18,122 M83,92 Q85,108 82,122" stroke="${hcL}" stroke-width="1.2" fill="none" opacity=".4"/>`
+        :`<path d="M50,38 C80,38 93,52 88,74 Q91,94 84,106 Q78,111 72,106 Q77,96 76,84 Q75,74 70,69 Q62,72 50,71 Q38,72 30,69 Q25,74 24,84 Q23,96 28,106 Q22,111 16,106 Q9,94 12,74 C7,52 20,38 50,38Z" fill="${HF}" ${HO}/><path d="M36,70 V66 M44,71 V67 M56,71 V67 M64,70 V66" stroke="${hcD}" stroke-width="1" opacity=".5"/>`;
+      g+=`<path d="M30,54 Q40,46 54,46" stroke="${hcL}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".45"/><path d="M62,48 Q68,50 71,54" stroke="${hcL}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".35"/>`;}
     else{const bang={short:'L76,72 L68,63 L60,72 L52,62 L44,71 L36,63 L28,70 L22,68',part:'Q64,58 42,74 Q40,66 34,64 Q28,66 22,72',bob:'Q72,72 62,70 Q50,73 38,70 Q28,72 22,68',tail:'Q72,72 62,70 Q50,73 38,70 Q28,72 22,68',pig:'Q72,72 62,70 Q50,73 38,70 Q28,72 22,68',long:'Q70,70 58,64 Q52,60 50,56 Q48,60 42,64 Q30,70 22,70'}[hs]||'L76,72 L68,63 L60,72 L52,62 L44,71 L36,63 L28,70 L22,68';
       const side=hs==='short'||hs==='part'?'Q14,72 15,86':'Q12,76 14,92';
       g+=`<path d="M15,86 C6,30 94,30 85,86 Q86,76 80,70 ${bang} ${side}Z" fill="${HF}" ${HO}/>`;
       if(hs==='short')g+=`<path d="M40,46 q4,-12 14,-10 q-5,3 -4,9Z M56,44 q8,-8 14,-2 q-6,0 -7,5Z" fill="${HF}" ${HO}/>`;
-      if(hs==='long')g+=`<path d="M15,72 Q9,98 13,122 Q16,132 23,130 Q20,112 22,96 Q23,84 26,74Z M85,72 Q91,98 87,122 Q84,132 77,130 Q80,112 78,96 Q77,84 74,74Z" fill="${HF}" ${HO}/><path d="M17,90 Q15,106 18,122 M83,90 Q85,106 82,122" stroke="${hcL}" stroke-width="1.2" fill="none" opacity=".4"/>`;
-      if(hs==='bob')g+=`<path d="M15,72 Q10,92 16,106 Q22,111 28,106 Q23,96 24,84 Q24,78 26,74Z M85,72 Q90,92 84,106 Q78,111 72,106 Q77,96 76,84 Q76,78 74,74Z" fill="${HF}" ${HO}/>`;
       if(hs==='pig')g+=`<circle cx="19" cy="86" r="4.5" fill="#ff7a9a" stroke="#c43a64" stroke-width="1.2"/><circle cx="81" cy="86" r="4.5" fill="#ff7a9a" stroke="#c43a64" stroke-width="1.2"/>`;
       g+=`<path d="M30,56 Q40,48 54,48" stroke="${hcL}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".45"/><path d="M62,50 Q68,52 71,56" stroke="${hcL}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".35"/>`;}}
   if(of.hood&&(!hat||hat==='none'))g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`+[[28,50],[40,43],[52,41],[64,43],[74,50]].map(([x,y])=>`<path d="M${x-5},${y+5} L${x},${y-7} L${x+5},${y+5}Z" fill="#f2c14e" stroke="#c89a2a" stroke-width="1"/>`).join('');
@@ -2774,7 +2825,7 @@ const WT=[{k:'sex',n:'주인공'},{k:'hair',n:'헤어'},{k:'hcol',n:'헤어 색'
 let wTab='outfit',wTry=null;
 const owns=(k,o)=>o.p===0||S.own.includes(k+':'+o.v);
 const HEADVB='12 2 76 76',BODYVB='-20 -2 140 178';
-const headVB=c=>c.sex==='yi'?'9 30 82 82':c.sex==='chick'?'11 60 78 78':(c.sex==='m'||c.sex==='f'||!ANS[c.sex])?'6 20 88 88':'11 38 78 78';
+const headVB=c=>c.sex==='yi'?'9 30 82 82':c.sex==='chick'?'11 60 78 78':(c.sex==='m'||c.sex==='f'||!ANS[c.sex])?(c.hat&&c.hat!=='none'?'6 20 88 88':'10 34 80 80'):'11 38 78 78';
 function avatarSVG(c){return `<svg viewBox="${headVB(c)}" aria-hidden="true">${charG(c)}</svg>`;}
 function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());}
 function wardChar(){const c=ME();if(wTry)c[wTry.k]=wTry.v;return c;}
@@ -2796,6 +2847,7 @@ function renderWard(){
     const pic=wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charG(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${charG(pv)}</svg>`;
     return `<button class="wopt ${cur?'on':''} ${tr?'try':''}" type="button" data-v="${o.v}">${pic}<span class="wn">${o.n}</span><span class="wp ${cur?'own':own?'own':S.money<o.p?'no':''}">${cur?'착용 중':own?'보유':won(o.p)}</span></button>`;}).join('');
   if(S.char.sex==='yi'&&wTab!=='sex')$('#wOpts').insertAdjacentHTML('afterbegin','<p class="wnote">이순신 장군은 전용 갑옷·투구를 입어요. 여기서 고른 꾸미기는 다른 주인공으로 바꾸면 보여요.</p>');
+  if(wTab==='item'){const own=OPT.item.filter(o=>o.d&&hasIt(o.v));$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>소품 보유 효과</b> — 사서 갖고 있기만 해도 적용돼요 (착용과 무관, 하드는 60%)<br>${own.length?own.map(o=>'· '+o.n+': '+o.d.replace('보유 효과: ','')).join('<br>'):'· 아직 가진 소품이 없어요'}</p>`);}
   if(yiOwn()&&wTab==='sex')$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>★ 이순신 장군 보유 효과</b><br>· 본공·원정 굴착력 +${S.mode==='hard'?3:5}% — 다른 캐릭터로 바꿔도 계속 적용<br>· 출현 이벤트(굴착량 +100%, ${YI.dur[S.mode]||60}초): ${S.char.sex==='yi'?'<b style="color:#7bd88f">발동 가능 (착용 중)</b>':'<b style="color:#ff9a7a">이순신 장군을 착용해야 발동</b>'}</p>`);
   const b=$('#wBuy');
   if(wTry){const o=OPT[wTry.k].find(x=>x.v===wTry.v),ok=S.money>=o.p;b.hidden=false;
@@ -4171,7 +4223,7 @@ function hud(){
     if(S.done){gt.hidden=false;gt.className='gate win';gt.textContent='지구 관통 완료! 여기를 누르면 엔딩과 새 회차를 볼 수 있어요.';gt.onclick=()=>{if(endCur==null)endCur=(S.ends||[])[S.ends.length-1]||'record';endI=99;$('#ending').hidden=false;endI=ENDS[endCur].sc.length;endScene();};}
     else if(g){gt.hidden=false;gt.className='gate';gt.textContent='굴착 정지 · '+g.gate+' — 드릴 Lv.'+g.req+' ('+dlName(g.req)+') 필요 (제작 탭, 모든 부품 Lv'+dlPartReq(g.req)+')';}
     else gt.hidden=true;
-    {const w=homeWx(),g=Math.round(Math.min(0,wxG(w))*.7),y=Math.round(wxY(w)),t=`${w.ic} 양구 ${w.n} · `+(g?`굴착 ${g}% · 강타 ${Math.round(Math.min(0,wxG(w))*1.5)}%`:'굴착 그대로')+` · 보물 상자 ${y>=0?'+':''}${y}%`,el=$('#bWx');if(el&&el.textContent!==t)el.textContent=t;}
+    {const w=homeWx(),g=Math.round(Math.min(0,wxG(w))*.7),el=$('#bWx'),k=w.id+g;if(el&&el.dataset.k!==k){el.dataset.k=k;el.innerHTML=`<svg class="bwxi" viewBox="-11 -11 22 22" width="22" height="22" aria-hidden="true"><circle r="10.5" fill="rgba(14,19,21,.8)" stroke="rgba(255,255,255,.35)" stroke-width=".8"/>${wxIcon(w.id)}</svg><span>양구 ${w.n} · ${g?`굴착 ${g}% · 강타 ${Math.round(Math.min(0,wxG(w))*1.5)}%`:'굴착·강타 영향 없음'}</span>`;}}
     const bb=$('#bBoost');if(bm>1){bb.hidden=false;bb.textContent='부스터 ×'+bm+' · '+Math.ceil((S.boost.until-Date.now())/1000)+'초';}else bb.hidden=true;
     const fk=FUEL.map(f=>have(f.res)).join()+L('cool');if(fk!==hudCache){hudCache=fk;renderFuels();}}
   if(exp){const r=exp.r,g=digOf(r.id),below=belowOf(r,g.i),e=eraAt(r,below),act=S.ex.active===r.id;

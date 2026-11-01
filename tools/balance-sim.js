@@ -23,7 +23,7 @@ function run(C,log=false){
     // investors
     for(const v of INV)if(!S.inv[v.id]&&v.cond(S,L)){S.inv[v.id]=1;S.money+=v.amt*(C.inv||1);}
     if(C.yiCost&&!S.yi&&S.money>=C.yiCost){S.money-=C.yiCost;S.yi=1;S.yiAt=S.t;}
-    if(C.rounds){const sumL=Object.values(S.parts).reduce((a,b)=>a+b,0),ra=(k,r)=>Math.max(200,k*dlCost(Math.min(C.DLOPEN,S.dl+1))*(C.inv||1)*(1+.04*r));
+    if(C.rounds){const sumL=Object.values(S.parts).reduce((a,b)=>a+b,0),ra=(k,r)=>{const lo=Math.min(...PARTS.map(p=>L(p.id))),mon=C.MONC[Math.min(C.MAXLV-1,lo)];return Math.max(k*dlCost(Math.min(C.DLOPEN,S.dl+1))*(1+.04*r),k*2*mon,k*4000*(1+.6*r))*(C.inv||1);};
       const RC={priv:[()=>S.depth>=300*Math.pow(2.3,S.ir.priv),.25],gov:[()=>S.dl>=3+4*S.ir.gov,.4],mid:[()=>S.blocks>=60*Math.pow(1.75,S.ir.mid),.32],big:[()=>sumL>=12+8*S.ir.big,.45],org:[()=>S.t/3600*1.2>=2+3*S.ir.org,.28]};
       for(const k in RC){while(RC[k][0]()){S.money+=ra(RC[k][1],S.ir[k]);S.ir[k]++;}}}
     // bore
