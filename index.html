@@ -431,7 +431,7 @@ nav.tabs button{font-size:12px}
 .lp .th3{width:64px;height:64px;object-fit:contain;display:block;margin:0 auto}
 .lgrid-wrap.l3{padding:4px;background:linear-gradient(#9fd2f0,#dff0f6 70%,#cfe6c8)}.lgrid-wrap .l3c{display:block;margin:0 auto;border-radius:12px;touch-action:none;cursor:grab}.lgrid-wrap .l3c:active{cursor:grabbing}
 .lgrid-wrap .lcam{position:absolute;right:8px;bottom:8px;display:flex;gap:6px}.lgrid-wrap .lcam button{width:30px;height:30px;opacity:.85;border-radius:50%;background:rgba(20,28,32,.78);color:#fff;font-size:17px;border:1px solid rgba(255,255,255,.3)}
-.lgrid-wrap .lcel{position:absolute;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,240,180,.7));transition:left 1s linear,top 1s linear}.lcel .lsun{animation:lsun 18s linear infinite;transform-origin:center}@keyframes lsun{to{transform:rotate(360deg)}}
+.lgrid-wrap .lcel{position:absolute;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,240,180,.7));transition:left 1s linear,top 1s linear}
 .lgrid-wrap .lsky{position:absolute;left:8px;top:8px;font-size:11px;font-weight:800;color:#fff;background:rgba(10,20,40,.55);border-radius:999px;padding:3px 9px;pointer-events:none}
 .lgrid-wrap .lrot{position:absolute;right:8px;top:8px;font-size:11px;font-weight:700;color:#2b3a22;background:rgba(255,255,255,.7);border-radius:999px;padding:3px 9px;pointer-events:none}.lgrid-wrap svg{transform-origin:50% 55%}
 .lgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;transform:perspective(600px) rotateX(18deg);transform-origin:50% 100%}
@@ -1666,19 +1666,19 @@ function tone(o){const c=SND.ctx;if(!c)return;const t=o.t??c.currentTime,g=c.cre
 function noise(o){const c=SND.ctx;if(!c)return;const t=o.t??c.currentTime,s=c.createBufferSource(),g=c.createGain(),f=c.createBiquadFilter();s.buffer=SND.noise;f.type=o.ft||'bandpass';f.frequency.value=o.f||1200;f.Q.value=o.q||1;
   g.gain.setValueAtTime(o.v??.2,t);g.gain.exponentialRampToValueAtTime(.0001,t+o.d);s.connect(f);f.connect(g);g.connect(o.bus||SND.sfxG);s.start(t,Math.random()*.5);s.stop(t+o.d+.02);}
 // ---- effects ----
-function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const now=c.currentTime,gap={dig:.07,break:.15,tick:.05,coin:.35,pickup:.12,tab:.05,select:.05,crit:.08}[k]||0;if(gap&&now-(SND.last[k]||0)<gap)return;SND.last[k]=now;
+function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const now=c.currentTime,gap={dig:.07,break:.2,tick:.05,coin:3.5,pickup:.6,tab:.05,select:.05,crit:.08}[k]||0;if(gap&&now-(SND.last[k]||0)<gap)return;SND.last[k]=now;
   switch(k){
-   case 'dig':noise({f:900+Math.random()*900,q:2.5,d:.05,v:.08});noise({f:3200,ft:'highpass',d:.025,v:.05,t:now+.02});break;
+   case 'dig':noise({f:700+Math.random()*600,q:.8,d:.05,v:.09});tone({f:110,f2:70,d:.05,v:.08});break;
    case 'crit':{// "탕!" — sharp crack, metal ring and a deep boom
      noise({f:4000,ft:'highpass',d:.04,v:.5});tone({f:1900,f2:500,d:.09,type:'square',v:.16});tone({f:150,f2:42,d:.28,v:.55});
      tone({f:2460,d:.45,type:'triangle',v:.07,t:now+.01});tone({f:3170,d:.32,type:'triangle',v:.05,t:now+.01});noise({f:700,ft:'lowpass',d:.25,v:.25,t:now+.02});break;}
-   case 'break':{// "꽝! 우르르 쾅쾅" — impact boom then rock debris tumbling
-     tone({f:85,f2:30,d:.45,v:.55});noise({f:500,ft:'lowpass',d:.35,v:.45});noise({f:1800,q:.8,d:.12,v:.18});
-     for(let i=0;i<4;i++){const t=now+.09+i*.07+Math.random()*.05;tone({f:70+Math.random()*50,f2:35,t,d:.16,v:.28-i*.05});noise({f:350+Math.random()*300,ft:'lowpass',t,d:.14,v:.22-i*.04});}
-     for(let i=0;i<6;i++)noise({f:2500+Math.random()*2500,q:3,t:now+.15+Math.random()*.4,d:.03,v:.06});break;}
+   case 'break':{// "쾅! 쾅! 쿵! 쿵!" — two blasts then two heavy thuds, all low and noisy (no pitched tones)
+     const hit=(t,f,v,d)=>{tone({f,f2:f*.38,t,d,v});noise({f:f*7,ft:'lowpass',t,d:d*.8,v:v*.9});noise({f:900,ft:'lowpass',t,d:.05,v:v*.6});};
+     hit(now,95,.6,.42);hit(now+.13,80,.5,.38);hit(now+.29,62,.42,.34);hit(now+.44,50,.34,.3);
+     noise({f:420,ft:'lowpass',t:now+.08,d:.7,v:.16});break;}
    case 'coin':{// 짤랑: small bright coin bells
-     const base=2400+Math.random()*300;[0,.055,.11].forEach((dt,i)=>{tone({f:base*(1+i*.19),t:now+dt,d:.22,type:'sine',v:.09});tone({f:base*2.76*(1+i*.19),t:now+dt,d:.09,type:'sine',v:.03});});noise({f:7000,q:2,d:.05,v:.03});break;}
-   case 'pickup':tone({f:520,f2:1040,d:.12,type:'triangle',v:.1});tone({f:1560,t:now+.07,d:.12,type:'sine',v:.06});noise({f:1200,q:1,d:.04,v:.06});break;
+     [0,.07,.15].forEach((dt,i)=>{noise({f:5200+i*600,q:1.2,t:now+dt,d:.06,v:.07});tone({f:1650+i*180,t:now+dt,d:.12,type:'triangle',v:.04});});break;}
+   case 'pickup':noise({f:700,ft:'lowpass',d:.08,v:.18});tone({f:180,f2:120,d:.08,v:.14});break;
    case 'tab':tone({f:880,d:.05,type:'triangle',v:.07});tone({f:1320,t:now+.035,d:.07,type:'triangle',v:.05});break;
    case 'select':tone({f:660,f2:990,d:.09,type:'sine',v:.09});noise({f:4000,ft:'highpass',d:.02,v:.03});break;
    case 'tick':tone({f:1800,d:.03,type:'triangle',v:.05});break;
@@ -1708,7 +1708,7 @@ function drillTick(){const c=SND.ctx;if(!c||c.state!=='running')return;drillInit
   const act=p.sfx&&!titleOn&&!document.hidden&&((view==='bore'&&!exp&&!gateAt()&&!S.done)||(!!exp&&S.ex.active===exp.r.id)),bo=boostM()>1;
   DRL.g.gain.setTargetAtTime(act?.32:0,t,.15);DRL.mot.frequency.setTargetAtTime(bo?78:48,t,.3);DRL.lfo.frequency.setTargetAtTime(bo?12:7,t,.3);DRL.gWh.gain.setTargetAtTime(act&&bo?.05:0,t,.2);DRL.wh.frequency.setTargetAtTime(900+Math.sin(t*3)*120,t,.1);
   // random stone knocks so it sounds like rock against steel, not just noise
-  if(act&&Math.random()<(bo?.9:.6))noise({f:1500+Math.random()*2500,q:4,d:.02+Math.random()*.03,v:.05+Math.random()*.05,t:t+Math.random()*.1});
+  if(act&&Math.random()<(bo?.9:.6))noise({f:600+Math.random()*1200,q:.7,d:.02+Math.random()*.03,v:.06+Math.random()*.05,t:t+Math.random()*.1});
   if(act&&Math.random()<.18)tone({f:120+Math.random()*80,f2:60,d:.06,v:.12,t:t+Math.random()*.1});}
 setInterval(drillTick,110);
 // every tab, region and button gets a light click
@@ -3405,10 +3405,10 @@ function model3(id){const g=new THREE.Group(),A=f=>L3.anims.push(f);
     const flag=new THREE.Mesh(new THREE.PlaneGeometry(.6,.4,8,1),new THREE.MeshLambertMaterial({map:fl,side:THREE.DoubleSide}));flag.position.set(-1.05,1.5,1.1);g.add(C3(.02,.02,1.8,'#4a3a2a',-1.27,.06,1.1),flag);
     const pos=flag.geometry.attributes.position,base=pos.array.slice();A(t=>{for(let i=0;i<pos.count;i++){const x=base[i*3];pos.array[i*3+2]=Math.sin(t*4+x*8)*.05*(x+.2);}pos.needsUpdate=true;});break;}
   case 'tree':{const c=G3(C3(.06,.08,.35,WOOD),K3(.42,.55,'#3f8a4a',0,.3),K3(.34,.5,'#357a40',0,.6),K3(.24,.42,'#2a6a33',0,.9));c.children.forEach(m=>m.castShadow=true);g.add(c);
-    const pc=S3(.05,'#8a5a2c',.2,.7,.1);g.add(pc);A(t=>{c.rotation.z=Math.sin(t*1.5)*.03;const k=(t*.25)%1;pc.position.set(.2+k*.15,k<.6?.7-k*1.15:.02,.1);pc.rotation.x=t*4;});break;}
-  case 'cherry':{g.add(C3(.06,.09,.5,'#6a4a2c'));for(const [x,y,z,r] of[[-.18,.6,0,.25],[.2,.62,.05,.25],[0,.82,-.05,.28],[0,.6,.2,.2]])g.add(S3(r,'#f3a9c3',x,y,z));
+    const pc=S3(.05,'#8a5a2c',.2,.7,.1);g.add(pc);A(t=>{const w=L3.wind||0;c.rotation.z=Math.sin(t*(1.5+w*2.5))*(.03+w*.07)-w*.14;c.rotation.x=Math.sin(t*2.3+1)*w*.05;const k=(t*.25)%1;pc.position.set(.2+k*.15,k<.6?.7-k*1.15:.02,.1);pc.rotation.x=t*4;});break;}
+  case 'cherry':{const ch=new THREE.Group();g.add(ch);ch.add(C3(.06,.09,.5,'#6a4a2c'));for(const [x,y,z,r] of[[-.18,.6,0,.25],[.2,.62,.05,.25],[0,.82,-.05,.28],[0,.6,.2,.2]])ch.add(S3(r,'#f3a9c3',x,y,z));
     const ps=[];for(let i=0;i<6;i++){const p=new THREE.Mesh(new THREE.PlaneGeometry(.05,.035),M3('#ffc6d8',{side:THREE.DoubleSide}));g.add(p);ps.push(p);}
-    A(t=>ps.forEach((p,i)=>{const k=((t*.18)+i/6)%1;p.position.set(-.3+i*.12+Math.sin(t+i)*.1,.8-k*.8,Math.cos(t*.7+i)*.25);p.rotation.set(t*2+i,t+i,0);}));break;}
+    A(t=>{const w=L3.wind||0;ch.rotation.z=Math.sin(t*(1.4+w*2.6))*(.025+w*.08)-w*.12;ps.forEach((p,i)=>{const k=((t*(.18+w*.4))+i/6)%1;p.position.set(-.3+i*.12+Math.sin(t+i)*.1+k*w*1.6,.8-k*.8+w*Math.sin(t*3+i)*.08,Math.cos(t*.7+i)*.25);p.rotation.set(t*(2+w*6)+i,t+i,0);});});break;}
   case 'pond':{// recessed water with a rocky rim, lily pads + lotus, reeds, koi and slow ripples
     g.add(C3(.97,1,.05,'#8a8478',0,0,0,28),C3(.86,.86,.03,'#1f4a5a',0,.03,0,28));
     const wm=new THREE.MeshPhongMaterial({color:'#3f9ccc',transparent:true,opacity:.78,shininess:90,specular:'#cfefff',emissive:'#062a3a'}),wat=new THREE.Mesh(new THREE.CircleGeometry(.84,32),wm);wat.rotation.x=-Math.PI/2;wat.position.y=.075;g.add(wat);
@@ -3504,6 +3504,7 @@ function l3EnvInit(){const E=L3.env={},sc=L3.scene;
   E.SN=160;{const gm=new THREE.BufferGeometry();gm.setAttribute('position',new THREE.BufferAttribute(new Float32Array(E.SN*3),3));E.spl=new THREE.Points(gm,new THREE.PointsMaterial({color:'#e8f6ff',size:.035,transparent:true,opacity:.85}));E.spl.frustumCulled=false;sc.add(E.spl);E.sp=[];E.spi=0;}
   E.RG=[];for(let i=0;i<24;i++){const m=new THREE.Mesh(new THREE.RingGeometry(.03,.045,14),new THREE.MeshBasicMaterial({color:'#e8f6ff',transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}));m.rotation.x=-Math.PI/2;sc.add(m);E.RG.push({m,l:0});}E.rgi=0;
   E.FN=380;{const gm=new THREE.BufferGeometry();gm.setAttribute('position',new THREE.BufferAttribute(new Float32Array(E.FN*3),3));E.snowP=new THREE.Points(gm,new THREE.PointsMaterial({color:'#ffffff',size:.06,transparent:true,opacity:.95}));E.snowP.frustumCulled=false;sc.add(E.snowP);E.fl=[];}
+  E.deb=[];{const cols=['#d9822a','#c9a03a','#8a5a2c','#7bb04a','#e8e2d0','#f4f2ee','#b8c2c8'];for(let i=0;i<34;i++){const trash=i%5===4,m=new THREE.Mesh(trash?new THREE.PlaneGeometry(.16,.12):new THREE.CircleGeometry(.075,5),new THREE.MeshLambertMaterial({color:cols[trash?4+i%3:i%4],side:THREE.DoubleSide}));m.scale.y=trash?1:.6;m.visible=false;sc.add(m);E.deb.push({m,x:0,y:0,z:0,s:Math.random()*10,trash});}}
   E.snowL=new THREE.DirectionalLight('#ffffff',0);E.snowL.position.set(0,10,0);sc.add(E.snowL);E.snow=0;}
 // surface height under a point (tile tops from each placed model's bounding box), used for rain splashes and snow landing
 function l3Height(x,z){const H=L3.hmap;if(!H)return 0;const gx=Math.floor(x+L3.N/2),gz=Math.floor(z+L3.N/2);return H[gx+','+gz]||0;}
@@ -3543,11 +3544,15 @@ function l3EnvTick(dt){const E=L3.env;if(!E)return;const now=new Date(),h=now.ge
   if(snowing){const P=E.snowP.geometry.attributes.position.array,n=bliz?E.FN:Math.floor(E.FN*.6),t=L3.t;while(E.fl.length<E.FN)E.fl.push({x:(Math.random()*2-1)*half,z:(Math.random()*2-1)*half,y:Math.random()*7,p:Math.random()*6});
     for(let i=0;i<E.FN;i++){const f2=E.fl[i];if(i>=n){P[i*3+1]=-99;continue;}f2.y-=(bliz?1.4:.7)*dt;f2.x+=(Math.sin(t*1.3+f2.p)*.25+(bliz?.9:0))*dt;if(f2.x>half)f2.x=-half;
       if(f2.y<=l3Height(f2.x,f2.z)){f2.x=(Math.random()*2-1)*half;f2.z=(Math.random()*2-1)*half;f2.y=6+Math.random()*2;}P[i*3]=f2.x;P[i*3+1]=f2.y;P[i*3+2]=f2.z;}E.snowP.geometry.attributes.position.needsUpdate=true;}
+  // wind: trees lean (L3.wind read by their animations) and leaves / paper litter tumble across the yard
+  const WIND={wind:.55,gale:1,storm:1,bliz:.9,hrain:.6,rain:.25};L3.wind=(L3.wind||0)+((WIND[w.id]||0)-(L3.wind||0))*Math.min(1,dt*.8);const wd=L3.wind,nDeb=Math.round(wd*E.deb.length);
+  E.deb.forEach((d,i)=>{if(i>=nDeb){d.m.visible=false;return;}if(!d.m.visible||d.x>half+1){d.x=-half-1-Math.random()*2;d.z=(Math.random()*2-1)*half;d.y=.05+Math.random()*.6;d.m.visible=true;}
+    d.s+=dt;d.x+=dt*(1.4+wd*2.6)*(d.trash?.8:1);d.y=Math.max(.03,d.y+Math.sin(d.s*3+i)*dt*.9-dt*.15);d.z+=Math.sin(d.s*1.7+i)*dt*.3;d.m.position.set(d.x,d.y,d.z);d.m.rotation.set(d.s*4+i,d.s*5,d.s*3);});
   // settled snow: a white ground sheet + a straight-down white light that frosts every upward-facing roof and ledge
   E.snowL.intensity=E.snow*.75;if(L3.snowSheet)L3.snowSheet.material.opacity=E.snow*.6;
   // sun / moon drawn as an overlay arc across the top of the land view (the 3D camera looks down, so a real sky body would never be in frame)
   const cel=$('#lcel');if(cel){const isDay=sa>0,prog=isDay?(h-6)/12:(((h-18)+24)%24)/12,x=8+prog*84,y=31-Math.sin(Math.PI*Math.max(0,Math.min(1,prog)))*20,key=isDay?'sun'+(kind==='clear'?'':'c'):'moon'+Math.round(f*100)+(kind==='clear'?'':'c');
-    if(cel.dataset.k!==key){cel.dataset.k=key;cel.innerHTML=isDay?'<svg viewBox="-20 -20 40 40" width="44" height="44" aria-hidden="true"><g class="lsun">'+Array.from({length:10},(_,i)=>`<path d="M0,-12 V-17" stroke="#ffd34a" stroke-width="2.4" stroke-linecap="round" transform="rotate(${i*36})"/>`).join('')+'</g><circle r="9.5" fill="#ffe066" stroke="#f2a020" stroke-width="1.5"/><circle cx="-3" cy="-3" r="3" fill="#fff6c8" opacity=".8"/></svg>':`<img src="${moonTex(f).image.toDataURL()}" width="40" height="40" alt="">`;}
+    if(cel.dataset.k!==key){cel.dataset.k=key;cel.innerHTML=isDay?'<svg viewBox="-20 -20 40 40" width="44" height="44" aria-hidden="true"><g><animateTransform attributeName="transform" type="rotate" values="0 0 0;360 0 0" dur="18s" repeatCount="indefinite"/>'+Array.from({length:10},(_,i)=>`<path d="M0,-12 V-17" stroke="#ffd34a" stroke-width="2.4" stroke-linecap="round" transform="rotate(${i*36})"/>`).join('')+'</g><circle r="9.5" fill="#ffe066" stroke="#f2a020" stroke-width="1.5"/><circle cx="-3" cy="-3" r="3" fill="#fff6c8" opacity=".8"/></svg>':`<img src="${moonTex(f).image.toDataURL()}" width="40" height="40" alt="">`;}
     cel.style.left=x+'%';cel.style.top=y+'%';cel.style.opacity=kind==='clear'?1:kind==='cloud'?.7:.25;cel.title=isDay?'낮':'밤 · '+moonName(f);}
   const chip=$('#lsky');if(chip){const txt=(day>.5?'☀️ 낮':'🌙 밤 · '+moonName(f))+' · '+w.ic+' '+w.n;if(chip.textContent!==txt)chip.textContent=txt;}}
 function splash(E,x,y,z){for(let k=0;k<3;k++){E.sp[E.spi]={x,y,z,vx:(Math.random()-.5)*.9,vy:.9+Math.random()*.8,vz:(Math.random()-.5)*.9,l:.32};E.spi=(E.spi+1)%E.SN;}
