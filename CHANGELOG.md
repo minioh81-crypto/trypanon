@@ -450,3 +450,12 @@ v19 이후로는 단계별 실제 코드가 Git 커밋으로도 남아 있습니
   - 굴착 능력: 드릴 레벨·등급, 본공 배수, 기본·본공·원정 굴착력, 본공 속도와 수입, 원정 칸당 재료와 추가 확률, 강타 확률·피해, 유물 발견률, 오프라인 시간, 부스터, 양구 날씨 영향.
   - 적용 중인 보유 효과: 이순신 장군, 소품, 투자자 혜택, 투자 라운드 누적, 유물 세트, 완성 화석, 집 보너스.
   - 부품 레벨 목록.
+
+## 40. 휴대폰(아이폰 포함)에서 바로 실행: GitHub Pages 배포 (v65, 2026-11-02)
+- 원인: 저장소의 index.html이 아티팩트용 조각 파일이라 `<!doctype>`, `<head>`, viewport가 없었음. 일반 웹 호스팅에서는 휴대폰 화면 폭에 맞지 않음. 또 아이폰은 '파일' 앱에서 HTML을 미리보기로만 열고 스크립트를 실행하지 않음.
+- `tools/build-index.py`: 아티팩트 파일(trypanon.html)을 감싸 독립 실행용 index.html을 만듦.
+  - 추가 내용: doctype, charset, 모바일 viewport(노치 대응), 제목·설명, 홈 화면 앱용 메타(apple-mobile-web-app-*), 아이콘, manifest.
+  - 이후 갱신 절차: `python3 tools/build-index.py /home/claude/trypanon.html index.html` 실행 후 main과 gh-pages에 push.
+- `icon-180.png`, `icon-512.png`(드릴 아이콘), `manifest.webmanifest` 추가. 아이폰 '홈 화면에 추가'와 안드로이드 '앱 설치' 시 앱처럼 전체 화면으로 열림.
+- `gh-pages` 브랜치로 배포. 주소: https://minioh81-crypto.github.io/trypanon/
+- 주인공 선택 안내 문구를 현재 동물 목록에 맞게 수정.

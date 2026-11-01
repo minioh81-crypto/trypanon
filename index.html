@@ -1,3 +1,21 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>트리파논 · 지구를 뚫어라</title>
+<meta name="description" content="한반도 한가운데 양구에서 지구 반대편까지 — 방치형 시추 게임">
+<meta name="theme-color" content="#0e1315">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="트리파논">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-512.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>html,body{margin:0;background:#0e1315;-webkit-text-size-adjust:100%;overscroll-behavior:none}</style>
+</head>
+<body>
 <title>트리파논</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -621,7 +639,7 @@ nav.tabs button{font-size:12px}
 </section>
 <section id="pick" hidden><div class="pickin">
   <h2 class="ptitle">주인공을 고르세요</h2>
-  <p class="sub">사람 또는 동물 주인공을 고르세요. 너구리, 고양이, 곰, 펭귄, 여우는 돈을 벌어 옷장에서 열 수 있어요. 모두 추리닝 차림으로 시작하고, 주인공은 나중에 옷장에서 언제든 바꿀 수 있어요.</p>
+  <p class="sub">사람 또는 동물 주인공을 고르세요. 동물 주인공은 돈을 벌어 옷장에서 열 수 있어요. 모두 추리닝 차림으로 시작하고, 주인공은 나중에 옷장에서 언제든 바꿀 수 있어요.</p>
   <div class="picks" id="picks"></div></div></section>
 <section id="menu" hidden><div class="dsheet">
   <div class="iname" style="font-size:18px">메뉴</div>
@@ -4415,3 +4433,6 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){hidAt=hid0
 setInterval(()=>{if(!document.hidden||!hidAt)return;const now=Date.now(),el=(now-hidAt)/1000;if(el<5)return;hidAt=now;catchUp(el,1,true);},5000);
 })();
 </script>
+
+</body>
+</html>
