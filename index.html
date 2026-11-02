@@ -1832,6 +1832,15 @@ setInterval(()=>{const now=Date.now();
 
 function updateMap(){document.querySelectorAll('#map .rcnt').forEach(t=>{t.textContent=(S.res[t.dataset.r]||0).toLocaleString('ko-KR');});document.querySelectorAll('.node').forEach(n=>{const r=REG.find(x=>x.id===n.dataset.id);
   n.classList.toggle('locked',!!r&&!isUnl(r));n.classList.toggle('sel',n.dataset.id===sel);n.classList.toggle('act',n.dataset.id===S.ex.active);n.classList.toggle('evt',!!(evtOn()&&n.dataset.id===S.evt.rid));});renderCard();}
+// Some iPhones (newer iOS with Reduce Motion / "Auto-Play Animated Images" off, or Low Power Mode) freeze SVG SMIL clocks.
+// If a visible SVG's clock stops advancing, drive it from script by seeking it every frame (seeking still redraws).
+const SMILW=new WeakMap();
+function smilWatch(){const now=performance.now()/1000;
+  document.querySelectorAll('#card .art svg,#eArt svg,#mapSvg,#lgWrap svg,#lcel svg,.yiev svg,#wStage svg,#rpop svg').forEach(sv=>{if(!sv.getCurrentTime||!sv.isConnected)return;const r=sv.getBoundingClientRect();if(!r.width||!r.height||(sv.id==='mapSvg'&&view!=='map'))return;
+    let st=SMILW.get(sv);if(!st){st={t0:now,c0:sv.getCurrentTime(),drive:false,base:sv.getCurrentTime()};SMILW.set(sv,st);return;}
+    if(!st.drive){if(now-st.t0>.6){if(sv.getCurrentTime()-st.c0<.15){st.drive=true;st.base=sv.getCurrentTime();st.t0=now;}else{st.t0=now;st.c0=sv.getCurrentTime();}}}
+    if(st.drive){try{sv.setCurrentTime(st.base+(now-st.t0));}catch(e){}}});}
+(function smilLoop(){smilWatch();setTimeout(()=>requestAnimationFrame(smilLoop),33);})();
 function kickArt(el){if(!el)return;requestAnimationFrame(()=>{const h=el.innerHTML;el.innerHTML=h;});}
 function openRegion(id){sel=id;updateMap();$('#rpop').hidden=false;const sh=$('#rpop .rsheet');sh.scrollTop=0;kickArt($('#card .art'));}
 function closeRegion(){$('#rpop').hidden=true;}
