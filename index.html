@@ -1838,7 +1838,7 @@ $('#map').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const 
 function renderCard(){const el=$('#card');
   if(sel==='yanggu'){const m=S.depth;
     el.innerHTML=`<div class="art">${regionArt('yanggu',{withChar:true,label:'양구 해안분지',cx:86,cy:166,ch:70})}</div><div class="ctop"><div><div class="ckind">본공 · 출발점</div><h2>양구 국토정중앙</h2></div><div class="cside">${fmtD(m)}<br>중심까지 ${fmtD(CORE-m)}</div></div>
-     <p class="cdesc">한반도의 지리적 중심에서 지구 중심(6,371km)을 향해 드릴이 스스로 파 내려갑니다. 굴착 속도는 드릴 굴착력으로 정해지고, 앱을 닫아도 최대 4시간까지 계속 팝니다.</p>
+     <p class="cdesc">한반도의 지리적 중심에서 지구 중심(6,371km)을 향해 드릴이 스스로 파 내려갑니다. 굴착 속도는 드릴 굴착력으로 정해지고, 앱을 닫아도 최대 1시간(내 땅에 집을 지으면 더 길게)까지 계속 팝니다.</p>
      <div class="autoline">현재 드릴 <b style="color:var(--amber2)">${tierName()}</b> · 본공 굴착력 ${fmtN(boreDps())}/초</div>
      ${S.ex.active?`<div class="estat">● ${regById(S.ex.active).n} 원정 시추 중 · ${altText(regById(S.ex.active),digOf(S.ex.active).i)}</div>`:''}
      <button class="primary" type="button" data-act="bore">본공 보기</button>
@@ -4004,7 +4004,7 @@ function shipLive(el){if(typeof THREE==='undefined')return false;const w=el.clie
 function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
   const nx=L0.lv<LAND_SIZE.length?LAND_COST[L0.lv]:0;if(landPick&&landPick!=='me'&&!L0.tiles[landPick])landPick=null;
   const pk=landPick&&landPick!=='me'?LITEM.find(i=>i.id===L0.tiles[landPick]):null,isMe=landPick==='me';
-  const hTxt=it=>it&&it.house?` <span class="hoffm">🌙 집 효과: 앱을 닫아도 <b>+${it.off}시간</b> 더 팜 (기본 4시간 → ${4+it.off+2*setPow('neo')}시간${hb&&hb>=it.off&&!(pk&&pk.id===it.id)?` · 지금 집이 +${hb}시간이라 더 늘지 않아요`:''})</span>`:'';
+  const hTxt=it=>it&&it.house?` <span class="hoffm">🌙 집 효과: 앱을 닫아도 <b>+${it.off}시간</b> 더 팜 (기본 ${OFFBASE+2*setPow('neo')}시간 → ${OFFBASE+it.off+2*setPow('neo')}시간${hb&&hb>=it.off&&!(pk&&pk.id===it.id)?` · 지금 집이 +${hb}시간이라 더 늘지 않아요`:''})</span>`:'';
   const msg=landDel?'철거할 물건을 누르세요. 산 값의 절반을 돌려받아요.':landSel?`<b>${LITEM.find(i=>i.id===landSel).n}</b>을(를) 놓을 빈 땅을 누르세요. 다시 누르면 선택이 풀려요.${hTxt(LITEM.find(i=>i.id===landSel))}`
     :isMe?'캐릭터를 세울 빈 땅(밝은 칸)을 누르세요.':pk?`<b>${pk.n}</b> 선택됨 · 옮길 빈 땅(밝은 칸)을 누르세요.${pk.house?` <span class="hoffm">🌙 이 집 효과: 오프라인 굴착 <b>+${pk.off}시간</b>${hb>pk.off?` (더 좋은 집 +${hb}시간이 적용 중)`:' 적용 중'}</span>`:''}`
     :hb?`물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요. 집이 있으면 앱을 닫아도 ${hb}시간 더 팝니다.`:'아래에서 물건을 고르고 빈 땅을 눌러 놓으세요. 놓인 물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.';
@@ -4719,7 +4719,8 @@ function hud(){
     $('#eHaul').innerHTML=`${ric(r.res)}${r.res} ${(S.res[r.res]||0).toLocaleString('ko-KR')}`;}}
 
 // ---------------- boot & loop ----------------
-const offCap=()=>(4+2*setPow('neo')+(S.land?houseBonus():0))*3600;
+var OFFBASE=1; // hours the drill keeps going with the app closed, before house / relic bonuses
+const offCap=()=>(OFFBASE+2*setPow('neo')+(S.land?houseBonus():0))*3600;
 // catch up on time the loop did not run (app closed = 50% rate, window minimised / tab in background = full rate)
 function catchUp(sec,rate,quiet){const el=Math.min(offCap(),sec);if(el<=0)return;
   const m0=S.depth;if(!gateAt())boreAdvance(boreDps()*el*rate,false);let msg=S.depth-m0>=1?'본공 '+fmtD(S.depth-m0):'';
