@@ -286,7 +286,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .wbody{flex:1;min-height:0;overflow-y:auto;display:grid;gap:12px;align-content:start;padding-block:12px calc(env(safe-area-inset-bottom,0px) + 16px);
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wtabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}.wtabs.drag{cursor:grabbing}.wtabs.drag .wtab{pointer-events:none}
-.lp .hoff{display:block;font-size:10px;color:#9fd6ff;font-weight:700;line-height:1.2}.hoffm{display:block;margin-top:4px;color:#9fd6ff}.hoffm b{color:#cfeaff}
+.lp .hoff{display:block;font-size:10px;color:#9fd6ff;font-weight:700;line-height:1.2}.hoffm{display:block;margin-top:4px;color:#9fd6ff}.hoffm small{color:#8fb3c4;font-size:11.5px}.hoffm b{color:#cfeaff}
 .wopt.wship{grid-column:1/-1}.wopt.wship svg,.wopt.wship img{width:100%;height:auto;max-height:170px;object-fit:contain}.wopt.wship img{border-radius:12px;background:radial-gradient(ellipse at 50% 78%,#3a9be8 0%,#1d69b8 45%,#0f3e74 100%)}
 .wshipcyc{grid-column:1/-1;display:grid;gap:6px;font-size:12px;color:var(--mute);padding:2px 2px 4px}.wshipcyc>span{font-weight:700;color:var(--fg)}.wshipcyc .segs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}.wshipcyc .segs button{padding:7px 0;font-size:12px}.wshipcyc small{font-size:11.5px}
 #wStage .s3wrap{width:100%;height:100%;min-height:200px}#wStage .s3wrap canvas{display:block;width:100%!important;height:100%!important;cursor:grab}#wStage{position:relative}#wStage .s3hint{position:absolute;right:10px;bottom:8px;font-size:11px;color:#cfe3ec;background:rgba(0,0,0,.4);border-radius:999px;padding:3px 9px;pointer-events:none}
@@ -4004,9 +4004,11 @@ function shipLive(el){if(typeof THREE==='undefined')return false;const w=el.clie
 function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
   const nx=L0.lv<LAND_SIZE.length?LAND_COST[L0.lv]:0;if(landPick&&landPick!=='me'&&!L0.tiles[landPick])landPick=null;
   const pk=landPick&&landPick!=='me'?LITEM.find(i=>i.id===L0.tiles[landPick]):null,isMe=landPick==='me';
-  const hTxt=it=>it&&it.house?` <span class="hoffm">🌙 집 효과: 앱을 닫아도 <b>+${it.off}시간</b> 더 팜 (기본 ${OFFBASE+2*setPow('neo')}시간 → ${OFFBASE+it.off+2*setPow('neo')}시간${hb&&hb>=it.off&&!(pk&&pk.id===it.id)?` · 지금 집이 +${hb}시간이라 더 늘지 않아요`:''})</span>`:'';
+  const fH=v=>(Math.round(v*10)/10).toLocaleString('ko-KR')+'시간',rel=2*setPow('neo'),now_=OFFBASE+rel+hb;
+  const hTxt=it=>{if(!it||!it.house)return '';const after=OFFBASE+rel+Math.max(hb,it.off);
+    return ` <span class="hoffm">🌙 집 효과: 앱을 닫아도 <b>+${it.off}시간</b> 더 팜 · 오프라인 <b>${fH(now_)} → ${fH(after)}</b>${it.off<=hb?` (지금 집 +${hb}시간보다 좋지 않아 늘지 않아요)`:''}<br><small>기본 ${OFFBASE}시간 + 집 +${Math.max(hb,it.off)}시간${rel>0?` + 신석기 유물 +${fH(rel)}`:''}</small></span>`;};
   const msg=landDel?'철거할 물건을 누르세요. 산 값의 절반을 돌려받아요.':landSel?`<b>${LITEM.find(i=>i.id===landSel).n}</b>을(를) 놓을 빈 땅을 누르세요. 다시 누르면 선택이 풀려요.${hTxt(LITEM.find(i=>i.id===landSel))}`
-    :isMe?'캐릭터를 세울 빈 땅(밝은 칸)을 누르세요.':pk?`<b>${pk.n}</b> 선택됨 · 옮길 빈 땅(밝은 칸)을 누르세요.${pk.house?` <span class="hoffm">🌙 이 집 효과: 오프라인 굴착 <b>+${pk.off}시간</b>${hb>pk.off?` (더 좋은 집 +${hb}시간이 적용 중)`:' 적용 중'}</span>`:''}`
+    :isMe?'캐릭터를 세울 빈 땅(밝은 칸)을 누르세요.':pk?`<b>${pk.n}</b> 선택됨 · 옮길 빈 땅(밝은 칸)을 누르세요.${pk.house?` <span class="hoffm">🌙 이 집 효과: 오프라인 굴착 <b>+${pk.off}시간</b>${hb>pk.off?` (더 좋은 집 +${hb}시간이 적용 중)`:' 적용 중'} · 지금 오프라인 <b>${fH(now_)}</b><br><small>기본 ${OFFBASE}시간 + 집 +${hb}시간${rel>0?` + 신석기 유물 +${fH(rel)}`:''}</small></span>`:''}`
     :hb?`물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요. 집이 있으면 앱을 닫아도 ${hb}시간 더 팝니다.`:'아래에서 물건을 고르고 빈 땅을 눌러 놓으세요. 놓인 물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.';
   const B=(id,t,c='ghost')=>`<button class="${c} sm" type="button" id="${id}">${t}</button>`;
   $('#landView').innerHTML=`<div class="lhead"><div><div class="tk">내 땅 · ${n}×${n}칸</div><div class="tn">양구 국토정중앙 옆 부지</div></div>
