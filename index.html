@@ -285,7 +285,8 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .wstage svg{height:100%;width:auto;max-width:100%;display:block}
 .wbody{flex:1;min-height:0;overflow-y:auto;display:grid;gap:12px;align-content:start;padding-block:12px calc(env(safe-area-inset-bottom,0px) + 16px);
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.wtabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.wtabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}.wtabs.drag{cursor:grabbing}.wtabs.drag .wtab{pointer-events:none}
+.wopt.wship{grid-column:1/-1}.wopt.wship svg{width:100%;height:auto;max-height:150px}
 .wtab{flex:none;padding:8px 13px;border-radius:999px;border:1px solid var(--line);font-size:13px;white-space:nowrap;color:var(--mute)}
 .wtab[aria-selected="true"]{background:var(--amber);color:#1a1206;border-color:var(--amber);font-weight:600}
 .wopts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -510,7 +511,7 @@ nav.tabs button{font-size:12px}
 @keyframes yiShout{from{transform:scale(2.4);opacity:0}to{transform:none;opacity:1}}
 .wnote{grid-column:1/-1;margin:0;padding:8px 10px;border-radius:10px;background:rgba(179,48,42,.18);border:1px solid rgba(242,193,78,.4);color:#ffe6a0;font-size:12px;line-height:1.4}
 #wBuy .primary{white-space:nowrap;flex:none}
-#wOpts:has(> .wopt svg[viewBox^="-6 -16"]) {grid-template-columns:1fr 1fr}
+
 .boost.bwx{align-self:flex-start;justify-self:start;display:inline-flex;align-items:center;gap:5px;width:auto;max-width:100%;margin-top:4px;padding:2px 9px 2px 2px;border-radius:999px;background:rgba(8,14,20,.38);border:1px solid rgba(160,210,240,.28);color:#d8eeff;font-size:11px;font-family:var(--f-body);font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.6)}.bwxi{flex:none;overflow:visible}
 .wdesc{display:block;font-size:11px;color:#ffd98a;font-weight:600;margin-top:3px;line-height:1.35}
 </style>
@@ -1519,7 +1520,7 @@ function openExp(r){exp={r};rstLabel();document.querySelectorAll('nav.tabs butto
   const g=digOf(r.id),act=S.ex.active===r.id,other=S.ex.active&&!act?regById(S.ex.active):null;
   $('#eName').textContent=r.n;$('#eResult').hidden=true;$('#exp').hidden=false;$('#eIntro').hidden=false;
   $('#eArt').innerHTML=regionArt(r.id,{withChar:true,rx:0,label:r.n+' 풍경',cx:r.t==='sea'?44:64,cy:168,ch:r.t==='sea'?70:84});
-  if(r.t==='sea'&&shipOn())$('#eArt').insertAdjacentHTML('beforeend',`<svg class="eship" viewBox="0 -14 300 214" aria-hidden="true">${turtleSVG({id:'e',sea:false})}</svg>`);
+  if(r.t==='sea'&&shipOn())$('#eArt').insertAdjacentHTML('beforeend',`<svg class="eship" viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'e',sea:false})}</svg>`);
   $('#eKind').textContent=(r.t==='sea'?'해상 시추':'육상 원정')+' · '+r.area;$('#eTitle').textContent=r.n;$('#eDesc').textContent=r.fl;
   const e=eraAt(r,belowOf(r,g.i));
   $('#eFacts').innerHTML=`<dt>출발</dt><dd>${r.t==='sea'?'해수면 0m':PEAK[r.id][0]+' 해발 '+PEAK[r.id][1].toLocaleString('ko-KR')+'m'}</dd>
@@ -1617,7 +1618,7 @@ function buildMap(){let g='';
   g+=`<g class="ptags" style="pointer-events:none">${PROV.map(p=>{const [x,y]=TAG[p.id]||p.c,w=p.n.length*5.4+4;return `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><rect x="${-w/2}" y="-4.2" width="${w}" height="7.6" rx="1.8" fill="#7a4a24" stroke="#4a2a12" stroke-width=".5" opacity=".88"/><rect x="${-w/2+.6}" y="-3.6" width="${w-1.2}" height="1.4" rx="1" fill="#a8703c" opacity=".7"/><text class="plab" y="1.9">${p.n}</text></g>`;}).join('')}</g>`;
   {const x1=+PX(126.75).toFixed(1),y1=+PY(33.92).toFixed(1),x2=+PX(129.0).toFixed(1),y2=+PY(34.05).toFixed(1);
    g+=`<g id="mShip" style="pointer-events:none;display:none"><g><animateTransform attributeName="transform" type="translate" values="${x1} ${y1};${x2} ${y2};${x1} ${y1}" keyTimes="0;.5;1" dur="70s" repeatCount="indefinite"/>
-    <g><animateTransform attributeName="transform" type="scale" values="-1 1;1 1" keyTimes="0;.5" calcMode="discrete" dur="70s" repeatCount="indefinite"/><g transform="translate(-20,-22) scale(.133)">${turtleSVG({id:'m',sea:false,anim:false})}</g>
+    <g><animateTransform attributeName="transform" type="scale" values="-1 1;1 1" keyTimes="0;.5" calcMode="discrete" dur="70s" repeatCount="indefinite"/><g transform="translate(-20,-22) scale(.133)">${turtleSVG({id:'m',sea:false,anim:false,fire:false})}</g>
     <path d="M20,2 q7,-2 14,0 M22,5 q6,-1.5 11,0" stroke="#fff" stroke-width=".9" fill="none" opacity=".85"/></g></g></g>`;}
   g+='<g id="mRb" style="pointer-events:none"></g>';
   const node=(id,cls,x,y,label,lx,la,ly,res)=>`<g class="node ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}">
@@ -1803,7 +1804,7 @@ function bgmSched(){const c=SND.ctx;if(!c||c.state!=='running')return;const want
 // ---------------- Admiral Yi event: owned special character appears on the map ----------------
 let yiPend=false,yiRoll=Date.now()+60000;
 function playYi(){const el=$('#yiEv'),left=Math.max(0,Math.ceil((S.yiB-Date.now())/1000));
-  el.innerHTML=`<div class="yirays"></div><svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${yiSVG({sex:'yi'},{pose:'raise',anim:true})}</svg><div class="yitxt"><b>必死則生 必生則死</b><span>필사즉생 필생즉사</span><em>본공·원정 굴착량 +${yiSet()?150:100}% · ${left}초</em></div>${yiSet()?`<svg class="yiship" viewBox="0 -14 300 214" aria-hidden="true">${turtleSVG({id:'y',sea:true})}</svg>`:''}`;
+  el.innerHTML=`<div class="yirays"></div><svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${yiSVG({sex:'yi'},{pose:'raise',anim:true})}</svg><div class="yitxt"><b>必死則生 必生則死</b><span>필사즉생 필생즉사</span><em>본공·원정 굴착량 +${yiSet()?150:100}% · ${left}초</em></div>${yiSet()?`<svg class="yiship" viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'y',sea:true})}</svg>`:''}`;
   el.hidden=false;el.classList.remove('go');void el.offsetWidth;el.classList.add('go');clearTimeout(playYi.t);playYi.t=setTimeout(()=>{el.hidden=true;el.innerHTML='';},5400);}
 function yiEvent(){const d=Math.round((YI.dur[S.mode]||90)*(yiSet()?YISET.d:1));S.yiB=Date.now()+d*1000;save();
   toast(yiSet()?'⚔🐢 이순신 장군과 거북선 출격! 「필사즉생 필생즉사」 굴착량 +150% · '+d+'초':'⚔ 이순신 장군 출현! 「필사즉생 필생즉사」 굴착량 +100% · '+d+'초');sfx('yi');yiVoice();
@@ -2044,7 +2045,7 @@ const OPT={
  body:[{v:'slim',n:'마른 체형',p:0,w:.86},{v:'normal',n:'보통',p:0,w:1},{v:'big',n:'튼튼',p:0,w:1.18}],
  hat:[{v:'none',n:'없음',p:0},{v:'helmet',n:'안전모',p:200},{v:'lamp',n:'랜턴 안전모',p:800},{v:'explorer',n:'탐험 모자',p:2000},{v:'mask',n:'잠수 마스크',p:4000},{v:'straw',n:'밀짚모자',p:300},{v:'beanie',n:'비니',p:400},{v:'cap',n:'야구 모자',p:500},{v:'flower',n:'꽃 화관',p:900},{v:'bow',n:'리본',p:700},{v:'beret',n:'베레모',p:1200},{v:'bowler',n:'중절모',p:2500},{v:'horns',n:'뿔 머리띠',p:3500},{v:'crown',n:'아다마스 투구',p:60000}],
  outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'dino',n:'공룡옷',p:3000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
- ship:[{v:'none',n:'없음',p:0},{v:'turtle',n:'★ 거북선',get p(){return S.mode==='hard'?16000000:8000000;},get d(){const h=S.mode==='hard';return `특수 소장품 · 보유 효과: 해상 원정 굴착력 +${h?12:20}%, 본공·원정 굴착력 +${h?2:3}% · 착용하면 지도 남해를 항해하고 해상 원정에 함께 나가요 · 이순신 장군과 함께 보유하면 세트 효과`;}}],
+ ship:[{v:'none',n:'없음',p:0},{v:'turtle',n:'★ 거북선',get p(){return S.mode==='hard'?16000000:8000000;},get d(){const h=S.mode==='hard';return `특수 소장품 · 보유 효과: 해상 원정 굴착력 +${h?12:20}%, 본공·원정 굴착력 +${h?2:3}% · 출항시키면 지도 남해를 항해하고 해상 원정에 함께 나가요 · 이순신 장군과 함께 보유하면 세트 효과`;}}],
  item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:3000,d:'보유 효과: 본공·원정 굴착력 +3% (하드 +1.8%)'},{v:'pick',n:'곡괭이',p:15000,d:'보유 효과: 강타 확률 +2%p (하드 +1.2%p)'},{v:'tablet',n:'탐사 태블릿',p:60000,d:'보유 효과: 원정 재료 추가 획득 +4%p · 유물 발견 +10% (하드 60%)'},{v:'hdrill',n:'휴대용 드릴',p:300000,d:'보유 효과: 굴착력 +4% · 강타 확률 +2%p (하드 60%)'}],
 };
 const DEFCHAR={sex:'m',skin:0,hair:'short',hcol:0,eyes:'round',body:'normal',hat:'none',outfit:'track',item:'none',ship:'none'};
@@ -2902,79 +2903,135 @@ $('#sBox').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.pre
 $('#sSkip').addEventListener('click',endStory);
 
 // ---------------- wardrobe ----------------
-const WT=[{k:'sex',n:'주인공'},{k:'hair',n:'헤어'},{k:'hcol',n:'헤어 색'},{k:'eyes',n:'눈'},{k:'skin',n:'피부'},{k:'body',n:'체형'},{k:'hat',n:'모자'},{k:'outfit',n:'의상'},{k:'item',n:'소품'},{k:'ship',n:'★ 거북선'}];
-let wTab='outfit',wTry=null;
+const WT=[{k:'sex',n:'주인공·특수'},{k:'hair',n:'헤어'},{k:'hcol',n:'헤어 색'},{k:'eyes',n:'눈'},{k:'skin',n:'피부'},{k:'body',n:'체형'},{k:'hat',n:'모자'},{k:'outfit',n:'의상'},{k:'item',n:'소품'}];
+let wTab='outfit',wTry=null,wShip=false;
 const owns=(k,o)=>o.p===0||S.own.includes(k+':'+o.v);
 const HEADVB='12 2 76 76',BODYVB='-20 -2 140 178';
 const headVB=c=>c.sex==='yi'?'9 30 82 82':c.sex==='chick'?'11 60 78 78':(c.sex==='m'||c.sex==='f'||!ANS[c.sex])?(c.hat&&c.hat!=='none'?'6 20 88 88':'10 34 80 80'):'11 38 78 78';
 function avatarSVG(c){return `<svg viewBox="${headVB(c)}" aria-hidden="true">${charG(c)}</svg>`;}
 function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());const ms=document.getElementById('mShip');if(ms)ms.style.display=shipOn()?'':'none';}
 function wardChar(){const c=ME();if(wTry)c[wTry.k]=wTry.v;return c;}
-// ---- 거북선 (turtle ship): detailed side view, bow (dragon head) to the left. viewBox 0 0 300 200, waterline y≈158 ----
-function turtleSVG(o={}){const k='ts'+(o.id||''),sea=o.sea!==false,anim=o.anim!==false,OL='stroke="#3a2210" stroke-width="1.4" stroke-linejoin="round"';
-  const spikes=(()=>{let s='';for(const [ry,n] of [[0,12],[1,11],[2,9]]){for(let i=0;i<n;i++){const t=(i+.5)/n,x=66+t*(196-ry*0)+ry*3,base=107-Math.pow(Math.sin(Math.PI*Math.min(.97,Math.max(.03,(x-60)/210))),.7)*(37-ry*11);s+=`<path d="M${(x-3.2).toFixed(1)},${(base+1).toFixed(1)} L${x.toFixed(1)},${(base-8).toFixed(1)} L${(x+3.2).toFixed(1)},${(base+1).toFixed(1)}Z" fill="url(#${k}sp)" stroke="#1a1c20" stroke-width=".6"/>`;}}return s;})();
-  const plates=Array.from({length:9},(_,i)=>{const x=82+i*20;return `<path d="M${x},106 Q${x+3},${84-Math.sin(Math.PI*(i+.5)/9)*8} ${x+8},${76-Math.sin(Math.PI*(i+.5)/9)*4}" stroke="#15181c" stroke-width="1.1" fill="none" opacity=".75"/>`;}).join('');
-  const rivets=Array.from({length:22},(_,i)=>`<circle cx="${70+i*9}" cy="107" r="1.2" fill="#ffd970"/>`).join('');
-  const ports=[0,1,2,3,4,5].map(i=>{const x=86+i*29;return `<rect x="${x}" y="116" width="15" height="12" rx="1.5" fill="#2a1608" ${OL}/><circle cx="${x+7.5}" cy="122" r="4.2" fill="#1b1d22"/><circle cx="${x+7.5}" cy="122" r="2.1" fill="#000"/><circle cx="${x+6.3}" cy="120.8" r="1" fill="#8a96a3"/>`;}).join('');
-  const brackets=[0,1,2,3,4,5,6].map(i=>{const x=78+i*29;return `<rect x="${x}" y="110" width="6" height="36" fill="url(#${k}au)" stroke="#7a4a10" stroke-width=".8"/><circle cx="${x+3}" cy="114" r="1.1" fill="#fff3b0"/><circle cx="${x+3}" cy="141" r="1.1" fill="#fff3b0"/>`;}).join('');
-  const oars=[0,1,2,3,4,5,6].map(i=>{const x=92+i*26;return `<g><path d="M${x},150 L${x+20},188" stroke="#7a4a22" stroke-width="5" stroke-linecap="round"/><path d="M${x},150 L${x+20},188" stroke="#c98a4e" stroke-width="2.2" stroke-linecap="round"/><path d="M${x+13},176 l9,-3 l4,12 l-9,3Z" fill="#a8683a" stroke="#5a3214" stroke-width=".8"/>${anim?`<animateTransform attributeName="transform" type="rotate" values="-6 ${x} 150;7 ${x} 150;-6 ${x} 150" dur="2.4s" begin="${(i*.08).toFixed(2)}s" repeatCount="indefinite"/>`:''}</g>`;}).join('');
-  const planks=[126,138,160,168].map(y=>`<path d="M48,${y} Q160,${y+6} 272,${y-2}" stroke="#4e2a12" stroke-width=".9" fill="none" opacity=".55"/>`).join('');
-  const flag=(x,id)=>`<g><rect x="${x-1.6}" y="30" width="3.2" height="78" fill="#7a4a22" ${OL}/><rect x="${x-2.6}" y="44" width="5.2" height="4" fill="url(#${k}au)"/><rect x="${x-2.6}" y="74" width="5.2" height="4" fill="url(#${k}au)"/><path d="M${x},22 l-3.6,8 h7.2Z" fill="url(#${k}au)" stroke="#7a4a10" stroke-width=".7"/>
-    <g><path d="M${x+1.6},34 h26 l-3,4 l3,4 l-3,4 l3,4 l-3,4 l3,4 l-3,4 l3,4 h-26Z" fill="#c62a1c" stroke="#5a0c06" stroke-width=".8"/><path d="M${x+1.6},36 h20 v30 h-20Z" fill="#141518"/>
-      <path d="M${x+15},40 q-6,2 -3,7 q4,5 -2,9 q-5,3 -1,8" stroke="#e9eef2" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="${x+15.5}" cy="40" r="1.6" fill="#e9eef2"/>
-      ${anim?`<animateTransform attributeName="transform" type="skewY" values="0;3;-2;0" dur="${id?2.2:2.6}s" repeatCount="indefinite" additive="sum"/>`:''}</g></g>`;
+// ---- 거북선 (turtle ship) v2: side view, bow (dragon head) to the left. Ship body spans x 0..300, y -14..200; fire breath reaches x ≈ -62 ----
+function turtleSVG(o={}){const k='ts'+(o.id||''),sea=o.sea!==false,anim=o.anim!==false,fire=o.fire!==false,OL='stroke="#3a2210" stroke-width="1.3" stroke-linejoin="round"',GO='stroke="#6e420c" stroke-width="1.1" stroke-linejoin="round"';
+  const A=(s)=>anim?s:'';
+  const ROOF='M60,108 Q66,76 118,69 Q170,62 222,69 Q264,76 272,106Z';
+  // hexagonal iron shell plates, each with a spike, clipped to the roof
+  let hex='';{const R=8.2,W=R*Math.sqrt(3);for(let row=0;row<7;row++){const y=64+row*R*1.5;for(let c=-1;c<16;c++){const x=58+c*W+(row%2?W/2:0),hy=y;const pts=Array.from({length:6},(_,i)=>{const a=Math.PI/3*i+Math.PI/6;return (x+R*.94*Math.cos(a)).toFixed(1)+','+(hy+R*.94*Math.sin(a)).toFixed(1);}).join(' ');
+    const sh=(.35+.65*((c*7+row*3)%5)/5).toFixed(2);hex+=`<polygon points="${pts}" fill="url(#${k}hx)" stroke="#c99a3c" stroke-width=".7" stroke-opacity=".75"/><polygon points="${pts}" fill="#000" opacity="${(sh*.25).toFixed(2)}"/>`;}}}
+  let spikes='';{const R=8.2,W=R*Math.sqrt(3);for(let row=0;row<7;row++){const y=64+row*R*1.5;for(let c=-1;c<16;c++){const x=58+c*W+(row%2?W/2:0);
+    // only on the roof: test against the roof outline (approximate top curve)
+    const t=(x-60)/212;if(t<.02||t>.98)continue;const top=108-(t<.5?Math.sin(Math.PI*t)*38:Math.sin(Math.PI*t)*38)-0;if(y<top+3||y>104)continue;
+    spikes+=`<path d="M${(x-2.6).toFixed(1)},${(y+1.6).toFixed(1)} L${x.toFixed(1)},${(y-6.2).toFixed(1)} L${(x+2.6).toFixed(1)},${(y+1.6).toFixed(1)}Z" fill="url(#${k}sp)" stroke="#121417" stroke-width=".5"/><circle cx="${x.toFixed(1)}" cy="${(y+1.4).toFixed(1)}" r="1.5" fill="#d7a84a" stroke="#6e420c" stroke-width=".4"/>`;}}}
+  const ports=[0,1,2,3,4,5].map(i=>{const x=86+i*29;return `<rect x="${x-1.5}" y="114.5" width="18" height="15" rx="1.5" fill="#5a2e12" ${OL}/><rect x="${x}" y="116" width="15" height="12" rx="1" fill="#1c0e06"/><circle cx="${x+7.5}" cy="122" r="4.4" fill="url(#${k}gun)" stroke="#0b0c0e" stroke-width=".6"/><circle cx="${x+7.5}" cy="122" r="2.2" fill="#000"/><path d="M${x+5},119.6 a3,3 0 0 1 3,-1" stroke="#c3ccd4" stroke-width=".9" fill="none"/><path d="M${x-1.5},113 h18 l-2,-3 h-14Z" fill="#7a4220" ${OL}/>`;}).join('');
+  const brackets=[0,1,2,3,4,5,6].map(i=>{const x=78+i*29;return `<rect x="${x}" y="110" width="6" height="40" fill="url(#${k}au)" ${GO}/><circle cx="${x+3}" cy="114" r="1.2" fill="#fff3b0"/><circle cx="${x+3}" cy="130" r="1.2" fill="#fff3b0"/><circle cx="${x+3}" cy="146" r="1.2" fill="#fff3b0"/>`;}).join('');
+  const oars=[0,1,2,3,4,5,6].map(i=>{const x=92+i*26;return `<g><path d="M${x},150 L${x+20},188" stroke="#5a3214" stroke-width="5.4" stroke-linecap="round"/><path d="M${x},150 L${x+20},188" stroke="#c98a4e" stroke-width="2.4" stroke-linecap="round"/><path d="M${x+13},176 l9,-3 l4,12 l-9,3Z" fill="#a8683a" stroke="#5a3214" stroke-width=".8"/>${A(`<animateTransform attributeName="transform" type="rotate" values="-6 ${x} 150;7 ${x} 150;-6 ${x} 150" dur="2.4s" begin="${(i*.08).toFixed(2)}s" repeatCount="indefinite"/>`)}</g>`;}).join('');
+  const grain=[122,131,140,158,166].map((y,i)=>`<path d="M${48+i},${y} Q160,${y+7} ${273-i},${y-2}" stroke="#4e2a12" stroke-width=".9" fill="none" opacity=".5"/>`).join('')+[70,120,175,230].map(x=>`<path d="M${x},152 v20" stroke="#4e2a12" stroke-width=".8" opacity=".45"/>`).join('');
+  const flag=(x,id)=>`<g><rect x="${x-1.6}" y="28" width="3.2" height="80" fill="#6a3a18" ${OL}/><rect x="${x-2.6}" y="44" width="5.2" height="4" fill="url(#${k}au)"/><rect x="${x-2.6}" y="76" width="5.2" height="4" fill="url(#${k}au)"/><path d="M${x},18 l-4,10 h8Z" fill="url(#${k}au)" ${GO}/><circle cx="${x}" cy="28.5" r="2.3" fill="url(#${k}au)" ${GO}/>
+    <g>${A(`<animateTransform attributeName="transform" type="skewY" values="0;3;-2;0" dur="${id?2.2:2.6}s" repeatCount="indefinite"/>`)}<path d="M${x+1.6},33 h27 l-3.4,4 l3.4,4 l-3.4,4 l3.4,4 l-3.4,4 l3.4,4 l-3.4,4 l3.4,4 h-27Z" fill="#c62a1c" stroke="#5a0c06" stroke-width=".8"/><path d="M${x+1.6},35.5 h21 v30 h-21Z" fill="#141518"/>
+      <path d="M${x+16},40 q-7,2 -4,7 q4,5 -2,9 q-5,3 -1,8" stroke="#e9eef2" stroke-width="2.1" fill="none" stroke-linecap="round"/><path d="M${x+14},38.5 l3,-2 l1,3Z" fill="#e9eef2"/><circle cx="${x+16.5}" cy="40" r="1.5" fill="#e9eef2"/><path d="M${x+11},50 l-3,-1 M${x+11},58 l3,1" stroke="#e9eef2" stroke-width="1.2"/></g></g>`;
+  // ---- dragon head (bow) ----
+  const head=`<g>
+   <!-- neck with belly scales -->
+   <path d="M64,110 C60,96 58,86 52,78 L36,80 C42,90 46,100 48,110Z" fill="url(#${k}gd)" ${GO}/>
+   ${[84,91,98,105].map((y,i)=>`<path d="M${40+i*2.2},${y} q6,3 12,0" stroke="#8a5612" stroke-width="1" fill="none"/>`).join('')}
+   <path d="M55,82 C58,90 60,98 62,108" stroke="#fff3b0" stroke-width="1.6" fill="none" opacity=".7"/>
+   <!-- mane: flame locks behind the head -->
+   <path d="M54,58 C64,50 74,52 80,44 C78,54 72,58 66,60 C76,60 82,66 88,62 C84,72 74,72 66,70 C74,74 78,82 84,82 C76,88 66,82 60,78Z" fill="url(#${k}au)" ${GO}/>
+   <path d="M60,60 C68,56 72,54 76,50 M62,68 C70,68 76,66 82,64 M60,76 C68,78 72,80 78,82" stroke="#8a5612" stroke-width=".9" fill="none"/>
+   <!-- horns -->
+   <path d="M44,52 C50,40 62,30 78,26 C68,34 58,42 52,54Z" fill="url(#${k}hn)" ${GO}/><path d="M50,54 C58,46 68,42 80,42 C70,46 62,50 56,58Z" fill="url(#${k}hn)" ${GO}/>
+   <path d="M50,46 l3,2 M56,40 l3,2 M62,35 l3,2" stroke="#8a6a3a" stroke-width=".8"/>
+   <!-- skull + upper jaw -->
+   <path d="M58,62 C58,52 50,48 42,48 C34,48 28,52 22,56 L8,58 C1,58 -3,62 -2,66 C-1,70 2,71 6,71 L18,71 C26,70 34,70 42,72 L56,74Z" fill="url(#${k}gd)" ${GO}/>
+   <path d="M-1,62 C2,58 8,57 12,58" stroke="#fff6c8" stroke-width="1.4" fill="none" opacity=".8"/>
+   <ellipse cx="2" cy="62" rx="3.2" ry="2.4" fill="#e2a53a" ${GO}/><ellipse cx="1.4" cy="62.4" rx="1.3" ry="1" fill="#3a1a08"/>
+   <path d="M10,60 q4,-3 8,0 M14,64 q4,-2 8,0" stroke="#8a5612" stroke-width=".9" fill="none"/>
+   <!-- mouth, tongue, teeth, lower jaw -->
+   <path d="M5,71 L44,72 L44,77 C30,79 18,79 8,78Z" fill="#6a0e08"/>
+   <path d="M10,75 C20,72 30,73 36,76 C30,78 20,79 12,78Z" fill="#e2443a"/>
+   <path d="M7,71 l2.2,3.4 l2.2,-3.4 l2.2,3.4 l2.2,-3.4 l2.2,3.4 l2.2,-3.4 l2.2,3.4 l2.2,-3.4 l2.2,3.4 l2.2,-3.4" fill="#fffbea" stroke="#9a8a6a" stroke-width=".4"/>
+   <path d="M4,70 l1.6,5.5 l2,-5.4Z M40,71.5 l1.4,4.2 l1.6,-4.2Z" fill="#fffbea" stroke="#9a8a6a" stroke-width=".4"/>
+   <path d="M44,77 C34,82 20,86 8,84 C3,83 2,79 6,78 L20,79 C28,79 36,78 44,77Z" fill="url(#${k}gd)" ${GO}/>
+   <path d="M10,78 l2,-3 l2,3 l2,-3 l2,3 l2,-3 l2,3" fill="#fffbea" stroke="#9a8a6a" stroke-width=".4"/>
+   <!-- beard -->
+   <path d="M14,84 C12,92 18,96 16,102 C22,96 20,90 24,86 C24,94 30,96 30,100 C34,92 30,88 34,84Z" fill="url(#${k}au)" ${GO}/>
+   <!-- eye + brow -->
+   <path d="M30,52 C36,46 46,46 50,52 C44,50 36,52 32,56Z" fill="#b8741a" ${GO}/>
+   <ellipse cx="40" cy="57" rx="6" ry="4.6" fill="#fff8e0" ${GO}/><circle cx="39" cy="57.4" r="3.2" fill="#d23a12"/><ellipse cx="39" cy="57.4" rx="1.1" ry="2.6" fill="#1a0a04"/><circle cx="37.8" cy="55.8" r="1" fill="#fff"/>
+   <!-- cheek scales -->
+   ${[[46,64],[51,66],[48,70],[53,71]].map(([x,y])=>`<path d="M${x-2.4},${y} a2.4,2.4 0 0 0 4.8,0" stroke="#8a5612" stroke-width=".8" fill="none"/>`).join('')}
+   <!-- whiskers -->
+   <path d="M2,66 C-6,56 -2,44 10,40 C20,36 24,30 20,24" stroke="#ffe680" stroke-width="2" fill="none" stroke-linecap="round">${A('<animate attributeName="d" values="M2,66 C-6,56 -2,44 10,40 C20,36 24,30 20,24;M2,66 C-8,58 -4,44 8,42 C20,38 26,32 24,26;M2,66 C-6,56 -2,44 10,40 C20,36 24,30 20,24" dur="2.6s" repeatCount="indefinite"/>')}</path>
+   <path d="M6,68 C-2,70 -8,80 -4,90 C0,98 -4,104 -8,106" stroke="#ffe680" stroke-width="1.8" fill="none" stroke-linecap="round">${A('<animate attributeName="d" values="M6,68 C-2,70 -8,80 -4,90 C0,98 -4,104 -8,106;M6,68 C-4,72 -10,82 -6,92 C-2,100 -8,104 -12,104;M6,68 C-2,70 -8,80 -4,90 C0,98 -4,104 -8,106" dur="2.9s" repeatCount="indefinite"/>')}</path>
+  </g>`;
+  // ---- fire breath from the mouth ----
+  const flame=fire?`<g>
+   <g>${A(`<animateTransform attributeName="transform" type="scale" values="1 1;1.1 .88;.94 1.1;1.05 .95;1 1" dur=".42s" repeatCount="indefinite" additive="sum"/>`)}
+    <g transform="translate(4,74)">
+     <path d="M0,0 C-10,-12 -30,-16 -44,-10 C-52,-14 -60,-8 -64,-2 C-58,0 -60,6 -66,10 C-56,14 -48,12 -42,10 C-30,18 -12,14 0,4Z" fill="url(#${k}f1)"/>
+     <path d="M0,1 C-10,-7 -24,-9 -36,-5 C-42,-6 -48,-2 -50,2 C-44,4 -40,8 -34,7 C-24,11 -10,9 0,3Z" fill="url(#${k}f2)"/>
+     <path d="M0,2 C-8,-2 -16,-3 -24,0 C-18,4 -8,5 0,3Z" fill="#fffbe0"/>
+    </g></g>
+   ${[0,1,2,3,4].map(i=>`<circle r="${(1.2+i%3*.6).toFixed(1)}" fill="${['#ffd25a','#ff8a2a','#fff3a0'][i%3]}">${A(`<animate attributeName="cx" values="${-8-i*3};${-58-i*6}" dur="${(.7+i*.13).toFixed(2)}s" repeatCount="indefinite"/><animate attributeName="cy" values="${74-i};${66+i*4}" dur="${(.7+i*.13).toFixed(2)}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="${(.7+i*.13).toFixed(2)}s" repeatCount="indefinite"/>`)}</circle>`).join('')}
+   ${A(`<circle cx="-40" cy="66" r="5" fill="#8a8f96" opacity=".0"><animate attributeName="cy" values="66;40" dur="1.8s" repeatCount="indefinite"/><animate attributeName="r" values="3;10" dur="1.8s" repeatCount="indefinite"/><animate attributeName="opacity" values=".45;0" dur="1.8s" repeatCount="indefinite"/></circle>`)}
+  </g>`:'';
+  // ---- stern dragon tail ----
+  const tail=`<g><path d="M260,104 C276,104 292,96 294,80 C296,66 286,56 276,60 C270,62 270,70 276,70 C282,70 284,76 280,82 C274,92 266,94 256,96Z" fill="url(#${k}gd)" ${GO}/>
+   ${[[272,98],[280,94],[287,88],[291,80],[290,71],[284,64]].map(([x,y],i)=>`<path d="M${x-3},${y+1} q3,-4 6,0" stroke="#8a5612" stroke-width=".9" fill="none"/>`).join('')}
+   <path d="M276,60 C280,50 290,48 296,52 C290,54 288,58 288,62Z M288,64 C296,60 302,64 304,70 C298,68 294,70 292,72Z" fill="url(#${k}au)" ${GO}/>
+   <path d="M262,100 C276,98 288,90 290,78" stroke="#fff3b0" stroke-width="1.3" fill="none" opacity=".7"/></g>`;
+  // ---- bow ghost-face plaque (귀면) ----
+  const gwi=`<g transform="translate(55,134)"><circle r="9" fill="url(#${k}au)" ${GO}/><circle r="7" fill="#b8241a" stroke="#5a0c06" stroke-width=".8"/><path d="M-4,-2 l2.5,-2 l1.5,2.5Z M4,-2 l-2.5,-2 l-1.5,2.5Z" fill="#ffe680"/><path d="M-4,2.5 q4,3.5 8,0" stroke="#ffe680" stroke-width="1.2" fill="none"/><path d="M-3,3 l1,3 l1,-2.5 M3,3 l-1,3 l-1,-2.5" fill="#fff"/><path d="M-6,-6 l-2,-3 M6,-6 l2,-3" stroke="#ffe680" stroke-width="1.4" stroke-linecap="round"/></g>`;
   return `<defs>
    <linearGradient id="${k}au" x1="0" x2="1"><stop offset="0" stop-color="#ffe680"/><stop offset=".45" stop-color="#f2b632"/><stop offset="1" stop-color="#b9761a"/></linearGradient>
-   <linearGradient id="${k}gd" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff0a0"/><stop offset=".4" stop-color="#f6c443"/><stop offset="1" stop-color="#b8741a"/></linearGradient>
-   <linearGradient id="${k}rf" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6b727c"/><stop offset=".35" stop-color="#454b54"/><stop offset="1" stop-color="#22262c"/></linearGradient>
-   <linearGradient id="${k}sp" x1="0" x2="1"><stop offset="0" stop-color="#a3a9b0"/><stop offset=".5" stop-color="#5b6168"/><stop offset="1" stop-color="#2c3036"/></linearGradient>
-   <linearGradient id="${k}wd" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d08a4a"/><stop offset=".5" stop-color="#a8602c"/><stop offset="1" stop-color="#6a3816"/></linearGradient>
+   <linearGradient id="${k}gd" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff2a8"/><stop offset=".35" stop-color="#f8c94a"/><stop offset=".75" stop-color="#d89a24"/><stop offset="1" stop-color="#a6650f"/></linearGradient>
+   <linearGradient id="${k}hn" x1="0" x2="1" y1="1" y2="0"><stop offset="0" stop-color="#e9d6a8"/><stop offset="1" stop-color="#fffaf0"/></linearGradient>
+   <radialGradient id="${k}hx" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#7a828c"/><stop offset=".55" stop-color="#454b54"/><stop offset="1" stop-color="#23272d"/></radialGradient>
+   <linearGradient id="${k}sp" x1="0" x2="1"><stop offset="0" stop-color="#c3c9d0"/><stop offset=".5" stop-color="#6b7178"/><stop offset="1" stop-color="#2c3036"/></linearGradient>
+   <radialGradient id="${k}gun" cx=".35" cy=".35"><stop offset="0" stop-color="#6a737c"/><stop offset="1" stop-color="#15171a"/></radialGradient>
+   <linearGradient id="${k}wd" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d69050"/><stop offset=".5" stop-color="#a8602c"/><stop offset="1" stop-color="#5e3012"/></linearGradient>
    <linearGradient id="${k}sl" x1="0" x2="1"><stop offset="0" stop-color="#fbf1d8"/><stop offset=".6" stop-color="#eedcb3"/><stop offset="1" stop-color="#d9c08c"/></linearGradient>
-   <linearGradient id="${k}sea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2a8fe0"/><stop offset="1" stop-color="#0b4a9a"/></linearGradient></defs>
-  <g>${anim?`<animateTransform attributeName="transform" type="translate" values="0 0;0 -2.2;0 0" dur="3.2s" repeatCount="indefinite"/>`:''}
+   <linearGradient id="${k}f1" x1="1" x2="0"><stop offset="0" stop-color="#ffb02a"/><stop offset=".45" stop-color="#ff5a14"/><stop offset=".85" stop-color="#d81e08"/><stop offset="1" stop-color="#a01004" stop-opacity=".5"/></linearGradient>
+   <linearGradient id="${k}f2" x1="1" x2="0"><stop offset="0" stop-color="#fffbe0"/><stop offset=".4" stop-color="#ffe04a"/><stop offset="1" stop-color="#ff9a1a" stop-opacity=".7"/></linearGradient>
+   <linearGradient id="${k}sea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2a8fe0"/><stop offset="1" stop-color="#0b4a9a"/></linearGradient>
+   <clipPath id="${k}rc"><path d="${ROOF}"/></clipPath></defs>
+  <g>${A(`<animateTransform attributeName="transform" type="translate" values="0 0;0 -2.2;0 0" dur="3.2s" repeatCount="indefinite"/>`)}
   ${flag(96,0)}${flag(246,1)}
   <!-- mast + sail -->
-  <rect x="164" y="-6" width="5" height="78" fill="#7a4a22" ${OL}/><circle cx="166.5" cy="-7" r="3" fill="url(#${k}au)" stroke="#7a4a10" stroke-width=".7"/>
+  <rect x="164" y="-6" width="5" height="78" fill="#6a3a18" ${OL}/><circle cx="166.5" cy="-7" r="3" fill="url(#${k}au)" ${GO}/>
   <path d="M124,2 Q170,-4 214,2 L218,68 Q170,76 122,68Z" fill="url(#${k}sl)" stroke="#6a4a2a" stroke-width="1.4"/>
   ${[14,30,46,60].map(y=>`<path d="M${123+(y-2)*.03},${y} Q170,${y-4} ${215+(y-2)*.05},${y}" stroke="#8a6a44" stroke-width="2.2" fill="none"/><circle cx="125" cy="${y}" r="1.6" fill="#c9a050"/><circle cx="215" cy="${y}" r="1.6" fill="#c9a050"/>`).join('')}
-  <path d="M120,0 h100" stroke="#7a4a22" stroke-width="4" stroke-linecap="round"/><path d="M120,70 h100" stroke="#7a4a22" stroke-width="4" stroke-linecap="round"/>
+  <path d="M120,0 h100" stroke="#6a3a18" stroke-width="4" stroke-linecap="round"/><path d="M120,70 h100" stroke="#6a3a18" stroke-width="4" stroke-linecap="round"/>
   <text x="170" y="54" text-anchor="middle" font-size="42" font-weight="900" fill="#1a1410" font-family="'Noto Serif KR','Noto Serif CJK KR','Nanum Myeongjo',serif" opacity=".92">龜</text>
   <path d="M216,6 q8,6 5,16 q-3,6 2,12" stroke="#d2281c" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M219,36 l3,10 l-4,-2 l-3,6" stroke="#d2281c" stroke-width="2.2" fill="none"/>
-  <!-- stern curl -->
-  <path d="M262,104 Q286,96 284,78 Q282,92 270,96 Q280,84 276,72 Q272,92 258,98Z" fill="url(#${k}gd)" stroke="#7a4a10" stroke-width="1.1"/>
+  ${tail}
+  <!-- rudder -->
+  <path d="M250,160 L268,158 L272,186 L254,186Z" fill="#7a4220" ${OL}/><path d="M253,166 h16 M254,176 h17" stroke="#4e2a12" stroke-width=".9"/>
   <!-- hull -->
   <path d="M46,110 L272,106 Q278,146 262,172 Q160,184 62,172 Q42,146 46,110Z" fill="url(#${k}wd)" stroke="#3a2210" stroke-width="1.8"/>
-  ${planks}
-  <path d="M50,150 Q160,158 272,148" stroke="url(#${k}au)" stroke-width="4" fill="none"/><path d="M50,150 Q160,158 272,148" stroke="#7a4a10" stroke-width=".7" fill="none"/>
+  ${grain}
+  <path d="M48,152 Q160,161 272,150" stroke="#b8241a" stroke-width="5" fill="none"/>
+  <path d="M48,148 Q160,157 272,146" stroke="url(#${k}au)" stroke-width="3.4" fill="none"/><path d="M48,156 Q160,165 271,154" stroke="url(#${k}au)" stroke-width="2.4" fill="none"/>
   ${brackets}${ports}
   ${oars}
-  <!-- iron roof with spikes -->
-  <path d="M60,108 Q70,74 120,70 Q170,64 220,70 Q262,76 270,106Z" fill="url(#${k}rf)" stroke="#121417" stroke-width="1.6"/>
-  ${plates}
+  <!-- iron turtle-shell roof -->
+  <path d="${ROOF}" fill="#23272d" stroke="#121417" stroke-width="1.8"/>
+  <g clip-path="url(#${k}rc)">${hex}<path d="M60,108 Q66,76 118,69 Q170,62 222,69 Q264,76 272,106" stroke="#fff" stroke-opacity=".12" stroke-width="10" fill="none"/></g>
+  <path d="M70,96 Q80,74 120,72 Q170,66 220,72 Q256,78 262,96" stroke="url(#${k}au)" stroke-width="3" fill="none"/><path d="M70,96 Q80,74 120,72 Q170,66 220,72 Q256,78 262,96" stroke="#6e420c" stroke-width=".6" fill="none"/>
   ${spikes}
-  <path d="M74,96 Q120,72 170,70" stroke="#c9d2da" stroke-width="1.6" fill="none" opacity=".35"/>
-  ${[0,1,2,3,4,5,6,7].map(i=>`<path d="M${86+i*24},${100-Math.sin(Math.PI*(i+.5)/8)*22} l3,2" stroke="#ffd970" stroke-width="1.2" opacity=".7"/>`).join('')}
-  <path d="M58,108 L272,105" stroke="url(#${k}au)" stroke-width="5.5"/><path d="M58,108 L272,105" stroke="#7a4a10" stroke-width=".8"/>${rivets}
-  <!-- golden bow plate + dragon head -->
-  <path d="M44,104 Q34,138 52,172 L66,172 Q54,138 60,104Z" fill="url(#${k}gd)" stroke="#7a4a10" stroke-width="1.3"/>
-  <path d="M48,112 h12 M47,126 h12 M48,140 h12" stroke="#7a4a10" stroke-width="1"/>
-  <g transform="translate(6,30)">
-   <path d="M52,78 Q58,60 50,48 Q44,40 34,40 L18,42 Q6,44 4,54 Q2,62 8,66 L14,66 Q12,72 20,76 L36,74 Q40,84 52,86Z" fill="url(#${k}gd)" stroke="#7a4a10" stroke-width="1.4"/>
-   <path d="M6,60 Q16,60 24,64 L36,62 Q28,72 18,72 Q10,70 8,66Z" fill="#b8241a" stroke="#5a0c06" stroke-width="1"/>
-   <path d="M10,58 l2,4 l2,-4 l2,4 l2,-4 l2,4 M14,68 l2,-3 l2,3 l2,-3 l2,3" stroke="#fff" stroke-width="1.2" fill="none"/>
-   <path d="M6,56 L4,48" stroke="#fff4c0" stroke-width="2" stroke-linecap="round"/>
-   <path d="M10,52 Q20,46 30,52" stroke="#7a4a10" stroke-width="1.2" fill="none"/>
-   <ellipse cx="30" cy="49" rx="5" ry="4" fill="#fff8e0" stroke="#7a4a10" stroke-width="1"/><circle cx="29" cy="49" r="2.4" fill="#3a1a08"/><circle cx="28.2" cy="48.2" r=".8" fill="#fff"/>
-   <path d="M24,44 Q30,38 38,42" stroke="#7a4a10" stroke-width="2" fill="none" stroke-linecap="round"/>
-   <path d="M38,40 Q44,26 58,24 Q50,32 52,38Z M42,46 Q56,40 64,44 Q54,48 52,52Z M46,58 Q60,58 66,64 Q56,64 52,66Z" fill="url(#${k}au)" stroke="#7a4a10" stroke-width="1.1"/>
-   <path d="M34,40 Q36,30 46,26" stroke="#ffe680" stroke-width="3" fill="none" stroke-linecap="round"/>
-   <path d="M8,62 q-6,2 -10,-1" stroke="#9fd6ff" stroke-width="1.2" fill="none" opacity=".6">${anim?'<animate attributeName="opacity" values=".1;.7;.1" dur="1.6s" repeatCount="indefinite"/>':''}</path>
+  <path d="${ROOF}" fill="none" stroke="#121417" stroke-width="1.6"/>
+  <path d="M58,108 L273,105" stroke="url(#${k}au)" stroke-width="6"/><path d="M58,108 L273,105" stroke="#6e420c" stroke-width=".8"/>${Array.from({length:23},(_,i)=>`<circle cx="${66+i*9.2}" cy="107.2" r="1.25" fill="#fff3b0"/>`).join('')}
+  <!-- golden bow plate + ghost face -->
+  <path d="M44,104 Q34,138 52,172 L68,172 Q56,138 62,104Z" fill="url(#${k}gd)" ${GO}/>
+  <path d="M46,114 h14 M45,152 h15 M48,164 h15" stroke="#7a4a10" stroke-width="1"/>
+  ${gwi}
+  ${head}
+  ${flame}
   </g>
-  </g>
-  ${sea?`<path d="M-20,168 Q0,162 20,168 T60,168 T100,168 T140,168 T180,168 T220,168 T260,168 T300,168 T340,168 V210 H-20Z" fill="url(#${k}sea)" opacity=".96"/>
-  <path d="M30,170 q16,-10 30,-2 q10,6 22,0 M150,178 q20,-8 40,0 M232,170 q18,-10 34,0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".9"/>
+  ${sea?`<path d="M-80,168 Q-60,162 -40,168 T0,168 T40,168 T80,168 T120,168 T160,168 T200,168 T240,168 T280,168 T320,168 T360,168 V210 H-80Z" fill="url(#${k}sea)" opacity=".96"/>
+  <path d="M30,170 q16,-10 30,-2 q10,6 22,0 M150,178 q20,-8 40,0 M232,170 q18,-10 34,0 M-40,176 q14,-8 28,0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".9"/>
   <g fill="#fff" opacity=".9"><circle cx="48" cy="164" r="2.4"/><circle cx="58" cy="160" r="1.6"/><circle cx="276" cy="164" r="2"/><circle cx="112" cy="180" r="1.6"/><circle cx="200" cy="184" r="2"/></g>
-  <path d="M0,188 Q30,182 60,188 T120,188 T180,188 T240,188 T300,188" stroke="#7cc8ff" stroke-width="2" fill="none" opacity=".6"/>`:''}`;}
+  <path d="M-80,188 Q-50,182 -20,188 T40,188 T100,188 T160,188 T220,188 T280,188 T340,188" stroke="#7cc8ff" stroke-width="2" fill="none" opacity=".6"/>`:''}`;}
 
 // large, detailed icons for the wardrobe's item tab
 const OLI='stroke="#2b211c" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"';
@@ -2986,16 +3043,20 @@ const ITEMSVG={
  hdrill:`<defs><linearGradient id="idr" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffc24a"/><stop offset="1" stop-color="#d9861a"/></linearGradient></defs><path d="M8,16 h30 q6,0 6,6 v4 q0,6 -6,6 h-30Z" fill="url(#idr)" ${OLI}/><path d="M18,32 h10 l3,18 h-15Z" fill="#2b3338" ${OLI}/><rect x="14" y="44" width="20" height="10" rx="2" fill="#3a4248" ${OLI}/><rect x="17" y="47" width="6" height="4" fill="#7cffc8"/><rect x="44" y="21" width="5" height="6" fill="#5a646a" ${OLI}/><path d="M49,24 h9" stroke="#c9d1d5" stroke-width="3.4" stroke-linecap="round"/><path d="M50,22 l2,4 l2,-4 l2,4" stroke="#7e888e" stroke-width="1" fill="none"/><path d="M12,20 h22" stroke="#fff3b0" stroke-width="1.6" opacity=".8"/>`};
 function renderWard(){
   const c=wardChar();
-  $('#wStage').innerHTML=wTab==='ship'&&c.ship==='turtle'?`<svg viewBox="-6 -16 312 216" role="img" aria-label="거북선 미리보기" style="width:100%;max-width:420px">${turtleSVG({id:'w'})}</svg>`:`<svg viewBox="-30 -14 160 192" role="img" aria-label="주인공 미리보기"><ellipse cx="50" cy="168" rx="40" ry="6" fill="rgba(0,0,0,.35)"/>${charG(c)}</svg>`;
+  const showShip=wTab==='sex'&&(wTry?wTry.k==='ship':wShip);
+  $('#wStage').innerHTML=showShip?`<svg viewBox="-70 -16 380 216" role="img" aria-label="거북선 미리보기" style="width:100%;max-width:440px">${turtleSVG({id:'w'})}</svg>`:`<svg viewBox="-30 -14 160 192" role="img" aria-label="주인공 미리보기"><ellipse cx="50" cy="168" rx="40" ry="6" fill="rgba(0,0,0,.35)"/>${charG(c)}</svg>`;
+  setTimeout(()=>{const a=document.querySelector('#wTabs [aria-selected="true"]');if(a&&a.scrollIntoView)a.scrollIntoView({inline:'nearest',block:'nearest'});},0);
   $('#wTabs').innerHTML=WT.map(t=>`<button class="wtab" type="button" role="tab" data-t="${t.k}" aria-selected="${t.k===wTab}">${t.n}</button>`).join('');
   const head=['hair','hcol','eyes','skin','hat'].includes(wTab);
   $('#wOpts').innerHTML=OPT[wTab].filter(o=>wTab!=='sex'||sexVis(o)).map(o=>{const cur=S.char[wTab]===o.v,tr=wTry&&wTry.k===wTab&&wTry.v===o.v,own=owns(wTab,o);
     const pv=Object.assign({},S.char,{[wTab]:o.v},wTab!=='sex'&&S.char.sex==='yi'?{sex:S.char.lastSex||'m'}:{},wTab==='sex'&&(o.v==='m'||o.v==='f')&&o.v!==S.char.sex?{hair:o.v==='f'?'long':'short'}:{});
-    const pic=wTab==='ship'?`<svg viewBox="${o.v==='turtle'?'-6 -16 312 216':'0 0 60 60'}" aria-hidden="true" style="width:100%;height:auto">${o.v==='turtle'?turtleSVG({id:'o',anim:false}):ITEMSVG.none}</svg>`:wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charG(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${charG(pv)}</svg>`;
+    const pic=wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charG(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${charG(pv)}</svg>`;
     return `<button class="wopt ${cur?'on':''} ${tr?'try':''}" type="button" data-v="${o.v}">${pic}<span class="wn">${o.n}</span><span class="wp ${cur?'own':own?'own':S.money<o.p?'no':''}">${cur?'착용 중':own?'보유':won(o.p)}</span></button>`;}).join('');
+  if(wTab==='sex'){const o=OPT.ship[1],on=S.char.ship==='turtle',own=owns('ship',o),tr=wTry&&wTry.k==='ship';
+    $('#wOpts').insertAdjacentHTML('beforeend',`<button class="wopt wship ${on?'on':''} ${tr?'try':''}" type="button" data-k="ship" data-v="turtle"><svg viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'o',anim:false})}</svg><span class="wn">${o.n}</span><span class="wp ${on||own?'own':S.money<o.p?'no':''}">${on?'출항 중 · 누르면 정박':own?'보유 · 누르면 출항':won(o.p)}</span></button>`);}
   if(S.char.sex==='yi'&&wTab!=='sex')$('#wOpts').insertAdjacentHTML('afterbegin','<p class="wnote">이순신 장군은 전용 갑옷·투구를 입어요. 여기서 고른 꾸미기는 다른 주인공으로 바꾸면 보여요.</p>');
   if(wTab==='item'){const own=OPT.item.filter(o=>o.d&&hasIt(o.v));$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>소품 보유 효과</b> — 사서 갖고 있기만 해도 적용돼요 (착용과 무관, 하드는 60%)<br>${own.length?own.map(o=>'· '+o.n+': '+o.d.replace('보유 효과: ','')).join('<br>'):'· 아직 가진 소품이 없어요'}</p>`);}
-  if(wTab==='ship')$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>🐢 거북선</b> — 사서 갖고 있으면 보유 효과, 착용하면 지도 남해를 항해하고 해상 원정 현장에 함께 나가요.<br>· 보유: 해상 원정 굴착력 +${Math.round((SHIP.sea[S.mode]??.2)*100)}%, 본공·원정 굴착력 +${Math.round((SHIP.all[S.mode]??.03)*100)}%<br>· <b>이순신 장군 + 거북선 세트</b>: 장군 출현 확률 ×1.5, 출현 시간 ×1.5, 출현 중 굴착량 +100% → <b>+150%</b> ${yiSet()?'<b style="color:#7bd88f">(적용 중)</b>':'<span style="color:#ff9a7a">('+(yiOwn()?'거북선':shipOwn()?'이순신 장군':'둘 다')+' 필요)</span>'}</p>`);
+  if(wTab==='sex'&&(wShip||(wTry&&wTry.k==='ship')||shipOwn()))$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>🐢 거북선</b> — 사서 갖고 있으면 보유 효과, 출항시키면 지도 남해를 항해하고 해상 원정 현장에 함께 나가요. 주인공은 그대로예요.<br>· 보유: 해상 원정 굴착력 +${Math.round((SHIP.sea[S.mode]??.2)*100)}%, 본공·원정 굴착력 +${Math.round((SHIP.all[S.mode]??.03)*100)}%<br>· <b>이순신 장군 + 거북선 세트</b>: 장군 출현 확률 ×1.5, 출현 시간 ×1.5, 출현 중 굴착량 +100% → <b>+150%</b> ${yiSet()?'<b style="color:#7bd88f">(적용 중)</b>':'<span style="color:#ff9a7a">('+(yiOwn()?'거북선':shipOwn()?'이순신 장군':'둘 다')+' 필요)</span>'}</p>`);
   if(yiOwn()&&wTab==='sex')$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>★ 이순신 장군 보유 효과</b><br>· 본공·원정 굴착력 +${S.mode==='hard'?3:5}% — 다른 캐릭터로 바꿔도 계속 적용<br>· 출현 이벤트(굴착량 +100%, ${YI.dur[S.mode]||60}초): ${S.char.sex==='yi'?'<b style="color:#7bd88f">발동 가능 (착용 중)</b>':'<b style="color:#ff9a7a">이순신 장군을 착용해야 발동</b>'}</p>`);
   const b=$('#wBuy');
   if(wTry){const o=OPT[wTry.k].find(x=>x.v===wTry.v),ok=S.money>=o.p;b.hidden=false;
@@ -3005,8 +3066,18 @@ function openWard(){wTry=null;$('#ward').hidden=false;renderWard();}
 function closeWard(){wTry=null;$('#ward').hidden=true;renderAvatar();if(view==='map')renderCard();}
 $('#avatarBtn').addEventListener('click',openWard);
 $('#wClose').addEventListener('click',closeWard);
-$('#wTabs').addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(!t)return;wTab=t.dataset.t;wTry=null;renderWard();});
-$('#wOpts').addEventListener('click',e=>{const b=e.target.closest('.wopt');if(!b)return;const o=OPT[wTab].find(x=>String(x.v)===b.dataset.v);
+$('#wTabs').addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(!t)return;wTab=t.dataset.t;wTry=null;wShip=false;renderWard();});
+// PC: horizontal scrollers move with the mouse wheel and by dragging (touch already scrolls natively)
+function hScroll(el){if(!el||el.dataset.hs)return;el.dataset.hs=1;
+  el.addEventListener('wheel',e=>{if(el.scrollWidth<=el.clientWidth||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;el.scrollLeft+=e.deltaY;e.preventDefault();},{passive:false});
+  let d=null;el.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;d={x:e.clientX,l:el.scrollLeft,m:false};});
+  addEventListener('pointermove',e=>{if(!d)return;const dx=e.clientX-d.x;if(!d.m&&Math.abs(dx)>5){d.m=true;el.classList.add('drag');}if(d.m)el.scrollLeft=d.l-dx;});
+  addEventListener('pointerup',()=>{if(!d)return;const m=d.m;d=null;if(m)setTimeout(()=>el.classList.remove('drag'),0);});
+  el.addEventListener('click',e=>{if(el.classList.contains('drag')){e.stopPropagation();e.preventDefault();}},true);}
+hScroll($('#wTabs'));
+$('#wOpts').addEventListener('click',e=>{const b=e.target.closest('.wopt');if(!b)return;
+  if(b.dataset.k==='ship'){const o=OPT.ship[1];wShip=true;if(owns('ship',o)){S.char.ship=S.char.ship==='turtle'?'none':'turtle';wTry=null;save();renderAvatar();toast(S.char.ship==='turtle'?'🐢 거북선 출항! 지도 남해를 항해해요':'⚓ 거북선 정박');}else wTry={k:'ship',v:'turtle'};renderWard();return;}
+  wShip=false;const o=OPT[wTab].find(x=>String(x.v)===b.dataset.v);
   if(owns(wTab,o)){if(wTab==='sex'&&S.char.sex!=='yi')S.char.lastSex=S.char.sex;S.char[wTab]=o.v;if(wTab==='sex'&&!owns('hair',OPT.hair.find(h=>h.v===S.char.hair)||OPT.hair[0]))S.char.hair=o.v==='f'?'long':'short';wTry=null;save();renderAvatar();}else wTry={k:wTab,v:o.v};renderWard();});
 $('#wBuy').addEventListener('click',e=>{if(!e.target.closest('#wBuyBtn')||!wTry)return;const o=OPT[wTry.k].find(x=>x.v===wTry.v);if(S.money<o.p)return;
   S.money-=o.p;S.own.push(wTry.k+':'+o.v);if(wTry.k==='sex'&&S.char.sex!=='yi')S.char.lastSex=S.char.sex;S.char[wTry.k]=o.v;toast(o.n+' 구매 완료');wTry=null;save();renderAvatar();renderWard();});
