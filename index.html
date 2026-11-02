@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <title>트리파논 · 지구를 뚫어라</title>
 <meta name="description" content="한반도 한가운데 양구에서 지구 반대편까지 — 방치형 시추 게임">
-<meta name="theme-color" content="#0e1315">
+<meta name="theme-color" content="#0e1315"><meta name="color-scheme" content="dark only">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" href="icon-512.png">
 <link rel="manifest" href="manifest.webmanifest">
-<style>html,body{margin:0;background:#0e1315;-webkit-text-size-adjust:100%;overscroll-behavior:none}</style>
+<style>:root{color-scheme:dark only}html,body{margin:0;background:#0e1315;-webkit-text-size-adjust:100%;overscroll-behavior:none}</style>
 </head>
 <body>
 <title>트리파논</title>
@@ -21,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Cinzel:wght@600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
-<style>
+<meta name="color-scheme" content="dark"><style>:root{color-scheme:dark only}html,body{overflow:hidden;overscroll-behavior:none}
 /* Layout: one-screen app — top bar, active view fills the middle, tab bar at the bottom; expedition is a full-screen overlay.
    Deliberately single-theme: a night-shift geological survey (slate ground, amber instruments). */
 :root{
@@ -33,7 +33,7 @@
   --f-num:'IBM Plex Mono',ui-monospace,Menlo,monospace;
   color-scheme:dark;
 }
-html,body{height:100%;background:var(--bg);color:var(--fg);font-family:var(--f-body);overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{height:100%;background:var(--bg);color:var(--fg);font-family:var(--f-body);overflow:hidden;word-break:keep-all;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 [hidden]{display:none!important}
 button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
@@ -142,6 +142,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .peff{font-size:12px;color:var(--mute);font-family:var(--f-num);margin-top:3px}
 .costs{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px;font-size:12px;font-family:var(--f-num)}
 .costs .no{color:var(--hot)} .costs .yes{color:var(--fg)}
+.costs .cgo{display:inline-flex;align-items:baseline;gap:5px;font:inherit;padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);cursor:pointer}.costs .cgo.no{border-color:rgba(255,120,90,.55);background:rgba(255,100,70,.08)}.costs .cgo small{font-family:var(--f-body);font-size:10.5px;color:var(--mute)}.costs .cgo.no small{color:#ffc39a}.costs .cgo:active{transform:scale(.96)}
 .craft{min-width:72px;height:44px;border-radius:12px;border:1px solid var(--amber);color:var(--amber);font-weight:600;font-size:14px}
 .craft:disabled{border-color:var(--line);color:var(--mute);cursor:default}
 .inv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -164,6 +165,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .ehead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:calc(env(safe-area-inset-top,0px) + 10px);padding-bottom:8px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .ename{font-family:var(--f-kr);font-size:24px;line-height:1.1}
+#exp .quit{white-space:nowrap;flex:none}.ehead>div:first-child{min-width:0}
 .esub{font-size:12px;color:var(--mute)}
 .etime{font-family:var(--f-num);font-weight:600;font-size:26px;font-variant-numeric:tabular-nums}
 .quit{font-size:12px;color:var(--mute);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
@@ -177,7 +179,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .ghost{height:52px;border-radius:14px;border:1px solid var(--line);font-weight:600}
 
 #toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 150px);transform:translateX(-50%);z-index:40;background:rgba(28,37,41,.97);border:1px solid var(--line);
-  border-radius:999px;padding:8px 16px;font-size:13px;max-width:calc(100% - 32px);text-align:center;pointer-events:none}
+  border-radius:18px;padding:8px 16px;font-size:13px;line-height:1.45;width:max-content;max-width:min(520px,calc(100vw - 32px));box-sizing:border-box;text-align:center;pointer-events:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 /* drill workshop preview */
 .preview{position:relative;border:1px solid var(--line);border-radius:16px;background:radial-gradient(ellipse at 50% 70%,#1d2a2f,#0c1113 75%);overflow:hidden;margin-bottom:14px}
@@ -216,13 +218,14 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .tmodes{display:grid;gap:8px;width:min(340px,100%)}.tmh{font-size:12px;letter-spacing:.2em;color:var(--amber2);text-align:center}
 .tmode{display:grid;gap:2px;text-align:left;border:1px solid var(--amber);border-radius:14px;padding:12px 14px;background:rgba(232,169,58,.14);color:var(--fg)}.tmode b{font-size:17px}.tmode span{font-size:12px;color:var(--mute)}
 .tmode.hard{border-color:#ff6b5a;background:rgba(255,91,58,.14)}.tmode.hard b{color:#ff9a8a}.tmode:disabled{opacity:.45}.tmnote{font-size:11.5px;color:var(--mute);margin:0;text-align:center}
-#v-map .mstat{position:absolute;right:10px;bottom:52px;z-index:5;border:1px solid rgba(255,255,255,.35);background:rgba(10,20,30,.62);color:#fff;font-weight:800;font-size:12px;border-radius:999px;padding:6px 12px}
-#statDlg{position:fixed;inset:0;z-index:70;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#statDlg .dsheet{max-height:90vh;overflow-y:auto}
+#v-map .mstat{position:absolute;top:10px;right:max(10px,env(safe-area-inset-right,0px));z-index:5;display:grid;justify-items:center;gap:1px;width:52px;padding:6px 0 5px;border:1.5px solid rgba(242,193,78,.75);background:linear-gradient(180deg,rgba(40,48,52,.92),rgba(14,19,21,.92));color:#ffe3a0;font-weight:800;font-size:10.5px;letter-spacing:-.2px;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.4)}
+#v-map .mstat .dico{width:24px;height:26px}#v-map .mstat:active{transform:scale(.95)}
+#statDlg{position:fixed;inset:0;z-index:70;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#statDlg .dsheet{max-height:90vh;max-height:90dvh;overflow-y:auto}
 .st-hero{display:flex;gap:12px;align-items:center;margin-bottom:8px}.st-hero svg{width:64px;height:76px;flex:none}.st-hero b{font-size:16px}.st-hero span{display:block;font-size:12px;color:var(--mute)}
 .st-sec{margin:12px 0 4px;font-size:12px;font-weight:800;color:#ffd56a;letter-spacing:.04em}.st-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
 .st-c{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:7px 9px}.st-c span{display:block;font-size:11px;color:var(--mute)}.st-c b{font-size:15px;font-family:var(--f-num)}
 .st-l{display:grid;gap:3px}.st-r{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:5px 8px;border-radius:8px;background:rgba(255,255,255,.03)}.st-r em{font-style:normal;color:#7bd88f;font-weight:700;text-align:right}.st-r.off{opacity:.45}.st-r.off em{color:var(--mute)}
-#nameDlg,#recDlg{position:fixed;inset:0;z-index:70;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#recDlg .dsheet{max-height:88vh;overflow-y:auto}
+#nameDlg,#recDlg{position:fixed;inset:0;z-index:70;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#recDlg .dsheet{max-height:88vh;max-height:88dvh;overflow-y:auto}
 .namein{height:46px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--fg);font-size:18px;padding:0 14px;width:100%}
 .rect{width:100%;border-collapse:collapse;font-size:12.5px}.rect th{color:var(--mute);font-weight:600;text-align:left;padding:6px 4px;border-bottom:1px solid var(--line)}.rect td{padding:7px 4px;border-bottom:1px solid var(--line)}.rect td.sc{font-family:var(--f-num);color:var(--amber2);font-weight:700}
 .rnow{border:1px solid var(--amber);border-radius:12px;padding:10px 12px;display:grid;gap:4px;font-size:13px}.rnow b{font-size:20px;font-family:var(--f-num);color:var(--amber2)}
@@ -258,7 +261,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .ibtn:disabled{background:var(--panel2);color:var(--mute);cursor:default}
 .badge{position:absolute;top:11px;left:calc(50% + 14px);width:8px;height:8px;border-radius:50%;background:var(--hot)}
 #deal{position:fixed;inset:0;z-index:56;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}
-.dsheet{width:100%;background:var(--panel);border-top:1px solid var(--line);border-radius:20px 20px 0 0;display:grid;gap:14px;
+.dsheet{box-sizing:border-box;max-height:calc(100vh - 10px);max-height:calc(100dvh - env(safe-area-inset-top,0px) - 10px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;width:100%;background:var(--panel);border-top:1px solid var(--line);border-radius:20px 20px 0 0;display:grid;gap:14px;
   padding-top:22px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px);padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
 .dtop{display:flex;gap:12px;align-items:center}
 .dq{font-size:16px;line-height:1.7;margin:0}
@@ -334,13 +337,6 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .menubtn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);display:grid;place-items:center;color:var(--fg);flex:none}
 #menu{position:fixed;inset:0;z-index:57;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}
 #menu .ghost{height:50px}
-#xfer{position:fixed;inset:0;z-index:62;background:rgba(5,7,8,.78);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}
-#xfer .dsheet{max-height:92dvh;overflow:auto}
-#xfer textarea{width:100%;box-sizing:border-box;min-height:96px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:inherit;font:12px/1.4 ui-monospace,Menlo,monospace;padding:10px;word-break:break-all;resize:vertical}
-#xfer .xrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px}
-#xfer .ghost,#xfer .primary{height:46px}
-#xfer .xsum{font-size:13px;line-height:1.5;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06)}
-#xfer h4{margin:6px 0 0;font-size:14px}
 .ghost.danger{color:var(--hot);border-color:rgba(255,91,58,.5)}
 .tier{border:1px solid var(--line);border-radius:16px;padding:14px;background:var(--panel);display:grid;gap:10px;margin-bottom:18px}
 .tier.ready{border-color:var(--amber)}
@@ -356,14 +352,14 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 
 .art{position:relative}
 .schipw{position:absolute;top:8px;left:8px;right:56px;display:flex;flex-wrap:wrap;gap:5px;pointer-events:none}.schipw .schip{position:static}.schip.rbs{background:linear-gradient(90deg,rgba(255,90,90,.85),rgba(255,200,60,.85),rgba(90,200,120,.85),rgba(80,140,255,.85),rgba(170,100,255,.85));color:#fff;font-weight:700}#map .wxi{pointer-events:none}.schip{position:absolute;top:8px;left:8px;font-size:11px;line-height:1;padding:5px 9px;border-radius:999px;background:rgba(11,15,16,.7);color:#ece6da}
-#pick{position:fixed;inset:0;z-index:59;background:var(--bg);display:flex;align-items:center;justify-content:center;max-width:560px;margin:0 auto;overflow-y:auto}
-.pickin{display:grid;gap:12px;width:100%;padding-block:calc(env(safe-area-inset-top,0px) + 20px) calc(env(safe-area-inset-bottom,0px) + 20px);
+#pick{position:fixed;inset:0;z-index:59;background:var(--bg);display:flex;align-items:flex-start;justify-content:center;max-width:560px;margin:0 auto;overflow-y:auto}
+.pickin{display:grid;gap:12px;width:100%;margin:auto 0;padding-block:calc(env(safe-area-inset-top,0px) + 20px) calc(env(safe-area-inset-bottom,0px) + 20px);
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .ptitle{font-family:var(--f-kr);font-weight:400;font-size:30px;margin:0}
 .picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .pk.lock{opacity:.55;cursor:default}.pk em{font-style:normal;font-size:11px;color:var(--mute);font-family:var(--f-num)}
 .pk{border:1px solid var(--line);border-radius:18px;background:radial-gradient(ellipse at 50% 85%,#25343a,#121a1d 70%);padding:10px 8px 14px;display:grid;justify-items:center;gap:8px}
-.pk svg{width:100%;height:auto;max-height:24vh}
+.pk svg{width:100%;height:auto;max-height:24vh;max-height:24dvh}
 .pk span{font-weight:600;font-size:15px}
 .pk:hover,.pk:focus-visible{border-color:var(--amber)}
 .seasonrow{display:grid;gap:8px;font-size:13px;color:var(--mute)}
@@ -372,16 +368,18 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .segs button[aria-pressed="true"]{background:var(--amber);color:#1a1206;border-color:var(--amber);font-weight:600}
 
 #v-map{position:relative}
-.mapinfo{position:absolute;top:10px;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
-.mchip{font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(14,19,21,.82);border:1px solid var(--line);font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.mapinfo{position:absolute;top:10px;left:max(10px,env(safe-area-inset-left,0px));right:calc(max(10px,env(safe-area-inset-right,0px)) + 60px);display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
+.mchip{font-size:12px;padding:5px 9px;white-space:nowrap;border-radius:999px;background:rgba(14,19,21,.82);border:1px solid var(--line);font-family:var(--f-num);font-variant-numeric:tabular-nums}
 .mchip b{font-family:var(--f-body);color:var(--amber2);font-weight:600;margin-right:2px}.mchip.cool b{color:var(--cool)}.mchip.dim{color:var(--mute)}
 .mchip em{font-style:normal;color:var(--hot)}
+@media (max-width:430px){.mapinfo{gap:4px}.mchip{font-size:11px;padding:4px 8px}}
+.mchip .wxs{margin-left:4px;padding-left:6px;border-left:1px solid rgba(255,255,255,.2)}.mchip .wxs.good{color:#9be37a}.mchip .wxs.bad{color:#ff9f86}
 .mlegend{position:relative;flex:none;padding:7px max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px));background:var(--panel);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11px;color:var(--mute);pointer-events:none}
 .mlegend span{display:inline-flex;align-items:center;gap:5px}.mlegend i{width:8px;height:8px;border-radius:50%;display:inline-block}
 .mchip.rbc{background:linear-gradient(90deg,rgba(255,90,90,.35),rgba(255,200,60,.35),rgba(90,200,120,.35),rgba(80,140,255,.35),rgba(170,100,255,.35)),rgba(14,19,21,.85)}.mchip.rbc b{color:#fff}.mchip.wxc.good b{color:#9be37a}.mchip.wxc.bad b{color:#ff9f86}.mlegend .mwx{color:#eaf4f8;font-weight:700;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:1px 8px}.mlegend i.sq{border-radius:1px;background:#fff4dc;transform:rotate(45deg)}
 .mhint{margin-left:auto;color:var(--amber2)}
 .rpop{position:fixed;inset:0;z-index:30;background:rgba(5,7,8,.62);display:flex;align-items:flex-end;justify-content:center}
-.rsheet{position:relative;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0;
+.rsheet{box-sizing:border-box;position:relative;width:100%;max-width:560px;max-height:90vh;max-height:90dvh;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0;
   padding-top:14px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));animation:sheet .25s ease-out}
 @keyframes sheet{from{transform:translateY(40px);opacity:0}}
 .rclose{position:absolute;top:22px;right:max(24px,calc(env(safe-area-inset-right,0px) + 8px));z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(11,15,16,.75);color:#ece6da;display:grid;place-items:center}
@@ -479,8 +477,8 @@ nav.tabs button{font-size:12px}
 .lp.on{border-color:var(--amber);background:var(--panel2)}
 .pickbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;border:1px solid var(--amber);border-radius:12px;background:var(--panel2);padding:6px 10px;font-size:13px}.pickbar>span{display:flex;align-items:center;gap:6px}.pickbar>span svg{width:34px;height:40px}.pickbar>div{display:flex;gap:6px;flex-wrap:wrap}#roomBar:not(:has(button)){border-color:var(--line);background:transparent;color:var(--mute)}.roomart .fu,.roomart .ft,.roomart .stair{cursor:pointer}.flt{display:flex;gap:6px;margin-left:auto;margin-right:8px}.flt:empty{display:none}.flt button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}.flt button.on{border-color:var(--amber);background:var(--amber);color:#1a1206}
 #room{position:fixed;inset:0;z-index:55;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}
-#room .dsheet{max-height:92vh;overflow-y:auto}
-#gal{position:fixed;inset:0;z-index:56;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#gal .dsheet{max-height:94vh;overflow-y:auto}
+#room .dsheet{max-height:92vh;max-height:92dvh;overflow-y:auto}
+#gal{position:fixed;inset:0;z-index:56;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#gal .dsheet{max-height:94vh;max-height:94dvh;overflow-y:auto}
 .galbody{display:grid;gap:14px}.gxs{display:grid;gap:14px}.gx{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#1c2226}.gx svg{display:block;width:100%;height:auto}
 .gpl{padding:8px 12px 12px;display:grid;gap:3px;background:linear-gradient(#2a2420,#221d1a);border-top:3px solid #8a6a3a}.gpl b{font-size:15px;color:#f2e6c8}.gpl>span{font-size:11.5px;color:var(--mute)}.gpl em{font-style:normal;font-size:12px;color:var(--mute)}.gpl em.ok{color:var(--ok)}
 .vera{display:grid;gap:8px}.vhd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #8a6a3a;padding-bottom:4px}.vhd b{font-size:15px;color:#f2e6c8}.vhd span{font-size:11.5px;color:var(--mute)}
@@ -523,7 +521,7 @@ nav.tabs button{font-size:12px}
   <section class="view" id="v-map">
     <div class="mapwrap" id="map"></div>
     <div class="yiev" id="yiEv" hidden></div>
-    <button class="mstat" id="mapStat" type="button">📊 능력치</button>
+    <button class="mstat" id="mapStat" type="button" aria-label="주인공 능력치 보기"><svg class="dico" viewBox="0 0 24 26" aria-hidden="true"><rect x="5" y="1" width="14" height="6" rx="2" fill="#f2c14e"/><rect x="5" y="3.4" width="14" height="1.3" fill="#b9862b"/><rect x="9" y="7" width="6" height="3" rx=".6" fill="#8d6a2a"/><path d="M6.5 10h11L12 25z" fill="#dfe7eb"/><path d="M7.4 12.6l9.4 2M8.9 16.2l6.6 1.5M10.3 19.8l3.6.8" stroke="#5f6f78" stroke-width="1.3" stroke-linecap="round"/><path d="M12 10v15" stroke="#fff" stroke-opacity=".5" stroke-width=".8"/></svg><span>능력치</span></button>
     <div class="mapinfo" id="mapInfo"></div>
     <div class="mlegend"><span>아이콘 = 그 지역 재료</span><span><svg width="12" height="12" viewBox="-6 -10 12 19" aria-hidden="true"><rect x="-5.5" y="-6" width="11" height="5" rx="1.2" fill="#d9573a"/><path d="M-4.5,-1 L4.5,-1 L0,8Z" fill="#f2c14e"/></svg>양구 본공</span><span style="opacity:.55">흐림 = 잠김</span><span class="mhint">지형을 눌러 보세요</span></div>
     <div class="rpop" id="rpop" hidden><div class="rsheet" role="dialog" aria-modal="true" aria-label="지형 정보">
@@ -615,7 +613,6 @@ nav.tabs button{font-size:12px}
       <button class="tmode hard" type="button" data-mode="hard"><b>하드 모드</b><span id="tHardTxt">엔딩까지 약 1달 · 부품 20단계 · 드릴 무한(Lv.100)까지</span></button>
       <p class="tmnote">새 게임은 돈·재료·부품·드릴·깊이·원정·투자자가 처음부터 시작돼요. 이름·옷장·내 땅·유물·화석·엔딩 기록은 유지돼요.</p></div>
     <button class="tlink" id="tStory" type="button" hidden>스토리 다시 보기</button>
-    <button class="tlink" id="tXfer" type="button">📲 다른 기기 진행 불러오기</button>
     <button class="tlink" id="tReset" type="button" hidden>게임 초기화</button>
   </div>
 </section>
@@ -653,29 +650,13 @@ nav.tabs button{font-size:12px}
   <div class="iname" style="font-size:18px">메뉴</div>
   <button class="ghost" type="button" id="mTitle">타이틀 화면으로</button>
   <button class="ghost" type="button" id="mName">이름 바꾸기</button>
-  <button class="ghost" type="button" id="mStat">📊 능력치 보기</button>
   <button class="ghost" type="button" id="mRec">기록실 (스코어)</button>
   <button class="ghost" type="button" id="mStory">스토리 다시 보기</button>
-  <button class="ghost" type="button" id="mXfer">📲 다른 기기로 진행 옮기기</button>
   <div class="seasonrow"><span>풍경 계절</span><div class="segs" id="mSeason"></div></div>
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
-<section id="xfer" hidden><div class="dsheet">
-  <div class="iname" style="font-size:18px">📲 기기 간 진행 옮기기</div>
-  <p class="wnote">진행은 기기마다 따로 저장됩니다. 이 기기의 <b>저장 코드</b>를 만들어 다른 기기(PC·안드로이드·아이폰)에 붙여 넣으면 그대로 이어서 할 수 있어요.</p>
-  <h4>① 이 기기 진행 보내기</h4>
-  <div class="xsum" id="xMine"></div>
-  <textarea id="xOut" readonly aria-label="저장 코드"></textarea>
-  <div class="xrow"><button class="ghost" type="button" id="xCopy">📋 코드 복사</button><button class="ghost" type="button" id="xShare">📤 공유</button><button class="ghost" type="button" id="xFile">💾 파일 저장</button></div>
-  <h4>② 다른 기기 진행 받기</h4>
-  <textarea id="xIn" placeholder="다른 기기에서 복사한 저장 코드를 여기에 붙여 넣으세요" aria-label="받을 저장 코드"></textarea>
-  <div class="xrow"><button class="ghost" type="button" id="xPaste">📋 붙여넣기</button><label class="ghost" style="display:grid;place-items:center;cursor:pointer;border-radius:12px">📂 파일 열기<input type="file" id="xPick" accept=".txt,text/plain" hidden></label></div>
-  <div class="xsum" id="xTheirs" hidden></div>
-  <button class="ghost danger" type="button" id="xLoad" disabled>이 진행으로 불러오기</button>
-  <p class="wnote">불러오면 이 기기의 현재 진행은 받은 진행으로 <b>덮어써집니다</b>.</p>
-  <button class="primary" type="button" id="xClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
 <section id="news" hidden><div class="dsheet news">
   <div class="nbar"><span class="nlogo">GNN</span><span class="nlive">속보</span><span class="ntime" id="nTime"></span></div>
@@ -812,6 +793,8 @@ if(S.seg!=null){S.depth=Math.max(S.depth||0,Math.min(segTop(S.seg),14999));}if(S
 S.char=Object.assign({},DEFCHAR_,S.char||{});S.ex=Object.assign({active:null,dig:{}},S.ex||{});S.relic=S.relic||{};if(!S.bv5){for(const k in (S.ex.dig||{})){const g0=S.ex.dig[k];g0.i=Math.round(g0.i*2/5);g0.hp=0;}S.bv5=1;}if(!S.rv){for(const k in S.relic)S.relic[k]=0;S.rv=2;}if(S.rv===2){const mp=[0,1,2,4,5,6,7,8,12];for(const k in S.relic)S.relic[k]=mp[S.relic[k]]??0;S.rv=3;}if(S.rv===3){for(const k in S.relic){const g0=S.relic[k];S.relic[k]=Math.floor(g0/4)*6+g0%4;}S.rv=4;}S.own=S.own||[];S.inv=S.inv||{};S.invN=S.invN||[];S.st=Object.assign({exp:0,sea:0},S.st||{});
 S.mode=S.mode||'normal';S.part=S.part||1;S.ng=S.ng||1;S.runStart=S.runStart||Date.now();applyMode();
 let saveLock=false;
+const unShift=()=>{if(window.scrollX||window.scrollY)window.scrollTo(0,0);if(document.scrollingElement)document.scrollingElement.scrollTop=0;};
+document.addEventListener('focusout',()=>setTimeout(unShift,60));if(window.visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(unShift,60));addEventListener('orientationchange',()=>setTimeout(unShift,300));addEventListener('scroll',()=>{if(!document.activeElement||!/INPUT|TEXTAREA/.test(document.activeElement.tagName))unShift();},{passive:true});
 const save=()=>{if(saveLock)return;S.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const L=id=>S.parts[id]||0;
 const levels=()=>Object.fromEntries(PARTS.map(p=>[p.id,L(p.id)]));
@@ -1709,8 +1692,14 @@ function sndInit(){if(SND.ctx)return SND.ctx;const AC=window.AudioContext||windo
 function sndApply(){if(!SND.ctx)return;const p=sndPref(),t=SND.ctx.currentTime;SND.master.gain.setTargetAtTime(p.vol,t,.05);SND.bgmG.gain.setTargetAtTime(p.bgm?.75:0,t,.3);SND.sfxG.gain.setTargetAtTime(p.sfx?1.3:0,t,.05);
   if(p.bgm)bgmStart();else bgmStop();}
 // unlock on the first user gesture (browser autoplay rules)
-['pointerdown','keydown','touchstart'].forEach(ev=>window.addEventListener(ev,()=>{const c=sndInit();if(c&&c.state==='suspended')c.resume();if(c&&!titleOn)sndApply();},{passive:true}));
-document.addEventListener('visibilitychange',()=>{if(!SND.ctx)return;if(document.hidden)SND.ctx.suspend();else SND.ctx.resume();});
+try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
+function sndRebuild(){// iOS sometimes leaves a context dead after the phone was locked: throw it away and make a fresh one inside the tap
+  const old=SND.ctx;bgmStop();SND.ctx=null;SND.fails=0;for(const k of Object.keys(DRL))if(k!=='on')delete DRL[k];try{old&&old.close();}catch(e){}return sndInit();}
+function sndWake(){let c=sndInit();if(!c)return;if(c.state!=='running'){SND.fails=(SND.fails||0)+1;if(SND.fails>2||c.state==='closed')c=sndRebuild();if(c)c.resume().then(()=>{SND.fails=0;if(!titleOn)sndApply();}).catch(()=>{});}
+  else{SND.fails=0;}if(c&&!titleOn)sndApply();}
+['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>window.addEventListener(ev,sndWake,{passive:true,capture:true}));
+document.addEventListener('visibilitychange',()=>{if(!SND.ctx)return;if(document.hidden)SND.ctx.suspend().catch(()=>{});else SND.ctx.resume().catch(()=>{});});
+addEventListener('pageshow',()=>{if(SND.ctx)SND.ctx.resume().catch(()=>{});});addEventListener('focus',()=>{if(SND.ctx&&SND.ctx.state!=='running')SND.ctx.resume().catch(()=>{});});
 const NOTE=n=>440*Math.pow(2,(n-69)/12);
 function tone(o){const c=SND.ctx;if(!c)return;const t=o.t??c.currentTime,g=c.createGain(),osc=c.createOscillator();osc.type=o.type||'sine';osc.frequency.setValueAtTime(o.f,t);if(o.f2)osc.frequency.exponentialRampToValueAtTime(o.f2,t+(o.glide||o.d));
   if(o.det)osc.detune.value=o.det;const a=o.a??.005,v=o.v??.3;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+a);g.gain.exponentialRampToValueAtTime(.0001,t+o.d);
@@ -1720,14 +1709,18 @@ function noise(o){const c=SND.ctx;if(!c)return;const t=o.t??c.currentTime,s=c.cr
 // ---- effects ----
 function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const now=c.currentTime,gap={dig:.07,break:.2,tick:.05,coin:3.5,pickup:.6,tab:.05,select:.05,crit:.08}[k]||0;if(gap&&now-(SND.last[k]||0)<gap)return;SND.last[k]=now;
   switch(k){
-   case 'dig':noise({f:700+Math.random()*600,q:.8,d:.05,v:.09});tone({f:110,f2:70,d:.05,v:.08});break;
+   case 'dig':{// 드득: steel bit biting rock — gritty crunch + low thud with an audible mid-range body
+     noise({f:380+Math.random()*260,q:1.1,d:.07,v:.2});noise({f:1800+Math.random()*900,q:1.6,d:.03,v:.07});
+     tone({f:170,f2:85,d:.07,v:.16,type:'triangle'});tone({f:85,f2:48,d:.08,v:.14});break;}
    case 'crit':{// "탕!" — sharp crack, metal ring and a deep boom
      noise({f:4000,ft:'highpass',d:.04,v:.5});tone({f:1900,f2:500,d:.09,type:'square',v:.16});tone({f:150,f2:42,d:.28,v:.55});
      tone({f:2460,d:.45,type:'triangle',v:.07,t:now+.01});tone({f:3170,d:.32,type:'triangle',v:.05,t:now+.01});noise({f:700,ft:'lowpass',d:.25,v:.25,t:now+.02});break;}
    case 'break':{// "쾅! 쾅! 쿵! 쿵!" — two blasts then two heavy thuds, all low and noisy (no pitched tones)
-     const hit=(t,f,v,d)=>{tone({f,f2:f*.38,t,d,v});noise({f:f*7,ft:'lowpass',t,d:d*.8,v:v*.9});noise({f:900,ft:'lowpass',t,d:.05,v:v*.6});};
-     hit(now,95,.6,.42);hit(now+.13,80,.5,.38);hit(now+.29,62,.42,.34);hit(now+.44,50,.34,.3);
-     noise({f:420,ft:'lowpass',t:now+.08,d:.7,v:.16});break;}
+     noise({f:2600,ft:'highpass',d:.035,v:.45});// the crack as the block splits
+     const hit=(t,f,v,d)=>{tone({f,f2:f*.38,t,d,v});tone({f:f*2.6,f2:f*.9,t,d:d*.6,v:v*.45,type:'triangle'});noise({f:f*7,ft:'lowpass',t,d:d*.8,v:v*.9});noise({f:520,q:.9,t,d:.09,v:v*.55});};
+     hit(now,95,.65,.45);hit(now+.13,80,.55,.4);hit(now+.29,62,.45,.36);hit(now+.44,50,.36,.32);
+     for(let i=0;i<7;i++)noise({f:900+Math.random()*2200,q:2.5,t:now+.12+i*.06+Math.random()*.05,d:.03+Math.random()*.03,v:.08+Math.random()*.06});// falling rubble
+     noise({f:420,ft:'lowpass',t:now+.08,d:.8,v:.2});break;}
    case 'coin':{// 짤랑: small bright coin bells
      [0,.07,.15].forEach((dt,i)=>{noise({f:5200+i*600,q:1.2,t:now+dt,d:.06,v:.07});tone({f:1650+i*180,t:now+dt,d:.12,type:'triangle',v:.04});});break;}
    case 'pickup':noise({f:700,ft:'lowpass',d:.08,v:.18});tone({f:180,f2:120,d:.08,v:.14});break;
@@ -1752,18 +1745,18 @@ function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.st
 // ---- continuous drilling sound (bore view or an open expedition): grinding grit + motor hum; a booster adds a turbine whine ----
 const DRL={on:false};
 function drillInit(){const c=SND.ctx;if(!c||DRL.g)return;const src=c.createBufferSource();src.buffer=SND.noise;src.loop=true;
-  const bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.value=900;bp.Q.value=1.1;const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=180;
-  const gGrit=c.createGain();gGrit.gain.value=.22;const gRum=c.createGain();gRum.gain.value=.6;src.connect(bp);bp.connect(gGrit);src.connect(lp);lp.connect(gRum);
-  const mot=c.createOscillator();mot.type='sawtooth';mot.frequency.value=48;const mlp=c.createBiquadFilter();mlp.type='lowpass';mlp.frequency.value=260;const gMot=c.createGain();gMot.gain.value=.25;mot.connect(mlp);mlp.connect(gMot);
+  const bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.value=520;bp.Q.value=1.3;const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=180;
+  const gGrit=c.createGain();gGrit.gain.value=.3;const gRum=c.createGain();gRum.gain.value=.6;src.connect(bp);bp.connect(gGrit);src.connect(lp);lp.connect(gRum);
+  const mot=c.createOscillator();mot.type='sawtooth';mot.frequency.value=48;const mlp=c.createBiquadFilter();mlp.type='lowpass';mlp.frequency.value=420;const gMot=c.createGain();gMot.gain.value=.25;mot.connect(mlp);mlp.connect(gMot);
   const wh=c.createOscillator();wh.type='sawtooth';wh.frequency.value=900;const wbp=c.createBiquadFilter();wbp.type='bandpass';wbp.frequency.value=1400;wbp.Q.value=4;const gWh=c.createGain();gWh.gain.value=0;wh.connect(wbp);wbp.connect(gWh);
-  const lfo=c.createOscillator();lfo.frequency.value=7;const lg=c.createGain();lg.gain.value=260;lfo.connect(lg);lg.connect(bp.frequency);
+  const lfo=c.createOscillator();lfo.frequency.value=7;const lg=c.createGain();lg.gain.value=180;lfo.connect(lg);lg.connect(bp.frequency);
   const g=c.createGain();g.gain.value=0;[gGrit,gRum,gMot,gWh].forEach(n=>n.connect(g));g.connect(SND.sfxG);[src,mot,wh,lfo].forEach(n=>n.start());Object.assign(DRL,{g,mot,wh,gWh,lfo,bp});}
 function drillTick(){const c=SND.ctx;if(!c||c.state!=='running')return;drillInit();const p=sndPref(),t=c.currentTime;
   const act=p.sfx&&!titleOn&&!document.hidden&&((view==='bore'&&!exp&&!gateAt()&&!S.done)||(!!exp&&S.ex.active===exp.r.id)),bo=boostM()>1;
   DRL.g.gain.setTargetAtTime(act?.32:0,t,.15);DRL.mot.frequency.setTargetAtTime(bo?78:48,t,.3);DRL.lfo.frequency.setTargetAtTime(bo?12:7,t,.3);DRL.gWh.gain.setTargetAtTime(act&&bo?.05:0,t,.2);DRL.wh.frequency.setTargetAtTime(900+Math.sin(t*3)*120,t,.1);
   // random stone knocks so it sounds like rock against steel, not just noise
-  if(act&&Math.random()<(bo?.9:.6))noise({f:600+Math.random()*1200,q:.7,d:.02+Math.random()*.03,v:.06+Math.random()*.05,t:t+Math.random()*.1});
-  if(act&&Math.random()<.18)tone({f:120+Math.random()*80,f2:60,d:.06,v:.12,t:t+Math.random()*.1});}
+  if(act&&Math.random()<(bo?.9:.65))noise({f:300+Math.random()*700,q:1.4,d:.03+Math.random()*.04,v:.1+Math.random()*.07,t:t+Math.random()*.1});
+  if(act&&Math.random()<.25){const tt=t+Math.random()*.1;tone({f:190+Math.random()*90,f2:90,d:.07,v:.13,type:'triangle',t:tt});tone({f:95,f2:50,d:.09,v:.14,t:tt});}}
 setInterval(drillTick,110);
 // every tab, region and button gets a light click
 document.addEventListener('click',e=>{const t=e.target;if(t.closest('nav.tabs button'))sfx('tab');else if(t.closest('.node'))sfx('select');else if(t.closest('button,[role="button"],.wopt,.lp,a'))sfx('tick');},true);
@@ -1844,7 +1837,8 @@ const canPay=c=>Object.entries(c).every(([k,v])=>have(k)>=v);
 function renderCraft(live){if(!live)setTimeout(()=>{const cur=document.querySelector('#ladder .cur');if(cur&&cur.parentElement)cur.parentElement.scrollLeft=cur.offsetLeft-cur.parentElement.clientWidth/2+cur.clientWidth/2;},0);
   const rows=PARTS.map(p=>{const l=L(p.id),max=l>=MAXLV,c=costOf(p),src=regOf(p.res),open=isUnl(src)||have(p.res)>0;
     const pips=Array.from({length:MAXLV},(_,i)=>`<i class="${i<l?'f':''}"></i>`).join('');
-    const cost=max?'<span class="yes">최대 레벨</span>':Object.entries(c).map(([k,v])=>`<span class="${have(k)>=v?'yes':'no'}">${k==='money'?won(v):`${ric(k)}${k} ${have(k)}/${v}`}</span>`).join('');
+    const cost=max?'<span class="yes">최대 레벨</span>':Object.entries(c).map(([k,v])=>{const ok=have(k)>=v,rg=k!=='money'&&regOf(k);if(k==='money')return `<span class="${ok?'yes':'no'}">${won(v)}</span>`;
+      return rg?`<button type="button" class="cgo ${ok?'yes':'no'}" data-go="${rg.id}" title="${rg.n} 원정으로 가기">${ric(k)}${k} ${have(k)}/${v}<small>${ok?'':'🧭 '}${rg.n} ›</small></button>`:`<span class="${ok?'yes':'no'}">${ric(k)}${k} ${have(k)}/${v}</span>`;}).join('');
     return `<div class="part ${selPart===p.id?'sel':''}" data-sel="${p.id}"><div style="min-width:0"><div class="pname">${p.n}<span class="lv">${pips}</span></div>
       <div class="peff">${p.eff(l)}${max?'':' → '+p.eff(l+1)}</div>
       ${selPart===p.id?`<div class="plook">모습 변화: ${p.look}</div>`:''}
@@ -1868,7 +1862,7 @@ function updatePreviewInfo(){const P=levels(),p=selPart&&PARTS.find(x=>x.id===se
   const m=$('#pMode');m.className='pmode'+(next?' next':'');
   m.textContent=next?`미리보기 · ${p.n} Lv${P[p.id]+1}`:p?`${p.n} 최대 레벨`:'현재 드릴 · 부품을 눌러 미리보기';
   $('#pStat').innerHTML=`굴착력 <b>${fmtN(dpsOf(Q)*dpsPerk())}</b>/초<br>강타 <b>${Math.round((.04*Q.shock+.05*setPow('bronze'))*100)}%</b><br>원정 <b>+${10*Q.insul}%</b>`;}
-$('#craftList').addEventListener('click',e=>{
+$('#craftList').addEventListener('click',e=>{const go=e.target.closest('[data-go]');if(go){e.stopPropagation();const r=regById(go.dataset.go);if(!r)return;if(!isUnl(r)){toast(`${r.n}은(는) 본공 ${fmtD(r.un)}에서 열려요 · 상점에서 살 수도 있어요`);return;}openExp(r);return;}
   if(e.target.closest('#tierUp')){const nx=S.dl+1,c=dlCost(nx);if(nx>DLOPEN||S.money<c||PARTS.some(p=>L(p.id)<dlPartReq(nx)))return;sfx('levelup');
     S.money-=c;S.dl=nx;save();flash=1.4;toast((dlStep(nx)===1?'드릴 승급 · ':'드릴 강화 · ')+dlName(nx)+' (Lv.'+nx+')');renderCraft();
     const cur=document.querySelector('#ladder .cur');if(cur)cur.scrollIntoView({inline:'center',block:'nearest'});return;}
@@ -4307,7 +4301,7 @@ function renderStats(){const c=ME(),l=layerAt(Math.min(S.depth,GOAL()-1)),pc=v=>
     <div class="st-sec">부품</div><div class="st-l">${parts}</div>`;}
 $('#wStat').addEventListener('click',()=>openStats());$('#mapStat').addEventListener('click',()=>openStats());
 $('#statClose').addEventListener('click',()=>$('#statDlg').hidden=true);
-$('#mStat').addEventListener('click',()=>{$('#menu').hidden=true;openStats();});
+
 $('#recClose').addEventListener('click',()=>$('#recDlg').hidden=true);
 function openTitleModes(){S.needMode=true;save();titleOn=true;$('#title').hidden=false;syncTitle();}
 function syncTitle(){const nm=!!S.needMode;$('#tStart').hidden=nm;$('#tModes').hidden=!nm;const hard=document.querySelector('.tmode.hard'),ok=!!S.hardOK||S.mode==='hard';
@@ -4362,38 +4356,6 @@ function resetGame(){try{localStorage.removeItem(KEY)}catch(_){}S=fresh();save()
   titleOn=true;$('#title').hidden=false;$('#tStory').hidden=true;$('#tReset').hidden=true;
   for(const id of ['mReset','tReset']){const b=$('#'+id);delete b.dataset.armed;b.textContent='게임 초기화';}
   toast('게임을 초기화했습니다. START를 눌러 처음부터 시작하세요');}
-// ---------------- device transfer: save code export / import ----------------
-const XPRE='TRYPANON1.';
-const b64u=u8=>{let t='';for(let i=0;i<u8.length;i+=0x8000)t+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(t).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');};
-const ub64=t=>{t=t.replace(/-/g,'+').replace(/_/g,'/');while(t.length%4)t+='=';const b=atob(t),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;};
-async function zip(u8,inv){const CS=inv?window.DecompressionStream:window.CompressionStream;if(!CS)return null;try{const st=new Blob([u8]).stream().pipeThrough(new CS('deflate-raw'));return new Uint8Array(await new Response(st).arrayBuffer());}catch(e){return null;}}
-async function makeCode(){save();const raw=new TextEncoder().encode(JSON.stringify(S));const z=await zip(raw);return z?XPRE+'z'+b64u(z):XPRE+'p'+b64u(raw);}
-async function readCode(txt){txt=(txt||'').replace(/\s+/g,'');const i=txt.indexOf(XPRE);if(i<0)throw new Error('트리파논 저장 코드가 아닙니다');const body=txt.slice(i+XPRE.length),k=body[0];let u=ub64(body.slice(1));
-  if(k==='z'){u=await zip(u,true);if(!u)throw new Error('이 브라우저는 압축 코드를 풀 수 없습니다. 브라우저를 최신으로 업데이트해 주세요');}else if(k!=='p')throw new Error('알 수 없는 코드 형식입니다');
-  const d=JSON.parse(new TextDecoder().decode(u));if(!d||typeof d!=='object'||typeof d.depth!=='number')throw new Error('저장 내용이 올바르지 않습니다');return d;}
-const xSum=d=>{const md=(d.mode==='hard'?'하드':'보통')+' '+(d.part||1)+'부',nm=d.name||(d.char&&d.char.name)||'';
-  return `${nm?'<b>'+String(nm).replace(/[<>&]/g,'')+'</b> · ':''}${md}<br>깊이 <b>${fmtD(d.depth||0)}</b> · 드릴 Lv.${d.dl||1} · 돈 ${won(Math.floor(d.money||0))}<br><span style="opacity:.7">마지막 저장 ${d.last?new Date(d.last).toLocaleString('ko-KR'):'-'}</span>`;};
-let xGot=null;
-async function openXfer(){$('#xfer').hidden=false;$('#xMine').innerHTML=S.story?xSum(S):'아직 시작한 진행이 없습니다.';$('#xOut').value='코드 만드는 중…';$('#xIn').value='';xGot=null;$('#xTheirs').hidden=true;
-  const b=$('#xLoad');b.disabled=true;delete b.dataset.armed;b.textContent='이 진행으로 불러오기';$('#xShare').hidden=!navigator.share;
-  try{$('#xOut').value=await makeCode();}catch(e){$('#xOut').value='코드를 만들지 못했습니다';}}
-async function xCheck(){const v=$('#xIn').value.trim(),box=$('#xTheirs'),b=$('#xLoad');xGot=null;b.disabled=true;delete b.dataset.armed;b.textContent='이 진행으로 불러오기';
-  if(!v){box.hidden=true;return;}box.hidden=false;try{xGot=await readCode(v);box.innerHTML='받을 진행 ✅<br>'+xSum(xGot);b.disabled=false;}catch(e){box.innerHTML='⚠️ '+e.message;}}
-async function xCopyTxt(t){try{await navigator.clipboard.writeText(t);return true;}catch(e){const ta=$('#xOut');ta.focus();ta.select();ta.setSelectionRange(0,t.length);try{return document.execCommand('copy');}catch(_){return false;}}}
-$('#mXfer').addEventListener('click',()=>{$('#menu').hidden=true;openXfer();});
-$('#tXfer').addEventListener('click',()=>openXfer());
-$('#xClose').addEventListener('click',()=>$('#xfer').hidden=true);
-$('#xfer').addEventListener('click',e=>{if(e.target.id==='xfer')$('#xfer').hidden=true;});
-$('#xCopy').addEventListener('click',async()=>{const ok=await xCopyTxt($('#xOut').value);toast(ok?'저장 코드를 복사했습니다. 다른 기기에 붙여 넣으세요':'복사가 막혔어요. 코드 칸을 길게 눌러 직접 복사해 주세요');});
-$('#xShare').addEventListener('click',async()=>{try{await navigator.share({title:'트리파논 저장 코드',text:$('#xOut').value});}catch(e){}});
-$('#xFile').addEventListener('click',()=>{try{const a=document.createElement('a'),d=new Date();a.href=URL.createObjectURL(new Blob([$('#xOut').value],{type:'text/plain'}));a.download=`trypanon-save-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.txt`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);toast('저장 코드 파일을 내려받았습니다');}catch(e){toast('파일 저장이 막혔어요. 코드 복사를 이용해 주세요');}});
-$('#xPaste').addEventListener('click',async()=>{try{$('#xIn').value=await navigator.clipboard.readText();xCheck();}catch(e){$('#xIn').focus();toast('칸을 길게 눌러 붙여넣기 해 주세요');}});
-$('#xIn').addEventListener('input',xCheck);
-$('#xPick').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;$('#xIn').value=await f.text();e.target.value='';xCheck();});
-$('#xLoad').addEventListener('click',e=>{const b=e.currentTarget;if(!xGot)return;
-  if(!b.dataset.armed){b.dataset.armed='1';b.textContent='한 번 더 누르면 덮어쓰고 다시 시작합니다';return;}
-  try{saveLock=true;localStorage.setItem(KEY,JSON.stringify(xGot));toast('진행을 불러왔습니다. 다시 시작합니다…');setTimeout(()=>location.reload(),600);}catch(err){saveLock=false;toast('불러오기에 실패했습니다');}});
-window.__xfer={makeCode,readCode};
 function armReset(b){if(b.dataset.armed){resetGame();return;}b.dataset.armed='1';b.textContent='한 번 더 누르면 모든 진행이 지워집니다';}
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
@@ -4422,7 +4384,7 @@ function hud(){
   $('#money').textContent=won(S.money);
   $('#expBadge').hidden=!S.ex.active;
   if(view==='map'){const ex_=S.ex.active?regById(S.ex.active):null;
-    const k=`<span class="mchip"><b class="modechip ${S.mode==='hard'?'hard':''}">${MD().n}</b></span><span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${gateAt()?' · <em>승급 필요</em>':''}</span>`+(ex_?`<span class="mchip cool"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}</span>`:'<span class="mchip dim">진행 중인 원정 없음</span>')+(rbOn()?`<span class="mchip rbc"><b>🌈 무지개</b> ${rbFx()}</span>`:'')+(ex_?(()=>{const w=wxOf(ex_.id),y=wxY(w);return `<span class="mchip wxc ${y>0?'good':y<0?'bad':''}" title="원정지 날씨"><b>${w.ic} ${ex_.n} ${w.n}</b> ${wxFx(w)}</span>`;})():'');
+    const k=`<span class="mchip"><b class="modechip ${S.mode==='hard'?'hard':''}">${MD().n}</b></span><span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${gateAt()?' · <em>승급 필요</em>':''}</span>`+(ex_?(()=>{const w=wxOf(ex_.id),y=Math.round(wxY(w));return `<span class="mchip cool" title="원정지 날씨: ${wxFx(w)}"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}<span class="wxs ${y>0?'good':y<0?'bad':''}">${w.ic} ${w.n}${y?` ${y>0?'+':''}${y}%`:''}</span></span>`;})():'<span class="mchip dim">진행 중인 원정 없음</span>')+(rbOn()?`<span class="mchip rbc"><b>🌈 무지개</b> ${rbFx()}</span>`:'');
     if(k!==mapInfoKey){mapInfoKey=k;$('#mapInfo').innerHTML=k;}}
   if(view==='bore'&&!exp){const m=S.depth,bm=boostM(),l=layerAt(m),sp=boreDps()/l.H;
     $('#bDepth').textContent=fmtD(m);updateGauge();
