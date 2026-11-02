@@ -1492,6 +1492,10 @@ function relicIcon(rl,found=true,sz=40){const u='ri'+(++UID),k=rl.ic,c=rl.c;let 
 const PEAK={bukhan:['백운대',836],gyeryong:['천황봉',845],songni:['천왕봉',1058],mai:['암마이봉',687],taebaek:['장군봉',1567],mudeung:['천왕봉',1187],jiri:['천왕봉',1915],seorak:['대청봉',1708],juwang:['주봉',721],halla:['한라산 정상',1947]};
 const expHP=(r,i)=>r.t==='sea'&&i<r.water?2:Math.round(MD().expBase*r.diff*Math.pow(1+.1*(i-(r.water||0)),MD().expGrow));
 const regById=id=>REG.find(x=>x.id===id);let SHIPR=null;
+// the map SVG keeps its aspect ratio, so on tall phones there is open sea below it: pin the °E labels to the bottom edge that is actually visible
+function mapLonFit(){const sv=document.getElementById('mapSvg');if(!sv)return;const W=sv.clientWidth,H=sv.clientHeight;if(!W||!H)return;const vb=sv.viewBox.baseVal,sc=Math.min(W/vb.width,H/vb.height),visH=H/sc,bottom=vb.y+vb.height/2+visH/2;
+  const y=Math.max(vb.y+vb.height+4,bottom-8).toFixed(1);sv.querySelectorAll('.glon').forEach(t=>t.setAttribute('y',y));}
+addEventListener('resize',()=>setTimeout(mapLonFit,60));
 function shipMapTick(){const g=document.getElementById('mShip');if(!g||!SHIPR)return;const ph=shipPhase();g.style.display=ph.vis?'':'none';if(!ph.vis)return;const e=ph.p<.5?2*ph.p*ph.p:1-2*(1-ph.p)*(1-ph.p),x=SHIPR[0]+(SHIPR[2]-SHIPR[0])*(ph.p*.8+e*.2),y=SHIPR[1]+(SHIPR[3]-SHIPR[1])*ph.p+Math.sin(ph.p*Math.PI*3)*1.2;
   document.getElementById('mShipPos').setAttribute('transform',`translate(${x.toFixed(1)},${y.toFixed(1)})`);document.getElementById('mShipDir').setAttribute('transform',ph.dir>0?'scale(-1,1)':'');}
 setInterval(()=>{if(view==='map'&&!document.hidden)shipMapTick();},120);
@@ -1584,7 +1588,7 @@ const mapX=r=>+PX(r.lon)+(r.id==='deep'?EDX:0);
 // shore wash: one foam line along the coast that washes in and out (cheap: 2 animations). Storms add rain, lightning and breaking spray.
 function buildMap(){let g='';
   for(let la=34;la<=38;la++){const y=PY(la).toFixed(1);g+=`<text class="gl" x="6" y="${y-3}" text-anchor="start">${la}°N</text>`;}
-  for(let lo=125;lo<=131;lo++){const x=PX(lo).toFixed(1);g+=`<text class="gl" x="${+x+3}" y="330">${lo}°E</text>`;}
+  for(let lo=125;lo<=131;lo++){const x=PX(lo).toFixed(1);g+=`<text class="gl glon" x="${+x+3}" y="330">${lo}°E</text>`;}
   const d='M'+COAST.map(p=>PX(p[0]).toFixed(1)+','+PY(p[1]).toFixed(1)).join('L')+'Z';
   const _r=[[128.35,38.45],[128.45,38.1],[128.62,37.75],[128.75,37.45],[128.85,37.15],[128.62,36.9],[128.2,36.75],[127.95,36.55],[127.85,36.2],[127.75,35.85],[127.7,35.5]].map(p=>[PX(p[0]),PY(p[1])]);
   const P=a=>a.map(p=>PX(p[0]).toFixed(1)+','+PY(p[1]).toFixed(1)).join(' L');
@@ -1638,7 +1642,7 @@ function buildMap(){let g='';
   for(const r of REG){const x=+mapX(r).toFixed(1),y=+PY(r.lat).toFixed(1);g+=r.t==='sea'?node(r.id,'sea',x,y,r.n,0,'middle',19,r.res):node(r.id,'land',x,y,r.n,r.lx,r.la,4,r.res);}
   g+=node('yanggu','base',+PX(127.99).toFixed(1),+PY(38.11).toFixed(1),'양구 본공',-11,'end',4);
   g+='<g id="mWxI"></g>';
-  $('#map').innerHTML=sea+`<svg id="mapSvg" viewBox="${VB}" role="img" aria-label="대한민국 시추 지도">${g}</svg>`;wxSet(true);}
+  $('#map').innerHTML=sea+`<svg id="mapSvg" viewBox="${VB}" role="img" aria-label="대한민국 시추 지도">${g}</svg>`;wxSet(true);setTimeout(mapLonFit,40);}
 // ---------------- weather: each expedition region has its own weather (changes every 3 minutes) ----------------
 // y: material yield %, g: dig speed %, w: weight by season [spring,summer,autumn,winter]
 const WXT=[
@@ -2799,7 +2803,8 @@ function scSeason(id,u){const r=REG.find(x=>x.id===id),sea=!!r&&r.t==='sea',se=s
   return SC[id](u).replace(/fill="(#[0-9a-fA-F]{6})"/g,(m,c)=>`fill="${seasonColor(c,se,sea)}"`)+seasonOverlay(se,sea,u);}
 // weather layer for a region's landscape picture (320x170)
 function artWx(id,u){if(!REG.find(r=>r.id===id))return '';const w=wxOf(id),k=w.id,R='width="320" height="170"';let g='';
-  const pat=(pid,pw,ph,body,dx,dy,dur)=>`<defs><pattern id="${u}${pid}" width="${pw}" height="${ph}" patternUnits="userSpaceOnUse">${body}<animateTransform attributeName="patternTransform" type="translate" from="0 0" to="${dx} ${dy}" dur="${dur}s" repeatCount="indefinite"/></pattern></defs><rect ${R} fill="url(#${u}${pid})"/>`;
+  const pat=(pid,pw,ph,body,dx,dy,dur)=>{dx=Math.round(dx/pw)*pw;dy=Math.round(dy/ph)*ph;const ax=Math.abs(dx)+pw,ay=Math.abs(dy)+ph;
+    return `<defs><pattern id="${u}${pid}" width="${pw}" height="${ph}" patternUnits="userSpaceOnUse">${body}</pattern></defs><g><animateTransform attributeName="transform" type="translate" from="0 0" to="${dx} ${dy}" dur="${dur}s" repeatCount="indefinite"/><rect x="${-ax}" y="${-ay}" width="${320+2*ax}" height="${170+2*ay}" fill="url(#${u}${pid})"/></g>`;};
   const sky=(c,op,to=105)=>`<defs><linearGradient id="${u}sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}" stop-opacity="${op}"/><stop offset="${to/170}" stop-color="${c}" stop-opacity="${op*.55}"/><stop offset="1" stop-color="${c}" stop-opacity="${op*.15}"/></linearGradient></defs><rect ${R} fill="url(#${u}sk)"/>`;
   const clouds=(c,n,y0,dark)=>`<g>${`<animateTransform attributeName="transform" type="translate" values="-20 0;20 0;-20 0" dur="${dark?14:26}s" repeatCount="indefinite"/>`}${Array.from({length:n},(_,i)=>{const x=-10+i*(340/(n-1||1)),y=y0+(i%2)*10,s2=.9+(i%3)*.25;return `<g transform="translate(${x},${y}) scale(${s2})"><ellipse cx="0" cy="8" rx="38" ry="12" fill="${c}"/><ellipse cx="-14" cy="0" rx="18" ry="13" fill="${c}"/><ellipse cx="10" cy="-4" rx="22" ry="16" fill="${c}"/>${dark?'':`<ellipse cx="6" cy="-10" rx="10" ry="5" fill="#fff" opacity=".35"/>`}</g>`;}).join('')}</g>`;
   const rain=(op,dense)=>pat('r',dense?10:16,dense?18:24,`<path d="M12,0 l-5,13" stroke="rgba(210,230,245,${op})" stroke-width="1"/>${dense?'<path d="M5,8 l-4,10" stroke="rgba(210,230,245,.45)" stroke-width=".9"/>':''}`,dense?-9:-6,dense?36:24,dense?.3:.42);
@@ -3098,7 +3103,7 @@ $('#wBuy').addEventListener('click',e=>{if(!e.target.closest('#wBuyBtn')||!wTry)
 
 // ---------------- tabs ----------------
 let hudCache='';
-function show(v){view=v;if(v==='map'&&yiPend&&yiM()>1){yiPend=false;setTimeout(()=>playYi(),60);}for(const [sel,on] of [['#mapSvg','map'],['#lgWrap svg','land']]){const sv=$(sel);if(sv&&sv.pauseAnimations){if(v===on)sv.unpauseAnimations();else sv.pauseAnimations();}}
+function show(v){view=v;if(v==='map')setTimeout(mapLonFit,40);if(v==='map'&&yiPend&&yiM()>1){yiPend=false;setTimeout(()=>playYi(),60);}for(const [sel,on] of [['#mapSvg','map'],['#lgWrap svg','land']]){const sv=$(sel);if(sv&&sv.pauseAnimations){if(v===on)sv.unpauseAnimations();else sv.pauseAnimations();}}
   for(const id of ['map','bore','craft','store','shop','invest','land'])$('#v-'+id).hidden=id!==v;
   document.querySelectorAll('nav.tabs button').forEach(b=>{if(b.dataset.tab===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
   if(v==='map')updateMap();if(v==='craft')renderCraft();if(v==='store')renderStore();if(v==='invest')renderInvest();if(v==='shop')renderShop();if(v==='land')renderLand();if(v==='bore'){hudCache='';}}
@@ -3795,6 +3800,19 @@ function l3EnvTick(dt){const E=L3.env;if(!E)return;const now=new Date(),h=now.ge
   const chip=$('#lsky');if(chip){const nightClear=!isDay&&(w.id==='sunny'||w.id==='hot'),txt=(isDay?'☀️ 낮':'🌙 밤 · '+moonName(f))+' · '+(nightClear?'✨ 맑음':w.ic+' '+w.n);if(chip.textContent!==txt)chip.textContent=txt;}
   const cp=$('#lcomp');if(cp&&cp.hidden)cp.hidden=false;}
 // small SVG sky scene (viewBox 80x60): sun / moon + the current weather in front of it
+// a photo-like moon: grey disc with limb darkening, dark maria, bright craters (Tycho rays), soft terminator; the unlit part keeps a faint earthshine
+function moonDisk(f,R,u){const k=Math.cos(2*Math.PI*f),rx=Math.abs(k)*R,wax=f<.5,lit=f>.02&&f<.98,full=f>.47&&f<.53,s=R/12;
+  const tex=`<circle r="${R}" fill="url(#${u}mg)"/><g filter="url(#${u}mb)" fill="#5f6264">${[[-5,-1,4,6,.5],[-2.5,-5,3.5,2.8,.55],[2.5,-4,2.2,2,.55],[4,-.5,2.8,2.2,.5],[8.3,-3,1.4,1.2,.6],[6.5,2.5,1.6,2.2,.45],[-2,4,2.6,1.8,.4],[4,3.6,1.2,1.1,.45],[-7.5,3,1.8,2.4,.35]].map(([x,y,a,b,o])=>`<ellipse cx="${x*s}" cy="${y*s}" rx="${a*s}" ry="${b*s}" opacity="${o}"/>`).join('')}</g>
+    <g fill="none" stroke="#f7f6f0" stroke-width="${.3*s}" opacity=".28">${[[-1,8.5,.9],[-3.5,-1,.7],[-6,6,.5],[1.5,6.5,.45],[6,-6.5,.4],[-8,-4,.45],[2,0,.35],[-4,9.5,.4]].map(([x,y,r])=>`<circle cx="${x*s}" cy="${y*s}" r="${r*s}"/>`).join('')}</g>
+    <g stroke="#ffffff" stroke-width="${.25*s}" opacity=".12">${[0,40,80,130,170,220,260,310].map(a=>`<path d="M${-1*s},${8.5*s} l${Math.cos(a*Math.PI/180)*5*s},${Math.sin(a*Math.PI/180)*5*s}"/>`).join('')}</g>
+    <circle cx="${-1*s}" cy="${8.5*s}" r="${.45*s}" fill="#fff" opacity=".55"/><circle cx="${-3.5*s}" cy="${-1*s}" r="${.35*s}" fill="#fff" opacity=".4"/>`;
+  const litP=full?`M0,-${R} A${R},${R} 0 1 1 0,${R} A${R},${R} 0 1 1 0,-${R}Z`:`M0,-${R} A${R},${R} 0 0 1 0,${R} A${rx.toFixed(2)},${R} 0 0 ${k>0?0:1} 0,-${R}Z`;
+  return `<defs><radialGradient id="${u}mg" cx=".42" cy=".4" r=".62"><stop offset="0" stop-color="#f3f2ec"/><stop offset=".65" stop-color="#d2d1cb"/><stop offset="1" stop-color="#8f8f8a"/></radialGradient>
+    <filter id="${u}mb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="${.55*s}"/></filter><filter id="${u}mt" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="${.7*s}"/></filter>
+    <mask id="${u}mm" maskUnits="userSpaceOnUse" x="${-R-2}" y="${-R-2}" width="${2*R+4}" height="${2*R+4}"><g transform="scale(${wax?1:-1},1)"><path d="${litP}" fill="#fff" filter="url(#${u}mt)"/></g></mask>
+    <clipPath id="${u}mc"><circle r="${R}"/></clipPath></defs>
+   <g clip-path="url(#${u}mc)"><circle r="${R}" fill="#0d0f13" opacity=".85"/><g opacity=".07">${tex}</g>${lit?`<g mask="url(#${u}mm)">${tex}</g>`:''}</g>
+   <circle r="${R}" fill="none" stroke="#ffffff" stroke-opacity="${lit?.06:.05}" stroke-width=".5"/>`;}
 function skySVG(isDay,f,w,kind,low){const id=w.id,u='sk'+(++UID);let g='';
   if(isDay){const hot=id==='hot',r=hot?13:11,c=low?'#ffb060':hot?'#ffb03a':'#ffe066';
     g+=`<g transform="translate(40,30)">${kind==='clear'?`<circle r="${r+8}" fill="${c}" opacity=".25"><animate attributeName="r" values="${r+5};${r+10};${r+5}" dur="${hot?1:2.4}s" repeatCount="indefinite"/></circle><g><animateTransform attributeName="transform" type="rotate" values="0 0 0;360 0 0" dur="${hot?8:18}s" repeatCount="indefinite"/>${Array.from({length:10},(_,i)=>`<path d="M0,-${r+3} V-${r+8}" stroke="${hot?'#ff7a2a':'#ffd34a'}" stroke-width="2.4" stroke-linecap="round" transform="rotate(${i*36})"/>`).join('')}</g>`:''}
@@ -3802,9 +3820,7 @@ function skySVG(isDay,f,w,kind,low){const id=w.id,u='sk'+(++UID);let g='';
     if(hot)g+=[0,1,2].map(i=>`<path d="M${22+i*12},56 q3,-4 0,-8 t0,-8" stroke="#ff9a5a" stroke-width="1.4" fill="none" opacity=".7"><animate attributeName="opacity" values=".2;.8;.2" dur="${1+i*.3}s" repeatCount="indefinite"/></path>`).join('');}
   else{// moon: lit area = outer half circle + terminator ellipse (waxing lit on the right, waning on the left)
     const R=12,k=Math.cos(2*Math.PI*f),rx=Math.abs(k)*R,wax=f<.5,lit=f>.03&&f<.97;
-    g+=`<g transform="translate(40,30)"><circle r="${R+7}" fill="#cfdcff" opacity="${(.12+.25*Math.sin(Math.PI*f)).toFixed(2)}"/><circle r="${R}" fill="#26314a" stroke="#56648a" stroke-width="1"/>
-      ${lit?`<g transform="scale(${wax?1:-1},1)"><path d="M0,-${R} A${R},${R} 0 0 1 0,${R} A${rx.toFixed(2)},${R} 0 0 ${k>0?0:1} 0,-${R}Z" fill="#fff6dc"/></g>`:''}
-      <circle cx="-4" cy="-3" r="2.2" fill="#000" opacity=".08"/><circle cx="3" cy="4" r="1.6" fill="#000" opacity=".08"/><circle cx="5" cy="-5" r="1.2" fill="#000" opacity=".07"/></g>`;
+    g+=`<g transform="translate(40,30)"><circle r="${R+7}" fill="#dfe6f5" opacity="${(.1+.22*Math.sin(Math.PI*f)).toFixed(2)}"/>${moonDisk(f,R,u)}</g>`;
     if(kind==='clear')g+=[[10,10],[70,14],[64,48],[14,46]].map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="1.1" fill="#fff"><animate attributeName="opacity" values=".2;1;.2" dur="${1.4+i*.4}s" repeatCount="indefinite"/></circle>`).join('');}
   const cloud=(x,y,sc,col,dur)=>`<g transform="translate(${x},${y}) scale(${sc})"><g><animateTransform attributeName="transform" type="translate" values="-3 0;3 0;-3 0" dur="${dur}s" repeatCount="indefinite"/><ellipse cx="0" cy="4" rx="18" ry="7" fill="${col}"/><circle cx="-8" cy="0" r="8" fill="${col}"/><circle cx="4" cy="-3" r="10" fill="${col}"/><circle cx="13" cy="2" r="6" fill="${col}"/></g></g>`;
   if(kind==='cloud'){// thin clouds drift over half of the disc
