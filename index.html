@@ -1727,11 +1727,17 @@ try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
 let oriTried=false;addEventListener('pointerup',()=>{if(oriTried)return;oriTried=true;try{const o=screen.orientation;if(o&&o.lock)o.lock('portrait').catch(()=>{});}catch(e){}},{passive:true});
 function sndRebuild(){// iOS sometimes leaves a context dead after the phone was locked: throw it away and make a fresh one inside the tap
   const old=SND.ctx;bgmStop();SND.ctx=null;SND.fails=0;for(const k of Object.keys(DRL))if(k!=='on')delete DRL[k];try{old&&old.close();}catch(e){}return sndInit();}
-function sndWake(){let c=sndInit();if(!c)return;if(c.state!=='running'){SND.fails=(SND.fails||0)+1;if(SND.fails>2||c.state==='closed')c=sndRebuild();if(c)c.resume().then(()=>{SND.fails=0;if(!titleOn)sndApply();}).catch(()=>{});}
+function sndWake(){if(document.hidden)return;let c=sndInit();if(!c)return;if(SND.asleep){SND.asleep=false;}if(c.state!=='running'){SND.fails=(SND.fails||0)+1;if(SND.fails>2||c.state==='closed')c=sndRebuild();if(c)c.resume().then(()=>{SND.fails=0;if(!titleOn)sndApply();}).catch(()=>{});}
   else{SND.fails=0;}if(c&&!titleOn)sndApply();}
 ['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>window.addEventListener(ev,sndWake,{passive:true,capture:true}));
-document.addEventListener('visibilitychange',()=>{if(!SND.ctx)return;if(document.hidden)SND.ctx.suspend().catch(()=>{});else SND.ctx.resume().catch(()=>{});});
-addEventListener('pageshow',()=>{if(SND.ctx)SND.ctx.resume().catch(()=>{});});addEventListener('focus',()=>{if(SND.ctx&&SND.ctx.state!=='running')SND.ctx.resume().catch(()=>{});});
+// leaving the app (home swipe, app switcher, lock): fade to silence first, then stop the audio engine — when iOS freezes the page mid-swipe a running
+// context underruns and crackles, so it must already be silent and suspended by the time the page loses focus
+function sndSleep(){const c=SND.ctx;if(!c)return;try{const t=c.currentTime;SND.master.gain.cancelScheduledValues(t);SND.master.gain.setValueAtTime(SND.master.gain.value,t);SND.master.gain.linearRampToValueAtTime(0,t+.03);if(SND.blastMix){SND.blastMix.gain.cancelScheduledValues(t);SND.blastMix.gain.setValueAtTime(0,t);}}catch(e){}
+  SND.asleep=true;bgmStop();setTimeout(()=>{if(SND.asleep&&c.state==='running')c.suspend().catch(()=>{});},40);try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
+function sndWakeUp(){if(!SND.ctx||!SND.asleep)return;if(document.hidden||!document.hasFocus())return;SND.asleep=false;SND.ctx.resume().then(()=>{if(!titleOn)sndApply();}).catch(()=>{});}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)sndSleep();else sndWakeUp();});
+addEventListener('pagehide',sndSleep);addEventListener('blur',sndSleep);addEventListener('freeze',sndSleep);
+addEventListener('pageshow',()=>setTimeout(sndWakeUp,50));addEventListener('focus',()=>setTimeout(sndWakeUp,50));
 const NOTE=n=>440*Math.pow(2,(n-69)/12);
 function tone(o){const c=SND.ctx;if(!c)return;const t=o.t??c.currentTime,g=c.createGain(),osc=c.createOscillator();osc.type=o.type||'sine';osc.frequency.setValueAtTime(o.f,t);if(o.f2)osc.frequency.exponentialRampToValueAtTime(o.f2,t+(o.glide||o.d));
   if(o.det)osc.detune.value=o.det;const a=o.a??.005,v=o.v??.3;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+a);g.gain.exponentialRampToValueAtTime(.0001,t+o.d);
