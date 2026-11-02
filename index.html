@@ -1534,7 +1534,7 @@ function exTick(dt){const id=S.ex.active;if(!id)return;const r=regById(id);exAcc
 function openExp(r){exp={r};rstLabel();document.querySelectorAll('nav.tabs button').forEach(b=>{if(b.dataset.tab==='exp')b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});ex.scroll=0;ex.parts=[];ex.fl=[];popQ=[];$('#relicPop').hidden=true;
   const g=digOf(r.id),act=S.ex.active===r.id,other=S.ex.active&&!act?regById(S.ex.active):null;
   $('#eName').textContent=r.n;$('#eResult').hidden=true;$('#exp').hidden=false;$('#eIntro').hidden=false;
-  $('#eArt').innerHTML=regionArt(r.id,{withChar:true,rx:0,label:r.n+' 풍경',cx:r.t==='sea'?44:64,cy:168,ch:r.t==='sea'?70:84});
+  $('#eArt').innerHTML=regionArt(r.id,{withChar:true,rx:0,label:r.n+' 풍경',cx:r.t==='sea'?44:64,cy:168,ch:r.t==='sea'?70:84});kickArt($('#eArt'));
   if(r.t==='sea'&&shipOn())$('#eArt').insertAdjacentHTML('beforeend',L3OK&&shipShot('side',640,300,{sea:false})?`<img class="eship" src="${shipShot('side',640,300,{sea:false})}" alt="">`:`<svg class="eship" viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'e',sea:false})}</svg>`);
   $('#eKind').textContent=(r.t==='sea'?'해상 시추':'육상 원정')+' · '+r.area;$('#eTitle').textContent=r.n;$('#eDesc').textContent=r.fl;
   const e=eraAt(r,belowOf(r,g.i));
@@ -1587,7 +1587,7 @@ const EDX=-28,ULLD=(()=>{const gb=PROV.find(p=>p.id==='gyeongbuk'),sub=gb.d.matc
 const mapX=r=>+PX(r.lon)+(r.id==='deep'?EDX:0);
 // shore wash: one foam line along the coast that washes in and out (cheap: 2 animations). Storms add rain, lightning and breaking spray.
 function buildMap(){let g='';
-  for(let la=34;la<=38;la++){const y=PY(la).toFixed(1);g+=`<text class="gl" x="6" y="${y-3}" text-anchor="start">${la}°N</text>`;}
+  for(let la=33;la<=38;la++){const y=PY(la).toFixed(1);g+=`<text class="gl" x="6" y="${y-3}" text-anchor="start">${la}°N</text>`;}
   for(let lo=125;lo<=131;lo++){const x=PX(lo).toFixed(1);g+=`<text class="gl glon" x="${+x+3}" y="330">${lo}°E</text>`;}
   const d='M'+COAST.map(p=>PX(p[0]).toFixed(1)+','+PY(p[1]).toFixed(1)).join('L')+'Z';
   const _r=[[128.35,38.45],[128.45,38.1],[128.62,37.75],[128.75,37.45],[128.85,37.15],[128.62,36.9],[128.2,36.75],[127.95,36.55],[127.85,36.2],[127.75,35.85],[127.7,35.5]].map(p=>[PX(p[0]),PY(p[1])]);
@@ -1832,7 +1832,8 @@ setInterval(()=>{const now=Date.now();
 
 function updateMap(){document.querySelectorAll('#map .rcnt').forEach(t=>{t.textContent=(S.res[t.dataset.r]||0).toLocaleString('ko-KR');});document.querySelectorAll('.node').forEach(n=>{const r=REG.find(x=>x.id===n.dataset.id);
   n.classList.toggle('locked',!!r&&!isUnl(r));n.classList.toggle('sel',n.dataset.id===sel);n.classList.toggle('act',n.dataset.id===S.ex.active);n.classList.toggle('evt',!!(evtOn()&&n.dataset.id===S.evt.rid));});renderCard();}
-function openRegion(id){sel=id;updateMap();$('#rpop').hidden=false;const sh=$('#rpop .rsheet');sh.scrollTop=0;}
+function kickArt(el){if(!el)return;requestAnimationFrame(()=>{const h=el.innerHTML;el.innerHTML=h;});}
+function openRegion(id){sel=id;updateMap();$('#rpop').hidden=false;const sh=$('#rpop .rsheet');sh.scrollTop=0;kickArt($('#card .art'));}
 function closeRegion(){$('#rpop').hidden=true;}
 $('#map').addEventListener('click',e=>{const n=e.target.closest('.node');if(!n)return;openRegion(n.dataset.id);});
 $('#rClose').addEventListener('click',closeRegion);
@@ -1841,7 +1842,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#rpop').hidden)closeRegi
 $('#map').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const n=e.target.closest('.node');if(n){e.preventDefault();openRegion(n.dataset.id);}}});
 function renderCard(){const el=$('#card');
   if(sel==='yanggu'){const m=S.depth;
-    el.innerHTML=`<div class="art">${regionArt('yanggu',{withChar:true,label:'양구 해안분지',cx:86,cy:166,ch:70})}</div><div class="ctop"><div><div class="ckind">본공 · 출발점</div><h2>양구 국토정중앙</h2></div><div class="cside">${fmtD(m)}<br>중심까지 ${fmtD(CORE-m)}</div></div>
+    el.innerHTML=`<div class="art">${regionArt('yanggu',{withChar:true,label:'양구 해안분지',cx:86,cy:166,ch:70})}<div class="schipw"><span class="schip">${seasonName(seasonNow())}</span>${(()=>{const w=homeWx();const g=Math.round(Math.min(0,wxG(w))*.7);return `<span class="schip wxs">${w.ic} 양구 ${w.n} · ${g?`본공 굴착 ${g}%`:'본공 영향 없음'}</span>`;})()}</div></div><div class="ctop"><div><div class="ckind">본공 · 출발점</div><h2>양구 국토정중앙</h2></div><div class="cside">${fmtD(m)}<br>중심까지 ${fmtD(CORE-m)}</div></div>
      <p class="cdesc">한반도의 지리적 중심에서 지구 중심(6,371km)을 향해 드릴이 스스로 파 내려갑니다. 굴착 속도는 드릴 굴착력으로 정해지고, 앱을 닫아도 최대 1시간(내 땅에 집을 지으면 더 길게)까지 계속 팝니다.</p>
      <div class="autoline">현재 드릴 <b style="color:var(--amber2)">${tierName()}</b> · 본공 굴착력 ${fmtN(boreDps())}/초</div>
      ${S.ex.active?`<div class="estat">● ${regById(S.ex.active).n} 원정 시추 중 · ${altText(regById(S.ex.active),digOf(S.ex.active).i)}</div>`:''}
@@ -2802,7 +2803,7 @@ function seasonOverlay(se,sea,u){const R=(i,k)=>hsh(i,k);
 function scSeason(id,u){const r=REG.find(x=>x.id===id),sea=!!r&&r.t==='sea',se=seasonNow();
   return SC[id](u).replace(/fill="(#[0-9a-fA-F]{6})"/g,(m,c)=>`fill="${seasonColor(c,se,sea)}"`)+seasonOverlay(se,sea,u);}
 // weather layer for a region's landscape picture (320x170)
-function artWx(id,u){if(!REG.find(r=>r.id===id))return '';const w=wxOf(id),k=w.id,R='width="320" height="170"';let g='';
+function artWx(id,u){if(id!=='yanggu'&&!REG.find(r=>r.id===id))return '';const w=id==='yanggu'?homeWx():wxOf(id),k=w.id,R='width="320" height="170"';let g='';
   const pat=(pid,pw,ph,body,dx,dy,dur)=>{dx=Math.round(dx/pw)*pw;dy=Math.round(dy/ph)*ph;const ax=Math.abs(dx)+pw,ay=Math.abs(dy)+ph;
     return `<defs><pattern id="${u}${pid}" width="${pw}" height="${ph}" patternUnits="userSpaceOnUse">${body}</pattern></defs><g><animateTransform attributeName="transform" type="translate" from="0 0" to="${dx} ${dy}" dur="${dur}s" repeatCount="indefinite"/><rect x="${-ax}" y="${-ay}" width="${320+2*ax}" height="${170+2*ay}" fill="url(#${u}${pid})"/></g>`;};
   const sky=(c,op,to=105)=>`<defs><linearGradient id="${u}sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}" stop-opacity="${op}"/><stop offset="${to/170}" stop-color="${c}" stop-opacity="${op*.55}"/><stop offset="1" stop-color="${c}" stop-opacity="${op*.15}"/></linearGradient></defs><rect ${R} fill="url(#${u}sk)"/>`;
