@@ -286,7 +286,10 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .wbody{flex:1;min-height:0;overflow-y:auto;display:grid;gap:12px;align-content:start;padding-block:12px calc(env(safe-area-inset-bottom,0px) + 16px);
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wtabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}.wtabs.drag{cursor:grabbing}.wtabs.drag .wtab{pointer-events:none}
-.wopt.wship{grid-column:1/-1}.wopt.wship svg{width:100%;height:auto;max-height:150px}
+.lp .hoff{display:block;font-size:10px;color:#9fd6ff;font-weight:700;line-height:1.2}.hoffm{display:block;margin-top:4px;color:#9fd6ff}.hoffm b{color:#cfeaff}
+.wopt.wship{grid-column:1/-1}.wopt.wship svg,.wopt.wship img{width:100%;height:auto;max-height:170px;object-fit:contain}.wopt.wship img{border-radius:12px;background:radial-gradient(ellipse at 50% 78%,#3a9be8 0%,#1d69b8 45%,#0f3e74 100%)}
+.wshipcyc{grid-column:1/-1;display:grid;gap:6px;font-size:12px;color:var(--mute);padding:2px 2px 4px}.wshipcyc>span{font-weight:700;color:var(--fg)}.wshipcyc .segs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}.wshipcyc .segs button{padding:7px 0;font-size:12px}.wshipcyc small{font-size:11.5px}
+#wStage .s3wrap{width:100%;height:100%;min-height:200px}#wStage .s3wrap canvas{display:block;width:100%!important;height:100%!important;cursor:grab}#wStage{position:relative}#wStage .s3hint{position:absolute;right:10px;bottom:8px;font-size:11px;color:#cfe3ec;background:rgba(0,0,0,.4);border-radius:999px;padding:3px 9px;pointer-events:none}
 .wtab{flex:none;padding:8px 13px;border-radius:999px;border:1px solid var(--line);font-size:13px;white-space:nowrap;color:var(--mute)}
 .wtab[aria-selected="true"]{background:var(--amber);color:#1a1206;border-color:var(--amber);font-weight:600}
 .wopts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -815,7 +818,12 @@ const extraP=()=>Math.min(.9,.08+.05*L('sensor')+PK('farm',.04)+.005*rp('mid')+.
 const boostM=()=>S.boost&&S.boost.until>Date.now()?S.boost.m:1;
 const yiOwn=()=>S.own.includes('sex:yi');
 // 거북선: owning gives the perks; equipping shows it on the map and at sea. Owning both it and Admiral Yi = set bonus
-const shipOwn=()=>S.own.includes('ship:turtle'),shipOn=()=>shipOwn()&&S.char.ship==='turtle',yiSet=()=>yiOwn()&&shipOwn();
+const shipOwn=()=>S.own.includes('ship:turtle'),shipCyc=()=>S.shipCyc??60,shipOn=()=>shipOwn()&&shipCyc()!=='off',yiSet=()=>yiOwn()&&shipOwn();
+// sails on its own: one crossing of the South Sea takes SHIPVOY seconds, then it rests for the chosen interval ('always' = back and forth nonstop)
+const SHIPVOY=40,SHIPCYC=[['always','항상'],[30,'30초'],[60,'1분'],[120,'2분'],[300,'5분'],['off','끔']];
+function shipPhase(now=Date.now()){if(!shipOn())return {vis:false};const c=shipCyc(),s=now/1000;
+  if(c==='always'){const tt=s%(SHIPVOY*2),dir=tt<SHIPVOY?1:-1;return {vis:true,dir,p:dir>0?tt/SHIPVOY:1-(tt-SHIPVOY)/SHIPVOY};}
+  const C=SHIPVOY+c,k=Math.floor(s/C),tt=s%C,dir=k%2?-1:1;return {vis:tt<SHIPVOY,dir,p:dir>0?tt/SHIPVOY:1-tt/SHIPVOY,next:Math.ceil(C-tt)};}
 const SHIP={sea:{normal:.2,hard:.12},all:{normal:.03,hard:.02}},YISET={m:2.5,p:1.5,d:1.5};
 const shipSea=()=>shipOwn()?1+(SHIP.sea[S.mode]??.2):1,shipAll=()=>shipOwn()?1+(SHIP.all[S.mode]??.03):1;
 const yiM=()=>S.yiB&&S.yiB>Date.now()?(yiSet()?YISET.m:2):1;
@@ -1483,7 +1491,10 @@ function relicIcon(rl,found=true,sz=40){const u='ri'+(++UID),k=rl.ic,c=rl.c;let 
 // ---------------- expedition (continuous, per-region, restartable) ----------------
 const PEAK={bukhan:['백운대',836],gyeryong:['천황봉',845],songni:['천왕봉',1058],mai:['암마이봉',687],taebaek:['장군봉',1567],mudeung:['천왕봉',1187],jiri:['천왕봉',1915],seorak:['대청봉',1708],juwang:['주봉',721],halla:['한라산 정상',1947]};
 const expHP=(r,i)=>r.t==='sea'&&i<r.water?2:Math.round(MD().expBase*r.diff*Math.pow(1+.1*(i-(r.water||0)),MD().expGrow));
-const regById=id=>REG.find(x=>x.id===id);
+const regById=id=>REG.find(x=>x.id===id);let SHIPR=null;
+function shipMapTick(){const g=document.getElementById('mShip');if(!g||!SHIPR)return;const ph=shipPhase();g.style.display=ph.vis?'':'none';if(!ph.vis)return;const e=ph.p<.5?2*ph.p*ph.p:1-2*(1-ph.p)*(1-ph.p),x=SHIPR[0]+(SHIPR[2]-SHIPR[0])*(ph.p*.8+e*.2),y=SHIPR[1]+(SHIPR[3]-SHIPR[1])*ph.p+Math.sin(ph.p*Math.PI*3)*1.2;
+  document.getElementById('mShipPos').setAttribute('transform',`translate(${x.toFixed(1)},${y.toFixed(1)})`);document.getElementById('mShipDir').setAttribute('transform',ph.dir>0?'scale(-1,1)':'');}
+setInterval(()=>{if(view==='map'&&!document.hidden)shipMapTick();},120);
 function digOf(id){S.ex.dig[id]=S.ex.dig[id]||{i:0,hp:0};const g=S.ex.dig[id];if(!g.hp)g.hp=expHP(regById(id),g.i);return g;}
 const belowOf=(r,i)=>r.t==='sea'?i-r.water:i;
 function altText(r,i){if(r.t==='sea')return i<r.water?'수심 '+(i*r.ws).toLocaleString('ko-KR')+'m':'해저 아래 '+((i-r.water)*BLK).toLocaleString('ko-KR')+'m';
@@ -1520,7 +1531,7 @@ function openExp(r){exp={r};rstLabel();document.querySelectorAll('nav.tabs butto
   const g=digOf(r.id),act=S.ex.active===r.id,other=S.ex.active&&!act?regById(S.ex.active):null;
   $('#eName').textContent=r.n;$('#eResult').hidden=true;$('#exp').hidden=false;$('#eIntro').hidden=false;
   $('#eArt').innerHTML=regionArt(r.id,{withChar:true,rx:0,label:r.n+' 풍경',cx:r.t==='sea'?44:64,cy:168,ch:r.t==='sea'?70:84});
-  if(r.t==='sea'&&shipOn())$('#eArt').insertAdjacentHTML('beforeend',`<svg class="eship" viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'e',sea:false})}</svg>`);
+  if(r.t==='sea'&&shipOn())$('#eArt').insertAdjacentHTML('beforeend',L3OK&&shipShot('side',640,300,{sea:false})?`<img class="eship" src="${shipShot('side',640,300,{sea:false})}" alt="">`:`<svg class="eship" viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'e',sea:false})}</svg>`);
   $('#eKind').textContent=(r.t==='sea'?'해상 시추':'육상 원정')+' · '+r.area;$('#eTitle').textContent=r.n;$('#eDesc').textContent=r.fl;
   const e=eraAt(r,belowOf(r,g.i));
   $('#eFacts').innerHTML=`<dt>출발</dt><dd>${r.t==='sea'?'해수면 0m':PEAK[r.id][0]+' 해발 '+PEAK[r.id][1].toLocaleString('ko-KR')+'m'}</dd>
@@ -1616,10 +1627,9 @@ function buildMap(){let g='';
   // province name tags
   const TAG={seoul:[121,83],incheon:[98,92],gyeonggi:[134,93],gangwon:[171,72],chungbuk:[158,107],chungnam:[97,118],sejong:[117,127],daejeon:[141,147],jeonbuk:[104,178],jeonnam:[116,236],gwangju:[127,217],gyeongbuk:[185,153],daegu:[197,177],gyeongnam:[178,215],ulsan:[219,186],busan:[206,213],jeju:[76,313]};
   g+=`<g class="ptags" style="pointer-events:none">${PROV.map(p=>{const [x,y]=TAG[p.id]||p.c,w=p.n.length*5.4+4;return `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><rect x="${-w/2}" y="-4.2" width="${w}" height="7.6" rx="1.8" fill="#7a4a24" stroke="#4a2a12" stroke-width=".5" opacity=".88"/><rect x="${-w/2+.6}" y="-3.6" width="${w-1.2}" height="1.4" rx="1" fill="#a8703c" opacity=".7"/><text class="plab" y="1.9">${p.n}</text></g>`;}).join('')}</g>`;
-  {const x1=+PX(126.75).toFixed(1),y1=+PY(33.92).toFixed(1),x2=+PX(129.0).toFixed(1),y2=+PY(34.05).toFixed(1);
-   g+=`<g id="mShip" style="pointer-events:none;display:none"><g><animateTransform attributeName="transform" type="translate" values="${x1} ${y1};${x2} ${y2};${x1} ${y1}" keyTimes="0;.5;1" dur="70s" repeatCount="indefinite"/>
-    <g><animateTransform attributeName="transform" type="scale" values="-1 1;1 1" keyTimes="0;.5" calcMode="discrete" dur="70s" repeatCount="indefinite"/><g transform="translate(-20,-22) scale(.133)">${turtleSVG({id:'m',sea:false,anim:false,fire:false})}</g>
-    <path d="M20,2 q7,-2 14,0 M22,5 q6,-1.5 11,0" stroke="#fff" stroke-width=".9" fill="none" opacity=".85"/></g></g></g>`;}
+  {SHIPR=[+PX(126.75).toFixed(1),+PY(33.92).toFixed(1),+PX(129.0).toFixed(1),+PY(34.05).toFixed(1)];const im=L3OK?shipShot('side',360,170,{sea:false,fire:false}):null;
+   g+=`<g id="mShip" style="pointer-events:none;display:none"><g id="mShipPos"><g id="mShipDir">${im?`<image href="${im}" x="-27" y="-17" width="54" height="25.5"/>`:`<g transform="translate(-20,-22) scale(.133)">${turtleSVG({id:'m',sea:false,anim:false,fire:false})}</g>`}
+    <path d="M18,6 q7,-2 14,0 M20,9 q6,-1.5 11,0" stroke="#fff" stroke-width=".9" fill="none" opacity=".85"/></g></g></g>`;}
   g+='<g id="mRb" style="pointer-events:none"></g>';
   const node=(id,cls,x,y,label,lx,la,ly,res)=>`<g class="node ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}">
     <circle class="hit" cx="${x}" cy="${y}" r="16"/><circle class="ring" cx="${x}" cy="${y}" r="10"/>
@@ -1804,7 +1814,7 @@ function bgmSched(){const c=SND.ctx;if(!c||c.state!=='running')return;const want
 // ---------------- Admiral Yi event: owned special character appears on the map ----------------
 let yiPend=false,yiRoll=Date.now()+60000;
 function playYi(){const el=$('#yiEv'),left=Math.max(0,Math.ceil((S.yiB-Date.now())/1000));
-  el.innerHTML=`<div class="yirays"></div><svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${yiSVG({sex:'yi'},{pose:'raise',anim:true})}</svg><div class="yitxt"><b>必死則生 必生則死</b><span>필사즉생 필생즉사</span><em>본공·원정 굴착량 +${yiSet()?150:100}% · ${left}초</em></div>${yiSet()?`<svg class="yiship" viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'y',sea:true})}</svg>`:''}`;
+  el.innerHTML=`<div class="yirays"></div><svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${yiSVG({sex:'yi'},{pose:'raise',anim:true})}</svg><div class="yitxt"><b>必死則生 必生則死</b><span>필사즉생 필생즉사</span><em>본공·원정 굴착량 +${yiSet()?150:100}% · ${left}초</em></div>${yiSet()?(L3OK&&shipShot('side',640,300,{sea:false})?`<img class="yiship" src="${shipShot('side',640,300,{sea:false})}" alt="">`:`<svg class="yiship" viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'y',sea:true})}</svg>`):''}`;
   el.hidden=false;el.classList.remove('go');void el.offsetWidth;el.classList.add('go');clearTimeout(playYi.t);playYi.t=setTimeout(()=>{el.hidden=true;el.innerHTML='';},5400);}
 function yiEvent(){const d=Math.round((YI.dur[S.mode]||90)*(yiSet()?YISET.d:1));S.yiB=Date.now()+d*1000;save();
   toast(yiSet()?'⚔🐢 이순신 장군과 거북선 출격! 「필사즉생 필생즉사」 굴착량 +150% · '+d+'초':'⚔ 이순신 장군 출현! 「필사즉생 필생즉사」 굴착량 +100% · '+d+'초');sfx('yi');yiVoice();
@@ -2045,7 +2055,7 @@ const OPT={
  body:[{v:'slim',n:'마른 체형',p:0,w:.86},{v:'normal',n:'보통',p:0,w:1},{v:'big',n:'튼튼',p:0,w:1.18}],
  hat:[{v:'none',n:'없음',p:0},{v:'helmet',n:'안전모',p:200},{v:'lamp',n:'랜턴 안전모',p:800},{v:'explorer',n:'탐험 모자',p:2000},{v:'mask',n:'잠수 마스크',p:4000},{v:'straw',n:'밀짚모자',p:300},{v:'beanie',n:'비니',p:400},{v:'cap',n:'야구 모자',p:500},{v:'flower',n:'꽃 화관',p:900},{v:'bow',n:'리본',p:700},{v:'beret',n:'베레모',p:1200},{v:'bowler',n:'중절모',p:2500},{v:'horns',n:'뿔 머리띠',p:3500},{v:'crown',n:'아다마스 투구',p:60000}],
  outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'dino',n:'공룡옷',p:3000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
- ship:[{v:'none',n:'없음',p:0},{v:'turtle',n:'★ 거북선',get p(){return S.mode==='hard'?16000000:8000000;},get d(){const h=S.mode==='hard';return `특수 소장품 · 보유 효과: 해상 원정 굴착력 +${h?12:20}%, 본공·원정 굴착력 +${h?2:3}% · 출항시키면 지도 남해를 항해하고 해상 원정에 함께 나가요 · 이순신 장군과 함께 보유하면 세트 효과`;}}],
+ ship:[{v:'none',n:'없음',p:0},{v:'turtle',n:'★ 거북선',get p(){return S.mode==='hard'?16000000:8000000;},get d(){const h=S.mode==='hard';return `특수 소장품 · 보유 효과: 해상 원정 굴착력 +${h?12:20}%, 본공·원정 굴착력 +${h?2:3}% · 사면 정해진 주기로 자동 출항해 지도 남해를 항해하고 해상 원정에 함께 나가요 · 이순신 장군과 함께 보유하면 세트 효과`;}}],
  item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:3000,d:'보유 효과: 본공·원정 굴착력 +3% (하드 +1.8%)'},{v:'pick',n:'곡괭이',p:15000,d:'보유 효과: 강타 확률 +2%p (하드 +1.2%p)'},{v:'tablet',n:'탐사 태블릿',p:60000,d:'보유 효과: 원정 재료 추가 획득 +4%p · 유물 발견 +10% (하드 60%)'},{v:'hdrill',n:'휴대용 드릴',p:300000,d:'보유 효과: 굴착력 +4% · 강타 확률 +2%p (하드 60%)'}],
 };
 const DEFCHAR={sex:'m',skin:0,hair:'short',hcol:0,eyes:'round',body:'normal',hat:'none',outfit:'track',item:'none',ship:'none'};
@@ -2909,7 +2919,7 @@ const owns=(k,o)=>o.p===0||S.own.includes(k+':'+o.v);
 const HEADVB='12 2 76 76',BODYVB='-20 -2 140 178';
 const headVB=c=>c.sex==='yi'?'9 30 82 82':c.sex==='chick'?'11 60 78 78':(c.sex==='m'||c.sex==='f'||!ANS[c.sex])?(c.hat&&c.hat!=='none'?'6 20 88 88':'10 34 80 80'):'11 38 78 78';
 function avatarSVG(c){return `<svg viewBox="${headVB(c)}" aria-hidden="true">${charG(c)}</svg>`;}
-function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());const ms=document.getElementById('mShip');if(ms)ms.style.display=shipOn()?'':'none';}
+function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());shipMapTick();}
 function wardChar(){const c=ME();if(wTry)c[wTry.k]=wTry.v;return c;}
 // ---- 거북선 (turtle ship) v2: side view, bow (dragon head) to the left. Ship body spans x 0..300, y -14..200; fire breath reaches x ≈ -62 ----
 function turtleSVG(o={}){const k='ts'+(o.id||''),sea=o.sea!==false,anim=o.anim!==false,fire=o.fire!==false,OL='stroke="#3a2210" stroke-width="1.3" stroke-linejoin="round"',GO='stroke="#6e420c" stroke-width="1.1" stroke-linejoin="round"';
@@ -3043,8 +3053,9 @@ const ITEMSVG={
  hdrill:`<defs><linearGradient id="idr" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffc24a"/><stop offset="1" stop-color="#d9861a"/></linearGradient></defs><path d="M8,16 h30 q6,0 6,6 v4 q0,6 -6,6 h-30Z" fill="url(#idr)" ${OLI}/><path d="M18,32 h10 l3,18 h-15Z" fill="#2b3338" ${OLI}/><rect x="14" y="44" width="20" height="10" rx="2" fill="#3a4248" ${OLI}/><rect x="17" y="47" width="6" height="4" fill="#7cffc8"/><rect x="44" y="21" width="5" height="6" fill="#5a646a" ${OLI}/><path d="M49,24 h9" stroke="#c9d1d5" stroke-width="3.4" stroke-linecap="round"/><path d="M50,22 l2,4 l2,-4 l2,4" stroke="#7e888e" stroke-width="1" fill="none"/><path d="M12,20 h22" stroke="#fff3b0" stroke-width="1.6" opacity=".8"/>`};
 function renderWard(){
   const c=wardChar();
-  const showShip=wTab==='sex'&&(wTry?wTry.k==='ship':wShip);
-  $('#wStage').innerHTML=showShip?`<svg viewBox="-70 -16 380 216" role="img" aria-label="거북선 미리보기" style="width:100%;max-width:440px">${turtleSVG({id:'w'})}</svg>`:`<svg viewBox="-30 -14 160 192" role="img" aria-label="주인공 미리보기"><ellipse cx="50" cy="168" rx="40" ry="6" fill="rgba(0,0,0,.35)"/>${charG(c)}</svg>`;
+  const showShip=wTab==='sex'&&(wTry?wTry.k==='ship':wShip);if(!showShip&&$('#wStage').querySelector('.ship3'))$('#wStage').innerHTML='';
+  if(showShip&&L3OK){const st=$('#wStage');if(!st.querySelector('.ship3')){st.innerHTML='<div class="s3wrap" aria-label="거북선 3D 미리보기 · 끌어서 돌려 보기"></div><span class="s3hint">끌어서 360° 돌려 보기</span>';shipLive(st.querySelector('.s3wrap'));}}
+  else $('#wStage').innerHTML=showShip?`<svg viewBox="-70 -16 380 216" role="img" aria-label="거북선 미리보기" style="width:100%;max-width:440px">${turtleSVG({id:'w'})}</svg>`:`<svg viewBox="-30 -14 160 192" role="img" aria-label="주인공 미리보기"><ellipse cx="50" cy="168" rx="40" ry="6" fill="rgba(0,0,0,.35)"/>${charG(c)}</svg>`;
   setTimeout(()=>{const a=document.querySelector('#wTabs [aria-selected="true"]');if(a&&a.scrollIntoView)a.scrollIntoView({inline:'nearest',block:'nearest'});},0);
   $('#wTabs').innerHTML=WT.map(t=>`<button class="wtab" type="button" role="tab" data-t="${t.k}" aria-selected="${t.k===wTab}">${t.n}</button>`).join('');
   const head=['hair','hcol','eyes','skin','hat'].includes(wTab);
@@ -3052,11 +3063,13 @@ function renderWard(){
     const pv=Object.assign({},S.char,{[wTab]:o.v},wTab!=='sex'&&S.char.sex==='yi'?{sex:S.char.lastSex||'m'}:{},wTab==='sex'&&(o.v==='m'||o.v==='f')&&o.v!==S.char.sex?{hair:o.v==='f'?'long':'short'}:{});
     const pic=wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charG(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${charG(pv)}</svg>`;
     return `<button class="wopt ${cur?'on':''} ${tr?'try':''}" type="button" data-v="${o.v}">${pic}<span class="wn">${o.n}</span><span class="wp ${cur?'own':own?'own':S.money<o.p?'no':''}">${cur?'착용 중':own?'보유':won(o.p)}</span></button>`;}).join('');
-  if(wTab==='sex'){const o=OPT.ship[1],on=S.char.ship==='turtle',own=owns('ship',o),tr=wTry&&wTry.k==='ship';
-    $('#wOpts').insertAdjacentHTML('beforeend',`<button class="wopt wship ${on?'on':''} ${tr?'try':''}" type="button" data-k="ship" data-v="turtle"><svg viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'o',anim:false})}</svg><span class="wn">${o.n}</span><span class="wp ${on||own?'own':S.money<o.p?'no':''}">${on?'출항 중 · 누르면 정박':own?'보유 · 누르면 출항':won(o.p)}</span></button>`);}
+  if(wTab==='sex'){const o=OPT.ship[1],own=owns('ship',o),tr=wTry&&wTry.k==='ship',ph=shipPhase(),im=L3OK?shipShot('q',640,380,{sea:false}):null;
+    const st=!own?won(o.p):shipCyc()==='off'?'보유 · 자동 출항 꺼짐':ph.vis?'⛵ 항해 중':`⚓ 정박 중 · ${ph.next}초 뒤 출항`;
+    $('#wOpts').insertAdjacentHTML('beforeend',`<button class="wopt wship ${own&&wShip?'on':''} ${tr?'try':''}" type="button" data-k="ship" data-v="turtle">${im?`<img src="${im}" alt="">`:`<svg viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'o',anim:false})}</svg>`}<span class="wn">${o.n}</span><span class="wp ${own?'own':S.money<o.p?'no':''}">${st}</span></button>`+
+      (own?`<div class="wshipcyc"><span>자동 출항</span><div class="segs">${SHIPCYC.map(([v,n])=>`<button type="button" data-cyc="${v}" aria-pressed="${String(shipCyc())===String(v)}">${n}</button>`).join('')}</div><small>${shipCyc()==='always'?'지도 남해를 쉬지 않고 오가요.':shipCyc()==='off'?'항해하지 않아요. 보유 효과는 그대로 적용돼요.':`한 번 항해(${SHIPVOY}초)를 마치면 ${SHIPCYC.find(x=>x[0]===shipCyc())[1]} 쉬었다가 다시 출항해요.`}</small></div>`:''));}
   if(S.char.sex==='yi'&&wTab!=='sex')$('#wOpts').insertAdjacentHTML('afterbegin','<p class="wnote">이순신 장군은 전용 갑옷·투구를 입어요. 여기서 고른 꾸미기는 다른 주인공으로 바꾸면 보여요.</p>');
   if(wTab==='item'){const own=OPT.item.filter(o=>o.d&&hasIt(o.v));$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>소품 보유 효과</b> — 사서 갖고 있기만 해도 적용돼요 (착용과 무관, 하드는 60%)<br>${own.length?own.map(o=>'· '+o.n+': '+o.d.replace('보유 효과: ','')).join('<br>'):'· 아직 가진 소품이 없어요'}</p>`);}
-  if(wTab==='sex'&&(wShip||(wTry&&wTry.k==='ship')||shipOwn()))$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>🐢 거북선</b> — 사서 갖고 있으면 보유 효과, 출항시키면 지도 남해를 항해하고 해상 원정 현장에 함께 나가요. 주인공은 그대로예요.<br>· 보유: 해상 원정 굴착력 +${Math.round((SHIP.sea[S.mode]??.2)*100)}%, 본공·원정 굴착력 +${Math.round((SHIP.all[S.mode]??.03)*100)}%<br>· <b>이순신 장군 + 거북선 세트</b>: 장군 출현 확률 ×1.5, 출현 시간 ×1.5, 출현 중 굴착량 +100% → <b>+150%</b> ${yiSet()?'<b style="color:#7bd88f">(적용 중)</b>':'<span style="color:#ff9a7a">('+(yiOwn()?'거북선':shipOwn()?'이순신 장군':'둘 다')+' 필요)</span>'}</p>`);
+  if(wTab==='sex'&&(wShip||(wTry&&wTry.k==='ship')||shipOwn()))$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>🐢 거북선</b> — 사서 갖고 있으면 보유 효과가 적용되고, 아래 '자동 출항' 주기마다 저절로 지도 남해를 항해해요. 주인공은 그대로예요.<br>· 보유: 해상 원정 굴착력 +${Math.round((SHIP.sea[S.mode]??.2)*100)}%, 본공·원정 굴착력 +${Math.round((SHIP.all[S.mode]??.03)*100)}%<br>· <b>이순신 장군 + 거북선 세트</b>: 장군 출현 확률 ×1.5, 출현 시간 ×1.5, 출현 중 굴착량 +100% → <b>+150%</b> ${yiSet()?'<b style="color:#7bd88f">(적용 중)</b>':'<span style="color:#ff9a7a">('+(yiOwn()?'거북선':shipOwn()?'이순신 장군':'둘 다')+' 필요)</span>'}</p>`);
   if(yiOwn()&&wTab==='sex')$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>★ 이순신 장군 보유 효과</b><br>· 본공·원정 굴착력 +${S.mode==='hard'?3:5}% — 다른 캐릭터로 바꿔도 계속 적용<br>· 출현 이벤트(굴착량 +100%, ${YI.dur[S.mode]||60}초): ${S.char.sex==='yi'?'<b style="color:#7bd88f">발동 가능 (착용 중)</b>':'<b style="color:#ff9a7a">이순신 장군을 착용해야 발동</b>'}</p>`);
   const b=$('#wBuy');
   if(wTry){const o=OPT[wTry.k].find(x=>x.v===wTry.v),ok=S.money>=o.p;b.hidden=false;
@@ -3075,8 +3088,9 @@ function hScroll(el){if(!el||el.dataset.hs)return;el.dataset.hs=1;
   addEventListener('pointerup',()=>{if(!d)return;const m=d.m;d=null;if(m)setTimeout(()=>el.classList.remove('drag'),0);});
   el.addEventListener('click',e=>{if(el.classList.contains('drag')){e.stopPropagation();e.preventDefault();}},true);}
 hScroll($('#wTabs'));
-$('#wOpts').addEventListener('click',e=>{const b=e.target.closest('.wopt');if(!b)return;
-  if(b.dataset.k==='ship'){const o=OPT.ship[1];wShip=true;if(owns('ship',o)){S.char.ship=S.char.ship==='turtle'?'none':'turtle';wTry=null;save();renderAvatar();toast(S.char.ship==='turtle'?'🐢 거북선 출항! 지도 남해를 항해해요':'⚓ 거북선 정박');}else wTry={k:'ship',v:'turtle'};renderWard();return;}
+$('#wOpts').addEventListener('click',e=>{const cy=e.target.closest('[data-cyc]');if(cy){const v=cy.dataset.cyc;S.shipCyc=v==='always'||v==='off'?v:+v;save();shipMapTick();toast(v==='off'?'⚓ 거북선 자동 출항을 껐어요':'⛵ 거북선 자동 출항: '+cy.textContent);wShip=true;renderWard();return;}
+  const b=e.target.closest('.wopt');if(!b)return;
+  if(b.dataset.k==='ship'){const o=OPT.ship[1];wShip=true;if(owns('ship',o))wTry=null;else wTry={k:'ship',v:'turtle'};renderWard();return;}
   wShip=false;const o=OPT[wTab].find(x=>String(x.v)===b.dataset.v);
   if(owns(wTab,o)){if(wTab==='sex'&&S.char.sex!=='yi')S.char.lastSex=S.char.sex;S.char[wTab]=o.v;if(wTab==='sex'&&!owns('hair',OPT.hair.find(h=>h.v===S.char.hair)||OPT.hair[0]))S.char.hair=o.v==='f'?'long':'short';wTry=null;save();renderAvatar();}else wTry={k:wTab,v:o.v};renderWard();});
 $('#wBuy').addEventListener('click',e=>{if(!e.target.closest('#wBuyBtn')||!wTry)return;const o=OPT[wTry.k].find(x=>x.v===wTry.v);if(S.money<o.p)return;
@@ -3122,7 +3136,7 @@ function fixBig(){const L0=landOf(),T=L0.tiles,N=landSize();let ch=0;
     else if(!landFits(id,x,y,k)){const it=LITEM.find(i=>i.id===id);S.money+=it.p;delete T[k];ch=1;toast(it.n+' 자리가 없어 보관 · '+won(it.p)+' 환급');}}
   if(ch)save();}
 const houseTile=()=>Object.entries(landOf().tiles).find(([k,v])=>LITEM.find(x=>x.id===v)?.house);
-const houseBonus=()=>{const h=houseTile();return h?LITEM.find(x=>x.id===h[1]).off:0;};
+const houseBonus=()=>Math.max(0,...Object.values(landOf().tiles).map(v=>(LITEM.find(x=>x.id===v)||{}).off||0)); // best house counts
 const OL2='stroke="#2b211c" stroke-width="1.6" stroke-linejoin="round"';
 function litemSVG(id){let g='';switch(id){
  case 'house_s':g=`<rect x="8" y="18" width="24" height="16" fill="#e9dcc0" ${OL2}/><path d="M5,19 L20,6 L35,19Z" fill="#c94a2a" ${OL2}/><rect x="17" y="24" width="7" height="10" fill="#7a5a3c"/><rect x="10" y="22" width="5" height="5" fill="#9cc6e0"/>`;break;
@@ -3858,11 +3872,141 @@ function thumb3(kind,id){const key=kind+id;if(THUMB[key]||!L3OK)return THUMB[key
   L3.anims=save;R3.anims=save2;sc.add(g);const box=new THREE.Box3().setFromObject(g);if(box.isEmpty()){THUMB[key]=null;return null;}const c=box.getCenter(new THREE.Vector3()),r=box.getSize(new THREE.Vector3()).length()*.62;
   const cam=new THREE.PerspectiveCamera(32,1,.01,100);cam.position.set(c.x+r*1.2,c.y+r*1.05,c.z+r*1.6);cam.lookAt(c);thumbRen.render(sc,cam);THUMB[key]=thumbRen.domElement.toDataURL();
   sc.traverse(o=>{if(o.geometry)o.geometry.dispose();});}catch(e){THUMB[key]=null;}return THUMB[key];}
+// ---------------- 3D 거북선 (three.js): built from primitives; bow (dragon head) toward -X, up +Y, beam ±Z ----------------
+var SHIP3={tex:{}};
+function s3Taper(curve,seg,rad,rFn){const T=THREE,g=new T.TubeGeometry(curve,seg,1,rad,false),p=g.attributes.position;for(let i=0;i<=seg;i++){const c=curve.getPointAt(i/seg),r=rFn(i/seg);for(let j=0;j<=rad;j++){const k=i*(rad+1)+j;p.setXYZ(k,c.x+(p.getX(k)-c.x)*r,c.y+(p.getY(k)-c.y)*r,c.z+(p.getZ(k)-c.z)*r);}}g.computeVertexNormals();return g;}
+function s3Tex(key,w,h,draw){if(SHIP3.tex[key])return SHIP3.tex[key];const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.anisotropy=4;SHIP3.tex[key]=t;return t;}
+function s3Ship(){const T=THREE,G=new T.Group(),anims=[];
+  const ph=(c,o={})=>new T.MeshPhongMaterial(Object.assign({color:c,shininess:30,specular:'#222'},o));
+  const GOLD=ph('#e8b23a',{shininess:90,specular:'#fff1b0',emissive:'#3a2400'}),GOLD2=ph('#c98a1e',{shininess:70,specular:'#ffe08a'}),IRON=ph('#3a3f47',{shininess:60,specular:'#8a929c'}),
+    IRON2=ph('#22262b',{shininess:40,specular:'#666'}),WOOD=ph('#a8602c',{shininess:12}),WOODD=ph('#6a3816',{shininess:8}),RED=ph('#b8241a',{shininess:30}),IVORY=ph('#f3e7c8',{shininess:60}),BLACK=ph('#141518',{shininess:80,specular:'#666'}),WHITE=ph('#fffbea');
+  const M=(g,m,x=0,y=0,z=0)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);G.add(o);return o;};
+  const RX=3.0,RZ=1.15,HW=.8; // half length, half beam, wall height
+  const beam=x=>RZ*Math.sqrt(Math.max(0,1-Math.pow(x/RX,2)))*(x<0?1-.18*Math.pow(-x/RX,2):1);
+  // ---- lower hull: half ellipsoid with a plank texture ----
+  const plank=s3Tex('plank',256,128,(g,w,h)=>{g.fillStyle='#a8602c';g.fillRect(0,0,w,h);for(let i=0;i<10;i++){g.fillStyle=i%2?'#9a5626':'#b26a32';g.fillRect(0,i*h/10,w,h/10);g.fillStyle='rgba(60,30,10,.55)';g.fillRect(0,i*h/10,w,1.5);}for(let i=0;i<40;i++){g.strokeStyle='rgba(70,35,12,.25)';g.beginPath();const y=Math.random()*h;g.moveTo(0,y);g.bezierCurveTo(w*.3,y+4,w*.6,y-4,w,y+2);g.stroke();}});
+  plank.wrapS=plank.wrapT=T.RepeatWrapping;plank.repeat.set(4,1);
+  const hg=new T.SphereGeometry(1,64,24,0,Math.PI*2,Math.PI/2,Math.PI/2);{const p=hg.attributes.position;for(let i=0;i<p.count;i++){let x=p.getX(i)*RX,y=p.getY(i)*.78,z=p.getZ(i);z*=beam(x)/RZ*RZ/(Math.sqrt(Math.max(1e-6,1-Math.pow(x/RX,2)))||1)*1;z=p.getZ(i)*RZ*(x<0?1-.18*Math.pow(-x/RX,2):1);p.setXYZ(i,x,y,z);}hg.computeVertexNormals();}
+  M(hg,ph('#ffffff',{map:plank,shininess:10}));
+  // ---- gun-deck wall: extruded deck outline ----
+  const sh=new T.Shape();for(let i=0;i<=96;i++){const a=i/96*Math.PI*2,x=Math.cos(a)*RX,z=Math.sin(a)*beam(x);i?sh.lineTo(x,z):sh.moveTo(x,z);}
+  const wallTex=s3Tex('wall',512,64,(g,w,h)=>{g.fillStyle='#9c5a2a';g.fillRect(0,0,w,h);for(let i=0;i<4;i++){g.fillStyle='rgba(60,30,10,.4)';g.fillRect(0,i*16,w,1.5);}});
+  const wg=new T.ExtrudeGeometry(sh,{depth:HW,bevelEnabled:false,curveSegments:96});wg.rotateX(-Math.PI/2);M(wg,ph('#a65a2a',{shininess:14}));
+  // red + gold bands around the hull top and roof base
+  const ring=(y,r,m,sx=1)=>{const g=new T.TorusGeometry(1,r,10,120);g.rotateX(Math.PI/2);const p=g.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i),a=Math.atan2(z,x),rx=Math.cos(a)*RX*sx,bz=beam(rx)*sx;const k=Math.hypot(x,z),ox=x/k,oz=z/k,t=(k-1);p.setXYZ(i,ox*RX*sx+ox*t,p.getY(i),Math.sin(a)*bz+oz*t);}g.computeVertexNormals();const o=M(g,m,0,y,0);return o;};
+  ring(-.02,.07,RED,1.005);ring(.06,.05,GOLD,1.01);ring(HW-.02,.07,GOLD,1.012);ring(HW*.5,.025,GOLD2,1.008);
+  // gun ports, cannons, gold brackets on both sides
+  const portG=new T.BoxGeometry(.3,.24,.08),lidG=new T.BoxGeometry(.36,.06,.12),canG=new T.CylinderGeometry(.065,.075,.42,14),muz=new T.TorusGeometry(.07,.02,6,14),brG=new T.BoxGeometry(.06,HW*.92,.05);
+  for(const s of [1,-1]){for(let i=0;i<6;i++){const x=-1.85+i*.74,z=beam(x),ang=Math.atan2(-(x/RX)*RZ/RX,1);
+      const n=new T.Vector3(x/(RX*RX),0,z/(RZ*RZ)*s).normalize();const yaw=Math.atan2(n.x,n.z*s)*s;
+      const pt=M(portG,BLACK,x,.42,s*(z+.01));pt.rotation.y=-yaw*s;const lid=M(lidG,WOODD,x,.58,s*(z+.04));lid.rotation.y=-yaw*s;
+      const c=M(canG,IRON,x+n.x*.12,.42,s*(z+.14));c.rotation.x=Math.PI/2;c.rotation.z=-n.x*1.2;const mz=M(muz,IRON2,x+n.x*.3,.42,s*(z+.34));mz.rotation.y=-yaw*s;}
+    for(let i=0;i<7;i++){const x=-2.22+i*.74,z=beam(x),b=M(brG,GOLD,x,HW/2,s*(z+.015));b.rotation.y=Math.atan2(x/(RX*RX),z/(RZ*RZ))*-1*s;}}
+  // ---- iron turtle-shell roof (upper half ellipsoid) with hex plates, ridge cross, spikes ----
+  const hexT=s3Tex('hex',1024,512,(g,w,h)=>{g.fillStyle='#2b3037';g.fillRect(0,0,w,h);const R=22,W=R*Math.sqrt(3);for(let r=0;r*R*1.5<h+R;r++)for(let c=-1;c*W<w+W;c++){const x=c*W+(r%2?W/2:0),y=r*R*1.5;g.beginPath();for(let k=0;k<6;k++){const a=Math.PI/3*k+Math.PI/6;g.lineTo(x+R*.95*Math.cos(a),y+R*.95*Math.sin(a));}g.closePath();const gr=g.createRadialGradient(x-6,y-6,2,x,y,R);gr.addColorStop(0,'#5a626d');gr.addColorStop(1,'#1c1f24');g.fillStyle=gr;g.fill();g.strokeStyle='#b8913e';g.lineWidth=2.2;g.stroke();}});
+  const RY=1.32,rg=new T.SphereGeometry(1,72,32,0,Math.PI*2,0,Math.PI/2);{const p=rg.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i)*RX*.985;p.setXYZ(i,x,p.getY(i)*RY,p.getZ(i)*RZ*(x<0?1-.18*Math.pow(-x/RX,2):1)*.985);}rg.computeVertexNormals();}
+  M(rg,ph('#ffffff',{map:hexT,shininess:22,specular:'#3a4048'}),0,HW,0);
+  const roofY=(x,z)=>{const bx=RX*.985,bz=beam(x)*.985;const q=1-Math.pow(x/bx,2)-Math.pow(z/(bz||1e-3),2);return HW+RY*Math.sqrt(Math.max(0,q));};
+  const ridge=new T.CatmullRomCurve3(Array.from({length:21},(_,i)=>{const x=-2.85+i*.285;return new T.Vector3(x,roofY(x,0)+.01,0);}));M(new T.TubeGeometry(ridge,80,.055,8,false),GOLD);
+  const cross=new T.CatmullRomCurve3(Array.from({length:15},(_,i)=>{const z=-1.08+i*(2.16/14);return new T.Vector3(.2,roofY(.2,z)+.01,z);}));M(new T.TubeGeometry(cross,60,.045,8,false),GOLD);
+  {const cone=new T.ConeGeometry(.042,.17,7);cone.translate(0,.085,0);const pts=[];for(let a=0;a<26;a++)for(let b=1;b<=7;b++){const th=a/26*Math.PI*2,ph_=b/8*Math.PI/2*1.02;let x=Math.cos(th)*Math.sin(ph_)*RX*.985,z=Math.sin(th)*Math.sin(ph_);z*=beam(x)*.985;if(Math.abs(z)<.12||Math.abs(x-.2)<.12)continue;pts.push([x,z]);}
+    const im=new T.InstancedMesh(cone,ph('#9aa1aa',{shininess:90,specular:'#ffffff'}),pts.length),d=new T.Object3D();
+    pts.forEach(([x,z],i)=>{const y=roofY(x,z);const bz=beam(x)*.985;const n=new T.Vector3(x/(RX*RX),(y-HW)/(RY*RY),z/(bz*bz||1)).normalize();d.position.set(x,y-.01,z);d.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),n);d.updateMatrix();im.setMatrixAt(i,d.matrix);});G.add(im);}
+  // ---- mast + sail (龜) ----
+  M(new T.CylinderGeometry(.05,.065,3.1,10),WOODD,.35,HW+RY+.95,0);M(new T.SphereGeometry(.09,12,10),GOLD,.35,HW+RY+2.52,0);
+  const sailT=s3Tex('sail',256,256,(g,w,h)=>{const gr=g.createLinearGradient(0,0,w,0);gr.addColorStop(0,'#fbf1d8');gr.addColorStop(.6,'#eedcb3');gr.addColorStop(1,'#d9c08c');g.fillStyle=gr;g.fillRect(0,0,w,h);g.strokeStyle='#8a6a44';g.lineWidth=7;for(const y of [34,90,146,202])g.beginPath(),g.moveTo(0,y),g.lineTo(w,y),g.stroke();g.strokeStyle='#6a4a2a';g.lineWidth=8;g.strokeRect(4,4,w-8,h-8);
+    g.fillStyle='#17110c';g.font='900 168px "Noto Serif KR","Noto Serif CJK KR","Nanum Myeongjo",serif';g.textAlign='center';g.textBaseline='middle';g.fillText('龜',w/2,h/2+8);});
+  const sg=new T.PlaneGeometry(1.75,1.55,12,8);{const p=sg.attributes.position;for(let i=0;i<p.count;i++){const u=(p.getX(i)/1.75+.5);p.setZ(i,Math.sin(u*Math.PI)*.16);}sg.computeVertexNormals();}
+  const sail=M(sg,ph('#ffffff',{map:sailT,side:T.DoubleSide,shininess:5}),.35,HW+RY+1.35,.06);
+  for(const y of [-.75,.75])M(new T.CylinderGeometry(.03,.03,1.95,8),WOODD,.35,HW+RY+1.35+y,.06).rotation.z=Math.PI/2;
+  // ---- small flags on visible poles ----
+  const flagT=s3Tex('flag',128,96,(g,w,h)=>{g.fillStyle='#c62a1c';g.fillRect(0,0,w,h);g.fillStyle='#141518';g.fillRect(10,10,w-28,h-20);for(let y=0;y<h;y+=12){g.fillStyle='#c62a1c';g.beginPath();g.moveTo(w-18,y);g.lineTo(w,y+6);g.lineTo(w-18,y+12);g.fill();}
+    g.strokeStyle='#e9eef2';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(66,18);g.bezierCurveTo(40,30,74,46,50,58);g.bezierCurveTo(34,68,58,78,48,84);g.stroke();g.fillStyle='#e9eef2';g.beginPath();g.arc(68,18,5,0,7);g.fill();});
+  for(const [fx,ph0] of [[-1.75,0],[2.15,1.3]]){const fy=roofY(fx,0);M(new T.CylinderGeometry(.03,.036,1.35,8),WOODD,fx,fy+.6,0);M(new T.ConeGeometry(.055,.14,8),GOLD,fx,fy+1.33,0);M(new T.SphereGeometry(.05,8,6),GOLD,fx,fy+1.24,0);
+    const fg=new T.PlaneGeometry(.52,.36,8,4);fg.translate(.26,0,0);const f=M(fg,ph('#ffffff',{map:flagT,side:T.DoubleSide}),fx+.03,fy+1.02,0);const base=fg.attributes.position.array.slice();
+    anims.push(t=>{const p=fg.attributes.position;for(let i=0;i<p.count;i++){const x=base[i*3];p.setZ(i,Math.sin(t*5+ph0-x*9)*.06*x/.52*2);}p.needsUpdate=true;});}
+  // ---- oars: 8 a side, rowing ----
+  const oarG=new T.CylinderGeometry(.032,.032,1.7,6);oarG.translate(0,-.85,0);const blade=new T.BoxGeometry(.05,.42,.16);blade.translate(0,-1.62,0);
+  for(const s of [1,-1])for(let i=0;i<8;i++){const x=-2.0+i*.56,z=beam(x),piv=new T.Group();piv.position.set(x,.12,s*(z+.01));G.add(piv);const o=new T.Mesh(oarG,WOODD),b=new T.Mesh(blade,WOOD);piv.add(o,b);
+    anims.push(t=>{const k=t*2.6+i*.12;piv.rotation.set(-s*(1.15+Math.sin(k)*.1),0,Math.cos(k)*.3);});}
+  // ---- stern dragon tail: tapering scaled segments that curl up ----
+  {const c=new T.CatmullRomCurve3([new T.Vector3(2.7,.5,0),new T.Vector3(3.2,.7,0),new T.Vector3(3.55,1.1,0),new T.Vector3(3.62,1.6,0),new T.Vector3(3.42,1.98,0),new T.Vector3(3.1,2.02,0),new T.Vector3(2.98,1.78,0),new T.Vector3(3.12,1.6,0)]);
+    M(s3Taper(c,70,14,t=>.27*(1-t)+.03),GOLD);{const e=c.getPointAt(0);M(new T.SphereGeometry(.27,14,10),GOLD,e.x,e.y,e.z);}
+    for(let i=0;i<9;i++){const t=.08+i*.1,p=c.getPointAt(t),r=M(new T.TorusGeometry(.27*(1-t)+.03,.018,6,18),GOLD2,p.x,p.y,p.z);r.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),c.getTangentAt(t));}
+    for(let i=0;i<7;i++){const t=.12+i*.11,p=c.getPointAt(t),tg=c.getTangentAt(t),n=new T.Vector3(tg.y,-tg.x,0);const f=M(new T.ConeGeometry(.07*(1-t)+.03,.22*(1-t)+.08,4),ph('#f08a1c',{shininess:60}),p.x+n.x*(.24*(1-t)+.04),p.y+n.y*(.24*(1-t)+.04),0);f.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),n);f.scale.set(1,1,.3);}
+    const e=c.getPointAt(1);for(const [a,z] of [[.4,0],[1.6,0],[-.6,0]]){const f=M(new T.ConeGeometry(.09,.36,4),GOLD,e.x+Math.cos(a)*.14,e.y+Math.sin(a)*.14,z);f.rotation.z=a-Math.PI/2;f.scale.set(1,1,.3);}}
+  // ---- dragon head on the bow ----
+  const H=new T.Group();H.position.set(-3.58,1.82,0);H.scale.setScalar(1.25);G.add(H);const HM=(g,m,x,y,z)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);H.add(o);return o;};
+  {const neck=new T.CatmullRomCurve3([new T.Vector3(-2.6,.35,0),new T.Vector3(-3.05,.8,0),new T.Vector3(-3.3,1.3,0),new T.Vector3(-3.45,1.62,0)]);
+    M(s3Taper(neck,40,16,t=>.34-.1*t),GOLD);{const e=neck.getPointAt(0);M(new T.SphereGeometry(.34,16,12),GOLD,e.x,e.y,e.z);}
+    for(let i=0;i<8;i++){const p=neck.getPointAt(.08+i*.11),r=M(new T.TorusGeometry(.3-.09*(.08+i*.11),.022,6,20),GOLD2,p.x,p.y,p.z);const tg=neck.getTangentAt(.08+i*.11);r.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),tg);}
+    // belly scales down the neck front
+    for(let i=0;i<7;i++){const p=neck.getPointAt(.06+i*.13),s=M(new T.SphereGeometry(.15,12,8),IVORY,p.x-.24,p.y,0);s.scale.set(.5,.9,1.4);}
+    // bow plate + ghost face
+    const bp=M(new T.SphereGeometry(.42,20,14),GOLD,-2.95,.25,0);bp.scale.set(.35,1,1.1);const gf=M(new T.CircleGeometry(.2,24),RED,-3.1,.28,0);gf.rotation.y=-Math.PI/2;
+    for(const z of [-.08,.08]){const e=M(new T.ConeGeometry(.04,.08,3),GOLD,-3.11,.34,z);e.rotation.z=Math.PI/2;}const mo=M(new T.TorusGeometry(.07,.015,6,12,Math.PI),GOLD,-3.11,.22,0);mo.rotation.set(0,-Math.PI/2,Math.PI);}
+  const skull=HM(new T.SphereGeometry(.34,24,18),GOLD,0,0,0);skull.scale.set(1.15,.9,.85);
+  const snout=HM(new T.SphereGeometry(.3,22,16),GOLD,-.38,-.06,0);snout.scale.set(1.35,.5,.62);
+  const nose=HM(new T.SphereGeometry(.13,16,12),GOLD2,-.72,.0,0);nose.scale.set(1,.8,1.3);
+  for(const z of [-.07,.07])HM(new T.SphereGeometry(.035,8,6),BLACK,-.82,.04,z);
+  const jaw=new T.Group();jaw.position.set(-.05,-.2,0);H.add(jaw);{const j=new T.Mesh(new T.SphereGeometry(.28,20,14),GOLD);j.position.set(-.32,-.04,0);j.scale.set(1.3,.32,.55);jaw.add(j);
+    const tg=new T.Mesh(new T.SphereGeometry(.2,14,10),ph('#e2443a'));tg.position.set(-.3,.04,0);tg.scale.set(1.4,.25,.45);jaw.add(tg);
+    for(let i=0;i<5;i++)for(const z of [-.12,.12]){const t=new T.Mesh(new T.ConeGeometry(.024,.08,6),WHITE);t.position.set(-.55+i*.1,.07,z*(1-i*.04));jaw.add(t);}}
+  jaw.rotation.z=.32;
+  const mouth=HM(new T.SphereGeometry(.22,16,12),ph('#5a0c08'),-.38,-.2,0);mouth.scale.set(1.3,.35,.5);
+  for(let i=0;i<6;i++)for(const z of [-.13,.13]){const t=HM(new T.ConeGeometry(.024,.09,6),WHITE,-.74+i*.1,-.16,z*(1-Math.max(0,3-i)*.06));t.rotation.x=Math.PI;}
+  for(const z of [-.14,.14]){const f=HM(new T.ConeGeometry(.035,.15,6),WHITE,-.72,-.18,z);f.rotation.x=Math.PI;}
+  for(const z of [-1,1]){const eyeW=HM(new T.SphereGeometry(.085,16,12),WHITE,-.12,.12,z*.22);eyeW.scale.set(1.2,.9,.6);HM(new T.SphereGeometry(.05,12,10),ph('#d23a12',{shininess:120,specular:'#fff'}),-.17,.12,z*.26);HM(new T.SphereGeometry(.024,8,6),BLACK,-.2,.12,z*.29);
+    const brow=HM(new T.SphereGeometry(.12,12,8),GOLD2,-.06,.24,z*.2);brow.scale.set(1.3,.4,.6);
+    // horns: ivory, swept back
+    const hc=new T.CatmullRomCurve3([new T.Vector3(.1,.22,z*.16),new T.Vector3(.35,.48,z*.24),new T.Vector3(.7,.62,z*.3)]);
+    for(let i=0;i<=12;i++){const t=i/12,p=hc.getPoint(t);HM(new T.SphereGeometry(.07*(1-t)+.012,10,8),IVORY,p.x,p.y,p.z);}
+    // moderate whiskers that sway
+    const wp=new T.Group();wp.position.set(-.7,-.04,z*.13);H.add(wp);const wc=new T.CatmullRomCurve3([new T.Vector3(0,0,0),new T.Vector3(.08,-.12,z*.12),new T.Vector3(.28,-.22,z*.2),new T.Vector3(.5,-.18,z*.24)]);
+    const wm=new T.Mesh(new T.TubeGeometry(wc,24,.016,6,false),ph('#ffe680',{shininess:80}));wp.add(wm);anims.push(t=>{wp.rotation.set(Math.sin(t*2+z)*.18,0,Math.sin(t*1.6+z)*.15);});
+    // cheek fins / ears
+    const ear=HM(new T.ConeGeometry(.08,.3,5),GOLD2,.22,.08,z*.26);ear.rotation.set(z*.5,0,-1.3);ear.scale.set(1,1,.35);}
+  // flame-like mane behind the head
+  for(let i=0;i<9;i++){const a=-.9+i*.24,m=HM(new T.ConeGeometry(.09,.48,5),i%2?GOLD:ph('#f08a1c',{shininess:60}),.3+Math.cos(a)*.22,.02+Math.sin(a)*.26,(i%3-1)*.1);m.rotation.z=-Math.PI/2+a*.9-.3;m.scale.set(1,1,.45);}
+  // beard
+  for(let i=0;i<4;i++){const b=HM(new T.ConeGeometry(.05,.24,5),GOLD2,-.2+i*.1,-.42,(i%2-.5)*.1);b.rotation.z=Math.PI+.2;}
+  H.rotation.z=-.08;
+  // ---- fire breath: additive sprites from the mouth ----
+  const fireT=s3Tex('fire',64,64,(g,w,h)=>{const r=g.createRadialGradient(32,32,2,32,32,32);r.addColorStop(0,'rgba(255,255,230,1)');r.addColorStop(.35,'rgba(255,210,80,.9)');r.addColorStop(.7,'rgba(255,90,20,.45)');r.addColorStop(1,'rgba(200,20,0,0)');g.fillStyle=r;g.fillRect(0,0,w,h);});
+  const FP=[];const fireG=new T.Group();G.add(fireG);const mouthW=new T.Vector3(-4.62,1.52,0);
+  for(let i=0;i<46;i++){const sp=new T.Sprite(new T.SpriteMaterial({map:fireT,blending:T.AdditiveBlending,depthWrite:false,transparent:true}));fireG.add(sp);FP.push({sp,t:Math.random(),v:.8+Math.random()*.5,dy:(Math.random()-.5)*.5,dz:(Math.random()-.5)*.5});}
+  const fireTick=(dt)=>{for(const f of FP){f.t+=dt*f.v*1.4;if(f.t>1){f.t-=1;f.dy=(Math.random()-.5)*.5;f.dz=(Math.random()-.5)*.5;}const t=f.t,d=t*2.5;f.sp.position.set(mouthW.x-d,mouthW.y-.05+f.dy*t+t*t*.25,f.dz*t);const s=.26+t*1.15;f.sp.scale.set(s,s,s);
+      const c=f.sp.material.color;if(t<.15)c.setRGB(1,.95,.7);else if(t<.45)c.setRGB(1,.55,.12);else c.setRGB(.9,.18,.04);f.sp.material.opacity=(t<.1?t*10:Math.max(0,1-(t-.1)/.9))*.85;}};
+  G.userData={anims,fireTick,fire:fireG};return G;}
+// water disk with gentle waves
+function s3Water(){const T=THREE,g=new T.PlaneGeometry(26,26,96,96);g.rotateX(-Math.PI/2);const base=g.attributes.position.array.slice();
+  const fade=s3Tex('wfade',128,128,(c,w,h)=>{const r=c.createRadialGradient(64,64,10,64,64,64);r.addColorStop(0,'#fff');r.addColorStop(.35,'#fff');r.addColorStop(.85,'#000');r.addColorStop(1,'#000');c.fillStyle=r;c.fillRect(0,0,w,h);});
+  const m=new T.Mesh(g,new T.MeshPhongMaterial({color:'#175fae',shininess:40,specular:'#3a7fbf',transparent:true,opacity:.95,alphaMap:fade,depthWrite:false}));m.position.y=-.32;
+  m.userData.tick=t=>{const p=g.attributes.position;for(let i=0;i<p.count;i++){const x=base[i*3],z=base[i*3+2];p.setY(i,Math.sin(x*1.3+t*1.8)*.05+Math.cos(z*1.7+t*1.3)*.04);}p.needsUpdate=true;g.computeVertexNormals();};return m;}
+function s3Scene(o={}){const T=THREE,sc=new T.Scene();sc.add(new T.HemisphereLight('#fff8ec','#506070',.85));const d=new T.DirectionalLight('#fff2d6',.85);d.position.set(-4,7,6);sc.add(d);const d2=new T.DirectionalLight('#9fd0ff',.35);d2.position.set(5,3,-6);sc.add(d2);
+  const ship=s3Ship();sc.add(ship);let water=null;if(o.sea!==false){water=s3Water();sc.add(water);}if(o.fire===false)ship.userData.fire.visible=false;
+  return {sc,ship,water,tick(t,dt){for(const a of ship.userData.anims)a(t);if(o.fire!==false)ship.userData.fireTick(dt);ship.position.y=Math.sin(t*1.9)*.04;ship.rotation.x=Math.sin(t*1.3)*.015;if(water)water.userData.tick(t);}};}
+// static snapshot (cached): angle 'side' (broadside, bow left) or 'q' (three-quarter)
+var S3SHOT={},s3Ren=null;
+function shipShot(kind='q',w=640,h=380,o={}){const key=kind+w+'x'+h+(o.sea===false?'n':'s')+(o.fire===false?'f':'');if(S3SHOT[key]||typeof THREE==='undefined')return S3SHOT[key]||null;try{
+  if(!s3Ren){s3Ren=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});s3Ren.setPixelRatio(1);}s3Ren.setSize(w,h,false);
+  const S=s3Scene(o);for(let i=0;i<40;i++)S.tick(1.2+i*.03,.03);S.ship.position.y=0;
+  const cam=new THREE.PerspectiveCamera(o.fov||28,w/h,.1,100);if(kind==='side'){cam.position.set(-1.1,1.4,15);cam.lookAt(-1.1,1.1,0);}else{cam.position.set(-8.2,4.4,11.6);cam.lookAt(-1.0,1.0,0);}
+  s3Ren.setClearColor(0,0);s3Ren.render(S.sc,cam);S3SHOT[key]=s3Ren.domElement.toDataURL();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});}catch(e){S3SHOT[key]=null;}return S3SHOT[key];}
+// live, rotatable view mounted into an element (wardrobe stage); stops when the element leaves the page
+function shipLive(el){if(typeof THREE==='undefined')return false;const w=el.clientWidth||360,h=el.clientHeight||240;const ren=new THREE.WebGLRenderer({antialias:true,alpha:true});ren.setPixelRatio(Math.min(2,devicePixelRatio||1));ren.setSize(w,h);ren.domElement.className='ship3';el.appendChild(ren.domElement);
+  const S=s3Scene({}),cam=new THREE.PerspectiveCamera(30,w/h,.1,100);let yaw=-.55,pitch=.32,dist=13,auto=true,drag=null,t0=performance.now(),last=t0;
+  const place=()=>{cam.position.set(Math.sin(yaw)*Math.cos(pitch)*dist-.3,Math.sin(pitch)*dist+1.1,Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(-.3,1.1,0);};
+  const cv=ren.domElement;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
+  cv.addEventListener('pointermove',e=>{if(!drag)return;yaw=drag.yaw-(e.clientX-drag.x)*.01;pitch=Math.max(.05,Math.min(1.1,drag.pitch+(e.clientY-drag.y)*.006));});cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>auto=true,2500);});
+  const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000;if(auto)yaw+=dt*.18;place();S.tick(t,dt);ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
+
 function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
   const nx=L0.lv<LAND_SIZE.length?LAND_COST[L0.lv]:0;if(landPick&&landPick!=='me'&&!L0.tiles[landPick])landPick=null;
   const pk=landPick&&landPick!=='me'?LITEM.find(i=>i.id===L0.tiles[landPick]):null,isMe=landPick==='me';
-  const msg=landDel?'철거할 물건을 누르세요. 산 값의 절반을 돌려받아요.':landSel?`<b>${LITEM.find(i=>i.id===landSel).n}</b>을(를) 놓을 빈 땅을 누르세요. 다시 누르면 선택이 풀려요.`
-    :isMe?'캐릭터를 세울 빈 땅(밝은 칸)을 누르세요.':pk?`<b>${pk.n}</b> 선택됨 · 옮길 빈 땅(밝은 칸)을 누르세요.`
+  const hTxt=it=>it&&it.house?` <span class="hoffm">🌙 집 효과: 앱을 닫아도 <b>+${it.off}시간</b> 더 팜 (기본 4시간 → ${4+it.off+2*setPow('neo')}시간${hb&&hb>=it.off&&!(pk&&pk.id===it.id)?` · 지금 집이 +${hb}시간이라 더 늘지 않아요`:''})</span>`:'';
+  const msg=landDel?'철거할 물건을 누르세요. 산 값의 절반을 돌려받아요.':landSel?`<b>${LITEM.find(i=>i.id===landSel).n}</b>을(를) 놓을 빈 땅을 누르세요. 다시 누르면 선택이 풀려요.${hTxt(LITEM.find(i=>i.id===landSel))}`
+    :isMe?'캐릭터를 세울 빈 땅(밝은 칸)을 누르세요.':pk?`<b>${pk.n}</b> 선택됨 · 옮길 빈 땅(밝은 칸)을 누르세요.${pk.house?` <span class="hoffm">🌙 이 집 효과: 오프라인 굴착 <b>+${pk.off}시간</b>${hb>pk.off?` (더 좋은 집 +${hb}시간이 적용 중)`:' 적용 중'}</span>`:''}`
     :hb?`물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요. 집이 있으면 앱을 닫아도 ${hb}시간 더 팝니다.`:'아래에서 물건을 고르고 빈 땅을 눌러 놓으세요. 놓인 물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.';
   const B=(id,t,c='ghost')=>`<button class="${c} sm" type="button" id="${id}">${t}</button>`;
   $('#landView').innerHTML=`<div class="lhead"><div><div class="tk">내 땅 · ${n}×${n}칸</div><div class="tn">양구 국토정중앙 옆 부지</div></div>
@@ -3871,7 +4015,7 @@ function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
    ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpStat','📊 능력치','primary')}${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
      :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${pk.id==='museum'?B('lpGal','전시관 들어가기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
    <p class="sub" style="margin:0">${msg}</p>
-   <div class="lpal">${LITEM.filter(i=>!isPetId(i.id)||petOpen(i.id)).map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${L3OK&&thumb3('land',i.id)?`<img class="th3" src="${thumb3('land',i.id)}" alt="">`:isoIcon(i.id)}<span>${i.n}</span><em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;if(L3OK)l3Mount();}
+   <div class="lpal">${LITEM.filter(i=>!isPetId(i.id)||petOpen(i.id)).map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${L3OK&&thumb3('land',i.id)?`<img class="th3" src="${thumb3('land',i.id)}" alt="">`:isoIcon(i.id)}<span>${i.n}</span>${i.house?`<small class="hoff">🌙 오프라인 +${i.off}시간</small>`:''}<em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;if(L3OK)l3Mount();}
 function removeTile(k){const L0=landOf(),it=LITEM.find(i=>i.id===L0.tiles[k]);if(!it)return;S.money+=Math.floor(it.p/2);delete L0.tiles[k];delete landRot()[k];save();toast(it.n+' 철거 · '+won(it.p/2)+' 환급');}
 let lgD=null,lgSup=false,lgPts=new Map(),lgPinch=null;
 // rotate the view 90 degrees with a short smooth turn (objects stay on their tiles, only the camera turns)
