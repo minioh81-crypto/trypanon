@@ -90,7 +90,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .ctop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .ckind{font-size:11px;letter-spacing:.08em;color:var(--mute)}
 .card h2{font-family:var(--f-kr);font-weight:400;font-size:28px;margin:2px 0 0;line-height:1.1}
-.cside{font-family:var(--f-num);font-size:13px;color:var(--mute);text-align:right;white-space:nowrap}
+.cside{font-family:var(--f-body);font-variant-numeric:tabular-nums;font-size:13px;color:var(--mute);text-align:right;white-space:nowrap}
 .cdesc{margin:0;font-size:14px;line-height:1.6;color:#cfc8bb;max-width:60ch}
 .facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px;margin:0}
 .facts dt{color:var(--mute)} .facts dd{margin:0}
@@ -113,10 +113,10 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .blayer{font-size:12px;color:var(--mute)}
 .seg{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
 .seg div{height:100%;background:var(--amber);width:0}
-.brow{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--mute);font-family:var(--f-num);flex-wrap:wrap}
+.brow{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--mute);font-family:var(--f-body);font-variant-numeric:tabular-nums;flex-wrap:wrap}
 .gate{font-size:12px;background:rgba(255,91,58,.14);border:1px solid rgba(255,91,58,.5);color:#ffb7a6;border-radius:10px;padding:7px 10px}
 .gate.win{background:rgba(246,199,106,.14);border-color:var(--amber2);color:var(--amber2)}
-.boost{font-size:12px;color:var(--amber2);font-family:var(--f-num)}
+.boost{font-size:12px;color:var(--amber2);font-family:var(--f-body);font-variant-numeric:tabular-nums}
 .bfoot{position:absolute;left:0;right:0;bottom:0;display:grid;gap:8px;padding-block:24px 12px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   background:linear-gradient(rgba(14,19,21,0),rgba(14,19,21,.94) 40%)}
@@ -126,9 +126,10 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .hbar.over div{background:var(--hot)}
 .fuels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .fuel{border:1px solid var(--line);background:rgba(21,28,31,.9);border-radius:12px;padding:8px;text-align:left;display:grid;gap:2px;min-width:0}
+.fuel .fn{display:flex;align-items:center;gap:3px;font-size:12px;font-weight:700;white-space:nowrap;min-width:0}.fuel .fn .fnm{overflow:hidden;text-overflow:ellipsis;min-width:0}.fuel .fn b{color:var(--amber2);flex:none}.fuel .fe{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10.5px}
 .fuel:disabled{opacity:.4;cursor:default}
 .fn{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fe{font-size:11px;color:var(--mute);font-family:var(--f-num)}
+.fe{font-size:11px;color:var(--mute);font-family:var(--f-body);font-variant-numeric:tabular-nums}
 .taphint{position:absolute;left:0;right:0;top:55%;text-align:center;font-size:13px;color:rgba(236,230,218,.55);pointer-events:none}
 
 /* craft & store */
@@ -139,8 +140,8 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .pname{font-weight:600;font-size:15px}
 .lv{display:inline-flex;gap:2px;margin-left:8px;vertical-align:middle}
 .lv i{width:5px;height:10px;border-radius:1px;background:var(--line)} .lv i.f{background:var(--amber)}
-.peff{font-size:12px;color:var(--mute);font-family:var(--f-num);margin-top:3px}
-.costs{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px;font-size:12px;font-family:var(--f-num)}
+.peff{font-size:12px;color:var(--mute);font-family:var(--f-body);font-variant-numeric:tabular-nums;margin-top:3px}
+.costs{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px;font-size:12px;font-family:var(--f-body);font-variant-numeric:tabular-nums}
 .costs .no{color:var(--hot)} .costs .yes{color:var(--fg)}
 .costs .cgo{display:inline-flex;align-items:baseline;gap:5px;font:inherit;padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);cursor:pointer}.costs .cgo.no{border-color:rgba(255,120,90,.55);background:rgba(255,100,70,.08)}.costs .cgo small{font-family:var(--f-body);font-size:10.5px;color:var(--mute)}.costs .cgo.no small{color:#ffc39a}.costs .cgo:active{transform:scale(.96)}
 .craft{min-width:72px;height:44px;border-radius:12px;border:1px solid var(--amber);color:var(--amber);font-weight:600;font-size:14px}
@@ -174,7 +175,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .result{position:absolute;inset:auto 0 0 0;background:var(--panel);border-top:1px solid var(--line);border-radius:20px 20px 0 0;display:grid;gap:12px;
   padding-top:20px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .result h3{font-family:var(--f-kr);font-weight:400;font-size:26px;margin:0}
-.rgain{font-family:var(--f-num);font-size:15px;display:flex;flex-wrap:wrap;gap:6px 16px}
+.rgain{font-family:var(--f-body);font-variant-numeric:tabular-nums;font-size:15px;display:flex;flex-wrap:wrap;gap:6px 16px}
 .rbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ghost{height:52px;border-radius:14px;border:1px solid var(--line);font-weight:600}
 
@@ -188,11 +189,11 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .ptier{font-family:var(--f-kr);font-size:20px;line-height:1.1}
 .pmode{font-size:11px;color:var(--mute);margin-top:3px}
 .pmode.next{color:var(--amber2)}
-.pstat{font-family:var(--f-num);font-size:12px;color:var(--mute);text-align:right;line-height:1.5}
+.pstat{font-family:var(--f-body);font-variant-numeric:tabular-nums;font-size:12px;color:var(--mute);text-align:right;line-height:1.5}
 .pstat b{color:var(--fg);font-weight:600}
 .part{cursor:pointer}
 .part.sel{border-color:var(--amber);background:var(--panel2)}
-.tierline{font-size:12px;color:var(--amber2);font-family:var(--f-num)}
+.tierline{font-size:12px;color:var(--amber2);font-family:var(--f-body);font-variant-numeric:tabular-nums}
 .plook{font-size:12px;color:var(--amber2);margin-top:6px;line-height:1.5}
 .autoline{font-size:12px;color:var(--mute)}
 
@@ -254,7 +255,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .investor.done .ava{opacity:.55}
 .ava{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-kr);font-size:19px;color:#1a1206;background:var(--c)}
 .iname{font-weight:600;font-size:15px}.irole{font-size:12px;color:var(--mute)}
-.icond{font-size:12px;font-family:var(--f-num);margin-top:5px;color:var(--mute)}
+.icond{font-size:12px;font-family:var(--f-body);font-variant-numeric:tabular-nums;margin-top:5px;color:var(--mute)}
 .iperk{font-size:12px;color:var(--amber2);margin-top:2px}
 .ibar{height:4px;background:var(--line);border-radius:2px;margin-top:6px;overflow:hidden}.ibar div{height:100%;background:var(--amber)}
 .ibtn{min-width:78px;height:42px;border-radius:12px;background:var(--amber);color:#1a1206;font-weight:600;font-size:13px}
@@ -293,7 +294,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .wopt.on{border-color:var(--amber);background:var(--panel2)}
 .wopt.try{border-color:var(--cool)}
 .wn{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.wp{font-size:11px;font-family:var(--f-num);color:var(--mute)}.wp.own{color:var(--ok)}.wp.no{color:var(--hot)}
+.wp{font-size:11px;font-family:var(--f-body);font-variant-numeric:tabular-nums;color:var(--mute)}.wp.own{color:var(--ok)}.wp.no{color:var(--hot)}
 .wsw{width:40px;height:40px;border-radius:50%;margin:10px 0;border:2px solid rgba(255,255,255,.15)}
 .wbuy{display:flex;gap:10px;align-items:center;justify-content:space-between;border:1px solid var(--cool);border-radius:14px;padding:10px 12px;background:var(--panel)}
 .wbuy .t{font-size:13px}.wbuy .t b{display:block;font-size:15px}
@@ -318,7 +319,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .era{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--panel);display:grid;gap:10px;margin-bottom:10px}
 .era.on1{border-color:rgba(232,169,58,.55)}.era.on2{border-color:var(--amber);background:var(--panel2)}
 .ehd{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.en{font-weight:600;font-size:15px}.ed{font-size:11px;color:var(--mute);font-family:var(--f-num)}
+.en{font-weight:600;font-size:15px}.ed{font-size:11px;color:var(--mute);font-family:var(--f-body);font-variant-numeric:tabular-nums}
 .eb{font-size:12px;display:grid;gap:2px}.eb span{color:var(--mute)}.eb span.on{color:var(--amber2)}
 .rgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .rel{display:grid;justify-items:center;gap:2px;text-align:center;min-width:0}
@@ -342,11 +343,11 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .tier.ready{border-color:var(--amber)}
 .th{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
 .tk{font-size:11px;color:var(--mute);letter-spacing:.06em}.tn{font-family:var(--f-kr);font-size:22px;line-height:1.2}
-.tm{font-family:var(--f-num);font-size:13px;color:var(--amber2);text-align:right}
+.tm{font-family:var(--f-body);font-variant-numeric:tabular-nums;font-size:13px;color:var(--amber2);text-align:right}
 .tnext{font-size:13px;color:#cfc8bb}.tnext b{color:var(--fg)}
-.treq{display:flex;flex-wrap:wrap;gap:6px}.treq span{font-size:11px;font-family:var(--f-num);padding:4px 8px;border-radius:999px;border:1px solid var(--line);color:var(--hot)}
+.treq{display:flex;flex-wrap:wrap;gap:6px}.treq span{font-size:11px;font-family:var(--f-body);font-variant-numeric:tabular-nums;padding:4px 8px;border-radius:999px;border:1px solid var(--line);color:var(--hot)}
 .treq span.ok{color:var(--ok);border-color:rgba(120,211,154,.4)}
-.tfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;font-family:var(--f-num)}
+.tfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;font-family:var(--f-body);font-variant-numeric:tabular-nums}
 .tfoot .primary{height:44px;padding:0 18px;font-size:16px}
 @media (max-width:440px){.brand span{display:none}}
 
@@ -357,7 +358,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .ptitle{font-family:var(--f-kr);font-weight:400;font-size:30px;margin:0}
 .picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.pk.lock{opacity:.55;cursor:default}.pk em{font-style:normal;font-size:11px;color:var(--mute);font-family:var(--f-num)}
+.pk.lock{opacity:.55;cursor:default}.pk em{font-style:normal;font-size:11px;color:var(--mute);font-family:var(--f-body);font-variant-numeric:tabular-nums}
 .pk{border:1px solid var(--line);border-radius:18px;background:radial-gradient(ellipse at 50% 85%,#25343a,#121a1d 70%);padding:10px 8px 14px;display:grid;justify-items:center;gap:8px}
 .pk svg{width:100%;height:auto;max-height:24vh;max-height:24dvh}
 .pk span{font-weight:600;font-size:15px}
@@ -369,7 +370,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 
 #v-map{position:relative}
 .mapinfo{position:absolute;top:10px;left:max(10px,env(safe-area-inset-left,0px));right:calc(max(10px,env(safe-area-inset-right,0px)) + 60px);display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
-.mchip{font-size:12px;padding:5px 9px;white-space:nowrap;border-radius:999px;background:rgba(14,19,21,.82);border:1px solid var(--line);font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.mchip{font-size:12px;padding:5px 9px;white-space:nowrap;border-radius:999px;background:rgba(14,19,21,.82);border:1px solid var(--line);font-family:var(--f-body);font-variant-numeric:tabular-nums;font-variant-numeric:tabular-nums}
 .mchip b{font-family:var(--f-body);color:var(--amber2);font-weight:600;margin-right:2px}.mchip.cool b{color:var(--cool)}.mchip.dim{color:var(--mute)}
 .mchip em{font-style:normal;color:var(--hot)}
 @media (max-width:430px){.mapinfo{gap:4px}.mchip{font-size:11px;padding:4px 8px}}
@@ -410,11 +411,11 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .dsheet.news{gap:10px}
 .nbar{display:flex;align-items:center;gap:8px;background:#b3261e;margin:-22px calc(-1*max(18px,env(safe-area-inset-left,0px))) 4px;padding:8px max(18px,env(safe-area-inset-left,0px));border-radius:20px 20px 0 0}
 .nlogo{font-family:var(--f-latin);font-weight:700;background:#ece6da;color:#b3261e;padding:1px 6px;border-radius:3px;font-size:13px}
-.nlive{font-size:12px;font-weight:700;color:#fff}.ntime{margin-left:auto;font-size:11px;color:rgba(255,255,255,.8);font-family:var(--f-num)}
+.nlive{font-size:12px;font-weight:700;color:#fff}.ntime{margin-left:auto;font-size:11px;color:rgba(255,255,255,.8);font-family:var(--f-body);font-variant-numeric:tabular-nums}
 .nhead{font-family:var(--f-kr);font-weight:400;font-size:22px;line-height:1.3;margin:0}
 .nart{display:flex;justify-content:center}.nart svg{width:84px;height:auto}
 .nbody{margin:0;font-size:14px;line-height:1.7;color:#cfc8bb}
-.nreward{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:var(--f-num);font-size:16px;color:var(--amber2)}
+.nreward{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:var(--f-body);font-variant-numeric:tabular-nums;font-size:16px;color:var(--amber2)}
 .badge.cool{background:var(--cool)}
 .foss{display:grid;gap:10px;margin-bottom:6px}
 .fos{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--panel)}
@@ -423,7 +424,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .shlist{display:grid;gap:8px}.shrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel)}
 .shrow.lock{opacity:.5}.shn{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:6px}.shn b{font-size:15px}.shn span{grid-column:1/-1;font-size:11.5px;color:var(--mute)}
 .shp{font-size:12px;color:var(--mute);align-self:center;text-align:right}.shp b{color:var(--fg);font-family:var(--f-num)}
-.shq{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.shq button{display:grid;gap:1px;height:auto;padding:6px 4px;font-weight:700}.shq em{font-style:normal;font-size:10.5px;font-family:var(--f-num);opacity:.85}
+.shq{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.shq button{display:grid;gap:1px;height:auto;padding:6px 4px;font-weight:700}.shq em{font-style:normal;font-size:10.5px;font-family:var(--f-body);font-variant-numeric:tabular-nums;opacity:.85}
 .finds{border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:grid;gap:6px;background:var(--panel2)}.finds .fh{font-size:12px;font-weight:700;color:var(--amber2)}.finds ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
 .finds li{display:grid;grid-template-columns:36px minmax(0,1fr);column-gap:8px;align-items:center;font-size:12.5px;opacity:.75}.finds li.ok{opacity:1}.finds li .fi2{grid-row:span 2;display:grid;place-items:center}.finds li em{font-style:normal;font-size:11px;color:var(--mute)}
 .galbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}.galbtns.lock button{opacity:.6}
@@ -473,7 +474,7 @@ nav.tabs button{font-size:12px}
 .lpal{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
 .lp{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:6px;display:grid;justify-items:center;gap:2px;min-width:0}
 .lp svg{width:56px;height:66px}
-.isoland{display:block;width:100%;height:auto}.isoland .it.own,.isoland .ii{cursor:pointer}.isoland .it.own:hover polygon:nth-child(3){filter:brightness(1.12)}.lp span{font-size:12px;font-weight:600}.lp em{font-style:normal;font-size:11px;font-family:var(--f-num);color:var(--mute)}.lp em.no{color:var(--hot)}.lp em.own{color:var(--ok)}
+.isoland{display:block;width:100%;height:auto}.isoland .it.own,.isoland .ii{cursor:pointer}.isoland .it.own:hover polygon:nth-child(3){filter:brightness(1.12)}.lp span{font-size:12px;font-weight:600}.lp em{font-style:normal;font-size:11px;font-family:var(--f-body);font-variant-numeric:tabular-nums;color:var(--mute)}.lp em.no{color:var(--hot)}.lp em.own{color:var(--ok)}
 .lp.on{border-color:var(--amber);background:var(--panel2)}
 .pickbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;border:1px solid var(--amber);border-radius:12px;background:var(--panel2);padding:6px 10px;font-size:13px}.pickbar>span{display:flex;align-items:center;gap:6px}.pickbar>span svg{width:34px;height:40px}.pickbar>div{display:flex;gap:6px;flex-wrap:wrap}#roomBar:not(:has(button)){border-color:var(--line);background:transparent;color:var(--mute)}.roomart .fu,.roomart .ft,.roomart .stair{cursor:pointer}.flt{display:flex;gap:6px;margin-left:auto;margin-right:8px}.flt:empty{display:none}.flt button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}.flt button.on{border-color:var(--amber);background:var(--amber);color:#1a1206}
 #room{position:fixed;inset:0;z-index:55;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}
@@ -494,7 +495,9 @@ nav.tabs button{font-size:12px}
 .yichip{border:1px solid #e0a040;background:linear-gradient(#a8261f,#5a0f0c);color:#ffe6a0;font-weight:800;font-size:12px;border-radius:999px;padding:4px 10px;white-space:nowrap;animation:yiPulse 1.6s ease-in-out infinite}
 @keyframes yiPulse{50%{box-shadow:0 0 12px rgba(255,190,80,.7)}}
 .yiev{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(255,196,90,.42),rgba(40,8,6,.62) 72%)}
-.yiev[hidden]{display:none}.yiev.go{animation:yiFade 5.4s ease forwards}
+.yiev[hidden]{display:none}#rotNote{display:none}
+@media (orientation:landscape) and (max-height:520px) and (pointer:coarse){#rotNote{display:flex;position:fixed;inset:0;z-index:999;background:#07090a;align-items:center;justify-content:center;text-align:center;color:#eaf1f3}#rotNote>div{display:grid;gap:8px;justify-items:center}#rotNote b{font-size:18px}#rotNote span{font-size:13px;color:#9fb0b6}}#eArt{position:relative}#eArt .eship{position:absolute;right:4%;bottom:14%;width:46%;height:auto;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35));pointer-events:none}.yiship{position:absolute;bottom:4%;left:0;width:min(62vw,300px);height:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5));animation:yiShip 5.4s linear both;pointer-events:none}
+@keyframes yiShip{0%{transform:translateX(110vw)}100%{transform:translateX(-80%)}}@media (min-width:561px){@keyframes yiShip{0%{transform:translateX(560px)}100%{transform:translateX(-80%)}}}.yiev.go{animation:yiFade 5.4s ease forwards}
 @keyframes yiFade{0%{opacity:0}7%{opacity:1}86%{opacity:1}100%{opacity:0;visibility:hidden}}
 .yirays{position:absolute;width:170vmax;height:170vmax;left:50%;top:42%;transform:translate(-50%,-50%);background:repeating-conic-gradient(rgba(255,222,150,.26) 0 5deg,transparent 5deg 16deg);-webkit-mask:radial-gradient(circle,#000 8%,transparent 42%);mask:radial-gradient(circle,#000 8%,transparent 42%);animation:yiSpin 14s linear infinite}
 @keyframes yiSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
@@ -507,6 +510,7 @@ nav.tabs button{font-size:12px}
 @keyframes yiShout{from{transform:scale(2.4);opacity:0}to{transform:none;opacity:1}}
 .wnote{grid-column:1/-1;margin:0;padding:8px 10px;border-radius:10px;background:rgba(179,48,42,.18);border:1px solid rgba(242,193,78,.4);color:#ffe6a0;font-size:12px;line-height:1.4}
 #wBuy .primary{white-space:nowrap;flex:none}
+#wOpts:has(> .wopt svg[viewBox^="-6 -16"]) {grid-template-columns:1fr 1fr}
 .boost.bwx{align-self:flex-start;justify-self:start;display:inline-flex;align-items:center;gap:5px;width:auto;max-width:100%;margin-top:4px;padding:2px 9px 2px 2px;border-radius:999px;background:rgba(8,14,20,.38);border:1px solid rgba(160,210,240,.28);color:#d8eeff;font-size:11px;font-family:var(--f-body);font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.6)}.bwxi{flex:none;overflow:visible}
 .wdesc{display:block;font-size:11px;color:#ffd98a;font-weight:600;margin-top:3px;line-height:1.35}
 </style>
@@ -633,7 +637,7 @@ nav.tabs button{font-size:12px}
 <section id="statDlg" hidden><div class="dsheet"><div class="ehd"><div class="iname" style="font-size:18px">능력치</div><button class="skip" id="statClose" type="button">닫기</button></div><div id="statBody"></div></div></section>
 <section id="recDlg" hidden><div class="dsheet"><div class="ehd"><div class="iname" style="font-size:18px">기록실</div><button class="skip" id="recClose" type="button">닫기</button></div><div id="recBody"></div></div></section>
 <section id="ward" hidden>
-  <div class="shead"><div class="wtitle">주인공 옷장</div><div style="display:flex;gap:6px"><button class="skip" id="wStat" type="button">📊 능력치</button><button class="skip" id="wClose" type="button">닫기</button></div></div>
+  <div class="shead"><div class="wtitle">주인공 옷장</div><div style="display:flex;gap:6px"><button class="skip" id="wClose" type="button">닫기</button></div></div>
   <div class="wstage" id="wStage"></div>
   <div class="wbody">
     <div class="wtabs" id="wTabs" role="tablist"></div>
@@ -658,6 +662,7 @@ nav.tabs button{font-size:12px}
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
+<div id="rotNote" aria-hidden="true"><div><svg viewBox="0 0 64 64" width="64" height="64"><rect x="20" y="6" width="24" height="44" rx="5" fill="none" stroke="#ffd56a" stroke-width="3"/><circle cx="32" cy="44" r="2" fill="#ffd56a"/><path d="M50,30 a18,18 0 0 1 -14,22" stroke="#9fd6ff" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M34,48 l3,5 l5,-2" stroke="#9fd6ff" stroke-width="3" fill="none" stroke-linecap="round"/></svg><b>휴대폰을 세로로 돌려 주세요</b><span>트리파논은 세로 화면 전용 게임이에요</span></div></div>
 <section id="news" hidden><div class="dsheet news">
   <div class="nbar"><span class="nlogo">GNN</span><span class="nlive">속보</span><span class="ntime" id="nTime"></span></div>
   <h3 class="nhead" id="nHead"></h3><div class="nart" id="nArt"></div><p class="nbody" id="nBody"></p>
@@ -785,7 +790,7 @@ const regOf=res=>REG.find(r=>r.res===res);
 
 // ---------------- state ----------------
 const KEY='trypanon-save-v1';
-const DEFCHAR_={sex:'m',skin:0,hair:'short',hcol:0,eyes:'round',body:'normal',hat:'none',outfit:'track',item:'none'};
+const DEFCHAR_={sex:'m',skin:0,hair:'short',hcol:0,eyes:'round',body:'normal',hat:'none',outfit:'track',item:'none',ship:'none'};
 const fresh=()=>({money:0,depth:0,dl:1,res:{},parts:{},unl:[],boost:{m:1,until:0},last:Date.now(),done:false,story:false,inv:{},invN:[],st:{exp:0,sea:0},char:Object.assign({},DEFCHAR_),own:[],ex:{active:null,dig:{}},relic:{},fos:{}});
 let S=fresh();
 try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&typeof d==='object'&&(typeof d.seg==='number'||typeof d.depth==='number'))S=Object.assign(S,d);}catch(e){}
@@ -800,14 +805,19 @@ const L=id=>S.parts[id]||0;
 const levels=()=>Object.fromEntries(PARTS.map(p=>[p.id,L(p.id)]));
 const dpsOf=P=>(3+2*P.housing)*(1+.6*P.bit)*(1+.12*P.bearing)*(1+.25*P.cable);
 const perk=id=>!!S.inv[id];const pm=()=>S.mode==='hard'?.6:1;const PK=(id,v)=>perk(id)?v*pm():0;const rp=id=>Math.min(20,(S.ir&&S.ir[id])||0)*pm();
-const dpsPerk=()=>(1+PK('vc',.15))*(1+PK('inst',.25))*(1+PK('space',.1))*(1+.01*rp('gov'))*(1+.1*setPow('samguk'))*(yiOwn()?(S.mode==='hard'?1.03:1.05):1)*(1+itFx('shovel',.03)+itFx('hdrill',.04));
+const dpsPerk=()=>(1+PK('vc',.15))*(1+PK('inst',.25))*(1+PK('space',.1))*(1+.01*rp('gov'))*(1+.1*setPow('samguk'))*(yiOwn()?(S.mode==='hard'?1.03:1.05):1)*shipAll()*(1+itFx('shovel',.03)+itFx('hdrill',.04));
 const dps=()=>dpsOf(levels())*dpsPerk();
 const critP=()=>(.04*L('shock')+PK('miner',.03)+.05*setPow('bronze')+itFx('pick',.02)+itFx('hdrill',.02))*boreWxK(1.5);
 // owned wardrobe items give small permanent perks (kept whatever is equipped); hard mode x0.6
 const hasIt=v=>!!(S.own&&S.own.includes('item:'+v)),itFx=(v,x)=>hasIt(v)?x*pm():0;
 const extraP=()=>Math.min(.9,.08+.05*L('sensor')+PK('farm',.04)+.005*rp('mid')+.1*setPow('goryeo')+itFx('tablet',.04));
 const boostM=()=>S.boost&&S.boost.until>Date.now()?S.boost.m:1;
-const yiOwn=()=>S.own.includes('sex:yi');const yiM=()=>S.yiB&&S.yiB>Date.now()?2:1;
+const yiOwn=()=>S.own.includes('sex:yi');
+// 거북선: owning gives the perks; equipping shows it on the map and at sea. Owning both it and Admiral Yi = set bonus
+const shipOwn=()=>S.own.includes('ship:turtle'),shipOn=()=>shipOwn()&&S.char.ship==='turtle',yiSet=()=>yiOwn()&&shipOwn();
+const SHIP={sea:{normal:.2,hard:.12},all:{normal:.03,hard:.02}},YISET={m:2.5,p:1.5,d:1.5};
+const shipSea=()=>shipOwn()?1+(SHIP.sea[S.mode]??.2):1,shipAll=()=>shipOwn()?1+(SHIP.all[S.mode]??.03):1;
+const yiM=()=>S.yiB&&S.yiB>Date.now()?(yiSet()?YISET.m:2):1;
 const YI={p:{normal:.054,hard:.04},dur:{normal:60,hard:40}};
 const yiOn=()=>yiOwn()&&ME().sex==='yi'; // owning gives the passive; the map event needs him equipped
 const isUnl=r=>r.un===0||S.unl.includes(r.id);
@@ -1477,7 +1487,7 @@ function digOf(id){S.ex.dig[id]=S.ex.dig[id]||{i:0,hp:0};const g=S.ex.dig[id];if
 const belowOf=(r,i)=>r.t==='sea'?i-r.water:i;
 function altText(r,i){if(r.t==='sea')return i<r.water?'수심 '+(i*r.ws).toLocaleString('ko-KR')+'m':'해저 아래 '+((i-r.water)*BLK).toLocaleString('ko-KR')+'m';
   const a=PEAK[r.id][1]-i*BLK;return a>=0?'해발 '+a.toLocaleString('ko-KR')+'m':'지하 '+(-a).toLocaleString('ko-KR')+'m';}
-const expDps=(rid=S.ex.active||(exp&&exp.r.id))=>wxDig(rid)*(1+PK('paleo',.1))*(rid&&regById(rid).t==='sea'?1+PK('ship',.15):1)*(rid&&regById(rid).t==='sea'?1+.4*L('press')/MAXLV:1)*dps()*boostM()*yiM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.05:1)*(fosDone('ura')?1.03:1);
+const expDps=(rid=S.ex.active||(exp&&exp.r.id))=>wxDig(rid)*(1+PK('paleo',.1))*(rid&&regById(rid).t==='sea'?(1+PK('ship',.15))*shipSea():1)*(rid&&regById(rid).t==='sea'?1+.4*L('press')/MAXLV:1)*dps()*boostM()*yiM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.05:1)*(fosDone('ura')?1.03:1);
 const relicP=()=>(.15+.004*L('sensor')+PK('prof',.02)+PK('museum',.02)+.002*rp('org'))*(1+itFx('tablet',.1));
 const critMul=()=>5+setPow('paleo');
 let exAcc=0,popQ=[],popT=0;
@@ -1509,6 +1519,7 @@ function openExp(r){exp={r};rstLabel();document.querySelectorAll('nav.tabs butto
   const g=digOf(r.id),act=S.ex.active===r.id,other=S.ex.active&&!act?regById(S.ex.active):null;
   $('#eName').textContent=r.n;$('#eResult').hidden=true;$('#exp').hidden=false;$('#eIntro').hidden=false;
   $('#eArt').innerHTML=regionArt(r.id,{withChar:true,rx:0,label:r.n+' 풍경',cx:r.t==='sea'?44:64,cy:168,ch:r.t==='sea'?70:84});
+  if(r.t==='sea'&&shipOn())$('#eArt').insertAdjacentHTML('beforeend',`<svg class="eship" viewBox="0 -14 300 214" aria-hidden="true">${turtleSVG({id:'e',sea:false})}</svg>`);
   $('#eKind').textContent=(r.t==='sea'?'해상 시추':'육상 원정')+' · '+r.area;$('#eTitle').textContent=r.n;$('#eDesc').textContent=r.fl;
   const e=eraAt(r,belowOf(r,g.i));
   $('#eFacts').innerHTML=`<dt>출발</dt><dd>${r.t==='sea'?'해수면 0m':PEAK[r.id][0]+' 해발 '+PEAK[r.id][1].toLocaleString('ko-KR')+'m'}</dd>
@@ -1604,6 +1615,10 @@ function buildMap(){let g='';
   // province name tags
   const TAG={seoul:[121,83],incheon:[98,92],gyeonggi:[134,93],gangwon:[171,72],chungbuk:[158,107],chungnam:[97,118],sejong:[117,127],daejeon:[141,147],jeonbuk:[104,178],jeonnam:[116,236],gwangju:[127,217],gyeongbuk:[185,153],daegu:[197,177],gyeongnam:[178,215],ulsan:[219,186],busan:[206,213],jeju:[76,313]};
   g+=`<g class="ptags" style="pointer-events:none">${PROV.map(p=>{const [x,y]=TAG[p.id]||p.c,w=p.n.length*5.4+4;return `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><rect x="${-w/2}" y="-4.2" width="${w}" height="7.6" rx="1.8" fill="#7a4a24" stroke="#4a2a12" stroke-width=".5" opacity=".88"/><rect x="${-w/2+.6}" y="-3.6" width="${w-1.2}" height="1.4" rx="1" fill="#a8703c" opacity=".7"/><text class="plab" y="1.9">${p.n}</text></g>`;}).join('')}</g>`;
+  {const x1=+PX(126.75).toFixed(1),y1=+PY(33.92).toFixed(1),x2=+PX(129.0).toFixed(1),y2=+PY(34.05).toFixed(1);
+   g+=`<g id="mShip" style="pointer-events:none;display:none"><g><animateTransform attributeName="transform" type="translate" values="${x1} ${y1};${x2} ${y2};${x1} ${y1}" keyTimes="0;.5;1" dur="70s" repeatCount="indefinite"/>
+    <g><animateTransform attributeName="transform" type="scale" values="-1 1;1 1" keyTimes="0;.5" calcMode="discrete" dur="70s" repeatCount="indefinite"/><g transform="translate(-20,-22) scale(.133)">${turtleSVG({id:'m',sea:false,anim:false})}</g>
+    <path d="M20,2 q7,-2 14,0 M22,5 q6,-1.5 11,0" stroke="#fff" stroke-width=".9" fill="none" opacity=".85"/></g></g></g>`;}
   g+='<g id="mRb" style="pointer-events:none"></g>';
   const node=(id,cls,x,y,label,lx,la,ly,res)=>`<g class="node ${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${label}">
     <circle class="hit" cx="${x}" cy="${y}" r="16"/><circle class="ring" cx="${x}" cy="${y}" r="10"/>
@@ -1685,14 +1700,16 @@ const SND={ctx:null,master:null,bgmG:null,sfxG:null,on:false,timer:null,step:0,n
 const sndPref=()=>Object.assign({bgm:1,sfx:1,voice:1,vol:.8},S.snd||{});
 function sndInit(){if(SND.ctx)return SND.ctx;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;try{SND.ctx=new AC();}catch(e){return null;}
   const c=SND.ctx;SND.master=c.createGain();SND.comp=c.createDynamicsCompressor();SND.comp.threshold.value=-18;SND.comp.knee.value=12;SND.comp.ratio.value=4;SND.comp.attack.value=.004;SND.comp.release.value=.2;SND.post=c.createGain();SND.post.gain.value=2.6;SND.master.connect(SND.comp);SND.comp.connect(SND.post);SND.post.connect(c.destination);SND.bgmG=c.createGain();SND.sfxG=c.createGain();SND.bgmG.connect(SND.master);SND.sfxG.connect(SND.master);
+  SND.blastG=c.createGain();SND.blastG.gain.value=1.6;const bl=c.createDynamicsCompressor();bl.threshold.value=-6;bl.knee.value=2;bl.ratio.value=20;bl.attack.value=.001;bl.release.value=.25;SND.blastG.connect(bl);SND.blastMix=c.createGain();bl.connect(SND.blastMix);SND.blastMix.connect(c.destination);
   // soft room reverb for the music bus
   const len=c.sampleRate*1.6,ir=c.createBuffer(2,len,c.sampleRate);for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);}
   SND.rev=c.createConvolver();SND.rev.buffer=ir;SND.revG=c.createGain();SND.revG.gain.value=.22;SND.rev.connect(SND.revG);SND.revG.connect(SND.bgmG);
   const nb=c.createBuffer(1,c.sampleRate,c.sampleRate),nd=nb.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;SND.noise=nb;sndApply();return c;}
-function sndApply(){if(!SND.ctx)return;const p=sndPref(),t=SND.ctx.currentTime;SND.master.gain.setTargetAtTime(p.vol,t,.05);SND.bgmG.gain.setTargetAtTime(p.bgm?.75:0,t,.3);SND.sfxG.gain.setTargetAtTime(p.sfx?1.3:0,t,.05);
+function sndApply(){if(!SND.ctx)return;const p=sndPref(),t=SND.ctx.currentTime;SND.master.gain.setTargetAtTime(p.vol,t,.05);SND.bgmG.gain.setTargetAtTime(p.bgm&&!(view==='bore'||(typeof exp!=='undefined'&&exp))?.75:0,t,.3);SND.sfxG.gain.setTargetAtTime(p.sfx?1.3:0,t,.05);if(SND.blastMix)SND.blastMix.gain.setTargetAtTime(p.sfx?Math.min(1,p.vol*1.25):0,t,.05);
   if(p.bgm)bgmStart();else bgmStop();}
 // unlock on the first user gesture (browser autoplay rules)
 try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
+let oriTried=false;addEventListener('pointerup',()=>{if(oriTried)return;oriTried=true;try{const o=screen.orientation;if(o&&o.lock)o.lock('portrait').catch(()=>{});}catch(e){}},{passive:true});
 function sndRebuild(){// iOS sometimes leaves a context dead after the phone was locked: throw it away and make a fresh one inside the tap
   const old=SND.ctx;bgmStop();SND.ctx=null;SND.fails=0;for(const k of Object.keys(DRL))if(k!=='on')delete DRL[k];try{old&&old.close();}catch(e){}return sndInit();}
 function sndWake(){let c=sndInit();if(!c)return;if(c.state!=='running'){SND.fails=(SND.fails||0)+1;if(SND.fails>2||c.state==='closed')c=sndRebuild();if(c)c.resume().then(()=>{SND.fails=0;if(!titleOn)sndApply();}).catch(()=>{});}
@@ -1707,7 +1724,7 @@ function tone(o){const c=SND.ctx;if(!c)return;const t=o.t??c.currentTime,g=c.cre
 function noise(o){const c=SND.ctx;if(!c)return;const t=o.t??c.currentTime,s=c.createBufferSource(),g=c.createGain(),f=c.createBiquadFilter();s.buffer=SND.noise;f.type=o.ft||'bandpass';f.frequency.value=o.f||1200;f.Q.value=o.q||1;
   g.gain.setValueAtTime(o.v??.2,t);g.gain.exponentialRampToValueAtTime(.0001,t+o.d);s.connect(f);f.connect(g);g.connect(o.bus||SND.sfxG);s.start(t,Math.random()*.5);s.stop(t+o.d+.02);}
 // ---- effects ----
-function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const now=c.currentTime,gap={dig:.07,break:.2,tick:.05,coin:3.5,pickup:.6,tab:.05,select:.05,crit:.08}[k]||0;if(gap&&now-(SND.last[k]||0)<gap)return;SND.last[k]=now;
+function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const now=c.currentTime,gap={dig:.07,break:.7,tick:.05,coin:3.5,pickup:.6,tab:.05,select:.05,crit:.08}[k]||0;if(gap&&now-(SND.last[k]||0)<gap)return;SND.last[k]=now;
   switch(k){
    case 'dig':{// 드득: steel bit biting rock — gritty crunch + low thud with an audible mid-range body
      noise({f:380+Math.random()*260,q:1.1,d:.07,v:.2});noise({f:1800+Math.random()*900,q:1.6,d:.03,v:.07});
@@ -1715,12 +1732,14 @@ function sfx(k){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.st
    case 'crit':{// "탕!" — sharp crack, metal ring and a deep boom
      noise({f:4000,ft:'highpass',d:.04,v:.5});tone({f:1900,f2:500,d:.09,type:'square',v:.16});tone({f:150,f2:42,d:.28,v:.55});
      tone({f:2460,d:.45,type:'triangle',v:.07,t:now+.01});tone({f:3170,d:.32,type:'triangle',v:.05,t:now+.01});noise({f:700,ft:'lowpass',d:.25,v:.25,t:now+.02});break;}
-   case 'break':{// "쾅! 쾅! 쿵! 쿵!" — two blasts then two heavy thuds, all low and noisy (no pitched tones)
-     noise({f:2600,ft:'highpass',d:.035,v:.45});// the crack as the block splits
-     const hit=(t,f,v,d)=>{tone({f,f2:f*.38,t,d,v});tone({f:f*2.6,f2:f*.9,t,d:d*.6,v:v*.45,type:'triangle'});noise({f:f*7,ft:'lowpass',t,d:d*.8,v:v*.9});noise({f:520,q:.9,t,d:.09,v:v*.55});};
-     hit(now,95,.65,.45);hit(now+.13,80,.55,.4);hit(now+.29,62,.45,.36);hit(now+.44,50,.36,.32);
-     for(let i=0;i<7;i++)noise({f:900+Math.random()*2200,q:2.5,t:now+.12+i*.06+Math.random()*.05,d:.03+Math.random()*.03,v:.08+Math.random()*.06});// falling rubble
-     noise({f:420,ft:'lowpass',t:now+.08,d:.8,v:.2});break;}
+   case 'break':{// 다이너마이트 발파: 날카로운 폭음 → 깊은 쿵 → 터널을 울리는 굉음 → 돌 무너지는 소리
+     const B=SND.blastG||SND.sfxG;
+     noise({f:3000,ft:'highpass',d:.06,v:1,bus:B});noise({f:1400,q:.7,d:.12,v:.9,bus:B});
+     tone({f:120,f2:32,d:1.1,v:1,bus:B});tone({f:240,f2:70,d:.55,v:.7,type:'triangle',bus:B});tone({f:420,f2:120,d:.25,v:.45,type:'square',lp:1400,bus:B});
+     noise({f:1600,ft:'lowpass',d:1.2,v:1,bus:B});noise({f:600,ft:'lowpass',t:now+.06,d:2.2,v:.75,bus:B});noise({f:250,ft:'lowpass',t:now+.25,d:2.6,v:.6,bus:B});
+     tone({f:62,f2:40,t:now+.35,d:1.4,v:.5,bus:B});
+     for(let i=0;i<16;i++){const tt=now+.18+i*.07+Math.random()*.08;noise({f:700+Math.random()*2600,q:2,t:tt,d:.03+Math.random()*.05,v:.18+Math.random()*.16,bus:B});if(i%3===0)tone({f:160+Math.random()*120,f2:70,t:tt,d:.08,v:.22,type:'triangle',bus:B});}
+     break;}
    case 'coin':{// 짤랑: small bright coin bells
      [0,.07,.15].forEach((dt,i)=>{noise({f:5200+i*600,q:1.2,t:now+dt,d:.06,v:.07});tone({f:1650+i*180,t:now+dt,d:.12,type:'triangle',v:.04});});break;}
    case 'pickup':noise({f:700,ft:'lowpass',d:.08,v:.18});tone({f:180,f2:120,d:.08,v:.14});break;
@@ -1753,6 +1772,7 @@ function drillInit(){const c=SND.ctx;if(!c||DRL.g)return;const src=c.createBuffe
   const g=c.createGain();g.gain.value=0;[gGrit,gRum,gMot,gWh].forEach(n=>n.connect(g));g.connect(SND.sfxG);[src,mot,wh,lfo].forEach(n=>n.start());Object.assign(DRL,{g,mot,wh,gWh,lfo,bp});}
 function drillTick(){const c=SND.ctx;if(!c||c.state!=='running')return;drillInit();const p=sndPref(),t=c.currentTime;
   const act=p.sfx&&!titleOn&&!document.hidden&&((view==='bore'&&!exp&&!gateAt()&&!S.done)||(!!exp&&S.ex.active===exp.r.id)),bo=boostM()>1;
+  {const quiet=view==='bore'||!!exp;SND.bgmG.gain.setTargetAtTime(p.bgm&&!quiet?.75:0,t,.35);}
   DRL.g.gain.setTargetAtTime(act?.32:0,t,.15);DRL.mot.frequency.setTargetAtTime(bo?78:48,t,.3);DRL.lfo.frequency.setTargetAtTime(bo?12:7,t,.3);DRL.gWh.gain.setTargetAtTime(act&&bo?.05:0,t,.2);DRL.wh.frequency.setTargetAtTime(900+Math.sin(t*3)*120,t,.1);
   // random stone knocks so it sounds like rock against steel, not just noise
   if(act&&Math.random()<(bo?.9:.65))noise({f:300+Math.random()*700,q:1.4,d:.03+Math.random()*.04,v:.1+Math.random()*.07,t:t+Math.random()*.1});
@@ -1783,16 +1803,16 @@ function bgmSched(){const c=SND.ctx;if(!c||c.state!=='running')return;const want
 // ---------------- Admiral Yi event: owned special character appears on the map ----------------
 let yiPend=false,yiRoll=Date.now()+60000;
 function playYi(){const el=$('#yiEv'),left=Math.max(0,Math.ceil((S.yiB-Date.now())/1000));
-  el.innerHTML=`<div class="yirays"></div><svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${yiSVG({sex:'yi'},{pose:'raise',anim:true})}</svg><div class="yitxt"><b>必死則生 必生則死</b><span>필사즉생 필생즉사</span><em>본공·원정 굴착량 +100% · ${left}초</em></div>`;
+  el.innerHTML=`<div class="yirays"></div><svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${yiSVG({sex:'yi'},{pose:'raise',anim:true})}</svg><div class="yitxt"><b>必死則生 必生則死</b><span>필사즉생 필생즉사</span><em>본공·원정 굴착량 +${yiSet()?150:100}% · ${left}초</em></div>${yiSet()?`<svg class="yiship" viewBox="0 -14 300 214" aria-hidden="true">${turtleSVG({id:'y',sea:true})}</svg>`:''}`;
   el.hidden=false;el.classList.remove('go');void el.offsetWidth;el.classList.add('go');clearTimeout(playYi.t);playYi.t=setTimeout(()=>{el.hidden=true;el.innerHTML='';},5400);}
-function yiEvent(){const d=YI.dur[S.mode]||90;S.yiB=Date.now()+d*1000;save();
-  toast('⚔ 이순신 장군 출현! 「필사즉생 필생즉사」 굴착량 +100% · '+d+'초');sfx('yi');yiVoice();
+function yiEvent(){const d=Math.round((YI.dur[S.mode]||90)*(yiSet()?YISET.d:1));S.yiB=Date.now()+d*1000;save();
+  toast(yiSet()?'⚔🐢 이순신 장군과 거북선 출격! 「필사즉생 필생즉사」 굴착량 +150% · '+d+'초':'⚔ 이순신 장군 출현! 「필사즉생 필생즉사」 굴착량 +100% · '+d+'초');sfx('yi');yiVoice();
   if(view==='map'&&!exp)playYi();else yiPend=true;}
 $('#yiEv').addEventListener('click',()=>{$('#yiEv').hidden=true;});
 $('#yiChip').addEventListener('click',()=>{if(view!=='map'||exp){toast('⚔ 필사즉생 — 본공·원정 굴착량 +100% 진행 중');return;}playYi();});
 setInterval(()=>{const now=Date.now();
-  if(now>=yiRoll){yiRoll=now+60000;if(yiOn()&&yiM()===1&&!titleOn&&!document.hidden&&Math.random()<(YI.p[S.mode]||YI.p.normal))yiEvent();}
-  const ch=$('#yiChip');if(yiM()>1){ch.hidden=false;ch.textContent='⚔×2 '+Math.ceil((S.yiB-now)/1000)+'초';ch.title='필사즉생 — 굴착량 +100%';}else if(!ch.hidden){ch.hidden=true;yiPend=false;}},1000);
+  if(now>=yiRoll){yiRoll=now+60000;if(yiOn()&&yiM()===1&&!titleOn&&!document.hidden&&Math.random()<(YI.p[S.mode]||YI.p.normal)*(yiSet()?YISET.p:1))yiEvent();}
+  const ch=$('#yiChip');if(yiM()>1){ch.hidden=false;ch.textContent=(yiSet()?'⚔×2.5 ':'⚔×2 ')+Math.ceil((S.yiB-now)/1000)+'초';ch.title='필사즉생 — 굴착량 +100%';}else if(!ch.hidden){ch.hidden=true;yiPend=false;}},1000);
 
 
 function updateMap(){document.querySelectorAll('#map .rcnt').forEach(t=>{t.textContent=(S.res[t.dataset.r]||0).toLocaleString('ko-KR');});document.querySelectorAll('.node').forEach(n=>{const r=REG.find(x=>x.id===n.dataset.id);
@@ -1905,7 +1925,7 @@ $('#storeList').addEventListener('click',e=>{const gb=e.target.closest('[data-ga
   b.dataset.armed='1';b.textContent='한 번 더 누르면 모든 진행이 지워집니다';});
 function renderFuels(){
   $('#fuels').innerHTML=FUEL.map((f,i)=>{const n=fuelNeed(f),c=fuelCost(f),ok=have(f.res)>=n&&S.money>=c;return `<button class="fuel" type="button" data-f="${i}" ${ok?'':'disabled'}>
-    <span class="fn">${ric(f.res)}${f.res} ${n}</span><span class="fe">×${f.m} · ${fuelSec(f)}초 · ${won(c)} (${have(f.res)})</span></button>`;}).join('');}
+    <span class="fn">${ric(f.res)}<span class="fnm">${f.res==='가스 하이드레이트'?'하이드레이트':f.res}</span> <b>${n}</b></span><span class="fe">×${f.m} · ${fuelSec(f)}초</span><span class="fe">${won(c)} · 보유 ${have(f.res)}</span></button>`;}).join('');}
 $('#fuels').addEventListener('click',e=>{const b=e.target.closest('.fuel');if(!b||b.disabled)return;const f=FUEL[+b.dataset.f];
   const n=fuelNeed(f),c=fuelCost(f);if(have(f.res)<n||S.money<c)return;S.res[f.res]-=n;S.money-=c;S.boost={m:f.m,until:Date.now()+fuelSec(f)*1000};save();renderFuels();toast(f.res+' 부스터 ×'+f.m+' 가동');sfx('boost');});
 
@@ -2024,9 +2044,10 @@ const OPT={
  body:[{v:'slim',n:'마른 체형',p:0,w:.86},{v:'normal',n:'보통',p:0,w:1},{v:'big',n:'튼튼',p:0,w:1.18}],
  hat:[{v:'none',n:'없음',p:0},{v:'helmet',n:'안전모',p:200},{v:'lamp',n:'랜턴 안전모',p:800},{v:'explorer',n:'탐험 모자',p:2000},{v:'mask',n:'잠수 마스크',p:4000},{v:'straw',n:'밀짚모자',p:300},{v:'beanie',n:'비니',p:400},{v:'cap',n:'야구 모자',p:500},{v:'flower',n:'꽃 화관',p:900},{v:'bow',n:'리본',p:700},{v:'beret',n:'베레모',p:1200},{v:'bowler',n:'중절모',p:2500},{v:'horns',n:'뿔 머리띠',p:3500},{v:'crown',n:'아다마스 투구',p:60000}],
  outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'dino',n:'공룡옷',p:3000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
+ ship:[{v:'none',n:'없음',p:0},{v:'turtle',n:'★ 거북선',get p(){return S.mode==='hard'?16000000:8000000;},get d(){const h=S.mode==='hard';return `특수 소장품 · 보유 효과: 해상 원정 굴착력 +${h?12:20}%, 본공·원정 굴착력 +${h?2:3}% · 착용하면 지도 남해를 항해하고 해상 원정에 함께 나가요 · 이순신 장군과 함께 보유하면 세트 효과`;}}],
  item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:3000,d:'보유 효과: 본공·원정 굴착력 +3% (하드 +1.8%)'},{v:'pick',n:'곡괭이',p:15000,d:'보유 효과: 강타 확률 +2%p (하드 +1.2%p)'},{v:'tablet',n:'탐사 태블릿',p:60000,d:'보유 효과: 원정 재료 추가 획득 +4%p · 유물 발견 +10% (하드 60%)'},{v:'hdrill',n:'휴대용 드릴',p:300000,d:'보유 효과: 굴착력 +4% · 강타 확률 +2%p (하드 60%)'}],
 };
-const DEFCHAR={sex:'m',skin:0,hair:'short',hcol:0,eyes:'round',body:'normal',hat:'none',outfit:'track',item:'none'};
+const DEFCHAR={sex:'m',skin:0,hair:'short',hcol:0,eyes:'round',body:'normal',hat:'none',outfit:'track',item:'none',ship:'none'};
 const OFC={
  track:{top:'#24366e',slv:'#24366e',pan:'#24366e',shoe:'#eeece6',legStripe:'#eeece6',slvStripe:'#eeece6',
   det:(L,R)=>`<path d="M44,70 L50,78 L56,70" fill="none" stroke="#eeece6" stroke-width="2"/><rect x="49.2" y="78" width="1.6" height="38" fill="#c9ccd6"/>`},
@@ -2881,14 +2902,80 @@ $('#sBox').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.pre
 $('#sSkip').addEventListener('click',endStory);
 
 // ---------------- wardrobe ----------------
-const WT=[{k:'sex',n:'주인공'},{k:'hair',n:'헤어'},{k:'hcol',n:'헤어 색'},{k:'eyes',n:'눈'},{k:'skin',n:'피부'},{k:'body',n:'체형'},{k:'hat',n:'모자'},{k:'outfit',n:'의상'},{k:'item',n:'소품'}];
+const WT=[{k:'sex',n:'주인공'},{k:'hair',n:'헤어'},{k:'hcol',n:'헤어 색'},{k:'eyes',n:'눈'},{k:'skin',n:'피부'},{k:'body',n:'체형'},{k:'hat',n:'모자'},{k:'outfit',n:'의상'},{k:'item',n:'소품'},{k:'ship',n:'★ 거북선'}];
 let wTab='outfit',wTry=null;
 const owns=(k,o)=>o.p===0||S.own.includes(k+':'+o.v);
 const HEADVB='12 2 76 76',BODYVB='-20 -2 140 178';
 const headVB=c=>c.sex==='yi'?'9 30 82 82':c.sex==='chick'?'11 60 78 78':(c.sex==='m'||c.sex==='f'||!ANS[c.sex])?(c.hat&&c.hat!=='none'?'6 20 88 88':'10 34 80 80'):'11 38 78 78';
 function avatarSVG(c){return `<svg viewBox="${headVB(c)}" aria-hidden="true">${charG(c)}</svg>`;}
-function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());}
+function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());const ms=document.getElementById('mShip');if(ms)ms.style.display=shipOn()?'':'none';}
 function wardChar(){const c=ME();if(wTry)c[wTry.k]=wTry.v;return c;}
+// ---- 거북선 (turtle ship): detailed side view, bow (dragon head) to the left. viewBox 0 0 300 200, waterline y≈158 ----
+function turtleSVG(o={}){const k='ts'+(o.id||''),sea=o.sea!==false,anim=o.anim!==false,OL='stroke="#3a2210" stroke-width="1.4" stroke-linejoin="round"';
+  const spikes=(()=>{let s='';for(const [ry,n] of [[0,12],[1,11],[2,9]]){for(let i=0;i<n;i++){const t=(i+.5)/n,x=66+t*(196-ry*0)+ry*3,base=107-Math.pow(Math.sin(Math.PI*Math.min(.97,Math.max(.03,(x-60)/210))),.7)*(37-ry*11);s+=`<path d="M${(x-3.2).toFixed(1)},${(base+1).toFixed(1)} L${x.toFixed(1)},${(base-8).toFixed(1)} L${(x+3.2).toFixed(1)},${(base+1).toFixed(1)}Z" fill="url(#${k}sp)" stroke="#1a1c20" stroke-width=".6"/>`;}}return s;})();
+  const plates=Array.from({length:9},(_,i)=>{const x=82+i*20;return `<path d="M${x},106 Q${x+3},${84-Math.sin(Math.PI*(i+.5)/9)*8} ${x+8},${76-Math.sin(Math.PI*(i+.5)/9)*4}" stroke="#15181c" stroke-width="1.1" fill="none" opacity=".75"/>`;}).join('');
+  const rivets=Array.from({length:22},(_,i)=>`<circle cx="${70+i*9}" cy="107" r="1.2" fill="#ffd970"/>`).join('');
+  const ports=[0,1,2,3,4,5].map(i=>{const x=86+i*29;return `<rect x="${x}" y="116" width="15" height="12" rx="1.5" fill="#2a1608" ${OL}/><circle cx="${x+7.5}" cy="122" r="4.2" fill="#1b1d22"/><circle cx="${x+7.5}" cy="122" r="2.1" fill="#000"/><circle cx="${x+6.3}" cy="120.8" r="1" fill="#8a96a3"/>`;}).join('');
+  const brackets=[0,1,2,3,4,5,6].map(i=>{const x=78+i*29;return `<rect x="${x}" y="110" width="6" height="36" fill="url(#${k}au)" stroke="#7a4a10" stroke-width=".8"/><circle cx="${x+3}" cy="114" r="1.1" fill="#fff3b0"/><circle cx="${x+3}" cy="141" r="1.1" fill="#fff3b0"/>`;}).join('');
+  const oars=[0,1,2,3,4,5,6].map(i=>{const x=92+i*26;return `<g><path d="M${x},150 L${x+20},188" stroke="#7a4a22" stroke-width="5" stroke-linecap="round"/><path d="M${x},150 L${x+20},188" stroke="#c98a4e" stroke-width="2.2" stroke-linecap="round"/><path d="M${x+13},176 l9,-3 l4,12 l-9,3Z" fill="#a8683a" stroke="#5a3214" stroke-width=".8"/>${anim?`<animateTransform attributeName="transform" type="rotate" values="-6 ${x} 150;7 ${x} 150;-6 ${x} 150" dur="2.4s" begin="${(i*.08).toFixed(2)}s" repeatCount="indefinite"/>`:''}</g>`;}).join('');
+  const planks=[126,138,160,168].map(y=>`<path d="M48,${y} Q160,${y+6} 272,${y-2}" stroke="#4e2a12" stroke-width=".9" fill="none" opacity=".55"/>`).join('');
+  const flag=(x,id)=>`<g><rect x="${x-1.6}" y="30" width="3.2" height="78" fill="#7a4a22" ${OL}/><rect x="${x-2.6}" y="44" width="5.2" height="4" fill="url(#${k}au)"/><rect x="${x-2.6}" y="74" width="5.2" height="4" fill="url(#${k}au)"/><path d="M${x},22 l-3.6,8 h7.2Z" fill="url(#${k}au)" stroke="#7a4a10" stroke-width=".7"/>
+    <g><path d="M${x+1.6},34 h26 l-3,4 l3,4 l-3,4 l3,4 l-3,4 l3,4 l-3,4 l3,4 h-26Z" fill="#c62a1c" stroke="#5a0c06" stroke-width=".8"/><path d="M${x+1.6},36 h20 v30 h-20Z" fill="#141518"/>
+      <path d="M${x+15},40 q-6,2 -3,7 q4,5 -2,9 q-5,3 -1,8" stroke="#e9eef2" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="${x+15.5}" cy="40" r="1.6" fill="#e9eef2"/>
+      ${anim?`<animateTransform attributeName="transform" type="skewY" values="0;3;-2;0" dur="${id?2.2:2.6}s" repeatCount="indefinite" additive="sum"/>`:''}</g></g>`;
+  return `<defs>
+   <linearGradient id="${k}au" x1="0" x2="1"><stop offset="0" stop-color="#ffe680"/><stop offset=".45" stop-color="#f2b632"/><stop offset="1" stop-color="#b9761a"/></linearGradient>
+   <linearGradient id="${k}gd" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff0a0"/><stop offset=".4" stop-color="#f6c443"/><stop offset="1" stop-color="#b8741a"/></linearGradient>
+   <linearGradient id="${k}rf" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6b727c"/><stop offset=".35" stop-color="#454b54"/><stop offset="1" stop-color="#22262c"/></linearGradient>
+   <linearGradient id="${k}sp" x1="0" x2="1"><stop offset="0" stop-color="#a3a9b0"/><stop offset=".5" stop-color="#5b6168"/><stop offset="1" stop-color="#2c3036"/></linearGradient>
+   <linearGradient id="${k}wd" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d08a4a"/><stop offset=".5" stop-color="#a8602c"/><stop offset="1" stop-color="#6a3816"/></linearGradient>
+   <linearGradient id="${k}sl" x1="0" x2="1"><stop offset="0" stop-color="#fbf1d8"/><stop offset=".6" stop-color="#eedcb3"/><stop offset="1" stop-color="#d9c08c"/></linearGradient>
+   <linearGradient id="${k}sea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2a8fe0"/><stop offset="1" stop-color="#0b4a9a"/></linearGradient></defs>
+  <g>${anim?`<animateTransform attributeName="transform" type="translate" values="0 0;0 -2.2;0 0" dur="3.2s" repeatCount="indefinite"/>`:''}
+  ${flag(96,0)}${flag(246,1)}
+  <!-- mast + sail -->
+  <rect x="164" y="-6" width="5" height="78" fill="#7a4a22" ${OL}/><circle cx="166.5" cy="-7" r="3" fill="url(#${k}au)" stroke="#7a4a10" stroke-width=".7"/>
+  <path d="M124,2 Q170,-4 214,2 L218,68 Q170,76 122,68Z" fill="url(#${k}sl)" stroke="#6a4a2a" stroke-width="1.4"/>
+  ${[14,30,46,60].map(y=>`<path d="M${123+(y-2)*.03},${y} Q170,${y-4} ${215+(y-2)*.05},${y}" stroke="#8a6a44" stroke-width="2.2" fill="none"/><circle cx="125" cy="${y}" r="1.6" fill="#c9a050"/><circle cx="215" cy="${y}" r="1.6" fill="#c9a050"/>`).join('')}
+  <path d="M120,0 h100" stroke="#7a4a22" stroke-width="4" stroke-linecap="round"/><path d="M120,70 h100" stroke="#7a4a22" stroke-width="4" stroke-linecap="round"/>
+  <text x="170" y="54" text-anchor="middle" font-size="42" font-weight="900" fill="#1a1410" font-family="'Noto Serif KR','Noto Serif CJK KR','Nanum Myeongjo',serif" opacity=".92">龜</text>
+  <path d="M216,6 q8,6 5,16 q-3,6 2,12" stroke="#d2281c" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M219,36 l3,10 l-4,-2 l-3,6" stroke="#d2281c" stroke-width="2.2" fill="none"/>
+  <!-- stern curl -->
+  <path d="M262,104 Q286,96 284,78 Q282,92 270,96 Q280,84 276,72 Q272,92 258,98Z" fill="url(#${k}gd)" stroke="#7a4a10" stroke-width="1.1"/>
+  <!-- hull -->
+  <path d="M46,110 L272,106 Q278,146 262,172 Q160,184 62,172 Q42,146 46,110Z" fill="url(#${k}wd)" stroke="#3a2210" stroke-width="1.8"/>
+  ${planks}
+  <path d="M50,150 Q160,158 272,148" stroke="url(#${k}au)" stroke-width="4" fill="none"/><path d="M50,150 Q160,158 272,148" stroke="#7a4a10" stroke-width=".7" fill="none"/>
+  ${brackets}${ports}
+  ${oars}
+  <!-- iron roof with spikes -->
+  <path d="M60,108 Q70,74 120,70 Q170,64 220,70 Q262,76 270,106Z" fill="url(#${k}rf)" stroke="#121417" stroke-width="1.6"/>
+  ${plates}
+  ${spikes}
+  <path d="M74,96 Q120,72 170,70" stroke="#c9d2da" stroke-width="1.6" fill="none" opacity=".35"/>
+  ${[0,1,2,3,4,5,6,7].map(i=>`<path d="M${86+i*24},${100-Math.sin(Math.PI*(i+.5)/8)*22} l3,2" stroke="#ffd970" stroke-width="1.2" opacity=".7"/>`).join('')}
+  <path d="M58,108 L272,105" stroke="url(#${k}au)" stroke-width="5.5"/><path d="M58,108 L272,105" stroke="#7a4a10" stroke-width=".8"/>${rivets}
+  <!-- golden bow plate + dragon head -->
+  <path d="M44,104 Q34,138 52,172 L66,172 Q54,138 60,104Z" fill="url(#${k}gd)" stroke="#7a4a10" stroke-width="1.3"/>
+  <path d="M48,112 h12 M47,126 h12 M48,140 h12" stroke="#7a4a10" stroke-width="1"/>
+  <g transform="translate(6,30)">
+   <path d="M52,78 Q58,60 50,48 Q44,40 34,40 L18,42 Q6,44 4,54 Q2,62 8,66 L14,66 Q12,72 20,76 L36,74 Q40,84 52,86Z" fill="url(#${k}gd)" stroke="#7a4a10" stroke-width="1.4"/>
+   <path d="M6,60 Q16,60 24,64 L36,62 Q28,72 18,72 Q10,70 8,66Z" fill="#b8241a" stroke="#5a0c06" stroke-width="1"/>
+   <path d="M10,58 l2,4 l2,-4 l2,4 l2,-4 l2,4 M14,68 l2,-3 l2,3 l2,-3 l2,3" stroke="#fff" stroke-width="1.2" fill="none"/>
+   <path d="M6,56 L4,48" stroke="#fff4c0" stroke-width="2" stroke-linecap="round"/>
+   <path d="M10,52 Q20,46 30,52" stroke="#7a4a10" stroke-width="1.2" fill="none"/>
+   <ellipse cx="30" cy="49" rx="5" ry="4" fill="#fff8e0" stroke="#7a4a10" stroke-width="1"/><circle cx="29" cy="49" r="2.4" fill="#3a1a08"/><circle cx="28.2" cy="48.2" r=".8" fill="#fff"/>
+   <path d="M24,44 Q30,38 38,42" stroke="#7a4a10" stroke-width="2" fill="none" stroke-linecap="round"/>
+   <path d="M38,40 Q44,26 58,24 Q50,32 52,38Z M42,46 Q56,40 64,44 Q54,48 52,52Z M46,58 Q60,58 66,64 Q56,64 52,66Z" fill="url(#${k}au)" stroke="#7a4a10" stroke-width="1.1"/>
+   <path d="M34,40 Q36,30 46,26" stroke="#ffe680" stroke-width="3" fill="none" stroke-linecap="round"/>
+   <path d="M8,62 q-6,2 -10,-1" stroke="#9fd6ff" stroke-width="1.2" fill="none" opacity=".6">${anim?'<animate attributeName="opacity" values=".1;.7;.1" dur="1.6s" repeatCount="indefinite"/>':''}</path>
+  </g>
+  </g>
+  ${sea?`<path d="M-20,168 Q0,162 20,168 T60,168 T100,168 T140,168 T180,168 T220,168 T260,168 T300,168 T340,168 V210 H-20Z" fill="url(#${k}sea)" opacity=".96"/>
+  <path d="M30,170 q16,-10 30,-2 q10,6 22,0 M150,178 q20,-8 40,0 M232,170 q18,-10 34,0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".9"/>
+  <g fill="#fff" opacity=".9"><circle cx="48" cy="164" r="2.4"/><circle cx="58" cy="160" r="1.6"/><circle cx="276" cy="164" r="2"/><circle cx="112" cy="180" r="1.6"/><circle cx="200" cy="184" r="2"/></g>
+  <path d="M0,188 Q30,182 60,188 T120,188 T180,188 T240,188 T300,188" stroke="#7cc8ff" stroke-width="2" fill="none" opacity=".6"/>`:''}`;}
+
 // large, detailed icons for the wardrobe's item tab
 const OLI='stroke="#2b211c" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"';
 const ITEMSVG={
@@ -2899,15 +2986,16 @@ const ITEMSVG={
  hdrill:`<defs><linearGradient id="idr" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffc24a"/><stop offset="1" stop-color="#d9861a"/></linearGradient></defs><path d="M8,16 h30 q6,0 6,6 v4 q0,6 -6,6 h-30Z" fill="url(#idr)" ${OLI}/><path d="M18,32 h10 l3,18 h-15Z" fill="#2b3338" ${OLI}/><rect x="14" y="44" width="20" height="10" rx="2" fill="#3a4248" ${OLI}/><rect x="17" y="47" width="6" height="4" fill="#7cffc8"/><rect x="44" y="21" width="5" height="6" fill="#5a646a" ${OLI}/><path d="M49,24 h9" stroke="#c9d1d5" stroke-width="3.4" stroke-linecap="round"/><path d="M50,22 l2,4 l2,-4 l2,4" stroke="#7e888e" stroke-width="1" fill="none"/><path d="M12,20 h22" stroke="#fff3b0" stroke-width="1.6" opacity=".8"/>`};
 function renderWard(){
   const c=wardChar();
-  $('#wStage').innerHTML=`<svg viewBox="-30 -14 160 192" role="img" aria-label="주인공 미리보기"><ellipse cx="50" cy="168" rx="40" ry="6" fill="rgba(0,0,0,.35)"/>${charG(c)}</svg>`;
+  $('#wStage').innerHTML=wTab==='ship'&&c.ship==='turtle'?`<svg viewBox="-6 -16 312 216" role="img" aria-label="거북선 미리보기" style="width:100%;max-width:420px">${turtleSVG({id:'w'})}</svg>`:`<svg viewBox="-30 -14 160 192" role="img" aria-label="주인공 미리보기"><ellipse cx="50" cy="168" rx="40" ry="6" fill="rgba(0,0,0,.35)"/>${charG(c)}</svg>`;
   $('#wTabs').innerHTML=WT.map(t=>`<button class="wtab" type="button" role="tab" data-t="${t.k}" aria-selected="${t.k===wTab}">${t.n}</button>`).join('');
   const head=['hair','hcol','eyes','skin','hat'].includes(wTab);
   $('#wOpts').innerHTML=OPT[wTab].filter(o=>wTab!=='sex'||sexVis(o)).map(o=>{const cur=S.char[wTab]===o.v,tr=wTry&&wTry.k===wTab&&wTry.v===o.v,own=owns(wTab,o);
     const pv=Object.assign({},S.char,{[wTab]:o.v},wTab!=='sex'&&S.char.sex==='yi'?{sex:S.char.lastSex||'m'}:{},wTab==='sex'&&(o.v==='m'||o.v==='f')&&o.v!==S.char.sex?{hair:o.v==='f'?'long':'short'}:{});
-    const pic=wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charG(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${charG(pv)}</svg>`;
+    const pic=wTab==='ship'?`<svg viewBox="${o.v==='turtle'?'-6 -16 312 216':'0 0 60 60'}" aria-hidden="true" style="width:100%;height:auto">${o.v==='turtle'?turtleSVG({id:'o',anim:false}):ITEMSVG.none}</svg>`:wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charG(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${charG(pv)}</svg>`;
     return `<button class="wopt ${cur?'on':''} ${tr?'try':''}" type="button" data-v="${o.v}">${pic}<span class="wn">${o.n}</span><span class="wp ${cur?'own':own?'own':S.money<o.p?'no':''}">${cur?'착용 중':own?'보유':won(o.p)}</span></button>`;}).join('');
   if(S.char.sex==='yi'&&wTab!=='sex')$('#wOpts').insertAdjacentHTML('afterbegin','<p class="wnote">이순신 장군은 전용 갑옷·투구를 입어요. 여기서 고른 꾸미기는 다른 주인공으로 바꾸면 보여요.</p>');
   if(wTab==='item'){const own=OPT.item.filter(o=>o.d&&hasIt(o.v));$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>소품 보유 효과</b> — 사서 갖고 있기만 해도 적용돼요 (착용과 무관, 하드는 60%)<br>${own.length?own.map(o=>'· '+o.n+': '+o.d.replace('보유 효과: ','')).join('<br>'):'· 아직 가진 소품이 없어요'}</p>`);}
+  if(wTab==='ship')$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>🐢 거북선</b> — 사서 갖고 있으면 보유 효과, 착용하면 지도 남해를 항해하고 해상 원정 현장에 함께 나가요.<br>· 보유: 해상 원정 굴착력 +${Math.round((SHIP.sea[S.mode]??.2)*100)}%, 본공·원정 굴착력 +${Math.round((SHIP.all[S.mode]??.03)*100)}%<br>· <b>이순신 장군 + 거북선 세트</b>: 장군 출현 확률 ×1.5, 출현 시간 ×1.5, 출현 중 굴착량 +100% → <b>+150%</b> ${yiSet()?'<b style="color:#7bd88f">(적용 중)</b>':'<span style="color:#ff9a7a">('+(yiOwn()?'거북선':shipOwn()?'이순신 장군':'둘 다')+' 필요)</span>'}</p>`);
   if(yiOwn()&&wTab==='sex')$('#wOpts').insertAdjacentHTML('afterbegin',`<p class="wnote"><b>★ 이순신 장군 보유 효과</b><br>· 본공·원정 굴착력 +${S.mode==='hard'?3:5}% — 다른 캐릭터로 바꿔도 계속 적용<br>· 출현 이벤트(굴착량 +100%, ${YI.dur[S.mode]||60}초): ${S.char.sex==='yi'?'<b style="color:#7bd88f">발동 가능 (착용 중)</b>':'<b style="color:#ff9a7a">이순신 장군을 착용해야 발동</b>'}</p>`);
   const b=$('#wBuy');
   if(wTry){const o=OPT[wTry.k].find(x=>x.v===wTry.v),ok=S.money>=o.p;b.hidden=false;
@@ -3617,7 +3705,8 @@ function l3EnvTick(dt){const E=L3.env;if(!E)return;const now=new Date(),h=now.ge
   const isDay=sa>0,prog=isDay?(h-6)/12:(((h-18)+24)%24)/12,cel=$('#lcel');
   if(cel){const x=8+prog*84,lowK=Math.sin(Math.PI*Math.max(0,Math.min(1,prog))),y=34-lowK*22,key=(isDay?'d':'n'+Math.round(f*100))+w.id+(lowK<.25?'l':'');
     if(cel.dataset.k!==key){cel.dataset.k=key;cel.innerHTML=skySVG(isDay,f,w,kind,lowK<.25);}
-    cel.style.left=x+'%';cel.style.top=y+'%';cel.style.opacity=lowK<.08?.55:1;cel.title=(isDay?'낮 · 해':'밤 · '+moonName(f))+' · '+w.n;}
+    cel.style.left=x+'%';cel.style.top=`max(${y}%, 58px)`;// stay below the top chips (sky / 360° hint) on small phones
+    cel.style.opacity=lowK<.08?.55:1;cel.title=(isDay?'낮 · 해':'밤 · '+moonName(f))+' · '+w.n;}
   const chip=$('#lsky');if(chip){const nightClear=!isDay&&(w.id==='sunny'||w.id==='hot'),txt=(isDay?'☀️ 낮':'🌙 밤 · '+moonName(f))+' · '+(nightClear?'✨ 맑음':w.ic+' '+w.n);if(chip.textContent!==txt)chip.textContent=txt;}
   const cp=$('#lcomp');if(cp&&cp.hidden)cp.hidden=false;}
 // small SVG sky scene (viewBox 80x60): sun / moon + the current weather in front of it
@@ -4285,8 +4374,10 @@ function renderStats(){const c=ME(),l=layerAt(Math.min(S.depth,GOAL()-1)),pc=v=>
     ['부스터',boostM()>1?`×${boostM()} 작동 중`:'꺼짐'],['날씨(양구)',`${w.ic} ${w.n} · 굴착 ${Math.round((boreWxK(.7)-1)*100)}%`]];
   const row=(n,v,on=true)=>`<div class="st-r ${on?'':'off'}"><span>${n}</span><em>${v}</em></div>`;
   const perks=[];
+  if(shipOwn())perks.push(row('🐢 거북선 (보유)',`해상 원정 굴착력 +${Math.round((SHIP.sea[S.mode]??.2)*100)}% · 굴착력 +${Math.round((SHIP.all[S.mode]??.03)*100)}%`));
+  if(yiSet())perks.push(row('⚔🐢 이순신·거북선 세트','출현 확률 ×1.5 · 출현 시간 ×1.5 · 출현 중 굴착량 ×2.5'));
   if(yiOwn())perks.push(row('★ 이순신 장군 (보유)','굴착력 '+(S.mode==='hard'?'+3%':'+5%')+(yiOn()?' · 출현 이벤트 가능':' · 이벤트는 착용 시')));
-  if(yiM()>1)perks.push(row('⚔ 필사즉생 발동 중','굴착량 ×2'));
+  if(yiM()>1)perks.push(row('⚔ 필사즉생 발동 중','굴착량 ×'+yiM()));
   for(const o of OPT.item)if(o.d&&hasIt(o.v))perks.push(row('소품 · '+o.n,o.d.replace('보유 효과: ','')));
   for(const v of INV)if(v.perk&&perk(v.id))perks.push(row('투자자 · '+v.n,v.perk+(S.mode==='hard'?' (하드 60%)':'')));
   const ir=S.ir||{},IRT={priv:'본공 수입 +1%/회',gov:'굴착력 +1%/회',org:'유물 발견 +0.2%p/회',mid:'원정 추가 획득 +0.5%p/회',big:'제작 비용 할인/회'};
@@ -4299,7 +4390,7 @@ function renderStats(){const c=ME(),l=layerAt(Math.min(S.depth,GOAL()-1)),pc=v=>
     <div class="st-sec">굴착 능력</div><div class="st-grid">${cards.map(([n,v])=>`<div class="st-c"><span>${n}</span><b>${v}</b></div>`).join('')}</div>
     <div class="st-sec">적용 중인 보유 효과 (${perks.length})</div><div class="st-l">${perks.join('')||'<p class="sub">아직 적용 중인 효과가 없어요. 투자자·유물 세트·화석·소품으로 늘어나요.</p>'}</div>
     <div class="st-sec">부품</div><div class="st-l">${parts}</div>`;}
-$('#wStat').addEventListener('click',()=>openStats());$('#mapStat').addEventListener('click',()=>openStats());
+$('#mapStat').addEventListener('click',()=>openStats());
 $('#statClose').addEventListener('click',()=>$('#statDlg').hidden=true);
 
 $('#recClose').addEventListener('click',()=>$('#recDlg').hidden=true);
