@@ -117,6 +117,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .gate{font-size:12px;background:rgba(255,91,58,.14);border:1px solid rgba(255,91,58,.5);color:#ffb7a6;border-radius:10px;padding:7px 10px}
 .gate.win{background:rgba(246,199,106,.14);border-color:var(--amber2);color:var(--amber2)}
 .boost{font-size:12px;color:var(--amber2);font-family:var(--f-body);font-variant-numeric:tabular-nums}
+.bpills{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px}.bpills .bwx{margin-top:0!important}.bboost{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;background:rgba(242,193,78,.16);border:1px solid rgba(242,193,78,.55);font-weight:700;white-space:nowrap}.bboost[hidden]{display:none}
 .bfoot{position:absolute;left:0;right:0;bottom:0;display:grid;gap:8px;padding-block:24px 12px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   background:linear-gradient(rgba(14,19,21,0),rgba(14,19,21,.94) 40%)}
@@ -546,7 +547,7 @@ nav.tabs button{font-size:12px}
         <div class="seg"><div id="bSeg"></div></div>
         <div class="brow"><span id="bRate"></span><span id="bNext"></span></div>
         <div class="tierline" id="bTier"></div>
-        <div class="boost" id="bBoost" hidden></div><div class="boost bwx" id="bWx"></div>
+        <div class="bpills"><div class="boost bboost" id="bBoost" hidden></div><div class="boost bwx" id="bWx"></div></div>
         <div class="gate" id="bGate" hidden></div>
       </div>
       <div class="lgauge" id="lgauge" aria-label="지구 내부 구조와 현재 위치"></div>
@@ -716,6 +717,7 @@ const PARTS=[
  {id:'cool',n:'냉각 코어',res:'화산유리',sub:'규사',look:'샤프트 옆에 보랏빛 냉각관이 빛남',eff:l=>'부스터 지속 +'+(15*l)+'%'},
  {id:'cable',n:'강화 케이블',res:'현무암 섬유',look:'샤프트가 굵은 꼬임 케이블로 바뀜',eff:l=>'굴착력 ×'+(1+.25*l).toFixed(2)},
 ];
+const BOOSTCAP=120; // seconds: boosters stack up to 2 minutes
 let FUEL=[{res:'원유',need:20,m:2,s:6,mc:.01},{res:'천연가스',need:20,m:3,s:10,mc:.02},{res:'가스 하이드레이트',need:12,m:5,s:15,mc:.04}];
 const fuelNeed=f=>Math.round(f.need*(1+(S.dl-1)/10)),fuelSec=f=>Math.round(f.s*(1+.1*L('cool')+PK('energy',.2))),fuelCost=f=>Math.max(50,Math.round(dlCost(Math.min(DLOPEN,S.dl+1))*f.mc));
 const TIERS=[{n:'견습 쇠송곳',lv:0,cost:0,mul:1},{n:'트리파논 Mk.I',lv:2,cost:1000,mul:2},{n:'트리파논 Mk.II',lv:4,cost:15000,mul:4},
@@ -800,7 +802,8 @@ let S=fresh();
 try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&typeof d==='object'&&(typeof d.seg==='number'||typeof d.depth==='number'))S=Object.assign(S,d);}catch(e){}
 if(S.seg!=null){S.depth=Math.max(S.depth||0,Math.min(segTop(S.seg),14999));}if(S.tier!=null&&(S.dl||1)===1)S.dl=[1,6,16,26,36,46][S.tier]||1;S.dl=S.dl||1;delete S.tier;delete S.seg;delete S.hp;
 S.char=Object.assign({},DEFCHAR_,S.char||{});S.ex=Object.assign({active:null,dig:{}},S.ex||{});S.relic=S.relic||{};if(!S.bv5){for(const k in (S.ex.dig||{})){const g0=S.ex.dig[k];g0.i=Math.round(g0.i*2/5);g0.hp=0;}S.bv5=1;}if(!S.rv){for(const k in S.relic)S.relic[k]=0;S.rv=2;}if(S.rv===2){const mp=[0,1,2,4,5,6,7,8,12];for(const k in S.relic)S.relic[k]=mp[S.relic[k]]??0;S.rv=3;}if(S.rv===3){for(const k in S.relic){const g0=S.relic[k];S.relic[k]=Math.floor(g0/4)*6+g0%4;}S.rv=4;}S.own=S.own||[];S.inv=S.inv||{};S.invN=S.invN||[];S.st=Object.assign({exp:0,sea:0},S.st||{});
-S.mode=S.mode||'normal';S.part=S.part||1;S.ng=S.ng||1;S.runStart=S.runStart||Date.now();applyMode();
+S.mode=S.mode||'normal';S.part=S.part||1;
+{const C=S.char;if(['bob','long','pig'].includes(C.hair))C.hair='tail';if(['helmet','explorer','beanie','cap','beret','bowler'].includes(C.hat))C.hat='none';if(C.outfit==='dino')C.outfit='track';if(C.ahair===undefined)C.ahair='none';}S.ng=S.ng||1;S.runStart=S.runStart||Date.now();applyMode();
 let saveLock=false;
 const unShift=()=>{if(window.scrollX||window.scrollY)window.scrollTo(0,0);if(document.scrollingElement)document.scrollingElement.scrollTop=0;};
 document.addEventListener('focusout',()=>setTimeout(unShift,60));if(window.visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(unShift,60));addEventListener('orientationchange',()=>setTimeout(unShift,300));addEventListener('scroll',()=>{if(!document.activeElement||!/INPUT|TEXTAREA/.test(document.activeElement.tagName))unShift();},{passive:true});
@@ -1550,7 +1553,7 @@ $('#eGo').addEventListener('click',startHere);
 $('#eBack').addEventListener('click',()=>closeExp('map'));
 $('#eQuit').addEventListener('click',()=>closeExp('map'));
 // expedition restarts: 5 per day (both modes), counter resets at local midnight
-const RST_MAX=5,dayKey=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();};
+const RST_MAX=3,dayKey=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();};
 const rstLeft=()=>{if(!S.rst||S.rst.day!==dayKey())S.rst={day:dayKey(),n:0};return RST_MAX-S.rst.n;};
 function rstLabel(){const b=$('#eRestart');if(b)b.textContent='재시작 '+rstLeft()+'/'+RST_MAX;}
 $('#eRestart').addEventListener('click',()=>{if(!exp)return;const r=exp.r;
@@ -1665,9 +1668,9 @@ const wxG=w=>w.g*(S.mode==='hard'?1.4:1)*(w.id==='hot'?1-Math.min(1,L('heat')/MA
 // rare map-wide rainbow: boosts every expedition regardless of local weather
 const rbAt=t=>hsh(Math.floor(t/WX_MS),4242)<(S.mode==='hard'?.08:.1),rbOn=()=>rbAt(Date.now()),RBY=()=>S.mode==='hard'?20:30,RBG=()=>S.mode==='hard'?12:20;
 const rbFx=()=>`모든 원정 재료 +${RBY()}% · 굴착 +${RBG()}%`;
-const wxDig=rid=>rid?(1+wxG(wxOf(rid))/100)*(rbOn()?1+RBG()/100:1):1;
-function wxAmt(amt,rid){const p=wxY(wxOf(rid))/100+(rbOn()?RBY()/100:0);if(!p)return amt;const d=Math.max(1,Math.round(Math.abs(p)*amt));return Math.max(1,amt+(p>0?d:-d));}
-function wxFx(w){const y=Math.round(wxY(w)),g=Math.round(wxG(w));return [y?`재료 ${y>0?'+':''}${y}%`:'재료 그대로',g?`굴착 ${g}%`:''].filter(Boolean).join(' · ');}
+const wxDig=rid=>rid?(rbOn()?1+RBG()/100:1+wxG(wxOf(rid))/100):1; // a rainbow replaces the local weather effect
+function wxAmt(amt,rid){const p=rbOn()?RBY()/100:wxY(wxOf(rid))/100;if(!p)return amt;const d=Math.max(1,Math.round(Math.abs(p)*amt));return Math.max(1,amt+(p>0?d:-d));}
+function wxFx(w){if(rbOn())return `🌈 무지개 · 재료 +${RBY()}% · 굴착 +${RBG()}% (날씨 효과 대신)`;const y=Math.round(wxY(w)),g=Math.round(wxG(w));return [y?`재료 ${y>0?'+':''}${y}%`:'재료 그대로',g?`굴착 ${g}%`:''].filter(Boolean).join(' · ');}
 // tide: static high-water foam (layer 0) + a low-tide layer (1) that fades in and out with a CSS opacity animation (16s, holds at high and low water).
 // Low tide widens the shallows and exposes the West Sea mud flats (Jeju excluded).
 function tideSVG(low){const d=TIDED;
@@ -1961,7 +1964,11 @@ function renderFuels(){
   $('#fuels').innerHTML=FUEL.map((f,i)=>{const n=fuelNeed(f),c=fuelCost(f),ok=have(f.res)>=n&&S.money>=c;return `<button class="fuel" type="button" data-f="${i}" ${ok?'':'disabled'}>
     <span class="fn">${ric(f.res)}<span class="fnm">${f.res==='가스 하이드레이트'?'하이드레이트':f.res}</span> <b>${n}</b></span><span class="fe">×${f.m} · ${fuelSec(f)}초</span><span class="fe">${won(c)} · 보유 ${have(f.res)}</span></button>`;}).join('');}
 $('#fuels').addEventListener('click',e=>{const b=e.target.closest('.fuel');if(!b||b.disabled)return;const f=FUEL[+b.dataset.f];
-  const n=fuelNeed(f),c=fuelCost(f);if(have(f.res)<n||S.money<c)return;S.res[f.res]-=n;S.money-=c;S.boost={m:f.m,until:Date.now()+fuelSec(f)*1000};save();renderFuels();toast(f.res+' 부스터 ×'+f.m+' 가동');sfx('boost');});
+  const n=fuelNeed(f),c=fuelCost(f);if(have(f.res)<n||S.money<c)return;
+  const now=Date.now(),left=Math.max(0,(boostM()>1?S.boost.until:now)-now)/1000,add=fuelSec(f);
+  if(left>=BOOSTCAP-1){toast(`⚠ 부스터는 최대 ${BOOSTCAP/60}분까지만 쌓여요 · 지금 ${Math.ceil(left)}초 남음 — 시간이 줄면 다시 넣으세요`);return;}
+  S.res[f.res]-=n;S.money-=c;const nl=Math.min(BOOSTCAP,left+add),m=boostM()>1?Math.max(S.boost.m,f.m):f.m;S.boost={m,until:now+nl*1000};save();renderFuels();
+  toast(left+add>BOOSTCAP?`${f.res} 부스터 ×${m} · 최대 ${BOOSTCAP/60}분까지 채움 (${Math.round(BOOSTCAP-left)}초만 추가, 남은 시간 ${Math.round(nl)}초)`:`${f.res} 부스터 ×${m} 가동 · 남은 시간 ${Math.round(nl)}초`);sfx('boost');});
 
 // ---------------- investors ----------------
 const depthNow=()=>S.depth;
@@ -2057,11 +2064,11 @@ function drawTitle(dt){const r=tcv.getBoundingClientRect();if(!r.width)return;co
   for(const p of tParts){tc.globalAlpha=Math.min(1,p.l*2);tc.fillStyle=p.c;tc.fillRect(p.x-1.5,p.y-1.5,3,3);}tc.globalAlpha=1;}
 function closeTitle(){titleOn=false;$('#title').hidden=true;}
 $('#tStart').addEventListener('click',()=>{sndInit();if(SND.ctx&&SND.ctx.state==='suspended')SND.ctx.resume();closeTitle();setTimeout(sndApply,50);titleOn=false;if(!S.story)openPick();else show(view);});
-function openPick(){const mk=o=>{const c=Object.assign({},DEFCHAR,{sex:o.v,hair:o.v==='f'?'long':'short'}),free=o.p===0;
+function openPick(){const mk=o=>{const c=Object.assign({},DEFCHAR,{sex:o.v,hair:o.v==='f'?'tail':'short'}),free=o.p===0;
     return `<button class="pk ${free?'':'lock'}" type="button" data-sex="${o.v}" ${free?'':'disabled'}><svg viewBox="-20 -8 140 186" aria-hidden="true"><ellipse cx="50" cy="168" rx="38" ry="6" fill="rgba(0,0,0,.35)"/>${charG(c,{expr:'happy'})}</svg><span>${o.n}</span>${free?'':`<em>옷장 ${won(o.p)}</em>`}</button>`;};
   $('#picks').innerHTML=OPT.sex.filter(o=>sexVis(o)&&o.v!=='yi').map(mk).join('');$('#pick').hidden=false;}
 $('#picks').addEventListener('click',e=>{const b=e.target.closest('[data-sex]');if(!b)return;const sx=b.dataset.sex;
-  S.char.sex=sx;S.char.hair=sx==='f'?'long':'short';save();renderAvatar();$('#pick').hidden=true;openName(openStory);});
+  S.char.sex=sx;S.char.hair=sx==='f'?'tail':'short';save();renderAvatar();$('#pick').hidden=true;openName(openStory);});
 $('#tStory').addEventListener('click',()=>{closeTitle();openStory();});
 
 // ---------------- character ----------------
@@ -2071,13 +2078,13 @@ const OPT={
   {v:'chick',n:'병아리',p:2500},{v:'dog',n:'강아지',p:3000},{v:'cat',n:'고양이',p:3000},{v:'rabbit',n:'토끼',p:3000},{v:'panda',n:'판다',p:6000},
   {v:'bear',n:'곰',p:4000},{v:'fox',n:'여우',p:5000},{v:'penguin',n:'펭귄',p:5000},{v:'dragon',n:'드래곤',p:20000},{v:'unicorn',n:'유니콘',p:25000},
   {v:'tanuki',n:'너구리',p:2000},{v:'squirrel',n:'다람쥐',p:3500},{v:'turtle',n:'거북이',p:3500},{v:'sheep',n:'양',p:4000},{v:'hedgehog',n:'고슴도치',p:4000}],
- hair:[{v:'short',n:'짧은 머리',p:0},{v:'part',n:'가르마',p:150},{v:'bob',n:'단발',p:150},{v:'tail',n:'묶은 머리',p:200},{v:'buzz',n:'삭발',p:80},{v:'long',n:'긴 생머리',p:0},{v:'pig',n:'양갈래',p:200}],
+ hair:[{v:'short',n:'짧은 머리',p:0},{v:'tail',n:'묶은 머리',p:0},{v:'part',n:'가르마',p:150},{v:'buzz',n:'삭발',p:80},{v:'regent',n:'폭주족 리젠트',p:1500},{v:'sangtu',n:'양반 상투',p:2500},{v:'noble',n:'귀족 쪽머리',p:3000},{v:'king',n:'임금 상투',p:8000},{v:'queen',n:'왕비 큰머리',p:9000}],
  hcol:[{v:0,n:'검정',p:0,c:'#1f1814'},{v:1,n:'갈색',p:100,c:'#4a2f20'},{v:2,n:'밝은 갈색',p:150,c:'#8a5a2b'},{v:3,n:'금발',p:300,c:'#c9a15a'},{v:4,n:'남색',p:400,c:'#3b4a78'},{v:5,n:'회색',p:400,c:'#8a8e95'}],
  eyes:[{v:'round',n:'동글',p:0},{v:'smile',n:'웃는 눈',p:200},{v:'sharp',n:'날카로운 눈',p:200}],
  skin:[{v:0,n:'밝은 톤',p:0},{v:1,n:'중간 톤',p:0},{v:2,n:'짙은 톤',p:0},{v:3,n:'깊은 톤',p:0}],
  body:[{v:'slim',n:'마른 체형',p:0,w:.86},{v:'normal',n:'보통',p:0,w:1},{v:'big',n:'튼튼',p:0,w:1.18}],
- hat:[{v:'none',n:'없음',p:0},{v:'helmet',n:'안전모',p:200},{v:'lamp',n:'랜턴 안전모',p:800},{v:'explorer',n:'탐험 모자',p:2000},{v:'mask',n:'잠수 마스크',p:4000},{v:'straw',n:'밀짚모자',p:300},{v:'beanie',n:'비니',p:400},{v:'cap',n:'야구 모자',p:500},{v:'flower',n:'꽃 화관',p:900},{v:'bow',n:'리본',p:700},{v:'beret',n:'베레모',p:1200},{v:'bowler',n:'중절모',p:2500},{v:'horns',n:'뿔 머리띠',p:3500},{v:'crown',n:'아다마스 투구',p:60000}],
- outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'dino',n:'공룡옷',p:3000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
+ hat:[{v:'none',n:'없음',p:0},{v:'straw',n:'밀짚모자',p:300},{v:'satgat',n:'삿갓 (농민)',p:400},{v:'bow',n:'리본',p:700},{v:'lamp',n:'랜턴 안전모',p:800},{v:'flower',n:'꽃 화관',p:900},{v:'gat',n:'갓 (양반)',p:3000},{v:'horns',n:'뿔 머리띠',p:3500},{v:'mask',n:'잠수 마스크',p:4000},{v:'jokduri',n:'족두리 (궁녀)',p:4000},{v:'samo',n:'사모 (영정 관리)',p:6000},{v:'hwagwan',n:'화관 (왕비)',p:15000},{v:'ikseon',n:'익선관 (왕)',p:20000},{v:'crown',n:'아다마스 투구',p:60000}],
+ outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'farmer',n:'농민 (바지저고리)',p:800},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'yangban',n:'양반 (도포)',p:5000},{v:'court',n:'궁녀 (당의)',p:8000},{v:'official',n:'영정 관복 (단령)',p:12000},{v:'king',n:'왕 (곤룡포)',p:40000},{v:'queen',n:'왕비 (적의)',p:50000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
  ship:[{v:'none',n:'없음',p:0},{v:'turtle',n:'★ 거북선',get p(){return S.mode==='hard'?16000000:8000000;},get d(){const h=S.mode==='hard';return `특수 소장품 · 보유 효과: 해상 원정 굴착력 +${h?12:20}%, 본공·원정 굴착력 +${h?2:3}% · 사면 정해진 주기로 자동 출항해 지도 남해를 항해하고 해상 원정에 함께 나가요 · 이순신 장군과 함께 보유하면 세트 효과`;}}],
  item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:3000,d:'보유 효과: 본공·원정 굴착력 +3% (하드 +1.8%)'},{v:'pick',n:'곡괭이',p:15000,d:'보유 효과: 강타 확률 +2%p (하드 +1.2%p)'},{v:'tablet',n:'탐사 태블릿',p:60000,d:'보유 효과: 원정 재료 추가 획득 +4%p · 유물 발견 +10% (하드 60%)'},{v:'hdrill',n:'휴대용 드릴',p:300000,d:'보유 효과: 굴착력 +4% · 강타 확률 +2%p (하드 60%)'}],
 };
@@ -2206,6 +2213,12 @@ const PXOF={
  cover:{top:'#e5762a',slv:'#e5762a',pan:'#e5762a',shoe:'#3a2a20'},
  sport:{top:'#d6343c',slv:'#d6343c',pan:'#1d2a52',shoe:'#2c6fd6',shorts:1},
  dino:{top:'#5cae5a',slv:'#5cae5a',pan:'#5cae5a',shoe:'#4a8f48',glove:'#5cae5a',hood:1},
+ farmer:{top:'#efe9dc',slv:'#efe9dc',pan:'#e2dac8',shoe:'#c9a25a'},
+ yangban:{top:'#dfeaf0',slv:'#dfeaf0',pan:'#dfeaf0',shoe:'#1d1d22',robe:1,wide:1},
+ official:{top:'#2e5e52',slv:'#2e5e52',pan:'#2e5e52',shoe:'#151518',robe:1,wide:1},
+ king:{top:'#b5222c',slv:'#b5222c',pan:'#b5222c',shoe:'#151518',robe:1,wide:1},
+ court:{top:'#8cc25e',slv:'#8cc25e',pan:'#26357a',shoe:'#f2efe6',skirt:'#26357a',cuff:'#f4f0e6'},
+ queen:{top:'#1e3a8e',slv:'#1e3a8e',pan:'#1e3a8e',shoe:'#c92f3a',skirt:'#1e3a8e',wide:1,cuff:'#e0b44a'},
  wet:{top:'#1d2428',slv:'#1d2428',pan:'#1d2428',shoe:'#1d2428',glove:'#2b3438'},
  dance:{top:'#6b3fa0',slv:'#6b3fa0',pan:'#1d1a24',shoe:'#c9ced2'},
  suit:{top:'#232a3a',slv:'#232a3a',pan:'#232a3a',shoe:'#121212'},
@@ -2435,6 +2448,13 @@ function vClothDet(oc){let g='';
   if(oc==='suit')g+=`<path d="M40,104 L50,116 L60,104Z" fill="#f4f2ee"/><path d="M50,108 L46,114 L50,132 L54,114Z" fill="#b8322a"/>`;
   if(oc==='adamas')g+=`<path d="M24,104 L50,124 L76,104" stroke="#f6c76a" stroke-width="3" fill="none"/><path d="M50,120 l5,5 l-5,5 l-5,-5Z" fill="#c9f2f8" stroke="#7cc6e6"/>`;
   if(oc==='apron')g+=`<path d="M34,108 H66 V140 H34Z" fill="#f4ece0"/>`;
+  if(oc==='farmer')g+=`<path d="M41,104 L57,122" stroke="#cfc5b0" stroke-width="5"/><path d="M41,104 L57,122" stroke="#fffaf0" stroke-width="2"/><path d="M57,121 q4,6 1,14 M57,121 q8,4 8,12" stroke="#8a6a4a" stroke-width="1.8" fill="none"/><rect x="18" y="134" width="64" height="5" fill="#8a6a4a"/>`;
+  if(oc==='yangban')g+=`<path d="M40,104 L56,124" stroke="#4a5a66" stroke-width="6"/><path d="M40,104 L56,124" stroke="#fff" stroke-width="2.4"/><path d="M60,104 L52,112" stroke="#4a5a66" stroke-width="5"/><path d="M18,127 H82" stroke="#c43a3a" stroke-width="2.2"/><circle cx="54" cy="127" r="2.6" fill="#c43a3a"/>`;
+  if(oc==='official'||oc==='king'){const dk=oc==='king'?'#7a1018':'#173a30';g+=`<path d="M38,104 Q50,118 62,104" stroke="${dk}" stroke-width="5" fill="none"/><path d="M41,104 Q50,114 59,104" stroke="#f4f0e6" stroke-width="1.6" fill="none"/>`;
+    if(oc==='official')g+=`<rect x="39" y="113" width="22" height="18" fill="#1f2c5a" stroke="#e0b44a" stroke-width="1.4"/><path d="M44,124 q6,-8 12,-2 M48,120 l-5,-4 M52,120 l5,-5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="50" cy="118" r="1.4" fill="#e0303a"/><path d="M42,128 q3,-2 6,0 q3,-2 6,0 q3,-2 6,0" stroke="#8ab0e0" stroke-width="1" fill="none"/><rect x="18" y="133" width="64" height="5" fill="#141418"/>${[30,47.5,65].map(x=>`<rect x="${x}" y="133.5" width="5" height="4" fill="#e0b44a"/>`).join('')}`;
+    else g+=`<circle cx="28" cy="109" r="7" fill="#e0b44a" opacity=".92"/><circle cx="72" cy="109" r="7" fill="#e0b44a" opacity=".92"/><circle cx="50" cy="120" r="9.5" fill="#e0b44a" stroke="#a87a1e" stroke-width="1"/><path d="M44,123 q2,-8 8,-6 q5,2 2,6 q-3,3 -6,0 q3,-1 4,-3" stroke="#7a1018" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="53.5" cy="116.5" r="1" fill="#7a1018"/><rect x="18" y="133" width="64" height="5" fill="#2a1a12"/>${[28,40,52,64].map(x=>`<rect x="${x}" y="133.5" width="7" height="4" rx="1" fill="#9fd6b8"/>`).join('')}`;}
+  if(oc==='court')g+=`<path d="M41,104 L55,120" stroke="#5a8a3a" stroke-width="5"/><path d="M41,104 L55,120" stroke="#fff" stroke-width="2"/><path d="M55,119 q-2,10 -6,16 M55,119 q4,10 2,18" stroke="#c62a3a" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M18,138 Q50,132 82,138" stroke="#5a8a3a" stroke-width="2" fill="none"/>`;
+  if(oc==='queen')g+=[[36,112],[64,112],[36,126],[64,126]].map(([x,y])=>`<path d="M${x-3},${y} q3,-4 6,0 q-3,4 -6,0Z" fill="#e0b44a"/><circle cx="${x}" cy="${y}" r=".9" fill="#c62a3a"/>`).join('')+`<path d="M40,104 L50,116 L60,104" stroke="#e8e0c8" stroke-width="3" fill="none"/><circle cx="50" cy="122" r="7" fill="#e0b44a" stroke="#a87a1e" stroke-width=".8"/><path d="M46,124 q4,-7 8,0 M50,117 v5" stroke="#c62a3a" stroke-width="1.4" fill="none"/><rect x="18" y="131" width="64" height="5" fill="#c62a3a"/>`;
   return g;}
 function vItem(item){const IX=82,IY=138,IT={shovel:`<path d="M${IX},${IY+8} V${IY-34}" stroke="#9a6a3a" stroke-width="3.4"/><path d="M${IX-5},${IY-36} h10" stroke="#6a4528" stroke-width="3"/><path d="M${IX-6},${IY+6} h12 l-2,12 l-4,4 l-4,-4Z" fill="#aab3b8" stroke="#5a646a" stroke-width="1.2"/>`,
     pick:`<path d="M${IX},${IY+12} V${IY-28}" stroke="#9a6a3a" stroke-width="3.4"/><path d="M${IX-16},${IY-22} Q${IX},${IY-34} ${IX+16},${IY-22}" stroke="#8e979c" stroke-width="4.4" fill="none" stroke-linecap="round"/>`,
@@ -2443,9 +2463,10 @@ function vItem(item){const IX=82,IY=138,IT={shovel:`<path d="M${IX},${IY+8} V${I
     gold:`<path d="M${IX-8},${IY-4} l4,-8 h14 l4,8Z" fill="#f2c14e" stroke="#a87a1e" stroke-width="1.2"/>`,phone:`<rect x="${IX-3}" y="${IY-18}" width="10" height="16" rx="2" fill="#1c2226"/>`,
     envelope:`<rect x="${IX-8}" y="${IY-16}" width="20" height="14" fill="#f4f2ee" stroke="#a8a090"/><circle cx="${IX+2}" cy="${IY-8}" r="2" fill="#c9302c"/>`,rusty:`<path d="M${IX},${IY+6} V${IY-26}" stroke="#5b4535" stroke-width="3"/><path d="M${IX-6},${IY+4} h12 l-3,10 h-6Z" fill="#8a4b2a"/>`};
   return IT[item]||'';}
-function animalSVG(c,o={}){const k=c.sex,A=ANS[k]||ANS.dog,ex=o.expr||'',of=PXOF[o.outfit||c.outfit]||PXOF.track,hat=o.hat??c.hat,item=o.item??c.item,oc=o.outfit||c.outfit,u='an'+(++UID);
+function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.assign({},A0,{f:shade(A0.f,[0,-.1,-.2,-.32][c.skin|0]||0)}):A0,bw=(OPT.body.find(b=>b.v===c.body)||{w:1}).w,eyes=o.eyes||c.eyes||'round',ah=c.ahair||'none',ex=o.expr||'',of=PXOF[o.outfit||c.outfit]||PXOF.track,hat=o.hat??c.hat,item=o.item??c.item,oc=o.outfit||c.outfit,u='an'+(++UID);
   const D=shade(A.f,-.42),OL=`stroke="${D}" stroke-width="1.8" stroke-linejoin="round"`,gr=(id,col,cx=.35,cy=.3)=>`<radialGradient id="${u}${id}" cx="${cx}" cy="${cy}" r=".85"><stop offset="0" stop-color="${shade(col,.28)}"/><stop offset=".55" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,-.2)}"/></radialGradient>`;
-  const F=`url(#${u}f)`,LG=`url(#${u}l)`;let g=`<defs>${gr('f',A.f)}${gr('l',A.l,.45,.35)}${gr('d',A.d)}<clipPath id="${u}b"><ellipse cx="50" cy="134" rx="26" ry="28"/></clipPath></defs>`;
+  const F=`url(#${u}f)`,LG=`url(#${u}l)`,hcA=(OPT.hcol[c.hcol]||OPT.hcol[0]).c,BR=(26*bw).toFixed(1);let g=`<defs>${gr('f',A.f)}${gr('l',A.l,.45,.35)}${gr('d',A.d)}${gr('h',hcA,.4,.18)}<clipPath id="${u}b"><ellipse cx="50" cy="134" rx="${BR}" ry="28"/></clipPath></defs>`;
+  const HTF=k==='chick'?'translate(50,112) scale(1.18,1.29) translate(-50,-80)':'translate(50,80) scale(1.09,1.065) translate(-50,-80)',AHP=ah!=='none'?hairParts(ah,`url(#${u}h)`,`stroke="${shade(hcA,-.5)}" stroke-width="1.8" stroke-linejoin="round"`,hcA,shade(hcA,-.5),shade(hcA,.45),false):null;
   const legC=A.legC||A.sock||shade(A.f,-.08);
   // behind: tails, wings, spikes, shell rim, wool
   if(A.wing)g+=`<path d="M30,118 L4,96 L10,112 L0,116 L12,124 L6,132 L30,130Z M70,118 L96,96 L90,112 L100,116 L88,124 L94,132 L70,130Z" fill="${A.wing}" ${OL}/>`;
@@ -2462,7 +2483,7 @@ function animalSVG(c,o={}){const k=c.sex,A=ANS[k]||ANS.dog,ex=o.expr||'',of=PXOF
   // feet
   const ft=A.bi?A.feet:legC;g+=A.bi?`<path d="M30,166 l6,-6 l6,6Z M58,166 l6,-6 l6,6Z" fill="${ft}" ${OL}/>`:`<ellipse cx="37" cy="163" rx="11" ry="6.5" fill="${ft}" ${OL}/><ellipse cx="63" cy="163" rx="11" ry="6.5" fill="${ft}" ${OL}/><path d="M33,163 v3 M37,163 v3 M59,163 v3 M63,163 v3" stroke="${D}" stroke-width="1" opacity=".5"/>`;
   // body + belly
-  g+=`<ellipse cx="50" cy="134" rx="26" ry="28" fill="${A.wool?LG:F}" ${OL}/>`;
+  g+=`<ellipse cx="50" cy="134" rx="${BR}" ry="28" fill="${A.wool?LG:F}" ${OL}/>`;
   if(A.wool)g+=Array.from({length:10},(_,i)=>{const a=i/10*Math.PI*2;return `<circle cx="${(50+Math.cos(a)*22).toFixed(1)}" cy="${(134+Math.sin(a)*24).toFixed(1)}" r="8" fill="${LG}" stroke="${shade(A.f,-.2)}" stroke-width="1"/>`;}).join('');
   else g+=`<ellipse cx="50" cy="140" rx="16" ry="18" fill="${LG}" clip-path="url(#${u}b)"/>`;
   // clothes
@@ -2477,7 +2498,7 @@ function animalSVG(c,o={}){const k=c.sex,A=ANS[k]||ANS.dog,ex=o.expr||'',of=PXOF
   // arms
   const slv=of.hood?'#5cae5a':(oc&&oc!=='none'&&!A.flipper?of.slv:A.f),paw=of.glove||(A.flipper?A.f:legC);
   const HI=HELD[item];if(HI)g+=HI.back||'';
-  for(const s of[-1,1]){const x=50+s*25,[hx,hy]=HI?HI.h[s<0?0:1]:[x+s*6,138],d=HI?`M${x},114 Q${x+s*6},${(114+hy)/2+8} ${hx},${hy}`:`M${x},114 q${s*11},10 ${s*6},24`;
+  for(const s of[-1,1]){const x=50+s*25*bw,[hx,hy]=HI?HI.h[s<0?0:1]:[x+s*6,138],d=HI?`M${x},114 Q${x+s*6},${(114+hy)/2+8} ${hx},${hy}`:`M${x},114 q${s*11},10 ${s*6},24`;
     g+=`<path d="${d}" stroke="${D}" stroke-width="12.5" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${slv}" stroke-width="8.6" fill="none" stroke-linecap="round"/>`;if(!HI)g+=`<circle cx="${hx}" cy="${hy}" r="5.2" fill="${paw}" stroke="${D}" stroke-width="1.6"/>`;}
   let held='';if(HI){held=(HI.mid||'')+HI.h.map(([hx,hy])=>`<circle cx="${hx}" cy="${hy}" r="5.4" fill="${paw}" stroke="${D}" stroke-width="1.6"/><path d="M${hx-2},${hy+2.4} v-2 M${hx+2},${hy+2.4} v-2" stroke="${D}" stroke-width=".9" opacity=".6"/>`).join('')+(HI.front||'');if(k!=='chick'){g+=held;held='';}}
   g+=(HI?'':vItem(item))||(A.acorn?`<ellipse cx="50" cy="136" rx="7" ry="8" fill="#a86a2a" stroke="#6a3a18" stroke-width="1.2"/><path d="M42,132 q8,-8 16,0Z" fill="#6a3a18"/>`:'');
@@ -2490,6 +2511,7 @@ function animalSVG(c,o={}){const k=c.sex,A=ANS[k]||ANS.dog,ex=o.expr||'',of=PXOF
   if(A.ear==='side')g+=`<ellipse cx="14" cy="80" rx="13" ry="7" transform="rotate(20 14 80)" fill="${A.earC}" ${OL}/><ellipse cx="86" cy="80" rx="13" ry="7" transform="rotate(-20 86 80)" fill="${A.earC}" ${OL}/>`;
   if(A.ear==='tiny')g+=`<circle cx="18" cy="70" r="6" fill="${F}" ${OL}/><circle cx="82" cy="70" r="6" fill="${F}" ${OL}/>`;
   if(A.ram)g+=`<path d="M20,60 C4,62 4,86 18,88 C26,88 26,78 20,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M80,60 C96,62 96,86 82,88 C74,88 74,78 80,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/>`;
+  if(AHP&&AHP.back)g+=`<g transform="${HTF}">${AHP.back}</g>`;
   // head (big, soft)
   const hr=k==='chick'?0:1;
   if(k==='chick')g+=`<ellipse cx="50" cy="112" rx="40" ry="40" fill="${F}" ${OL}/>`;else g+=`<ellipse cx="50" cy="80" rx="37" ry="33" fill="${A.wool?LG:F}" ${OL}/>`;
@@ -2510,7 +2532,9 @@ function animalSVG(c,o={}){const k=c.sex,A=ANS[k]||ANS.dog,ex=o.expr||'',of=PXOF
   const eyeY=k==='chick'?100:83,ex1=37,ex2=63;
   if(ex==='happy')g+=`<path d="M${ex1-5},${eyeY+1} q5,-7 10,0 M${ex2-5},${eyeY+1} q5,-7 10,0" stroke="#2a1a14" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
   else if(ex==='shock')g+=[ex1,ex2].map(x=>`<ellipse cx="${x}" cy="${eyeY}" rx="6.4" ry="7.4" fill="#fff" stroke="#2a1a14" stroke-width="2"/><circle cx="${x}" cy="${eyeY}" r="2.4" fill="#2a1a14"/>`).join('');
-  else for(const x of[ex1,ex2])g+=`<ellipse cx="${x}" cy="${eyeY}" rx="5.6" ry="6.8" fill="#1f1410"/><ellipse cx="${x}" cy="${eyeY+2.6}" rx="4" ry="3" fill="${k==='cat'?'#5a8a3a':'#6a4028'}"/><circle cx="${x-1.8}" cy="${eyeY-2.8}" r="2.4" fill="#fff"/><circle cx="${x+2.2}" cy="${eyeY+2.2}" r="1" fill="#fff"/>`;
+  else if(eyes==='smile')g+=`<path d="M${ex1-5.5},${eyeY+1} q5.5,-7 11,0 M${ex2-5.5},${eyeY+1} q5.5,-7 11,0" stroke="#2a1a14" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
+  else{const sh_=eyes==='sharp',ry=sh_?4.8:6.8;for(const x of[ex1,ex2])g+=`<ellipse cx="${x}" cy="${eyeY}" rx="5.6" ry="${ry}" fill="#1f1410"/><ellipse cx="${x}" cy="${eyeY+ry*.38}" rx="4" ry="${ry*.44}" fill="${k==='cat'?'#5a8a3a':'#6a4028'}"/><circle cx="${x-1.8}" cy="${eyeY-ry*.4}" r="2.3" fill="#fff"/><circle cx="${x+2.2}" cy="${eyeY+ry*.32}" r="1" fill="#fff"/>`;
+    if(sh_)g+=`<path d="M${ex1-6.5},${eyeY-6} L${ex1+5.5},${eyeY-3} M${ex2+6.5},${eyeY-6} L${ex2-5.5},${eyeY-3}" stroke="#2a1a14" stroke-width="2.2" stroke-linecap="round"/>`;}
   g+=`<ellipse cx="25" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/><ellipse cx="75" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/>`;
   if(A.beak)g+=`<path d="M44,${eyeY+9} Q50,${eyeY+4} 56,${eyeY+9} Q50,${eyeY+17} 44,${eyeY+9}Z" fill="${A.beak}" stroke="${shade(A.beak,-.35)}" stroke-width="1.2"/>`;
   else{const big=k==='mole';g+=`<ellipse cx="50" cy="${big?92:91}" rx="${big?6:4}" ry="${big?4.6:2.9}" fill="${A.nose}"/><ellipse cx="${big?48:48.8}" cy="${big?90:90}" rx="1.4" ry="1" fill="#fff" opacity=".7"/>`;
@@ -2519,8 +2543,9 @@ function animalSVG(c,o={}){const k=c.sex,A=ANS[k]||ANS.dog,ex=o.expr||'',of=PXOF
   if(A.flipper)g+='';
   // hood / hat
   if(of.hood&&(!hat||hat==='none'))g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`+[[28,50],[40,43],[52,41],[64,43],[74,50]].map(([x,y])=>`<path d="M${x-5},${y+5} L${x},${y-7} L${x+5},${y+5}Z" fill="#f2c14e" stroke="#c89a2a" stroke-width="1"/>`).join('');
+  const hatOn=!!(hat&&hat!=='none');if(AHP&&!(of.hood&&!hatOn))g+=`<g transform="${HTF}">${AHP.front}${hatOn?'':AHP.top}</g>`;
   if(held)g+=`<g transform="translate(0,14)">${held}</g>`;
-  if(hat&&hat!=='none'&&VHAT[hat])g+=`<g transform="translate(50,${k==='chick'?82:(hat==='flower'||hat==='bow'||hat==='horns'?58:56)}) scale(1.24) translate(-50,-33)">${VHAT[hat]}</g>`;
+  if(hatOn)g+=`<g transform="${HTF}">${hatG(hat,u)}</g>`;
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="32" ry="5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
 
@@ -2538,51 +2563,107 @@ const HELD={
   mid:`<path d="M42,138 L48,126" stroke="#2b3338" stroke-width="7" stroke-linecap="round"/><rect x="40" y="110" width="30" height="13" rx="4" fill="#e8a93a" stroke="#8a5a1a" stroke-width="1.2"/><rect x="44" y="113" width="10" height="7" rx="1.5" fill="#2b3338"/><circle cx="62" cy="116.5" r="2" fill="#ffe08a"/>
    <rect x="70" y="113" width="6" height="7" rx="1" fill="#55626a"/><path d="M76,116.5 H92" stroke="#a8b4bc" stroke-width="3" stroke-linecap="round"/><path d="M78,114.5 l3,4 M82,114.5 l3,4 M86,114.5 l3,4" stroke="#6a7378" stroke-width=".9"/>`}};
 // ---------------- chibi humans (vector, same frame/style as the animals) ----------------
+// ---------------- character parts shared by human and animal heroes (human head frame: head ellipse cx50 cy80 rx34 ry31, hairline ~y62) ----------------
+// hair: returns {back, front, top}. top = parts that rise above the head (hidden under a hat)
+function hairParts(hs,HF,HO,hc,hcD,hcL,fem){const P={back:'',front:'',top:''},shine=(y=48)=>`<path d="M30,${y+8} Q40,${y} 54,${y}" stroke="${hcL}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".45"/><path d="M62,${y+2} Q68,${y+4} 71,${y+8}" stroke="${hcL}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".35"/>`;
+  // smooth pulled-back cap (no fringe) used by 상투 / 쪽머리 / 큰머리
+  const cap=(part)=>`<path d="M15,86 C6,30 94,30 85,86 Q84,72 78,66 Q66,60 50,61 Q34,60 22,66 Q16,72 15,86Z" fill="${HF}" ${HO}/>`+(part?`<path d="M50,40 V61" stroke="${hcD}" stroke-width="1.4" opacity=".7"/>`:'')+[[30,64,38,44],[40,61,44,40],[60,61,56,40],[70,64,62,44]].map(([a,b,c,d])=>`<path d="M${a},${b} Q${(a+c)/2+(a<50?-2:2)},${(b+d)/2} ${c},${d}" stroke="${hcD}" stroke-width=".9" fill="none" opacity=".45"/>`).join('')+`<path d="M28,52 Q38,42 52,41" stroke="${hcL}" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".4"/>`;
+  const mang=(gold)=>`<path d="M15,74 Q16,64 24,62 Q50,56 76,62 Q84,64 85,74 Q82,68 76,67 Q50,62 24,67 Q18,68 15,74Z" fill="#141418" opacity=".82"/><path d="M20,66 Q50,59 80,66" stroke="#3a3a44" stroke-width=".7" fill="none" stroke-dasharray="1.2 1.2"/><circle cx="17" cy="72" r="2.6" fill="${gold?'#f2c14e':'#bfe6d0'}" stroke="${gold?'#a87a1e':'#6aa88a'}" stroke-width=".8"/><circle cx="83" cy="72" r="2.6" fill="${gold?'#f2c14e':'#bfe6d0'}" stroke="${gold?'#a87a1e':'#6aa88a'}" stroke-width=".8"/>`;
+  switch(hs){
+   case 'buzz':P.front=`<path d="M17,82 C12,40 88,40 83,82 Q80,68 72,63 Q50,57 28,63 Q20,68 17,82Z" fill="${HF}" opacity=".55"/><ellipse cx="40" cy="58" rx="11" ry="6" fill="#fff" opacity=".22" transform="rotate(-18 40 58)"/>`;break;
+   case 'tail':P.back=`<path d="M70,56 Q102,58 98,96 Q96,116 84,124 Q90,100 80,76Z" fill="${HF}" ${HO}/><path d="M86,72 Q94,90 88,112" stroke="${hcL}" stroke-width="1.4" fill="none" opacity=".4"/><path d="M74,58 q6,-4 10,1 q-2,5 -8,4Z" fill="${shade(hc,-.6)}" stroke="${shade(hc,-.75)}" stroke-width="1"/>`;
+     P.front=`<path d="M15,86 C6,30 94,30 85,86 Q86,76 80,70 Q72,72 62,70 Q50,73 38,70 Q28,72 22,68 Q12,76 14,92Z" fill="${HF}" ${HO}/><path d="M34,70 V66 M46,71 V67 M58,71 V67" stroke="${hcD}" stroke-width="1" opacity=".45"/>`+shine();break;
+   case 'part':P.front=`<path d="M15,86 C6,30 94,30 85,86 Q86,76 80,70 Q64,58 42,74 Q40,66 34,64 Q28,66 22,72 Q14,72 15,86Z" fill="${HF}" ${HO}/>`+shine();break;
+   case 'regent':// 폭주족 리젠트: tight sides + a big glossy quiff over the forehead
+     P.front=`<path d="M15,86 C8,44 92,44 85,86 Q84,72 78,66 Q50,60 22,66 Q16,72 15,86Z" fill="${HF}" ${HO}/><path d="M17,80 Q16,70 22,66 M83,80 Q84,70 78,66" stroke="${hcD}" stroke-width="1.2" fill="none" opacity=".6"/>`;
+     P.top=`<path d="M22,66 C16,46 28,30 50,27 C68,25 82,32 82,44 C78,40 70,38 64,40 C72,46 76,54 76,64 C68,56 54,52 40,56 C32,59 26,62 22,66Z" fill="${HF}" ${HO}/><path d="M30,52 C34,40 46,33 64,32" stroke="${hcL}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/><path d="M40,55 C46,46 58,42 72,44" stroke="${hcL}" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".4"/><path d="M62,40 C70,44 74,50 75,58" stroke="${hcD}" stroke-width="1.2" fill="none" opacity=".55"/>`;break;
+   case 'sangtu':case 'king':{const k=hs==='king';P.front=cap(false)+mang(k);
+     P.top=`<ellipse cx="50" cy="${k?34:37}" rx="${k?10:8.5}" ry="${k?9:7.5}" fill="${HF}" ${HO}/><path d="M43,${k?33:36} q7,-5 14,0" stroke="${hcL}" stroke-width="1.6" fill="none" opacity=".5"/><path d="M${k?36:38},${k?36:39} H${k?64:62}" stroke="${k?'#f2c14e':'#d8e8e0'}" stroke-width="${k?2.6:2}" stroke-linecap="round"/><circle cx="${k?64:62}" cy="${k?36:39}" r="${k?2.6:2}" fill="${k?'#ffd76a':'#eef6f2'}" stroke="${k?'#a87a1e':'#8aa89a'}" stroke-width=".7"/>`;break;}
+   case 'noble':// 귀족 쪽머리: center part, low bun at the nape with a jade 비녀 across
+     P.back=`<ellipse cx="50" cy="108" rx="16" ry="10" fill="${HF}" ${HO}/><path d="M24,104 H76" stroke="#7fc8a8" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="104" r="3.2" fill="#5fae88" stroke="#3a7a5a" stroke-width=".8"/><circle cx="76" cy="104" r="3.2" fill="#5fae88" stroke="#3a7a5a" stroke-width=".8"/>`;
+     P.front=cap(true)+`<path d="M15,86 Q14,96 20,104 M85,86 Q86,96 80,104" stroke="${hcD}" stroke-width="5" fill="none" stroke-linecap="round"/>`;break;
+   case 'queen':// 왕비 큰머리(어여머리): smooth part + a huge braided 가체 ring on top, gold 떨잠
+     P.front=cap(true);
+     P.top=`<path d="M8,66 C2,38 30,26 50,28 C70,26 98,38 92,66 C86,54 74,46 50,46 C26,46 14,54 8,66Z" fill="${HF}" ${HO}/>`+Array.from({length:11},(_,i)=>{const t=i/10,x=11+t*78,y=60-Math.sin(t*Math.PI)*26;return `<path d="M${(x-4).toFixed(1)},${(y+3).toFixed(1)} q4,-6 8,0" stroke="${hcL}" stroke-width="1.3" fill="none" opacity=".45"/>`;}).join('')
+       +[[50,32,'#ffd76a',4.6],[29,38,'#7fd0b0',3.6],[71,38,'#7fd0b0',3.6],[16,52,'#ff8a8a',2.8],[84,52,'#ff8a8a',2.8]].map(([x,y,c,r])=>`<path d="M${x},${y} v-6" stroke="#c9a040" stroke-width="1"/><circle cx="${x}" cy="${y-7}" r="${r*.5}" fill="#fff6c8"/>${[0,60,120,180,240,300].map(a=>`<circle cx="${(x+Math.cos(a*Math.PI/180)*r*.62).toFixed(1)}" cy="${(y+Math.sin(a*Math.PI/180)*r*.62).toFixed(1)}" r="${(r*.42).toFixed(1)}" fill="${c}" stroke="#a87a1e" stroke-width=".5"/>`).join('')}<circle cx="${x}" cy="${y}" r="${(r*.45).toFixed(1)}" fill="#ffd76a" stroke="#a87a1e" stroke-width=".6"/>`).join('')
+       +`<path d="M6,62 L-2,66 M94,62 L102,66" stroke="#d8b44a" stroke-width="2.4" stroke-linecap="round"/>`;break;
+   case 'none':break;
+   default:// short
+     P.front=`<path d="M15,86 C6,30 94,30 85,86 Q86,76 80,70 L76,72 L68,63 L60,72 L52,62 L44,71 L36,63 L28,70 L22,68 Q14,72 15,86Z" fill="${HF}" ${HO}/>`+shine();
+     P.top=`<path d="M40,46 q4,-12 14,-10 q-5,3 -4,9Z M56,44 q8,-8 14,-2 q-6,0 -7,5Z" fill="${HF}" ${HO}/>`;}
+  return P;}
+// hats drawn natively in the human head frame; animals reuse them through a transform
+function hatG(id,u0){const u=u0+'H',gd=(k,a,b)=>`<linearGradient id="${u}${k}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`,ol='stroke-linejoin="round"';
+  switch(id){
+   case 'lamp':return `<defs>${gd('l','#ffa64a','#d86a14')}</defs><path d="M11,68 C11,22 89,22 89,68Z" fill="url(#${u}l)" stroke="#9a4a10" stroke-width="1.6" ${ol}/><path d="M50,26 V66" stroke="#c86d1a" stroke-width="4"/><path d="M24,38 Q34,28 48,27" stroke="#ffd09a" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/><path d="M4,66 Q50,76 96,66 L96,72 Q50,82 4,72Z" fill="#b85c14" stroke="#7a3a0a" stroke-width="1.2"/><circle cx="50" cy="44" r="13" fill="#fff3b0" opacity=".22"/><circle cx="50" cy="44" r="8.5" fill="#cfd6da" stroke="#7a8288" stroke-width="1.2"/><circle cx="50" cy="44" r="5.2" fill="#fff6c8"/><circle cx="48" cy="42" r="1.6" fill="#fff"/>`;
+   case 'mask':return `<path d="M13,70 Q50,62 87,70" stroke="#16191c" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="26" y="44" width="48" height="26" rx="11" fill="#22a8a3" stroke="#0f6a66" stroke-width="1.6"/><rect x="30" y="48" width="40" height="18" rx="8" fill="#bff0f0" opacity=".8"/><path d="M34,52 L44,62 M40,50 L48,58" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/><rect x="47" y="44" width="6" height="4" fill="#0f6a66"/>`;
+   case 'straw':return `<ellipse cx="50" cy="66" rx="56" ry="13" fill="#d6a64e" stroke="#9a7228" stroke-width="1.4"/><ellipse cx="50" cy="64" rx="54" ry="10.5" fill="#efc46c"/>${Array.from({length:14},(_,i)=>{const a=i/14*Math.PI*2;return `<path d="M${(50+Math.cos(a)*26).toFixed(1)},${(64+Math.sin(a)*5).toFixed(1)} L${(50+Math.cos(a)*53).toFixed(1)},${(64+Math.sin(a)*10).toFixed(1)}" stroke="#d6a64e" stroke-width=".9"/>`;}).join('')}<path d="M25,64 C25,28 75,28 75,64Z" fill="#f2cb78" stroke="#b8893a" stroke-width="1.4"/>${[32,40,48,56,64].map(x=>`<path d="M${x},34 Q${x+1},46 ${x},58" stroke="#d8a446" stroke-width="1" fill="none"/>`).join('')}<path d="M25,56 Q50,62 75,56 L75,63 Q50,69 25,63Z" fill="#c8402a"/>`;
+   case 'flower':return Array.from({length:9},(_,i)=>{const a=Math.PI*(1.05+i*.1125),x=50+Math.cos(a)*36,y=62+Math.sin(a)*14;return `<path d="M${x.toFixed(1)},${y.toFixed(1)} q4,-5 9,-1" stroke="#4f9a46" stroke-width="2.4" fill="none"/>`;}).join('')+Array.from({length:7},(_,i)=>{const a=Math.PI*(1.08+i*.14),x=50+Math.cos(a)*36,y=62+Math.sin(a)*14,c=['#ffd34a','#ff8ab0','#ffffff','#ffb3c6'][i%4];return [0,72,144,216,288].map(d=>`<circle cx="${(x+Math.cos(d*Math.PI/180)*3.6).toFixed(1)}" cy="${(y+Math.sin(d*Math.PI/180)*3.6).toFixed(1)}" r="3.1" fill="${c}" stroke="rgba(0,0,0,.22)" stroke-width=".5"/>`).join('')+`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.2" fill="#ffae2a"/>`;}).join('');
+   case 'bow':return `<g transform="translate(74,52) scale(1.25)"><path d="M0,0 L-14,-10 Q-18,0 -14,10Z M0,0 L14,-10 Q18,0 14,10Z" fill="#ff5f8a" stroke="#c43a64" stroke-width="1.3"/><path d="M-11,-6 L-5,-2 M11,-6 L5,-2" stroke="#ff9ab6" stroke-width="1.6"/><path d="M-3,3 L-8,16 M3,3 L8,16" stroke="#e0456f" stroke-width="3" stroke-linecap="round"/><circle r="4.4" fill="#e0456f" stroke="#c43a64" stroke-width="1.2"/></g>`;
+   case 'horns':return `<path d="M17,66 Q50,46 83,66" stroke="#24242a" stroke-width="3.4" fill="none"/><path d="M30,56 C18,48 18,30 24,22 C26,34 32,44 40,50Z M70,56 C82,48 82,30 76,22 C74,34 68,44 60,50Z" fill="#c8303a" stroke="#7a141c" stroke-width="1.3" ${ol}/><path d="M24,26 C23,36 28,44 34,48 M76,26 C77,36 72,44 66,48" stroke="#ff7a84" stroke-width="1.3" fill="none"/>`;
+   case 'crown':return `<defs>${gd('c','#ffe08a','#b8841e')}</defs><path d="M10,82 Q8,58 12,48 C16,26 84,26 88,48 Q92,58 90,82 L82,82 Q80,66 74,62 Q50,56 26,62 Q20,66 18,82Z" fill="url(#${u}c)" stroke="#7a5410" stroke-width="1.6" ${ol}/><path d="M50,24 V60" stroke="#a87a1e" stroke-width="3"/><path d="M14,60 Q50,50 86,60" stroke="#fff3b0" stroke-width="2" fill="none" opacity=".7"/><path d="M50,12 L58,24 L50,32 L42,24Z" fill="#c9f2f8" stroke="#5aa8c8" stroke-width="1.2"/><circle cx="50" cy="22" r="2" fill="#fff"/>`;
+   case 'satgat':// 삿갓 (farmer): wide bamboo cone + chin cord
+     return `<path d="M24,68 Q28,92 40,108 M76,68 Q72,92 60,108" stroke="#8a6a3a" stroke-width="1.4" fill="none"/><ellipse cx="50" cy="62" rx="50" ry="9" fill="#b8924e"/><path d="M0,62 L50,22 L100,62 Q50,74 0,62Z" fill="#dcb86c" stroke="#8a6a32" stroke-width="1.5" ${ol}/>${Array.from({length:13},(_,i)=>{const x=2+i*8;return `<path d="M50,23 L${x.toFixed(1)},${(62+Math.sin((i/12)*Math.PI)*10).toFixed(1)}" stroke="#b8924e" stroke-width=".9"/>`;}).join('')}<path d="M14,55 Q50,66 86,55" stroke="#c9a25a" stroke-width="1" fill="none"/><circle cx="50" cy="23" r="2.6" fill="#8a6a32"/>`;
+   case 'gat':// 갓 (yangban): see-through black horsehair brim, tall crown, amber bead cords
+     return `<path d="M28,66 Q24,92 36,114 M72,66 Q76,92 64,114" stroke="#5a3a1a" stroke-width="1" fill="none"/>${Array.from({length:9},(_,i)=>`<circle cx="${(28-Math.sin(i/8*2.2)*4+i*1).toFixed(1)}" cy="${(70+i*5.4).toFixed(1)}" r="1.9" fill="#e8a03a" stroke="#8a5a1a" stroke-width=".5"/><circle cx="${(72+Math.sin(i/8*2.2)*4-i*1).toFixed(1)}" cy="${(70+i*5.4).toFixed(1)}" r="1.9" fill="#e8a03a" stroke="#8a5a1a" stroke-width=".5"/>`).join('')}
+       <ellipse cx="50" cy="64" rx="52" ry="10" fill="rgba(18,18,24,.78)" stroke="#05050a" stroke-width="1.2"/><ellipse cx="50" cy="64" rx="44" ry="7" fill="none" stroke="rgba(255,255,255,.12)" stroke-width=".8"/><path d="M36,64 L38,30 Q50,26 62,30 L64,64Z" fill="rgba(14,14,20,.9)" stroke="#05050a" stroke-width="1.2" ${ol}/><ellipse cx="50" cy="30" rx="12" ry="3" fill="#1c1c24" stroke="#05050a" stroke-width="1"/><path d="M41,34 Q42,48 41,60" stroke="rgba(255,255,255,.18)" stroke-width="1.6" fill="none"/><path d="M36,58 Q50,61 64,58" stroke="#2a2a36" stroke-width="2.4" fill="none"/>`;
+   case 'samo':// 사모 (official's portrait cap): two-tier black cap with flat oval wings
+     return `<defs>${gd('s','#3a3a46','#0c0c12')}</defs><path d="M30,42 Q18,40 2,38 Q-8,40 2,44 Q18,46 30,46Z M70,42 Q82,40 98,38 Q108,40 98,44 Q82,46 70,46Z" fill="#14141a" stroke="#000" stroke-width="1" ${ol}/><path d="M4,40 Q16,41 28,43 M96,40 Q84,41 72,43" stroke="rgba(255,255,255,.2)" stroke-width=".8" fill="none"/><path d="M32,60 L33,30 Q50,22 67,30 L68,60Z" fill="url(#${u}s)" stroke="#000" stroke-width="1.2" ${ol}/><path d="M15,70 C15,44 85,44 85,70 Q50,62 15,70Z" fill="url(#${u}s)" stroke="#000" stroke-width="1.3" ${ol}/><path d="M24,56 Q40,48 56,48" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+   case 'ikseon':// 익선관 (king): black cap with two wings standing up at the back
+     return `<defs>${gd('k','#3a3046','#0c0a12')}</defs><g transform="rotate(-14 42 30)"><ellipse cx="42" cy="22" rx="7" ry="14" fill="#1a1622" stroke="#000" stroke-width="1"/><path d="M42,10 V34" stroke="rgba(255,255,255,.18)" stroke-width=".8"/></g><g transform="rotate(14 58 30)"><ellipse cx="58" cy="22" rx="7" ry="14" fill="#1a1622" stroke="#000" stroke-width="1"/><path d="M58,10 V34" stroke="rgba(255,255,255,.18)" stroke-width=".8"/></g><path d="M31,60 L32,32 Q50,24 68,32 L69,60Z" fill="url(#${u}k)" stroke="#000" stroke-width="1.2" ${ol}/><path d="M14,70 C14,42 86,42 86,70 Q50,62 14,70Z" fill="url(#${u}k)" stroke="#000" stroke-width="1.3" ${ol}/><path d="M16,66 Q50,58 84,66" stroke="#c9a040" stroke-width="1.2" fill="none" opacity=".8"/><path d="M24,56 Q40,48 56,48" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+   case 'jokduri':// 족두리 (court lady): small black crown cap with gold trim and jewels
+     return `<path d="M34,52 Q50,56 66,52 L63,34 L56,28 H44 L37,34Z" fill="#17141c" stroke="#000" stroke-width="1.1" ${ol}/><path d="M34,52 Q50,56 66,52" stroke="#e0b44a" stroke-width="2.2" fill="none"/><path d="M37,34 L63,34 M44,28 L42,52 M56,28 L58,52" stroke="#e0b44a" stroke-width="1" fill="none"/><circle cx="50" cy="26" r="3" fill="#ff6a5a" stroke="#a82a1e" stroke-width=".8"/><circle cx="50" cy="42" r="3.2" fill="#7fd0b0" stroke="#3a8a6a" stroke-width=".8"/><circle cx="41" cy="44" r="2" fill="#ffd76a"/><circle cx="59" cy="44" r="2" fill="#ffd76a"/><path d="M38,54 Q34,64 30,70 M62,54 Q66,64 70,70" stroke="#c62a3a" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+   case 'hwagwan':// 화관 (queen): gold floral crown with jewels and dangling ornaments
+     return `<defs>${gd('q','#ffe48a','#c4901e')}</defs>${[[20,58,16],[80,58,16],[30,52,22],[70,52,22]].map(([x,y,l])=>`<path d="M${x},${y} V${y+l}" stroke="#c9a040" stroke-width="1"/><circle cx="${x}" cy="${y+l}" r="2.2" fill="#ff6a7a" stroke="#a82a3a" stroke-width=".6"/><circle cx="${x}" cy="${y+l/2}" r="1.4" fill="#fff6c8"/>`).join('')}
+       <path d="M16,62 Q50,48 84,62 L80,46 L70,50 L64,34 L56,42 L50,24 L44,42 L36,34 L30,50 L20,46Z" fill="url(#${u}q)" stroke="#8a5e10" stroke-width="1.3" ${ol}/><path d="M18,60 Q50,48 82,60" stroke="#fff3b0" stroke-width="1.4" fill="none"/>
+       ${[[50,32,'#ff4a5a',3.4],[36,44,'#4ac0a0',2.6],[64,44,'#4ac0a0',2.6],[26,52,'#5a8aff',2.2],[74,52,'#5a8aff',2.2],[43,54,'#fff6d8',1.8],[57,54,'#fff6d8',1.8]].map(([x,y,c,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" stroke="#7a5410" stroke-width=".6"/><circle cx="${x-r*.35}" cy="${y-r*.35}" r="${r*.3}" fill="#fff" opacity=".8"/>`).join('')}`;
+  }
+  return '';}
+
 function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.outfit,of=PXOF[oc]||PXOF.track,hat=o.hat??c.hat,item=o.item??c.item,eyes=o.eyes||c.eyes||'round',u='hm'+(++UID);
   const sk=SKIN[c.skin]??SKIN[0],skD=shade(sk,-.4),hc=(OPT.hcol[c.hcol]||OPT.hcol[0]).c,hcD=shade(hc,-.5),hcL=shade(hc,.45);
-  const bw=(OPT.body.find(b=>b.v===c.body)||{w:1}).w,hs=c.hair||(fem?'long':'short');
+  const bw=(OPT.body.find(b=>b.v===c.body)||{w:1}).w,hs0=c.hair||(fem?'tail':'short'),hs={bob:'tail',long:'tail',pig:'tail'}[hs0]||hs0,hatOn=!!(hat&&hat!=='none');
   const OL=`stroke="${skD}" stroke-width="1.8" stroke-linejoin="round"`,HO=`stroke="${hcD}" stroke-width="1.8" stroke-linejoin="round"`;
   const gr=(id,col,cx=.35,cy=.3,a=.28,b=-.2)=>`<radialGradient id="${u}${id}" cx="${cx}" cy="${cy}" r=".85"><stop offset="0" stop-color="${shade(col,a)}"/><stop offset=".55" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,b)}"/></radialGradient>`;
   const sw=(fem?16.5:18.5)*bw,ww=(fem?14:15.5)*(bw>1.1?1.22:bw),T=`M${50-sw},112 Q${50-sw},104 ${50-sw+8},104 H${50+sw-8} Q${50+sw},104 ${50+sw},112 L${50+ww},142 H${50-ww}Z`;
   let g=`<defs>${gr('s',sk,.38,.32,.18,-.12)}${gr('h',hc,.4,.18,.3,-.25)}<clipPath id="${u}b"><path d="${T}"/></clipPath></defs>`;
-  const HF=`url(#${u}h)`,SF=`url(#${u}s)`;
-  // back hair (behind everything)
-  if(hs==='long')g+=`<path d="M14,80 C6,32 94,32 86,80 Q92,104 90,124 Q88,136 76,136 Q72,124 70,112 H30 Q28,124 24,136 Q12,136 10,124 Q8,104 14,80Z" fill="${HF}" ${HO}/><path d="M18,96 Q16,116 20,130 M82,96 Q84,116 80,130" stroke="${hcL}" stroke-width="1.4" fill="none" opacity=".35"/>`;
-  if(hs==='bob')g+=`<path d="M13,80 C6,32 94,32 87,80 C90,94 88,104 80,109 Q66,113 50,112 Q34,113 20,109 C12,104 10,94 13,80Z" fill="${HF}" ${HO}/>`;
-  if(hs==='tail')g+=`<path d="M74,58 Q100,62 96,100 Q94,116 84,122 Q90,100 80,78Z" fill="${HF}" ${HO}/><circle cx="80" cy="62" r="5" fill="#e0456f" stroke="#a82a4a" stroke-width="1.2"/>`;
-  if(hs==='pig')g+=`<path d="M18,80 Q0,92 6,126 Q10,136 18,132 Q12,108 26,90Z M82,80 Q100,92 94,126 Q90,136 82,132 Q88,108 74,90Z" fill="${HF}" ${HO}/>`;
-  // legs + shoes
+  const HF=`url(#${u}h)`,SF=`url(#${u}s)`,HP=hairParts(hs,HF,HO,hc,hcD,hcL,fem);
+  g+=HP.back;
+  // legs + shoes (robes and skirts cover the legs; only the shoe tips show)
   const pan=of.hood?'#5cae5a':of.pan,lx=50-ww+2.5,lw=ww-4,pl=of.shorts?10:20;
-  g+=`<rect x="${lx}" y="138" width="${lw}" height="${pl}" rx="3" fill="${pan}" stroke="${shade(pan,-.4)}" stroke-width="1.4"/><rect x="${50+1.5}" y="138" width="${lw}" height="${pl}" rx="3" fill="${pan}" stroke="${shade(pan,-.4)}" stroke-width="1.4"/>`;
+  if(!of.robe&&!of.skirt){g+=`<rect x="${lx}" y="138" width="${lw}" height="${pl}" rx="3" fill="${pan}" stroke="${shade(pan,-.4)}" stroke-width="1.4"/><rect x="${50+1.5}" y="138" width="${lw}" height="${pl}" rx="3" fill="${pan}" stroke="${shade(pan,-.4)}" stroke-width="1.4"/>`;
+    if(oc==='farmer')g+=`<path d="M${lx},150 h${lw} M51.5,150 h${lw}" stroke="#3a3a46" stroke-width="2.6"/>`;}
   if(of.shorts)g+=`<rect x="${lx+2}" y="147" width="${lw-4}" height="12" fill="${SF}"/><rect x="${53.5}" y="147" width="${lw-4}" height="12" fill="${SF}"/><path d="M${lx+2},155 h${lw-4} M53.5,155 h${lw-4}" stroke="#eeece6" stroke-width="3"/>`;
   const sh=of.shoe,shD=shade(sh,-.45);g+=`<path d="M${lx-2},166 Q${lx-2},157 ${lx+5},157 H${lx+lw} Q${lx+lw+3},157 ${lx+lw+2},166Z" fill="${sh}" stroke="${shD}" stroke-width="1.6"/><path d="M${51},166 Q${50},157 ${56},157 H${51+lw+2} Q${51+lw+6},157 ${51+lw+5},166Z" fill="${sh}" stroke="${shD}" stroke-width="1.6"/><path d="M${lx},163 h${lw+1} M52,163 h${lw+3}" stroke="${shade(sh,.35)}" stroke-width="1.4"/>`;
+  if(of.robe||of.skirt){const col=of.skirt||of.top,fl=of.skirt?12:6,bot=of.skirt?163:161,cD=shade(col,-.4);
+    g+=`<linearGradient id="${u}r" x1="0" x2="1"><stop offset="0" stop-color="${shade(col,.18)}"/><stop offset=".5" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,-.25)}"/></linearGradient><path d="M${50-ww-1},134 Q${50-ww-fl},${bot-8} ${50-ww-fl-1},${bot} Q50,${bot+3} ${50+ww+fl+1},${bot} Q${50+ww+fl},${bot-8} ${50+ww+1},134Z" fill="url(#${u}r)" stroke="${cD}" stroke-width="1.6" stroke-linejoin="round"/>`+robeDet(oc,ww,fl,bot);}
   // torso + clothes
   const top=of.hood?'#5cae5a':of.top,tD=shade(top,-.45);
   g+=`<linearGradient id="${u}t" x1="0" x2="1"><stop offset="0" stop-color="${shade(top,.22)}"/><stop offset=".45" stop-color="${top}"/><stop offset="1" stop-color="${shade(top,-.28)}"/></linearGradient><path d="${T}" fill="url(#${u}t)" stroke="${tD}" stroke-width="1.8" stroke-linejoin="round"/>`;
-  g+=`<g clip-path="url(#${u}b)"><rect x="${50+sw-9}" y="104" width="12" height="40" fill="#000" opacity=".12"/><rect x="${50-sw+2}" y="104" width="5" height="40" fill="#fff" opacity=".12"/>${of.hood?`<ellipse cx="50" cy="128" rx="11" ry="13" fill="#ece3a4"/>`:vClothDet(oc)}<rect x="10" y="139" width="80" height="4" fill="${tD}" opacity=".35"/></g>`;
-  if(fem&&!of.hood)g+=`<path d="M42,104 Q50,112 58,104" stroke="#fff" stroke-width="1.6" fill="none" opacity=".55"/>`;
-  // arms: relaxed, or both hands on the held tool
-  const slv=of.slv||top,hand=of.glove||sk,HI=HELD[item],armP=(x,hx,hy,s)=>`M${x},110 Q${x+s*7},${(110+hy)/2+6} ${hx},${hy}`;
+  g+=`<g clip-path="url(#${u}b)"><rect x="${50+sw-9}" y="104" width="12" height="40" fill="#000" opacity=".12"/><rect x="${50-sw+2}" y="104" width="5" height="40" fill="#fff" opacity=".12"/>${of.hood?`<ellipse cx="50" cy="128" rx="11" ry="13" fill="#ece3a4"/>`:vClothDet(oc)}${of.robe||of.skirt?'':`<rect x="10" y="139" width="80" height="4" fill="${tD}" opacity=".35"/>`}</g>`;
+  if(fem&&!of.hood&&!of.robe&&!of.skirt&&oc!=='farmer')g+=`<path d="M42,104 Q50,112 58,104" stroke="#fff" stroke-width="1.6" fill="none" opacity=".55"/>`;
+  // arms: relaxed, or both hands on the held tool; robes get wide sleeves
+  const slv=of.slv||top,hand=of.glove||sk,HI=HELD[item],armP=(x,hx,hy,s)=>`M${x},110 Q${x+s*7},${(110+hy)/2+6} ${hx},${hy}`,aw=of.wide?[15.5,12]:[12,8.4];
   if(HI)g+=HI.back||'';
   for(const s of[-1,1]){const x=50+s*(sw+1.5),[hx,hy]=HI?HI.h[s<0?0:1]:[x+s*5,136],d=HI?armP(x,hx,hy,s):`M${x},110 q${s*9},10 ${s*5},24`;
-    g+=`<path d="${d}" stroke="${shade(slv,-.45)}" stroke-width="12" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${slv}" stroke-width="8.4" fill="none" stroke-linecap="round"/>`;
+    g+=`<path d="${d}" stroke="${shade(slv,-.45)}" stroke-width="${aw[0]}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${slv}" stroke-width="${aw[1]}" fill="none" stroke-linecap="round"/>`;
+    if(of.cuff)g+=`<circle cx="${hx-s*1.5}" cy="${hy-4}" r="${of.wide?6.2:4.6}" fill="${of.cuff}" opacity=".95"/>`;
     if(!HI)g+=`<circle cx="${hx}" cy="${hy}" r="5" fill="${hand}" stroke="${of.glove?shade(hand,-.4):skD}" stroke-width="1.5"/>`;}
   if(HI){g+=HI.mid||'';for(const [hx,hy] of HI.h)g+=`<circle cx="${hx}" cy="${hy}" r="5.2" fill="${hand}" stroke="${of.glove?shade(hand,-.4):skD}" stroke-width="1.5"/><path d="M${hx-3},${hy-1} h6 M${hx-2.6},${hy+1.4} h5.2" stroke="${of.glove?shade(hand,-.4):skD}" stroke-width=".8" opacity=".7"/>`;g+=HI.front||'';}
   else g+=vItem(item);
-  // ears + head
-  if(hs!=='bob'&&hs!=='long')g+=`<ellipse cx="16.5" cy="88" rx="5.5" ry="7" fill="${SF}" ${OL}/><ellipse cx="83.5" cy="88" rx="5.5" ry="7" fill="${SF}" ${OL}/><path d="M16,85 q2,3 0,6 M84,85 q-2,3 0,6" stroke="${skD}" stroke-width="1" fill="none"/>`;
+  // ears + head (soft neck shadow under the chin)
+  g+=`<ellipse cx="16.5" cy="88" rx="5.5" ry="7" fill="${SF}" ${OL}/><ellipse cx="83.5" cy="88" rx="5.5" ry="7" fill="${SF}" ${OL}/><path d="M16,85 q2,3 0,6 M84,85 q-2,3 0,6" stroke="${skD}" stroke-width="1" fill="none"/>`;
   g+=`<ellipse cx="50" cy="80" rx="34" ry="31" fill="${SF}" ${OL}/><path d="M24,96 Q30,106 42,109" stroke="#fff" stroke-width="2" fill="none" opacity=".18" stroke-linecap="round"/>`;
   // face
   const ey=88,E1=37,E2=63,ink='#1f1410',iris=['#5a3a24','#3a2a1e','#4a5a7a'][c.hcol===4?2:c.hcol===3?0:1];
-  const blush=fem?.55:.32;g+=`<ellipse cx="24" cy="${ey+10}" rx="6.5" ry="3.6" fill="#ff8fa3" opacity="${blush}"/><ellipse cx="76" cy="${ey+10}" rx="6.5" ry="3.6" fill="#ff8fa3" opacity="${blush}"/>`;
+  if(fem)g+=`<ellipse cx="25" cy="${ey+10}" rx="6" ry="3.2" fill="#ff8fa3" opacity=".38"/><ellipse cx="75" cy="${ey+10}" rx="6" ry="3.2" fill="#ff8fa3" opacity=".38"/>`;
   const shut=ex==='happy'||eyes==='smile';
   if(ex==='shock')g+=[E1,E2].map(x=>`<ellipse cx="${x}" cy="${ey}" rx="6" ry="7" fill="#fff" stroke="${ink}" stroke-width="2"/><circle cx="${x}" cy="${ey}" r="2.4" fill="${ink}"/>`).join('');
   else if(shut)g+=`<path d="M${E1-6},${ey+1} q6,-7 12,0 M${E2-6},${ey+1} q6,-7 12,0" stroke="${ink}" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
   else{const ry=eyes==='sharp'?4.6:6.6,rx=eyes==='sharp'?5.6:5.2;
-    for(const x of[E1,E2])g+=`<ellipse cx="${x}" cy="${ey}" rx="${rx}" ry="${ry}" fill="${ink}"/><ellipse cx="${x}" cy="${ey+ry*.4}" rx="${rx*.72}" ry="${ry*.45}" fill="${iris}"/><circle cx="${x-1.8}" cy="${ey-ry*.42}" r="2.3" fill="#fff"/><circle cx="${x+2}" cy="${ey+ry*.35}" r="1" fill="#fff"/>`;
+    for(const x of[E1,E2])g+=`<ellipse cx="${x}" cy="${ey}" rx="${rx}" ry="${ry}" fill="${ink}"/><ellipse cx="${x}" cy="${ey+ry*.4}" rx="${rx*.72}" ry="${ry*.45}" fill="${iris}"/><circle cx="${x-1.8}" cy="${ey-ry*.42}" r="2.3" fill="#fff"/><circle cx="${x+2}" cy="${ey+ry*.35}" r="1" fill="#fff"/><path d="M${x-rx+.6},${ey+ry*.75} Q${x},${ey+ry+1.6} ${x+rx-.6},${ey+ry*.75}" stroke="${skD}" stroke-width=".8" fill="none" opacity=".35"/>`;
     if(eyes==='sharp')g+=`<path d="M${E1-6},${ey-4} L${E1+6},${ey-2} M${E2+6},${ey-4} L${E2-6},${ey-2}" stroke="${ink}" stroke-width="2" stroke-linecap="round"/>`;}
-  if(fem&&ex!=='shock')for(const [x,s] of[[E1,-1],[E2,1]]){const top=shut?ey-3:ey-(eyes==='sharp'?4.6:6.6);g+=`<path d="M${x-5.5},${top+1.6} Q${x},${top-2.6} ${x+5.5},${top+1.6}" stroke="${ink}" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M${x+s*5},${top+1} l${s*3.4},-2.6 M${x+s*3},${top-.4} l${s*2.2},-3" stroke="${ink}" stroke-width="1.6" stroke-linecap="round"/>`;}
-  // brows (male: thick + straight, female: thin + arched)
+  if(fem&&ex!=='shock')for(const [x,s] of[[E1,-1],[E2,1]]){const tp=shut?ey-3:ey-(eyes==='sharp'?4.6:6.6);g+=`<path d="M${x-5.5},${tp+1.6} Q${x},${tp-2.6} ${x+5.5},${tp+1.6}" stroke="${ink}" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M${x+s*5},${tp+1} l${s*3.4},-2.6 M${x+s*3},${tp-.4} l${s*2.2},-3" stroke="${ink}" stroke-width="1.6" stroke-linecap="round"/>`;}
   const by=ey-(eyes==='sharp'?10:12);
   g+=fem?`<path d="M${E1-5},${by+1} q5,-3 10,0 M${E2-5},${by+1} q5,-3 10,0" stroke="${hcD}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`
     :`<path d="M${E1-6},${by+(eyes==='sharp'?-1:1)} L${E1+5},${by+(eyes==='sharp'?3:0)} M${E2+6},${by+(eyes==='sharp'?-1:1)} L${E2-5},${by+(eyes==='sharp'?3:0)}" stroke="${hcD}" stroke-width="3.6" stroke-linecap="round"/>`;
@@ -2591,24 +2672,21 @@ function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.out
   if(ex==='shock')g+=`<ellipse cx="50" cy="${my+1}" rx="3.2" ry="4" fill="#7a2a2a"/>`;
   else if(ex==='happy')g+=`<path d="M44,${my-1} Q50,${my+8} 56,${my-1}Z" fill="#8a2a2a" stroke="#5a1a1a" stroke-width="1.2" stroke-linejoin="round"/><path d="M46.5,${my+3} Q50,${my+6} 53.5,${my+3}" fill="#f07a8a"/>`;
   else g+=fem?`<path d="M45.5,${my} Q50,${my+4.4} 54.5,${my} Q50,${my+1.4} 45.5,${my}Z" fill="#e0506c" stroke="#b8304c" stroke-width="1.2"/>`:`<path d="M45,${my} q5,3.4 10,0" stroke="#5a2a22" stroke-width="2" fill="none" stroke-linecap="round"/>`;
-  // front hair
-  const hairOn=!(of.hood&&(!hat||hat==='none'));
-  if(hairOn){
-    if(hs==='buzz')g+=`<ellipse cx="40" cy="60" rx="11" ry="6" fill="#fff" opacity=".28" transform="rotate(-18 40 60)"/><path d="M30,56 Q36,51 44,50" stroke="#fff" stroke-width="2" fill="none" opacity=".35" stroke-linecap="round"/>`;
-    else if(hs==='bob'||hs==='long'){// one continuous front shape: crown + fringe + side locks (no seams at the temples)
-      g+=hs==='long'?`<path d="M50,38 C80,38 93,52 88,74 Q92,100 87,122 Q84,132 77,130 Q80,112 78,96 Q77,82 72,70 Q66,66 58,63 Q52,59 50,55 Q48,59 42,63 Q34,66 28,70 Q23,82 22,96 Q20,112 23,130 Q16,132 13,122 Q8,100 12,74 C7,52 20,38 50,38Z" fill="${HF}" ${HO}/><path d="M17,92 Q15,108 18,122 M83,92 Q85,108 82,122" stroke="${hcL}" stroke-width="1.2" fill="none" opacity=".4"/>`
-        :`<path d="M50,38 C80,38 93,52 88,74 Q91,94 84,106 Q78,111 72,106 Q77,96 76,84 Q75,74 70,69 Q62,72 50,71 Q38,72 30,69 Q25,74 24,84 Q23,96 28,106 Q22,111 16,106 Q9,94 12,74 C7,52 20,38 50,38Z" fill="${HF}" ${HO}/><path d="M36,70 V66 M44,71 V67 M56,71 V67 M64,70 V66" stroke="${hcD}" stroke-width="1" opacity=".5"/>`;
-      g+=`<path d="M30,54 Q40,46 54,46" stroke="${hcL}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".45"/><path d="M62,48 Q68,50 71,54" stroke="${hcL}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".35"/>`;}
-    else{const bang={short:'L76,72 L68,63 L60,72 L52,62 L44,71 L36,63 L28,70 L22,68',part:'Q64,58 42,74 Q40,66 34,64 Q28,66 22,72',bob:'Q72,72 62,70 Q50,73 38,70 Q28,72 22,68',tail:'Q72,72 62,70 Q50,73 38,70 Q28,72 22,68',pig:'Q72,72 62,70 Q50,73 38,70 Q28,72 22,68',long:'Q70,70 58,64 Q52,60 50,56 Q48,60 42,64 Q30,70 22,70'}[hs]||'L76,72 L68,63 L60,72 L52,62 L44,71 L36,63 L28,70 L22,68';
-      const side=hs==='short'||hs==='part'?'Q14,72 15,86':'Q12,76 14,92';
-      g+=`<path d="M15,86 C6,30 94,30 85,86 Q86,76 80,70 ${bang} ${side}Z" fill="${HF}" ${HO}/>`;
-      if(hs==='short')g+=`<path d="M40,46 q4,-12 14,-10 q-5,3 -4,9Z M56,44 q8,-8 14,-2 q-6,0 -7,5Z" fill="${HF}" ${HO}/>`;
-      if(hs==='pig')g+=`<circle cx="19" cy="86" r="4.5" fill="#ff7a9a" stroke="#c43a64" stroke-width="1.2"/><circle cx="81" cy="86" r="4.5" fill="#ff7a9a" stroke="#c43a64" stroke-width="1.2"/>`;
-      g+=`<path d="M30,56 Q40,48 54,48" stroke="${hcL}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".45"/><path d="M62,50 Q68,52 71,56" stroke="${hcL}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".35"/>`;}}
-  if(of.hood&&(!hat||hat==='none'))g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`+[[28,50],[40,43],[52,41],[64,43],[74,50]].map(([x,y])=>`<path d="M${x-5},${y+5} L${x},${y-7} L${x+5},${y+5}Z" fill="#f2c14e" stroke="#c89a2a" stroke-width="1"/>`).join('');
-  if(hat&&hat!=='none'&&VHAT[hat])g+=`<g transform="translate(50,${hat==='flower'||hat==='bow'||hat==='horns'?57:61}) scale(1.22) translate(-50,-33)">${VHAT[hat]}</g>`;
+  // hair (front), the parts above the head are left out under a hat
+  if(!(of.hood&&!hatOn)){g+=HP.front;if(!hatOn)g+=HP.top;}
+  if(of.hood&&!hatOn)g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`;
+  if(hatOn)g+=hatG(hat,u);
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="30" ry="5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
+// long robe / skirt details (drawn over the robe body, below the torso)
+function robeDet(oc,ww,fl,bot){const L=50-ww-fl,R=50+ww+fl;
+  switch(oc){
+   case 'yangban':return `<path d="M50,136 V${bot}" stroke="#b8c8d0" stroke-width="1.2"/><path d="M53,136 q2,10 -1,18 M56,136 q3,11 1,19" stroke="#c43a3a" stroke-width="1.6" fill="none"/><path d="M50.5,152 l2,6 l1.6,-6Z M54,153 l2,6 l1.6,-6Z" fill="#c43a3a"/>`;
+   case 'official':case 'king':return `<path d="M${50-ww+2},140 Q${L+4},${bot-6} ${L+3},${bot-1} M${50+ww-2},140 Q${R-4},${bot-6} ${R-3},${bot-1}" stroke="${oc==='king'?'#7a1018':'#1a3a30'}" stroke-width="1.2" fill="none" opacity=".7"/>`;
+   case 'court':return [-8,-3,2,7,12].map(d=>`<path d="M${50+d*1.4},140 Q${50+d*2.1},${bot-6} ${50+d*2.4},${bot}" stroke="#1a2558" stroke-width="1" fill="none" opacity=".6"/>`).join('');
+   case 'queen':return `<path d="M${L+1},${bot-9} Q50,${bot-6} ${R-1},${bot-9}" stroke="#e0b44a" stroke-width="2.6" fill="none"/><path d="M${L},${bot-4} Q50,${bot-1} ${R},${bot-4}" stroke="#e0b44a" stroke-width="1.6" fill="none"/>`+[[40,146],[50,150],[60,146]].map(([x,y])=>`<path d="M${x-2.4},${y} q2.4,-3 4.8,0 q-2.4,3 -4.8,0Z" fill="#e0b44a"/>`).join('');
+  }return '';}
+
 
 // ---------------- Admiral Yi Sun-sin (special character) ----------------
 // pose 'stand' = sword planted in front (Gwanghwamun pose), 'raise' = sword raised overhead, shouting
@@ -2693,13 +2771,14 @@ function yiSVG(c,o={}){const u='yi'+(++UID),ex=o.expr||'',up=o.pose==='raise',an
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="34" ry="5.5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
 const charG=(c,o)=>c.sex==='yi'?yiSVG(c,o||{}):(c.sex!=='m'&&c.sex!=='f'&&ANS[c.sex])?animalSVG(c,o||{}):humanSVG(c,o||{});
+if(window.__expose){window.__charG=charG;window.__OPT=OPT;}
 const fig=(c,x,y,h,o={})=>{const s=h/172;return `<g transform="translate(${(x-50*s).toFixed(1)},${(y-172*s).toFixed(1)}) scale(${s.toFixed(3)})">${charG(c,o)}</g>`;};
 const ME=()=>Object.assign({},DEFCHAR,S.char||{});
 // animals open per mode: normal 5, hard 5 (the other 5 species are retired; owned ones keep working)
 const PETMODE={normal:['dog','cat','rabbit','chick','panda'],hard:['fox','penguin','bear','dragon','unicorn']};
 const petOpen=k=>(PETMODE[S.mode]||PETMODE.normal).includes(k);
 const sexVis=o=>!ANS[o.v]||o.v==='mole'||petOpen(o.v)||S.own.includes('sex:'+o.v);
-const MOM={sex:'f',skin:0,hair:'bob',hcol:5,eyes:'smile',body:'normal',hat:'none',outfit:'apron',item:'envelope'};
+const MOM={sex:'f',skin:0,hair:'noble',hcol:5,eyes:'smile',body:'normal',hat:'none',outfit:'apron',item:'envelope'};
 const HUNTER={skin:2,hair:'short',hcol:1,eyes:'sharp',body:'big',hat:'mask',outfit:'wet',item:'gold'};
 const ANCHOR={sex:'f',skin:0,hair:'bob',hcol:0,eyes:'round',body:'slim',hat:'none',outfit:'suit',item:'none'};
 
@@ -2937,15 +3016,22 @@ $('#sBox').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.pre
 $('#sSkip').addEventListener('click',endStory);
 
 // ---------------- wardrobe ----------------
+OPT.ahair=[{v:'none',n:'없음 (털)',p:0}].concat(OPT.hair.map(h=>Object.assign({},h)));
 const WT=[{k:'sex',n:'주인공·특수'},{k:'hair',n:'헤어'},{k:'hcol',n:'헤어 색'},{k:'eyes',n:'눈'},{k:'skin',n:'피부'},{k:'body',n:'체형'},{k:'hat',n:'모자'},{k:'outfit',n:'의상'},{k:'item',n:'소품'}];
 let wTab='outfit',wTry=null,wShip=false;
-const owns=(k,o)=>o.p===0||S.own.includes(k+':'+o.v);
+const owns=(k,o)=>o.p===0||S.own.includes((k==='ahair'?'hair':k)+':'+o.v);
 const HEADVB='12 2 76 76',BODYVB='-20 -2 140 178';
 const headVB=c=>c.sex==='yi'?'9 30 82 82':c.sex==='chick'?'11 60 78 78':(c.sex==='m'||c.sex==='f'||!ANS[c.sex])?(c.hat&&c.hat!=='none'?'6 20 88 88':'10 34 80 80'):'11 38 78 78';
 function avatarSVG(c){return `<svg viewBox="${headVB(c)}" aria-hidden="true">${charG(c)}</svg>`;}
 function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());shipMapTick();}
 function wardChar(){const c=ME();if(wTry)c[wTry.k]=wTry.v;return c;}
+const isAnimalSex=sx=>sx!=='m'&&sx!=='f'&&sx!=='yi'&&!!ANS[sx];
+const wKey=()=>wTab==='hair'&&isAnimalSex(S.char.sex)?'ahair':wTab;
 // ---- 거북선 (turtle ship) v2: side view, bow (dragon head) to the left. Ship body spans x 0..300, y -14..200; fire breath reaches x ≈ -62 ----
+// 태극기 as SVG (w wide, 3:2), top-left at x,y
+function tgkSVG(x,y,w){const h=w*2/3,cx=x+w/2,cy=y+h/2,R=h/4,th=Math.atan2(2,3)*180/Math.PI,bt=R/6,gp=R/12,L=R,dist=R*1.5+bt*1.5+gp,a0=Math.atan2(2,3);
+  const tri=(ang,bars)=>`<g transform="translate(${(cx+Math.cos(ang)*dist).toFixed(2)},${(cy+Math.sin(ang)*dist).toFixed(2)}) rotate(${(ang*180/Math.PI+90).toFixed(1)})">${bars.map((b,k)=>{const yy=((k-1)*(bt+gp)-bt/2).toFixed(2);return b?`<rect x="${-L/2}" y="${yy}" width="${L}" height="${bt}"/>`:`<rect x="${-L/2}" y="${yy}" width="${L/2-gp/2}" height="${bt}"/><rect x="${gp/2}" y="${yy}" width="${L/2-gp/2}" height="${bt}"/>`;}).join('')}</g>`;
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff" stroke="#c9c9c9" stroke-width=".5"/><g transform="translate(${cx},${cy}) rotate(${th.toFixed(1)})"><path d="M${-R},0 A${R},${R} 0 0 1 ${R},0Z" fill="#cd2e3a"/><path d="M${-R},0 A${R},${R} 0 0 0 ${R},0Z" fill="#0047a0"/><circle cx="${-R/2}" r="${R/2}" fill="#cd2e3a"/><circle cx="${R/2}" r="${R/2}" fill="#0047a0"/></g><g fill="#000">${tri(Math.PI+a0,[1,1,1])+tri(a0,[0,0,0])+tri(-a0,[0,1,0])+tri(Math.PI-a0,[1,0,1])}</g>`;}
 function turtleSVG(o={}){const k='ts'+(o.id||''),sea=o.sea!==false,anim=o.anim!==false,fire=o.fire!==false,OL='stroke="#3a2210" stroke-width="1.3" stroke-linejoin="round"',GO='stroke="#6e420c" stroke-width="1.1" stroke-linejoin="round"';
   const A=(s)=>anim?s:'';
   const ROOF='M60,108 Q66,76 118,69 Q170,62 222,69 Q264,76 272,106Z';
@@ -2961,8 +3047,7 @@ function turtleSVG(o={}){const k='ts'+(o.id||''),sea=o.sea!==false,anim=o.anim!=
   const oars=[0,1,2,3,4,5,6].map(i=>{const x=92+i*26;return `<g><path d="M${x},150 L${x+20},188" stroke="#5a3214" stroke-width="5.4" stroke-linecap="round"/><path d="M${x},150 L${x+20},188" stroke="#c98a4e" stroke-width="2.4" stroke-linecap="round"/><path d="M${x+13},176 l9,-3 l4,12 l-9,3Z" fill="#a8683a" stroke="#5a3214" stroke-width=".8"/>${A(`<animateTransform attributeName="transform" type="rotate" values="-6 ${x} 150;7 ${x} 150;-6 ${x} 150" dur="2.4s" begin="${(i*.08).toFixed(2)}s" repeatCount="indefinite"/>`)}</g>`;}).join('');
   const grain=[122,131,140,158,166].map((y,i)=>`<path d="M${48+i},${y} Q160,${y+7} ${273-i},${y-2}" stroke="#4e2a12" stroke-width=".9" fill="none" opacity=".5"/>`).join('')+[70,120,175,230].map(x=>`<path d="M${x},152 v20" stroke="#4e2a12" stroke-width=".8" opacity=".45"/>`).join('');
   const flag=(x,id)=>`<g><rect x="${x-1.6}" y="28" width="3.2" height="80" fill="#6a3a18" ${OL}/><rect x="${x-2.6}" y="44" width="5.2" height="4" fill="url(#${k}au)"/><rect x="${x-2.6}" y="76" width="5.2" height="4" fill="url(#${k}au)"/><path d="M${x},18 l-4,10 h8Z" fill="url(#${k}au)" ${GO}/><circle cx="${x}" cy="28.5" r="2.3" fill="url(#${k}au)" ${GO}/>
-    <g>${A(`<animateTransform attributeName="transform" type="skewY" values="0;3;-2;0" dur="${id?2.2:2.6}s" repeatCount="indefinite"/>`)}<path d="M${x+1.6},33 h27 l-3.4,4 l3.4,4 l-3.4,4 l3.4,4 l-3.4,4 l3.4,4 l-3.4,4 l3.4,4 h-27Z" fill="#c62a1c" stroke="#5a0c06" stroke-width=".8"/><path d="M${x+1.6},35.5 h21 v30 h-21Z" fill="#141518"/>
-      <path d="M${x+16},40 q-7,2 -4,7 q4,5 -2,9 q-5,3 -1,8" stroke="#e9eef2" stroke-width="2.1" fill="none" stroke-linecap="round"/><path d="M${x+14},38.5 l3,-2 l1,3Z" fill="#e9eef2"/><circle cx="${x+16.5}" cy="40" r="1.5" fill="#e9eef2"/><path d="M${x+11},50 l-3,-1 M${x+11},58 l3,1" stroke="#e9eef2" stroke-width="1.2"/></g></g>`;
+    <g>${A(`<animateTransform attributeName="transform" type="skewY" values="0;3;-2;0" dur="${id?2.2:2.6}s" repeatCount="indefinite"/>`)}${tgkSVG(x+1.6,33,30)}</g></g>`;
   // ---- dragon head (bow) ----
   const head=`<g>
    <!-- neck with belly scales -->
@@ -3083,8 +3168,9 @@ function renderWard(){
   setTimeout(()=>{const a=document.querySelector('#wTabs [aria-selected="true"]');if(a&&a.scrollIntoView)a.scrollIntoView({inline:'nearest',block:'nearest'});},0);
   $('#wTabs').innerHTML=WT.map(t=>`<button class="wtab" type="button" role="tab" data-t="${t.k}" aria-selected="${t.k===wTab}">${t.n}</button>`).join('');
   const head=['hair','hcol','eyes','skin','hat'].includes(wTab);
-  $('#wOpts').innerHTML=OPT[wTab].filter(o=>wTab!=='sex'||sexVis(o)).map(o=>{const cur=S.char[wTab]===o.v,tr=wTry&&wTry.k===wTab&&wTry.v===o.v,own=owns(wTab,o);
-    const pv=Object.assign({},S.char,{[wTab]:o.v},wTab!=='sex'&&S.char.sex==='yi'?{sex:S.char.lastSex||'m'}:{},wTab==='sex'&&(o.v==='m'||o.v==='f')&&o.v!==S.char.sex?{hair:o.v==='f'?'long':'short'}:{});
+  const K=wKey();
+  $('#wOpts').innerHTML=OPT[K].filter(o=>wTab!=='sex'||sexVis(o)).map(o=>{const cur=(S.char[K]??(K==='ahair'?'none':undefined))===o.v,tr=wTry&&wTry.k===K&&wTry.v===o.v,own=owns(K,o);
+    const pv=Object.assign({},S.char,{[K]:o.v},wTab!=='sex'&&S.char.sex==='yi'?{sex:S.char.lastSex||'m'}:{},wTab==='sex'&&(o.v==='m'||o.v==='f')&&o.v!==S.char.sex&&!S.char.hair?{hair:o.v==='f'?'tail':'short'}:{});
     const pic=wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charG(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${charG(pv)}</svg>`;
     return `<button class="wopt ${cur?'on':''} ${tr?'try':''}" type="button" data-v="${o.v}">${pic}<span class="wn">${o.n}</span><span class="wp ${cur?'own':own?'own':S.money<o.p?'no':''}">${cur?'착용 중':own?'보유':won(o.p)}</span></button>`;}).join('');
   if(wTab==='sex'){const o=OPT.ship[1],own=owns('ship',o),tr=wTry&&wTry.k==='ship',ph=shipPhase(),im=L3OK?shipShot('q',640,380,{sea:false}):null;
@@ -3115,10 +3201,10 @@ hScroll($('#wTabs'));
 $('#wOpts').addEventListener('click',e=>{const cy=e.target.closest('[data-cyc]');if(cy){const v=cy.dataset.cyc;S.shipCyc=v==='always'||v==='off'?v:+v;save();shipMapTick();toast(v==='off'?'⚓ 거북선 자동 출항을 껐어요':'⛵ 거북선 자동 출항: '+cy.textContent);wShip=true;renderWard();return;}
   const b=e.target.closest('.wopt');if(!b)return;
   if(b.dataset.k==='ship'){const o=OPT.ship[1];wShip=true;if(owns('ship',o))wTry=null;else wTry={k:'ship',v:'turtle'};renderWard();return;}
-  wShip=false;const o=OPT[wTab].find(x=>String(x.v)===b.dataset.v);
-  if(owns(wTab,o)){if(wTab==='sex'&&S.char.sex!=='yi')S.char.lastSex=S.char.sex;S.char[wTab]=o.v;if(wTab==='sex'&&!owns('hair',OPT.hair.find(h=>h.v===S.char.hair)||OPT.hair[0]))S.char.hair=o.v==='f'?'long':'short';wTry=null;save();renderAvatar();}else wTry={k:wTab,v:o.v};renderWard();});
+  wShip=false;const K=wKey(),o=OPT[K].find(x=>String(x.v)===b.dataset.v);
+  if(owns(K,o)){if(wTab==='sex'&&S.char.sex!=='yi')S.char.lastSex=S.char.sex;S.char[K]=o.v;if(wTab==='sex'&&!owns('hair',OPT.hair.find(h=>h.v===S.char.hair)||OPT.hair[0]))S.char.hair=o.v==='f'?'tail':'short';wTry=null;save();renderAvatar();}else wTry={k:K,v:o.v};renderWard();});
 $('#wBuy').addEventListener('click',e=>{if(!e.target.closest('#wBuyBtn')||!wTry)return;const o=OPT[wTry.k].find(x=>x.v===wTry.v);if(S.money<o.p)return;
-  S.money-=o.p;S.own.push(wTry.k+':'+o.v);if(wTry.k==='sex'&&S.char.sex!=='yi')S.char.lastSex=S.char.sex;S.char[wTry.k]=o.v;toast(o.n+' 구매 완료');wTry=null;save();renderAvatar();renderWard();});
+  S.money-=o.p;S.own.push((wTry.k==='ahair'?'hair':wTry.k)+':'+o.v);if(wTry.k==='sex'&&S.char.sex!=='yi')S.char.lastSex=S.char.sex;S.char[wTry.k]=o.v;toast(o.n+' 구매 완료');wTry=null;save();renderAvatar();renderWard();});
 
 // ---------------- tabs ----------------
 let hudCache='';
@@ -3955,11 +4041,18 @@ function s3Ship(){const T=THREE,G=new T.Group(),anims=[];
   const sail=M(sg,ph('#ffffff',{map:sailT,side:T.DoubleSide,shininess:5}),.35,HW+RY+1.35,.06);
   for(const y of [-.75,.75])M(new T.CylinderGeometry(.03,.03,1.95,8),WOODD,.35,HW+RY+1.35+y,.06).rotation.z=Math.PI/2;
   // ---- small flags on visible poles ----
-  const flagT=s3Tex('flag',128,96,(g,w,h)=>{g.fillStyle='#c62a1c';g.fillRect(0,0,w,h);g.fillStyle='#141518';g.fillRect(10,10,w-28,h-20);for(let y=0;y<h;y+=12){g.fillStyle='#c62a1c';g.beginPath();g.moveTo(w-18,y);g.lineTo(w,y+6);g.lineTo(w-18,y+12);g.fill();}
-    g.strokeStyle='#e9eef2';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(66,18);g.bezierCurveTo(40,30,74,46,50,58);g.bezierCurveTo(34,68,58,78,48,84);g.stroke();g.fillStyle='#e9eef2';g.beginPath();g.arc(68,18,5,0,7);g.fill();});
-  for(const [fx,ph0] of [[-1.75,0],[2.15,1.3]]){const fy=roofY(fx,0);M(new T.CylinderGeometry(.03,.036,1.35,8),WOODD,fx,fy+.6,0);M(new T.ConeGeometry(.055,.14,8),GOLD,fx,fy+1.33,0);M(new T.SphereGeometry(.05,8,6),GOLD,fx,fy+1.24,0);
-    const fg=new T.PlaneGeometry(.52,.36,8,4);fg.translate(.26,0,0);const f=M(fg,ph('#ffffff',{map:flagT,side:T.DoubleSide}),fx+.03,fy+1.02,0);const base=fg.attributes.position.array.slice();
-    anims.push(t=>{const p=fg.attributes.position;for(let i=0;i<p.count;i++){const x=base[i*3];p.setZ(i,Math.sin(t*5+ph0-x*9)*.06*x/.52*2);}p.needsUpdate=true;});}
+  // 태극기 (Korean national flag), 3:2
+  const flagT=s3Tex('taegukgi',384,256,(g,w,h)=>{g.fillStyle='#ffffff';g.fillRect(0,0,w,h);const cx=w/2,cy=h/2,R=h/4,th=Math.atan2(2,3);
+    g.save();g.translate(cx,cy);g.rotate(th);g.fillStyle='#cd2e3a';g.beginPath();g.arc(0,0,R,Math.PI,0);g.fill();g.fillStyle='#0047a0';g.beginPath();g.arc(0,0,R,0,Math.PI);g.fill();
+    g.fillStyle='#cd2e3a';g.beginPath();g.arc(-R/2,0,R/2,0,Math.PI*2);g.fill();g.fillStyle='#0047a0';g.beginPath();g.arc(R/2,0,R/2,0,Math.PI*2);g.fill();g.restore();
+    // trigrams: 건 (upper-left), 곤 (lower-right), 감 (upper-right), 리 (lower-left); 1 = solid bar, 0 = broken
+    const L=R,bt=R/6,gap=R/12,dist=R*1.5+bt*1.5+gap;g.fillStyle='#000';
+    for(const [ang,bars] of [[Math.PI+th,[1,1,1]],[th,[0,0,0]],[-th,[0,1,0]],[Math.PI-th,[1,0,1]]]){g.save();g.translate(cx+Math.cos(ang)*dist,cy+Math.sin(ang)*dist);g.rotate(ang+Math.PI/2);
+      bars.forEach((b,k)=>{const y=(k-1)*(bt+gap)-bt/2;if(b)g.fillRect(-L/2,y,L,bt);else{g.fillRect(-L/2,y,L/2-gap/2,bt);g.fillRect(gap/2,y,L/2-gap/2,bt);}});g.restore();}
+    g.strokeStyle='rgba(0,0,0,.12)';g.lineWidth=3;g.strokeRect(1.5,1.5,w-3,h-3);});
+  for(const [fx,ph0] of [[-1.75,0],[2.15,1.3]]){const fy=roofY(fx,0);M(new T.CylinderGeometry(.03,.036,1.5,8),WOODD,fx,fy+.68,0);M(new T.ConeGeometry(.055,.14,8),GOLD,fx,fy+1.48,0);M(new T.SphereGeometry(.05,8,6),GOLD,fx,fy+1.39,0);
+    const fg=new T.PlaneGeometry(.66,.44,10,6);fg.translate(.33,0,0);const f=M(fg,ph('#ffffff',{map:flagT,side:T.DoubleSide,shininess:5}),fx+.03,fy+1.06,0);const base=fg.attributes.position.array.slice();
+    anims.push(t=>{const p=fg.attributes.position;for(let i=0;i<p.count;i++){const x=base[i*3];p.setZ(i,Math.sin(t*4.5+ph0-x*8)*.045*x/.66*2);}p.needsUpdate=true;});}
   // ---- oars: 8 a side, rowing ----
   const oarG=new T.CylinderGeometry(.032,.032,1.7,6);oarG.translate(0,-.85,0);const blade=new T.BoxGeometry(.05,.42,.16);blade.translate(0,-1.62,0);
   for(const s of [1,-1])for(let i=0;i<8;i++){const x=-2.0+i*.56,z=beam(x),piv=new T.Group();piv.position.set(x,.12,s*(z+.01));G.add(piv);const o=new T.Mesh(oarG,WOODD),b=new T.Mesh(blade,WOOD);piv.add(o,b);
@@ -3993,9 +4086,13 @@ function s3Ship(){const T=THREE,G=new T.Group(),anims=[];
   for(const z of [-.14,.14]){const f=HM(new T.ConeGeometry(.035,.15,6),WHITE,-.72,-.18,z);f.rotation.x=Math.PI;}
   for(const z of [-1,1]){const eyeW=HM(new T.SphereGeometry(.085,16,12),WHITE,-.12,.12,z*.22);eyeW.scale.set(1.2,.9,.6);HM(new T.SphereGeometry(.05,12,10),ph('#d23a12',{shininess:120,specular:'#fff'}),-.17,.12,z*.26);HM(new T.SphereGeometry(.024,8,6),BLACK,-.2,.12,z*.29);
     const brow=HM(new T.SphereGeometry(.12,12,8),GOLD2,-.06,.24,z*.2);brow.scale.set(1.3,.4,.6);
-    // horns: ivory, swept back
-    const hc=new T.CatmullRomCurve3([new T.Vector3(.1,.22,z*.16),new T.Vector3(.35,.48,z*.24),new T.Vector3(.7,.62,z*.3)]);
-    for(let i=0;i<=12;i++){const t=i/12,p=hc.getPoint(t);HM(new T.SphereGeometry(.07*(1-t)+.012,10,8),IVORY,p.x,p.y,p.z);}
+    // dragon horns: deer-antler shape (main beam sweeping back and up, two forked tines), tapered
+    const HN=ph('#f2dfa6',{shininess:70,specular:'#fff6d0'}),hm=(pts,r0,r1)=>{const c=new T.CatmullRomCurve3(pts.map(p=>new T.Vector3(p[0],p[1],p[2])));H.add(new T.Mesh(s3Taper(c,24,8,t=>r0*(1-t)+r1*t),HN));const e=c.getPointAt(1);const tip=new T.Mesh(new T.SphereGeometry(r1,8,6),HN);tip.position.copy(e);H.add(tip);return c;};
+    const beam=hm([[.08,.24,z*.15],[.3,.5,z*.22],[.55,.66,z*.28],[.86,.72,z*.32],[1.02,.9,z*.34]],.075,.016);
+    const p1=beam.getPointAt(.35),p2=beam.getPointAt(.65);
+    hm([[p1.x,p1.y,p1.z],[p1.x+.04,p1.y+.18,p1.z+z*.02],[p1.x-.02,p1.y+.34,p1.z+z*.04]],.04,.012);
+    hm([[p2.x,p2.y,p2.z],[p2.x+.08,p2.y+.16,p2.z+z*.02],[p2.x+.06,p2.y+.3,p2.z+z*.03]],.034,.01);
+    {const b=new T.Mesh(new T.TorusGeometry(.075,.02,6,14),GOLD2);b.position.set(.12,.27,z*.16);b.rotation.set(Math.PI/2,0,.7);H.add(b);}
     // moderate whiskers that sway
     const wp=new T.Group();wp.position.set(-.7,-.04,z*.13);H.add(wp);const wc=new T.CatmullRomCurve3([new T.Vector3(0,0,0),new T.Vector3(.08,-.12,z*.12),new T.Vector3(.28,-.22,z*.2),new T.Vector3(.5,-.18,z*.24)]);
     const wm=new T.Mesh(new T.TubeGeometry(wc,24,.016,6,false),ph('#ffe680',{shininess:80}));wp.add(wm);anims.push(t=>{wp.rotation.set(Math.sin(t*2+z)*.18,0,Math.sin(t*1.6+z)*.15);});
@@ -4727,7 +4824,7 @@ function hud(){
   $('#money').textContent=won(S.money);
   $('#expBadge').hidden=!S.ex.active;
   if(view==='map'){const ex_=S.ex.active?regById(S.ex.active):null;
-    const k=`<span class="mchip"><b class="modechip ${S.mode==='hard'?'hard':''}">${MD().n}</b></span><span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${gateAt()?' · <em>승급 필요</em>':''}</span>`+(ex_?(()=>{const w=wxOf(ex_.id),y=Math.round(wxY(w));return `<span class="mchip cool" title="원정지 날씨: ${wxFx(w)}"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}<span class="wxs ${y>0?'good':y<0?'bad':''}">${w.ic} ${w.n}${y?` ${y>0?'+':''}${y}%`:''}</span></span>`;})():'<span class="mchip dim">진행 중인 원정 없음</span>')+(rbOn()?`<span class="mchip rbc"><b>🌈 무지개</b> ${rbFx()}</span>`:'');
+    const k=`<span class="mchip"><b class="modechip ${S.mode==='hard'?'hard':''}">${MD().n}</b></span><span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${gateAt()?' · <em>승급 필요</em>':''}</span>`+(ex_?(()=>{const w=wxOf(ex_.id),y=Math.round(wxY(w));return `<span class="mchip cool" title="원정지 날씨: ${wxFx(w)}"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}${rbOn()?`<span class="wxs good">🌈 무지개 +${RBY()}%</span>`:`<span class="wxs ${y>0?'good':y<0?'bad':''}">${w.ic} ${w.n}${y?` ${y>0?'+':''}${y}%`:''}</span>`}</span>`;})():'<span class="mchip dim">진행 중인 원정 없음</span>')+(rbOn()?`<span class="mchip rbc"><b>🌈 무지개</b> ${rbFx()}</span>`:'');
     if(k!==mapInfoKey){mapInfoKey=k;$('#mapInfo').innerHTML=k;}}
   if(view==='bore'&&!exp){const m=S.depth,bm=boostM(),l=layerAt(m),sp=boreDps()/l.H;
     $('#bDepth').textContent=fmtD(m);updateGauge();
@@ -4741,10 +4838,10 @@ function hud(){
     else if(g){gt.hidden=false;gt.className='gate';gt.textContent='굴착 정지 · '+g.gate+' — 드릴 Lv.'+g.req+' ('+dlName(g.req)+') 필요 (제작 탭, 모든 부품 Lv'+dlPartReq(g.req)+')';}
     else gt.hidden=true;
     {const w=homeWx(),g=Math.round(Math.min(0,wxG(w))*.7),el=$('#bWx'),k=w.id+g;if(el&&el.dataset.k!==k){el.dataset.k=k;el.innerHTML=`<svg class="bwxi" viewBox="-11 -11 22 22" width="22" height="22" aria-hidden="true"><circle r="10.5" fill="rgba(14,19,21,.8)" stroke="rgba(255,255,255,.35)" stroke-width=".8"/>${wxIcon(w.id)}</svg><span>양구 ${w.n} · ${g?`굴착 ${g}% · 강타 ${Math.round(Math.min(0,wxG(w))*1.5)}%`:'굴착·강타 영향 없음'}</span>`;}}
-    const bb=$('#bBoost');if(bm>1){bb.hidden=false;bb.textContent='부스터 ×'+bm+' · '+Math.ceil((S.boost.until-Date.now())/1000)+'초';}else bb.hidden=true;
+    const bb=$('#bBoost');if(bm>1){bb.hidden=false;bb.textContent='🔥 부스터 ×'+bm+' · '+Math.ceil((S.boost.until-Date.now())/1000)+'초';}else bb.hidden=true;
     const fk=FUEL.map(f=>have(f.res)).join()+L('cool');if(fk!==hudCache){hudCache=fk;renderFuels();}}
   if(exp){const r=exp.r,g=digOf(r.id),below=belowOf(r,g.i),e=eraAt(r,below),act=S.ex.active===r.id;
-    {const w=wxOf(r.id);$('#eSub').textContent=(act?'● 자동 시추 중':'일시 정지')+' · 굴착력 '+fmtN(expDps())+'/초 · '+w.ic+' '+w.n+' '+wxFx(w);}
+    {const w=wxOf(r.id);$('#eSub').textContent=(act?'● 자동 시추 중':'일시 정지')+' · 굴착력 '+fmtN(expDps())+'/초 · '+(rbOn()?wxFx(w):w.ic+' '+w.n+' '+wxFx(w));}
     $('#eAlt').textContent=altText(r,g.i);
     let et='';if(!e)et=`수심 구간 · 해저까지 ${((r.water-g.i)*r.ws).toLocaleString('ko-KR')}m`;
     let f0=0,f1=r.water;
