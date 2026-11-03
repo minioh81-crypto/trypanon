@@ -64,7 +64,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .grat{stroke:#5ab8ea;stroke-width:.4;opacity:.5}
 .plab{font:800 5.4px var(--f-body);fill:#fff6dc;text-anchor:middle}.plab.sm{font-size:5.4px;fill:#fff;paint-order:stroke;stroke:#14609e;stroke-width:1.6px}
 .mapwrap{position:relative}.mapwrap svg{overflow:visible}.mapwrap .mlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}#mapSvg{position:relative;z-index:1}
-.mtide{opacity:0;will-change:opacity;animation:tide 16s ease-in-out infinite}@keyframes tide{0%,30%{opacity:0}50%,80%{opacity:1}100%{opacity:0}}
+.mtide{opacity:0;animation:tide 16s ease-in-out infinite}@keyframes tide{0%,30%{opacity:0}50%,80%{opacity:1}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.mtide{animation:none}}
 .gl{fill:#bfe6ff;opacity:.7;font:500 7px var(--f-num)}
 #map.wx-storm .flash{animation:mflash 7s infinite}@keyframes mflash{0%,90%,94%,100%{opacity:0}91%{opacity:.5}93%{opacity:.15}92.5%{opacity:.45}}#map #mWx{pointer-events:none}
@@ -165,7 +165,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 #exp{position:fixed;inset:0;bottom:calc(54px + env(safe-area-inset-bottom,0px));z-index:20;background:var(--bg);display:flex;flex-direction:column;max-width:560px;margin:0 auto}
 .ehead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:calc(env(safe-area-inset-top,0px) + 10px);padding-bottom:8px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.ename{font-family:var(--f-kr);font-size:24px;line-height:1.1}
+.ename{font-family:var(--f-kr);font-size:24px;line-height:1.1;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;transform:translateZ(0);backface-visibility:hidden;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #exp .quit{white-space:nowrap;flex:none}.ehead>div:first-child{min-width:0}
 .esub{font-size:12px;color:var(--mute)}
 .etime{font-family:var(--f-num);font-weight:600;font-size:26px;font-variant-numeric:tabular-nums}
@@ -1672,10 +1672,13 @@ function wxFx(w){const y=Math.round(wxY(w)),g=Math.round(wxG(w));return [y?`재�
 // Low tide widens the shallows and exposes the West Sea mud flats (Jeju excluded).
 function tideSVG(low){const d=TIDED;
   if(!low)return `<path d="${d}" fill="none" stroke="#a8e4fa" stroke-linejoin="round" opacity=".55" stroke-width="4"/><path d="${d}" fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=".6 3.2" opacity=".85" stroke-width="2.2"/>`;
-  return `<clipPath id="mWest"><rect x="-300" y="-300" width="${(PX(127.05)+300).toFixed(0)}" height="${(PY(34.05)+300).toFixed(0)}"/></clipPath>
+  // West Sea mud flats: only the coast segments west of 127.05°E and north of 34.05°N (built as plain lines — a clipPath here made some Android GPUs smear brown blocks)
+  const X0=PX(127.05),Y0=PY(34.05);let west='';for(const sp of d.split('Z')){const pts=[...sp.matchAll(/(-?[\d.]+),(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);if(pts.length<2)continue;pts.push(pts[0]);let run=false;
+    for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i],inA=a[0]<=X0&&a[1]<=Y0,inB=b[0]<=X0&&b[1]<=Y0;if(inA&&inB){west+=(run?'':`M${a[0]},${a[1]}`)+`L${b[0]},${b[1]}`;run=true;}else run=false;}}
+  return `
   <path d="${d}" fill="none" stroke="#a8e4fa" stroke-linejoin="round" opacity=".55" stroke-width="10"/>
   <path d="${d}" fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=".6 3.2" opacity=".85" stroke-width="8"/>
-  <path d="${d}" fill="none" stroke="#b49a6c" stroke-linejoin="round" clip-path="url(#mWest)" stroke-width="6.4" opacity=".75"/>`;}
+  <path d="${west}" fill="none" stroke="#b49a6c" stroke-linejoin="round" stroke-linecap="round" stroke-width="6.4" opacity=".75"/>`;}
 // small animated weather icon (about 16px), drawn next to each region on the map
 function wxIcon(id){const A=(t,v,d,b=0)=>`<animateTransform attributeName="transform" type="${t}" values="${v}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/>`;
   const cloud=(c,x=0,y=0)=>`<g transform="translate(${x},${y})"><ellipse cx="0" cy="1" rx="7" ry="3.4" fill="${c}" stroke="#2b3a44" stroke-width=".6"/><circle cx="-2.6" cy="-.8" r="3" fill="${c}"/><circle cx="1.8" cy="-1.6" r="3.6" fill="${c}"/></g>`;
