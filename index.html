@@ -1838,8 +1838,15 @@ if(window.speechSynthesis){yiLoadVoices();try{speechSynthesis.onvoiceschanged=yi
   let unl=false;addEventListener('pointerup',()=>{if(unl)return;unl=true;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}catch(e){}},{passive:true,capture:true});}
 function yiVoice(){const p=sndPref();if(!p.voice||!window.speechSynthesis)return;try{if(!yiVoices.length)yiLoadVoices();
   const v=yiVoices.find(x=>/^ko/i.test(x.lang)&&/male|남|injoon|minsu/i.test(x.name))||yiVoices.find(x=>/^ko/i.test(x.lang));
-  const say=(txt,pitch,rate)=>{const u=new SpeechSynthesisUtterance(txt);u.lang='ko-KR';u.pitch=pitch;u.rate=rate;u.volume=Math.min(1,p.vol+.2);if(v)u.voice=v;speechSynthesis.speak(u);};
-  speechSynthesis.cancel();if(speechSynthesis.paused)speechSynthesis.resume();say('필사즉생! 필생즉사!',.55,.82);say('싸움에 있어 죽고자 하면 반드시 살고, 살고자 하면 죽는다!',.6,.9);}catch(e){}}
+  // speech grabs the phone's audio focus and can suspend Web Audio: wake the music again when each line starts/ends
+  const back=()=>{SND.asleep=false;const c=SND.ctx;if(c&&c.state!=='running')c.resume().then(()=>{if(!titleOn)sndApply();}).catch(()=>{});};
+  const say=(txt,pitch,rate)=>{const u=new SpeechSynthesisUtterance(txt);u.lang='ko-KR';u.pitch=pitch;u.rate=rate;u.volume=1;if(v)u.voice=v;u.onstart=back;u.onend=back;u.onerror=back;speechSynthesis.speak(u);return u;};
+  const duck=on=>{const c=SND.ctx;if(!c||!SND.bgmG)return;SND.bgmG.gain.setTargetAtTime(on?.15:(sndPref().bgm&&!(view==='bore'||exp)?.75:0),c.currentTime,.2);};
+  const go=()=>{if(speechSynthesis.paused)speechSynthesis.resume();duck(true);say('필사즉생! 필생즉사!',.55,.85);const u2=say('싸움에 있어 죽고자 하면 반드시 살고, 살고자 하면 죽는다!',.6,.92);const end=()=>{back();duck(false);};u2.onend=end;u2.onerror=end;setTimeout(()=>duck(false),12000);};
+  // Chrome on Android drops an utterance queued in the same tick as cancel(): only cancel when something is still talking, then speak a moment later
+  if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(go,120);}else go();}catch(e){}}
+// audio watchdog: if the system interrupted Web Audio (speech, calls, other apps) while we're visible, bring it back
+setInterval(()=>{const c=SND.ctx;if(!c||document.hidden||SND.asleep)return;if(c.state!=='running'&&c.state!=='closed')c.resume().then(()=>{if(!titleOn)sndApply();}).catch(()=>{});},1500);
 // ---- background music: small step sequencer (lookahead scheduling) ----
 // 'field' = bright pentatonic march for the surface; 'deep' = slower, darker loop while drilling
 const SONGS={
