@@ -390,7 +390,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 @keyframes sheet{from{transform:translateY(40px);opacity:0}}
 .rclose{position:absolute;top:22px;right:max(24px,calc(env(safe-area-inset-right,0px) + 8px));z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(11,15,16,.75);color:#ece6da;display:grid;place-items:center}
 @media (prefers-reduced-motion:reduce){.rsheet{animation:none}}
-.wbody{grid-auto-rows:max-content}.wtabs{min-height:42px}
+.wbody{grid-auto-rows:max-content}.wtabs{min-height:42px;position:sticky;top:-12px;z-index:3;background:var(--bg);padding-top:8px;margin-top:-8px;box-shadow:0 6px 8px -6px rgba(0,0,0,.6)}
 
 .bhud{background:linear-gradient(rgba(20,15,11,.78) 60%,rgba(20,15,11,0))!important}
 .bfoot{background:linear-gradient(rgba(20,15,11,0),rgba(20,15,11,.85) 40%)!important}
@@ -515,7 +515,7 @@ nav.tabs button{font-size:12px}
 .yitxt em{font-style:normal;font-weight:800;font-size:13px;color:#ffe6a0;background:rgba(0,0,0,.55);border:1px solid rgba(242,193,78,.6);justify-self:center;padding:4px 12px;border-radius:999px;animation:yiShout .5s 1.2s both}
 @keyframes yiShout{from{transform:scale(2.4);opacity:0}to{transform:none;opacity:1}}
 .wnote{grid-column:1/-1;margin:0;padding:8px 10px;border-radius:10px;background:rgba(179,48,42,.18);border:1px solid rgba(242,193,78,.4);color:#ffe6a0;font-size:12px;line-height:1.4}
-#wBuy .primary{white-space:nowrap;flex:none}
+#wBuy .primary{white-space:nowrap;flex:none}#wBuy{position:sticky;bottom:0;z-index:4;box-shadow:0 -8px 16px rgba(0,0,0,.55)}
 
 .boost.bwx{align-self:flex-start;justify-self:start;display:inline-flex;align-items:center;gap:5px;width:auto;max-width:100%;margin-top:4px;padding:2px 9px 2px 2px;border-radius:999px;background:rgba(8,14,20,.38);border:1px solid rgba(160,210,240,.28);color:#d8eeff;font-size:11px;font-family:var(--f-body);font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.6)}.bwxi{flex:none;overflow:visible}
 .wdesc{display:block;font-size:11px;color:#ffd98a;font-weight:600;margin-top:3px;line-height:1.35}
@@ -647,8 +647,8 @@ nav.tabs button{font-size:12px}
   <div class="wstage" id="wStage"></div>
   <div class="wbody">
     <div class="wtabs" id="wTabs" role="tablist"></div>
-    <div class="wbuy" id="wBuy" hidden></div>
     <div class="wopts" id="wOpts"></div>
+    <div class="wbuy" id="wBuy" hidden></div>
     <p class="wnote">피부 톤과 체형은 무료로 바꿀 수 있어요. 헤어·눈·모자·의상·소품은 시추로 번 돈으로 삽니다. 한 번 산 것은 언제든 다시 착용할 수 있어요.</p>
   </div>
 </section>
@@ -1265,7 +1265,7 @@ function fossilArt(f,got,hl,slab=true,mount=null){const parts=FOSPARTS[f.id](),B
   parts.forEach((ops,i)=>{const have=got.includes(i);if(!have){g+=draw(ops,'miss');return;}if(i===hl)g+=draw(ops,'glow');g+=draw(ops,'out')+draw(ops,'fill');});
   return g;}
 function fossilSVG(f,hl=-1){return `<svg viewBox="0 0 200 100" aria-hidden="true">${fossilArt(f,fosGot(f.id),hl)}</svg>`;}
-const MUSEUMF=()=>typeof landOf==='function'&&Object.values(landOf().tiles||{}).includes('museum')?1.3:1; // 유물 전시관 보유: 화석 발견 확률 ×1.3
+const MUSEUMP=()=>S.mode==='hard'?18:30,MUSEUMF=()=>typeof landOf==='function'&&Object.values(landOf().tiles||{}).includes('museum')?1+MUSEUMP()/100:1; // 유물 전시관 보유: 화석 발견 확률 +30% (하드 +18%) — 기본 확률(칸당 5%)에 곱해짐
 function fosTry(reg,below,vis){const mine=FOSSILS.filter(f=>f.rg===reg.id&&!fosDone(f.id));if(!mine.length)return;
   const inb=mine.filter(f=>{const [a,b]=fosBand(f);return below>=a&&below<b;}),missed=mine.filter(f=>below>=fosBand(f)[1]);
   const mk=MUSEUMF();let f=null;if(inb.length&&Math.random()<.05*mk)f=inb[Math.floor(Math.random()*inb.length)];else if(!inb.length&&missed.length&&Math.random()<.008*mk)f=missed[Math.floor(Math.random()*missed.length)];
@@ -2093,12 +2093,12 @@ const OPT={
   {v:'chick',n:'병아리',p:2500},{v:'dog',n:'강아지',p:3000},{v:'cat',n:'고양이',p:3000},{v:'rabbit',n:'토끼',p:3000},{v:'panda',n:'판다',p:6000},
   {v:'bear',n:'곰',p:4000},{v:'fox',n:'여우',p:5000},{v:'penguin',n:'펭귄',p:5000},{v:'dragon',n:'드래곤',p:20000},{v:'unicorn',n:'유니콘',p:25000},{v:'tiger',n:'호랑이',p:8000},{v:'lion',n:'사자',p:8000},
   {v:'tanuki',n:'너구리',p:2000},{v:'squirrel',n:'다람쥐',p:3500},{v:'turtle',n:'거북이',p:3500},{v:'sheep',n:'양',p:4000},{v:'hedgehog',n:'고슴도치',p:4000}],
- hair:[{v:'short',n:'짧은 머리',p:0},{v:'tail',n:'묶은 머리',p:0},{v:'part',n:'가르마',p:150},{v:'buzz',n:'삭발',p:80},{v:'regent',n:'폭주족 리젠트',p:1500},{v:'sangtu',n:'양반 상투',p:2500},{v:'noble',n:'귀족 쪽머리',p:3000},{v:'king',n:'임금 상투',p:8000},{v:'queen',n:'왕비 큰머리',p:9000}],
+ hair:[{v:'short',n:'짧은 머리',p:0},{v:'tail',n:'묶은 머리',p:0},{v:'part',n:'가르마',p:150},{v:'buzz',n:'삭발 (반짝 대머리)',p:80},{v:'regent',n:'폭주족 리젠트',p:1500},{v:'sangtu',n:'양반 상투',p:2500},{v:'noble',n:'귀족 쪽머리',p:3000},{v:'king',n:'임금 상투',p:8000},{v:'queen',n:'왕비 큰머리',p:9000}],
  hcol:[{v:0,n:'검정',p:0,c:'#1f1814'},{v:1,n:'갈색',p:100,c:'#4a2f20'},{v:2,n:'밝은 갈색',p:150,c:'#8a5a2b'},{v:3,n:'금발',p:300,c:'#c9a15a'},{v:4,n:'남색',p:400,c:'#3b4a78'},{v:5,n:'회색',p:400,c:'#8a8e95'}],
  eyes:[{v:'round',n:'동글',p:0},{v:'smile',n:'웃는 눈',p:200},{v:'sharp',n:'날카로운 눈',p:200}],
  skin:[{v:0,n:'밝은 톤',p:0},{v:1,n:'중간 톤',p:0},{v:2,n:'짙은 톤',p:0},{v:3,n:'깊은 톤',p:0}],
  body:[{v:'slim',n:'마른 체형',p:0,w:.86},{v:'normal',n:'보통',p:0,w:1},{v:'big',n:'튼튼',p:0,w:1.18}],
- hat:[{v:'none',n:'없음',p:0},{v:'straw',n:'밀짚모자',p:300},{v:'satgat',n:'삿갓 (농민)',p:400},{v:'bow',n:'리본',p:700},{v:'lamp',n:'랜턴 안전모',p:800},{v:'flower',n:'꽃 화관',p:900},{v:'gat',n:'갓 (양반)',p:3000},{v:'horns',n:'뿔 머리띠',p:3500},{v:'mask',n:'잠수 마스크',p:4000},{v:'jokduri',n:'족두리 (궁녀)',p:4000},{v:'samo',n:'사모 (영정 관리)',p:6000},{v:'hwagwan',n:'화관 (왕비)',p:15000},{v:'veil',n:'💍 티아라 베일',p:12000},{v:'ikseon',n:'익선관 (왕)',p:20000},{v:'crown',n:'아다마스 투구',p:60000}],
+ hat:[{v:'none',n:'없음',p:0},{v:'straw',n:'밀짚모자',p:300},{v:'satgat',n:'삿갓 (농민)',p:400},{v:'bow',n:'리본',p:700},{v:'pig',n:'양갈래 (머리 장식)',p:900},{v:'lamp',n:'랜턴 안전모',p:800},{v:'flower',n:'꽃 화관',p:900},{v:'gat',n:'갓 (양반)',p:3000},{v:'horns',n:'뿔 머리띠',p:3500},{v:'mask',n:'잠수 마스크',p:4000},{v:'jokduri',n:'족두리 (궁녀)',p:4000},{v:'samo',n:'사모 (영정 관리)',p:6000},{v:'hwagwan',n:'화관 (왕비)',p:15000},{v:'veil',n:'💍 티아라 베일',p:12000},{v:'ikseon',n:'익선관 (왕)',p:20000},{v:'crown',n:'아다마스 투구',p:60000}],
  outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'farmer',n:'농민 (바지저고리)',p:800},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'yangban',n:'양반 (도포)',p:5000},{v:'court',n:'궁녀 (당의)',p:8000},{v:'official',n:'영정 관복 (단령)',p:12000},{v:'king',n:'왕 (곤룡포)',p:40000},{v:'queen',n:'왕비 (적의)',p:50000},{v:'wedding',n:'💍 웨딩드레스',p:30000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
  ship:[{v:'none',n:'없음',p:0},{v:'turtle',n:'★ 거북선',get p(){return S.mode==='hard'?16000000:8000000;},get d(){const h=S.mode==='hard';return `특수 소장품 · 보유 효과: 해상 원정 굴착력 +${h?12:20}%, 본공·원정 굴착력 +${h?2:3}% · 사면 정해진 주기로 자동 출항해 지도 남해를 항해하고 해상 원정에 함께 나가요 · 이순신 장군과 함께 보유하면 세트 효과`;}}],
  item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:3000,d:'보유 효과: 본공·원정 굴착력 +3% (하드 +1.8%)'},{v:'pick',n:'곡괭이',p:15000,d:'보유 효과: 강타 확률 +2%p (하드 +1.2%p)'},{v:'tablet',n:'탐사 태블릿',p:60000,d:'보유 효과: 원정 재료 추가 획득 +4%p · 유물 발견 +10% (하드 60%)'},{v:'hdrill',n:'휴대용 드릴',p:300000,d:'보유 효과: 굴착력 +4% · 강타 확률 +2%p (하드 60%)'}],
@@ -2233,7 +2233,7 @@ const PXOF={
  official:{top:'#2e5e52',slv:'#2e5e52',pan:'#2e5e52',shoe:'#151518',robe:1,wide:1},
  king:{top:'#b5222c',slv:'#b5222c',pan:'#b5222c',shoe:'#151518',robe:1,wide:1},
  court:{top:'#8cc25e',slv:'#8cc25e',pan:'#26357a',shoe:'#f2efe6',skirt:'#26357a',cuff:'#f4f0e6'},
- wedding:{top:'#fbfaf8',slv:'#f4f2f0',pan:'#fbfaf8',shoe:'#f4f0ee',skirt:'#fdfcfb',fl:20},
+ wedding:{top:'#fdfcfa',slv:'#f6f4f2',pan:'#fbfaf8',shoe:'#f4f0ee',dress:1,fl:20},
  queen:{top:'#1e3a8e',slv:'#1e3a8e',pan:'#1e3a8e',shoe:'#c92f3a',skirt:'#1e3a8e',wide:1,cuff:'#e0b44a'},
  wet:{top:'#1d2428',slv:'#1d2428',pan:'#1d2428',shoe:'#1d2428',glove:'#2b3438'},
  dance:{top:'#6b3fa0',slv:'#6b3fa0',pan:'#1d1a24',shoe:'#c9ced2'},
@@ -2479,7 +2479,7 @@ function vClothDet(oc){let g='';
     if(oc==='official')g+=`<rect x="39" y="113" width="22" height="18" fill="#1f2c5a" stroke="#e0b44a" stroke-width="1.4"/><path d="M44,124 q6,-8 12,-2 M48,120 l-5,-4 M52,120 l5,-5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="50" cy="118" r="1.4" fill="#e0303a"/><path d="M42,128 q3,-2 6,0 q3,-2 6,0 q3,-2 6,0" stroke="#8ab0e0" stroke-width="1" fill="none"/><rect x="18" y="133" width="64" height="5" fill="#141418"/>${[30,47.5,65].map(x=>`<rect x="${x}" y="133.5" width="5" height="4" fill="#e0b44a"/>`).join('')}`;
     else g+=`<circle cx="28" cy="109" r="7" fill="#e0b44a" opacity=".92"/><circle cx="72" cy="109" r="7" fill="#e0b44a" opacity=".92"/>${KDRAGON}<rect x="18" y="133" width="64" height="5" fill="#2a1a12"/>${[28,40,52,64].map(x=>`<rect x="${x}" y="133.5" width="7" height="4" rx="1" fill="#9fd6b8"/>`).join('')}`;}
   if(oc==='court')g+=`<path d="M41,104 L55,120" stroke="#5a8a3a" stroke-width="5"/><path d="M41,104 L55,120" stroke="#fff" stroke-width="2"/><path d="M55,119 q-2,10 -6,16 M55,119 q4,10 2,18" stroke="#c62a3a" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M18,138 Q50,132 82,138" stroke="#5a8a3a" stroke-width="2" fill="none"/>`;
-  if(oc==='wedding')g+=`<path d="M32,104 Q41,112 50,108 Q59,112 68,104" stroke="#e8e2dc" stroke-width="2" fill="none"/>${[[38,114],[46,118],[54,118],[62,114],[42,124],[50,126],[58,124]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#e2dad4" stroke-width=".8"/>`).join('')}<path d="M24,132 Q50,138 76,132" stroke="#f4c8d4" stroke-width="3.4" fill="none"/><path d="M50,135 l-5,4 l1,-6Z M50,135 l5,4 l-1,-6Z" fill="#f4c8d4"/>`+TWINKLE([[36,112,.0],[62,118,.6],[48,128,1.1],[58,108,1.6]],1.6);
+  if(oc==='wedding')g+=`<path d="M32,104 Q41,112 50,108 Q59,112 68,104" stroke="#e8e2dc" stroke-width="2" fill="none"/>${[[38,114],[46,118],[54,118],[62,114],[42,124],[50,126],[58,124]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#e2dad4" stroke-width=".8"/>`).join('')}<path d="M28,126 Q50,132 72,126" stroke="#ebe4de" stroke-width="1.2" fill="none" stroke-dasharray="2 1.6"/><path d="M40,128 Q50,146 46,166 M60,128 Q52,146 56,166" stroke="#eee8e2" stroke-width="1" fill="none"/>`+TWINKLE([[36,112,.0],[62,118,.6],[48,132,1.1],[58,108,1.6],[40,150,.3],[62,152,1.4]],1.6);
   if(oc==='queen')g+=[[36,112],[64,112],[36,126],[64,126]].map(([x,y])=>`<path d="M${x-3},${y} q3,-4 6,0 q-3,4 -6,0Z" fill="#e0b44a"/><circle cx="${x}" cy="${y}" r=".9" fill="#c62a3a"/>`).join('')+`<path d="M40,104 L50,116 L60,104" stroke="#e8e0c8" stroke-width="3" fill="none"/><circle cx="50" cy="122" r="7" fill="#e0b44a" stroke="#a87a1e" stroke-width=".8"/><path d="M46,124 q4,-7 8,0 M50,117 v5" stroke="#c62a3a" stroke-width="1.4" fill="none"/><rect x="18" y="131" width="64" height="5" fill="#c62a3a"/>`;
   return g;}
 function vItem(item){const IX=82,IY=138,IT={shovel:`<path d="M${IX},${IY+8} V${IY-34}" stroke="#9a6a3a" stroke-width="3.4"/><path d="M${IX-5},${IY-36} h10" stroke="#6a4528" stroke-width="3"/><path d="M${IX-6},${IY+6} h12 l-2,12 l-4,4 l-4,-4Z" fill="#aab3b8" stroke="#5a646a" stroke-width="1.2"/>`,
@@ -2506,13 +2506,13 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(A.tail==='ball')g+=`<circle cx="74" cy="150" r="7" fill="${LG}" ${OL}/>`;
   if(A.tail==='dragon')g+=`<path d="M70,152 C92,160 100,144 96,130 L104,124 L94,122 C92,136 86,146 70,144Z" fill="${F}" ${OL}/>`;
   if(A.tail==='mane')g+=`<path d="M72,140 C96,134 98,156 88,166 C96,150 84,146 74,150Z" fill="${A.mane[0]}" ${OL}/><path d="M74,146 C92,146 92,160 84,166" stroke="${A.mane[1]}" stroke-width="4" fill="none"/>`;
-  if(A.spikes)g+=Array.from({length:13},(_,i)=>{const a=Math.PI*(1.05+i*.07),x=50+Math.cos(a)*44,y=96+Math.sin(a)*44,x2=50+Math.cos(a)*60,y2=96+Math.sin(a)*60,a2=a+.12,x3=50+Math.cos(a2)*44,y3=96+Math.sin(a2)*44;return `<path d="M${x.toFixed(1)},${y.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)} L${x3.toFixed(1)},${y3.toFixed(1)}Z" fill="${A.spikes}" stroke="${shade(A.spikes,-.4)}" stroke-width="1"/>`;}).join('')+`<path d="M8,110 C10,74 90,74 92,110 C96,140 4,140 8,110Z" fill="${A.spikes}"/>`;
+  if(A.spikes){let p='';for(let i=0;i<=22;i++){const a=Math.PI*(.92+i*(1.16/22)),r=i%2?33:47;p+=(i?'L':'M')+(50+Math.cos(a)*r*1.12).toFixed(1)+','+(84+Math.sin(a)*r).toFixed(1);}g+=`<path d="${p}Z" fill="${A.spikes}" stroke="${shade(A.spikes,-.4)}" stroke-width="1.4" stroke-linejoin="round"/>`+Array.from({length:11},(_,i)=>{const a=Math.PI*(1.0+i*.1);return `<path d="M${(50+Math.cos(a)*40).toFixed(1)},${(84+Math.sin(a)*36).toFixed(1)} L${(50+Math.cos(a)*50).toFixed(1)},${(84+Math.sin(a)*44).toFixed(1)}" stroke="${shade(A.spikes,.35)}" stroke-width="1.2"/>`;}).join('');}
   if(A.shell)g+=`<ellipse cx="50" cy="132" rx="34" ry="30" fill="${A.shell}" stroke="${shade(A.shell,-.4)}" stroke-width="2"/><path d="M28,120 l10,-10 h24 l10,10 M24,138 h52" stroke="${shade(A.shell,-.3)}" stroke-width="2" fill="none"/>`;
   // feet
   const ft=A.bi?A.feet:legC;g+=A.bi?`<path d="M30,166 l6,-6 l6,6Z M58,166 l6,-6 l6,6Z" fill="${ft}" ${OL}/>`:`<ellipse cx="37" cy="163" rx="11" ry="6.5" fill="${ft}" ${OL}/><ellipse cx="63" cy="163" rx="11" ry="6.5" fill="${ft}" ${OL}/><path d="M33,163 v3 M37,163 v3 M59,163 v3 M63,163 v3" stroke="${D}" stroke-width="1" opacity=".5"/>`;
   // body + belly
   g+=`<ellipse cx="50" cy="134" rx="${BR}" ry="28" fill="${A.wool?LG:F}" ${OL}/>`;
-  if(A.wool)g+=Array.from({length:10},(_,i)=>{const a=i/10*Math.PI*2;return `<circle cx="${(50+Math.cos(a)*22).toFixed(1)}" cy="${(134+Math.sin(a)*24).toFixed(1)}" r="8" fill="${LG}" stroke="${shade(A.f,-.2)}" stroke-width="1"/>`;}).join('');
+  if(A.wool)g+=`<path d="M${50-26*bw},128 q-4,-14 10,-20 q8,-10 20,-4 q12,-6 20,4 q14,6 10,20 q6,12 -4,22 q-2,12 -16,12 q-10,6 -20,0 q-14,0 -16,-12 q-10,-10 -4,-22Z" fill="${LG}" stroke="${shade(A.f,-.18)}" stroke-width="1.2"/><path d="M36,122 q6,-5 12,0 M52,118 q6,-5 12,0 M40,140 q6,-5 12,0 M56,136 q6,-5 12,0" stroke="${shade(A.f,-.12)}" stroke-width="1.2" fill="none"/>`;
   else g+=`<ellipse cx="50" cy="140" rx="16" ry="18" fill="${LG}" clip-path="url(#${u}b)"/>`;
   // clothes
   if(of.hood)g+=`<g clip-path="url(#${u}b)"><rect x="20" y="104" width="60" height="64" fill="#5cae5a"/><ellipse cx="50" cy="142" rx="15" ry="18" fill="#ece3a4"/></g>`;
@@ -2540,11 +2540,11 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(A.ear==='tiny')g+=`<circle cx="18" cy="70" r="6" fill="${F}" ${OL}/><circle cx="82" cy="70" r="6" fill="${F}" ${OL}/>`;
   if(A.ram)g+=`<path d="M20,60 C4,62 4,86 18,88 C26,88 26,78 20,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M80,60 C96,62 96,86 82,88 C74,88 74,78 80,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/>`;
   if(A.lmane)g+=Array.from({length:18},(_,i)=>{const a=i/18*Math.PI*2,x=50+Math.cos(a)*40,y=82+Math.sin(a)*37;return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="13" ry="9" transform="rotate(${(a*180/Math.PI).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${A.lmane[i%2]}" stroke="${shade(A.lmane[0],-.35)}" stroke-width="1.2"/>`;}).join('')+Array.from({length:12},(_,i)=>{const a=(i+.5)/12*Math.PI*2,x=50+Math.cos(a)*34,y=82+Math.sin(a)*31;return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="9" ry="6" transform="rotate(${(a*180/Math.PI).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${A.lmane[2]}"/>`;}).join('');
-  if(AHP&&AHP.back)g+=`<g transform="${HTF}">${AHP.back}</g>`;
+  if(AHP&&AHP.back)g+=`<g transform="${HTF}">${AHP.back}</g>`;if(hat&&hat!=='none'&&hatBack(hat))g+=`<g transform="${HTF}">${hatBack(hat)}</g>`;
   // head (big, soft)
   const hr=k==='chick'?0:1;
   if(k==='chick')g+=`<ellipse cx="50" cy="112" rx="40" ry="40" fill="${F}" ${OL}/>`;else g+=`<ellipse cx="50" cy="80" rx="37" ry="33" fill="${A.wool?LG:F}" ${OL}/>`;
-  if(A.wool)g+=Array.from({length:9},(_,i)=>`<circle cx="${22+i*7}" cy="${52-Math.sin(i/8*Math.PI)*6}" r="8" fill="${LG}" stroke="${shade(A.f,-.2)}" stroke-width="1"/>`).join('')+`<ellipse cx="50" cy="86" rx="25" ry="22" fill="${shade(A.l,.03)}"/>`;
+  if(A.wool)g+=`<path d="M24,64 q-6,-12 8,-16 q4,-12 18,-8 q14,-6 20,6 q14,2 10,16 Q50,52 24,64Z" fill="${LG}" stroke="${shade(A.f,-.18)}" stroke-width="1.2"/><path d="M36,54 q5,-4 10,0 M52,52 q5,-4 10,0" stroke="${shade(A.f,-.12)}" stroke-width="1.1" fill="none"/><ellipse cx="50" cy="86" rx="25" ry="22" fill="${shade(A.l,.03)}"/>`;
   if(A.ear==='tuft')g+=`<path d="M46,74 q-2,-10 4,-12 q-1,6 2,8 q2,-8 8,-6 q-6,4 -4,10Z" fill="${A.f}" ${OL}/>`;
   if(A.mane)g+=`<path d="M30,52 C34,36 58,34 70,46 C62,44 56,46 52,52 C48,46 40,46 30,52Z" fill="${A.mane[0]}" ${OL}/><path d="M64,48 C80,50 86,68 80,84 C78,70 72,60 64,56Z" fill="${A.mane[1]}" ${OL}/><path d="M38,50 C44,42 52,42 56,48" stroke="${A.mane[2]}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
   if(A.horn)g+=`<path d="M44,50 L50,18 L56,50Z" fill="${A.horn}" stroke="${shade(A.horn,-.4)}" stroke-width="1.4"/><path d="M47,40 l6,-3 M46,46 l8,-4 M48,32 l4,-2" stroke="#fff3c8" stroke-width="1.2"/>`;
@@ -2575,7 +2575,7 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(of.hood&&(!hat||hat==='none'))g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`+[[28,50],[40,43],[52,41],[64,43],[74,50]].map(([x,y])=>`<path d="M${x-5},${y+5} L${x},${y-7} L${x+5},${y+5}Z" fill="#f2c14e" stroke="#c89a2a" stroke-width="1"/>`).join('');
   const hatOn=!!(hat&&hat!=='none');if(AHP&&!(of.hood&&!hatOn))g+=`<g transform="${HTF}">${AHP.front}${hatOn?'':AHP.top}</g>`;
   if(held)g+=`<g transform="translate(0,14)">${held}</g>`;
-  if(hatOn)g+=`<g transform="${HTF}">${hatG(hat,u)}</g>`;
+  if(hatOn)g+=`<g transform="${HTF}">${hatG(hat,u,{hf:`url(#${u}h)`,hd:shade(hcA,-.5)})}</g>`;
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="32" ry="5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
 
@@ -2600,7 +2600,8 @@ function hairParts(hs,HF,HO,hc,hcD,hcL,fem){const P={back:'',front:'',top:''},sh
   const cap=(part)=>`<path d="M15,86 C6,30 94,30 85,86 Q84,72 78,66 Q66,60 50,61 Q34,60 22,66 Q16,72 15,86Z" fill="${HF}" ${HO}/>`+(part?`<path d="M50,40 V61" stroke="${hcD}" stroke-width="1.4" opacity=".7"/>`:'')+[[30,64,38,44],[40,61,44,40],[60,61,56,40],[70,64,62,44]].map(([a,b,c,d])=>`<path d="M${a},${b} Q${(a+c)/2+(a<50?-2:2)},${(b+d)/2} ${c},${d}" stroke="${hcD}" stroke-width=".9" fill="none" opacity=".45"/>`).join('')+`<path d="M28,52 Q38,42 52,41" stroke="${hcL}" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".4"/>`;
   const mang=(gold)=>`<path d="M15,74 Q16,64 24,62 Q50,56 76,62 Q84,64 85,74 Q82,68 76,67 Q50,62 24,67 Q18,68 15,74Z" fill="#141418" opacity=".82"/><path d="M20,66 Q50,59 80,66" stroke="#3a3a44" stroke-width=".7" fill="none" stroke-dasharray="1.2 1.2"/><circle cx="17" cy="72" r="2.6" fill="${gold?'#f2c14e':'#bfe6d0'}" stroke="${gold?'#a87a1e':'#6aa88a'}" stroke-width=".8"/><circle cx="83" cy="72" r="2.6" fill="${gold?'#f2c14e':'#bfe6d0'}" stroke="${gold?'#a87a1e':'#6aa88a'}" stroke-width=".8"/>`;
   switch(hs){
-   case 'buzz':P.front=`<path d="M17,82 C12,40 88,40 83,82 Q80,68 72,63 Q50,57 28,63 Q20,68 17,82Z" fill="${HF}" opacity=".55"/><ellipse cx="40" cy="58" rx="11" ry="6" fill="#fff" opacity=".22" transform="rotate(-18 40 58)"/>`;break;
+   case 'buzz':// shiny bald head: no hair at all, just highlights on the scalp
+     P.front=`<ellipse cx="38" cy="58" rx="13" ry="7" fill="#fff" opacity=".55" transform="rotate(-22 38 58)"/><ellipse cx="36" cy="57" rx="5" ry="2.6" fill="#fff" opacity=".9" transform="rotate(-22 36 57)"/><circle cx="60" cy="54" r="2.2" fill="#fff" opacity=".7"/><path d="M66,60 Q72,64 74,70" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".35"/>`+TWINKLE([[30,50,0],[63,50,1.1]],1.5);break;
    case 'tail':P.back=`<path d="M70,56 Q102,58 98,96 Q96,116 84,124 Q90,100 80,76Z" fill="${HF}" ${HO}/><path d="M86,72 Q94,90 88,112" stroke="${hcL}" stroke-width="1.4" fill="none" opacity=".4"/><path d="M74,58 q6,-4 10,1 q-2,5 -8,4Z" fill="${shade(hc,-.6)}" stroke="${shade(hc,-.75)}" stroke-width="1"/>`;
      P.front=`<path d="M15,86 C6,30 94,30 85,86 Q86,76 80,70 Q72,72 62,70 Q50,73 38,70 Q28,72 22,68 Q12,76 14,92Z" fill="${HF}" ${HO}/><path d="M34,70 V66 M46,71 V67 M58,71 V67" stroke="${hcD}" stroke-width="1" opacity=".45"/>`+shine();break;
    case 'part':P.front=`<path d="M15,86 C6,30 94,30 85,86 Q86,76 80,70 Q64,58 42,74 Q40,66 34,64 Q28,66 22,72 Q14,72 15,86Z" fill="${HF}" ${HO}/>`+shine();break;
@@ -2623,7 +2624,8 @@ function hairParts(hs,HF,HO,hc,hcD,hcL,fem){const P={back:'',front:'',top:''},sh
      P.top=`<path d="M40,46 q4,-12 14,-10 q-5,3 -4,9Z M56,44 q8,-8 14,-2 q-6,0 -7,5Z" fill="${HF}" ${HO}/>`;}
   return P;}
 // hats drawn natively in the human head frame; animals reuse them through a transform
-function hatG(id,u0){const u=u0+'H',gd=(k,a,b)=>`<linearGradient id="${u}${k}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`,ol='stroke-linejoin="round"';
+function hatBack(id){if(id==='veil')return `<path d="M50,40 C22,40 10,58 8,86 C6,112 2,134 -2,152 Q24,160 50,156 Q76,160 102,152 C98,134 94,112 92,86 C90,58 78,40 50,40Z" fill="rgba(255,255,255,.5)" stroke="rgba(225,228,238,.95)" stroke-width=".9"/><path d="M14,92 Q10,120 4,146 M86,92 Q90,120 96,146 M24,110 Q22,130 18,150 M76,110 Q78,130 82,150" stroke="rgba(255,255,255,.75)" stroke-width="1.1" fill="none"/>`;return '';}
+function hatG(id,u0,C={}){const u=u0+'H',gd=(k,a,b)=>`<linearGradient id="${u}${k}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`,ol='stroke-linejoin="round"';
   switch(id){
    case 'lamp':return `<defs>${gd('l','#ffa64a','#d86a14')}</defs><path d="M11,69 C11,22 89,22 89,69 Q50,78 11,69Z" fill="url(#${u}l)" stroke="#9a4a10" stroke-width="1.6" ${ol}/><path d="M50,26 V72" stroke="#c86d1a" stroke-width="4"/><path d="M24,38 Q34,28 48,27" stroke="#ffd09a" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/><path d="M4,67 Q50,77.5 96,67 L96,73 Q50,83.5 4,73Z" fill="#b85c14" stroke="#7a3a0a" stroke-width="1.2"/><circle cx="50" cy="44" r="13" fill="#fff3b0" opacity=".22"/><circle cx="50" cy="44" r="8.5" fill="#cfd6da" stroke="#7a8288" stroke-width="1.2"/><circle cx="50" cy="44" r="5.2" fill="#fff6c8"/><circle cx="48" cy="42" r="1.6" fill="#fff"/>`;
    case 'mask':return `<path d="M13,70 Q50,62 87,70" stroke="#16191c" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="26" y="44" width="48" height="26" rx="11" fill="#22a8a3" stroke="#0f6a66" stroke-width="1.6"/><rect x="30" y="48" width="40" height="18" rx="8" fill="#bff0f0" opacity=".8"/><path d="M34,52 L44,62 M40,50 L48,58" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/><rect x="47" y="44" width="6" height="4" fill="#0f6a66"/>`;
@@ -2643,9 +2645,11 @@ function hatG(id,u0){const u=u0+'H',gd=(k,a,b)=>`<linearGradient id="${u}${k}" x
      return `<defs>${gd('k','#3a3046','#0c0a12')}</defs><g transform="rotate(-14 42 30)"><ellipse cx="42" cy="22" rx="7" ry="14" fill="#1a1622" stroke="#000" stroke-width="1"/><path d="M42,10 V34" stroke="rgba(255,255,255,.18)" stroke-width=".8"/></g><g transform="rotate(14 58 30)"><ellipse cx="58" cy="22" rx="7" ry="14" fill="#1a1622" stroke="#000" stroke-width="1"/><path d="M58,10 V34" stroke="rgba(255,255,255,.18)" stroke-width=".8"/></g><path d="M31,60 L32,32 Q50,24 68,32 L69,60Z" fill="url(#${u}k)" stroke="#000" stroke-width="1.2" ${ol}/><path d="M14,70 C14,42 86,42 86,70 Q50,62 14,70Z" fill="url(#${u}k)" stroke="#000" stroke-width="1.3" ${ol}/><path d="M16,66 Q50,58 84,66" stroke="#c9a040" stroke-width="1.2" fill="none" opacity=".8"/><path d="M24,56 Q40,48 56,48" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none" stroke-linecap="round"/>`;
    case 'jokduri':// 족두리 (court lady): small black crown cap with gold trim and jewels
      return `<path d="M34,52 Q50,56 66,52 L63,34 L56,28 H44 L37,34Z" fill="#17141c" stroke="#000" stroke-width="1.1" ${ol}/><path d="M34,52 Q50,56 66,52" stroke="#e0b44a" stroke-width="2.2" fill="none"/><path d="M37,34 L63,34 M44,28 L42,52 M56,28 L58,52" stroke="#e0b44a" stroke-width="1" fill="none"/><circle cx="50" cy="26" r="3" fill="#ff6a5a" stroke="#a82a1e" stroke-width=".8"/><circle cx="50" cy="42" r="3.2" fill="#7fd0b0" stroke="#3a8a6a" stroke-width=".8"/><circle cx="41" cy="44" r="2" fill="#ffd76a"/><circle cx="59" cy="44" r="2" fill="#ffd76a"/><path d="M38,54 Q34,64 30,70 M62,54 Q66,64 70,70" stroke="#c62a3a" stroke-width="2" fill="none" stroke-linecap="round"/>`;
-   case 'veil':// 티아라 베일: sheer veil falling behind to the shoulders + a sparkling tiara
-     return `<path d="M14,64 C4,90 6,118 2,140 Q20,132 28,112 Q24,90 26,70Z M86,64 C96,90 94,118 98,140 Q80,132 72,112 Q76,90 74,70Z" fill="rgba(255,255,255,.55)" stroke="rgba(230,230,240,.9)" stroke-width=".8"/><path d="M16,62 C14,40 86,40 84,62" fill="rgba(255,255,255,.35)" stroke="rgba(230,230,240,.8)" stroke-width=".8"/>
-       <path d="M30,56 Q50,48 70,56 L66,46 L58,50 L50,38 L42,50 L34,46Z" fill="#e8eef4" stroke="#9aa8b4" stroke-width="1" ${ol}/>${[[50,44,'#9fe0ff',2.6],[40,50,'#ffd0e0',1.6],[60,50,'#ffd0e0',1.6]].map(([x,y,c,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" stroke="#7a8a98" stroke-width=".5"/>`).join('')}`+TWINKLE([[50,38,0],[34,50,.7],[66,50,1.3],[20,96,1.8],[82,104,.4]],1.8);
+   case 'pig':return `<path d="M18,70 Q-2,84 4,118 Q8,132 18,128 Q12,104 24,84Z M82,70 Q102,84 96,118 Q92,132 82,128 Q88,104 76,84Z" fill="${C.hf||'#2a1f18'}" stroke="${C.hd||'#120c08'}" stroke-width="1.6" stroke-linejoin="round"/><path d="M10,92 Q8,106 12,120 M90,92 Q92,106 88,120" stroke="#fff" stroke-width="1.4" fill="none" opacity=".25"/><g transform="translate(19,76)"><path d="M0,0 L-9,-6 Q-11,0 -9,6Z M0,0 L9,-6 Q11,0 9,6Z" fill="#ff6a8e" stroke="#c43a64" stroke-width="1.1"/><circle r="3" fill="#e0456f"/></g><g transform="translate(81,76)"><path d="M0,0 L-9,-6 Q-11,0 -9,6Z M0,0 L9,-6 Q11,0 9,6Z" fill="#ff6a8e" stroke="#c43a64" stroke-width="1.1"/><circle r="3" fill="#e0456f"/></g>`;
+   case 'veil':// 티아라 베일: a bigger jewelled tiara; the veil (drawn behind the head by hatBack) frames the face
+     return `<path d="M18,64 Q16,56 22,52 Q50,40 78,52 Q84,56 82,64 Q50,52 18,64Z" fill="rgba(255,255,255,.42)" stroke="rgba(225,228,238,.9)" stroke-width=".8"/>
+       <path d="M22,58 Q50,46 78,58 L74,44 L64,48 L57,34 L50,26 L43,34 L36,48 L26,44Z" fill="#eef3f8" stroke="#8a98a8" stroke-width="1.1" ${ol}/><path d="M24,56 Q50,46 76,56" stroke="#c0ccd8" stroke-width="1.4" fill="none"/>
+       ${[[50,36,'#9fe0ff',3.6],[38,46,'#ffd0e0',2.4],[62,46,'#ffd0e0',2.4],[28,50,'#d8f0ff',1.6],[72,50,'#d8f0ff',1.6]].map(([x,y,c,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" stroke="#7a8a98" stroke-width=".6"/><circle cx="${x-r*.35}" cy="${y-r*.35}" r="${r*.3}" fill="#fff"/>`).join('')}<circle cx="50" cy="26" r="1.8" fill="#fff"/>`+TWINKLE([[50,26,0],[30,46,.7],[70,46,1.3],[42,38,1.9]],1.9);
    case 'hwagwan':// 화관 (queen): gold floral crown with jewels and dangling ornaments
      return `<defs>${gd('q','#ffe48a','#c4901e')}</defs>${[[20,58,16],[80,58,16],[30,52,22],[70,52,22]].map(([x,y,l])=>`<path d="M${x},${y} V${y+l}" stroke="#c9a040" stroke-width="1"/><circle cx="${x}" cy="${y+l}" r="2.2" fill="#ff6a7a" stroke="#a82a3a" stroke-width=".6"/><circle cx="${x}" cy="${y+l/2}" r="1.4" fill="#fff6c8"/>`).join('')}
        <path d="M16,62 Q50,48 84,62 L80,46 L70,50 L64,34 L56,42 L50,24 L44,42 L36,34 L30,50 L20,46Z" fill="url(#${u}q)" stroke="#8a5e10" stroke-width="1.3" ${ol}/><path d="M18,60 Q50,48 82,60" stroke="#fff3b0" stroke-width="1.4" fill="none"/>
@@ -2658,13 +2662,14 @@ function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.out
   const bw=(OPT.body.find(b=>b.v===c.body)||{w:1}).w,hs0=c.hair||(fem?'tail':'short'),hs={bob:'tail',long:'tail',pig:'tail'}[hs0]||hs0,hatOn=!!(hat&&hat!=='none');
   const OL=`stroke="${skD}" stroke-width="1.8" stroke-linejoin="round"`,HO=`stroke="${hcD}" stroke-width="1.8" stroke-linejoin="round"`;
   const gr=(id,col,cx=.35,cy=.3,a=.28,b=-.2)=>`<radialGradient id="${u}${id}" cx="${cx}" cy="${cy}" r=".85"><stop offset="0" stop-color="${shade(col,a)}"/><stop offset=".55" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,b)}"/></radialGradient>`;
-  const sw=(fem?16.5:18.5)*bw,ww=(fem?14:15.5)*(bw>1.1?1.22:bw),T=`M${50-sw},112 Q${50-sw},104 ${50-sw+8},104 H${50+sw-8} Q${50+sw},104 ${50+sw},112 L${50+ww},142 H${50-ww}Z`;
+  const sw=(fem?16.5:18.5)*bw,ww=(fem?14:15.5)*(bw>1.1?1.22:bw);let T=`M${50-sw},112 Q${50-sw},104 ${50-sw+8},104 H${50+sw-8} Q${50+sw},104 ${50+sw},112 L${50+ww},142 H${50-ww}Z`;
+  if(of.dress){const fl=of.fl||18;T=`M${50-sw},112 Q${50-sw},104 ${50-sw+8},104 H${50+sw-8} Q${50+sw},104 ${50+sw},112 L${50+ww-2},126 Q${50+ww+fl*.55},140 ${50+ww+fl},162 Q50,167 ${50-ww-fl},162 Q${50-ww-fl*.55},140 ${50-ww+2},126Z`;}
   let g=`<defs>${gr('s',sk,.38,.32,.18,-.12)}${gr('h',hc,.4,.18,.3,-.25)}<clipPath id="${u}b"><path d="${T}"/></clipPath></defs>`;
   const HF=`url(#${u}h)`,SF=`url(#${u}s)`,HP=hairParts(hs,HF,HO,hc,hcD,hcL,fem);
-  g+=HP.back;
+  g+=HP.back;if(hat&&hat!=='none')g+=hatBack(hat);
   // legs + shoes (robes and skirts cover the legs; only the shoe tips show)
   const pan=of.hood?'#5cae5a':of.pan,lx=50-ww+2.5,lw=ww-4,pl=of.shorts?10:20;
-  if(!of.robe&&!of.skirt){g+=`<rect x="${lx}" y="138" width="${lw}" height="${pl}" rx="3" fill="${pan}" stroke="${shade(pan,-.4)}" stroke-width="1.4"/><rect x="${50+1.5}" y="138" width="${lw}" height="${pl}" rx="3" fill="${pan}" stroke="${shade(pan,-.4)}" stroke-width="1.4"/>`;
+  if(!of.robe&&!of.skirt&&!of.dress){g+=`<rect x="${lx}" y="138" width="${lw}" height="${pl}" rx="3" fill="${pan}" stroke="${shade(pan,-.4)}" stroke-width="1.4"/><rect x="${50+1.5}" y="138" width="${lw}" height="${pl}" rx="3" fill="${pan}" stroke="${shade(pan,-.4)}" stroke-width="1.4"/>`;
     if(oc==='farmer')g+=`<path d="M${lx},150 h${lw} M51.5,150 h${lw}" stroke="#3a3a46" stroke-width="2.6"/>`;}
   if(of.shorts)g+=`<rect x="${lx+2}" y="147" width="${lw-4}" height="12" fill="${SF}"/><rect x="${53.5}" y="147" width="${lw-4}" height="12" fill="${SF}"/><path d="M${lx+2},155 h${lw-4} M53.5,155 h${lw-4}" stroke="#eeece6" stroke-width="3"/>`;
   const sh=of.shoe,shD=shade(sh,-.45);g+=`<path d="M${lx-2},166 Q${lx-2},157 ${lx+5},157 H${lx+lw} Q${lx+lw+3},157 ${lx+lw+2},166Z" fill="${sh}" stroke="${shD}" stroke-width="1.6"/><path d="M${51},166 Q${50},157 ${56},157 H${51+lw+2} Q${51+lw+6},157 ${51+lw+5},166Z" fill="${sh}" stroke="${shD}" stroke-width="1.6"/><path d="M${lx},163 h${lw+1} M52,163 h${lw+3}" stroke="${shade(sh,.35)}" stroke-width="1.4"/>`;
@@ -2673,8 +2678,8 @@ function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.out
   // torso + clothes
   const top=of.hood?'#5cae5a':of.top,tD=shade(top,-.45);
   g+=`<linearGradient id="${u}t" x1="0" x2="1"><stop offset="0" stop-color="${shade(top,.22)}"/><stop offset=".45" stop-color="${top}"/><stop offset="1" stop-color="${shade(top,-.28)}"/></linearGradient><path d="${T}" fill="url(#${u}t)" stroke="${tD}" stroke-width="1.8" stroke-linejoin="round"/>`;
-  g+=`<g clip-path="url(#${u}b)"><rect x="${50+sw-9}" y="104" width="12" height="40" fill="#000" opacity=".12"/><rect x="${50-sw+2}" y="104" width="5" height="40" fill="#fff" opacity=".12"/>${of.hood?`<ellipse cx="50" cy="128" rx="11" ry="13" fill="#ece3a4"/>`:vClothDet(oc)}${of.robe||of.skirt?'':`<rect x="10" y="139" width="80" height="4" fill="${tD}" opacity=".35"/>`}</g>`;
-  if(fem&&!of.hood&&!of.robe&&!of.skirt&&oc!=='farmer')g+=`<path d="M42,104 Q50,112 58,104" stroke="#fff" stroke-width="1.6" fill="none" opacity=".55"/>`;
+  g+=`<g clip-path="url(#${u}b)"><rect x="${50+sw-9}" y="104" width="12" height="40" fill="#000" opacity=".12"/><rect x="${50-sw+2}" y="104" width="5" height="40" fill="#fff" opacity=".12"/>${of.hood?`<ellipse cx="50" cy="128" rx="11" ry="13" fill="#ece3a4"/>`:vClothDet(oc)}${of.robe||of.skirt||of.dress?'':`<rect x="10" y="139" width="80" height="4" fill="${tD}" opacity=".35"/>`}</g>`+(of.dress?robeDet(oc,ww,of.fl||18,162):'');
+  if(fem&&!of.hood&&!of.robe&&!of.skirt&&!of.dress&&oc!=='farmer')g+=`<path d="M42,104 Q50,112 58,104" stroke="#fff" stroke-width="1.6" fill="none" opacity=".55"/>`;
   // arms: relaxed, or both hands on the held tool; robes get wide sleeves
   const slv=of.slv||top,hand=of.glove||sk,HI=HELD[item],armP=(x,hx,hy,s)=>`M${x},110 Q${x+s*7},${(110+hy)/2+6} ${hx},${hy}`,aw=of.wide?[15.5,12]:[12,8.4];
   if(HI)g+=HI.back||'';
@@ -2708,7 +2713,7 @@ function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.out
   // hair (front), the parts above the head are left out under a hat
   if(!(of.hood&&!hatOn)){g+=HP.front;if(!hatOn)g+=HP.top;}
   if(of.hood&&!hatOn)g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`;
-  if(hatOn)g+=hatG(hat,u);
+  if(hatOn)g+=hatG(hat,u,{hf:HF,hd:hcD});
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="30" ry="5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
 // twinkling 4-point sparkles: [x,y,delay]
@@ -3208,7 +3213,7 @@ function renderWard(){
   const showShip=wTab==='sex'&&(wTry?wTry.k==='ship':wShip);if(!showShip&&$('#wStage').querySelector('.ship3'))$('#wStage').innerHTML='';
   if(showShip&&L3OK){const st=$('#wStage');if(!st.querySelector('.ship3')){st.innerHTML='<div class="s3wrap" aria-label="거북선 3D 미리보기 · 끌어서 돌려 보기"></div><span class="s3hint">끌어서 360° 돌려 보기</span>';shipLive(st.querySelector('.s3wrap'));}}
   else $('#wStage').innerHTML=showShip?`<svg viewBox="-70 -16 380 216" role="img" aria-label="거북선 미리보기" style="width:100%;max-width:440px">${turtleSVG({id:'w'})}</svg>`:`<svg viewBox="-30 -14 160 192" role="img" aria-label="주인공 미리보기"><ellipse cx="50" cy="168" rx="40" ry="6" fill="rgba(0,0,0,.35)"/>${charG(c)}</svg>`;
-  setTimeout(()=>{const a=document.querySelector('#wTabs [aria-selected="true"]');if(a&&a.scrollIntoView)a.scrollIntoView({inline:'nearest',block:'nearest'});},0);
+  const wb=document.querySelector('#ward .wbody'),keepY=wb?wb.scrollTop:0;setTimeout(()=>{if(wb)wb.scrollTop=keepY;const a=document.querySelector('#wTabs [aria-selected="true"]'),ts=$('#wTabs');if(a&&ts){const l=a.offsetLeft,r=l+a.offsetWidth;if(l<ts.scrollLeft)ts.scrollLeft=l-12;else if(r>ts.scrollLeft+ts.clientWidth)ts.scrollLeft=r-ts.clientWidth+12;}},0);
   $('#wTabs').innerHTML=WT.map(t=>`<button class="wtab" type="button" role="tab" data-t="${t.k}" aria-selected="${t.k===wTab}">${t.n}</button>`).join('');
   const head=['hair','hcol','eyes','skin','hat'].includes(wTab);
   const K=wKey();
@@ -3233,7 +3238,7 @@ function openWard(){wTry=null;$('#ward').hidden=false;mapAnim(false);renderWard(
 function closeWard(){wTry=null;$('#ward').hidden=true;if(view==='map')mapAnim(true);renderAvatar();if(view==='map')renderCard();}
 $('#avatarBtn').addEventListener('click',openWard);
 $('#wClose').addEventListener('click',closeWard);
-$('#wTabs').addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(!t)return;wTab=t.dataset.t;wTry=null;wShip=false;renderWard();});
+$('#wTabs').addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(!t)return;wTab=t.dataset.t;wTry=null;wShip=false;renderWard();const wb=document.querySelector('#ward .wbody');if(wb)setTimeout(()=>wb.scrollTop=0,1);});
 // PC: horizontal scrollers move with the mouse wheel and by dragging (touch already scrolls natively)
 function hScroll(el){if(!el||el.dataset.hs)return;el.dataset.hs=1;
   el.addEventListener('wheel',e=>{if(el.scrollWidth<=el.clientWidth||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;el.scrollLeft+=e.deltaY;e.preventDefault();},{passive:false});
@@ -3267,7 +3272,7 @@ const LITEM=[
  {id:'house_s',n:'작은 집',p:3000,house:1,off:1},{id:'house_h',n:'한옥',p:15000,house:1,off:2},{id:'house_b',n:'2층 주택',p:60000,house:1,off:3},{id:'house_d',n:'단독 주택',p:150000,house:1,off:4},{id:'house_y',n:'양반 가옥',p:400000,house:1,off:5},
  {id:'tree',n:'소나무',p:200},{id:'cherry',n:'벚나무',p:500},{id:'flower',n:'꽃밭',p:150},{id:'veg',n:'텃밭',p:300},
  {id:'pond',n:'연못',p:800},{id:'cairn',n:'오층 석탑',p:1500},{id:'bench',n:'벤치',p:250},{id:'lamp',n:'가로등',p:300},{id:'fountain',n:'분수',p:2500},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800},
- {id:'monument',n:'드릴 기념비',p:5000},{id:'museum',n:'유물 전시관',p:10000,fx:'화석 발견 확률 +30%'},
+ {id:'monument',n:'드릴 기념비',p:5000},{id:'museum',n:'유물 전시관',p:10000,get fx(){return '화석 발견 +'+MUSEUMP()+'%';}},
  {id:'chick',n:'병아리',p:1500},{id:'rabbit',n:'토끼',p:2200},{id:'turtle',n:'거북이',p:2000},{id:'squirrel',n:'다람쥐',p:2000},{id:'hedgehog',n:'고슴도치',p:2400},{id:'sheep',n:'양',p:2500},{id:'raccoon',n:'너구리',p:2600},{id:'fox',n:'여우',p:3000},{id:'penguin',n:'펭귄',p:3000},{id:'bear',n:'곰',p:3500},{id:'panda',n:'판다',p:4000},{id:'dragon',n:'드래곤',p:12000},{id:'unicorn',n:'유니콘',p:15000}];
 const FURN=[
  {id:'rug',n:'러그',p:400},{id:'bed',n:'침대',p:800},{id:'desk',n:'책상',p:500},{id:'sofa',n:'소파',p:1200},{id:'tv',n:'TV',p:1500},
@@ -4195,29 +4200,38 @@ function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongM
   const tube=(mat,pts,r0,r1,cap=true)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p)));add(new T.Mesh(s3Taper(c,48,16,t=>r0+(r1-r0)*t),mat));if(cap){const a=c.getPointAt(0),b=c.getPointAt(1);add(new T.Mesh(new T.SphereGeometry(r0,16,12),mat),a.x,a.y,a.z);add(new T.Mesh(new T.SphereGeometry(Math.max(.01,r1),12,8),mat),b.x,b.y,b.z);}return c;};
   const eye=(x,y,z,r=.045)=>{add(new T.Mesh(new T.SphereGeometry(r,14,10),ph('#1a1208',{shininess:120,specular:'#ffffff'})),x,y,z);add(new T.Mesh(new T.SphereGeometry(r*.32,8,6),ph('#ffffff',{emissive:'#ffffff'})),x+r*.35,y+r*.4,z+(z>0?r*.6:-r*.6));};
   const CL=ph('#2a2420',{shininess:70});
+  // spine(points, radius(t), vertical squash): tail tip -> body -> neck -> head as ONE smooth surface
+  // radius table [[x,r],...] along the body, smoothly (cosine) interpolated by the x position on the spine
+  const RT=tab=>x=>{if(x<=tab[0][0])return tab[0][1];for(let i=1;i<tab.length;i++)if(x<=tab[i][0]){const [x0,r0]=tab[i-1],[x1,r1]=tab[i],k=(1-Math.cos(Math.PI*(x-x0)/(x1-x0)))/2;return r0+(r1-r0)*k;}return tab[tab.length-1][1];};
+  const scaleT=s3Tex('f3scale',256,256,(g,w,h)=>{g.fillStyle='#ffffff';g.fillRect(0,0,w,h);g.strokeStyle='rgba(0,0,0,.16)';g.lineWidth=1.2;for(let y=0;y<h;y+=7)for(let x=(y/7)%2*5;x<w;x+=10){g.beginPath();g.arc(x,y,4.2,0,Math.PI);g.stroke();}});scaleT.wrapS=scaleT.wrapT=T.RepeatWrapping;scaleT.repeat.set(10,3);
+  const CS=(top,mid,bel,stripe)=>({top:new T.Color(top),mid:new T.Color(mid),bel:new T.Color(bel),stripe:stripe?new T.Color(stripe):null});
+  const spine=(mat,pts,tab,sq=1)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p))),rx=RT(tab),rf=t=>rx(c.getPointAt(Math.min(1,t)).x);const g=s3Taper(c,120,32,rf);
+    let capM=null;if(mat&&mat.top){const cs=mat;capM=ph('#'+cs.mid.getHexString(),{shininess:38});mat=ph('#ffffff',{vertexColors:true,map:scaleT,shininess:38,specular:'#2e2e2e'});g.computeVertexNormals();const n=g.attributes.normal,p=g.attributes.position,col=[];const tmp=new T.Color();
+      for(let i=0;i<p.count;i++){const ny=n.getY(i),x=p.getX(i);if(ny>.1)tmp.copy(cs.mid).lerp(cs.top,Math.min(1,(ny-.1)/.7));else tmp.copy(cs.mid).lerp(cs.bel,Math.min(1,(-ny+.1)/.6));
+        if(cs.stripe&&ny>-.1&&Math.sin(x*9)>.55)tmp.lerp(cs.stripe,.55);col.push(tmp.r,tmp.g,tmp.b);}g.setAttribute('color',new T.Float32BufferAttribute(col,3));}if(sq!==1){const p=g.attributes.position;for(let i=0;i<p.count;i++){const t=Math.floor(i/33)/120,q=c.getPointAt(Math.min(1,t));p.setY(i,q.y+(p.getY(i)-q.y)*sq);}g.computeVertexNormals();}add(new T.Mesh(g,mat));const e=c.getPointAt(1),r=rf(1)*.95;const cap=add(new T.Mesh(new T.SphereGeometry(r,24,18),capM||mat),e.x,e.y,e.z);cap.scale.y=sq;return c;};
+  const bump=(t0,t1,a)=>t=>t<t0||t>t1?0:Math.sin((t-t0)/(t1-t0)*Math.PI)*a;
   const leg=(mat,pts,r0,r1,toes,tr=.05)=>{tube(mat,pts,r0,r1);const h=pts[0];ell(mat,h[0],h[1]-r0*.3,h[2],r0*1.35,r0*1.6,r0*1.1);const f=pts[pts.length-1],fy=Math.max(tr*.9,f[1]);ell(mat,f[0]+tr*1.2,fy,f[2],tr*2.4,tr*1.1,tr*2);
     for(let i=0;i<toes;i++){const a=(i-(toes-1)/2)*.5,x=f[0]+tr*2.4+Math.cos(a)*tr*2,z=f[2]+Math.sin(a)*tr*2.2;const t=add(new T.Mesh(new T.SphereGeometry(tr*.75,10,8),mat),x,fy-tr*.3,z);t.scale.set(1.6,.8,.9);cone(CL,x+tr*1.3,fy-tr*.45,z,tr*.35,tr*1.1,-Math.PI/2);}};
   const cone=(mat,x,y,z,r,h,rz=0,ry=0,rx=0)=>{const m=add(new T.Mesh(new T.ConeGeometry(r,h,16),mat),x,y,z);m.rotation.set(rx,ry,rz);return m;};
   switch(id){
-   case 'kcera':{// Koreaceratops: small basal ceratopsian — parrot beak, short frill, tall paddle-like tail spines
-     const S=ph('#fff',{map:f3Skin('kc','#7f8f4a','#3f4a22','#d8cf9a','stripe')}),B=ph('#6f7f3c'),K=ph('#2a2622',{shininess:60});
-     ell(S,0,.95,0,1.0,.55,.5);tube(B,[[-.8,1.0,0],[-1.6,.95,0],[-2.3,.78,0],[-2.9,.6,0]],.36,.04);
-     {const sh=new T.Shape();sh.moveTo(0,0);sh.quadraticCurveTo(.5,.75,1.4,.55);sh.quadraticCurveTo(1.8,.4,2.0,0);sh.lineTo(0,0);const g=new T.ExtrudeGeometry(sh,{depth:.04,bevelEnabled:false});const m=add(new T.Mesh(g,ph('#8a6a3a',{side:T.DoubleSide})),-2.6,.78,-.02);m.rotation.z=.12;}
-     tube(B,[[.8,1.05,0],[1.15,1.25,0]],.3,.22,false);ell(S,1.42,1.27,0,.4,.28,.25);ell(B,1.72,1.2,0,.22,.17,.17);cone(K,1.98,1.14,0,.09,.26,-Math.PI/2-.3);
-     {const fr=add(new T.Mesh(new T.CircleGeometry(.34,24,0,Math.PI),ph('#9a7a42',{side:T.DoubleSide})),1.16,1.42,0);fr.rotation.set(0,Math.PI/2,.5);}
-     eye(1.55,1.36,.21);eye(1.55,1.36,-.21);
-     for(const z of[.3,-.3]){leg(B,[[-.35,.9,z],[-.15,.45,z*1.1],[-.35,.06,z*1.1]],.22,.08,3,.06);leg(B,[[.6,.75,z*.9],[.72,.38,z],[.66,.05,z]],.11,.06,3,.04);}break;}
-   case 'kano':case 'goseong':{// small bipedal ornithopod / larger iguanodontian track-maker
-     const big=id==='goseong',k=big?1.35:1,S=ph('#fff',{map:f3Skin(id,big?'#6a8a7a':'#9a7a4e',big?'#2e4a3e':'#4a3420',big?'#d8e0c8':'#e8d8b0',big?'spot':'stripe')}),B=ph(big?'#5a7a6a':'#8a6a40');
-     G.scale.setScalar(k);ell(S,0,1.15,0,.9,.48,.42,-.15);tube(B,[[-.7,1.25,0],[-1.6,1.2,0],[-2.5,1.0,0],[-3.1,.85,0]],.32,.03);
-     tube(B,[[.7,1.3,0],[1.0,1.55,0],[1.15,1.75,0]],.24,.16,false);ell(S,1.38,1.78,0,.36,.22,.2,-.1);ell(B,1.7,1.72,0,.18,.12,.13);eye(1.45,1.87,.17,.04);eye(1.45,1.87,-.17,.04);
-     for(const z of[.24,-.24]){leg(B,[[-.2,1.05,z],[.1,.6,z],[-.12,.35,z],[.05,.05,z]],.24,.07,3,.06);leg(B,[[.55,1.05,z*.8],[.72,.8,z],[.86,.62,z]],.08,.04,big?4:3,.03);}
-     if(big)ell(B,0,.03,0,.01,.01,.01);break;}
+   case 'kcera':{// Koreaceratops: small basal ceratopsian — parrot beak, short frill, tall paddle-like tail
+     const S=ph('#fff',{map:f3Skin('kc','#7f8f4a','#3f4a22','#d8cf9a','stripe'),shininess:35}),B=ph('#73833f',{shininess:35}),K=ph('#2a2622',{shininess:70}),FR=ph('#a8843f',{side:T.DoubleSide,shininess:30});
+     const sp=spine(CS('#4a5a28','#7f8f4a','#d8cf9a','#3a4520'),[[-2.9,.62,0],[-2.2,.8,0],[-1.3,.96,0],[-.3,1.02,0],[.6,1.04,0],[1.1,1.2,0],[1.45,1.26,0],[1.86,1.16,0]],[[-2.9,.03],[-2.0,.17],[-1.0,.36],[-.2,.5],[.45,.46],[.9,.26],[1.15,.21],[1.42,.25],[1.7,.16],[1.86,.08]],.9);
+     {const sh=new T.Shape();sh.moveTo(0,0);sh.bezierCurveTo(.3,.55,.9,.62,1.5,.42);sh.quadraticCurveTo(1.85,.3,2.0,0);sh.lineTo(0,0);const m=add(new T.Mesh(new T.ExtrudeGeometry(sh,{depth:.035,bevelEnabled:true,bevelSize:.02,bevelThickness:.015,curveSegments:24}),ph('#8a6a36',{shininess:30})),-2.65,.8,-.02);m.rotation.z=.1;for(let i=0;i<9;i++){const r=add(new T.Mesh(new T.CylinderGeometry(.012,.02,.4,6),ph('#6a4e26')),-2.45+i*.2,.98,0);r.rotation.z=-.15;}}
+     cone(K,1.98,1.12,0,.08,.24,-Math.PI/2-.35);{const fr=add(new T.Mesh(new T.CircleGeometry(.36,32,0,Math.PI),FR),1.22,1.36,0);fr.rotation.set(0,Math.PI/2,.55);}
+     for(const z of[.17,-.17]){eye(1.56,1.33,z,.042);const ck=add(new T.Mesh(new T.ConeGeometry(.05,.14,8),K),1.48,1.18,z*1.25);ck.rotation.x=z>0?1.2:-1.2;}
+     for(const z of[.3,-.3]){leg(B,[[-.35,.95,z],[-.12,.5,z*1.1],[-.32,.08,z*1.1]],.24,.08,3,.065);leg(B,[[.6,.85,z*.85],[.74,.45,z],[.66,.06,z]],.12,.06,4,.045);}break;}
+   case 'kano':case 'goseong':{// slim bipedal ornithopod / larger iguanodontian track-maker
+     const big=id==='goseong',S=ph('#fff',{map:f3Skin(id,big?'#6a8a7a':'#9a7a4e',big?'#2e4a3e':'#4a3420',big?'#d8e0c8':'#e8d8b0',big?'spot':'stripe'),shininess:35}),B=ph(big?'#5a7a6a':'#8a6a40',{shininess:35});
+     if(big)G.scale.setScalar(1.3);
+     spine(big?CS('#3a5a4a','#6a8a7a','#d8e0c8'):CS('#5a4026','#9a7a4e','#e8d8b0','#4a3420'),[[-3.1,.9,0],[-2.2,1.06,0],[-1.2,1.18,0],[-.2,1.22,0],[.55,1.32,0],[.95,1.6,0],[1.2,1.84,0],[1.55,1.84,0],[1.85,1.74,0]],[[-3.1,.025],[-2.2,.13],[-1.2,.3],[-.2,.44],[.4,.38],[.85,.2],[1.15,.17],[1.4,.21],[1.7,.13],[1.85,.07]],.92);
+     for(const z of[.16,-.16])eye(1.45,1.9,z,.04);ell(ph('#3a2a1a'),1.86,1.72,0,.06,.05,.09);
+     for(const z of[.24,-.24]){leg(B,[[-.15,1.1,z],[.15,.62,z],[-.1,.36,z],[.06,.06,z]],.26,.07,3,.065);leg(B,[[.62,1.12,z*.8],[.78,.86,z],[.92,.68,z]],.08,.04,big?4:3,.035);}break;}
    case 'puk':{// Pukyongosaurus: long-necked sauropod
-     const S=ph('#fff',{map:f3Skin('pk','#8a8a78','#4a4a3e','#cfcab4','spot')}),B=ph('#7a7a68');
-     ell(S,0,1.55,0,1.3,.75,.62);tube(B,[[1.0,1.8,0],[1.6,2.4,0],[2.0,3.1,0],[2.15,3.6,0]],.38,.14);ell(S,2.32,3.66,0,.28,.16,.15,-.2);eye(2.4,3.74,.12,.035);eye(2.4,3.74,-.12,.035);
-     tube(B,[[-1.1,1.7,0],[-2.0,1.5,0],[-2.9,1.1,0],[-3.7,.7,0],[-4.3,.5,0]],.42,.03);
-     for(const z of[.42,-.42]){leg(B,[[-.6,1.4,z],[-.6,.7,z],[-.62,.08,z]],.28,.2,4,.07);leg(B,[[.7,1.4,z],[.72,.7,z],[.7,.08,z]],.24,.18,4,.06);}
+     const S=ph('#fff',{map:f3Skin('pk','#8a8a78','#4a4a3e','#cfcab4','spot'),shininess:30}),B=ph('#7a7a68',{shininess:30});
+     spine(CS('#5a5a4c','#8a8a78','#cfcab4'),[[-4.4,.5,0],[-3.4,.85,0],[-2.2,1.35,0],[-.8,1.68,0],[.6,1.74,0],[1.35,2.3,0],[1.85,3.0,0],[2.15,3.55,0],[2.5,3.62,0]],[[-4.4,.03],[-3.2,.22],[-2.0,.5],[-.8,.78],[.3,.76],[1.1,.42],[1.6,.24],[2.0,.16],[2.22,.17],[2.5,.08]],.88);
+     for(const z of[.11,-.11])eye(2.35,3.7,z,.035);
+     for(const z of[.42,-.42]){leg(B,[[-.55,1.5,z],[-.55,.75,z],[-.58,.1,z]],.32,.22,4,.075);leg(B,[[.7,1.5,z],[.72,.75,z],[.7,.1,z]],.27,.2,4,.065);}
      G.scale.setScalar(.8);break;}
    case 'haenam':{// azhdarchid pterosaur (maker of the Haenamichnus tracks), gliding on a display rod
      const S=ph('#fff',{map:f3Skin('hn','#d8c8a8','#7a5a42','#f4ece0','spot')}),B=ph('#c8b694'),W=ph('#a8503a',{side:T.DoubleSide,shininess:8}),Wd=ph('#7a3426',{side:T.DoubleSide});
@@ -4242,10 +4256,11 @@ function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongM
      [[0,.45,0],[.55,.42,.35],[-.55,.42,.3],[.5,.42,-.4],[-.45,.42,-.45],[0,.4,.6],[0,.4,-.65]].forEach(([x,y,z],i)=>{const m=add(new T.Mesh(new T.SphereGeometry(.28,24,18),E),x,y,z);m.scale.set(1,1.25,1);m.rotation.set(.3*i,i,.4);});
      {const b=ph('#8aa86a');ell(b,.0,.78,0,.16,.13,.12);eye(.1,.84,.08,.025);eye(.1,.84,-.08,.025);const sh=add(new T.Mesh(new T.SphereGeometry(.29,20,14,0,Math.PI*2,Math.PI*.45,Math.PI*.55),E),0,.62,0);sh.scale.set(1,1.2,1);}
      break;}
-   case 'cavebear':{const S=ph('#fff',{map:f3Skin('cb','#6a4a32','#3a2618','#8a6a4a','fur'),shininess:6}),B=ph('#5a3e28',{shininess:6});
-     ell(S,0,1.15,0,1.15,.7,.6);ell(S,.95,1.25,0,.5,.5,.48);ell(S,1.45,1.3,0,.38,.34,.32);ell(B,1.8,1.22,0,.2,.16,.17);add(new T.Mesh(new T.SphereGeometry(.07,10,8),ph('#1a1210',{shininess:80})),1.99,1.27,0);
-     for(const z of[.2,-.2])ell(B,1.4,1.62,z,.1,.1,.06);eye(1.68,1.42,.17,.04);eye(1.68,1.42,-.17,.04);
-     for(const z of[.38,-.38]){leg(B,[[-.6,1.0,z],[-.62,.5,z],[-.6,.08,z]],.26,.2,5,.05);leg(B,[[.7,1.0,z],[.72,.5,z],[.75,.08,z]],.24,.18,5,.05);}break;}
+   case 'cavebear':{const S=ph('#fff',{map:f3Skin('cb','#6a4a32','#3a2618','#8a6a4a','fur'),shininess:8}),B=ph('#5a3e28',{shininess:8});
+     spine(CS('#3e2a1a','#6a4a32','#8a6a4a'),[[-1.25,1.08,0],[-.6,1.24,0],[.2,1.28,0],[.85,1.3,0],[1.3,1.38,0],[1.62,1.34,0],[1.92,1.24,0]],[[-1.25,.16],[-.8,.5],[-.1,.66],[.6,.6],[1.0,.42],[1.3,.38],[1.6,.3],[1.92,.12]],.96);
+     ell(B,1.98,1.25,0,.13,.1,.12);add(new T.Mesh(new T.SphereGeometry(.065,12,10),ph('#141010',{shininess:90})),2.08,1.29,0);
+     for(const z of[.21,-.21])ell(B,1.38,1.68,z,.11,.11,.06);for(const z of[.16,-.16])eye(1.74,1.44,z,.038);
+     for(const z of[.36,-.36]){leg(B,[[-.55,1.0,z],[-.6,.5,z],[-.55,.1,z]],.28,.21,5,.055);leg(B,[[.75,1.0,z],[.78,.5,z],[.82,.1,z]],.26,.2,5,.055);}break;}
    case 'whale':case 'dolphin':{const dol=id==='dolphin',S=ph('#fff',{map:f3Skin(id,dol?'#7a8a98':'#4a525c',dol?'#3a4a58':'#22262c',dol?'#eef2f4':'#d0d4d8',dol?'spot':'grooves'),shininess:80,specular:'#777'}),B=ph(dol?'#5e6e7c':'#363e46',{shininess:60});
      const body=new T.CatmullRomCurve3(dol?[V(-2.2,1.25),V(-1.2,1.3),V(0,1.36),V(1.2,1.36),V(2.0,1.3),V(2.45,1.22)]:[V(-2.6,1.2),V(-1.4,1.28),V(0,1.34),V(1.4,1.32),V(2.4,1.24),V(3.0,1.16)]);
      const prof=dol?(t=>.08+Math.pow(Math.sin(Math.min(1,t*1.05)*Math.PI*.92),.8)*.5):(t=>.08+Math.pow(Math.sin(Math.min(1,t)*Math.PI*.82+.12),.75)*.7);
@@ -4269,13 +4284,20 @@ function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongM
      for(const z of[1,-1]){for(let i=0;i<3;i++){const w=add(new T.Mesh(new T.CylinderGeometry(.006,.004,.28,4),ph('#efe6d6')),1.55,2.0-i*.025,z*.13);w.rotation.set(z*1.3,0,1.2-i*.15);}
        const f=add(new T.Mesh(new T.SphereGeometry(1,16,10),B),.55,.82,z*.42);f.scale.set(.42,.06,.2);f.rotation.set(z*.4,z*-.5,-.5);
        const h=add(new T.Mesh(new T.SphereGeometry(1,16,10),B),-1.55,.76,z*.2);h.scale.set(.36,.05,.14);h.rotation.y=z*.5;}break;}
-   case 'shell':{// a tray of West Sea shells: scallop, cockles, oyster, whelk on sand
-     add(new T.Mesh(new T.CylinderGeometry(1.5,1.6,.16,40),ph('#d8c49a',{shininess:4})),0,.08,0);
-     const fan=(x,z,s,c,ry)=>{const g=new T.CircleGeometry(.5*s,18,Math.PI*.15,Math.PI*.7),m=add(new T.Mesh(g,ph(c,{side:T.DoubleSide,shininess:30})),x,.2,z);m.rotation.set(-Math.PI/2+.25,0,ry);for(let i=0;i<7;i++){const r=add(new T.Mesh(new T.CylinderGeometry(.012,.012,.48*s,4),ph(shade(c,-.25))),x,.21,z);r.rotation.set(-Math.PI/2+.25,0,ry+Math.PI*(.2+i*.1)-Math.PI/2);r.translateY(.24*s);}return m;};
-     fan(-.6,.3,1.1,'#e8a06a',.3);fan(.7,-.4,.9,'#f0d0b0',-.4);
-     const cl=(x,z,c)=>{const m=add(new T.Mesh(new T.SphereGeometry(.28,20,12,0,Math.PI*2,0,Math.PI/2),ph(c,{shininess:40})),x,.16,z);m.scale.set(1,.55,.85);};cl(.2,.55,'#b89a7a');cl(-.2,-.6,'#9a8a7a');cl(.9,.5,'#c8b8a0');
-     {const o=add(new T.Mesh(new T.DodecahedronGeometry(.3,1),ph('#a8a296',{flatShading:true})),-.9,.22,-.4);o.scale.set(1.3,.35,.9);}
-     {const w=add(new T.Mesh(new T.ConeGeometry(.2,.6,24,8,true),ph('#d8b890',{side:T.DoubleSide,shininess:40})),.1,.42,-.05);w.rotation.z=1.2;for(let i=0;i<6;i++){const r=add(new T.Mesh(new T.TorusGeometry(.2-i*.03,.012,4,16),ph('#a8845a')),.1-Math.cos(1.2)*(.0+i*.1),.42+Math.sin(1.2)*(-.25+i*.09)*.3,-.05);r.rotation.y=Math.PI/2;r.rotation.x=.4;}}
+   case 'shell':{// a tray of West Sea fossil shells: ribbed scallops, cockles, a spiral whelk and an oyster on sand
+     const sand=s3Tex('f3sand',256,256,(g,w,h)=>{g.fillStyle='#b8a47e';g.fillRect(0,0,w,h);let sd=3;const R=()=>(sd=(sd*9301+49297)%233280)/233280;for(let i=0;i<2600;i++){g.fillStyle=R()<.5?'rgba(120,96,60,.25)':'rgba(255,248,230,.3)';g.fillRect(R()*w,R()*h,1.4,1.4);}});
+     add(new T.Mesh(new T.CylinderGeometry(1.5,1.58,.18,48),ph('#fff',{map:sand,shininess:4})),0,.09,0);
+     const fan=(x,z,s,col,ry,ribs=16)=>{const g=new T.BufferGeometry(),pos=[],idx=[],NR=18,NA=64;for(let r=0;r<=NR;r++)for(let a=0;a<=NA;a++){const rr=r/NR,th=Math.PI*(.14+.72*a/NA),rib=Math.pow(Math.abs(Math.sin(th*ribs*1.5)),.6)*.06*rr;const R0=.55*s*rr;pos.push(Math.cos(th)*R0,(.26*(1-rr*rr)+rib)*s,Math.sin(th)*R0);}
+       for(let r=0;r<NR;r++)for(let a=0;a<NA;a++){const k=r*(NA+1)+a;idx.push(k,k+1,k+NA+1,k+1,k+NA+2,k+NA+1);}g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setIndex(idx);g.computeVertexNormals();
+       const m=add(new T.Mesh(g,ph(col,{side:T.DoubleSide,shininess:20,specular:'#333'})),x,.19,z);m.rotation.y=ry;
+       for(const e of[-1,1]){const ear=add(new T.Mesh(new T.BoxGeometry(.12*s,.03*s,.09*s),ph(shade(col,-.12))),x,.2,z);ear.rotation.y=ry;ear.translateX(e*.08*s);ear.translateZ(-.04*s);}return m;};
+     fan(-.55,.25,1.15,'#d8763a',.4);fan(.75,-.35,.9,'#c89a6a',-.6,14);fan(.0,-.85,.7,'#b85a3a',2.6,12);
+     const cockle=(x,z,s,col)=>{const g=new T.SphereGeometry(.3*s,48,20,0,Math.PI*2,0,Math.PI/2),p=g.attributes.position;for(let i=0;i<p.count;i++){const X=p.getX(i),Z=p.getZ(i),Y=p.getY(i),a=Math.atan2(Z,X),k=1+Math.pow(Math.abs(Math.sin(a*11)),.7)*.06*(1-Y/(.3*s));p.setXYZ(i,X*k,Y,Z*k);}g.computeVertexNormals();const m=add(new T.Mesh(g,ph(col,{shininess:18,specular:'#2a2a2a'})),x,.17,z);m.scale.set(1,.62,.85);};
+     cockle(.3,.6,1,'#a8825a');cockle(-.85,-.45,.9,'#8a7a6a');cockle(.95,.45,.8,'#b89e7a');
+     {const prof=[];for(let i=0;i<=24;i++){const t=i/24;prof.push(new T.Vector2(.02+.3*Math.pow(Math.sin(Math.min(1,t*1.1)*Math.PI*.5),.8)*(1-t*.9),t*.75));}const W=new T.Group();const lat=new T.Mesh(new T.LatheGeometry(prof,48),ph('#d8b088',{shininess:25,specular:'#444'}));W.add(lat);
+       const pts=[];for(let i=0;i<=160;i++){const t=i/160,a=t*Math.PI*2*5,y=t*.72,rr=.02+.3*Math.pow(Math.sin(Math.min(1,y/.75*1.1)*Math.PI*.5),.8)*(1-y/.75*.9);pts.push(new T.Vector3(Math.cos(a)*rr,y,Math.sin(a)*rr));}W.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),220,.018,6,false),ph('#a87e54',{shininess:40})));
+       W.position.set(.15,.22,-.1);W.rotation.z=1.35;G.add(W);}
+     {const o=add(new T.Mesh(new T.DodecahedronGeometry(.32,2),ph('#a8a296',{shininess:20})),-.25,.22,.75);o.scale.set(1.35,.32,.9);const p=o.geometry.attributes.position;for(let i=0;i<p.count;i++){p.setY(i,p.getY(i)*(1+Math.sin(p.getX(i)*30)*.08));}o.geometry.computeVertexNormals();}
      break;}
   }
   return G;}
@@ -4725,7 +4747,7 @@ function relicCase(r){const h=hasRelic(r.id),g=h?S.relic[r.id]:-1;
   return `<div class="vit ${h?'':'no'}" style="--g:${h?GR[g].c:'#3a4650'}"><div class="vglass">${relicIcon(r,h,74)}</div><div class="vped"><b>${h?r.n:'미발굴'}</b>${h?gBadge(g):'<span class="vq">?</span>'}</div></div>`;}
 function renderGal(){const nf=FOSSILS.filter(f=>fosDone(f.id)).length;
   $('#galTab').innerHTML=[['fos','화석관'],['rel','유물관']].map(([k,t])=>`<button type="button" class="${galTab===k?'on':''}" data-gt="${k}">${t}</button>`).join('');
-  if(galTab==='fos')$('#galBody').innerHTML=`<p class="sub" style="margin:0">찾은 뼈로 골격을 세워 전시해요. 비어 있는 부분은 아직 못 찾은 부위예요. 복원 완료 ${nf}/${FOSSILS.length}<br><b style="color:#9fd6ff">🦴 전시관 보유 효과: 화석 발견 확률 +30%</b> · 다 모은 화석은 실물 3D 복원 모형과 함께 전시돼요.</p><div class="gxs">${FOSSILS.map(fossilExhibit).join('')}</div>`;
+  if(galTab==='fos')$('#galBody').innerHTML=`<p class="sub" style="margin:0">찾은 뼈로 골격을 세워 전시해요. 비어 있는 부분은 아직 못 찾은 부위예요. 복원 완료 ${nf}/${FOSSILS.length}<br><b style="color:#9fd6ff">🦴 전시관 보유 효과: 화석 발견 확률 +${MUSEUMP()}% (칸당 ${(5*MUSEUMF()).toFixed(1)}% · ${S.mode==='hard'?'하드':'보통'})</b> · 다 모은 화석은 실물 3D 복원 모형과 함께 전시돼요.</p><div class="gxs">${FOSSILS.map(fossilExhibit).join('')}</div>`;
   else $('#galBody').innerHTML=`<p class="sub" style="margin:0">원정에서 발굴한 유물을 시대별 진열장에 전시해요. 발굴 ${relicCount()}/${RELICS.length}</p>`+ERAS.map(e=>{const rs=relicsOf(e.id),n=setCount(e.id);
     return `<div class="vera"><div class="vhd"><b>${e.n}</b><span>${n}/${rs.length}${setLv(e.id)?' · 세트 효과 '+e.b(setPow(e.id)):''}</span></div><div class="vrow">${rs.map(relicCase).join('')}</div></div>`;}).join('');}
 const hasMuseum=()=>Object.values(landOf().tiles).includes('museum');
@@ -4900,6 +4922,7 @@ function renderStats(){const c=ME(),l=layerAt(Math.min(S.depth,GOAL()-1)),pc=v=>
   for(const e of ERAS){const lv=setLv(e.id);if(lv)perks.push(row(`유물 세트 · ${e.n} ${lv===2?'완성':'3종'}`,e.b(setPow(e.id))));}
   for(const f of FOSSILS)if(fosDone(f.id))perks.push(row('화석 · '+f.n,f.eff));
   if(S.land&&houseBonus())perks.push(row('내 땅 · 집','오프라인 +'+houseBonus()+'시간'));
+  if(S.land&&MUSEUMF()>1)perks.push(row('내 땅 · 유물 전시관','화석 발견 확률 +'+MUSEUMP()+'%'));
   const parts=PARTS.map(p=>row(p.n,`Lv.${L(p.id)}/${MAXLV}`,L(p.id)>0)).join('');
   $('#statBody').innerHTML=`<div class="st-hero"><svg viewBox="-20 -6 140 180" aria-hidden="true">${charG(c,{expr:'happy'})}</svg><div><b>${escH(pName())}</b><span>${MD().n} 모드 · ${S.part===2?'2부':'1부'} · ${fmtD(S.depth)} / ${fmtD(GOAL())}</span><span>유물 ${relicCount()}/${RELICS.length} · 화석 ${FOSSILS.filter(f=>fosDone(f.id)).length}/${FOSSILS.length} · 투자 ${Object.values(ir).reduce((a,b)=>a+b,0)}회</span></div></div>
     <div class="st-sec">굴착 능력</div><div class="st-grid">${cards.map(([n,v])=>`<div class="st-c"><span>${n}</span><b>${v}</b></div>`).join('')}</div>
