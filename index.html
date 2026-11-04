@@ -667,7 +667,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>풍경 계절</span><div class="segs" id="mSeason"></div></div>
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v91 · 2026-11-04 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v92 · 2026-11-04 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1762,16 +1762,18 @@ try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
 let oriTried=false;addEventListener('pointerup',()=>{if(oriTried)return;oriTried=true;try{const o=screen.orientation;if(o&&o.lock)o.lock('portrait').catch(()=>{});}catch(e){}},{passive:true});
 function sndRebuild(){// iOS sometimes leaves a context dead after the phone was locked: throw it away and make a fresh one inside the tap
   const old=SND.ctx;bgmStop();SND.ctx=null;SND.fails=0;for(const k of Object.keys(DRL))if(k!=='on')delete DRL[k];try{old&&old.close();}catch(e){}return sndInit();}
-function sndWake(){if(document.hidden)return;let c=sndInit();if(!c)return;if(SND.asleep){SND.asleep=false;}if(c.state!=='running'){SND.fails=(SND.fails||0)+1;if(SND.fails>2||c.state==='closed')c=sndRebuild();if(c)c.resume().then(()=>{SND.fails=0;if(!titleOn)sndApply();}).catch(()=>{});}
+function sndWake(){if(document.hidden||SND.speaking)return;let c=sndInit();if(!c)return;if(SND.asleep){SND.asleep=false;}if(c.state!=='running'){SND.fails=(SND.fails||0)+1;if(SND.fails>2||c.state==='closed')c=sndRebuild();if(c)c.resume().then(()=>{SND.fails=0;if(!titleOn)sndApply();}).catch(()=>{});}
   else{SND.fails=0;}if(c&&!titleOn)sndApply();}
 ['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>window.addEventListener(ev,sndWake,{passive:true,capture:true}));
 // leaving the app (home swipe, app switcher, lock): fade to silence first, then stop the audio engine — when iOS freezes the page mid-swipe a running
 // context underruns and crackles, so it must already be silent and suspended by the time the page loses focus
 function sndSleep(){const c=SND.ctx;if(!c)return;try{const t=c.currentTime;SND.master.gain.cancelScheduledValues(t);SND.master.gain.setValueAtTime(SND.master.gain.value,t);SND.master.gain.linearRampToValueAtTime(0,t+.03);if(SND.blastMix){SND.blastMix.gain.cancelScheduledValues(t);SND.blastMix.gain.setValueAtTime(0,t);}}catch(e){}
-  SND.asleep=true;bgmStop();setTimeout(()=>{if(SND.asleep&&c.state==='running')c.suspend().catch(()=>{});},40);try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
-function sndWakeUp(){if(!SND.ctx||!SND.asleep)return;if(document.hidden||!document.hasFocus())return;SND.asleep=false;SND.ctx.resume().then(()=>{if(!titleOn)sndApply();}).catch(()=>{});}
-document.addEventListener('visibilitychange',()=>{if(document.hidden)sndSleep();else sndWakeUp();});
-addEventListener('pagehide',sndSleep);addEventListener('blur',sndSleep);addEventListener('freeze',sndSleep);
+  SND.asleep=true;bgmStop();setTimeout(()=>{if(SND.asleep&&c.state==='running')c.suspend().catch(()=>{});},40);}
+function sndHide(){sndSleep();SND.speaking=false;try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
+function sndWakeUp(){if(!SND.ctx||!SND.asleep||SND.speaking)return;if(document.hidden||!document.hasFocus())return;SND.asleep=false;SND.ctx.resume().then(()=>{if(!titleOn)sndApply();}).catch(()=>{});}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)sndHide();else sndWakeUp();});
+// blur alone (speech engine, system sheet, notification shade) only quiets the music; the voice is never cut and the watchdog brings sound back while we're still on screen
+addEventListener('pagehide',sndHide);addEventListener('freeze',sndHide);addEventListener('blur',()=>{if(!SND.speaking)sndSleep();});
 addEventListener('pageshow',()=>setTimeout(sndWakeUp,50));addEventListener('focus',()=>setTimeout(sndWakeUp,50));
 const NOTE=n=>440*Math.pow(2,(n-69)/12);
 function tone(o){const c=SND.ctx;if(!c)return;const t=o.t??c.currentTime,g=c.createGain(),osc=c.createOscillator();osc.type=o.type||'sine';osc.frequency.setValueAtTime(o.f,t);if(o.f2)osc.frequency.exponentialRampToValueAtTime(o.f2,t+(o.glide||o.d));
@@ -1840,17 +1842,26 @@ document.addEventListener('click',e=>{const t=e.target;if(t.closest('nav.tabs bu
 let yiVoices=[];function yiLoadVoices(){try{yiVoices=speechSynthesis.getVoices()||[];}catch(e){}}
 if(window.speechSynthesis){yiLoadVoices();try{speechSynthesis.onvoiceschanged=yiLoadVoices;}catch(e){}
   let unl=false;addEventListener('pointerup',()=>{if(unl)return;unl=true;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}catch(e){}},{passive:true,capture:true});}
-function yiVoice(){const p=sndPref();if(!p.voice||!window.speechSynthesis)return;try{if(!yiVoices.length)yiLoadVoices();
+function yiVoice(delay=0){const p=sndPref();if(!p.voice||!window.speechSynthesis)return;try{if(!yiVoices.length)yiLoadVoices();
   const v=yiVoices.find(x=>/^ko/i.test(x.lang)&&/male|남|injoon|minsu/i.test(x.name))||yiVoices.find(x=>/^ko/i.test(x.lang));
-  // speech grabs the phone's audio focus and can suspend Web Audio: wake the music again when each line starts/ends
-  const back=()=>{SND.asleep=false;const c=SND.ctx;if(c&&c.state!=='running')c.resume().then(()=>{if(!titleOn)sndApply();}).catch(()=>{});};
-  const say=(txt,pitch,rate)=>{const u=new SpeechSynthesisUtterance(txt);u.lang='ko-KR';u.pitch=pitch;u.rate=rate;u.volume=1;if(v)u.voice=v;u.onstart=back;u.onend=back;u.onerror=back;speechSynthesis.speak(u);return u;};
-  const duck=on=>{const c=SND.ctx;if(!c||!SND.bgmG)return;SND.bgmG.gain.setTargetAtTime(on?.15:(sndPref().bgm&&!(view==='bore'||exp)?.75:0),c.currentTime,.2);};
-  const go=()=>{if(speechSynthesis.paused)speechSynthesis.resume();duck(true);say('필사즉생! 필생즉사!',.55,.85);const u2=say('싸움에 있어 죽고자 하면 반드시 살고, 살고자 하면 죽는다!',.6,.92);const end=()=>{back();duck(false);};u2.onend=end;u2.onerror=end;setTimeout(()=>duck(false),12000);};
+  // phones give speech and Web Audio one audio focus: fighting over it (resuming music mid-sentence) is what silenced the voice and left the music dead.
+  // So: hush + pause our engine, say the lines, then bring the music back once — with timeouts in case the engine never reports start/end.
+  clearTimeout(yiVoice.t1);clearTimeout(yiVoice.t2);clearTimeout(yiVoice.t3);
+  const done=()=>{if(!SND.speaking)return;SND.speaking=false;clearTimeout(yiVoice.t2);clearTimeout(yiVoice.t3);if(document.hidden)return;SND.asleep=false;const c=SND.ctx;
+    if(c&&c.state!=='closed')(c.state==='running'?Promise.resolve():c.resume()).then(()=>{if(!titleOn)sndApply();}).catch(()=>{});};
+  const say=(txt,pitch,rate)=>{const u=new SpeechSynthesisUtterance(txt);u.lang='ko-KR';u.pitch=pitch;u.rate=rate;u.volume=1;if(v)u.voice=v;speechSynthesis.speak(u);return u;};
+  const talk=()=>{if(!SND.speaking||document.hidden)return;if(speechSynthesis.paused)speechSynthesis.resume();
+    const u1=say('필사즉생! 필생즉사!',.55,.85),u2=say('싸움에 있어 죽고자 하면 반드시 살고, 살고자 하면 죽는다!',.6,.92);
+    let st=false;u1.onstart=u2.onstart=()=>{st=true;};u2.onend=u2.onerror=done;u1.onerror=e=>{if(!st)done();};
+    yiVoice.t2=setTimeout(()=>{if(!st&&!speechSynthesis.speaking)done();},3500);yiVoice.t3=setTimeout(done,16000);window.__yiTalk=(window.__yiTalk||0)+1;};
+  const go=()=>{SND.speaking=true;const c=SND.ctx;bgmStop();
+    if(c&&c.state==='running'){try{const t=c.currentTime;SND.master.gain.cancelScheduledValues(t);SND.master.gain.setValueAtTime(SND.master.gain.value,t);SND.master.gain.linearRampToValueAtTime(0,t+.2);}catch(e){}
+      setTimeout(()=>{const c2=SND.ctx;if(SND.speaking&&c2&&c2.state==='running')c2.suspend().then(talk,talk);else talk();},230);}else talk();};
   // Chrome on Android drops an utterance queued in the same tick as cancel(): only cancel when something is still talking, then speak a moment later
-  if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(go,120);}else go();}catch(e){}}
+  const start=()=>{if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(go,150);}else go();};
+  if(delay)yiVoice.t1=setTimeout(start,delay);else start();}catch(e){SND.speaking=false;}}
 // audio watchdog: if the system interrupted Web Audio (speech, calls, other apps) while we're visible, bring it back
-setInterval(()=>{const c=SND.ctx;if(!c||document.hidden||SND.asleep)return;if(c.state!=='running'&&c.state!=='closed')c.resume().then(()=>{if(!titleOn)sndApply();}).catch(()=>{});},1500);
+setInterval(()=>{const c=SND.ctx;if(!c||document.hidden||SND.speaking)return;if(SND.asleep){if(document.hasFocus())sndWakeUp();return;}if(c.state!=='running'&&c.state!=='closed')c.resume().then(()=>{if(!titleOn)sndApply();}).catch(()=>{});},1500);
 // ---- background music: small step sequencer (lookahead scheduling) ----
 // 'field' = bright pentatonic march for the surface; 'deep' = slower, darker loop while drilling
 const SONGS={
@@ -1873,7 +1884,7 @@ function playYi(){const el=$('#yiEv'),left=Math.max(0,Math.ceil((S.yiB-Date.now(
   el.innerHTML=`<div class="yirays"></div><svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${yiSVG({sex:'yi'},{pose:'raise',anim:true})}</svg><div class="yitxt"><b>必死則生 必生則死</b><span>필사즉생 필생즉사</span><em>본공·원정 굴착량 +${yiSet()?150:100}% · ${left}초</em></div>${yiSet()?(L3OK&&shipShot('side',640,300,{sea:false})?`<img class="yiship" src="${shipShot('side',640,300,{sea:false})}" alt="">`:`<svg class="yiship" viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'y',sea:true})}</svg>`):''}`;
   el.hidden=false;el.classList.remove('go');void el.offsetWidth;el.classList.add('go');clearTimeout(playYi.t);playYi.t=setTimeout(()=>{el.hidden=true;el.innerHTML='';},5400);}
 function yiEvent(){const d=Math.round((YI.dur[S.mode]||90)*(yiSet()?YISET.d:1));S.yiB=Date.now()+d*1000;save();
-  toast(yiSet()?'⚔🐢 이순신 장군과 거북선 출격! 「필사즉생 필생즉사」 굴착량 +150% · '+d+'초':'⚔ 이순신 장군 출현! 「필사즉생 필생즉사」 굴착량 +100% · '+d+'초');sfx('yi');yiVoice();
+  toast(yiSet()?'⚔🐢 이순신 장군과 거북선 출격! 「필사즉생 필생즉사」 굴착량 +150% · '+d+'초':'⚔ 이순신 장군 출현! 「필사즉생 필생즉사」 굴착량 +100% · '+d+'초');sfx('yi');yiVoice(2600);
   if(view==='map'&&!exp)playYi();else yiPend=true;}
 $('#yiEv').addEventListener('click',()=>{yiVoice();$('#yiEv').hidden=true;});
 $('#yiChip').addEventListener('click',()=>{yiVoice();if(view!=='map'||exp){toast(`⚔ 필사즉생 — 본공·원정 굴착력 ×${yiM()} 적용 중`);return;}playYi();});
@@ -2849,7 +2860,7 @@ function yiSVG(c,o={}){const u='yi'+(++UID),ex=o.expr||'',up=o.pose==='raise',an
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="34" ry="5.5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
 const charG=(c,o)=>c.sex==='yi'?yiSVG(c,o||{}):(c.sex!=='m'&&c.sex!=='f'&&ANS[c.sex])?animalSVG(c,o||{}):humanSVG(c,o||{});
-if(window.__expose){window.__charG=charG;window.__OPT=OPT;setTimeout(()=>{try{window.__animal3=animal3;window.__animPose=animPose;window.__yiEvent=yiEvent;window.__boreDps=boreDps;window.__expDps=expDps;}catch(e){}},0);}
+if(window.__expose){window.__charG=charG;window.__OPT=OPT;setTimeout(()=>{try{window.__animal3=animal3;window.__animPose=animPose;window.__yiEvent=yiEvent;window.SND=SND;window.__grandY=grandYangban;window.__boreDps=boreDps;window.__expDps=expDps;}catch(e){}},0);}
 const fig=(c,x,y,h,o={})=>{const s=h/172;return `<g transform="translate(${(x-50*s).toFixed(1)},${(y-172*s).toFixed(1)}) scale(${s.toFixed(3)})">${charG(c,o)}</g>`;};
 const ME=()=>Object.assign({},DEFCHAR,S.char||{});
 // animals open per mode: normal 5, hard 5 (the other 5 species are retired; owned ones keep working)
@@ -3415,12 +3426,13 @@ function grandVilla(cx,cy){let g=shadowE(cx,cy,78,30)+lotPad(cx,cy,2.92,'#86c060
 
 function giwaWall(A,Z,h,col='#d9cdb4'){return `<polygon points="${PT([A,Z,up(Z,h),up(A,h)])}" fill="${col}" ${ISK}/>`+[.15,.35,.55,.75].map(t=>{const x=A[0]+(Z[0]-A[0])*t,y=A[1]+(Z[1]-A[1])*t;return `<circle cx="${x.toFixed(1)}" cy="${(y-h*.5).toFixed(1)}" r="1.6" fill="#a89a80"/>`;}).join('')
   +`<polygon points="${PT([up(A,h),up(Z,h),up(Z,h+4),up(A,h+4)])}" fill="#3a3a44" ${ISK}/><path d="M${A[0]},${A[1]-h-4} L${Z[0]},${Z[1]-h-4}" stroke="#5a5a66" stroke-width="1.4"/>`;}
+const GLOWP=(poly,i)=>poly.replace(/\/>$/,`><animate attributeName="fill" values="#ffe3a4;#ffc96e;#ffe8b0;#ffe3a4" dur="${(2.6+i%3*.7).toFixed(1)}s" repeatCount="indefinite"/></polygon>`);
 function hanokHall(cx,cy,su,sv,h,rh,base=6){let g=rBox(cx,cy,su+.12,sv+.12,base,'#a8a29a').svg;const B=rBox(cx,cy-base,su,sv,h,'#f3e8d0');g+=B.svg;
   const nl=Math.max(2,Math.round(sv*4)),nr=Math.max(2,Math.round(su*4));
   for(let i=0;i<=nl;i++){const u=i/nl;g+=rFace(B,'l',Math.max(0,u-.02),Math.min(1,u+.02),0,h,'#6a4a2c');}
   for(let i=0;i<=nr;i++){const u=i/nr;g+=rFace(B,'r',Math.max(0,u-.02),Math.min(1,u+.02),0,h,'#6a4a2c');}
-  for(let i=0;i<nr;i++){const u0=i/nr+.03,u1=(i+1)/nr-.03;g+=rFace(B,'r',u0,u1,2,h-5,'#efe0bc',ISK)+rFace(B,'r',(u0+u1)/2-.004,(u0+u1)/2+.004,2,h-5,'#8a6a44')+rFace(B,'r',u0,u1,(h-3)/2,(h-3)/2+.7,'#b89a6a');}
-  for(let i=0;i<nl;i++){const u0=i/nl+.03,u1=(i+1)/nl-.03;g+=rFace(B,'l',u0,u1,h*.35,h-5,'#e8d8b0',ISK);}
+  for(let i=0;i<nr;i++){const u0=i/nr+.03,u1=(i+1)/nr-.03;g+=GLOWP(rFace(B,'r',u0,u1,2,h-5,'#ffdf9a',ISK),i)+rFace(B,'r',(u0+u1)/2-.004,(u0+u1)/2+.004,2,h-5,'#8a6a44')+rFace(B,'r',u0,u1,(h-3)/2,(h-3)/2+.7,'#b89a6a');}
+  for(let i=0;i<nl;i++){const u0=i/nl+.03,u1=(i+1)/nl-.03;g+=GLOWP(rFace(B,'l',u0,u1,h*.35,h-5,'#ffd88e',ISK),i+2);}
   g+=rFace(B,'l',0,1,h-4,h,'#6a4a2c')+rFace(B,'r',0,1,h-4,h,'#6a4a2c');
   // hipped-gable tiled roof (팔작지붕)
   const y0=cy-base-h,o=.2,T=ip(cx,y0,-su-o,-sv-o),R=ip(cx,y0,su+o,-sv-o),Bp=ip(cx,y0,su+o,sv+o),L=ip(cx,y0,-su-o,sv+o);
@@ -3446,7 +3458,7 @@ function grandYangban(cx,cy){let g=shadowE(cx,cy,80,30)+lotPad(cx,cy,2.94,'#cbb9
   g+=hanokHall(...ip(cx,cy,.78,.18),.3,.55,20,19,5);
   // pine & lanterns
   const [tx,ty]=ip(cx,cy,-1.15,-.05);g+=miniPine(tx,ty,1.2);
-  for(const [u,v] of[[-.25,.45],[.55,1.0]]){const [x,y]=ip(cx,cy,u,v);g+=`<rect x="${x-2.4}" y="${y-12}" width="4.8" height="12" fill="#a8a29a" ${ISK}/><rect x="${x-4}" y="${y-19}" width="8" height="7" fill="#fff3b0" ${ISK}><animate attributeName="fill" values="#fff3b0;#ffe08a;#fff3b0" dur="2s" repeatCount="indefinite"/></rect><path d="M${x-6},${y-19} L${x},${y-24} L${x+6},${y-19}Z" fill="#3a3a44" ${ISK}/>`;}
+  for(const [u,v] of[[-.25,.45],[.55,1.0]]){const [x,y]=ip(cx,cy,u,v);g+=`<ellipse cx="${x}" cy="${y-15}" rx="13" ry="10" fill="#ffc870" opacity=".22"><animate attributeName="opacity" values=".16;.28;.2;.16" dur="2.4s" repeatCount="indefinite"/></ellipse><ellipse cx="${x}" cy="${y+1}" rx="12" ry="5" fill="#ffc870" opacity=".18"/><rect x="${x-2.4}" y="${y-12}" width="4.8" height="12" fill="#a8a29a" ${ISK}/><rect x="${x-4}" y="${y-19}" width="8" height="7" fill="#fff3b0" ${ISK}><animate attributeName="fill" values="#fff3b0;#ffe08a;#fff3b0" dur="2s" repeatCount="indefinite"/></rect><path d="M${x-6},${y-19} L${x},${y-24} L${x+6},${y-19}Z" fill="#3a3a44" ${ISK}/>`;}
   // front walls with 솟을대문 gate on left-front wall
   const gm=[Lp[0]+(Bp[0]-Lp[0])*.5,Lp[1]+(Bp[1]-Lp[1])*.5],ga=[Lp[0]+(Bp[0]-Lp[0])*.38,Lp[1]+(Bp[1]-Lp[1])*.38],gb=[Lp[0]+(Bp[0]-Lp[0])*.62,Lp[1]+(Bp[1]-Lp[1])*.62];
   g+=giwaWall(Lp,ga,12)+giwaWall(gb,Bp,12)+giwaWall(Bp,Rp,12);
@@ -3798,12 +3810,31 @@ function model3(id){const g=new THREE.Group(),A=f=>L3.anims.push(f);
     g.add(B3(.9,.75,1.2,'#b07a44',.85,.06,-.6),B3(.7,.55,.04,'#d8dcde',.85,.06,.01),B3(1,.06,1.3,'#3a3e44',.85,.81,-.6));
     g.add(B3(1.1,.06,.8,'#b88a5a',.6,.06,.85),B3(.9,.05,.6,'#3fa3d6',.6,.1,.85,{emissive:'#0a3050'}));
     for(const [x,z] of[[-1.25,1.2],[-.6,1.25],[1.3,.2]])g.add(S3(.18,'#4a9a44',x,.22,z));g.add(K3(.3,.7,'#2f7a3a',-1.2,.35,.6),C3(.05,.05,.35,WOOD,-1.2,.06,.6));break;}
-  case 'house_y':{g.add(B3(2.9,.06,2.9,'#cbb995'));const wall=(w,d,x,z)=>{g.add(B3(w,.32,d,'#d9cdb4',x,.06,z),B3(w+.06,.06,d+.06,'#3a3a44',x,.38,z));};
+  case 'house_y':{g.add(B3(2.9,.06,2.9,'#cbb995'));const paper=new THREE.MeshLambertMaterial({color:'#f3e2b8',emissive:'#ffb85a',emissiveIntensity:.3});const wall=(w,d,x,z)=>{g.add(B3(w,.32,d,'#d9cdb4',x,.06,z),B3(w+.06,.06,d+.06,'#3a3a44',x,.38,z));};
     wall(2.8,.12,0,-1.38);wall(.12,2.8,-1.38,0);wall(.12,2.8,1.38,0);wall(1.1,.12,-.85,1.38);wall(1.1,.12,.85,1.38);
     g.add(B3(.12,.6,.12,WOOD,-.3,.06,1.38),B3(.12,.6,.12,WOOD,.3,.06,1.38),B3(.5,.5,.06,'#7a4a2a',0,.06,1.38),hipRoof(.75,.3,.25,'#33333c',.66));g.children[g.children.length-1].position.set(0,0,1.38);
-    const hall=(w,d,x,z,h)=>{const s=new THREE.Group();s.add(B3(w+.15,.12,d+.15,'#a8a29a'),B3(w,h,d,'#f3e8d0',0,.12));for(let i=0;i<=4;i++)s.add(B3(.06,h,.06,'#6a4a2c',-w/2+w*i/4,.12,d/2));s.add(B3(w*.8,h*.5,.03,'#e8d8b0',0,.18,d/2+.02));s.add(hipRoof(w,d,.55,'#33333c',.12+h));s.position.set(x,.06,z);return s;};
+    const hall=(w,d,x,z,h)=>{const s=new THREE.Group();s.add(B3(w+.15,.12,d+.15,'#a8a29a'),B3(w,h,d,'#f3e8d0',0,.12));for(let i=0;i<=4;i++)s.add(B3(.06,h,.06,'#6a4a2c',-w/2+w*i/4,.12,d/2));{const pn=new THREE.Mesh(new THREE.BoxGeometry(w*.8,h*.5,.03),paper);pn.position.set(0,.18+h*.25,d/2+.02);s.add(pn);for(let i=1;i<4;i++)s.add(B3(.018,h*.5,.04,'#6a4a2c',-w*.4+w*.8*i/4,.18,d/2+.025));s.add(B3(w*.8,.018,.04,'#6a4a2c',0,.18+h*.25,d/2+.025));}s.add(hipRoof(w,d,.55,'#33333c',.12+h));s.position.set(x,.06,z);return s;};
     g.add(hall(1.5,.75,-.25,-.6,.55),hall(.6,1.1,.85,.25,.5));for(const [x,z] of[[-1,.6],[-.8,.8],[-1.05,.95]])g.add(C3(.09,.12,.22,'#6a3e24',x,.06,z));
-    g.add(K3(.32,.6,'#2f7a3a',-1.05,.5,-.05),K3(.24,.45,'#2f7a3a',-1.05,.85,-.05),C3(.05,.05,.5,WOOD,-1.05,.06,-.05));break;}
+    g.add(K3(.32,.6,'#2f7a3a',-1.05,.5,-.05),K3(.24,.45,'#2f7a3a',-1.05,.85,-.05),C3(.05,.05,.5,WOOD,-1.05,.06,-.05));
+    /* 마당 모닥불 + 대문 청사초롱 + 창호지 불빛 */
+    const fx=-.05,fz=.62,AD={transparent:true,depthWrite:false,blending:THREE.AdditiveBlending};
+    for(let i=0;i<9;i++){const a=i/9*Math.PI*2;g.add(S3(.045,'#8a857c',fx+Math.cos(a)*.17,.08,fz+Math.sin(a)*.17));}
+    for(const r of[.4,1.9,3.2]){const l=C3(.025,.025,.3,'#5a3a22',0,0,0,6);l.rotation.set(Math.PI/2-.35,r,0);l.position.set(fx,.12,fz);g.add(l);}
+    const emb=new THREE.Mesh(new THREE.CircleGeometry(.12,16),new THREE.MeshBasicMaterial({color:'#ff6a1a'}));emb.rotation.x=-Math.PI/2;emb.position.set(fx,.075,fz);g.add(emb);
+    const fl=[['#ff7a1a',.09,.3],['#ffb030',.065,.22],['#fff0a0',.035,.13]].map(([c,r,h])=>{const m=new THREE.Mesh(new THREE.ConeGeometry(r,h,8),new THREE.MeshBasicMaterial(Object.assign({color:c,opacity:.9},AD)));m.position.set(fx,.08+h/2,fz);g.add(m);return m;});
+    const fh=new THREE.Sprite(new THREE.SpriteMaterial(Object.assign({map:glowTex(),color:'#ff9a40',opacity:.4},AD)));fh.scale.set(.8,.8,1);fh.position.set(fx,.22,fz);g.add(fh);
+    const fpool=new THREE.Mesh(new THREE.CircleGeometry(.75,24),new THREE.MeshBasicMaterial(Object.assign({map:glowTex(),color:'#ff9a40',opacity:.2},AD)));fpool.rotation.x=-Math.PI/2;fpool.position.set(fx,.07,fz);g.add(fpool);
+    const fpl=new THREE.PointLight('#ff9a48',.4,2.4);fpl.position.set(fx,.35,fz);g.add(fpl);
+    const lan=[];for(const lx of[-.3,.3]){const lg=new THREE.Group();lg.position.set(lx,.5,1.48);g.add(lg);lg.add(C3(.004,.004,.12,'#222',0,.06));
+      const lm=new THREE.MeshLambertMaterial({color:'#c8283a',emissive:'#ff5a3a',emissiveIntensity:.3});const b=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,.07,10),lm);b.position.y=.02;lg.add(b);
+      const lb=new THREE.MeshLambertMaterial({color:'#2a4fa8',emissive:'#5a7aff',emissiveIntensity:.2});const b2=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,.03,10),lb);b2.position.y=-.03;lg.add(b2);
+      const h=new THREE.Sprite(new THREE.SpriteMaterial(Object.assign({map:glowTex(),color:'#ffb070',opacity:.3},AD)));h.scale.set(.3,.3,1);lg.add(h);lan.push([lg,lm,lb,h]);}
+    const wpl=new THREE.PointLight('#ffc070',.2,2.2);wpl.position.set(-.25,.5,-.05);g.add(wpl);
+    A(t=>{const n=L3.night||0,f=1+.18*Math.sin(t*17)*Math.sin(t*5.3+1),f2=1+.12*Math.sin(t*23+2);
+      fl.forEach((m,i)=>{m.scale.set(1+.1*Math.sin(t*11+i),f*(1+.15*Math.sin(t*19+i*2)),1+.1*Math.cos(t*9+i));m.rotation.y=t*(1+i*.6);});
+      emb.material.color.setRGB(1,.35+.12*f2,.08);fh.material.opacity=(.3+.6*n)*f;fh.scale.setScalar(.7+.5*n+.08*f);fpool.material.opacity=(.12+.5*n)*f2;fpl.intensity=(.35+1.6*n)*f;
+      paper.emissiveIntensity=.25+1.25*n*(1+.04*Math.sin(t*7));wpl.intensity=.1+.9*n;
+      lan.forEach(([lg,lm,lb,h],i)=>{lg.rotation.z=Math.sin(t*1.6+i*2)*.08;lm.emissiveIntensity=.3+1.3*n;lb.emissiveIntensity=.2+.9*n;h.material.opacity=(.2+.7*n)*f2;});});break;}
   case 'museum':{g.add(B3(2.9,.06,2.9,'#d9d3c6'));g.add(B3(2.3,.1,2.3,'#cfc8ba',-.1,.06,-.1),B3(2.1,.1,2.1,'#ddd6c8',-.1,.16,-.1),B3(1.9,.1,1.9,'#e9e3d6',-.1,.26,-.1));
     g.add(B3(1.3,1.1,1.3,'#efe6d2',-.1,.36,-.1),B3(.36,.6,.04,'#6b4a26',-.1,.36,.56));
     for(let i=0;i<6;i++)for(const s of[0,1,2,3]){const t=-.8+i*.32,x=s===0?t:s===1?t:s===2?-.9:.9,z=s===0?.9:s===1?-.9:t;if(s>1&&(i===0||i===5))continue;g.add(C3(.07,.08,1.1,'#f6f1e6',x-.1,.36,z-.1,10));}
