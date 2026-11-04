@@ -83,7 +83,9 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .node.locked .dot{fill:#3a4549}
 .node text{font:600 10.5px var(--f-body);fill:var(--fg);paint-order:stroke;stroke:var(--sea);stroke-width:3px;stroke-linejoin:round}
 .node.locked text{fill:#6c7a7d}
-.node text.rlab,.node tspan.rlab{font:700 7.6px var(--f-body);stroke-width:2.4px}.node .rcnt{fill:#e8e2d6;font-weight:500}.node.locked .rlab{opacity:.55}.node .ricon{overflow:visible;filter:drop-shadow(0 0 1.5px #0e1315) drop-shadow(0 0 1px #0e1315)}.node.locked .ricon{opacity:.45;filter:grayscale(1) drop-shadow(0 0 1.5px #0e1315)}
+.node text.rlab,.node tspan.rlab{font:700 7.6px var(--f-body);stroke-width:2.4px}.node .rcnt{fill:#e8e2d6;font-weight:500}.node.locked .rlab{opacity:.55}.node .ricon{overflow:visible;filter:drop-shadow(0 0 1.5px #0e1315) drop-shadow(0 0 1px #0e1315)}
+/* Android (Samsung etc.): SVG filters + per-frame animation inside the big map SVG make the GPU leave corrupted tiles -> no filters there, ring pulses by opacity only */
+html.android .node .ricon,html.android .node.locked .ricon,html.android .node.act .ring{filter:none!important}html.android .node.locked .ricon{opacity:.4}html.android .node.act .ring{animation:actringA 1.4s ease-in-out infinite!important}@keyframes actringA{0%,100%{opacity:1}50%{opacity:.45}}html.android #map *{will-change:auto!important}.node.locked .ricon{opacity:.45;filter:grayscale(1) drop-shadow(0 0 1.5px #0e1315)}
 .node .ring{fill:none;stroke:var(--amber2);stroke-width:1.5;opacity:0}
 .node.sel .ring{opacity:1}
 .card{display:grid;gap:12px}
@@ -1516,7 +1518,7 @@ const expHP=(r,i)=>r.t==='sea'&&i<r.water?2:Math.round(MD().expBase*r.diff*Math.
 const regById=id=>REG.find(x=>x.id===id);let SHIPR=null;
 // Android GPUs (Samsung etc.) smear a large semi-transparent SVG layer whose opacity is animated into brown stripes:
 // there the tide is a plain swap between high and low water every 8 seconds on the base layer (no blending, no animated layer)
-var ANDROID=/Android/i.test(navigator.userAgent);
+var ANDROID=/Android/i.test(navigator.userAgent);if(ANDROID)document.documentElement.classList.add('android');
 // (Android keeps a static high-water coastline: repainting that region made some GPUs leave a dark rectangle over the West Sea)
 // the map SVG keeps its aspect ratio, so on tall phones there is open sea below it: pin the °E labels to the bottom edge that is actually visible
 function mapLonFit(){const sv=document.getElementById('mapSvg');if(!sv)return;const W=sv.clientWidth,H=sv.clientHeight;if(!W||!H)return;const vb=sv.viewBox.baseVal,sc=Math.min(W/vb.width,H/vb.height),visH=H/sc,bottom=vb.y+vb.height/2+visH/2;
