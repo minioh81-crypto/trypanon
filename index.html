@@ -64,7 +64,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .grat{stroke:#5ab8ea;stroke-width:.4;opacity:.5}
 .plab{font:800 5.4px var(--f-body);fill:#fff6dc;text-anchor:middle}.plab.sm{font-size:5.4px;fill:#fff;paint-order:stroke;stroke:#14609e;stroke-width:1.6px}
 .mapwrap{position:relative}.mapwrap svg{overflow:visible}.mapwrap .mlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}#mapSvg{position:relative;z-index:1}
-.mtide{opacity:0;animation:tide 16s ease-in-out infinite}@keyframes tide{0%,30%{opacity:0}50%,80%{opacity:1}100%{opacity:0}}
+.mtide{opacity:0;animation:tide 16s ease-in-out infinite}#map.frozen *{animation-play-state:paused!important}@keyframes tide{0%,30%{opacity:0}50%,80%{opacity:1}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.mtide{animation:none}}
 .gl{fill:#bfe6ff;opacity:.7;font:500 7px var(--f-num)}
 #map.wx-storm .flash{animation:mflash 7s infinite}@keyframes mflash{0%,90%,94%,100%{opacity:0}91%{opacity:.5}93%{opacity:.15}92.5%{opacity:.45}}#map #mWx{pointer-events:none}
@@ -485,7 +485,8 @@ nav.tabs button{font-size:12px}
 #room{position:fixed;inset:0;z-index:55;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}
 #room .dsheet{max-height:92vh;max-height:92dvh;overflow-y:auto}
 #gal{position:fixed;inset:0;z-index:56;background:rgba(5,7,8,.72);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#gal .dsheet{max-height:94vh;max-height:94dvh;overflow-y:auto}
-.galbody{display:grid;gap:14px}.gxs{display:grid;gap:14px}.gx{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#1c2226}.gx svg{display:block;width:100%;height:auto}
+.galbody{display:grid;gap:14px}.g3{display:grid;grid-template-columns:46% 1fr;gap:8px;align-items:center;padding:8px;background:radial-gradient(ellipse at 30% 60%,#3a3430,#1e1a18);border-top:1px solid #4a4038}.g3 img{width:100%;height:auto;display:block}.g3t{display:grid;gap:4px}.g3t b{color:#f2e6c8;font-size:13px}.g3t span{font-size:11.5px;color:var(--mute)}.g3t button{justify-self:start;font-size:12px;height:auto;padding:7px 11px;white-space:nowrap}
+#fos3d{position:fixed;inset:0;z-index:72;background:rgba(5,7,8,.8);display:flex;align-items:flex-end;max-width:560px;margin:0 auto}#fos3d .dsheet{gap:10px}.f3wrap{position:relative;height:min(62dvh,420px);border-radius:14px;overflow:hidden;background:radial-gradient(ellipse at 50% 70%,#3e3630,#141210)}.f3wrap canvas{display:block;width:100%!important;height:100%!important;cursor:grab}.gxs{display:grid;gap:14px}.gx{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#1c2226}.gx svg{display:block;width:100%;height:auto}
 .gpl{padding:8px 12px 12px;display:grid;gap:3px;background:linear-gradient(#2a2420,#221d1a);border-top:3px solid #8a6a3a}.gpl b{font-size:15px;color:#f2e6c8}.gpl>span{font-size:11.5px;color:var(--mute)}.gpl em{font-style:normal;font-size:12px;color:var(--mute)}.gpl em.ok{color:var(--ok)}
 .vera{display:grid;gap:8px}.vhd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #8a6a3a;padding-bottom:4px}.vhd b{font-size:15px;color:#f2e6c8}.vhd span{font-size:11.5px;color:var(--mute)}
 .vrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
@@ -672,6 +673,7 @@ nav.tabs button{font-size:12px}
   <div class="nbar"><span class="nlogo">GNN</span><span class="nlive">속보</span><span class="ntime" id="nTime"></span></div>
   <h3 class="nhead" id="nHead"></h3><div class="nart" id="nArt"></div><p class="nbody" id="nBody"></p>
   <div class="nreward" id="nReward"></div><button class="primary" type="button" id="nOk">받기</button></div></section>
+<section id="fos3d" hidden><div class="dsheet"><div class="ehd"><div class="iname" style="font-size:18px" id="f3Name">실물 복원 모형</div><button class="skip" id="f3Close" type="button">닫기</button></div><div class="f3wrap" id="f3Wrap"></div><p class="sub" id="f3Txt" style="margin:0"></p></div></section>
 <section id="gal" hidden><div class="dsheet"><div class="ehd"><div class="iname" style="font-size:18px">전시관</div><div class="flt" id="galTab"></div><button class="skip" id="galClose" type="button">닫기</button></div><div id="galBody" class="galbody"></div></div></section>
 <section id="room" hidden><div class="dsheet">
   <div class="ehd"><div class="iname" style="font-size:18px" id="roomTitle">집 안 꾸미기</div><div class="flt" id="roomFl"></div><button class="skip" id="roomClose" type="button">닫기</button></div>
@@ -1171,6 +1173,8 @@ const FOSSILS=[
  {id:'ura',rg:'mudeung',e:'meso',n:'우항리 물갈퀴새 발자국',where:'전남 해남 우항리의 물갈퀴 새 발자국 (우항리크누스)',eff:'원정 굴착력 +3%',pn:['첫째 발자국','둘째 발자국','셋째 발자국','넷째 발자국','다섯째 발자국']},
  {id:'cavebear',rg:'taebaek',e:'paleo',n:'단양 동굴곰',where:'충북 단양 구낭굴에서 나온 동굴곰 뼈',eff:'본공 굴착력 +3%',pn:['뒷다리뼈','골반·꼬리뼈','등뼈·갈비뼈','앞다리뼈','머리뼈(송곳니)']},
  {id:'whale',rg:'east',sea:1,n:'포항 고래 화석',where:'동해 해저 신생대 지층의 고래 뼈 (경북 포항 일대 산지)',eff:'해상 원정 자원 +1 (20% 확률)',pn:['꼬리뼈·꼬리지느러미','허리뼈','등뼈·갈비뼈','앞지느러미뼈','머리뼈']},
+ {id:'gangchi',rg:'deep',sea:1,n:'독도 강치 뼈',where:'독도 바다사자(강치)의 뼈 — 한때 독도 바위섬을 가득 메웠던 동해의 바다사자',eff:'해상 원정 굴착력 +5%',pn:['뒷지느러미·꼬리뼈','골반·허리뼈','등뼈·갈비뼈','목뼈·앞지느러미','머리뼈(송곳니)']},
+ {id:'dolphin',rg:'deep',sea:1,n:'울릉도 돌고래 화석',where:'울릉분지 해저 신생대 지층의 고대 돌고래 뼈',eff:'해상 원정 자원 +1 (10% 확률)',pn:['꼬리지느러미·꼬리뼈','허리뼈','등뼈·갈비뼈','가슴지느러미뼈','머리뼈(긴 주둥이)']},
  {id:'shell',rg:'west',sea:1,n:'서해 조개 화석',where:'서해 해저 퇴적층의 조개·굴 화석 판',eff:'보급 상자 재료 +20%',pn:['가리비 화석','굴 화석','백합 화석','꼬막 화석','고둥 화석']},
 ];
 const fosGot=id=>(S.fos&&S.fos[id])||[];
@@ -1197,6 +1201,15 @@ const FOSPARTS={
   fchain([[54,49],[80,46]],6,3.8,4.4,4,5,3),[...fchain([[82,45],[118,44]],7,4.6,4.6,5,5),...fribs(7,84,5,44,0,22,1.8)],
   [['F','M113,46 Q124,41 129,50 Q123,58 116,56Z'],['L',[[121,53],[125,64]],3.4],['L',[[125,64],[131,73]],2.6],['L',[[131,73],[137,79]],2]],
   [['F','M120,42 Q132,32 150,36 L192,44 Q196,46 192,48 L150,54 Q132,56 122,50Z'],['L',[[132,54],[192,49]],2.4],['H',140,44,3,2.6],['H',146,38,2.4,1.4]]],
+ gangchi:()=>[[...fchain([[20,60],[36,57]],4,1.4,2.6,0,0,0),['F','M32,60 Q14,70 4,84 Q16,82 36,66Z'],['F','M32,62 Q24,78 22,90 Q32,84 38,66Z']],
+  [['F','M36,53 Q48,45 58,52 Q54,63 40,62Z'],['H',47,55,3.2,2.4],...fchain([[40,54],[66,50]],5,3,3.6,3,4)],
+  [...fchain([[68,50],[104,44]],7,3.8,4,4,5),...fribs(7,70,5,48,-1,24,1.6)],
+  [...fchain([[106,43],[130,34]],5,3.4,2.8,2,1),['L',[[110,50],[117,64]],3.2],['F','M115,62 Q122,80 108,96 Q130,88 126,64Z'],['L',[[118,70],[114,88]],.8,'#8a7a5a'],['L',[[121,70],[120,88]],.8,'#8a7a5a']],
+  [['F','M131,33 Q141,22 158,26 L176,34 Q181,37 176,40 L160,42 Q142,45 133,39Z'],['L',[[140,43],[174,41]],2.4],['H',150,30,3.2,2.6],['H',140,34,2.2,1.6],['L',[[166,39],[167,48]],1.8],['L',[[170,40],[170,46]],1.2]]],
+ dolphin:()=>[[...fchain([[14,56],[40,52]],8,1.4,3,1,2.5,0),['F','M10,56 Q0,44 6,40 Q12,50 16,54 Q12,60 6,70 Q0,66 10,56Z']],
+  fchain([[42,51],[70,48]],6,3.4,4,5,6,3),[...fchain([[72,47],[104,45]],6,4.2,4.2,5,4),...fribs(6,74,5.4,46,0,20,1.6)],
+  [['F','M104,52 Q114,60 112,76 Q104,72 100,56Z'],['L',[[106,58],[109,72]],.8,'#8a7a5a'],['L',[[103,60],[105,70]],.8,'#8a7a5a']],
+  [['F','M108,42 Q118,32 132,36 Q140,38 146,42 L190,46 Q193,47 190,49 L146,50 Q132,54 118,50Z'],['L',[[146,51],[188,50]],1.8],['H',128,40,3.2,2.6],['H',120,38,2,1.6],...[152,158,164,170,176,182].map(x=>['L',[[x,49],[x+.6,51]],.7,'#8a7a5a'])]],
  shell:()=>[shellOps(40,58,1.3),shellOps(72,40,1.1),shellOps(104,62,1.4),shellOps(136,42,1.2),shellOps(168,60,1.3)],
  goseong:()=>[[triP(30,62)],[triP(64,38)],[triP(100,62)],[triP(136,38)],[triP(170,62)]],
  ura:()=>[[webP(34,58)],[webP(66,44)],[webP(100,60)],[webP(132,44)],[webP(164,58)]],
@@ -1252,9 +1265,10 @@ function fossilArt(f,got,hl,slab=true,mount=null){const parts=FOSPARTS[f.id](),B
   parts.forEach((ops,i)=>{const have=got.includes(i);if(!have){g+=draw(ops,'miss');return;}if(i===hl)g+=draw(ops,'glow');g+=draw(ops,'out')+draw(ops,'fill');});
   return g;}
 function fossilSVG(f,hl=-1){return `<svg viewBox="0 0 200 100" aria-hidden="true">${fossilArt(f,fosGot(f.id),hl)}</svg>`;}
+const MUSEUMF=()=>typeof landOf==='function'&&Object.values(landOf().tiles||{}).includes('museum')?1.3:1; // 유물 전시관 보유: 화석 발견 확률 ×1.3
 function fosTry(reg,below,vis){const mine=FOSSILS.filter(f=>f.rg===reg.id&&!fosDone(f.id));if(!mine.length)return;
   const inb=mine.filter(f=>{const [a,b]=fosBand(f);return below>=a&&below<b;}),missed=mine.filter(f=>below>=fosBand(f)[1]);
-  let f=null;if(inb.length&&Math.random()<.05)f=inb[Math.floor(Math.random()*inb.length)];else if(!inb.length&&missed.length&&Math.random()<.008)f=missed[Math.floor(Math.random()*missed.length)];
+  const mk=MUSEUMF();let f=null;if(inb.length&&Math.random()<.05*mk)f=inb[Math.floor(Math.random()*inb.length)];else if(!inb.length&&missed.length&&Math.random()<.008*mk)f=missed[Math.floor(Math.random()*missed.length)];
   if(f)dropFossilFor(f,vis,reg);}
 function dropFossilFor(f,vis,reg){S.fos=S.fos||{};const got=fosGot(f.id),miss=[0,1,2,3,4].filter(i=>!got.includes(i));if(!miss.length)return;const pc=miss[Math.floor(Math.random()*miss.length)];
   S.fos[f.id]=[...got,pc];const pn=f.pn[pc],where=reg.n+' '+altText(reg,digOf(reg.id).i);
@@ -1380,6 +1394,7 @@ const RELICS=[
  {id:'ptero',n:'익룡 이빨 화석',e:'meso',ic:'tooth',c:'#e9dfc8',v:600},{id:'bone',n:'공룡 뼈 화석',e:'meso',ic:'bone',c:'#d8c7a4',v:700},
  {id:'goldbar',n:'보물선 금괴',e:'wreck',ic:'bar',c:'#f2c14e',v:1200},{id:'silver',n:'은화 꾸러미',e:'wreck',ic:'coin',c:'#c9ced2',v:500},
  {id:'cargo',n:'운반선 청자 대접',e:'wreck',ic:'bowl',c:'#8fc1b0',v:600},{id:'anchor',n:'닻돌',e:'wreck',ic:'anchor',c:'#6c6a66',v:300},
+ {id:'usan',n:'우산국 토기',e:'wreck',ic:'jar',c:'#8a6a4e',v:900},
  {id:'trilo',n:'삼엽충 화석',e:'paleoz',ic:'trilo',c:'#8a7a66',v:1000},{id:'fish',n:'갑주어 화석',e:'paleoz',ic:'fish',c:'#7a8288',v:1100},
  {id:'crinoid',n:'바다나리 화석',e:'paleoz',ic:'crinoid',c:'#b9a88a',v:900},{id:'fern',n:'고사리 화석',e:'paleoz',ic:'fern',c:'#6f8a5a',v:850},
  {id:'strom',n:'스트로마톨라이트',e:'precam',ic:'strom',c:'#a89070',v:1500},{id:'bif',n:'호상철광층',e:'precam',ic:'bif',c:'#9a3f2c',v:1400},
@@ -1388,7 +1403,7 @@ const RELICS=[
 const REL_RG={moonjar:'bukhan',yeop:'gyeryong',yugi:'mai',rain:'songni',maebyeong:'mudeung',type:'songni',eunbyeong:'bukhan',najeon:'gyeryong',pagoda:'seorak',
  crown:'juwang',earring:'jiri',armor:'jiri',tou:'juwang',ingot:'jiri',ironaxe:'taebaek',slim:'mai',mold:'gyeryong',bipa:'mudeung',halfmoon:'songni',plain:'bukhan',mirror:'mai',
  comb:'seorak',grind:'taebaek',spindle:'halla',hook:'seorak',handaxe:'bukhan',chopper:'taebaek',tang:'songni',scraper:'halla',foot:'jiri',egg:'mudeung',ptero:'halla',bone:'juwang',
- trilo:'taebaek',fish:'juwang',crinoid:'seorak',fern:'taebaek',strom:'bukhan',bif:'seorak',zircon:'jiri',meteor:'halla',goldbar:'east',silver:'south',cargo:'west',anchor:'south'};
+ trilo:'taebaek',fish:'juwang',crinoid:'seorak',fern:'taebaek',strom:'bukhan',bif:'seorak',zircon:'jiri',meteor:'halla',goldbar:'east',silver:'south',cargo:'west',anchor:'south',usan:'deep'};
 RELICS.forEach(r=>r.rg=REL_RG[r.id]);
 const WRECK=[M(80),M(450)],SEAFOS=[M(150),M(600)];
 function eraBand(eid){if(eid==='wreck')return WRECK;const L2=ERAS.filter(x=>!x.sea),i=L2.findIndex(x=>x.id===eid);return [L2[i].from,i+1<L2.length?L2[i+1].from:Infinity];}
@@ -1506,7 +1521,7 @@ function digOf(id){S.ex.dig[id]=S.ex.dig[id]||{i:0,hp:0};const g=S.ex.dig[id];if
 const belowOf=(r,i)=>r.t==='sea'?i-r.water:i;
 function altText(r,i){if(r.t==='sea')return i<r.water?'수심 '+(i*r.ws).toLocaleString('ko-KR')+'m':'해저 아래 '+((i-r.water)*BLK).toLocaleString('ko-KR')+'m';
   const a=PEAK[r.id][1]-i*BLK;return a>=0?'해발 '+a.toLocaleString('ko-KR')+'m':'지하 '+(-a).toLocaleString('ko-KR')+'m';}
-const expDps=(rid=S.ex.active||(exp&&exp.r.id))=>wxDig(rid)*(1+PK('paleo',.1))*(rid&&regById(rid).t==='sea'?(1+PK('ship',.15))*shipSea():1)*(rid&&regById(rid).t==='sea'?1+.4*L('press')/MAXLV:1)*dps()*boostM()*yiM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.05:1)*(fosDone('ura')?1.03:1);
+const expDps=(rid=S.ex.active||(exp&&exp.r.id))=>wxDig(rid)*(1+PK('paleo',.1))*(rid&&regById(rid).t==='sea'?(1+PK('ship',.15))*shipSea()*(fosDone('gangchi')?1.05:1):1)*(rid&&regById(rid).t==='sea'?1+.4*L('press')/MAXLV:1)*dps()*boostM()*yiM()*(1+.1*L('insul'))*(1+.2*setPow('meso'))*(fosDone('puk')?1.05:1)*(fosDone('ura')?1.03:1);
 const relicP=()=>(.15+.004*L('sensor')+PK('prof',.02)+PK('museum',.02)+.002*rp('org'))*(1+itFx('tablet',.1));
 const critMul=()=>5+setPow('paleo');
 let exAcc=0,popQ=[],popT=0;
@@ -1518,7 +1533,7 @@ function addRelic(rl,vis,belowM){S.relic=S.relic||{};const g=rollGrade(belowM||0
   if(vis)popQ.push({rl,g,cur,sold,msg});else if(g>=6||cur<0)toast(`${cur<0?'유물 발견':'등급 상승'}: ${GR[g].n} ${rl.n}`);}
 function expBreak(r,vis){const g=digOf(r.id),below=belowOf(r,g.i);
   if(r.t==='land'&&PEAK[r.id][1]-g.i*BLK>0&&PEAK[r.id][1]-(g.i+1)*BLK<=0)toast(r.n+' 해발 0m 도달 · 여기부터는 본공 지표(0m)와 같은 지층이 이어집니다');
-  if(below>=0){let wp=r.t==='sea'?setPow('wreck'):0,amt=Math.floor((MD().yf||3)*(S.part===2?MD().y2||1:1)+Math.random())+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.15?1:0)+(r.t==='sea'&&fosDone('whale')&&Math.random()<.2?1:0)+(r.t==='sea'?(perk('sea')&&Math.random()<pm()?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
+  if(below>=0){let wp=r.t==='sea'?setPow('wreck'):0,amt=Math.floor((MD().yf||3)*(S.part===2?MD().y2||1:1)+Math.random())+(Math.random()<extraP()?1:0)+(fosDone('goseong')&&Math.random()<.15?1:0)+(r.t==='sea'&&fosDone('whale')&&Math.random()<.2?1:0)+(r.t==='sea'&&fosDone('dolphin')&&Math.random()<.1?1:0)+(r.t==='sea'?(perk('sea')&&Math.random()<pm()?1:0)+Math.floor(wp)+(Math.random()<wp%1?1:0):0);
     amt=wxAmt(amt,r.id);if(evtOn()&&S.evt.rid===r.id)amt*=2;
     S.res[r.res]=(S.res[r.res]||0)+amt;const m=Math.round(5*r.diff*Math.pow(expHP(r,g.i)/(MD().expBase*r.diff),.6)*(1+.15*setPow('joseon')));S.money+=m;
     if(vis&&!expPopped){ex.pop('+'+amt+' '+r.res,RES[r.res]);expPopped=1;sfx('pickup');}
@@ -1848,7 +1863,7 @@ function updateMap(){document.querySelectorAll('#map .rcnt').forEach(t=>{t.textC
 // If a visible SVG's clock stops advancing, drive it from script by seeking it every frame (seeking still redraws).
 const SMILW=new WeakMap();
 function smilWatch(){const now=performance.now()/1000;
-  document.querySelectorAll('#card .art svg,#eArt svg,#mapSvg,#lgWrap svg,#lcel svg,.yiev svg,#wStage svg,#rpop svg').forEach(sv=>{if(!sv.getCurrentTime||!sv.isConnected)return;const r=sv.getBoundingClientRect();if(!r.width||!r.height||(sv.id==='mapSvg'&&view!=='map'))return;
+  document.querySelectorAll('#card .art svg,#eArt svg,#mapSvg,#lgWrap svg,#lcel svg,.yiev svg,#wStage svg,#rpop svg').forEach(sv=>{if(!sv.getCurrentTime||!sv.isConnected||(sv.animationsPaused&&sv.animationsPaused())||!$('#ward').hidden&&sv.closest('#map'))return;const r=sv.getBoundingClientRect();if(!r.width||!r.height||(sv.id==='mapSvg'&&view!=='map'))return;
     let st=SMILW.get(sv);if(!st){st={t0:now,c0:sv.getCurrentTime(),drive:false,base:sv.getCurrentTime()};SMILW.set(sv,st);return;}
     if(!st.drive){if(now-st.t0>.6){if(sv.getCurrentTime()-st.c0<.15){st.drive=true;st.base=sv.getCurrentTime();st.t0=now;}else{st.t0=now;st.c0=sv.getCurrentTime();}}}
     if(st.drive){try{sv.setCurrentTime(st.base+(now-st.t0));}catch(e){}}});}
@@ -2076,15 +2091,15 @@ const SKIN=['#f3d3b5','#e5b48a','#c58c5e','#8b5a3c'];
 const OPT={
  sex:[{v:'m',n:'남자 주인공',p:0},{v:'f',n:'여자 주인공',p:0},{v:'yi',n:'★ 이순신 장군',get p(){return S.mode==='hard'?10000000:5000000;},d:'특수 캐릭터 · 보유 효과: 본공·원정 굴착력 +5% (하드 +3%, 다른 캐릭터로 바꿔도 유지) · 이순신 장군을 착용 중이면 가끔 지도에 출현해 「필사즉생 필생즉사」를 외치고 본공·원정 굴착량 +100% (보통 60초 / 하드 40초)'},{v:'mole',n:'두더지',p:0},
   {v:'chick',n:'병아리',p:2500},{v:'dog',n:'강아지',p:3000},{v:'cat',n:'고양이',p:3000},{v:'rabbit',n:'토끼',p:3000},{v:'panda',n:'판다',p:6000},
-  {v:'bear',n:'곰',p:4000},{v:'fox',n:'여우',p:5000},{v:'penguin',n:'펭귄',p:5000},{v:'dragon',n:'드래곤',p:20000},{v:'unicorn',n:'유니콘',p:25000},
+  {v:'bear',n:'곰',p:4000},{v:'fox',n:'여우',p:5000},{v:'penguin',n:'펭귄',p:5000},{v:'dragon',n:'드래곤',p:20000},{v:'unicorn',n:'유니콘',p:25000},{v:'tiger',n:'호랑이',p:8000},{v:'lion',n:'사자',p:8000},
   {v:'tanuki',n:'너구리',p:2000},{v:'squirrel',n:'다람쥐',p:3500},{v:'turtle',n:'거북이',p:3500},{v:'sheep',n:'양',p:4000},{v:'hedgehog',n:'고슴도치',p:4000}],
  hair:[{v:'short',n:'짧은 머리',p:0},{v:'tail',n:'묶은 머리',p:0},{v:'part',n:'가르마',p:150},{v:'buzz',n:'삭발',p:80},{v:'regent',n:'폭주족 리젠트',p:1500},{v:'sangtu',n:'양반 상투',p:2500},{v:'noble',n:'귀족 쪽머리',p:3000},{v:'king',n:'임금 상투',p:8000},{v:'queen',n:'왕비 큰머리',p:9000}],
  hcol:[{v:0,n:'검정',p:0,c:'#1f1814'},{v:1,n:'갈색',p:100,c:'#4a2f20'},{v:2,n:'밝은 갈색',p:150,c:'#8a5a2b'},{v:3,n:'금발',p:300,c:'#c9a15a'},{v:4,n:'남색',p:400,c:'#3b4a78'},{v:5,n:'회색',p:400,c:'#8a8e95'}],
  eyes:[{v:'round',n:'동글',p:0},{v:'smile',n:'웃는 눈',p:200},{v:'sharp',n:'날카로운 눈',p:200}],
  skin:[{v:0,n:'밝은 톤',p:0},{v:1,n:'중간 톤',p:0},{v:2,n:'짙은 톤',p:0},{v:3,n:'깊은 톤',p:0}],
  body:[{v:'slim',n:'마른 체형',p:0,w:.86},{v:'normal',n:'보통',p:0,w:1},{v:'big',n:'튼튼',p:0,w:1.18}],
- hat:[{v:'none',n:'없음',p:0},{v:'straw',n:'밀짚모자',p:300},{v:'satgat',n:'삿갓 (농민)',p:400},{v:'bow',n:'리본',p:700},{v:'lamp',n:'랜턴 안전모',p:800},{v:'flower',n:'꽃 화관',p:900},{v:'gat',n:'갓 (양반)',p:3000},{v:'horns',n:'뿔 머리띠',p:3500},{v:'mask',n:'잠수 마스크',p:4000},{v:'jokduri',n:'족두리 (궁녀)',p:4000},{v:'samo',n:'사모 (영정 관리)',p:6000},{v:'hwagwan',n:'화관 (왕비)',p:15000},{v:'ikseon',n:'익선관 (왕)',p:20000},{v:'crown',n:'아다마스 투구',p:60000}],
- outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'farmer',n:'농민 (바지저고리)',p:800},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'yangban',n:'양반 (도포)',p:5000},{v:'court',n:'궁녀 (당의)',p:8000},{v:'official',n:'영정 관복 (단령)',p:12000},{v:'king',n:'왕 (곤룡포)',p:40000},{v:'queen',n:'왕비 (적의)',p:50000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
+ hat:[{v:'none',n:'없음',p:0},{v:'straw',n:'밀짚모자',p:300},{v:'satgat',n:'삿갓 (농민)',p:400},{v:'bow',n:'리본',p:700},{v:'lamp',n:'랜턴 안전모',p:800},{v:'flower',n:'꽃 화관',p:900},{v:'gat',n:'갓 (양반)',p:3000},{v:'horns',n:'뿔 머리띠',p:3500},{v:'mask',n:'잠수 마스크',p:4000},{v:'jokduri',n:'족두리 (궁녀)',p:4000},{v:'samo',n:'사모 (영정 관리)',p:6000},{v:'hwagwan',n:'화관 (왕비)',p:15000},{v:'veil',n:'💍 티아라 베일',p:12000},{v:'ikseon',n:'익선관 (왕)',p:20000},{v:'crown',n:'아다마스 투구',p:60000}],
+ outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'farmer',n:'농민 (바지저고리)',p:800},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'yangban',n:'양반 (도포)',p:5000},{v:'court',n:'궁녀 (당의)',p:8000},{v:'official',n:'영정 관복 (단령)',p:12000},{v:'king',n:'왕 (곤룡포)',p:40000},{v:'queen',n:'왕비 (적의)',p:50000},{v:'wedding',n:'💍 웨딩드레스',p:30000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
  ship:[{v:'none',n:'없음',p:0},{v:'turtle',n:'★ 거북선',get p(){return S.mode==='hard'?16000000:8000000;},get d(){const h=S.mode==='hard';return `특수 소장품 · 보유 효과: 해상 원정 굴착력 +${h?12:20}%, 본공·원정 굴착력 +${h?2:3}% · 사면 정해진 주기로 자동 출항해 지도 남해를 항해하고 해상 원정에 함께 나가요 · 이순신 장군과 함께 보유하면 세트 효과`;}}],
  item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:3000,d:'보유 효과: 본공·원정 굴착력 +3% (하드 +1.8%)'},{v:'pick',n:'곡괭이',p:15000,d:'보유 효과: 강타 확률 +2%p (하드 +1.2%p)'},{v:'tablet',n:'탐사 태블릿',p:60000,d:'보유 효과: 원정 재료 추가 획득 +4%p · 유물 발견 +10% (하드 60%)'},{v:'hdrill',n:'휴대용 드릴',p:300000,d:'보유 효과: 굴착력 +4% · 강타 확률 +2%p (하드 60%)'}],
 };
@@ -2218,6 +2233,7 @@ const PXOF={
  official:{top:'#2e5e52',slv:'#2e5e52',pan:'#2e5e52',shoe:'#151518',robe:1,wide:1},
  king:{top:'#b5222c',slv:'#b5222c',pan:'#b5222c',shoe:'#151518',robe:1,wide:1},
  court:{top:'#8cc25e',slv:'#8cc25e',pan:'#26357a',shoe:'#f2efe6',skirt:'#26357a',cuff:'#f4f0e6'},
+ wedding:{top:'#fbfaf8',slv:'#f4f2f0',pan:'#fbfaf8',shoe:'#f4f0ee',skirt:'#fdfcfb',fl:20},
  queen:{top:'#1e3a8e',slv:'#1e3a8e',pan:'#1e3a8e',shoe:'#c92f3a',skirt:'#1e3a8e',wide:1,cuff:'#e0b44a'},
  wet:{top:'#1d2428',slv:'#1d2428',pan:'#1d2428',shoe:'#1d2428',glove:'#2b3438'},
  dance:{top:'#6b3fa0',slv:'#6b3fa0',pan:'#1d1a24',shoe:'#c9ced2'},
@@ -2438,6 +2454,15 @@ const VHAT={helmet:`<path d="M23,33 C23,7 77,7 77,33Z" fill="#f1f1ec"/><path d="
  bowler:`<ellipse cx="50" cy="32" rx="40" ry="6.5" fill="#1c1c20"/><path d="M27,32 C26,4 74,4 73,32Z" fill="#24242a"/><rect x="27" y="23" width="46" height="6" fill="#4a3a2a"/><path d="M34,12 Q42,7 52,8" stroke="#4a4a52" stroke-width="2" fill="none"/>`,
  horns:`<path d="M28,30 C14,22 16,6 24,0 C24,12 30,20 38,24Z M72,30 C86,22 84,6 76,0 C76,12 70,20 62,24Z" fill="#2a2a30" stroke="#121216" stroke-width="1.2"/><path d="M24,4 C22,12 26,20 32,24 M76,4 C78,12 74,20 68,24" stroke="#4a4a54" stroke-width="1.4" fill="none"/>`,
  cap:`<path d="M22,32 C22,6 76,6 76,32Z" fill="#3aa0e0"/><path d="M50,8 V30" stroke="#2a80c0" stroke-width="2"/><path d="M60,30 Q86,26 94,34 Q80,38 60,36Z" fill="#2a80c0"/><circle cx="50" cy="8" r="3" fill="#2a80c0"/>`};
+// 곤룡포 보: a coiled gold dragon chasing a pearl on a red roundel with a gold rim
+const KDRAGON=`<g transform="translate(50,120)"><circle r="11.2" fill="#e8b94a" stroke="#8a5e10" stroke-width=".8"/><circle r="9.4" fill="#9a1622"/><circle r="8.4" fill="none" stroke="#e8b94a" stroke-width=".45" stroke-dasharray="1.1 .9"/>
+  <path d="M-6.4,6.4 C-9.6,1.6 -5.6,-2.8 -1.2,-.6 C3.2,1.6 6.4,-1.2 4.6,-4.4" stroke="#7a4a10" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M-6.4,6.4 C-9.6,1.6 -5.6,-2.8 -1.2,-.6 C3.2,1.6 6.4,-1.2 4.6,-4.4" stroke="#ffd56a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M-7.6,3.4 l-1.2,-.8 M-5.4,-1.4 l-.4,-1.3 M-1,.2 l.3,-1.3 M3.2,0 l1.1,-.8" stroke="#b8841e" stroke-width=".6"/>
+  <path d="M-6.4,6.4 l-2.2,1.6 l2.6,.2 l-.6,1.4 l1.8,-1.6Z" fill="#ffd56a" stroke="#7a4a10" stroke-width=".4"/>
+  <path d="M2.4,-4.6 Q4.4,-8.2 7.2,-6.2 Q8.4,-4.8 7.4,-3.6 Q5.4,-2.4 3.6,-3.4Z" fill="#ffd56a" stroke="#7a4a10" stroke-width=".5"/><path d="M5,-7.4 l-1,-2.2 M6.4,-7 l.2,-2.4" stroke="#ffd56a" stroke-width=".8" stroke-linecap="round"/><circle cx="5.8" cy="-5.6" r=".55" fill="#9a1622"/><path d="M7.4,-4.4 q2,.4 2.6,1.8 M7,-3.8 q1.4,1.4 1,2.8" stroke="#ffd56a" stroke-width=".45" fill="none"/>
+  <path d="M-4.2,1.8 l-1.4,1.6 M-3.6,2 l-.6,2 M1.6,1 l.4,2 M2.4,.8 l1.4,1.4" stroke="#ffd56a" stroke-width=".7" stroke-linecap="round"/>
+  <circle cx="-3.8" cy="-5" r="1.7" fill="#fff3b0" stroke="#e8b94a" stroke-width=".5"/><path d="M-3.8,-6.7 q-1,-1.6 .2,-2.6 q.2,1 1,1.2 q.2,-1.2 1,-1.6 q.2,1.8 -1.2,3" fill="#ff8a3a"/>
+  <path d="M-8,-4 q1,-1 2,0 q1,-1 2,0 M3.6,6.6 q1,-1 2,0 q1,-1 2,0" stroke="#e8b94a" stroke-width=".5" fill="none"/></g>`;
 function vClothDet(oc){let g='';
   if(oc==='track')g+=`<path d="M50,106 V138" stroke="#eeece6" stroke-width="2.4"/><path d="M42,106 L50,114 L58,106" stroke="#eeece6" stroke-width="2.4" fill="none"/>`;
   if(oc==='vest')g+=`<rect x="22" y="104" width="14" height="34" fill="#c4ec46"/><rect x="64" y="104" width="14" height="34" fill="#c4ec46"/><rect x="22" y="122" width="56" height="4" fill="#e6eef2"/>`;
@@ -2452,8 +2477,9 @@ function vClothDet(oc){let g='';
   if(oc==='yangban')g+=`<path d="M40,104 L56,124" stroke="#4a5a66" stroke-width="6"/><path d="M40,104 L56,124" stroke="#fff" stroke-width="2.4"/><path d="M60,104 L52,112" stroke="#4a5a66" stroke-width="5"/><path d="M18,127 H82" stroke="#c43a3a" stroke-width="2.2"/><circle cx="54" cy="127" r="2.6" fill="#c43a3a"/>`;
   if(oc==='official'||oc==='king'){const dk=oc==='king'?'#7a1018':'#173a30';g+=`<path d="M38,104 Q50,118 62,104" stroke="${dk}" stroke-width="5" fill="none"/><path d="M41,104 Q50,114 59,104" stroke="#f4f0e6" stroke-width="1.6" fill="none"/>`;
     if(oc==='official')g+=`<rect x="39" y="113" width="22" height="18" fill="#1f2c5a" stroke="#e0b44a" stroke-width="1.4"/><path d="M44,124 q6,-8 12,-2 M48,120 l-5,-4 M52,120 l5,-5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="50" cy="118" r="1.4" fill="#e0303a"/><path d="M42,128 q3,-2 6,0 q3,-2 6,0 q3,-2 6,0" stroke="#8ab0e0" stroke-width="1" fill="none"/><rect x="18" y="133" width="64" height="5" fill="#141418"/>${[30,47.5,65].map(x=>`<rect x="${x}" y="133.5" width="5" height="4" fill="#e0b44a"/>`).join('')}`;
-    else g+=`<circle cx="28" cy="109" r="7" fill="#e0b44a" opacity=".92"/><circle cx="72" cy="109" r="7" fill="#e0b44a" opacity=".92"/><circle cx="50" cy="120" r="9.5" fill="#e0b44a" stroke="#a87a1e" stroke-width="1"/><path d="M44,123 q2,-8 8,-6 q5,2 2,6 q-3,3 -6,0 q3,-1 4,-3" stroke="#7a1018" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="53.5" cy="116.5" r="1" fill="#7a1018"/><rect x="18" y="133" width="64" height="5" fill="#2a1a12"/>${[28,40,52,64].map(x=>`<rect x="${x}" y="133.5" width="7" height="4" rx="1" fill="#9fd6b8"/>`).join('')}`;}
+    else g+=`<circle cx="28" cy="109" r="7" fill="#e0b44a" opacity=".92"/><circle cx="72" cy="109" r="7" fill="#e0b44a" opacity=".92"/>${KDRAGON}<rect x="18" y="133" width="64" height="5" fill="#2a1a12"/>${[28,40,52,64].map(x=>`<rect x="${x}" y="133.5" width="7" height="4" rx="1" fill="#9fd6b8"/>`).join('')}`;}
   if(oc==='court')g+=`<path d="M41,104 L55,120" stroke="#5a8a3a" stroke-width="5"/><path d="M41,104 L55,120" stroke="#fff" stroke-width="2"/><path d="M55,119 q-2,10 -6,16 M55,119 q4,10 2,18" stroke="#c62a3a" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M18,138 Q50,132 82,138" stroke="#5a8a3a" stroke-width="2" fill="none"/>`;
+  if(oc==='wedding')g+=`<path d="M32,104 Q41,112 50,108 Q59,112 68,104" stroke="#e8e2dc" stroke-width="2" fill="none"/>${[[38,114],[46,118],[54,118],[62,114],[42,124],[50,126],[58,124]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#e2dad4" stroke-width=".8"/>`).join('')}<path d="M24,132 Q50,138 76,132" stroke="#f4c8d4" stroke-width="3.4" fill="none"/><path d="M50,135 l-5,4 l1,-6Z M50,135 l5,4 l-1,-6Z" fill="#f4c8d4"/>`+TWINKLE([[36,112,.0],[62,118,.6],[48,128,1.1],[58,108,1.6]],1.6);
   if(oc==='queen')g+=[[36,112],[64,112],[36,126],[64,126]].map(([x,y])=>`<path d="M${x-3},${y} q3,-4 6,0 q-3,4 -6,0Z" fill="#e0b44a"/><circle cx="${x}" cy="${y}" r=".9" fill="#c62a3a"/>`).join('')+`<path d="M40,104 L50,116 L60,104" stroke="#e8e0c8" stroke-width="3" fill="none"/><circle cx="50" cy="122" r="7" fill="#e0b44a" stroke="#a87a1e" stroke-width=".8"/><path d="M46,124 q4,-7 8,0 M50,117 v5" stroke="#c62a3a" stroke-width="1.4" fill="none"/><rect x="18" y="131" width="64" height="5" fill="#c62a3a"/>`;
   return g;}
 function vItem(item){const IX=82,IY=138,IT={shovel:`<path d="M${IX},${IY+8} V${IY-34}" stroke="#9a6a3a" stroke-width="3.4"/><path d="M${IX-5},${IY-36} h10" stroke="#6a4528" stroke-width="3"/><path d="M${IX-6},${IY+6} h12 l-2,12 l-4,4 l-4,-4Z" fill="#aab3b8" stroke="#5a646a" stroke-width="1.2"/>`,
@@ -2466,7 +2492,7 @@ function vItem(item){const IX=82,IY=138,IT={shovel:`<path d="M${IX},${IY+8} V${I
 function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.assign({},A0,{f:shade(A0.f,[0,-.1,-.2,-.32][c.skin|0]||0)}):A0,bw=(OPT.body.find(b=>b.v===c.body)||{w:1}).w,eyes=o.eyes||c.eyes||'round',ah=c.ahair||'none',ex=o.expr||'',of=PXOF[o.outfit||c.outfit]||PXOF.track,hat=o.hat??c.hat,item=o.item??c.item,oc=o.outfit||c.outfit,u='an'+(++UID);
   const D=shade(A.f,-.42),OL=`stroke="${D}" stroke-width="1.8" stroke-linejoin="round"`,gr=(id,col,cx=.35,cy=.3)=>`<radialGradient id="${u}${id}" cx="${cx}" cy="${cy}" r=".85"><stop offset="0" stop-color="${shade(col,.28)}"/><stop offset=".55" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,-.2)}"/></radialGradient>`;
   const F=`url(#${u}f)`,LG=`url(#${u}l)`,hcA=(OPT.hcol[c.hcol]||OPT.hcol[0]).c,BR=(26*bw).toFixed(1);let g=`<defs>${gr('f',A.f)}${gr('l',A.l,.45,.35)}${gr('d',A.d)}${gr('h',hcA,.4,.18)}<clipPath id="${u}b"><ellipse cx="50" cy="134" rx="${BR}" ry="28"/></clipPath></defs>`;
-  const HTF=k==='chick'?'translate(50,112) scale(1.18,1.29) translate(-50,-80)':'translate(50,80) scale(1.09,1.065) translate(-50,-80)',AHP=ah!=='none'?hairParts(ah,`url(#${u}h)`,`stroke="${shade(hcA,-.5)}" stroke-width="1.8" stroke-linejoin="round"`,hcA,shade(hcA,-.5),shade(hcA,.45),false):null;
+  const HTF=k==='chick'?'translate(50,62) scale(1.18) translate(-50,-49)':'translate(50,47) scale(1.09) translate(-50,-49)',AHP=ah!=='none'?hairParts(ah,`url(#${u}h)`,`stroke="${shade(hcA,-.5)}" stroke-width="1.8" stroke-linejoin="round"`,hcA,shade(hcA,-.5),shade(hcA,.45),false):null;
   const legC=A.legC||A.sock||shade(A.f,-.08);
   // behind: tails, wings, spikes, shell rim, wool
   if(A.wing)g+=`<path d="M30,118 L4,96 L10,112 L0,116 L12,124 L6,132 L30,130Z M70,118 L96,96 L90,112 L100,116 L88,124 L94,132 L70,130Z" fill="${A.wing}" ${OL}/>`;
@@ -2475,6 +2501,8 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(A.tail==='bushy')g+=`<path d="M68,150 C98,150 104,112 88,98 C86,118 78,130 64,136Z" fill="${F}" ${OL}/><path d="M92,103 C91,112 87,118 82,121 C89,122 96,114 96,104Z" fill="${A.tailTip}"/>`;
   if(A.tail==='squirrel')g+=`<path d="M64,150 C100,156 104,108 86,84 C76,74 64,86 74,96 C86,108 84,130 62,136Z" fill="${F}" ${OL}/><path d="M80,92 C88,104 90,122 80,136" stroke="${shade(A.f,.25)}" stroke-width="3" fill="none" opacity=".6"/>`;
   if(A.tail==='ring')g+=`<ellipse cx="82" cy="140" rx="12" ry="17" transform="rotate(-30 82 140)" fill="${F}" ${OL}/><path d="M74,132 l15,-6 M77,141 l15,-6 M80,150 l12,-5" stroke="${A.d}" stroke-width="3.4" stroke-linecap="round"/>`;
+  if(A.tail==='lion')g+=`<path d="M70,152 C94,154 98,128 90,114" stroke="${D}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M70,152 C94,154 98,128 90,114" stroke="${A.f}" stroke-width="4.4" fill="none" stroke-linecap="round"/><path d="M90,116 q-6,-8 0,-14 q4,4 6,-2 q4,8 -2,14 q-2,4 -4,2Z" fill="${A.lmane[0]}" stroke="${shade(A.lmane[0],-.35)}" stroke-width="1"/>`;
+  if(A.tstripe&&A.tail==='long')g+=`<path d="M93,124 l6,-2 M94,134 l6,0 M92,144 l6,2" stroke="${A.tstripe}" stroke-width="2.8" stroke-linecap="round"/>`;
   if(A.tail==='ball')g+=`<circle cx="74" cy="150" r="7" fill="${LG}" ${OL}/>`;
   if(A.tail==='dragon')g+=`<path d="M70,152 C92,160 100,144 96,130 L104,124 L94,122 C92,136 86,146 70,144Z" fill="${F}" ${OL}/>`;
   if(A.tail==='mane')g+=`<path d="M72,140 C96,134 98,156 88,166 C96,150 84,146 74,150Z" fill="${A.mane[0]}" ${OL}/><path d="M74,146 C92,146 92,160 84,166" stroke="${A.mane[1]}" stroke-width="4" fill="none"/>`;
@@ -2499,7 +2527,7 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   const slv=of.hood?'#5cae5a':(oc&&oc!=='none'&&!A.flipper?of.slv:A.f),paw=of.glove||(A.flipper?A.f:legC);
   const HI=HELD[item];if(HI)g+=HI.back||'';
   for(const s of[-1,1]){const x=50+s*25*bw,[hx,hy]=HI?HI.h[s<0?0:1]:[x+s*6,138],d=HI?`M${x},114 Q${x+s*6},${(114+hy)/2+8} ${hx},${hy}`:`M${x},114 q${s*11},10 ${s*6},24`;
-    g+=`<path d="${d}" stroke="${D}" stroke-width="12.5" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${slv}" stroke-width="8.6" fill="none" stroke-linecap="round"/>`;if(!HI)g+=`<circle cx="${hx}" cy="${hy}" r="5.2" fill="${paw}" stroke="${D}" stroke-width="1.6"/>`;}
+    g+=`<path d="${d}" stroke="${shade(slv,-.32)}" stroke-width="11" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${slv}" stroke-width="8.6" fill="none" stroke-linecap="round"/><path d="${d}" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".14" transform="translate(${-s*1.4},-1)"/>`;if(!HI)g+=`<circle cx="${hx}" cy="${hy}" r="5.2" fill="${paw}" stroke="${shade(paw,-.35)}" stroke-width="1.4"/>`;}
   let held='';if(HI){held=(HI.mid||'')+HI.h.map(([hx,hy])=>`<circle cx="${hx}" cy="${hy}" r="5.4" fill="${paw}" stroke="${D}" stroke-width="1.6"/><path d="M${hx-2},${hy+2.4} v-2 M${hx+2},${hy+2.4} v-2" stroke="${D}" stroke-width=".9" opacity=".6"/>`).join('')+(HI.front||'');if(k!=='chick'){g+=held;held='';}}
   g+=(HI?'':vItem(item))||(A.acorn?`<ellipse cx="50" cy="136" rx="7" ry="8" fill="#a86a2a" stroke="#6a3a18" stroke-width="1.2"/><path d="M42,132 q8,-8 16,0Z" fill="#6a3a18"/>`:'');
   // ears behind head
@@ -2511,6 +2539,7 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(A.ear==='side')g+=`<ellipse cx="14" cy="80" rx="13" ry="7" transform="rotate(20 14 80)" fill="${A.earC}" ${OL}/><ellipse cx="86" cy="80" rx="13" ry="7" transform="rotate(-20 86 80)" fill="${A.earC}" ${OL}/>`;
   if(A.ear==='tiny')g+=`<circle cx="18" cy="70" r="6" fill="${F}" ${OL}/><circle cx="82" cy="70" r="6" fill="${F}" ${OL}/>`;
   if(A.ram)g+=`<path d="M20,60 C4,62 4,86 18,88 C26,88 26,78 20,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M80,60 C96,62 96,86 82,88 C74,88 74,78 80,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/>`;
+  if(A.lmane)g+=Array.from({length:18},(_,i)=>{const a=i/18*Math.PI*2,x=50+Math.cos(a)*40,y=82+Math.sin(a)*37;return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="13" ry="9" transform="rotate(${(a*180/Math.PI).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${A.lmane[i%2]}" stroke="${shade(A.lmane[0],-.35)}" stroke-width="1.2"/>`;}).join('')+Array.from({length:12},(_,i)=>{const a=(i+.5)/12*Math.PI*2,x=50+Math.cos(a)*34,y=82+Math.sin(a)*31;return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="9" ry="6" transform="rotate(${(a*180/Math.PI).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${A.lmane[2]}"/>`;}).join('');
   if(AHP&&AHP.back)g+=`<g transform="${HTF}">${AHP.back}</g>`;
   // head (big, soft)
   const hr=k==='chick'?0:1;
@@ -2526,6 +2555,7 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(k==='penguin')g+=`<path d="M50,64 C40,52 18,58 20,82 C21,100 36,108 50,108 C64,108 79,100 80,82 C82,58 60,52 50,64Z" fill="${LG}"/>`;
   if(!A.bi&&!A.wool&&k!=='fox'&&k!=='turtle')g+=`<ellipse cx="50" cy="97" rx="15" ry="10.5" fill="${LG}"/>`;
   if(k==='dog')g+=`<ellipse cx="34" cy="70" rx="9" ry="7" fill="${A.patch}" opacity=".8"/>`;
+  if(A.tstripe)g+=`<path d="M14,78 q8,1 12,4 M13,88 q8,0 12,2 M86,78 q-8,1 -12,4 M87,88 q-8,0 -12,2 M30,56 q3,6 2,11 M70,56 q-3,6 -2,11" stroke="${A.tstripe}" stroke-width="2.6" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="96" rx="17" ry="11" fill="#fff6ea"/>`;
   // floppy ears in front of the head
   if(A.ear==='flop')g+=`<path d="M20,58 C8,64 8,92 16,98 C24,100 28,84 28,66Z" fill="${A.earC}" ${OL}/><path d="M80,58 C92,64 92,92 84,98 C76,100 72,84 72,66Z" fill="${A.earC}" ${OL}/>`;
   // eyes: big glossy
@@ -2595,7 +2625,7 @@ function hairParts(hs,HF,HO,hc,hcD,hcL,fem){const P={back:'',front:'',top:''},sh
 // hats drawn natively in the human head frame; animals reuse them through a transform
 function hatG(id,u0){const u=u0+'H',gd=(k,a,b)=>`<linearGradient id="${u}${k}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`,ol='stroke-linejoin="round"';
   switch(id){
-   case 'lamp':return `<defs>${gd('l','#ffa64a','#d86a14')}</defs><path d="M11,68 C11,22 89,22 89,68Z" fill="url(#${u}l)" stroke="#9a4a10" stroke-width="1.6" ${ol}/><path d="M50,26 V66" stroke="#c86d1a" stroke-width="4"/><path d="M24,38 Q34,28 48,27" stroke="#ffd09a" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/><path d="M4,66 Q50,76 96,66 L96,72 Q50,82 4,72Z" fill="#b85c14" stroke="#7a3a0a" stroke-width="1.2"/><circle cx="50" cy="44" r="13" fill="#fff3b0" opacity=".22"/><circle cx="50" cy="44" r="8.5" fill="#cfd6da" stroke="#7a8288" stroke-width="1.2"/><circle cx="50" cy="44" r="5.2" fill="#fff6c8"/><circle cx="48" cy="42" r="1.6" fill="#fff"/>`;
+   case 'lamp':return `<defs>${gd('l','#ffa64a','#d86a14')}</defs><path d="M11,69 C11,22 89,22 89,69 Q50,78 11,69Z" fill="url(#${u}l)" stroke="#9a4a10" stroke-width="1.6" ${ol}/><path d="M50,26 V72" stroke="#c86d1a" stroke-width="4"/><path d="M24,38 Q34,28 48,27" stroke="#ffd09a" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/><path d="M4,67 Q50,77.5 96,67 L96,73 Q50,83.5 4,73Z" fill="#b85c14" stroke="#7a3a0a" stroke-width="1.2"/><circle cx="50" cy="44" r="13" fill="#fff3b0" opacity=".22"/><circle cx="50" cy="44" r="8.5" fill="#cfd6da" stroke="#7a8288" stroke-width="1.2"/><circle cx="50" cy="44" r="5.2" fill="#fff6c8"/><circle cx="48" cy="42" r="1.6" fill="#fff"/>`;
    case 'mask':return `<path d="M13,70 Q50,62 87,70" stroke="#16191c" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="26" y="44" width="48" height="26" rx="11" fill="#22a8a3" stroke="#0f6a66" stroke-width="1.6"/><rect x="30" y="48" width="40" height="18" rx="8" fill="#bff0f0" opacity=".8"/><path d="M34,52 L44,62 M40,50 L48,58" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/><rect x="47" y="44" width="6" height="4" fill="#0f6a66"/>`;
    case 'straw':return `<ellipse cx="50" cy="66" rx="56" ry="13" fill="#d6a64e" stroke="#9a7228" stroke-width="1.4"/><ellipse cx="50" cy="64" rx="54" ry="10.5" fill="#efc46c"/>${Array.from({length:14},(_,i)=>{const a=i/14*Math.PI*2;return `<path d="M${(50+Math.cos(a)*26).toFixed(1)},${(64+Math.sin(a)*5).toFixed(1)} L${(50+Math.cos(a)*53).toFixed(1)},${(64+Math.sin(a)*10).toFixed(1)}" stroke="#d6a64e" stroke-width=".9"/>`;}).join('')}<path d="M25,64 C25,28 75,28 75,64Z" fill="#f2cb78" stroke="#b8893a" stroke-width="1.4"/>${[32,40,48,56,64].map(x=>`<path d="M${x},34 Q${x+1},46 ${x},58" stroke="#d8a446" stroke-width="1" fill="none"/>`).join('')}<path d="M25,56 Q50,62 75,56 L75,63 Q50,69 25,63Z" fill="#c8402a"/>`;
    case 'flower':return Array.from({length:9},(_,i)=>{const a=Math.PI*(1.05+i*.1125),x=50+Math.cos(a)*36,y=62+Math.sin(a)*14;return `<path d="M${x.toFixed(1)},${y.toFixed(1)} q4,-5 9,-1" stroke="#4f9a46" stroke-width="2.4" fill="none"/>`;}).join('')+Array.from({length:7},(_,i)=>{const a=Math.PI*(1.08+i*.14),x=50+Math.cos(a)*36,y=62+Math.sin(a)*14,c=['#ffd34a','#ff8ab0','#ffffff','#ffb3c6'][i%4];return [0,72,144,216,288].map(d=>`<circle cx="${(x+Math.cos(d*Math.PI/180)*3.6).toFixed(1)}" cy="${(y+Math.sin(d*Math.PI/180)*3.6).toFixed(1)}" r="3.1" fill="${c}" stroke="rgba(0,0,0,.22)" stroke-width=".5"/>`).join('')+`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.2" fill="#ffae2a"/>`;}).join('');
@@ -2613,6 +2643,9 @@ function hatG(id,u0){const u=u0+'H',gd=(k,a,b)=>`<linearGradient id="${u}${k}" x
      return `<defs>${gd('k','#3a3046','#0c0a12')}</defs><g transform="rotate(-14 42 30)"><ellipse cx="42" cy="22" rx="7" ry="14" fill="#1a1622" stroke="#000" stroke-width="1"/><path d="M42,10 V34" stroke="rgba(255,255,255,.18)" stroke-width=".8"/></g><g transform="rotate(14 58 30)"><ellipse cx="58" cy="22" rx="7" ry="14" fill="#1a1622" stroke="#000" stroke-width="1"/><path d="M58,10 V34" stroke="rgba(255,255,255,.18)" stroke-width=".8"/></g><path d="M31,60 L32,32 Q50,24 68,32 L69,60Z" fill="url(#${u}k)" stroke="#000" stroke-width="1.2" ${ol}/><path d="M14,70 C14,42 86,42 86,70 Q50,62 14,70Z" fill="url(#${u}k)" stroke="#000" stroke-width="1.3" ${ol}/><path d="M16,66 Q50,58 84,66" stroke="#c9a040" stroke-width="1.2" fill="none" opacity=".8"/><path d="M24,56 Q40,48 56,48" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none" stroke-linecap="round"/>`;
    case 'jokduri':// 족두리 (court lady): small black crown cap with gold trim and jewels
      return `<path d="M34,52 Q50,56 66,52 L63,34 L56,28 H44 L37,34Z" fill="#17141c" stroke="#000" stroke-width="1.1" ${ol}/><path d="M34,52 Q50,56 66,52" stroke="#e0b44a" stroke-width="2.2" fill="none"/><path d="M37,34 L63,34 M44,28 L42,52 M56,28 L58,52" stroke="#e0b44a" stroke-width="1" fill="none"/><circle cx="50" cy="26" r="3" fill="#ff6a5a" stroke="#a82a1e" stroke-width=".8"/><circle cx="50" cy="42" r="3.2" fill="#7fd0b0" stroke="#3a8a6a" stroke-width=".8"/><circle cx="41" cy="44" r="2" fill="#ffd76a"/><circle cx="59" cy="44" r="2" fill="#ffd76a"/><path d="M38,54 Q34,64 30,70 M62,54 Q66,64 70,70" stroke="#c62a3a" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+   case 'veil':// 티아라 베일: sheer veil falling behind to the shoulders + a sparkling tiara
+     return `<path d="M14,64 C4,90 6,118 2,140 Q20,132 28,112 Q24,90 26,70Z M86,64 C96,90 94,118 98,140 Q80,132 72,112 Q76,90 74,70Z" fill="rgba(255,255,255,.55)" stroke="rgba(230,230,240,.9)" stroke-width=".8"/><path d="M16,62 C14,40 86,40 84,62" fill="rgba(255,255,255,.35)" stroke="rgba(230,230,240,.8)" stroke-width=".8"/>
+       <path d="M30,56 Q50,48 70,56 L66,46 L58,50 L50,38 L42,50 L34,46Z" fill="#e8eef4" stroke="#9aa8b4" stroke-width="1" ${ol}/>${[[50,44,'#9fe0ff',2.6],[40,50,'#ffd0e0',1.6],[60,50,'#ffd0e0',1.6]].map(([x,y,c,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" stroke="#7a8a98" stroke-width=".5"/>`).join('')}`+TWINKLE([[50,38,0],[34,50,.7],[66,50,1.3],[20,96,1.8],[82,104,.4]],1.8);
    case 'hwagwan':// 화관 (queen): gold floral crown with jewels and dangling ornaments
      return `<defs>${gd('q','#ffe48a','#c4901e')}</defs>${[[20,58,16],[80,58,16],[30,52,22],[70,52,22]].map(([x,y,l])=>`<path d="M${x},${y} V${y+l}" stroke="#c9a040" stroke-width="1"/><circle cx="${x}" cy="${y+l}" r="2.2" fill="#ff6a7a" stroke="#a82a3a" stroke-width=".6"/><circle cx="${x}" cy="${y+l/2}" r="1.4" fill="#fff6c8"/>`).join('')}
        <path d="M16,62 Q50,48 84,62 L80,46 L70,50 L64,34 L56,42 L50,24 L44,42 L36,34 L30,50 L20,46Z" fill="url(#${u}q)" stroke="#8a5e10" stroke-width="1.3" ${ol}/><path d="M18,60 Q50,48 82,60" stroke="#fff3b0" stroke-width="1.4" fill="none"/>
@@ -2635,7 +2668,7 @@ function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.out
     if(oc==='farmer')g+=`<path d="M${lx},150 h${lw} M51.5,150 h${lw}" stroke="#3a3a46" stroke-width="2.6"/>`;}
   if(of.shorts)g+=`<rect x="${lx+2}" y="147" width="${lw-4}" height="12" fill="${SF}"/><rect x="${53.5}" y="147" width="${lw-4}" height="12" fill="${SF}"/><path d="M${lx+2},155 h${lw-4} M53.5,155 h${lw-4}" stroke="#eeece6" stroke-width="3"/>`;
   const sh=of.shoe,shD=shade(sh,-.45);g+=`<path d="M${lx-2},166 Q${lx-2},157 ${lx+5},157 H${lx+lw} Q${lx+lw+3},157 ${lx+lw+2},166Z" fill="${sh}" stroke="${shD}" stroke-width="1.6"/><path d="M${51},166 Q${50},157 ${56},157 H${51+lw+2} Q${51+lw+6},157 ${51+lw+5},166Z" fill="${sh}" stroke="${shD}" stroke-width="1.6"/><path d="M${lx},163 h${lw+1} M52,163 h${lw+3}" stroke="${shade(sh,.35)}" stroke-width="1.4"/>`;
-  if(of.robe||of.skirt){const col=of.skirt||of.top,fl=of.skirt?12:6,bot=of.skirt?163:161,cD=shade(col,-.4);
+  if(of.robe||of.skirt){const col=of.skirt||of.top,fl=of.fl||(of.skirt?12:6),bot=of.skirt?163:161,cD=shade(col,-.4);
     g+=`<linearGradient id="${u}r" x1="0" x2="1"><stop offset="0" stop-color="${shade(col,.18)}"/><stop offset=".5" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,-.25)}"/></linearGradient><path d="M${50-ww-1},134 Q${50-ww-fl},${bot-8} ${50-ww-fl-1},${bot} Q50,${bot+3} ${50+ww+fl+1},${bot} Q${50+ww+fl},${bot-8} ${50+ww+1},134Z" fill="url(#${u}r)" stroke="${cD}" stroke-width="1.6" stroke-linejoin="round"/>`+robeDet(oc,ww,fl,bot);}
   // torso + clothes
   const top=of.hood?'#5cae5a':of.top,tD=shade(top,-.45);
@@ -2678,12 +2711,18 @@ function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.out
   if(hatOn)g+=hatG(hat,u);
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="30" ry="5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
+// twinkling 4-point sparkles: [x,y,delay]
+const TWINKLE=(pts,r)=>pts.map(([x,y,d])=>`<path d="M${x},${y-r*2} Q${x+r*.35},${y-r*.35} ${x+r*2},${y} Q${x+r*.35},${y+r*.35} ${x},${y+r*2} Q${x-r*.35},${y+r*.35} ${x-r*2},${y} Q${x-r*.35},${y-r*.35} ${x},${y-r*2}Z" fill="#fffbe8" opacity="0"><animate attributeName="opacity" values="0;1;0;0" keyTimes="0;.2;.45;1" dur="2.2s" begin="${d}s" repeatCount="indefinite"/></path>`).join('');
 // long robe / skirt details (drawn over the robe body, below the torso)
 function robeDet(oc,ww,fl,bot){const L=50-ww-fl,R=50+ww+fl;
   switch(oc){
    case 'yangban':return `<path d="M50,136 V${bot}" stroke="#b8c8d0" stroke-width="1.2"/><path d="M53,136 q2,10 -1,18 M56,136 q3,11 1,19" stroke="#c43a3a" stroke-width="1.6" fill="none"/><path d="M50.5,152 l2,6 l1.6,-6Z M54,153 l2,6 l1.6,-6Z" fill="#c43a3a"/>`;
    case 'official':case 'king':return `<path d="M${50-ww+2},140 Q${L+4},${bot-6} ${L+3},${bot-1} M${50+ww-2},140 Q${R-4},${bot-6} ${R-3},${bot-1}" stroke="${oc==='king'?'#7a1018':'#1a3a30'}" stroke-width="1.2" fill="none" opacity=".7"/>`;
    case 'court':return [-8,-3,2,7,12].map(d=>`<path d="M${50+d*1.4},140 Q${50+d*2.1},${bot-6} ${50+d*2.4},${bot}" stroke="#1a2558" stroke-width="1" fill="none" opacity=".6"/>`).join('');
+   case 'wedding':{let w=`<path d="M${L+4},${bot-12} Q50,${bot-7} ${R-4},${bot-12}" stroke="#ece6e0" stroke-width="1.4" fill="none"/><path d="M${L+2},${bot-5} Q50,${bot} ${R-2},${bot-5}" stroke="#ece6e0" stroke-width="1.4" fill="none"/>`;
+     for(let i=0;i<9;i++){const x=L+3+i*(R-L-6)/8;w+=`<path d="M${(x-3).toFixed(1)},${bot-1} q3,4 6,0" stroke="#e8e0da" stroke-width="1.2" fill="#fff"/>`;}
+     w+=[-14,-6,2,10].map(d=>`<path d="M${50+d},138 Q${50+d*1.8},${bot-8} ${50+d*2.2},${bot-2}" stroke="#ece6e0" stroke-width=".9" fill="none"/>`).join('');
+     return w+`<g filter="none">${[[L+6,bot-14],[R-8,bot-10],[44,150],[60,146],[52,158],[L+12,bot-4],[R-12,bot-3],[38,142]].map(([x,y],i)=>`<circle cx="${x.toFixed(1)}" cy="${y}" r="1" fill="#fff"/>`).join('')}</g>`+TWINKLE([[L+8,bot-10,.2],[R-9,bot-14,.9],[46,148,1.5],[60,154,.5],[54,142,1.9],[L+16,bot-3,1.2],[R-14,bot-4,.7]],2.2);}
    case 'queen':return `<path d="M${L+1},${bot-9} Q50,${bot-6} ${R-1},${bot-9}" stroke="#e0b44a" stroke-width="2.6" fill="none"/><path d="M${L},${bot-4} Q50,${bot-1} ${R},${bot-4}" stroke="#e0b44a" stroke-width="1.6" fill="none"/>`+[[40,146],[50,150],[60,146]].map(([x,y])=>`<path d="M${x-2.4},${y} q2.4,-3 4.8,0 q-2.4,3 -4.8,0Z" fill="#e0b44a"/>`).join('');
   }return '';}
 
@@ -2776,8 +2815,8 @@ const fig=(c,x,y,h,o={})=>{const s=h/172;return `<g transform="translate(${(x-50
 const ME=()=>Object.assign({},DEFCHAR,S.char||{});
 // animals open per mode: normal 5, hard 5 (the other 5 species are retired; owned ones keep working)
 const PETMODE={normal:['dog','cat','rabbit','chick','panda'],hard:['fox','penguin','bear','dragon','unicorn']};
-const petOpen=k=>(PETMODE[S.mode]||PETMODE.normal).includes(k);
-const sexVis=o=>!ANS[o.v]||o.v==='mole'||petOpen(o.v)||S.own.includes('sex:'+o.v);
+const petOpen=k=>true; // all pets are open for now (quality review)
+const sexVis=o=>true; // all heroes are open for now (quality review)
 const MOM={sex:'f',skin:0,hair:'noble',hcol:5,eyes:'smile',body:'normal',hat:'none',outfit:'apron',item:'envelope'};
 const HUNTER={skin:2,hair:'short',hcol:1,eyes:'sharp',body:'big',hat:'mask',outfit:'wet',item:'gold'};
 const ANCHOR={sex:'f',skin:0,hair:'bob',hcol:0,eyes:'round',body:'slim',hat:'none',outfit:'suit',item:'none'};
@@ -3021,10 +3060,14 @@ const WT=[{k:'sex',n:'주인공·특수'},{k:'hair',n:'헤어'},{k:'hcol',n:'헤
 let wTab='outfit',wTry=null,wShip=false;
 const owns=(k,o)=>o.p===0||S.own.includes((k==='ahair'?'hair':k)+':'+o.v);
 const HEADVB='12 2 76 76',BODYVB='-20 -2 140 178';
-const headVB=c=>c.sex==='yi'?'9 30 82 82':c.sex==='chick'?'11 60 78 78':(c.sex==='m'||c.sex==='f'||!ANS[c.sex])?(c.hat&&c.hat!=='none'?'6 20 88 88':'10 34 80 80'):'11 38 78 78';
+const headVB=c=>{const ht=c.hat&&c.hat!=='none',tall=['regent','sangtu','king','queen'].includes(c.sex==='m'||c.sex==='f'?c.hair:c.ahair);
+  if(c.sex==='yi')return '9 30 82 82';if(c.sex==='chick')return ht||tall?'-4 34 108 108':'11 60 78 78';
+  if(c.sex==='m'||c.sex==='f'||!ANS[c.sex])return ht?'-6 4 112 112':tall?'2 12 96 96':'10 34 80 80';
+  return ht?'-6 4 112 112':tall?'0 12 100 100':'8 30 84 84';};
 function avatarSVG(c){return `<svg viewBox="${headVB(c)}" aria-hidden="true">${charG(c)}</svg>`;}
 function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());shipMapTick();}
 function wardChar(){const c=ME();if(wTry)c[wTry.k]=wTry.v;return c;}
+const WCACHE=new Map();function charGC(c,o){const k=JSON.stringify(c)+(o?JSON.stringify(o):'');let v=WCACHE.get(k);if(v===undefined){v=charG(c,o);if(WCACHE.size>500)WCACHE.clear();WCACHE.set(k,v);}return v;}
 const isAnimalSex=sx=>sx!=='m'&&sx!=='f'&&sx!=='yi'&&!!ANS[sx];
 const wKey=()=>wTab==='hair'&&isAnimalSex(S.char.sex)?'ahair':wTab;
 // ---- 거북선 (turtle ship) v2: side view, bow (dragon head) to the left. Ship body spans x 0..300, y -14..200; fire breath reaches x ≈ -62 ----
@@ -3171,7 +3214,7 @@ function renderWard(){
   const K=wKey();
   $('#wOpts').innerHTML=OPT[K].filter(o=>wTab!=='sex'||sexVis(o)).map(o=>{const cur=(S.char[K]??(K==='ahair'?'none':undefined))===o.v,tr=wTry&&wTry.k===K&&wTry.v===o.v,own=owns(K,o);
     const pv=Object.assign({},S.char,{[K]:o.v},wTab!=='sex'&&S.char.sex==='yi'?{sex:S.char.lastSex||'m'}:{},wTab==='sex'&&(o.v==='m'||o.v==='f')&&o.v!==S.char.sex&&!S.char.hair?{hair:o.v==='f'?'tail':'short'}:{});
-    const pic=wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charG(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${charG(pv)}</svg>`;
+    const pic=wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charGC(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${charGC(pv)}</svg>`;
     return `<button class="wopt ${cur?'on':''} ${tr?'try':''}" type="button" data-v="${o.v}">${pic}<span class="wn">${o.n}</span><span class="wp ${cur?'own':own?'own':S.money<o.p?'no':''}">${cur?'착용 중':own?'보유':won(o.p)}</span></button>`;}).join('');
   if(wTab==='sex'){const o=OPT.ship[1],own=owns('ship',o),tr=wTry&&wTry.k==='ship',ph=shipPhase(),im=L3OK?shipShot('q',640,380,{sea:false}):null;
     const st=!own?won(o.p):shipCyc()==='off'?'보유 · 자동 출항 꺼짐':ph.vis?'⛵ 항해 중':`⚓ 정박 중 · ${ph.next}초 뒤 출항`;
@@ -3185,8 +3228,9 @@ function renderWard(){
   if(wTry){const o=OPT[wTry.k].find(x=>x.v===wTry.v),ok=S.money>=o.p;b.hidden=false;
     b.innerHTML=`<div class="t">입어 보는 중<b>${o.n} · ${won(o.p)}</b>${o.d?`<small class="wdesc">${o.d}</small>`:''}</div><button class="primary" type="button" id="wBuyBtn" ${ok?'':'disabled'}>${ok?'구매하고 착용':'자금 부족'}</button>`;}
   else b.hidden=true;}
-function openWard(){wTry=null;$('#ward').hidden=false;renderWard();}
-function closeWard(){wTry=null;$('#ward').hidden=true;renderAvatar();if(view==='map')renderCard();}
+function mapAnim(on){document.querySelectorAll('#map svg').forEach(sv=>{try{on?sv.unpauseAnimations():sv.pauseAnimations();}catch(e){}});$('#map').classList.toggle('frozen',!on);}
+function openWard(){wTry=null;$('#ward').hidden=false;mapAnim(false);renderWard();}
+function closeWard(){wTry=null;$('#ward').hidden=true;if(view==='map')mapAnim(true);renderAvatar();if(view==='map')renderCard();}
 $('#avatarBtn').addEventListener('click',openWard);
 $('#wClose').addEventListener('click',closeWard);
 $('#wTabs').addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(!t)return;wTab=t.dataset.t;wTry=null;wShip=false;renderWard();});
@@ -3223,7 +3267,7 @@ const LITEM=[
  {id:'house_s',n:'작은 집',p:3000,house:1,off:1},{id:'house_h',n:'한옥',p:15000,house:1,off:2},{id:'house_b',n:'2층 주택',p:60000,house:1,off:3},{id:'house_d',n:'단독 주택',p:150000,house:1,off:4},{id:'house_y',n:'양반 가옥',p:400000,house:1,off:5},
  {id:'tree',n:'소나무',p:200},{id:'cherry',n:'벚나무',p:500},{id:'flower',n:'꽃밭',p:150},{id:'veg',n:'텃밭',p:300},
  {id:'pond',n:'연못',p:800},{id:'cairn',n:'오층 석탑',p:1500},{id:'bench',n:'벤치',p:250},{id:'lamp',n:'가로등',p:300},{id:'fountain',n:'분수',p:2500},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800},
- {id:'monument',n:'드릴 기념비',p:5000},{id:'museum',n:'유물 전시관',p:10000},
+ {id:'monument',n:'드릴 기념비',p:5000},{id:'museum',n:'유물 전시관',p:10000,fx:'화석 발견 확률 +30%'},
  {id:'chick',n:'병아리',p:1500},{id:'rabbit',n:'토끼',p:2200},{id:'turtle',n:'거북이',p:2000},{id:'squirrel',n:'다람쥐',p:2000},{id:'hedgehog',n:'고슴도치',p:2400},{id:'sheep',n:'양',p:2500},{id:'raccoon',n:'너구리',p:2600},{id:'fox',n:'여우',p:3000},{id:'penguin',n:'펭귄',p:3000},{id:'bear',n:'곰',p:3500},{id:'panda',n:'판다',p:4000},{id:'dragon',n:'드래곤',p:12000},{id:'unicorn',n:'유니콘',p:15000}];
 const FURN=[
  {id:'rug',n:'러그',p:400},{id:'bed',n:'침대',p:800},{id:'desk',n:'책상',p:500},{id:'sofa',n:'소파',p:1200},{id:'tv',n:'TV',p:1500},
@@ -3599,6 +3643,8 @@ const ANS={
  panda:{n:'판다',f:'#fafafa',l:'#fafafa',d:'#262628',ear:'round',earC:'#262628',face:'panda',legC:'#262628',tail:'ball',acc:'scarf',accC:'#4aa04a',nose:'#262628'},
  raccoon:{n:'너구리',f:'#a9a9b2',l:'#eeeeee',d:'#3a3a40',ear:'point',earIn:'#eeeeee',face:'mask',tail:'ring',acc:'scarf',accC:'#4aa04a',nose:'#2a2a2e'},
  bear:{n:'곰',f:'#8e5c3a',l:'#d9b48a',d:'#4a2c18',ear:'round',acc:'bandana',accC:'#3a7ad6',nose:'#2a1f1a'},
+ tiger:{n:'호랑이',f:'#f29a38',l:'#fff6ea',d:'#3a2414',ear:'round',tail:'long',stripe:'#2a1a10',tstripe:'#2a1a10',nose:'#d9707a'},
+ lion:{n:'사자',f:'#e8b866',l:'#fff1d6',d:'#6a4418',ear:'round',tail:'lion',lmane:['#a8561a','#d0802c','#e8a24a'],nose:'#5a3a2a'},
  dragon:{n:'드래곤',f:'#d8402e',l:'#f6d8a0',d:'#8a2418',ear:'horn',hornC:'#f2c14e',tail:'dragon',wing:'#e8703a',nose:'#8a2418'},
  chick:{n:'병아리',f:'#ffd84a',l:'#ffe680',d:'#e09a1a',ear:'tuft',beak:'#f59a2a',bi:1,feet:'#f59a2a'},
  penguin:{n:'펭귄',f:'#2a2e3a',l:'#fbfaf6',d:'#14161c',beak:'#f59a2a',bi:1,feet:'#f59a2a',acc:'scarf',accC:'#3a7ad6',flipper:1},
@@ -4133,6 +4179,123 @@ function shipLive(el){if(typeof THREE==='undefined')return false;const w=el.clie
   cv.addEventListener('pointermove',e=>{if(!drag)return;yaw=drag.yaw-(e.clientX-drag.x)*.01;pitch=Math.max(.05,Math.min(1.1,drag.pitch+(e.clientY-drag.y)*.006));});cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>auto=true,2500);});
   const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000;if(auto)yaw+=dt*.18;place();S.tick(t,dt);ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
 
+// ---------------- 3D life reconstructions for completed fossils (three.js, built from primitives; head toward +X, feet on y=0) ----------------
+const F3={shots:{}};
+function f3Skin(key,base,dark,belly,mode){return s3Tex('f3'+key,256,256,(g,w,h)=>{const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,dark);gr.addColorStop(.35,base);gr.addColorStop(.7,base);gr.addColorStop(1,belly);g.fillStyle=gr;g.fillRect(0,0,w,h);
+  let sd=7;const R=()=>(sd=(sd*9301+49297)%233280)/233280;
+  if(mode==='stripe'){g.fillStyle=dark;for(let i=0;i<9;i++){const x=i*w/9+R()*8;g.globalAlpha=.55;g.beginPath();g.moveTo(x,0);g.quadraticCurveTo(x+10,h*.25,x-4,h*.45);g.lineTo(x+6,h*.45);g.quadraticCurveTo(x+18,h*.2,x+10,0);g.fill();}}
+  if(mode==='spot'){for(let i=0;i<70;i++){g.globalAlpha=.35+R()*.3;g.fillStyle=R()<.5?dark:base;g.beginPath();g.ellipse(R()*w,R()*h*.6,3+R()*7,2+R()*5,R()*3,0,7);g.fill();}}
+  if(mode==='fur'){g.globalAlpha=.25;for(let i=0;i<900;i++){g.strokeStyle=R()<.5?dark:belly;g.lineWidth=1;const x=R()*w,y=R()*h;g.beginPath();g.moveTo(x,y);g.lineTo(x+R()*3-1.5,y+4+R()*4);g.stroke();}}
+  if(mode==='grooves'){g.globalAlpha=.35;g.strokeStyle='#3a3a40';g.lineWidth=2;for(let i=0;i<14;i++){const y=h*.72+i*5;g.beginPath();g.moveTo(0,y);g.lineTo(w,y);g.stroke();}}
+  // fine scales / wrinkles everywhere
+  g.globalAlpha=.12;g.strokeStyle='#000';g.lineWidth=1;for(let y=0;y<h;y+=6)for(let x=(y/6)%2*4;x<w;x+=8){g.beginPath();g.arc(x,y,3.2,0,Math.PI);g.stroke();}g.globalAlpha=1;});}
+function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongMaterial(Object.assign({color:c,shininess:25,specular:'#2a2a2a'},o));
+  const add=(m,x=0,y=0,z=0)=>{m.position.set(x,y,z);G.add(m);return m;},V=(x,y,z=0)=>new T.Vector3(x,y,z);
+  const ell=(mat,x,y,z,sx,sy,sz,rz=0,ry=0)=>{const m=add(new T.Mesh(new T.SphereGeometry(1,40,28),mat),x,y,z);m.scale.set(sx,sy,sz);m.rotation.set(0,ry,rz);return m;};
+  const tube=(mat,pts,r0,r1,cap=true)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p)));add(new T.Mesh(s3Taper(c,48,16,t=>r0+(r1-r0)*t),mat));if(cap){const a=c.getPointAt(0),b=c.getPointAt(1);add(new T.Mesh(new T.SphereGeometry(r0,16,12),mat),a.x,a.y,a.z);add(new T.Mesh(new T.SphereGeometry(Math.max(.01,r1),12,8),mat),b.x,b.y,b.z);}return c;};
+  const eye=(x,y,z,r=.045)=>{add(new T.Mesh(new T.SphereGeometry(r,14,10),ph('#1a1208',{shininess:120,specular:'#ffffff'})),x,y,z);add(new T.Mesh(new T.SphereGeometry(r*.32,8,6),ph('#ffffff',{emissive:'#ffffff'})),x+r*.35,y+r*.4,z+(z>0?r*.6:-r*.6));};
+  const CL=ph('#2a2420',{shininess:70});
+  const leg=(mat,pts,r0,r1,toes,tr=.05)=>{tube(mat,pts,r0,r1);const h=pts[0];ell(mat,h[0],h[1]-r0*.3,h[2],r0*1.35,r0*1.6,r0*1.1);const f=pts[pts.length-1],fy=Math.max(tr*.9,f[1]);ell(mat,f[0]+tr*1.2,fy,f[2],tr*2.4,tr*1.1,tr*2);
+    for(let i=0;i<toes;i++){const a=(i-(toes-1)/2)*.5,x=f[0]+tr*2.4+Math.cos(a)*tr*2,z=f[2]+Math.sin(a)*tr*2.2;const t=add(new T.Mesh(new T.SphereGeometry(tr*.75,10,8),mat),x,fy-tr*.3,z);t.scale.set(1.6,.8,.9);cone(CL,x+tr*1.3,fy-tr*.45,z,tr*.35,tr*1.1,-Math.PI/2);}};
+  const cone=(mat,x,y,z,r,h,rz=0,ry=0,rx=0)=>{const m=add(new T.Mesh(new T.ConeGeometry(r,h,16),mat),x,y,z);m.rotation.set(rx,ry,rz);return m;};
+  switch(id){
+   case 'kcera':{// Koreaceratops: small basal ceratopsian — parrot beak, short frill, tall paddle-like tail spines
+     const S=ph('#fff',{map:f3Skin('kc','#7f8f4a','#3f4a22','#d8cf9a','stripe')}),B=ph('#6f7f3c'),K=ph('#2a2622',{shininess:60});
+     ell(S,0,.95,0,1.0,.55,.5);tube(B,[[-.8,1.0,0],[-1.6,.95,0],[-2.3,.78,0],[-2.9,.6,0]],.36,.04);
+     {const sh=new T.Shape();sh.moveTo(0,0);sh.quadraticCurveTo(.5,.75,1.4,.55);sh.quadraticCurveTo(1.8,.4,2.0,0);sh.lineTo(0,0);const g=new T.ExtrudeGeometry(sh,{depth:.04,bevelEnabled:false});const m=add(new T.Mesh(g,ph('#8a6a3a',{side:T.DoubleSide})),-2.6,.78,-.02);m.rotation.z=.12;}
+     tube(B,[[.8,1.05,0],[1.15,1.25,0]],.3,.22,false);ell(S,1.42,1.27,0,.4,.28,.25);ell(B,1.72,1.2,0,.22,.17,.17);cone(K,1.98,1.14,0,.09,.26,-Math.PI/2-.3);
+     {const fr=add(new T.Mesh(new T.CircleGeometry(.34,24,0,Math.PI),ph('#9a7a42',{side:T.DoubleSide})),1.16,1.42,0);fr.rotation.set(0,Math.PI/2,.5);}
+     eye(1.55,1.36,.21);eye(1.55,1.36,-.21);
+     for(const z of[.3,-.3]){leg(B,[[-.35,.9,z],[-.15,.45,z*1.1],[-.35,.06,z*1.1]],.22,.08,3,.06);leg(B,[[.6,.75,z*.9],[.72,.38,z],[.66,.05,z]],.11,.06,3,.04);}break;}
+   case 'kano':case 'goseong':{// small bipedal ornithopod / larger iguanodontian track-maker
+     const big=id==='goseong',k=big?1.35:1,S=ph('#fff',{map:f3Skin(id,big?'#6a8a7a':'#9a7a4e',big?'#2e4a3e':'#4a3420',big?'#d8e0c8':'#e8d8b0',big?'spot':'stripe')}),B=ph(big?'#5a7a6a':'#8a6a40');
+     G.scale.setScalar(k);ell(S,0,1.15,0,.9,.48,.42,-.15);tube(B,[[-.7,1.25,0],[-1.6,1.2,0],[-2.5,1.0,0],[-3.1,.85,0]],.32,.03);
+     tube(B,[[.7,1.3,0],[1.0,1.55,0],[1.15,1.75,0]],.24,.16,false);ell(S,1.38,1.78,0,.36,.22,.2,-.1);ell(B,1.7,1.72,0,.18,.12,.13);eye(1.45,1.87,.17,.04);eye(1.45,1.87,-.17,.04);
+     for(const z of[.24,-.24]){leg(B,[[-.2,1.05,z],[.1,.6,z],[-.12,.35,z],[.05,.05,z]],.24,.07,3,.06);leg(B,[[.55,1.05,z*.8],[.72,.8,z],[.86,.62,z]],.08,.04,big?4:3,.03);}
+     if(big)ell(B,0,.03,0,.01,.01,.01);break;}
+   case 'puk':{// Pukyongosaurus: long-necked sauropod
+     const S=ph('#fff',{map:f3Skin('pk','#8a8a78','#4a4a3e','#cfcab4','spot')}),B=ph('#7a7a68');
+     ell(S,0,1.55,0,1.3,.75,.62);tube(B,[[1.0,1.8,0],[1.6,2.4,0],[2.0,3.1,0],[2.15,3.6,0]],.38,.14);ell(S,2.32,3.66,0,.28,.16,.15,-.2);eye(2.4,3.74,.12,.035);eye(2.4,3.74,-.12,.035);
+     tube(B,[[-1.1,1.7,0],[-2.0,1.5,0],[-2.9,1.1,0],[-3.7,.7,0],[-4.3,.5,0]],.42,.03);
+     for(const z of[.42,-.42]){leg(B,[[-.6,1.4,z],[-.6,.7,z],[-.62,.08,z]],.28,.2,4,.07);leg(B,[[.7,1.4,z],[.72,.7,z],[.7,.08,z]],.24,.18,4,.06);}
+     G.scale.setScalar(.8);break;}
+   case 'haenam':{// azhdarchid pterosaur (maker of the Haenamichnus tracks), gliding on a display rod
+     const S=ph('#fff',{map:f3Skin('hn','#d8c8a8','#7a5a42','#f4ece0','spot')}),B=ph('#c8b694'),W=ph('#a8503a',{side:T.DoubleSide,shininess:8}),Wd=ph('#7a3426',{side:T.DoubleSide});
+     add(new T.Mesh(new T.CylinderGeometry(.04,.05,1.9,8),ph('#55595e')),0,.95,0);
+     ell(S,0,2.0,0,.5,.22,.2);tube(B,[[.4,2.08,0],[.9,2.25,0],[1.35,2.32,0]],.11,.07,false);ell(S,1.5,2.34,0,.24,.13,.12);
+     cone(ph('#e0cfa8'),2.1,2.3,0,.07,1.05,-Math.PI/2-.04);{const cr=add(new T.Mesh(new T.CircleGeometry(.36,20,0,Math.PI*.55),ph('#d8502a',{side:T.DoubleSide})),1.42,2.4,0);cr.rotation.z=.45;}eye(1.56,2.4,.11,.032);eye(1.56,2.4,-.11,.032);
+     for(const s2 of[1,-1]){const tri=(a,b,c,m)=>{const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute([...a,...b,...c],3));g.computeVertexNormals();G.add(new T.Mesh(g,m));};
+       const sh=[.15,2.05,s2*.15],el=[.45,2.25,s2*1.1],wr=[.3,2.32,s2*1.9],tip=[-.25,2.18,s2*3.4],hip=[-.45,1.95,s2*.18],ft=[-1.0,1.9,s2*.35];
+       tri(sh,el,hip,W);tri(el,wr,hip,W);tri(wr,tip,hip,W);tri(hip,tip,ft,Wd);
+       tube(B,[sh,el,wr],.07,.04,false);tube(B,[wr,tip],.04,.012);tube(B,[hip,ft],.06,.03);
+       for(let i=0;i<3;i++)cone(CL,wr[0]+.08,wr[1]+.02,wr[2]+s2*(i-1)*.05,.015,.1,-Math.PI/2);}
+     G.scale.setScalar(1.25);break;}
+   case 'ura':{// web-footed shorebird (Uhangrichnus track-maker)
+     const S=ph('#fff',{map:f3Skin('ur','#e8e6e0','#7a7a80','#ffffff','fur')}),B=ph('#e8e2d6'),Y=ph('#e8a03a');
+     ell(S,0,1.0,0,.55,.35,.3,.15);tube(B,[[.4,1.15,0],[.55,1.45,0],[.6,1.7,0]],.12,.09,false);ell(S,.68,1.78,0,.16,.13,.12);cone(Y,.98,1.75,0,.04,.42,-Math.PI/2-.08);eye(.74,1.83,.1,.025);eye(.74,1.83,-.1,.025);
+     ell(ph('#6a6a70'),-.15,1.08,.24,.4,.18,.06,.2);ell(ph('#6a6a70'),-.15,1.08,-.24,.4,.18,.06,.2);cone(ph('#5a5a60'),-.62,1.06,0,.12,.32,Math.PI/2+.3);
+     for(const z of[.12,-.12]){tube(Y,[[0,.75,z],[.05,.4,z],[0,.05,z]],.035,.025);const web=add(new T.Mesh(new T.CircleGeometry(.16,12,-.6,1.2),ph('#e8a03a',{side:T.DoubleSide})),.02,.02,z);web.rotation.x=-Math.PI/2;}
+     break;}
+   case 'eggnest':{// clutch of dinosaur eggs in a mud nest, one hatching
+     const E=ph('#fff',{map:f3Skin('eg','#e2d6bc','#a89878','#efe6d0','spot'),shininess:12}),N=ph('#7a5a3a',{shininess:4});
+     {const t=add(new T.Mesh(new T.TorusGeometry(1.15,.35,16,40),N),0,.18,0);t.rotation.x=Math.PI/2;t.scale.set(1,1,.6);}add(new T.Mesh(new T.CylinderGeometry(1.2,1.25,.12,40),N),0,.06,0);
+     [[0,.45,0],[.55,.42,.35],[-.55,.42,.3],[.5,.42,-.4],[-.45,.42,-.45],[0,.4,.6],[0,.4,-.65]].forEach(([x,y,z],i)=>{const m=add(new T.Mesh(new T.SphereGeometry(.28,24,18),E),x,y,z);m.scale.set(1,1.25,1);m.rotation.set(.3*i,i,.4);});
+     {const b=ph('#8aa86a');ell(b,.0,.78,0,.16,.13,.12);eye(.1,.84,.08,.025);eye(.1,.84,-.08,.025);const sh=add(new T.Mesh(new T.SphereGeometry(.29,20,14,0,Math.PI*2,Math.PI*.45,Math.PI*.55),E),0,.62,0);sh.scale.set(1,1.2,1);}
+     break;}
+   case 'cavebear':{const S=ph('#fff',{map:f3Skin('cb','#6a4a32','#3a2618','#8a6a4a','fur'),shininess:6}),B=ph('#5a3e28',{shininess:6});
+     ell(S,0,1.15,0,1.15,.7,.6);ell(S,.95,1.25,0,.5,.5,.48);ell(S,1.45,1.3,0,.38,.34,.32);ell(B,1.8,1.22,0,.2,.16,.17);add(new T.Mesh(new T.SphereGeometry(.07,10,8),ph('#1a1210',{shininess:80})),1.99,1.27,0);
+     for(const z of[.2,-.2])ell(B,1.4,1.62,z,.1,.1,.06);eye(1.68,1.42,.17,.04);eye(1.68,1.42,-.17,.04);
+     for(const z of[.38,-.38]){leg(B,[[-.6,1.0,z],[-.62,.5,z],[-.6,.08,z]],.26,.2,5,.05);leg(B,[[.7,1.0,z],[.72,.5,z],[.75,.08,z]],.24,.18,5,.05);}break;}
+   case 'whale':case 'dolphin':{const dol=id==='dolphin',S=ph('#fff',{map:f3Skin(id,dol?'#7a8a98':'#4a525c',dol?'#3a4a58':'#22262c',dol?'#eef2f4':'#d0d4d8',dol?'spot':'grooves'),shininess:80,specular:'#777'}),B=ph(dol?'#5e6e7c':'#363e46',{shininess:60});
+     const body=new T.CatmullRomCurve3(dol?[V(-2.2,1.25),V(-1.2,1.3),V(0,1.36),V(1.2,1.36),V(2.0,1.3),V(2.45,1.22)]:[V(-2.6,1.2),V(-1.4,1.28),V(0,1.34),V(1.4,1.32),V(2.4,1.24),V(3.0,1.16)]);
+     const prof=dol?(t=>.08+Math.pow(Math.sin(Math.min(1,t*1.05)*Math.PI*.92),.8)*.5):(t=>.08+Math.pow(Math.sin(Math.min(1,t)*Math.PI*.82+.12),.75)*.7);
+     {const m=add(new T.Mesh(s3Taper(body,80,28,prof),S));m.scale.set(1,dol?1:.86,1);}
+     const nose=body.getPointAt(1);add(new T.Mesh(new T.SphereGeometry(prof(1),16,12),B),nose.x,nose.y,nose.z);
+     if(dol){const bk=add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(2.4,1.22),V(2.75,1.16),V(3.0,1.12)]),20,14,t=>.16-.1*t),S));add(new T.Mesh(new T.SphereGeometry(.06,10,8),S),3.0,1.12,0);
+       const df=new T.Shape();df.moveTo(0,0);df.quadraticCurveTo(.15,.42,-.32,.62);df.quadraticCurveTo(-.25,.3,-.5,0);df.lineTo(0,0);const d=add(new T.Mesh(new T.ExtrudeGeometry(df,{depth:.05,bevelEnabled:true,bevelSize:.02,bevelThickness:.02}),B),-.05,1.78,-.025);}
+     else{add(new T.Mesh(new T.TorusGeometry(.62,.012,6,40,Math.PI*.7),ph('#1a1c20')),2.35,1.1,0).rotation.set(Math.PI/2,0,-.3);
+       const df=add(new T.Mesh(new T.ConeGeometry(.14,.3,4),B),-1.2,1.83,0);df.scale.set(1.6,1,.25);df.rotation.z=.6;}
+     const tail=body.getPointAt(0);{const fl=new T.Shape();fl.moveTo(0,0);fl.quadraticCurveTo(-.35,.5,-.85,.72);fl.quadraticCurveTo(-.55,.25,-.45,0);fl.quadraticCurveTo(-.55,-.25,-.85,-.72);fl.quadraticCurveTo(-.35,-.5,0,0);const m=add(new T.Mesh(new T.ExtrudeGeometry(fl,{depth:.04,bevelEnabled:true,bevelSize:.015,bevelThickness:.015}),B),tail.x+.15,tail.y,0);m.rotation.x=Math.PI/2;if(dol)m.scale.setScalar(.75);}
+     for(const z of[1,-1]){const p=add(new T.Mesh(new T.SphereGeometry(1,20,12),B),dol?1.35:1.6,dol?1.05:.98,z*(dol?.4:.55));p.scale.set(dol?.3:.75,.05,dol?.13:.2);p.rotation.set(z*.6,z*-.5,-.35);}
+     eye(dol?2.25:2.55,dol?1.3:1.2,dol?.36:.55,.045);eye(dol?2.25:2.55,dol?1.3:1.2,dol?-.36:-.55,.045);
+     for(const x of[-.6,1.0])add(new T.Mesh(new T.CylinderGeometry(.04,.04,1.0,8),ph('#55595e')),x,.5,0);
+     if(dol)G.scale.setScalar(.85);break;}
+   case 'gangchi':{// Dokdo sea lion (Zalophus japonicus) hauled out on a rock
+     const S=ph('#fff',{map:f3Skin('gc','#6a523e','#3a2a1e','#9a7e62','fur'),shininess:40}),B=ph('#5a4432',{shininess:40}),R=ph('#6a6a64',{flatShading:true,shininess:5});
+     {const r=add(new T.Mesh(new T.DodecahedronGeometry(1.1,1),R),0,.3,0);r.scale.set(1.8,.45,1.1);}
+     tube(S,[[-1.4,.85,0],[-.6,1.0,0],[.3,1.2,0],[.9,1.6,0],[1.15,1.95,0]],.16,.24,false);
+     add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(-1.4,.85),V(-.6,1.0),V(.3,1.2),V(.9,1.6),V(1.15,1.95)]),50,20,t=>.12+Math.sin(t*Math.PI*.9)*.42),S));
+     ell(S,1.25,2.08,0,.24,.2,.19);ell(B,1.5,2.04,0,.13,.1,.11);add(new T.Mesh(new T.SphereGeometry(.035,8,6),ph('#111',{shininess:80})),1.62,2.06,0);eye(1.38,2.16,.13,.04);eye(1.38,2.16,-.13,.04);
+     for(const z of[1,-1]){for(let i=0;i<3;i++){const w=add(new T.Mesh(new T.CylinderGeometry(.006,.004,.28,4),ph('#efe6d6')),1.55,2.0-i*.025,z*.13);w.rotation.set(z*1.3,0,1.2-i*.15);}
+       const f=add(new T.Mesh(new T.SphereGeometry(1,16,10),B),.55,.82,z*.42);f.scale.set(.42,.06,.2);f.rotation.set(z*.4,z*-.5,-.5);
+       const h=add(new T.Mesh(new T.SphereGeometry(1,16,10),B),-1.55,.76,z*.2);h.scale.set(.36,.05,.14);h.rotation.y=z*.5;}break;}
+   case 'shell':{// a tray of West Sea shells: scallop, cockles, oyster, whelk on sand
+     add(new T.Mesh(new T.CylinderGeometry(1.5,1.6,.16,40),ph('#d8c49a',{shininess:4})),0,.08,0);
+     const fan=(x,z,s,c,ry)=>{const g=new T.CircleGeometry(.5*s,18,Math.PI*.15,Math.PI*.7),m=add(new T.Mesh(g,ph(c,{side:T.DoubleSide,shininess:30})),x,.2,z);m.rotation.set(-Math.PI/2+.25,0,ry);for(let i=0;i<7;i++){const r=add(new T.Mesh(new T.CylinderGeometry(.012,.012,.48*s,4),ph(shade(c,-.25))),x,.21,z);r.rotation.set(-Math.PI/2+.25,0,ry+Math.PI*(.2+i*.1)-Math.PI/2);r.translateY(.24*s);}return m;};
+     fan(-.6,.3,1.1,'#e8a06a',.3);fan(.7,-.4,.9,'#f0d0b0',-.4);
+     const cl=(x,z,c)=>{const m=add(new T.Mesh(new T.SphereGeometry(.28,20,12,0,Math.PI*2,0,Math.PI/2),ph(c,{shininess:40})),x,.16,z);m.scale.set(1,.55,.85);};cl(.2,.55,'#b89a7a');cl(-.2,-.6,'#9a8a7a');cl(.9,.5,'#c8b8a0');
+     {const o=add(new T.Mesh(new T.DodecahedronGeometry(.3,1),ph('#a8a296',{flatShading:true})),-.9,.22,-.4);o.scale.set(1.3,.35,.9);}
+     {const w=add(new T.Mesh(new T.ConeGeometry(.2,.6,24,8,true),ph('#d8b890',{side:T.DoubleSide,shininess:40})),.1,.42,-.05);w.rotation.z=1.2;for(let i=0;i<6;i++){const r=add(new T.Mesh(new T.TorusGeometry(.2-i*.03,.012,4,16),ph('#a8845a')),.1-Math.cos(1.2)*(.0+i*.1),.42+Math.sin(1.2)*(-.25+i*.09)*.3,-.05);r.rotation.y=Math.PI/2;r.rotation.x=.4;}}
+     break;}
+  }
+  return G;}
+function f3Scene(id){const T=THREE,sc=new T.Scene();sc.add(new T.HemisphereLight('#fff6e8','#5a5048',.8));const d=new T.DirectionalLight('#fff0d8',.9);d.position.set(4,7,6);sc.add(d);const d2=new T.DirectionalLight('#9fc8ff',.35);d2.position.set(-5,3,-4);sc.add(d2);
+  const m=f3Model(id);sc.add(m);const box=new T.Box3().setFromObject(m),sz=box.getSize(new T.Vector3()),ctr=box.getCenter(new T.Vector3());
+  // museum plinth
+  const pr=Math.max(sz.x,sz.z)*.5+.15;const pl=new T.Mesh(new T.CylinderGeometry(pr,pr*1.04,.18,48),new T.MeshPhongMaterial({color:'#4a423c',shininess:30}));pl.position.set(ctr.x,-.09,ctr.z);sc.add(pl);
+  return {sc,model:m,ctr,R:Math.max(sz.x,sz.z,sz.y*1.7)};}
+function fosShot(id,w=480,h=300){const key=id+w+'x'+h;if(F3.shots[key]||typeof THREE==='undefined')return F3.shots[key]||null;try{
+  if(!s3Ren){s3Ren=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});s3Ren.setPixelRatio(1);}s3Ren.setSize(w,h,false);
+  const S=f3Scene(id),cam=new THREE.PerspectiveCamera(30,w/h,.05,100),R=S.R;cam.position.set(S.ctr.x+R*.5,S.ctr.y+R*.42,S.ctr.z+R*1.55);cam.lookAt(S.ctr.x,S.ctr.y*.85,S.ctr.z);
+  s3Ren.setClearColor(0,0);s3Ren.render(S.sc,cam);F3.shots[key]=s3Ren.domElement.toDataURL();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});}catch(e){F3.shots[key]=null;}return F3.shots[key];}
+function fosLive(el,id){if(typeof THREE==='undefined')return false;const w=el.clientWidth||360,h=el.clientHeight||300;const ren=new THREE.WebGLRenderer({antialias:true,alpha:true});ren.setPixelRatio(Math.min(2,devicePixelRatio||1));ren.setSize(w,h);ren.domElement.className='fos3cv';el.appendChild(ren.domElement);
+  const S=f3Scene(id),cam=new THREE.PerspectiveCamera(30,w/h,.05,100);let yaw=.4,pitch=.28,dist=S.R*1.7,auto=true,drag=null,last=performance.now();
+  const place=()=>{cam.position.set(S.ctr.x+Math.sin(yaw)*Math.cos(pitch)*dist,S.ctr.y+Math.sin(pitch)*dist,S.ctr.z+Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(S.ctr);};
+  const cv=ren.domElement;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
+  cv.addEventListener('pointermove',e=>{if(!drag)return;yaw=drag.yaw-(e.clientX-drag.x)*.01;pitch=Math.max(-.1,Math.min(1.2,drag.pitch+(e.clientY-drag.y)*.006));});cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>auto=true,2500);});
+  cv.addEventListener('wheel',e=>{dist=Math.max(S.R*1.1,Math.min(S.R*4,dist*(1+Math.sign(e.deltaY)*.08)));e.preventDefault();},{passive:false});
+  const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}const dt=Math.min(.05,(now-last)/1000);last=now;if(auto)yaw+=dt*.3;place();ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
+
 function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
   const nx=L0.lv<LAND_SIZE.length?LAND_COST[L0.lv]:0;if(landPick&&landPick!=='me'&&!L0.tiles[landPick])landPick=null;
   const pk=landPick&&landPick!=='me'?LITEM.find(i=>i.id===L0.tiles[landPick]):null,isMe=landPick==='me';
@@ -4149,7 +4312,7 @@ function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
    ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpStat','📊 능력치','primary')}${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
      :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${pk.id==='museum'?B('lpGal','전시관 들어가기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
    <p class="sub" style="margin:0">${msg}</p>
-   <div class="lpal">${LITEM.filter(i=>!isPetId(i.id)||petOpen(i.id)).map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${L3OK&&thumb3('land',i.id)?`<img class="th3" src="${thumb3('land',i.id)}" alt="">`:isoIcon(i.id)}<span>${i.n}</span>${i.house?`<small class="hoff">🌙 오프라인 +${i.off}시간</small>`:''}<em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;if(L3OK)l3Mount();}
+   <div class="lpal">${LITEM.filter(i=>!isPetId(i.id)||petOpen(i.id)).map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${L3OK&&thumb3('land',i.id)?`<img class="th3" src="${thumb3('land',i.id)}" alt="">`:isoIcon(i.id)}<span>${i.n}</span>${i.house?`<small class="hoff">🌙 오프라인 +${i.off}시간</small>`:i.fx?`<small class="hoff">🦴 ${i.fx}</small>`:''}<em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;if(L3OK)l3Mount();}
 function removeTile(k){const L0=landOf(),it=LITEM.find(i=>i.id===L0.tiles[k]);if(!it)return;S.money+=Math.floor(it.p/2);delete L0.tiles[k];delete landRot()[k];save();toast(it.n+' 철거 · '+won(it.p/2)+' 환급');}
 let lgD=null,lgSup=false,lgPts=new Map(),lgPinch=null;
 // rotate the view 90 degrees with a short smooth turn (objects stay on their tiles, only the camera turns)
@@ -4543,7 +4706,7 @@ function fountainArt(cx,cy){const st='#b8b3aa',sd='#8f8a80',wt='#4fa3d9',O=ISK;l
   g+=`<circle cx="${cx}" cy="${cy-42}" r="2.4" fill="#eaf8ff"><animate attributeName="r" values="1.6;3;1.6" dur=".5s" repeatCount="indefinite"/></circle>`;
   return g;}
 // ---------------- exhibition hall ----------------
-const MOUNT={whale:[[60,48],[100,44]],kcera:[[90,46],[132,48]],kano:[[88,46],[118,38]],puk:[[70,48],[108,44],[148,22]],cavebear:[[60,40],[124,34]]};
+const MOUNT={gangchi:[[52,50],[100,44]],dolphin:[[56,48],[100,44]],whale:[[60,48],[100,44]],kcera:[[90,46],[132,48]],kano:[[88,46],[118,38]],puk:[[70,48],[108,44],[148,22]],cavebear:[[60,40],[124,34]]};
 const TRACE={haenam:1,goseong:1,ura:1,shell:1};
 let galTab='fos';
 function fossilExhibit(f){const u='bx'+(++UID),got=fosGot(f.id),n=got.length;let art;
@@ -4555,19 +4718,22 @@ function fossilExhibit(f){const u='bx'+(++UID),got=fosGot(f.id),n=got.length;let
       <path d="M50,114 Q50,40 120,38 Q190,40 190,114" fill="rgba(200,230,245,.12)" stroke="rgba(220,240,255,.55)" stroke-width="1.6"/><path d="M62,104 Q62,54 104,46" stroke="rgba(255,255,255,.45)" stroke-width="2.4" fill="none"/>`;}
   else{const rods=(MOUNT[f.id]||[]).map(([x,y])=>`<path d="M${x+20},${y+18} V${112}" stroke="#55595e" stroke-width="2.2"/><circle cx="${x+20}" cy="${y+18}" r="2" fill="#6a6e74"/>`).join('');
     art=`<path d="M14,128 V116 H226 V128Z" fill="#4a423c" stroke="#1a140f" stroke-width="1.5"/><path d="M14,116 H226 L220,111 H20Z" fill="#6a5e54" stroke="#1a140f" stroke-width="1"/>${rods}<g transform="translate(20,18)">${fossilArt(f,got,-1,false,u)}</g>`;}
-  return `<div class="gx"><svg viewBox="0 0 240 150" aria-label="${f.n} 전시">${bg}${art}</svg>
+  const life=n>=5&&L3OK?fosShot(f.id):null;
+  return `<div class="gx"><svg viewBox="0 0 240 150" aria-label="${f.n} 전시">${bg}${art}</svg>${life?`<div class="g3"><img src="${life}" alt="${f.n} 실물 복원 모형"><div class="g3t"><b>실물 복원 모형</b><span>뼈 화석을 바탕으로 살아 있던 모습을 되살렸어요</span><button type="button" class="primary sm" data-f3="${f.id}">🔍 3D로 돌려 보기</button></div></div>`:''}
     <div class="gpl"><b>${f.n}</b><span>${f.where}</span><div class="fpn">${f.pn.map((x,i)=>`<span class="${got.includes(i)?'on':''}">${x}</span>`).join('')}</div><em class="${n>=5?'ok':''}">${n>=5?'복원 완료 · '+f.eff:`복원 중 ${n}/5 · 빈 곳은 아직 못 찾은 부위예요`}</em></div></div>`;}
 function relicCase(r){const h=hasRelic(r.id),g=h?S.relic[r.id]:-1;
   return `<div class="vit ${h?'':'no'}" style="--g:${h?GR[g].c:'#3a4650'}"><div class="vglass">${relicIcon(r,h,74)}</div><div class="vped"><b>${h?r.n:'미발굴'}</b>${h?gBadge(g):'<span class="vq">?</span>'}</div></div>`;}
 function renderGal(){const nf=FOSSILS.filter(f=>fosDone(f.id)).length;
   $('#galTab').innerHTML=[['fos','화석관'],['rel','유물관']].map(([k,t])=>`<button type="button" class="${galTab===k?'on':''}" data-gt="${k}">${t}</button>`).join('');
-  if(galTab==='fos')$('#galBody').innerHTML=`<p class="sub" style="margin:0">찾은 뼈로 골격을 세워 전시해요. 비어 있는 부분은 아직 못 찾은 부위예요. 복원 완료 ${nf}/${FOSSILS.length}</p><div class="gxs">${FOSSILS.map(fossilExhibit).join('')}</div>`;
+  if(galTab==='fos')$('#galBody').innerHTML=`<p class="sub" style="margin:0">찾은 뼈로 골격을 세워 전시해요. 비어 있는 부분은 아직 못 찾은 부위예요. 복원 완료 ${nf}/${FOSSILS.length}<br><b style="color:#9fd6ff">🦴 전시관 보유 효과: 화석 발견 확률 +30%</b> · 다 모은 화석은 실물 3D 복원 모형과 함께 전시돼요.</p><div class="gxs">${FOSSILS.map(fossilExhibit).join('')}</div>`;
   else $('#galBody').innerHTML=`<p class="sub" style="margin:0">원정에서 발굴한 유물을 시대별 진열장에 전시해요. 발굴 ${relicCount()}/${RELICS.length}</p>`+ERAS.map(e=>{const rs=relicsOf(e.id),n=setCount(e.id);
     return `<div class="vera"><div class="vhd"><b>${e.n}</b><span>${n}/${rs.length}${setLv(e.id)?' · 세트 효과 '+e.b(setPow(e.id)):''}</span></div><div class="vrow">${rs.map(relicCase).join('')}</div></div>`;}).join('');}
 const hasMuseum=()=>Object.values(landOf().tiles).includes('museum');
 function openGal(t){if(!hasMuseum()){toast('내 땅에 유물 전시관을 먼저 지어 주세요 (₩10,000)');return;}if(t)galTab=t;renderGal();$('#gal').hidden=false;$('#gal .dsheet').scrollTop=0;}
 $('#galTab').addEventListener('click',e=>{const b=e.target.closest('[data-gt]');if(!b)return;galTab=b.dataset.gt;renderGal();$('#gal .dsheet').scrollTop=0;});
 $('#galClose').addEventListener('click',()=>{$('#gal').hidden=true;});
+$('#galBody').addEventListener('click',e=>{const b=e.target.closest('[data-f3]');if(!b)return;const f=FOSSILS.find(x=>x.id===b.dataset.f3);if(!f)return;$('#fos3d').hidden=false;$('#f3Name').textContent=f.n+' · 실물 복원 모형';$('#f3Txt').textContent=f.where+' · 끌어서 360° 돌려 보고, PC는 휠로 확대해요.';const w=$('#f3Wrap');w.innerHTML='';requestAnimationFrame(()=>fosLive(w,f.id));});
+$('#f3Close').addEventListener('click',()=>{$('#fos3d').hidden=true;$('#f3Wrap').innerHTML='';});
 
 // ---------------- endings ----------------
 const EA=(t,v,d,ex='')=>`<animateTransform attributeName="transform" type="${t}" values="${v}" dur="${d}s" repeatCount="indefinite" ${ex}/>`;
