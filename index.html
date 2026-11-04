@@ -667,6 +667,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>풍경 계절</span><div class="segs" id="mSeason"></div></div>
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v91 · 2026-11-04 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1630,8 +1631,11 @@ function buildMap(){let g='';
 </defs>`+g;
   // raised province slabs: drop shadow -> cliffs -> tops (lower slabs first so higher cliffs overlap them)
   // sea, drop shadow and tide live in separate layers under the land: the low-tide layer only fades (GPU opacity), so the big land SVG never repaints for the tide
+  // sea ripples as plain path segments (no <pattern>: some Android GPUs fail to paint pattern tiles and leave dark rectangles)
+var RIPC=null;function RIPPLES(){if(RIPC)return RIPC;let a='',b='';for(let y=-260;y<580;y+=14)for(let x=-100;x<420;x+=26){a+=`M${x+2},${y+7}q3,-3 6,0t6,0`;b+=`M${x+15},${y+13}q2.5,-2.5 5,0`;}
+  return RIPC=`<path d="${a}" stroke="#bfe8ff" stroke-width=".6" fill="none" opacity=".35"/><path d="${b}" stroke="#bfe8ff" stroke-width=".5" fill="none" opacity=".25"/>`;}
   const VB='2 2 318 322',sea=`<svg class="mlay" viewBox="${VB}" aria-hidden="true"><defs>${seaDefs}<pattern id="mRip2" width="26" height="14" patternUnits="userSpaceOnUse"><path d="M2,7 q3,-3 6,0 t6,0" stroke="#bfe8ff" stroke-width=".6" fill="none" opacity=".35"/><path d="M15,13 q2.5,-2.5 5,0" stroke="#bfe8ff" stroke-width=".5" fill="none" opacity=".25"/></pattern></defs>
-    <rect x="-100" y="-260" width="520" height="840" fill="#1d78bc"/><rect x="-100" y="-260" width="520" height="840" fill="url(#mSea)"/>${ANDROID?'':'<rect x="-100" y="-260" width="520" height="840" fill="url(#mRip2)"/>'}
+    <rect x="-100" y="-260" width="520" height="840" fill="#1d78bc"/><rect x="-100" y="-260" width="520" height="840" fill="url(#mSea)"/>${RIPPLES()}
     <path d="${allD}" transform="translate(2.4,7)" fill="#0a3460" opacity=".32"/><g id="mTideG" transform="translate(0,5.2)">${tideSVG(0)}</g></svg>
     ${ANDROID?'':`<svg class="mlay mtide" viewBox="${VB}" aria-hidden="true"><g transform="translate(0,5.2)">${tideSVG(1)}</g></svg>`}`;
   for(const p of PROV){const c=softC(p.col),top=-p.e;g+=`<path d="${p.d}" transform="translate(0,5.2)" fill="${shade(c,-.42)}" stroke="${shade(c,-.55)}" stroke-width=".5"/><path d="${p.d}" transform="translate(0,${(2.4+top).toFixed(1)})" fill="${shade(c,-.25)}"/>`
