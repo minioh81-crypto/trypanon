@@ -505,8 +505,8 @@ nav.tabs button{font-size:12px}
 .yiev{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(255,196,90,.42),rgba(40,8,6,.62) 72%)}
 .yiev[hidden]{display:none}#rotNote{display:none}
 @media (orientation:landscape) and (max-height:520px) and (pointer:coarse){#rotNote{display:flex;position:fixed;inset:0;z-index:999;background:#07090a;align-items:center;justify-content:center;text-align:center;color:#eaf1f3}#rotNote>div{display:grid;gap:8px;justify-items:center}#rotNote b{font-size:18px}#rotNote span{font-size:13px;color:#9fb0b6}}#eArt{position:relative}#eArt .eship{position:absolute;right:4%;bottom:14%;width:46%;height:auto;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35));pointer-events:none}.yiship{position:absolute;bottom:4%;left:0;width:min(62vw,300px);height:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5));animation:yiShip 5.4s linear both;pointer-events:none}
-@keyframes yiShip{0%{transform:translateX(110vw)}100%{transform:translateX(-80%)}}@media (min-width:561px){@keyframes yiShip{0%{transform:translateX(560px)}100%{transform:translateX(-80%)}}}.yiev.go{animation:yiFade 5.4s ease forwards}
-@keyframes yiFade{0%{opacity:0}7%{opacity:1}86%{opacity:1}100%{opacity:0;visibility:hidden}}
+@keyframes yiShip{0%{transform:translateX(110vw)}100%{transform:translateX(-80%)}}@media (min-width:561px){@keyframes yiShip{0%{transform:translateX(560px)}100%{transform:translateX(-80%)}}}.yiev.go{animation:yiIn .4s ease both}.yiev.out{animation:yiOut .6s ease forwards}
+@keyframes yiIn{from{opacity:0}to{opacity:1}}@keyframes yiOut{to{opacity:0;visibility:hidden}}
 .yirays{position:absolute;width:170vmax;height:170vmax;left:50%;top:42%;transform:translate(-50%,-50%);background:repeating-conic-gradient(rgba(255,222,150,.26) 0 5deg,transparent 5deg 16deg);-webkit-mask:radial-gradient(circle,#000 8%,transparent 42%);mask:radial-gradient(circle,#000 8%,transparent 42%);animation:yiSpin 14s linear infinite}
 @keyframes yiSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 .yifig{position:relative;width:min(58vw,250px,46vh);height:auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.6));animation:yiRise .9s cubic-bezier(.2,1.4,.4,1) both}
@@ -666,8 +666,9 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mStory">스토리 다시 보기</button>
   <div class="seasonrow"><span>풍경 계절</span><div class="segs" id="mSeason"></div></div>
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
+  <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v92 · 2026-11-04 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v93 · 2026-11-04 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1842,16 +1843,21 @@ document.addEventListener('click',e=>{const t=e.target;if(t.closest('nav.tabs bu
 let yiVoices=[];function yiLoadVoices(){try{yiVoices=speechSynthesis.getVoices()||[];}catch(e){}}
 if(window.speechSynthesis){yiLoadVoices();try{speechSynthesis.onvoiceschanged=yiLoadVoices;}catch(e){}
   let unl=false;addEventListener('pointerup',()=>{if(unl)return;unl=true;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}catch(e){}},{passive:true,capture:true});}
+const YIMALE=/\bmale\b|남성|남자|injoon|bongjin|gookmin|hyunsu|minsu|jian|ko-kr-x-ko[cd]|ko-kr-x-kod|kod-|koc-/i,YIFEM=/female|여성|여자|yuna|sunhi|seoyeon|sora|heami|jimin|suhyun|ko-kr-x-ism|ko-kr-x-kob|kob-|ism-|google/i;
+function yiKoVoices(){if(!yiVoices.length)yiLoadVoices();return yiVoices.filter(x=>/^ko/i.test(x.lang)||/ko[-_]kr/i.test(x.voiceURI||''));}
+function yiPick(){const ko=yiKoVoices(),want=(S.snd&&S.snd.vname)||'';const tag=x=>x.name+' '+(x.voiceURI||'');
+  return ko.find(x=>x.name===want)||ko.find(x=>YIMALE.test(tag(x)))||ko.find(x=>!YIFEM.test(tag(x)))||ko[0]||null;}
+const yiIsMale=v=>!!v&&YIMALE.test(v.name+' '+(v.voiceURI||''));
 function yiVoice(delay=0){const p=sndPref();if(!p.voice||!window.speechSynthesis)return;try{if(!yiVoices.length)yiLoadVoices();
-  const v=yiVoices.find(x=>/^ko/i.test(x.lang)&&/male|남|injoon|minsu/i.test(x.name))||yiVoices.find(x=>/^ko/i.test(x.lang));
+  const v=yiPick(),male=yiIsMale(v);yiVoice.busy=true;
   // phones give speech and Web Audio one audio focus: fighting over it (resuming music mid-sentence) is what silenced the voice and left the music dead.
   // So: hush + pause our engine, say the lines, then bring the music back once — with timeouts in case the engine never reports start/end.
   clearTimeout(yiVoice.t1);clearTimeout(yiVoice.t2);clearTimeout(yiVoice.t3);
-  const done=()=>{if(!SND.speaking)return;SND.speaking=false;clearTimeout(yiVoice.t2);clearTimeout(yiVoice.t3);if(document.hidden)return;SND.asleep=false;const c=SND.ctx;
+  const done=()=>{yiVoice.busy=false;if(!SND.speaking)return;SND.speaking=false;clearTimeout(yiVoice.t2);clearTimeout(yiVoice.t3);if(document.hidden)return;SND.asleep=false;const c=SND.ctx;
     if(c&&c.state!=='closed')(c.state==='running'?Promise.resolve():c.resume()).then(()=>{if(!titleOn)sndApply();}).catch(()=>{});};
-  const say=(txt,pitch,rate)=>{const u=new SpeechSynthesisUtterance(txt);u.lang='ko-KR';u.pitch=pitch;u.rate=rate;u.volume=1;if(v)u.voice=v;speechSynthesis.speak(u);return u;};
+  const say=(txt,pitch,rate)=>{const u=new SpeechSynthesisUtterance(txt);u.lang='ko-KR';u.pitch=pitch;u.rate=rate;u.volume=1;if(v)try{u.voice=v;}catch(e){}speechSynthesis.speak(u);return u;};
   const talk=()=>{if(!SND.speaking||document.hidden)return;if(speechSynthesis.paused)speechSynthesis.resume();
-    const u1=say('필사즉생! 필생즉사!',.55,.85),u2=say('싸움에 있어 죽고자 하면 반드시 살고, 살고자 하면 죽는다!',.6,.92);
+    const pl=male?.7:.05,u1=say('필사즉생!',pl,1.05);say('필생즉사!',pl,1.05);say('싸움에 있어, 죽고자 하면 반드시 살고,',pl+.05,1.22);const u2=say('살고자 하면 죽는다!',pl,1.12);
     let st=false;u1.onstart=u2.onstart=()=>{st=true;};u2.onend=u2.onerror=done;u1.onerror=e=>{if(!st)done();};
     yiVoice.t2=setTimeout(()=>{if(!st&&!speechSynthesis.speaking)done();},3500);yiVoice.t3=setTimeout(done,16000);window.__yiTalk=(window.__yiTalk||0)+1;};
   const go=()=>{SND.speaking=true;const c=SND.ctx;bgmStop();
@@ -1859,7 +1865,7 @@ function yiVoice(delay=0){const p=sndPref();if(!p.voice||!window.speechSynthesis
       setTimeout(()=>{const c2=SND.ctx;if(SND.speaking&&c2&&c2.state==='running')c2.suspend().then(talk,talk);else talk();},230);}else talk();};
   // Chrome on Android drops an utterance queued in the same tick as cancel(): only cancel when something is still talking, then speak a moment later
   const start=()=>{if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(go,150);}else go();};
-  if(delay)yiVoice.t1=setTimeout(start,delay);else start();}catch(e){SND.speaking=false;}}
+  if(delay)yiVoice.t1=setTimeout(start,delay);else start();}catch(e){SND.speaking=false;yiVoice.busy=false;}}
 // audio watchdog: if the system interrupted Web Audio (speech, calls, other apps) while we're visible, bring it back
 setInterval(()=>{const c=SND.ctx;if(!c||document.hidden||SND.speaking)return;if(SND.asleep){if(document.hasFocus())sndWakeUp();return;}if(c.state!=='running'&&c.state!=='closed')c.resume().then(()=>{if(!titleOn)sndApply();}).catch(()=>{});},1500);
 // ---- background music: small step sequencer (lookahead scheduling) ----
@@ -1882,12 +1888,15 @@ function bgmSched(){const c=SND.ctx;if(!c||c.state!=='running')return;const want
 let yiPend=false,yiRoll=Date.now()+60000;
 function playYi(){const el=$('#yiEv'),left=Math.max(0,Math.ceil((S.yiB-Date.now())/1000));
   el.innerHTML=`<div class="yirays"></div><svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${yiSVG({sex:'yi'},{pose:'raise',anim:true})}</svg><div class="yitxt"><b>必死則生 必生則死</b><span>필사즉생 필생즉사</span><em>본공·원정 굴착량 +${yiSet()?150:100}% · ${left}초</em></div>${yiSet()?(L3OK&&shipShot('side',640,300,{sea:false})?`<img class="yiship" src="${shipShot('side',640,300,{sea:false})}" alt="">`:`<svg class="yiship" viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'y',sea:true})}</svg>`):''}`;
-  el.hidden=false;el.classList.remove('go');void el.offsetWidth;el.classList.add('go');clearTimeout(playYi.t);playYi.t=setTimeout(()=>{el.hidden=true;el.innerHTML='';},5400);}
+  el.hidden=false;el.classList.remove('go','out');void el.offsetWidth;el.classList.add('go');clearTimeout(playYi.t);clearTimeout(playYi.t2);const t0=Date.now();
+  // hold the scene for at least 5 s and until the admiral has finished speaking (hard cap 22 s)
+  const chk=()=>{if(el.hidden)return;if(Date.now()-t0<4800||(yiVoice.busy&&Date.now()-t0<22000)){playYi.t=setTimeout(chk,250);return;}yiHide();};playYi.t=setTimeout(chk,250);}
+function yiHide(){const el=$('#yiEv');if(el.hidden)return;clearTimeout(playYi.t);el.classList.add('out');clearTimeout(playYi.t2);playYi.t2=setTimeout(()=>{el.hidden=true;el.innerHTML='';el.classList.remove('go','out');},620);}
 function yiEvent(){const d=Math.round((YI.dur[S.mode]||90)*(yiSet()?YISET.d:1));S.yiB=Date.now()+d*1000;save();
   toast(yiSet()?'⚔🐢 이순신 장군과 거북선 출격! 「필사즉생 필생즉사」 굴착량 +150% · '+d+'초':'⚔ 이순신 장군 출현! 「필사즉생 필생즉사」 굴착량 +100% · '+d+'초');sfx('yi');yiVoice(2600);
   if(view==='map'&&!exp)playYi();else yiPend=true;}
-$('#yiEv').addEventListener('click',()=>{yiVoice();$('#yiEv').hidden=true;});
-$('#yiChip').addEventListener('click',()=>{yiVoice();if(view!=='map'||exp){toast(`⚔ 필사즉생 — 본공·원정 굴착력 ×${yiM()} 적용 중`);return;}playYi();});
+$('#yiEv').addEventListener('click',()=>{if(!yiVoice.busy)yiHide();});
+$('#yiChip').addEventListener('click',()=>{if(!yiVoice.busy)yiVoice();if(view!=='map'||exp){toast(`⚔ 필사즉생 — 본공·원정 굴착력 ×${yiM()} 적용 중`);return;}playYi();});
 setInterval(()=>{const now=Date.now();
   if(now>=yiRoll){yiRoll=now+60000;if(yiOn()&&yiM()===1&&!titleOn&&!document.hidden&&Math.random()<(YI.p[S.mode]||YI.p.normal)*(yiSet()?YISET.p:1))yiEvent();}
   const ch=$('#yiChip');if(yiM()>1){ch.hidden=false;ch.textContent=(yiSet()?'⚔×2.5 ':'⚔×2 ')+Math.ceil((S.yiB-now)/1000)+'초';ch.title='필사즉생 — 굴착량 +100%';}else if(!ch.hidden){ch.hidden=true;yiPend=false;}},1000);
@@ -5153,7 +5162,13 @@ function resetGame(){try{localStorage.removeItem(KEY)}catch(_){}S=fresh();save()
 function armReset(b){if(b.dataset.armed){resetGame();return;}b.dataset.armed='1';b.textContent='한 번 더 누르면 모든 진행이 지워집니다';}
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
-function renderSndSeg(){const p=sndPref();$('#mSnd').innerHTML=[['bgm','🎵 음악'],['sfx','🔊 효과음'],['voice','🗣 음성']].map(([k,n])=>`<button type="button" data-snd="${k}" aria-pressed="${!!p[k]}">${n}</button>`).join('')+[['.4','작게'],['.8','보통'],['1','크게']].map(([v,n])=>`<button type="button" data-vol="${v}" aria-pressed="${Math.abs(p.vol-v)<.01}">${n}</button>`).join('');}
+function renderVoiceSeg(){const el=$('#mVoice');if(!el)return;if(!window.speechSynthesis){el.innerHTML='<button type="button" disabled>이 기기는 음성 미지원</button>';return;}
+  const ko=yiKoVoices(),v=yiPick();el.innerHTML=`<button type="button" data-vc="next" aria-pressed="true" style="flex:2 1 auto;min-width:0">${v?(yiIsMale(v)?'🧔 ':'🗣 ')+v.name.replace(/Microsoft |Google |\(.*?\)|Online|Natural/g,'').trim().slice(0,18):'기기 기본'}${ko.length>1?' ▸':''}</button><button type="button" data-vc="test" style="flex:1 0 auto">▶ 들어보기</button>`
+    +(ko.length<2?'<small style="opacity:.65;font-size:11px;align-self:center">기기에 한국어 목소리가 1개뿐 — 낮은 톤으로 재생</small>':'');}
+$('#mVoice').addEventListener('click',e=>{const b=e.target.closest('[data-vc]');if(!b)return;const ko=yiKoVoices();
+  if(b.dataset.vc==='next'&&ko.length>1){const v=yiPick(),i=ko.indexOf(v);S.snd=Object.assign(sndPref(),{vname:ko[(i+1)%ko.length].name});save();renderVoiceSeg();}
+  if(!yiVoice.busy)yiVoice();});
+function renderSndSeg(){renderVoiceSeg();const p=sndPref();$('#mSnd').innerHTML=[['bgm','🎵 음악'],['sfx','🔊 효과음'],['voice','🗣 음성']].map(([k,n])=>`<button type="button" data-snd="${k}" aria-pressed="${!!p[k]}">${n}</button>`).join('')+[['.4','작게'],['.8','보통'],['1','크게']].map(([v,n])=>`<button type="button" data-vol="${v}" aria-pressed="${Math.abs(p.vol-v)<.01}">${n}</button>`).join('');}
 $('#mSnd').addEventListener('click',e=>{const b=e.target.closest('[data-snd],[data-vol]');if(!b)return;const p=sndPref();if(b.dataset.snd)p[b.dataset.snd]=p[b.dataset.snd]?0:1;else p.vol=+b.dataset.vol;S.snd=p;save();sndInit();if(SND.ctx&&SND.ctx.state==='suspended')SND.ctx.resume();sndApply();renderSndSeg();if(b.dataset.snd==='sfx'&&p.sfx)sfx('coin');});
 function renderSeasonSeg(){const cur=S.season||'auto';$('#mSeason').innerHTML=[{k:'auto',n:'자동·'+seasonName(autoSeason())},...SEASONS].map(x=>`<button type="button" data-se="${x.k}" aria-pressed="${x.k===cur}">${x.n}</button>`).join('');}
 $('#mSeason').addEventListener('click',e=>{const b=e.target.closest('[data-se]');if(!b)return;S.season=b.dataset.se;save();renderSeasonSeg();if(view==='map')renderCard();toast('풍경 계절: '+(S.season==='auto'?'자동':seasonName(S.season)));});
