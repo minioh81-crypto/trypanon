@@ -2099,7 +2099,7 @@ const OPT={
  skin:[{v:0,n:'밝은 톤',p:0},{v:1,n:'중간 톤',p:0},{v:2,n:'짙은 톤',p:0},{v:3,n:'깊은 톤',p:0}],
  body:[{v:'slim',n:'마른 체형',p:0,w:.86},{v:'normal',n:'보통',p:0,w:1},{v:'big',n:'튼튼',p:0,w:1.18}],
  hat:[{v:'none',n:'없음',p:0},{v:'straw',n:'밀짚모자',p:300},{v:'satgat',n:'삿갓 (농민)',p:400},{v:'bow',n:'리본',p:700},{v:'yangmeori',n:'양머리 수건',p:900},{v:'lamp',n:'랜턴 안전모',p:800},{v:'flower',n:'꽃 화관',p:900},{v:'gat',n:'갓 (양반)',p:3000},{v:'horns',n:'뿔 머리띠',p:3500},{v:'mask',n:'잠수 마스크',p:4000},{v:'jokduri',n:'족두리 (궁녀)',p:4000},{v:'samo',n:'사모 (영정 관리)',p:6000},{v:'hwagwan',n:'화관 (왕비)',p:15000},{v:'veil',n:'💍 티아라 베일',p:12000},{v:'ikseon',n:'익선관 (왕)',p:20000},{v:'crown',n:'아다마스 투구',p:60000}],
- outfit:[{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'farmer',n:'농민 (바지저고리)',p:800},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'yangban',n:'양반 (도포)',p:5000},{v:'court',n:'궁녀 (당의)',p:8000},{v:'official',n:'영정 관복 (단령)',p:12000},{v:'king',n:'왕 (곤룡포)',p:40000},{v:'queen',n:'왕비 (적의)',p:50000},{v:'wedding',n:'💍 웨딩드레스',p:30000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
+ outfit:[{v:'none',n:'없음',p:0},{v:'track',n:'추리닝',p:0},{v:'vest',n:'안전 조끼',p:300},{v:'farmer',n:'농민 (바지저고리)',p:800},{v:'cover',n:'오렌지 작업복',p:1200},{v:'sport',n:'스포츠옷',p:1500},{v:'yangban',n:'양반 (도포)',p:5000},{v:'court',n:'궁녀 (당의)',p:8000},{v:'official',n:'영정 관복 (단령)',p:12000},{v:'king',n:'왕 (곤룡포)',p:40000},{v:'queen',n:'왕비 (적의)',p:50000},{v:'wedding',n:'💍 웨딩드레스',p:30000},{v:'wet',n:'잠수복',p:5000},{v:'dance',n:'댄스옷',p:6000},{v:'suit',n:'투자 미팅 정장',p:9000},{v:'adamas',n:'아다마스 슈트',p:90000}],
  ship:[{v:'none',n:'없음',p:0},{v:'turtle',n:'★ 거북선',get p(){return S.mode==='hard'?16000000:8000000;},get d(){const h=S.mode==='hard';return `특수 소장품 · 보유 효과: 해상 원정 굴착력 +${h?12:20}%, 본공·원정 굴착력 +${h?2:3}% · 사면 정해진 주기로 자동 출항해 지도 남해를 항해하고 해상 원정에 함께 나가요 · 이순신 장군과 함께 보유하면 세트 효과`;}}],
  item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:3000,d:'보유 효과: 본공·원정 굴착력 +3% (하드 +1.8%)'},{v:'pick',n:'곡괭이',p:15000,d:'보유 효과: 강타 확률 +2%p (하드 +1.2%p)'},{v:'tablet',n:'탐사 태블릿',p:60000,d:'보유 효과: 원정 재료 추가 획득 +4%p · 유물 발견 +10% (하드 60%)'},{v:'hdrill',n:'휴대용 드릴',p:300000,d:'보유 효과: 굴착력 +4% · 강타 확률 +2%p (하드 60%)'}],
 };
@@ -2228,6 +2228,7 @@ const PXOF={
  cover:{top:'#e5762a',slv:'#e5762a',pan:'#e5762a',shoe:'#3a2a20'},
  sport:{top:'#d6343c',slv:'#d6343c',pan:'#1d2a52',shoe:'#2c6fd6',shorts:1},
  dino:{top:'#5cae5a',slv:'#5cae5a',pan:'#5cae5a',shoe:'#4a8f48',glove:'#5cae5a',hood:1},
+ none:{top:'#f6f4f0',slv:'#f6f4f0',pan:'#8a96a2',shoe:'#e8e2da',shorts:1},
  farmer:{top:'#efe9dc',slv:'#efe9dc',pan:'#e2dac8',shoe:'#c9a25a'},
  yangban:{top:'#dfeaf0',slv:'#dfeaf0',pan:'#dfeaf0',shoe:'#1d1d22',robe:1,wide:1},
  official:{top:'#2e5e52',slv:'#2e5e52',pan:'#2e5e52',shoe:'#151518',robe:1,wide:1},
@@ -3708,7 +3709,7 @@ function animal3_(k,O={}){const A=ANS[k]||ANS.dog,g=new THREE.Group(),body=new T
   if(A.tail==='bushy'||A.tail==='squirrel'){const big=A.tail==='squirrel';const t=S3(big?.13:.09,A.f,0,big?.16:.06,big?-.06:-.1);t.scale.set(.8,big?1.5:1,big?1:1.6);T.add(t);if(A.tailTip)T.add(S3(.05,A.tailTip,0,.04,-.2));}
   if(A.tail==='ring'){for(let i=0;i<4;i++){const s=S3(.06-i*.004,i%2?A.d:A.f,0,.02+i*.03,-.04-i*.05);T.add(s);}}
   if(A.tail==='dragon'){for(let i=0;i<5;i++)T.add(S3(.06-i*.01,A.f,0,-.04+i*.03,-.02-i*.06));const s=mesh(new THREE.ConeGeometry(.04,.09,4),A.hornC);s.position.set(0,.13,-.33);s.rotation.x=-.9;T.add(s);}
-  if(A.tail==='mane'){A.mane.forEach((c,i)=>{const x=(i-1)*.025;strand([[x,.02,0],[x,.09,-.08],[x*1.6,.07,-.17],[x*2,-.02,-.24]],.035,c,T);});}
+  if(A.tail==='mane'){const P=[[0,.02,0],[0,.1,-.08],[0,.08,-.17],[0,.0,-.23]];strand(P,.05,A.mane[0],T);[[.02,1],[-.02,2]].forEach(([d,i])=>strand(P.map((p,j)=>[d*Math.cos(j*1.7),p[1]+.003,p[2]]),.026,A.mane[i],T));const bd=mesh(new THREE.TorusGeometry(.042,.011,6,14),'#f2c14e');bd.position.set(0,.06,-.04);bd.rotation.x=.9;T.add(bd);}
   if(A.wing){const W=[];for(const s of[-1,1]){const w=new THREE.Group(),sh=new THREE.Shape();sh.moveTo(0,0);sh.lineTo(.22,.1);sh.lineTo(.18,-.02);sh.lineTo(.12,.02);sh.lineTo(.08,-.06);sh.lineTo(0,0);
       const m=new THREE.Mesh(new THREE.ShapeGeometry(sh),M3(A.wing,{side:THREE.DoubleSide}));m.scale.x=s;w.add(m);w.position.set(s*.1,.32,-.08);body.add(w);W.push(w);}g.userData.wings=W;}
   if(A.acc==='collar'){const c=mesh(new THREE.TorusGeometry(.1,.02,8,16),A.accC);c.rotation.x=Math.PI/2;c.position.set(0,hy-.1,.03);body.add(c);body.add(S3(.03,'#f2c14e',0,hy-.13,.13));}
@@ -3741,11 +3742,12 @@ function animal3_(k,O={}){const A=ANS[k]||ANS.dog,g=new THREE.Group(),body=new T
     if(A.ear==='tuft'&&s>0)for(let i=0;i<3;i++)ear(new THREE.ConeGeometry(.02,.08,6),A.f,(i-1)*.03,.5,0,0,(i-1)*.4);
     if(A.ram){const r=mesh(new THREE.TorusGeometry(.05,.022,8,12,Math.PI*1.5),A.ram);r.position.set(s*.13,HY+.06,-.02);r.rotation.set(0,s*Math.PI/2,0);head.add(r);}}
   if(A.horn){const h=mesh(new THREE.ConeGeometry(.036,.24,14),A.horn);h.position.set(0,HY+.2,.07);h.rotation.x=.28;head.add(h);for(let i=0;i<4;i++){const r=mesh(new THREE.TorusGeometry(.03-i*.006,.005,4,14),shade(A.horn,.3));r.position.set(0,HY+.12+i*.04,.05+i*.012);r.rotation.x=Math.PI/2+.28;head.add(r);}}
-  if(A.mane){A.mane.forEach((c,i)=>{for(let j=0;j<2;j++){const x=(i-1)*.035+(j?.02:-.02);strand([[x,HY+.17,.04-i*.05],[x*1.3,HY+.12,-.1-i*.03],[x*1.6,HY-.02,-.16-i*.02],[x*1.8,HY-.14,-.14]],.04-j*.008,c,head);}});strand([[0,HY+.16,.12],[.04,HY+.1,.17],[.07,HY+.05,.17]],.035,A.mane[1],head);}
+  if(A.mane){const P=[[0,HY+.18,.02],[0,HY+.15,-.1],[0,HY+.02,-.17],[0,HY-.12,-.15]];strand(P,.07,A.mane[0],head);[[.028,1],[-.028,2]].forEach(([d,i])=>strand(P.map((p,j)=>[d*Math.cos(j*1.6),p[1]+.004,p[2]+d*Math.sin(j*1.6)*.6]),.035,A.mane[i],head));const bd=mesh(new THREE.TorusGeometry(.055,.014,6,16),'#f2c14e');bd.position.set(0,HY+.155,-.09);bd.rotation.x=1.2;head.add(bd);strand([[0,HY+.17,.1],[.03,HY+.12,.16],[.05,HY+.07,.17]],.035,A.mane[1],head);}
   if(A.wool||A.wool3){for(let i=0;i<5;i++)head.add(S3(.045,A.f,(i-2)*.035,HY+.14,.02));}
   head.scale.setScalar(k==='chick'?1:(O.chibi?1.42:1.16));head.position.y-=k==='chick'?0:(O.chibi?.05:.07);if(O.chibi){legs.forEach(l=>l.scale.y=.8);body.scale.set(.92,.88,.92);}
   if(A.stripe)for(let i=-1;i<=1;i++)head.add(B3(.025,.012,.08,A.stripe,i*.04,HY+.165,-.02));
-  g.rotation.order='YXZ';g.userData={legs,body,head,k,tail:T,by:quad?-.03:0};return g;}
+  const nk=new THREE.Group(),ny=hy-.13;nk.position.set(0,ny+head.position.y,head.position.z);body.remove(head);head.position.set(0,-ny,0);nk.add(head);body.add(nk);
+  g.rotation.order='YXZ';g.userData={legs,body,head:nk,k,tail:T,by:quad?-.03:0};return g;}
 // pose animation: walk/run swing legs, sit lowers rear, sleep lies down, bark/meow hop, belly rolls over
 function animPose(g,pose,t){const u=g.userData,L=u.legs,run=pose==='run',walk=pose==='walk'||run||pose==='gohome';
   const sp=run?16:9,a=walk?(run?.7:.5):0;L.forEach((l,i)=>{l.rotation.x=Math.sin(t*sp+(i%2===0?0:Math.PI)+(i>1?Math.PI:0))*a;l.visible=true;});
