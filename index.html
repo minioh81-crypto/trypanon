@@ -2479,7 +2479,7 @@ function vClothDet(oc){let g='';
     if(oc==='official')g+=`<rect x="39" y="113" width="22" height="18" fill="#1f2c5a" stroke="#e0b44a" stroke-width="1.4"/><path d="M44,124 q6,-8 12,-2 M48,120 l-5,-4 M52,120 l5,-5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="50" cy="118" r="1.4" fill="#e0303a"/><path d="M42,128 q3,-2 6,0 q3,-2 6,0 q3,-2 6,0" stroke="#8ab0e0" stroke-width="1" fill="none"/><rect x="18" y="133" width="64" height="5" fill="#141418"/>${[30,47.5,65].map(x=>`<rect x="${x}" y="133.5" width="5" height="4" fill="#e0b44a"/>`).join('')}`;
     else g+=`<circle cx="28" cy="109" r="7" fill="#e0b44a" opacity=".92"/><circle cx="72" cy="109" r="7" fill="#e0b44a" opacity=".92"/>${KDRAGON}<rect x="18" y="133" width="64" height="5" fill="#2a1a12"/>${[28,40,52,64].map(x=>`<rect x="${x}" y="133.5" width="7" height="4" rx="1" fill="#9fd6b8"/>`).join('')}`;}
   if(oc==='court')g+=`<path d="M41,104 L55,120" stroke="#5a8a3a" stroke-width="5"/><path d="M41,104 L55,120" stroke="#fff" stroke-width="2"/><path d="M55,119 q-2,10 -6,16 M55,119 q4,10 2,18" stroke="#c62a3a" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M18,138 Q50,132 82,138" stroke="#5a8a3a" stroke-width="2" fill="none"/>`;
-  if(oc==='wedding')g+=`<path d="M32,104 Q41,112 50,108 Q59,112 68,104" stroke="#e8e2dc" stroke-width="2" fill="none"/>${[[38,114],[46,118],[54,118],[62,114],[42,124],[50,126],[58,124]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#e2dad4" stroke-width=".8"/>`).join('')}<path d="M28,126 Q50,132 72,126" stroke="#ebe4de" stroke-width="1.2" fill="none" stroke-dasharray="2 1.6"/><path d="M40,128 Q50,146 46,166 M60,128 Q52,146 56,166" stroke="#eee8e2" stroke-width="1" fill="none"/>`+TWINKLE([[36,112,.0],[62,118,.6],[48,132,1.1],[58,108,1.6],[40,150,.3],[62,152,1.4]],1.6);
+  if(oc==='wedding')g+=`<path d="M32,104 Q41,112 50,108 Q59,112 68,104" stroke="#e8e2dc" stroke-width="2" fill="none"/>${[[38,114],[46,118],[54,118],[62,114],[42,124],[50,126],[58,124]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#e2dad4" stroke-width=".8"/>`).join('')}<path d="M28,126 Q50,132 72,126" stroke="#ebe4de" stroke-width="1.2" fill="none" stroke-dasharray="2 1.6"/>`+TWINKLE([[36,112,.0],[62,118,.6],[48,132,1.1],[58,108,1.6],[40,150,.3],[62,152,1.4]],1.6);
   if(oc==='queen')g+=[[36,112],[64,112],[36,126],[64,126]].map(([x,y])=>`<path d="M${x-3},${y} q3,-4 6,0 q-3,4 -6,0Z" fill="#e0b44a"/><circle cx="${x}" cy="${y}" r=".9" fill="#c62a3a"/>`).join('')+`<path d="M40,104 L50,116 L60,104" stroke="#e8e0c8" stroke-width="3" fill="none"/><circle cx="50" cy="122" r="7" fill="#e0b44a" stroke="#a87a1e" stroke-width=".8"/><path d="M46,124 q4,-7 8,0 M50,117 v5" stroke="#c62a3a" stroke-width="1.4" fill="none"/><rect x="18" y="131" width="64" height="5" fill="#c62a3a"/>`;
   return g;}
 function vItem(item){const IX=82,IY=138,IT={shovel:`<path d="M${IX},${IY+8} V${IY-34}" stroke="#9a6a3a" stroke-width="3.4"/><path d="M${IX-5},${IY-36} h10" stroke="#6a4528" stroke-width="3"/><path d="M${IX-6},${IY+6} h12 l-2,12 l-4,4 l-4,-4Z" fill="#aab3b8" stroke="#5a646a" stroke-width="1.2"/>`,
@@ -2519,6 +2519,7 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   else if(oc&&oc!=='none'){const top=of.top,d2=shade(top,-.2);g+=`<g clip-path="url(#${u}b)"><rect x="18" y="104" width="64" height="${oc==='apron'?40:34}" fill="${top}"/><rect x="18" y="${oc==='apron'?142:136}" width="64" height="3" fill="${d2}"/><path d="M62,104 V138" stroke="${d2}" stroke-width="10" opacity=".3"/><path d="M34,106 V138" stroke="#fff" stroke-width="6" opacity=".12"/>`;
     g+=vClothDet(oc);
     g+=`</g>`;}
+  if(of.dress)g+=`<path d="M${50-22*bw},140 Q${50-30*bw},154 ${50-34*bw},164 Q50,170 ${50+34*bw},164 Q${50+30*bw},154 ${50+22*bw},140Z" fill="#fdfcfa" stroke="#ddd6d0" stroke-width="1.4"/>${Array.from({length:7},(_,i)=>{const x=50-30*bw+i*10*bw;return `<path d="M${x.toFixed(1)},165 q${(5*bw).toFixed(1)},4 ${(10*bw).toFixed(1)},0" stroke="#e8e0da" stroke-width="1.1" fill="#fff"/>`;}).join('')}`+TWINKLE([[40,152,.2],[60,156,1.1],[50,146,1.7]],1.6);
   // neck accessory
   if(A.acc==='collar')g+=`<path d="M30,106 Q50,116 70,106" stroke="${A.accC}" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="50" cy="114" r="4" fill="#f2c14e" stroke="#a87a1e" stroke-width="1"/>`;
   if(A.acc==='scarf'||A.acc==='bandana')g+=`<path d="M28,104 Q50,118 72,104 L70,110 Q50,124 30,110Z" fill="${A.accC}" stroke="${shade(A.accC,-.35)}" stroke-width="1.2"/><path d="M46,114 L54,114 L50,126Z" fill="${A.accC}" stroke="${shade(A.accC,-.35)}" stroke-width="1"/>`;
@@ -2529,11 +2530,12 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   for(const s of[-1,1]){const x=50+s*25*bw,[hx,hy]=HI?HI.h[s<0?0:1]:[x+s*6,138],d=HI?`M${x},114 Q${x+s*6},${(114+hy)/2+8} ${hx},${hy}`:`M${x},114 q${s*11},10 ${s*6},24`;
     g+=`<path d="${d}" stroke="${shade(slv,-.32)}" stroke-width="11" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${slv}" stroke-width="8.6" fill="none" stroke-linecap="round"/><path d="${d}" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".14" transform="translate(${-s*1.4},-1)"/>`;if(!HI)g+=`<circle cx="${hx}" cy="${hy}" r="5.2" fill="${paw}" stroke="${shade(paw,-.35)}" stroke-width="1.4"/>`;}
   let held='';if(HI){held=(HI.mid||'')+HI.h.map(([hx,hy])=>`<circle cx="${hx}" cy="${hy}" r="5.4" fill="${paw}" stroke="${D}" stroke-width="1.6"/><path d="M${hx-2},${hy+2.4} v-2 M${hx+2},${hy+2.4} v-2" stroke="${D}" stroke-width=".9" opacity=".6"/>`).join('')+(HI.front||'');if(k!=='chick'){g+=held;held='';}}
-  g+=(HI?'':vItem(item))||(A.acorn?`<ellipse cx="50" cy="136" rx="7" ry="8" fill="#a86a2a" stroke="#6a3a18" stroke-width="1.2"/><path d="M42,132 q8,-8 16,0Z" fill="#6a3a18"/>`:'');
+  g+=(HI?'':vItem(item))||'';
   // ears behind head
   const E=d=>`<path d="${d}" fill="${F}" ${OL}/>`;const ein=A.earIn||'#f6c8c8';
-  if(A.ear==='point'){const big=k==='fox';g+=E(big?'M20,72 L14,28 L48,52Z':'M22,68 L20,36 L46,52Z')+E(big?'M80,72 L86,28 L52,52Z':'M78,68 L80,36 L54,52Z')+`<path d="${big?'M24,62 L20,40 L38,52Z M76,62 L80,40 L62,52Z':'M26,60 L25,44 L37,53Z M74,60 L75,44 L63,53Z'}" fill="${ein}"/>`+(A.earTip?`<path d="M16,38 L14,28 L24,34Z M84,38 L86,28 L76,34Z" fill="${A.earTip}"/>`:'');}
-  if(A.ear==='round')g+=`<circle cx="22" cy="54" r="11" fill="${A.earC?A.earC:F}" ${OL}/><circle cx="78" cy="54" r="11" fill="${A.earC?A.earC:F}" ${OL}/>`+(A.earC?'':`<circle cx="22" cy="54" r="5.5" fill="${A.l}"/><circle cx="78" cy="54" r="5.5" fill="${A.l}"/>`);
+  const earHide=['lamp','crown','samo','ikseon','yangmeori'].includes(hat);
+  if(A.ear==='point'&&!earHide){const big=k==='fox';g+=E(big?'M20,72 L14,28 L48,52Z':'M22,68 L20,36 L46,52Z')+E(big?'M80,72 L86,28 L52,52Z':'M78,68 L80,36 L54,52Z')+`<path d="${big?'M24,62 L20,40 L38,52Z M76,62 L80,40 L62,52Z':'M26,60 L25,44 L37,53Z M74,60 L75,44 L63,53Z'}" fill="${ein}"/>`+(A.earTip?`<path d="M16,38 L14,28 L24,34Z M84,38 L86,28 L76,34Z" fill="${A.earTip}"/>`:'');}
+  if(A.ear==='round'&&!earHide)g+=`<circle cx="22" cy="54" r="11" fill="${A.earC?A.earC:F}" ${OL}/><circle cx="78" cy="54" r="11" fill="${A.earC?A.earC:F}" ${OL}/>`+(A.earC?'':`<circle cx="22" cy="54" r="5.5" fill="${A.l}"/><circle cx="78" cy="54" r="5.5" fill="${A.l}"/>`);
   if(A.ear==='long')g+=`<ellipse cx="36" cy="30" rx="9" ry="26" transform="rotate(-10 36 30)" fill="${F}" ${OL}/><ellipse cx="64" cy="30" rx="9" ry="26" transform="rotate(10 64 30)" fill="${F}" ${OL}/><ellipse cx="36" cy="32" rx="4.5" ry="19" transform="rotate(-10 36 32)" fill="${ein}"/><ellipse cx="64" cy="32" rx="4.5" ry="19" transform="rotate(10 64 32)" fill="${ein}"/>`;
   if(A.ear==='horn')g+=`<path d="M30,56 C22,40 26,30 32,24 C34,36 38,44 42,50Z M70,56 C78,40 74,30 68,24 C66,36 62,44 58,50Z" fill="${A.hornC}" stroke="${shade(A.hornC,-.4)}" stroke-width="1.6"/>`;
   if(A.ear==='side')g+=`<ellipse cx="14" cy="80" rx="13" ry="7" transform="rotate(20 14 80)" fill="${A.earC}" ${OL}/><ellipse cx="86" cy="80" rx="13" ry="7" transform="rotate(-20 86 80)" fill="${A.earC}" ${OL}/>`;
@@ -2574,7 +2576,7 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(A.flipper)g+='';
   // hood / hat
   if(of.hood&&(!hat||hat==='none'))g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`+[[28,50],[40,43],[52,41],[64,43],[74,50]].map(([x,y])=>`<path d="M${x-5},${y+5} L${x},${y-7} L${x+5},${y+5}Z" fill="#f2c14e" stroke="#c89a2a" stroke-width="1"/>`).join('');
-  const hatOn=!!(hat&&hat!=='none');if(AHP&&!(of.hood&&!hatOn))g+=`<g transform="${HTF}">${AHP.front}${hatOn?'':AHP.top}</g>`;
+  const hatOn=!!(hat&&hat!=='none'),cutA=hatOn?HATCUT[hat]:0;if(AHP&&!(of.hood&&!hatOn))g+=`<g transform="${HTF}">${cutA?`<clipPath id="${u}hc"><rect x="-40" y="${cutA}" width="180" height="200"/></clipPath><g clip-path="url(#${u}hc)">${AHP.front}</g>`:AHP.front}${hatOn?'':AHP.top}</g>`;
   if(held)g+=`<g transform="translate(0,14)">${held}</g>`;
   if(hatOn)g+=`<g transform="${HTF}">${hatG(hat,u,{hf:`url(#${u}h)`,hd:shade(hcA,-.5)})}</g>`;
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="32" ry="5" fill="rgba(0,0,0,.3)"/>`;
@@ -2625,6 +2627,7 @@ function hairParts(hs,HF,HO,hc,hcD,hcL,fem){const P={back:'',front:'',top:''},sh
      P.top=`<path d="M40,46 q4,-12 14,-10 q-5,3 -4,9Z M56,44 q8,-8 14,-2 q-6,0 -7,5Z" fill="${HF}" ${HO}/>`;}
   return P;}
 // hats drawn natively in the human head frame; animals reuse them through a transform
+const HATCUT={lamp:70,crown:82,samo:68,ikseon:68,yangmeori:72,straw:63,satgat:60,mask:0};
 function hatBack(id){if(id==='veil')return `<path d="M50,40 C22,40 10,58 8,86 C6,112 2,134 -2,152 Q24,160 50,156 Q76,160 102,152 C98,134 94,112 92,86 C90,58 78,40 50,40Z" fill="rgba(255,255,255,.5)" stroke="rgba(225,228,238,.95)" stroke-width=".9"/><path d="M14,92 Q10,120 4,146 M86,92 Q90,120 96,146 M24,110 Q22,130 18,150 M76,110 Q78,130 82,150" stroke="rgba(255,255,255,.75)" stroke-width="1.1" fill="none"/>`;return '';}
 function hatG(id,u0,C={}){const u=u0+'H',gd=(k,a,b)=>`<linearGradient id="${u}${k}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`,ol='stroke-linejoin="round"';
   switch(id){
@@ -2716,7 +2719,7 @@ function humanSVG(c,o={}){const fem=c.sex==='f',ex=o.expr||'',oc=o.outfit||c.out
   else if(ex==='happy')g+=`<path d="M44,${my-1} Q50,${my+8} 56,${my-1}Z" fill="#8a2a2a" stroke="#5a1a1a" stroke-width="1.2" stroke-linejoin="round"/><path d="M46.5,${my+3} Q50,${my+6} 53.5,${my+3}" fill="#f07a8a"/>`;
   else g+=fem?`<path d="M45.5,${my} Q50,${my+4.4} 54.5,${my} Q50,${my+1.4} 45.5,${my}Z" fill="#e0506c" stroke="#b8304c" stroke-width="1.2"/>`:`<path d="M45,${my} q5,3.4 10,0" stroke="#5a2a22" stroke-width="2" fill="none" stroke-linecap="round"/>`;
   // hair (front), the parts above the head are left out under a hat
-  if(!(of.hood&&!hatOn)){g+=HP.front;if(!hatOn)g+=HP.top;}
+  if(!(of.hood&&!hatOn)){const cut=hatOn?HATCUT[hat]:0;g+=cut?`<clipPath id="${u}hc"><rect x="-40" y="${cut}" width="180" height="200"/></clipPath><g clip-path="url(#${u}hc)">${HP.front}</g>`:HP.front;if(!hatOn)g+=HP.top;}
   if(of.hood&&!hatOn)g+=`<path d="M12,86 C8,40 92,40 88,86 C84,62 70,52 50,52 C30,52 16,62 12,86Z" fill="#5cae5a" stroke="#3a7a3a" stroke-width="2.4"/>`;
   if(hatOn)g+=hatG(hat,u,{hf:HF,hd:hcD});
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="30" ry="5" fill="rgba(0,0,0,.3)"/>`;
@@ -2729,7 +2732,7 @@ function robeDet(oc,ww,fl,bot){const L=50-ww-fl,R=50+ww+fl;
    case 'yangban':return `<path d="M50,136 V${bot}" stroke="#b8c8d0" stroke-width="1.2"/><path d="M53,136 q2,10 -1,18 M56,136 q3,11 1,19" stroke="#c43a3a" stroke-width="1.6" fill="none"/><path d="M50.5,152 l2,6 l1.6,-6Z M54,153 l2,6 l1.6,-6Z" fill="#c43a3a"/>`;
    case 'official':case 'king':return `<path d="M${50-ww+2},140 Q${L+4},${bot-6} ${L+3},${bot-1} M${50+ww-2},140 Q${R-4},${bot-6} ${R-3},${bot-1}" stroke="${oc==='king'?'#7a1018':'#1a3a30'}" stroke-width="1.2" fill="none" opacity=".7"/>`;
    case 'court':return [-8,-3,2,7,12].map(d=>`<path d="M${50+d*1.4},140 Q${50+d*2.1},${bot-6} ${50+d*2.4},${bot}" stroke="#1a2558" stroke-width="1" fill="none" opacity=".6"/>`).join('');
-   case 'wedding':{let w=`<path d="M${L+4},${bot-12} Q50,${bot-7} ${R-4},${bot-12}" stroke="#ece6e0" stroke-width="1.4" fill="none"/><path d="M${L+2},${bot-5} Q50,${bot} ${R-2},${bot-5}" stroke="#ece6e0" stroke-width="1.4" fill="none"/>`;
+   case 'wedding':{let w=`<path d="M40,128 Q50,146 46,166 M60,128 Q52,146 56,166" stroke="#eee8e2" stroke-width="1" fill="none"/><path d="M${L+4},${bot-12} Q50,${bot-7} ${R-4},${bot-12}" stroke="#ece6e0" stroke-width="1.4" fill="none"/><path d="M${L+2},${bot-5} Q50,${bot} ${R-2},${bot-5}" stroke="#ece6e0" stroke-width="1.4" fill="none"/>`;
      for(let i=0;i<9;i++){const x=L+3+i*(R-L-6)/8;w+=`<path d="M${(x-3).toFixed(1)},${bot-1} q3,4 6,0" stroke="#e8e0da" stroke-width="1.2" fill="#fff"/>`;}
      w+=[-14,-6,2,10].map(d=>`<path d="M${50+d},138 Q${50+d*1.8},${bot-8} ${50+d*2.2},${bot-2}" stroke="#ece6e0" stroke-width=".9" fill="none"/>`).join('');
      return w+`<g filter="none">${[[L+6,bot-14],[R-8,bot-10],[44,150],[60,146],[52,158],[L+12,bot-4],[R-12,bot-3],[38,142]].map(([x,y],i)=>`<circle cx="${x.toFixed(1)}" cy="${y}" r="1" fill="#fff"/>`).join('')}</g>`+TWINKLE([[L+8,bot-10,.2],[R-9,bot-14,.9],[46,148,1.5],[60,154,.5],[54,142,1.9],[L+16,bot-3,1.2],[R-14,bot-4,.7]],2.2);}
@@ -3674,7 +3677,7 @@ function animal3_(k,O={}){const A=ANS[k]||ANS.dog,g=new THREE.Group(),body=new T
   // flowing strand (mane / tail hair): a tapered tube through the given points
   const strand=(pts,r0,col,par)=>{const c=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));const m=mesh(s3Taper(c,20,8,t=>r0*(1-t*.85)),col);par.add(m);return m;};
   const sph=(r,c,x,y,z,sx=1,sy=1,sz=1,par=body)=>{const m=S3(r,c,x,y,z);m.scale.set(sx,sy,sz);par.add(m);return m;};
-  const quad=!A.bi&&k!=='turtle',hy=quad?.42:.36,legC=A.legC||(A.sock?A.sock:shade(A.f,-.05));
+  const quad=false,hy=.36,legC=A.legC||(A.sock?A.sock:shade(A.f,-.05));
   // legs (pivot at hip)
   const legPos=quad?[[-.09,.1,.08],[.09,.1,.08],[-.09,.1,-.08],[.09,.1,-.08]]:[[-.07,.1,0],[.07,.1,0]];
   for(const [x,y,z] of legPos){const p=new THREE.Group();p.position.set(x,y,z);const L=mesh(new THREE.CylinderGeometry(.04,.045,y,10),A.bi?A.feet:legC);L.position.y=-y/2;p.add(L);
@@ -3692,7 +3695,7 @@ function animal3_(k,O={}){const A=ANS[k]||ANS.dog,g=new THREE.Group(),body=new T
     const bm=mesh(new THREE.LatheGeometry(pts,22),A.f);bm.scale.set(1,1,1.12);body.add(bm);
     sph(.112,A.l,0,.21,.085,.9,1.15,.55);
     if(k==='dog'||k==='fox'||k==='cat'||k==='rabbit'||k==='bear'||k==='panda'||k==='unicorn'){const ch=sph(.075,k==='bear'?A.l:shade(A.l,.04),0,.34,.1,1.1,.8,.6);}
-    for(const s of[-1,1]){const p=sph(.045,A.legC||A.f,s*.075,.06,.13,1.1,.7,1.2);}}
+    for(const s of[-1,1]){const p=sph(.048,A.legC||A.f,s*.165,.25,.03,.8,1.25,.85);p.rotation.z=s*.45;}}
   if(A.wool||A.wool3){for(let i=0;i<14;i++){const a=i/14*Math.PI*2;sph(.08,A.f,Math.cos(a)*.13,.28+(i%2)*.06,Math.sin(a)*.15);}sph(.12,A.f,0,.36,0);}
   if(A.spikes){for(let i=0;i<27;i++){const a=(i%9)/9*Math.PI*1.2-Math.PI*.1,r2=Math.floor(i/9);const c=mesh(new THREE.ConeGeometry(.05,.2,6),A.spikes);
       const th=a,ph=.5+r2*.45;c.position.set(Math.cos(th)*.17*Math.sin(ph+.3),.26+Math.cos(ph)*.12,-Math.sin(th)*.05-.06-r2*.05);c.rotation.set(-1.1+r2*.3,0,(Math.cos(th))*-.9);body.add(c);}
@@ -3711,7 +3714,7 @@ function animal3_(k,O={}){const A=ANS[k]||ANS.dog,g=new THREE.Group(),body=new T
   if(A.acc==='collar'){const c=mesh(new THREE.TorusGeometry(.1,.02,8,16),A.accC);c.rotation.x=Math.PI/2;c.position.set(0,hy-.1,.03);body.add(c);body.add(S3(.03,'#f2c14e',0,hy-.13,.13));}
   if(A.acc==='scarf'||A.acc==='bandana'){const c=mesh(new THREE.TorusGeometry(.105,.035,8,16),A.accC);c.rotation.x=Math.PI/2;c.position.set(0,hy-.1,.02);body.add(c);const t=mesh(new THREE.ConeGeometry(.06,.1,3),A.accC);t.rotation.x=Math.PI;t.position.set(0,hy-.16,.12);body.add(t);}
   if(A.acc==='bell'){body.add(S3(.035,A.accC,0,hy-.14,.13));}
-  if(A.acorn){const a=S3(.04,'#a86a2a',0,.22,.17);body.add(a,K3(.045,.03,'#6a3a18',0,.24,.17));}
+
   if(A.flipper){for(const s of[-1,1]){const f=S3(.05,A.f,s*.17,.24,0);f.scale.set(.4,1.4,.8);f.rotation.z=s*.3;body.add(f);}}
   // head
   head.position.set(0,0,.02);body.add(head);const hr=k==='chick'?0:.17,HY=hy;
