@@ -668,7 +668,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v93 · 2026-11-04 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v94 · 2026-11-05 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2137,7 +2137,7 @@ const OPT={
  sex:[{v:'m',n:'남자 주인공',p:0},{v:'f',n:'여자 주인공',p:0},{v:'yi',n:'★ 이순신 장군',get p(){return S.mode==='hard'?10000000:5000000;},d:'특수 캐릭터 · 보유 효과: 본공·원정 굴착력 +5% (하드 +3%, 다른 캐릭터로 바꿔도 유지) · 이순신 장군을 착용 중이면 가끔 지도에 출현해 「필사즉생 필생즉사」를 외치고 본공·원정 굴착량 +100% (보통 60초 / 하드 40초)'},{v:'mole',n:'두더지',p:0},
   {v:'chick',n:'병아리',p:2500},{v:'dog',n:'강아지',p:3000},{v:'cat',n:'고양이',p:3000},{v:'rabbit',n:'토끼',p:3000},{v:'panda',n:'판다',p:6000},
   {v:'bear',n:'곰',p:4000},{v:'fox',n:'여우',p:5000},{v:'penguin',n:'펭귄',p:5000},{v:'dragon',n:'드래곤',p:20000},{v:'unicorn',n:'유니콘',p:25000},{v:'tiger',n:'호랑이',p:8000},{v:'lion',n:'사자',p:8000},
-  {v:'squirrel',n:'다람쥐',p:3500},{v:'sheep',n:'양',p:4000},{v:'hedgehog',n:'고슴도치',p:4000}],
+  {v:'squirrel',n:'다람쥐',p:3500},{v:'sheep',n:'양',p:4000},{v:'hedgehog',n:'고슴도치',p:4000},{v:'capy',n:'카피바라',p:6000},{v:'capyb',n:'카피바라 & 아기',p:9000}],
  hair:[{v:'short',n:'짧은 머리',p:0},{v:'tail',n:'묶은 머리',p:0},{v:'part',n:'가르마',p:150},{v:'buzz',n:'삭발 (반짝 대머리)',p:80},{v:'regent',n:'폭주족 리젠트',p:1500},{v:'sangtu',n:'양반 상투',p:2500},{v:'noble',n:'귀족 쪽머리',p:3000},{v:'king',n:'임금 상투',p:8000},{v:'queen',n:'왕비 큰머리',p:9000}],
  hcol:[{v:0,n:'검정',p:0,c:'#1f1814'},{v:1,n:'갈색',p:100,c:'#4a2f20'},{v:2,n:'밝은 갈색',p:150,c:'#8a5a2b'},{v:3,n:'금발',p:300,c:'#c9a15a'},{v:4,n:'남색',p:400,c:'#3b4a78'},{v:5,n:'회색',p:400,c:'#8a8e95'}],
  eyes:[{v:'round',n:'동글',p:0},{v:'smile',n:'웃는 눈',p:200},{v:'sharp',n:'날카로운 눈',p:200}],
@@ -2585,6 +2585,7 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(A.ear==='long')g+=`<ellipse cx="36" cy="30" rx="9" ry="26" transform="rotate(-10 36 30)" fill="${F}" ${OL}/><ellipse cx="64" cy="30" rx="9" ry="26" transform="rotate(10 64 30)" fill="${F}" ${OL}/><ellipse cx="36" cy="32" rx="4.5" ry="19" transform="rotate(-10 36 32)" fill="${ein}"/><ellipse cx="64" cy="32" rx="4.5" ry="19" transform="rotate(10 64 32)" fill="${ein}"/>`;
   if(A.ear==='horn')g+=`<path d="M30,56 C22,40 26,30 32,24 C34,36 38,44 42,50Z M70,56 C78,40 74,30 68,24 C66,36 62,44 58,50Z" fill="${A.hornC}" stroke="${shade(A.hornC,-.4)}" stroke-width="1.6"/>`;
   if(A.ear==='side')g+=`<ellipse cx="14" cy="80" rx="13" ry="7" transform="rotate(20 14 80)" fill="${A.earC}" ${OL}/><ellipse cx="86" cy="80" rx="13" ry="7" transform="rotate(-20 86 80)" fill="${A.earC}" ${OL}/>`;
+  if(A.ear==='capy'&&!earHide)g+=`<ellipse cx="25" cy="55" rx="8" ry="9" transform="rotate(-20 25 55)" fill="${F}" ${OL}/><ellipse cx="75" cy="55" rx="8" ry="9" transform="rotate(20 75 55)" fill="${F}" ${OL}/><ellipse cx="25.5" cy="56" rx="4" ry="5" transform="rotate(-20 25 56)" fill="#e8b070"/><ellipse cx="74.5" cy="56" rx="4" ry="5" transform="rotate(20 74 56)" fill="#e8b070"/>`;
   if(A.ear==='tiny')g+=`<circle cx="18" cy="70" r="6" fill="${F}" ${OL}/><circle cx="82" cy="70" r="6" fill="${F}" ${OL}/>`;
   if(A.ram)g+=`<path d="M20,60 C4,62 4,86 18,88 C26,88 26,78 20,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M80,60 C96,62 96,86 82,88 C74,88 74,78 80,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/>`;
   if(A.lmane)g+=Array.from({length:18},(_,i)=>{const a=i/18*Math.PI*2,x=50+Math.cos(a)*40,y=82+Math.sin(a)*37;return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="13" ry="9" transform="rotate(${(a*180/Math.PI).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${A.lmane[i%2]}" stroke="${shade(A.lmane[0],-.35)}" stroke-width="1.2"/>`;}).join('')+Array.from({length:12},(_,i)=>{const a=(i+.5)/12*Math.PI*2,x=50+Math.cos(a)*34,y=82+Math.sin(a)*31;return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="9" ry="6" transform="rotate(${(a*180/Math.PI).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${A.lmane[2]}"/>`;}).join('');
@@ -2602,13 +2603,13 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(A.face==='mask')g+=`<path d="M16,80 C24,70 40,74 46,82 C40,90 26,92 18,88Z M84,80 C76,70 60,74 54,82 C60,90 74,92 82,88Z" fill="${A.d}"/>`;
   if(k==='fox')g+=`<path d="M14,86 C26,82 40,92 50,104 C60,92 74,82 86,86 C82,104 66,112 50,112 C34,112 18,104 14,86Z" fill="${LG}"/>`;
   if(k==='penguin')g+=`<path d="M50,64 C40,52 18,58 20,82 C21,100 36,108 50,108 C64,108 79,100 80,82 C82,58 60,52 50,64Z" fill="${LG}"/>`;
-  if(!A.bi&&!A.wool&&k!=='fox'&&k!=='turtle')g+=`<ellipse cx="50" cy="97" rx="15" ry="10.5" fill="${LG}"/>`;
+  if(!A.bi&&!A.wool&&!A.capy&&k!=='fox'&&k!=='turtle')g+=`<ellipse cx="50" cy="97" rx="15" ry="10.5" fill="${LG}"/>`;
   if(k==='dog')g+=`<ellipse cx="34" cy="70" rx="9" ry="7" fill="${A.patch}" opacity=".8"/>`;
   if(A.tstripe)g+=`<path d="M14,78 q8,1 12,4 M13,88 q8,0 12,2 M86,78 q-8,1 -12,4 M87,88 q-8,0 -12,2 M30,56 q3,6 2,11 M70,56 q-3,6 -2,11" stroke="${A.tstripe}" stroke-width="2.6" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="96" rx="17" ry="11" fill="#fff6ea"/>`;
   // floppy ears in front of the head
   if(A.ear==='flop')g+=`<path d="M20,58 C8,64 8,92 16,98 C24,100 28,84 28,66Z" fill="${A.earC}" ${OL}/><path d="M80,58 C92,64 92,92 84,98 C76,100 72,84 72,66Z" fill="${A.earC}" ${OL}/>`;
   // eyes: big glossy
-  const eyeY=k==='chick'?100:83,ex1=37,ex2=63;
+  const eyeY=k==='chick'?100:A.capy?78:83,ex1=37,ex2=63;
   if(ex==='happy')g+=`<path d="M${ex1-5},${eyeY+1} q5,-7 10,0 M${ex2-5},${eyeY+1} q5,-7 10,0" stroke="#2a1a14" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
   else if(ex==='shock')g+=[ex1,ex2].map(x=>`<ellipse cx="${x}" cy="${eyeY}" rx="6.4" ry="7.4" fill="#fff" stroke="#2a1a14" stroke-width="2"/><circle cx="${x}" cy="${eyeY}" r="2.4" fill="#2a1a14"/>`).join('');
   else if(eyes==='smile')g+=`<path d="M${ex1-5.5},${eyeY+1} q5.5,-7 11,0 M${ex2-5.5},${eyeY+1} q5.5,-7 11,0" stroke="#2a1a14" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
@@ -2616,6 +2617,8 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
     if(sh_)g+=`<path d="M${ex1-6.5},${eyeY-6} L${ex1+5.5},${eyeY-3} M${ex2+6.5},${eyeY-6} L${ex2-5.5},${eyeY-3}" stroke="#2a1a14" stroke-width="2.2" stroke-linecap="round"/>`;}
   g+=`<ellipse cx="25" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/><ellipse cx="75" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/>`;
   if(A.beak)g+=`<path d="M44,${eyeY+9} Q50,${eyeY+4} 56,${eyeY+9} Q50,${eyeY+17} 44,${eyeY+9}Z" fill="${A.beak}" stroke="${shade(A.beak,-.35)}" stroke-width="1.2"/>`;
+  else if(A.capy){const MZ=shade(A.f,-.13);g+=`<path d="M22,74 Q50,62 78,74" stroke="${shade(A.f,-.12)}" stroke-width="2" fill="none" opacity=".5"/><ellipse cx="50" cy="99" rx="22" ry="14.5" fill="${MZ}" ${OL}/><ellipse cx="46" cy="94" rx="11" ry="5" fill="${shade(A.f,-.06)}" opacity=".55"/>`
+      +`<path d="M41,95 q3,-3.4 6,.4 M53,95.4 q3,-3.8 6,-.4" stroke="#2a1a10" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M50,99 v4.5 M50,103.5 q-5,4 -9,1 M50,103.5 q5,4 9,1" stroke="#2a1a10" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;}
   else{const big=k==='mole';g+=`<ellipse cx="50" cy="${big?92:91}" rx="${big?6:4}" ry="${big?4.6:2.9}" fill="${A.nose}"/><ellipse cx="${big?48:48.8}" cy="${big?90:90}" rx="1.4" ry="1" fill="#fff" opacity=".7"/>`;
     g+=ex==='shock'?`<ellipse cx="50" cy="101" rx="3" ry="3.6" fill="#7a2a2a"/>`:`<path d="M44,97 q3,3 6,0 q3,3 6,0" stroke="#3a2a22" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
     if(k==='cat')g+=`<path d="M30,95 h-12 M30,99 l-11,3 M70,95 h12 M70,99 l11,3" stroke="${A.d}" stroke-width="1.2"/>`;}
@@ -2625,6 +2628,10 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   const hatOn=!!(hat&&hat!=='none'),cutA=hatOn?HATCUT[hat]:0;if(AHP&&!(of.hood&&!hatOn))g+=`<g transform="${HTF}">${cutA?`<clipPath id="${u}hc"><rect x="-40" y="${cutA}" width="180" height="200"/></clipPath><g clip-path="url(#${u}hc)">${AHP.front}</g>`:AHP.front}${hatOn?'':AHP.top}</g>`;
   if(held)g+=`<g transform="translate(0,14)">${held}</g>`;
   if(hatOn)g+=`<g transform="${HTF}">${hatG(hat,u,{hf:`url(#${u}h)`,hd:shade(hcA,-.5)})}</g>`;
+  if(A.baby){const by=30,bf=shade(A.f,.06),bD=shade(A.f,-.42);g+=`<g transform="${hatOn?'translate(84,140) scale(.78)':`translate(50,${by})`}"><ellipse cx="0" cy="12" rx="17" ry="12" fill="${bf}" stroke="${bD}" stroke-width="1.6"/><ellipse cx="-9" cy="22" rx="4.5" ry="3" fill="${legC}" stroke="${bD}" stroke-width="1.2"/><ellipse cx="9" cy="22" rx="4.5" ry="3" fill="${legC}" stroke="${bD}" stroke-width="1.2"/>`
+    +`<ellipse cx="-9" cy="-4" rx="4" ry="4.6" fill="${bf}" stroke="${bD}" stroke-width="1.3"/><ellipse cx="9" cy="-4" rx="4" ry="4.6" fill="${bf}" stroke="${bD}" stroke-width="1.3"/><ellipse cx="-9" cy="-3.6" rx="2" ry="2.4" fill="#e8b070"/><ellipse cx="9" cy="-3.6" rx="2" ry="2.4" fill="#e8b070"/>`
+    +`<ellipse cx="0" cy="6" rx="15" ry="12.5" fill="${bf}" stroke="${bD}" stroke-width="1.6"/><ellipse cx="0" cy="11" rx="9.5" ry="7" fill="${shade(A.f,-.16)}"/><circle cx="-6.4" cy="3" r="2.4" fill="#1f1410"/><circle cx="6.4" cy="3" r="2.4" fill="#1f1410"/><circle cx="-5.6" cy="2.2" r=".9" fill="#fff"/><circle cx="7.2" cy="2.2" r=".9" fill="#fff"/>`
+    +`<path d="M-3,9 q1.4,-1.5 2.6,.2 M.6,9.2 q1.4,-1.7 2.6,-.2 M0,11.4 v2 q-2.4,2 -4,.5 M0,13.4 q2.4,2 4,.5" stroke="#2a1a10" stroke-width="1.1" fill="none" stroke-linecap="round"/><ellipse cx="-11" cy="9" rx="3" ry="1.8" fill="#ff8fa3" opacity=".5"/><ellipse cx="11" cy="9" rx="3" ry="1.8" fill="#ff8fa3" opacity=".5"/></g>`;}
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="32" ry="5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
 
@@ -3288,7 +3295,10 @@ function renderWard(){
     b.innerHTML=`<div class="t">입어 보는 중<b>${o.n} · ${won(o.p)}</b>${o.d?`<small class="wdesc">${o.d}</small>`:''}</div><button class="primary" type="button" id="wBuyBtn" ${ok?'':'disabled'}>${ok?'구매하고 착용':'자금 부족'}</button>`;}
   else b.hidden=true;}
 function mapAnim(on){document.querySelectorAll('#map svg').forEach(sv=>{try{on?sv.unpauseAnimations():sv.pauseAnimations();}catch(e){}});$('#map').classList.toggle('frozen',!on);}
-function openWard(){wTry=null;$('#ward').hidden=false;mapAnim(false);renderWard();}
+function openWard(){wTry=null;wShip=false;$('#ward').hidden=false;mapAnim(false);
+  // a special/animal hero is chosen in the 주인공·특수 tab — open there with the current pick in view (otherwise keep the last tab)
+  const sp=S.char.sex!=='m'&&S.char.sex!=='f';if(sp)wTab='sex';renderWard();
+  if(sp)setTimeout(()=>{const on=document.querySelector('#wOpts .wopt.on');if(on)on.scrollIntoView({block:'center'});},30);}
 function closeWard(){wTry=null;$('#ward').hidden=true;if(view==='map')mapAnim(true);renderAvatar();if(view==='map')renderCard();}
 $('#avatarBtn').addEventListener('click',openWard);
 $('#wClose').addEventListener('click',closeWard);
@@ -3714,7 +3724,9 @@ const ANS={
  hedgehog:{n:'고슴도치',f:'#f2d8b0',l:'#f8e8d0',d:'#6a4a2a',ear:'round',earC:'#f2d8b0',spikes:'#7a4a2a',nose:'#2a1f1a'},
  turtle:{n:'거북이',f:'#6ac85a',l:'#c8f0a0',d:'#3a7a2a',shell:'#a8743e',ear:'none',nose:'#3a7a2a'},
  mole:{n:'두더지',f:'#7a675d',l:'#e8d6c6',d:'#4a3c36',ear:'tiny',nose:'#f08aa0'},
- tanuki:{n:'너구리',f:'#a08a76',l:'#f2e8da',d:'#3a2c22',ear:'round',earC:'#a08a76',face:'mask',tail:'ring',nose:'#2a1f1a'}};
+ tanuki:{n:'너구리',f:'#a08a76',l:'#f2e8da',d:'#3a2c22',ear:'round',earC:'#a08a76',face:'mask',tail:'ring',nose:'#2a1f1a'},
+ capy:{n:'카피바라',f:'#a8703c',l:'#c08a56',d:'#5a3a1e',ear:'capy',capy:1,legC:'#6a4426',nose:'#3a2414'},
+ capyb:{n:'카피바라 & 아기',f:'#a8703c',l:'#c08a56',d:'#5a3a1e',ear:'capy',capy:1,baby:1,legC:'#6a4426',nose:'#3a2414'}};
 const PETK=['dog','cat','rabbit','fox','panda','raccoon','bear','dragon','chick','penguin','unicorn','sheep','squirrel','hedgehog','turtle'];
 const isPetId=id=>PETK.includes(id);
 
@@ -4220,10 +4232,10 @@ function s3Ship(){const T=THREE,G=new T.Group(),anims=[];
     const brow=HM(new T.SphereGeometry(.12,12,8),GOLD2,-.06,.24,z*.2);brow.scale.set(1.3,.4,.6);
     // dragon horns: deer-antler shape (main beam sweeping back and up, two forked tines), tapered
     const HN=ph('#f2dfa6',{shininess:70,specular:'#fff6d0'}),hm=(pts,r0,r1)=>{const c=new T.CatmullRomCurve3(pts.map(p=>new T.Vector3(p[0],p[1],p[2])));H.add(new T.Mesh(s3Taper(c,24,8,t=>r0*(1-t)+r1*t),HN));const e=c.getPointAt(1);const tip=new T.Mesh(new T.SphereGeometry(r1,8,6),HN);tip.position.copy(e);H.add(tip);return c;};
-    const beam=hm([[.08,.24,z*.15],[.3,.5,z*.22],[.55,.66,z*.28],[.86,.72,z*.32],[1.02,.9,z*.34]],.075,.016);
+    const beam=hm([[.08,.24,z*.15],[.22,.4,z*.2],[.36,.5,z*.24],[.5,.55,z*.27],[.6,.64,z*.28]],.068,.016);
     const p1=beam.getPointAt(.35),p2=beam.getPointAt(.65);
-    hm([[p1.x,p1.y,p1.z],[p1.x+.04,p1.y+.18,p1.z+z*.02],[p1.x-.02,p1.y+.34,p1.z+z*.04]],.04,.012);
-    hm([[p2.x,p2.y,p2.z],[p2.x+.08,p2.y+.16,p2.z+z*.02],[p2.x+.06,p2.y+.3,p2.z+z*.03]],.034,.01);
+    hm([[p1.x,p1.y,p1.z],[p1.x+.03,p1.y+.1,p1.z+z*.015],[p1.x-.01,p1.y+.19,p1.z+z*.03]],.034,.011);
+    hm([[p2.x,p2.y,p2.z],[p2.x+.05,p2.y+.09,p2.z+z*.015],[p2.x+.04,p2.y+.17,p2.z+z*.02]],.028,.009);
     {const b=new T.Mesh(new T.TorusGeometry(.075,.02,6,14),GOLD2);b.position.set(.12,.27,z*.16);b.rotation.set(Math.PI/2,0,.7);H.add(b);}
     // moderate whiskers that sway
     const wp=new T.Group();wp.position.set(-.7,-.04,z*.13);H.add(wp);const wc=new T.CatmullRomCurve3([new T.Vector3(0,0,0),new T.Vector3(.08,-.12,z*.12),new T.Vector3(.28,-.22,z*.2),new T.Vector3(.5,-.18,z*.24)]);
@@ -4276,202 +4288,361 @@ function f3Skin(key,base,dark,belly,mode){return s3Tex('f3'+key,256,256,(g,w,h)=
   // fine scales / wrinkles everywhere
   g.globalAlpha=.12;g.strokeStyle='#000';g.lineWidth=1;for(let y=0;y<h;y+=6)for(let x=(y/6)%2*4;x<w;x+=8){g.beginPath();g.arc(x,y,3.2,0,Math.PI);g.stroke();}g.globalAlpha=1;});}
 function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongMaterial(Object.assign({color:c,shininess:25,specular:'#2a2a2a'},o));
-  const add=(m,x=0,y=0,z=0)=>{m.position.set(x,y,z);G.add(m);return m;},V=(x,y,z=0)=>new T.Vector3(x,y,z);
-  const ell=(mat,x,y,z,sx,sy,sz,rz=0,ry=0)=>{const m=add(new T.Mesh(new T.SphereGeometry(1,40,28),mat),x,y,z);m.scale.set(sx,sy,sz);m.rotation.set(0,ry,rz);return m;};
-  const tube=(mat,pts,r0,r1,cap=true)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p)));add(new T.Mesh(s3Taper(c,48,16,t=>r0+(r1-r0)*t),mat));if(cap){const a=c.getPointAt(0),b=c.getPointAt(1);add(new T.Mesh(new T.SphereGeometry(r0,16,12),mat),a.x,a.y,a.z);add(new T.Mesh(new T.SphereGeometry(Math.max(.01,r1),12,8),mat),b.x,b.y,b.z);}return c;};
-  const eye=(x,y,z,r=.045)=>{add(new T.Mesh(new T.SphereGeometry(r,14,10),ph('#1a1208',{shininess:120,specular:'#ffffff'})),x,y,z);add(new T.Mesh(new T.SphereGeometry(r*.32,8,6),ph('#ffffff',{emissive:'#ffffff'})),x+r*.35,y+r*.4,z+(z>0?r*.6:-r*.6));};
-  const CL=ph('#2a2420',{shininess:70});
-  // spine(points, radius(t), vertical squash): tail tip -> body -> neck -> head as ONE smooth surface
-  // radius table [[x,r],...] along the body, smoothly (cosine) interpolated by the x position on the spine
+  let TG=G;const add=(m,x=0,y=0,z=0)=>{m.position.set(x,y,z);TG.add(m);return m;},sub=fn=>{const g=new T.Group();G.add(g);const pv=TG;TG=g;fn();TG=pv;return g;},V=(x,y,z=0)=>new T.Vector3(x,y,z),C=c=>new T.Color(c);
+  const cone=(mat,x,y,z,r,h,rz=0,ry=0,rx=0)=>{const m=add(new T.Mesh(new T.ConeGeometry(r,h,12),mat),x,y,z);m.rotation.set(rx,ry,rz);return m;};
   const RT=tab=>x=>{if(x<=tab[0][0])return tab[0][1];for(let i=1;i<tab.length;i++)if(x<=tab[i][0]){const [x0,r0]=tab[i-1],[x1,r1]=tab[i],k=(1-Math.cos(Math.PI*(x-x0)/(x1-x0)))/2;return r0+(r1-r0)*k;}return tab[tab.length-1][1];};
-  const scaleT=s3Tex('f3scale',256,256,(g,w,h)=>{g.fillStyle='#ffffff';g.fillRect(0,0,w,h);g.strokeStyle='rgba(0,0,0,.16)';g.lineWidth=1.2;for(let y=0;y<h;y+=7)for(let x=(y/7)%2*5;x<w;x+=10){g.beginPath();g.arc(x,y,4.2,0,Math.PI);g.stroke();}});scaleT.wrapS=scaleT.wrapT=T.RepeatWrapping;scaleT.repeat.set(10,3);
-  const CS=(top,mid,bel,stripe)=>({top:new T.Color(top),mid:new T.Color(mid),bel:new T.Color(bel),stripe:stripe?new T.Color(stripe):null});
-  const spine=(mat,pts,tab,sq=1)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p))),rx=RT(tab),rf=t=>rx(c.getPointAt(Math.min(1,t)).x);const g=s3Taper(c,120,32,rf);
-    let capM=null;if(mat&&mat.top){const cs=mat;capM=ph('#'+cs.mid.getHexString(),{shininess:38});mat=ph('#ffffff',{vertexColors:true,map:scaleT,shininess:38,specular:'#2e2e2e'});g.computeVertexNormals();const n=g.attributes.normal,p=g.attributes.position,col=[];const tmp=new T.Color();
-      for(let i=0;i<p.count;i++){const ny=n.getY(i),x=p.getX(i);if(ny>.1)tmp.copy(cs.mid).lerp(cs.top,Math.min(1,(ny-.1)/.7));else tmp.copy(cs.mid).lerp(cs.bel,Math.min(1,(-ny+.1)/.6));
-        if(cs.stripe&&ny>-.1&&Math.sin(x*9)>.55)tmp.lerp(cs.stripe,.55);col.push(tmp.r,tmp.g,tmp.b);}g.setAttribute('color',new T.Float32BufferAttribute(col,3));}if(sq!==1){const p=g.attributes.position;for(let i=0;i<p.count;i++){const t=Math.floor(i/33)/120,q=c.getPointAt(Math.min(1,t));p.setY(i,q.y+(p.getY(i)-q.y)*sq);}g.computeVertexNormals();}add(new T.Mesh(g,mat));const e=c.getPointAt(1),r=rf(1)*.95;const cap=add(new T.Mesh(new T.SphereGeometry(r,24,18),capM||mat),e.x,e.y,e.z);cap.scale.y=sq;return c;};
-  const bump=(t0,t1,a)=>t=>t<t0||t>t1?0:Math.sin((t-t0)/(t1-t0)*Math.PI)*a;
-  const leg=(mat,pts,r0,r1,toes,tr=.05)=>{tube(mat,pts,r0,r1);const h=pts[0];ell(mat,h[0],h[1]-r0*.3,h[2],r0*1.35,r0*1.6,r0*1.1);const f=pts[pts.length-1],fy=Math.max(tr*.9,f[1]);ell(mat,f[0]+tr*1.2,fy,f[2],tr*2.4,tr*1.1,tr*2);
-    for(let i=0;i<toes;i++){const a=(i-(toes-1)/2)*.5,x=f[0]+tr*2.4+Math.cos(a)*tr*2,z=f[2]+Math.sin(a)*tr*2.2;const t=add(new T.Mesh(new T.SphereGeometry(tr*.75,10,8),mat),x,fy-tr*.3,z);t.scale.set(1.6,.8,.9);cone(CL,x+tr*1.3,fy-tr*.45,z,tr*.35,tr*1.1,-Math.PI/2);}};
-  const cone=(mat,x,y,z,r,h,rz=0,ry=0,rx=0)=>{const m=add(new T.Mesh(new T.ConeGeometry(r,h,16),mat),x,y,z);m.rotation.set(rx,ry,rz);return m;};
-  // ---- v2 body builder: one smooth surface along a spine with per-x radius, vertical/side squash and a per-vertex colour function ----
   const tabf=tab=>tab?RT(tab):(()=>1);
   const hsh=(a,b,c)=>{const v=Math.sin(a*127.1+b*311.7+c*74.7)*43758.5453;return v-Math.floor(v);};
-  const spots=(x,y,z,cell,rad)=>{const ix=Math.floor(x/cell),iy=Math.floor(y/cell),iz=Math.floor(z/cell);let m=9;for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)for(let c=-1;c<=1;c++){const X=ix+a,Y=iy+b,Z=iz+c,h=hsh(X,Y,Z);if(h<.5)continue;const cx=(X+hsh(X,Z,Y))*cell,cy=(Y+hsh(Y,X,Z))*cell,cz=(Z+hsh(Z,Y,X))*cell;m=Math.min(m,Math.hypot((x-cx)/1.6,y-cy,z-cz)/(rad*(.6+h*.6)));}return m<1;};
-  const C=c=>new T.Color(c);
-  const body=(o)=>{const c=new T.CatmullRomCurve3(o.pts.map(p=>V(...p))),rx=RT(o.r),sy=tabf(o.sy),sz=tabf(o.sz),SEG=o.seg||140,RAD=o.rad||36;
-    const g=s3Taper(c,SEG,RAD,t=>rx(c.getPointAt(Math.min(1,t)).x)),p=g.attributes.position;
-    for(let i=0;i<p.count;i++){const t=Math.min(1,Math.floor(i/(RAD+1))/SEG),q=c.getPointAt(t);p.setY(i,q.y+(p.getY(i)-q.y)*sy(q.x)+(o.dy?o.dy(q.x,p.getY(i)-q.y):0));p.setZ(i,q.z+(p.getZ(i)-q.z)*sz(q.x));}
-    g.computeVertexNormals();const n=g.attributes.normal,col=[],tc=new T.Color();
-    for(let i=0;i<p.count;i++){o.col(tc,p.getX(i),p.getY(i),p.getZ(i),n.getY(i),n.getZ(i));col.push(tc.r,tc.g,tc.b);}g.setAttribute('color',new T.Float32BufferAttribute(col,3));
-    const mat=ph('#ffffff',{vertexColors:true,map:o.tex||scaleT,shininess:o.shin??30,specular:o.spec||'#2a2a2a'});add(new T.Mesh(g,mat));
-    for(const t of[0,1]){const e=c.getPointAt(t),r=rx(e.x);if(r<.03)continue;const s=add(new T.Mesh(new T.SphereGeometry(r,24,16),mat),e.x,e.y,e.z);s.scale.set(1,sy(e.x),sz(e.x));const sg=s.geometry,sp=sg.attributes.position,sn=sg.attributes.normal,cc=[];for(let i=0;i<sp.count;i++){o.col(tc,e.x+sp.getX(i)*r,e.y+sp.getY(i)*r*sy(e.x),e.z+sp.getZ(i)*r,sn.getY(i),sn.getZ(i));cc.push(tc.r,tc.g,tc.b);}sg.setAttribute('color',new T.Float32BufferAttribute(cc,3));}
-    return c;};
-  // 3-tone countershading helper: dorsal colour -> flank -> belly by the surface normal
+  // smooth 3D value noise (0..1) for mottling and shaggy displacement
+  const vn=(x,y,z)=>{const X=Math.floor(x),Y=Math.floor(y),Z=Math.floor(z),fx=x-X,fy=y-Y,fz=z-Z,s=t=>t*t*(3-2*t),u=s(fx),v=s(fy),w=s(fz);const L=(a,b,t)=>a+(b-a)*t;
+    return L(L(L(hsh(X,Y,Z),hsh(X+1,Y,Z),u),L(hsh(X,Y+1,Z),hsh(X+1,Y+1,Z),u),v),L(L(hsh(X,Y,Z+1),hsh(X+1,Y,Z+1),u),L(hsh(X,Y+1,Z+1),hsh(X+1,Y+1,Z+1),u),v),w);};
+  const fbm=(x,y,z)=>vn(x,y,z)*.55+vn(x*2.1,y*2.1,z*2.1)*.3+vn(x*4.3,y*4.3,z*4.3)*.15;
+  const spots=(x,y,z,cell,rad)=>{const ix=Math.floor(x/cell),iy=Math.floor(y/cell),iz=Math.floor(z/cell);for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)for(let c=-1;c<=1;c++){const X=ix+a,Y=iy+b,Z=iz+c,h=hsh(X,Y,Z);if(h<.5)continue;
+      const cx=(X+hsh(X,Z,Y))*cell,cy=(Y+hsh(Z,X,Y))*cell,cz=(Z+hsh(Y,Z,X))*cell,d=Math.hypot(x-cx,y-cy,z-cz);if(d<rad*(.6+h*.6))return true;}return false;};
   const shade3=(tc,ny,top,mid,bel)=>{if(ny>.05)tc.copy(mid).lerp(top,Math.min(1,(ny-.05)/.75));else tc.copy(mid).lerp(bel,Math.min(1,(-ny+.05)/.55));return tc;};
-  const furT=s3Tex('f3fur',256,256,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);let sd=11;const R=()=>(sd=(sd*9301+49297)%233280)/233280;g.lineWidth=1;for(let i=0;i<2600;i++){g.strokeStyle=R()<.5?'rgba(0,0,0,.18)':'rgba(255,255,255,.35)';const x=R()*w,y=R()*h;g.beginPath();g.moveTo(x,y);g.lineTo(x+R()*2-1,y+3+R()*5);g.stroke();}});furT.wrapS=furT.wrapT=T.RepeatWrapping;furT.repeat.set(8,4);
-  const wrinT=s3Tex('f3wrin',256,256,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);let sd=5;const R=()=>(sd=(sd*9301+49297)%233280)/233280;g.strokeStyle='rgba(0,0,0,.2)';for(let i=0;i<220;i++){g.lineWidth=.6+R();const x=R()*w,y=R()*h;g.beginPath();g.moveTo(x,y);g.bezierCurveTo(x+R()*20-10,y+R()*10,x+R()*20-10,y+R()*10,x+R()*30-15,y+R()*14-7);g.stroke();}});wrinT.wrapS=wrinT.wrapT=T.RepeatWrapping;wrinT.repeat.set(6,3);
-  const limb=(mat,pts,rs,toes,tr,clawC)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p)));const N=pts.length-1;add(new T.Mesh(s3Taper(c,40,16,t=>{const k=t*N,i=Math.min(N-1,Math.floor(k)),f=k-i,s=(1-Math.cos(Math.PI*f))/2;return rs[i]+(rs[i+1]-rs[i])*s;}),mat));
-    pts.forEach((p,i)=>{add(new T.Mesh(new T.SphereGeometry(rs[i]*1.02,16,12),mat),...p);});
-    const f=pts[N];if(toes){for(let i=0;i<toes;i++){const a=(i-(toes-1)/2)*.42;const tx=f[0]+Math.cos(a)*tr*2.6,tz=f[2]+Math.sin(a)*tr*2.6,ty=Math.max(tr*.6,f[1]-tr*.4),ey=Math.max(tr*.5,f[1]-tr*1.2);add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(f[0],ty,f[2]),V((f[0]+tx)/2,(ty+ey)/2,(f[2]+tz)/2),V(tx,ey,tz)]),10,8,t=>tr*(1-t*.4)),mat));cone(clawC||CL,tx+tr*.7,ey-tr*.1,tz,tr*.42,tr*1.4,-Math.PI/2-.3,a*.6);}}};
-  const ringEye=(x,y,z,r,iris)=>{add(new T.Mesh(new T.SphereGeometry(r*1.25,14,10),ph('#2a1c14')),x,y,z);add(new T.Mesh(new T.SphereGeometry(r,16,12),ph(iris||'#c8902a',{shininess:120,specular:'#fff'})),x+(r*.25),y,z+(z>0?r*.35:-r*.35));add(new T.Mesh(new T.SphereGeometry(r*.5,10,8),ph('#0a0806',{shininess:140,specular:'#fff'})),x+r*.45,y,z+(z>0?r*.7:-r*.7));add(new T.Mesh(new T.SphereGeometry(r*.18,6,6),ph('#fff',{emissive:'#fff'})),x+r*.55,y+r*.35,z+(z>0?r*.8:-r*.8));};
+  const mott=(tc,x,y,z,f=3,a=.18)=>{const n=fbm(x*f+7,y*f,z*f)-.5;tc.offsetHSL(0,0,n*a);return tc;};
+  // ---- relief textures (bump maps): scales / tubercles / fur / feathers / wrinkles / smooth skin ----
+  const BD={
+    scale:(g,w,h)=>{g.fillStyle='#606060';g.fillRect(0,0,w,h);const s=16;for(let r=0;r<h/s*2+2;r++)for(let c=-1;c<w/s+1;c++){const x=c*s+(r%2)*s/2,y=r*s/2;const gr=g.createRadialGradient(x-2,y-2,1,x,y,s*.62);gr.addColorStop(0,'#ffffff');gr.addColorStop(.7,'#b0b0b0');gr.addColorStop(1,'#404040');g.fillStyle=gr;g.beginPath();g.arc(x,y,s*.56,0,7);g.fill();}},
+    tuber:(g,w,h)=>{g.fillStyle='#707070';g.fillRect(0,0,w,h);let sd=9;const R=()=>(sd=(sd*9301+49297)%233280)/233280;for(let i=0;i<520;i++){const x=R()*w,y=R()*h,r=2+R()*(R()<.12?9:4);const gr=g.createRadialGradient(x-r*.3,y-r*.3,0,x,y,r);gr.addColorStop(0,'#fff');gr.addColorStop(1,'rgba(80,80,80,0)');g.fillStyle=gr;g.beginPath();g.arc(x,y,r,0,7);g.fill();}},
+    fur:(g,w,h)=>{g.fillStyle='#808080';g.fillRect(0,0,w,h);let sd=11;const R=()=>(sd=(sd*9301+49297)%233280)/233280;g.lineCap='round';for(let i=0;i<5200;i++){const x=R()*w,y=R()*h,l=6+R()*14,a=(R()-.5)*.6;g.strokeStyle=R()<.5?'rgba(20,20,20,.55)':'rgba(255,255,255,.55)';g.lineWidth=.8+R()*1.2;g.beginPath();g.moveTo(x,y);g.quadraticCurveTo(x+l*.5,y+a*l*.6,x+l,y+a*l);g.stroke();}},
+    feather:(g,w,h)=>{g.fillStyle='#707070';g.fillRect(0,0,w,h);const s=14;for(let r=0;r<h/s*2+2;r++)for(let c=-1;c<w/(s*1.6)+1;c++){const x=c*s*1.6+(r%2)*s*.8,y=r*s/2;const gr=g.createLinearGradient(x-s,y,x+s*.8,y);gr.addColorStop(0,'#ffffff');gr.addColorStop(.75,'#9a9a9a');gr.addColorStop(1,'#3a3a3a');g.fillStyle=gr;g.beginPath();g.ellipse(x,y,s*.95,s*.55,0,0,7);g.fill();g.strokeStyle='rgba(60,60,60,.5)';g.lineWidth=.7;g.beginPath();g.moveTo(x-s*.9,y);g.lineTo(x+s*.8,y);g.stroke();}},
+    wrinkle:(g,w,h)=>{g.fillStyle='#9a9a9a';g.fillRect(0,0,w,h);let sd=5;const R=()=>(sd=(sd*9301+49297)%233280)/233280;for(let i=0;i<9000;i++){g.fillStyle=R()<.5?'rgba(255,255,255,.18)':'rgba(0,0,0,.15)';g.fillRect(R()*w,R()*h,2,2);}
+      g.strokeStyle='rgba(20,20,20,.75)';for(let i=0;i<170;i++){g.lineWidth=.6+R()*1.6;let x=R()*w,y=R()*h;g.beginPath();g.moveTo(x,y);for(let k=0;k<6;k++){x+=(R()-.5)*26;y+=(R()-.5)*16;g.lineTo(x,y);}g.stroke();}},
+    pleat:(g,w,h)=>{g.fillStyle='#9a9a9a';g.fillRect(0,0,w,h);for(let y=0;y<h;y+=8){const gr=g.createLinearGradient(0,y,0,y+8);gr.addColorStop(0,'#3a3a3a');gr.addColorStop(.5,'#ffffff');gr.addColorStop(1,'#3a3a3a');g.fillStyle=gr;g.fillRect(0,y,w,8);}},
+    smooth:(g,w,h)=>{g.fillStyle='#909090';g.fillRect(0,0,w,h);let sd=3;const R=()=>(sd=(sd*9301+49297)%233280)/233280;for(let i=0;i<4000;i++){g.fillStyle=R()<.5?'rgba(255,255,255,.12)':'rgba(0,0,0,.12)';g.beginPath();g.arc(R()*w,R()*h,1+R()*3,0,7);g.fill();}}};
+  const bt=(k,rx,ry)=>{const b=s3Tex('f3b_'+k,256,256,BD[k]);const t=b.clone();t.needsUpdate=true;t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(rx,ry);return t;};
+  const skin=(k,rx,ry,bs=.025,o={})=>ph('#ffffff',Object.assign({vertexColors:true,bumpMap:bt(k,rx,ry),bumpScale:bs,shininess:14,specular:'#1c1c1c'},o));
+  // paint any mesh by world position + normal with the same colour function as the body => limbs blend into the torso
+  const paint=(m,col)=>{m.updateMatrixWorld(true);const g=m.geometry,p=g.attributes.position,n=g.attributes.normal,v=new T.Vector3(),nv=new T.Vector3(),nm=new T.Matrix3().getNormalMatrix(m.matrixWorld),c=[],tc=new T.Color();
+    for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i).applyMatrix4(m.matrixWorld);nv.fromBufferAttribute(n,i).applyMatrix3(nm).normalize();col(tc,v.x,v.y,v.z,nv.y,nv.z,nv.x);c.push(tc.r,tc.g,tc.b);}g.setAttribute('color',new T.Float32BufferAttribute(c,3));return m;};
+  // one continuous surface along a spine: per-x radius, vertical/side squash, vertical offset dy(x,ly,lz), normal noise dn(x,y,z)
+  const body=o=>{const c=new T.CatmullRomCurve3(o.pts.map(p=>V(...p))),rx=RT(o.r),sy=tabf(o.sy),sz=tabf(o.sz),SEG=o.seg||160,RAD=o.rad||40;
+    const g=s3Taper(c,SEG,RAD,t=>rx(c.getPointAt(Math.min(1,t)).x)),p=g.attributes.position;
+    for(let i=0;i<p.count;i++){const t=Math.min(1,Math.floor(i/(RAD+1))/SEG),q=c.getPointAt(t),ly=p.getY(i)-q.y,lz=p.getZ(i)-q.z;let y=q.y+ly*sy(q.x)+(o.dy?o.dy(q.x,ly,lz):0),z=q.z+lz*sz(q.x);
+      if(o.dn){const d=o.dn(p.getX(i),y,z),L=Math.hypot(y-q.y,z-q.z)||1;y+=(y-q.y)/L*d;z+=(z-q.z)/L*d;}p.setY(i,y);p.setZ(i,z);}
+    g.computeVertexNormals();const n=g.attributes.normal,col=[],tc=new T.Color();
+    for(let i=0;i<p.count;i++){o.col(tc,p.getX(i),p.getY(i),p.getZ(i),n.getY(i),n.getZ(i),n.getX(i));col.push(tc.r,tc.g,tc.b);}g.setAttribute('color',new T.Float32BufferAttribute(col,3));
+    const mat=o.mat||ph('#ffffff',{vertexColors:true,shininess:o.shin??30});add(new T.Mesh(g,mat));
+    for(const t of[0,1]){if(o.noCap&&o.noCap[t])continue;const e=c.getPointAt(t),r=rx(e.x);if(r<.025)continue;const s=add(new T.Mesh(new T.SphereGeometry(r,28,18),mat),e.x,e.y,e.z);s.scale.set(1,sy(e.x),sz(e.x));paint(s,o.col);}
+    return {c,rx,sy,sz,dy:o.dy};};
+  // point on a body surface at spine-x, angle a (0=side,+pi/2=top), scale k (1 = on the skin)
+  const at=(B,x,a,k=1)=>{let lo=0,hi=1;for(let i=0;i<30;i++){const m=(lo+hi)/2;if(B.c.getPointAt(m).x<x)lo=m;else hi=m;}const q=B.c.getPointAt(lo),r=B.rx(x)*k,ly=Math.sin(a)*r,lz=Math.cos(a)*r;return [x,q.y+ly*B.sy(x)+(B.dy?B.dy(x,ly,lz):0),q.z+lz*B.sz(x)];};
+  // ellipsoid spanning a->b (muscle / thigh / snout) painted with the body colours
+  const blob=(mat,col,a,b,r,flat=.8,ext=1.12,seg=30)=>{const A=V(...a),B=V(...b),d=B.clone().sub(A),L=d.length();const m=new T.Mesh(new T.SphereGeometry(1,seg,Math.round(seg*.7)),mat);m.position.copy(A).add(B).multiplyScalar(.5);
+    m.quaternion.setFromUnitVectors(V(0,1,0),d.normalize());m.scale.set(r,L/2*ext,r*flat);TG.add(m);return paint(m,col);};
+  const ball=(mat,col,x,y,z,sx,sy,sz,rx=0,ry=0,rz=0)=>{const m=add(new T.Mesh(new T.SphereGeometry(1,30,20),mat),x,y,z);m.scale.set(sx,sy,sz);m.rotation.set(rx,ry,rz);return paint(m,col);};
+  // tapered tube through points with radii per point, painted
+  const tube=(mat,col,pts,rs,seg=40,rad=18)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p))),N=pts.length-1;const m=add(new T.Mesh(s3Taper(c,seg,rad,t=>{const k=t*N,i=Math.min(N-1,Math.floor(k)),f=k-i,s=(1-Math.cos(Math.PI*f))/2;return rs[i]+(rs[i+1]-rs[i])*s;}),mat));paint(m,col);
+    for(const i of[0,N]){const s=add(new T.Mesh(new T.SphereGeometry(rs[i],18,12),mat),...pts[i]);paint(s,col);}return c;};
+  const CLAW=ph('#2a2420',{shininess:90,specular:'#888'});
+  // leg: thigh muscle + shin + foot with splayed toes and claws. P=[hip,knee,ankle,foot] (y of foot >= toe radius)
+  const leg=(mat,col,P,R,o={})=>{const [hip,knee]=P;if(o.thigh)blob(mat,col,[hip[0],hip[1]+o.thigh*.35,hip[2]],knee,o.thigh,o.flat||.72,1.25);tube(mat,col,P,R,48,18);
+    if(o.joints)for(let i=1;i<P.length-1;i++){const s=add(new T.Mesh(new T.SphereGeometry(R[i]*1.02,18,12),mat),...P[i]);paint(s,col);}
+    const f=P[P.length-1],n=o.toes||0,tr=o.tr||R[R.length-1]*.55,tl=o.tl||tr*4,spread=o.spread||.42,dir=o.dir??0;
+    for(let i=0;i<n;i++){const a=dir+(i-(n-1)/2)*spread,len=tl*(i===(n-1)/2?1.12:.9),ex=f[0]+Math.cos(a)*len*(o.hang?.45:1),ez=f[2]+Math.sin(a)*len*(o.hang?.6:1),ey=o.hang?f[1]-len*.85:tr*.55;
+      tube(mat,col,[[f[0],o.hang?f[1]:Math.max(tr,f[1]),f[2]],[(f[0]+ex)/2+Math.cos(a)*len*.05,o.hang?(f[1]+ey)/2:tr*.85,(f[2]+ez)/2],[ex,ey,ez]],[tr*1.05,tr*.85,tr*.55],12,10);
+      if(o.claw!==false){const cl=add(new T.Mesh(new T.ConeGeometry(tr*.5,tr*1.8,10),o.clawM||CLAW),ex+Math.cos(a)*tr*.7,ey-tr*.05,ez+Math.sin(a)*tr*.7);cl.rotation.set(0,-a,-Math.PI/2-.35);if(o.hang){cl.position.set(ex+Math.cos(a)*tr*.3,ey-tr*.6,ez);cl.rotation.set(0,-a,Math.PI*.92);}}}
+    if(o.pad){const pd=add(new T.Mesh(new T.CylinderGeometry(o.pad*.9,o.pad,o.pad*.7,26),mat),f[0],o.pad*.35,f[2]);paint(pd,col);for(let i=0;i<(o.nails||0);i++){const a=(i-(o.nails-1)/2)*.45;const nl=add(new T.Mesh(new T.SphereGeometry(o.pad*.2,10,8),ph('#d8d0c0',{shininess:60})),f[0]+Math.cos(a)*o.pad*.92,o.pad*.14,f[2]+Math.sin(a)*o.pad*.92);nl.scale.set(.7,.6,1);}}};
+  // eye with socket, glossy iris, pupil (round or slit), highlight and an upper lid in skin colour so it reads as a living eye
+  const eye=(x,y,z,r,iris,lidC,o={})=>{const s=z>=0?1:-1,ry=o.ry||0;const grp=new T.Group();grp.position.set(x,y,z);grp.rotation.y=s*ry;TG.add(grp);const ad=(m,px,py,pz)=>{m.position.set(px,py,pz*s);grp.add(m);return m;};
+    const so=ad(new T.Mesh(new T.SphereGeometry(r*1.3,20,14),ph(o.ring||'#1c120c',{shininess:10})),0,0,0);so.scale.set(1.05,.9,.6);
+    ad(new T.Mesh(new T.SphereGeometry(r,24,18),ph(iris,{shininess:160,specular:'#ffffff'})),0,0,r*.32);
+    const pu=ad(new T.Mesh(new T.SphereGeometry(r*.5,16,12),ph('#040404',{shininess:180,specular:'#fff'})),r*.12,0,r*.88);if(o.slit)pu.scale.set(.38,1.15,.6);
+    ad(new T.Mesh(new T.SphereGeometry(r*.17,8,6),ph('#fff',{emissive:'#ffffff'})),r*.38,r*.36,r*1.18);
+    if(lidC){const lid=ad(new T.Mesh(new T.SphereGeometry(r*1.14,22,12,0,Math.PI*2,0,Math.PI*.3),ph(lidC,{shininess:14})),0,r*.05,r*.3);lid.rotation.set(s*.45,0,-.25);
+      const lo=ad(new T.Mesh(new T.SphereGeometry(r*1.12,22,10,0,Math.PI*2,Math.PI*.74,Math.PI*.26),ph(lidC,{shininess:14})),0,-r*.02,r*.3);lo.rotation.set(-s*.4,0,0);}
+    if(o.brow){const b=ad(new T.Mesh(new T.SphereGeometry(1,16,10),ph(o.brow,{shininess:12})),-r*.1,r*1.05,r*.05);b.scale.set(r*1.9,r*.55,r*.9);b.rotation.z=-.15;}
+    return grp;};
+  const teeth=(mat,pts,n,len,up=false)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p)));for(let i=0;i<n;i++){const p=c.getPointAt((i+.5)/n),l=len*(.7+.3*Math.sin(i*2.1)**2);const t=add(new T.Mesh(new T.ConeGeometry(l*.3,l,8),mat),p.x,p.y+(up?l*.45:-l*.45),p.z);t.rotation.z=up?0:Math.PI;}};
+  const lineT=(mat,pts,r)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p)));add(new T.Mesh(new T.TubeGeometry(c,30,r,6,false),mat));};
   switch(id){
-   case 'kano':{// Koreanosaurus (photo 1): slender running ornithopod — teal-grey with white blotches, rust-red head, long tail held high
-     const top=C('#2f4f5c'),mid=C('#4f7480'),bel=C('#e6e2da'),head=C('#8a4636'),wht=C('#e8ecea'),pink=C('#b07a6a');
-     body({pts:[[-3.6,1.55,0],[-2.6,1.5,0],[-1.6,1.36,0],[-.7,1.18,0],[0,1.08,0],[.6,1.1,0],[1.05,1.3,0],[1.35,1.62,0],[1.6,1.85,0],[1.9,1.86,0],[2.2,1.76,0]],
-       r:[[-3.6,.012],[-2.6,.07],[-1.6,.17],[-.8,.32],[-.1,.42],[.5,.36],[.95,.2],[1.3,.13],[1.6,.12],[1.82,.17],[2.05,.15],[2.2,.12]],sy:[[-2,1.15],[0,1.05],[1.8,.95]],sz:[[-1,.85],[0,.8],[1.8,.85]],
-       col:(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);if(x>1.55)tc.lerp(head,Math.min(1,(x-1.55)/.15)*(ny>-.3?1:.4));if(ny>.15&&x>-2.4&&x<1.2&&spots(x,y,z,.16,.07))tc.lerp(wht,.85);if(ny<-.2&&x>-1&&x<1)tc.lerp(pink,.25);}});
-     ringEye(1.92,1.93,.13,.03);ringEye(1.92,1.93,-.13,.03);add(new T.Mesh(new T.TorusGeometry(.07,.008,4,16,Math.PI*.8),ph('#2a1810')),2.07,1.73,0).rotation.set(Math.PI/2,0,-.4);
-     const L=ph('#ffffff',{map:wrinT,color:'#7a9aa4',shininess:25}),Lp=ph('#ffffff',{map:wrinT,color:'#c8a8a0'});
-     for(const [z,ph_] of [[.2,0],[-.2,1]]){const fw=ph_?.35:-.1;limb(L,[[-.15,1.05,z],[.05+fw*.6,.62,z*1.1],[-.2+fw*.8,.34,z*1.1],[.0+fw,ph_?.24:.06,z*1.1]],[.24,.1,.065,.045],3,.045);}
-     for(const z of[.16,-.16])limb(Lp,[[.75,1.05,z],[.85,.82,z*1.2],[.98,.68,z*1.2]],[.05,.035,.025],3,.018);
+   case 'kcera':{// Koreaceratops (photo): bipedal stance, big deep head with parrot beak + cheek flare + low frill, yellow/red banded face, olive body with blue & gold speckles, tall red/cream banded paddle tail, short arms
+     const top=C('#4a4020'),mid=C('#7a6228'),bel=C('#d6be82'),blu=C('#4e6088'),gold=C('#d8a83a'),red=C('#a8281c'),crm=C('#efd9a0'),hy=C('#c8902c'),dk=C('#3a2a14');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,4,.2);
+       if(x<-1.3){const b=Math.sin(x*5.2+Math.sin(y*6)*.5);tc.copy(b>.45?red:b>-.15?crm:C('#8a5a24'));if(b>.2&&b<.45)tc.lerp(dk,.5);if(ny<-.4)tc.lerp(bel,.55);mott(tc,x,y,z,6,.15);}
+       else if(x<1.35){if(ny>-.2&&spots(x,y,z,.085,.035))tc.lerp(blu,.72);else if(ny>.1&&spots(x+3,y,z,.06,.022))tc.lerp(gold,.7);}
+       if(x>1.22){tc.copy(hy);const b=Math.sin((x-1.22)*30+y*14);if(b>.55)tc.lerp(red,.7);else if(b<-.7)tc.lerp(C('#f0d070'),.5);if(ny<-.35)tc.lerp(crm,.45);mott(tc,x,y,z,9,.16);}};
+     const M=skin('tuber',16,6,.035);
+     const B=body({mat:M,col,pts:[[-3.6,1.02,0],[-2.8,1.22,0],[-1.9,1.2,0],[-1.0,1.12,0],[-.2,1.08,0],[.5,1.04,0],[.95,1.08,0],[1.25,1.18,0],[1.5,1.22,0],[1.75,1.12,0],[1.98,.96,0]],
+       r:[[-3.6,.012],[-3.2,.07],[-2.6,.15],[-2,.24],[-1.2,.34],[-.4,.46],[.3,.42],[.8,.31],[1.1,.28],[1.32,.3],[1.5,.3],[1.7,.24],[1.88,.15],[1.98,.08]],
+       sy:[[-3.5,1.3],[-3.0,2.1],[-2.2,2.2],[-1.2,1.55],[-.3,1.1],[.6,1.05],[1.1,1.1],[1.4,1.45],[1.65,1.5],[1.9,1.25]],sz:[[-3.4,.33],[-2.2,.4],[-1.2,.62],[-.3,.85],[.8,.82],[1.25,.85],[1.45,.92],[1.7,.7],[1.95,.6]],
+       dy:(x,ly)=>x>1.4&&ly<0?ly*.15*Math.min(1,(x-1.4)/.2):0});
+     // cheek (jugal) flares and low frill ridge at the back of the skull
+     for(const s of[1,-1]){const j=at(B,1.56,-.45,.98);const jh=cone(ph('#5a3a18',{shininess:40}),j[0]+.02,j[1]-.08,s*(j[2]+.05),.035,.1,Math.PI+.2,0,s*.5);}
+     {const fr=add(new T.Mesh(new T.TorusGeometry(.3,.05,12,30,Math.PI),M),1.36,1.24,0);fr.rotation.set(0,Math.PI/2,0);fr.scale.set(1,1.05,.45);paint(fr,col);}
+     // parrot beak: hooked upper + lower beak, dark keratin
+     {const K=ph('#2e2418',{shininess:90,specular:'#777'});const ub=add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(1.84,1.04),V(1.98,1.0),V(2.05,.93),V(2.07,.87)]),24,16,t=>.11*(1-t*.62)),K));ub.scale.z=.75;add(new T.Mesh(new T.SphereGeometry(.04,12,10),K),2.07,.87,0);
+      const lb=add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(1.82,.86),V(1.94,.85),V(2.03,.87)]),14,12,t=>.075*(1-t*.6)),K));lb.scale.z=.68;}
+     lineT(ph('#2a1810'),[[1.86,.89,.13],[1.75,.9,.17],[1.6,.95,.21]],.008);lineT(ph('#2a1810'),[[1.86,.89,-.13],[1.75,.9,-.17],[1.6,.95,-.21]],.008);
+     for(const s of[1,-1]){const e=at(B,1.58,.4,.98);eye(e[0],e[1],s*e[2],.052,'#c8641e',hy.getStyle(),{brow:'#b8481c',slit:false,ry:.3});
+       const n=at(B,1.9,.3,.9);add(new T.Mesh(new T.SphereGeometry(.018,8,6),ph('#120a06')),n[0],n[1],s*n[2]);}
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,5,.22);if(ny>-.1&&spots(x,y,z,.07,.025))tc.lerp(blu,.55);if(y<.35)tc.lerp(C('#5a4520'),.35);};
+     // hind legs: walking stride (left forward)
+     for(const [s,f] of[[1,.25],[-1,-.2]])leg(M,LC,[[-.35,1.0,s*.3],[.02+f*.6,.62,s*.34],[-.32+f,.28,s*.32],[-.2+f,.09,s*.32]],[.2,.13,.085,.065],{thigh:.3,flat:.55,toes:4,tr:.05,tl:.2,spread:.38});
+     // short arms held under the chest
+     for(const [s,f] of[[1,.05],[-1,-.06]])leg(M,LC,[[.62,.86,s*.24],[.66+f,.62,s*.31],[.82+f,.5,s*.31],[.9+f,.44,s*.3]],[.085,.065,.045,.038],{thigh:.13,flat:.8,toes:4,tr:.022,tl:.07,spread:.35,hang:1});
      break;}
-   case 'kcera':{// Koreaceratops (photo 7): bronze-olive body with blue spots, head bands, red/cream banded deep paddle tail, parrot beak, small crest
-     const top=C('#5a4a22'),mid=C('#8a6a2e'),bel=C('#d8b46a'),blu=C('#4a5a8a'),red=C('#a8261c'),crm=C('#ecd29a'),hd=C('#a0782e');
-     body({pts:[[-3.5,.95,0],[-2.8,1.22,0],[-1.9,1.14,0],[-1,.98,0],[-.2,.95,0],[.5,.98,0],[1.0,1.08,0],[1.35,1.15,0],[1.7,1.12,0],[2.0,1.0,0]],
-       r:[[-3.5,.015],[-3.1,.07],[-2.6,.14],[-2,.22],[-1.2,.3],[-.3,.44],[.4,.4],[.95,.24],[1.2,.24],[1.5,.27],[1.8,.23],[2.0,.16]],sy:[[-3.5,1.2],[-3.0,2.0],[-2.2,2.1],[-1.2,1.5],[-.3,1.05],[.6,1],[1.4,1.05]],sz:[[-3.4,.35],[-2.2,.42],[-1.2,.62],[-.3,.85],[.8,.85],[1.6,.82]],
-       col:(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);if(x<-1.4){const b=Math.sin(x*6.5);tc.copy(b>.35?red:b>-.3?crm:mid);if(ny<-.3)tc.lerp(bel,.5);}else if(ny>.0&&x<1.1&&spots(x,y,z,.11,.045))tc.lerp(blu,.7);
-         if(x>1.15){tc.copy(hd);const b=Math.sin(x*28+y*10);if(b>.6)tc.lerp(C('#e8b84a'),.6);else if(b<-.6)tc.lerp(red,.45);if(ny<-.4)tc.lerp(crm,.4);}}});
-     {const K=ph('#3a2a1a',{shininess:80});const bk=add(new T.Mesh(new T.ConeGeometry(.1,.26,12),K),2.08,.92,0);bk.rotation.z=-Math.PI/2-.55;bk.scale.set(1,1,.75);
-      const cr=add(new T.Mesh(new T.TorusGeometry(.26,.06,10,24,Math.PI*.9),ph('#9a5a26',{shininess:30})),1.42,1.28,0);cr.rotation.set(0,Math.PI/2,.3);cr.scale.set(1,1,.4);}
-     ringEye(1.66,1.22,.17,.034,'#c86a2a');ringEye(1.66,1.22,-.17,.034,'#c86a2a');
-     const L=ph('#ffffff',{map:wrinT,color:'#7a5a26',shininess:25});
-     for(const z of[.3,-.3]){limb(L,[[-.3,.92,z],[-.05,.5,z*1.1],[-.35,.25,z*1.1],[-.2,.05,z*1.1]],[.32,.16,.09,.065],3,.065);limb(L,[[.55,.85,z*.85],[.72,.52,z],[.62,.34,z],[.7,.18,z]],[.15,.1,.065,.05],4,.035);}
+   case 'kano':{// Koreanosaurus (photo): slender running ornithopod — teal-grey crackled hide with white blotches, pale belly with pink flush, rust-red rounded head, S-neck, long tail held high, short arms
+     const top=C('#27424e'),mid=C('#4a6e7a'),bel=C('#e4e0d8'),head=C('#8a4232'),hd2=C('#5a2a20'),wht=C('#eef0ec'),pink=C('#b88272');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,5,.22);if(ny<-.15&&x>-1.4&&x<1.3)tc.lerp(pink,.3*Math.min(1,(-ny-.15)*3));
+       if(ny>.12&&x>-2.6&&x<1.0&&spots(x,y,z,.15,.055))tc.lerp(wht,.85);
+       if(x>1.42){const k=Math.min(1,(x-1.42)/.18);tc.lerp(head,k*(ny>-.35?1:.5));if(k>.5)tc.lerp(hd2,(fbm(x*14,y*14,z*14)-.4)*.8);}};
+     const M=skin('wrinkle',22,6,.035);
+     const B=body({mat:M,col,pts:[[-3.8,1.92,0],[-2.8,1.78,0],[-1.6,1.46,0],[-.5,1.22,0],[.35,1.1,0],[.85,1.18,0],[1.15,1.5,0],[1.4,1.8,0],[1.66,1.94,0],[1.92,1.9,0],[2.12,1.8,0]],
+       r:[[-3.8,.012],[-2.8,.06],[-1.8,.15],[-.9,.3],[-.2,.38],[.45,.34],[.85,.2],[1.15,.13],[1.45,.115],[1.62,.16],[1.82,.15],[1.98,.1],[2.12,.055]],
+       sy:[[-1,1.1],[0,1.12],[1.0,.95],[1.6,1.12],[2.0,.95]],sz:[[-2,.78],[-.5,.78],[.5,.82],[1.2,.9],[1.65,.82],[2.0,.7]]});
+     const K=ph('#2a1a14',{shininess:60});{const b=add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(2.04,1.84),V(2.14,1.8),V(2.18,1.75)]),14,12,t=>.05*(1-t*.6)),K));b.scale.z=.7;}
+     lineT(ph('#3a1a12'),[[2.1,1.76,.04],[2.0,1.78,.08],[1.86,1.82,.11]],.006);lineT(ph('#3a1a12'),[[2.1,1.76,-.04],[2.0,1.78,-.08],[1.86,1.82,-.11]],.006);
+     for(const s of[1,-1]){const e=at(B,1.78,.45,.97);eye(e[0],e[1],s*e[2],.036,'#d8b030',head.getStyle(),{brow:'#6a3024',ry:.35});const n=at(B,2.06,.35,.9);add(new T.Mesh(new T.SphereGeometry(.012,8,6),ph('#120a06')),n[0],n[1],s*n[2]);}
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,6,.2);if(ny<0)tc.lerp(pink,.35);if(y<.5)tc.lerp(C('#d8d4cc'),.45*(1-y/.5));};
+     // running: right leg planted, left leg swung back
+     leg(M,LC,[[-.4,1.18,-.22],[.02,.76,-.26],[-.3,.36,-.25],[-.16,.08,-.25]],[.2,.11,.07,.05],{thigh:.3,flat:.55,toes:3,tr:.04,tl:.18,spread:.42});
+     leg(M,LC,[[-.4,1.18,.22],[-.3,.82,.27],[-.78,.6,.27],[-.72,.42,.26]],[.2,.11,.07,.05],{thigh:.3,flat:.55,toes:3,tr:.036,tl:.14,spread:.4,hang:1,dir:Math.PI*.15});
+     // short arms, hands held in front
+     for(const [s,f] of[[1,.04],[-1,-.05]])leg(M,LC,[[.5,.98,s*.2],[.56+f,.78,s*.26],[.72+f,.72,s*.27],[.8+f,.66,s*.27]],[.07,.05,.035,.03],{thigh:.1,flat:.8,toes:4,tr:.016,tl:.05,spread:.4,hang:1});
      break;}
-   case 'goseong':{// large bipedal track-maker (photo 8): heavy theropod-like body, big head, small arms, grey-green scaly hide with dark feather tufts
-     const top=C('#3a4436'),mid=C('#5e6a56'),bel=C('#a8a890'),dk=C('#2a2a24');
-     body({pts:[[-3.4,1.45,0],[-2.4,1.5,0],[-1.4,1.62,0],[-.5,1.72,0],[.3,1.8,0],[.9,1.98,0],[1.25,2.18,0],[1.6,2.3,0],[2.05,2.2,0],[2.35,2.05,0]],
-       r:[[-3.4,.03],[-2.4,.16],[-1.4,.36],[-.5,.58],[.3,.56],[.85,.36],[1.2,.32],[1.55,.38],[1.95,.33],[2.35,.24]],sy:[[-1,1.05],[.3,1.1],[1.6,1.15],[2.3,.9]],sz:[[-1,.8],[.3,.85],[1.6,.72]],
-       col:(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);if(ny>.2&&x>-1.2&&x<1.6&&spots(x,y,z,.09,.05))tc.lerp(dk,.6);}});
-     for(let i=0;i<26;i++){const x=-.6+i*.08,y=1.72+Math.sin(i*.2)*.2+(x>.9?(x-.9)*.6:0)+.5;const f=add(new T.Mesh(new T.ConeGeometry(.04,.16,5),ph('#3a3828')),x,Math.min(2.62,y),(i%3-1)*.06);f.rotation.z=.6;}
-     add(new T.Mesh(new T.TorusGeometry(.2,.012,4,16,Math.PI*.9),ph('#2a1a14')),2.14,2.02,0).rotation.set(Math.PI/2,0,-.3);
-     for(let i=0;i<8;i++)for(const z of[.09,-.09])cone(ph('#f0e8d0'),1.9+i*.055,1.98-i*.008,z*(1-i*.02),.012,.05,Math.PI);
-     ringEye(1.82,2.36,.2,.035,'#d8a02a');ringEye(1.82,2.36,-.2,.035,'#d8a02a');
-     const L=ph('#ffffff',{map:wrinT,color:'#56604c',shininess:22});
-     for(const [z,f] of[[.3,0],[-.3,.3]]){limb(L,[[-.3,1.55,z],[.1+f,.95,z*1.1],[-.25+f,.5,z*1.1],[.05+f,.08,z*1.1]],[.36,.18,.1,.07],3,.07);}
-     for(const z of[.25,-.25])limb(L,[[1.05,1.75,z],[1.25,1.5,z*1.15],[1.4,1.42,z*1.15]],[.07,.05,.035],2,.022);
+   case 'goseong':{// Goseong track-maker (photo): heavy theropod — deep boxy skull with open toothy jaws, brow bosses, tiny two-finger arms, powerful legs, shaggy filaments on neck & back, olive-grey knobbly hide with dark bands
+     const top=C('#2e3428'),mid=C('#545a46'),bel=C('#a29e84'),dk=C('#1e221a'),hd=C('#4a4636');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,3.5,.26);if(ny>-.2&&x<1.3&&Math.sin(x*7+Math.sin(y*5)*.8)>.55)tc.lerp(dk,.45);if(x>1.35)tc.lerp(hd,.4);};
+     const M=skin('tuber',18,7,.045);
+     const B=body({mat:M,col,pts:[[-3.7,1.5,0],[-2.5,1.62,0],[-1.3,1.74,0],[-.3,1.82,0],[.5,1.8,0],[1.0,1.98,0],[1.28,2.2,0],[1.5,2.32,0],[1.9,2.28,0],[2.38,2.12,0]],
+       r:[[-3.7,.015],[-2.6,.17],[-1.4,.38],[-.4,.6],[.4,.56],[.95,.38],[1.25,.34],[1.5,.37],[1.85,.3],[2.15,.22],[2.38,.15]],
+       sy:[[-1,1.05],[.4,1.12],[1.0,1.05],[1.5,1.2],[2.1,1.1]],sz:[[-1,.78],[.4,.85],[1.1,.82],[1.5,.72],[2.0,.58],[2.38,.55]],
+       dy:(x,ly)=>x>1.5&&ly<0?ly*.35*Math.min(1,(x-1.5)/.25):0});
+     // lower jaw, slightly open, with throat
+     const JC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,5,.2);tc.lerp(hd,.25);};
+     body({mat:M,col:JC,pts:[[1.35,2.02,0],[1.7,1.96,0],[2.05,1.9,0],[2.34,1.86,0]],r:[[1.35,.2],[1.7,.16],[2.05,.12],[2.34,.08]],sy:[[1.4,.75],[2.3,.6]],sz:[[1.4,1.0],[2.0,.95],[2.34,.9]]});
+     const mouth=ph('#5a2222',{shininess:30});{const m=add(new T.Mesh(new T.BoxGeometry(.62,.05,.17),mouth),1.92,1.99,0);m.rotation.z=-.12;}
+     const TT=ph('#efe6cc',{shininess:80,specular:'#999'});
+     for(const s of[1,-1]){teeth(TT,[[1.72,2.03,s*.15],[2.0,1.99,s*.13],[2.3,1.96,s*.1]],8,.06);teeth(TT,[[1.8,1.93,s*.12],[2.05,1.9,s*.11],[2.28,1.88,s*.08]],7,.045,true);}
+     for(const s of[1,-1]){const e=at(B,1.62,.42,.97);eye(e[0],e[1],s*e[2],.05,'#d89a28',hd.getStyle(),{brow:'#3e3a2c',slit:true,ry:.25});
+       const bb=at(B,1.52,.72,.98);ball(M,col,bb[0],bb[1],s*bb[2],.09,.06,.06);
+       const n=at(B,2.3,.5,.95);const ns=add(new T.Mesh(new T.SphereGeometry(.024,8,6),ph('#0e0c08')),n[0],n[1],s*n[2]);ns.scale.set(1.6,1,1);
+       // jaw scales row
+       lineT(ph('#262418'),[[1.58,2.06,s*.21],[1.9,2.02,s*.17],[2.3,1.99,s*.115]],.008);}
+     // shaggy filaments on the nape and back
+     const FB=ph('#2e2c22',{shininess:6}),FB2=ph('#4a4634',{shininess:6});
+     for(let i=0;i<120;i++){const x=-1.0+i/120*2.6,a=Math.PI/2+(hsh(i,1,2)-.5)*1.3,p=at(B,x,a,.96);const L=.12+hsh(i,3,4)*.16+(x>.8&&x<1.4?.08:0);const f=add(new T.Mesh(new T.ConeGeometry(.018+hsh(i,5,1)*.012,L,5),i%3?FB:FB2),p[0],p[1]+L*.3,p[2]);f.rotation.set((p[2])*1.5,0,.9+hsh(i,2,2)*.5);}
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,5,.25);if(y<.5)tc.lerp(C('#3a3a30'),.3);};
+     leg(M,LC,[[-.25,1.72,.36],[.22,1.02,.4],[-.12,.46,.38],[.06,.11,.38]],[.27,.17,.11,.085],{thigh:.46,flat:.55,toes:3,tr:.075,tl:.28,spread:.4});
+     leg(M,LC,[[-.25,1.72,-.36],[-.08,1.04,-.4],[-.55,.48,-.38],[-.42,.11,-.38]],[.27,.17,.11,.085],{thigh:.46,flat:.55,toes:3,tr:.075,tl:.28,spread:.4});
+     for(const s of[1,-1])leg(M,LC,[[.78,1.66,s*.3],[.92,1.44,s*.36],[1.06,1.4,s*.36],[1.12,1.35,s*.35]],[.065,.045,.032,.028],{thigh:.1,flat:.8,toes:2,tr:.017,tl:.06,spread:.5,hang:1});
      G.scale.setScalar(.95);break;}
-   case 'puk':{// Pukyongosaurus (photo 6): pale blue-grey sauropod, very long rising neck, long whip tail, columnar legs, wrinkled hide
-     const top=C('#7a8a94'),mid=C('#a8b6bc'),bel=C('#d4dade');
-     body({pts:[[-5.2,.55,0],[-4.0,.75,0],[-2.8,1.2,0],[-1.6,1.7,0],[-.4,1.95,0],[.6,1.95,0],[1.3,2.4,0],[1.8,3.1,0],[2.1,3.8,0],[2.3,4.3,0],[2.6,4.38,0]],
-       r:[[-5.2,.02],[-4,.1],[-2.8,.3],[-1.6,.62],[-.6,.86],[.3,.8],[1.1,.42],[1.6,.26],[2.0,.18],[2.3,.19],[2.6,.14]],sy:[[-1,1.05],[2.2,1]],sz:[[-1,.82],[0,.8],[2.2,.8]],tex:wrinT,shin:18,
-       col:(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);}});
-     ringEye(2.42,4.43,.12,.028,'#3a3020');ringEye(2.42,4.43,-.12,.028,'#3a3020');
-     const L=ph('#ffffff',{map:wrinT,color:'#8a98a0',shininess:18});
-     for(const z of[.48,-.48]){limb(L,[[-1.1,1.6,z],[-1.1,.9,z],[-1.05,.15,z]],[.36,.28,.25],4,.07);limb(L,[[.55,1.6,z],[.6,.9,z],[.58,.15,z]],[.3,.24,.22],4,.06);}
+   case 'puk':{// Pukyongosaurus (photo): pale blue-grey sauropod with white veined, wrinkled hide; very long graceful neck, small horse-like head, long whip tail, elephant-like column legs
+     const top=C('#62727c'),mid=C('#909ea6'),bel=C('#c6ced2'),vein=C('#eef2f4');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,2.5,.16);const v=Math.abs(fbm(x*2.2+3,y*2.2,z*2.2)-.5);if(v<.022)tc.lerp(vein,.75*(1-v/.022));};
+     const M=skin('wrinkle',26,7,.05,{shininess:10});
+     const B=body({mat:M,col,pts:[[-5.4,.7,0],[-4.2,.98,0],[-3.0,1.42,0],[-1.8,1.88,0],[-.9,2.08,0],[0,2.04,0],[.7,2.08,0],[1.3,2.5,0],[1.8,3.2,0],[2.15,3.9,0],[2.38,4.38,0],[2.6,4.55,0],[2.9,4.45,0]],
+       r:[[-5.4,.015],[-4.2,.1],[-3,.3],[-1.8,.62],[-.9,.82],[0,.84],[.6,.72],[1.2,.42],[1.7,.27],[2.1,.2],[2.35,.17],[2.55,.19],[2.75,.16],[2.9,.1]],
+       sy:[[-2,1.08],[0,1.1],[1.2,1.0],[2.5,1.1]],sz:[[-2,.8],[0,.82],[1.2,.9],[2.5,.78],[2.9,.7]]});
+     for(const s of[1,-1]){const e=at(B,2.62,.42,.97);eye(e[0],e[1],s*e[2],.03,'#3a2a18',mid.getStyle(),{ry:.3});const n=at(B,2.84,.6,.95);add(new T.Mesh(new T.SphereGeometry(.016,8,6),ph('#202428')),n[0],n[1],s*n[2]);
+       lineT(ph('#3a4248'),[[2.92,4.41,s*.04],[2.8,4.42,s*.1],[2.66,4.45,s*.13]],.006);}
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,3,.16);if(y<.6)tc.lerp(C('#7a858c'),.3);};
+     for(const s of[1,-1]){leg(M,LC,[[-.95,2.0,s*.4],[-1.0,1.05,s*.52],[-.92,.42,s*.54],[-.9,.2,s*.54]],[.5,.32,.25,.25],{pad:.27,nails:4});
+       leg(M,LC,[[.5,1.95,s*.38],[.62,1.05,s*.52],[.6,.42,s*.54],[.6,.2,s*.54]],[.42,.28,.22,.22],{pad:.24,nails:3});}
      G.scale.setScalar(.72);break;}
-   case 'haenam':{// azhdarchid pterosaur (photo 10): walking on folded wings — fuzzy brown body, blue-grey head, huge dark beak, tall folded wing fingers
-     const fur=C('#8a6a3a'),furD=C('#5a4224'),furL=C('#b89a64'),blu=C('#4a5a7a'),bk=C('#2a2a30'),wg=ph('#3a2e26',{side:T.DoubleSide,shininess:20});
-     body({pts:[[-.75,1.12,0],[-.45,1.2,0],[-.05,1.25,0],[.3,1.35,0]],r:[[-.75,.06],[-.45,.24],[-.1,.3],[.3,.22]],sy:[[-.5,1.1]],sz:[[-.5,.85]],tex:furT,shin:8,col:(tc,x,y,z,ny)=>shade3(tc,ny,furD,fur,furL)});
-     body({pts:[[.2,1.3,0],[.55,1.62,0],[.85,1.98,0],[1.05,2.2,0],[1.2,2.28,0]],r:[[.2,.2],[.55,.13],[.95,.1],[1.12,.12],[1.2,.1]],tex:furT,shin:8,col:(tc,x,y,z,ny)=>{shade3(tc,ny,furD,fur,furL);if(x>.95)tc.lerp(blu,Math.min(1,(x-.95)/.15));}});
-     {const c=new T.CatmullRomCurve3([V(1.15,2.28),V(1.6,2.18),V(2.1,2.03),V(2.5,1.92)]);add(new T.Mesh(s3Taper(c,30,12,t=>.11*(1-t)+.01),ph('#2e2e34',{shininess:60})));const s=add(new T.Mesh(new T.ConeGeometry(.08,.26,12),ph('#4a5a7a')),1.18,2.42,0);s.rotation.z=.9;s.scale.z=.35;}
-     ringEye(1.24,2.33,.08,.024,'#c85a2a');ringEye(1.24,2.33,-.08,.024,'#c85a2a');
-     const L=ph('#ffffff',{map:furT,color:'#4a3a2a',shininess:15});
-     for(const s of[1,-1]){const sh=[.18,1.2,s*.2],el=[.42,.75,s*.42],wr=[.62,.18,s*.5],tip=[-.05,1.75,s*.36],hip=[-.55,1.05,s*.18];
-       limb(L,[sh,el,wr,[wr[0]+.05,.05,wr[2]]],[.09,.07,.05,.035],3,.025);
-       {const c=new T.CatmullRomCurve3([V(...wr),V(.4,.9,s*.46),V(.15,1.4,s*.42),V(...tip)]);add(new T.Mesh(s3Taper(c,30,10,t=>.05*(1-t)+.008),L));
-        const geo=new T.BufferGeometry(),P=[];const pts=c.getPoints(14);for(let i=0;i<pts.length-1;i++){P.push(pts[i].x,pts[i].y,pts[i].z,pts[i+1].x,pts[i+1].y,pts[i+1].z,...(i<7?sh:hip));}P.push(...sh,...hip,...wr);geo.setAttribute('position',new T.Float32BufferAttribute(P,3));geo.computeVertexNormals();G.add(new T.Mesh(geo,wg));}
-       limb(L,[hip,[-.62,.55,s*.24],[-.75,.12,s*.26],[-.7,.05,s*.26]],[.1,.06,.04,.03],3,.03);}
+   case 'haenam':{// Haenamichnus maker (photo): azhdarchid pterosaur walking on all fours — fuzzy brown body, long neck, blue-grey head with a small crest, huge dark spear beak, tall folded wing fingers with membrane, short tail
+     const fur=C('#8a6a3a'),furD=C('#4e3820'),furL=C('#bea06a'),blu=C('#46587a'),bluD=C('#2c3a56');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,furD,fur,furL);mott(tc,x,y,z,6,.2);if(x>.95){const k=Math.min(1,(x-.95)/.15);tc.lerp(ny>0?bluD:blu,k);}};
+     const M=skin('fur',26,8,.045,{shininess:6});
+     const B=body({mat:M,col,pts:[[-.9,1.02,0],[-.58,1.14,0],[-.22,1.25,0],[.14,1.36,0],[.4,1.62,0],[.68,1.96,0],[.94,2.2,0],[1.14,2.32,0],[1.36,2.3,0]],
+       r:[[-.9,.02],[-.6,.1],[-.3,.28],[.05,.27],[.32,.16],[.65,.11],[.95,.1],[1.15,.14],[1.36,.11]],sy:[[-.3,1.1],[1.1,1.1]],sz:[[-.3,.85],[1.15,.8]]});
+     {const K=ph('#26262c',{shininess:80,specular:'#888'});const bk=add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(1.3,2.32),V(1.7,2.22),V(2.1,2.07),V(2.48,1.92)]),40,16,t=>.115*(1-t)+.006),K));bk.scale.z=.55;
+      const lj=add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(1.32,2.22),V(1.75,2.12),V(2.2,1.98),V(2.42,1.93)]),30,12,t=>.06*(1-t)+.005),ph('#34343a',{shininess:60})));lj.scale.z=.55;
+      lineT(ph('#8a8a90'),[[1.4,2.25,.05],[1.9,2.12,.035],[2.35,1.96,.012]],.004);lineT(ph('#8a8a90'),[[1.4,2.25,-.05],[1.9,2.12,-.035],[2.35,1.96,-.012]],.004);
+      const cr=add(new T.Mesh(new T.ConeGeometry(.07,.32,10),ph('#3a4a6a',{shininess:30})),1.06,2.47,0);cr.rotation.z=.9;cr.scale.z=.35;}
+     for(const s of[1,-1]){const e=at(B,1.2,.35,.97);eye(e[0],e[1],s*e[2],.03,'#c84a22',bluD.getStyle(),{brow:'#2a3650',ry:.25});}
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,furD,C('#5a4430'),fur);mott(tc,x,y,z,7,.2);if(y<.6)tc.lerp(C('#2e2620'),.5);};
+     const WM=ph('#3a2c22',{side:T.DoubleSide,shininess:16,specular:'#3a3028',transparent:true,opacity:.96});
+     for(const s of[1,-1]){const sh=[.14,1.26,s*.22],el=[.36,.8,s*.42],wr=[.56,.26,s*.46],hip=[-.48,1.12,s*.17];
+       leg(M,LC,[sh,el,wr,[.62,.07,s*.47]],[.1,.075,.05,.04],{thigh:.12,flat:.8,toes:3,tr:.022,tl:.08,spread:.45});
+       // folded wing finger rising up and back from the wrist
+       const fc=new T.CatmullRomCurve3([V(...wr),V(.42,.85,s*.5),V(.08,1.55,s*.46),V(-.3,2.18,s*.4),V(-.52,2.5,s*.36)]);add(new T.Mesh(s3Taper(fc,40,10,t=>.05*(1-t)+.01),ph('#2e241c',{shininess:20})));
+       // membrane between the finger and the arm/body
+       const tc=new T.CatmullRomCurve3([V(...wr),V(...el),V(.18,1.25,s*.3),V(-.15,1.25,s*.24),V(-.38,1.3,s*.22)]);const P=[],N=24;for(let i=0;i<N;i++){const a0=fc.getPointAt(i/N),a1=fc.getPointAt((i+1)/N),b0=tc.getPointAt(i/N),b1=tc.getPointAt((i+1)/N);
+         const m0=a0.clone().lerp(b0,.55).add(V(-.06,0,s*.04)),m1=a1.clone().lerp(b1,.55).add(V(-.06,0,s*.04));for(const [p,q,r,w] of[[a0,a1,m0,m1],[m0,m1,b0,b1]])P.push(p.x,p.y,p.z,q.x,q.y,q.z,r.x,r.y,r.z,q.x,q.y,q.z,w.x,w.y,w.z,r.x,r.y,r.z);}
+       const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(P,3));geo.computeVertexNormals();add(new T.Mesh(geo,WM));
+       leg(M,LC,[hip,[-.36,.72,s*.24],[-.6,.28,s*.24],[-.52,.07,s*.24]],[.1,.065,.045,.035],{thigh:.17,flat:.65,toes:4,tr:.022,tl:.1,spread:.35});}
      break;}
-   case 'ura':{// Hesperornis-like diving bird (photo 4): dark slate-blue back, white throat and belly, long toothed beak, legs set far back with lobed toes
-     const top=C('#2a3a52'),mid=C('#4a5a74'),bel=C('#f2f2ee');
-     body({pts:[[-.9,.6,0],[-.5,.65,0],[0,.73,0],[.35,.9,0],[.55,1.25,0],[.62,1.6,0],[.75,1.8,0],[.95,1.85,0]],r:[[-.9,.06],[-.55,.22],[-.1,.3],[.3,.2],[.55,.11],[.65,.1],[.8,.11],[.95,.1]],sz:[[-.4,.82]],tex:furT,shin:30,
-       col:(tc,x,y,z,ny,nz)=>{shade3(tc,ny,top,mid,bel);if(x>.25&&x<.8&&ny<.35)tc.lerp(bel,.85);}});
-     add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(.95,1.85),V(1.25,1.81),V(1.55,1.73)]),20,10,t=>.06*(1-t)+.006),ph('#c8a050',{shininess:60})));for(let i=0;i<6;i++)for(const z of[.02,-.02])cone(ph('#fff'),1.0+i*.08,1.79-i*.012,z,.006,.02,Math.PI);
-     ringEye(.92,1.92,.07,.02,'#e8c84a');ringEye(.92,1.92,-.07,.02,'#e8c84a');
-     for(const z of[.22,-.22]){const w=add(new T.Mesh(new T.SphereGeometry(1,12,8),ph('#2a3a52')),-.15,.75,z);w.scale.set(.25,.06,.05);}
-     const L=ph('#c8a050',{shininess:30});for(const z of[.16,-.16]){limb(L,[[-.55,.55,z],[-.62,.3,z*1.2],[-.6,.08,z*1.3]],[.07,.04,.032],4,.035);for(let i=0;i<4;i++){const a=(i-1.5)*.42,lb=add(new T.Mesh(new T.CircleGeometry(.06,10),ph('#c8a050',{side:T.DoubleSide})),-.6+Math.cos(a)*.11,.02,z*1.3+Math.sin(a)*.11);lb.rotation.x=-Math.PI/2;}}
+   case 'eggnest':{// Hwaseong egg nest (photo): low mound of twigs/moss, rings of elongated eggs, hatchlings standing in the nest, one baby breaking out of its egg
+     const N=ph('#ffffff',{vertexColors:true,bumpMap:bt('wrinkle',6,3),bumpScale:.04,shininess:4});
+     const NC=(tc,x,y,z)=>{tc.copy(C('#6a5034'));mott(tc,x,y,z,3,.3);if(y>.3)tc.lerp(C('#7a6040'),.4);};
+     {const t=add(new T.Mesh(new T.TorusGeometry(1.22,.34,20,64),N),0,.2,0);t.rotation.x=Math.PI/2;t.scale.set(1,1,.62);paint(t,NC);const b=add(new T.Mesh(new T.CylinderGeometry(1.28,1.34,.14,64),N),0,.07,0);paint(b,NC);}
+     let sd=3;const R=()=>(sd=(sd*9301+49297)%233280)/233280;const TW=[ph('#7a5a3a',{shininess:6}),ph('#5a4028',{shininess:6}),ph('#9a7a52',{shininess:8})];
+     for(let i=0;i<150;i++){const a=R()*Math.PI*2,r=.95+R()*.7,l=.45+R()*.8;const c=new T.CatmullRomCurve3([V(-l/2,0,0),V(0,(R()-.5)*.06,(R()-.5)*.08),V(l/2,(R()-.5)*.05,0)]);const st=add(new T.Mesh(s3Taper(c,8,5,t=>.018+R()*.0+(.012*(1-t))),TW[i%3]),Math.cos(a)*r,.14+R()*.34,Math.sin(a)*r);st.rotation.set((R()-.5)*.5,-a+Math.PI/2+(R()-.5)*1.0,(R()-.5)*.4);}
+     const MS=ph('#ffffff',{vertexColors:true,bumpMap:bt('fur',4,4),bumpScale:.03,shininess:4});
+     for(let i=0;i<18;i++){const a=R()*Math.PI*2,r=1.05+R()*.35;ball(MS,(tc,x,y,z)=>{tc.copy(C('#5a6a30'));mott(tc,x,y,z,9,.3);},Math.cos(a)*r,.42,Math.sin(a)*r,.16,.06,.12,0,R()*3,0);}
+     add(new T.Mesh(new T.CylinderGeometry(.95,.95,.06,48),ph('#5a4430',{shininess:3})),0,.22,0);
+     const E=ph('#ffffff',{vertexColors:true,bumpMap:bt('tuber',3,3),bumpScale:.02,shininess:24});const EC=(tc,x,y,z)=>{tc.copy(C('#efe8d8'));mott(tc,x,y,z,8,.08);if(spots(x,y,z,.05,.016))tc.lerp(C('#b8a890'),.5);};
+     const egg=(x,z,a,tilt)=>{const m=add(new T.Mesh(new T.SphereGeometry(.13,22,16),E),x,.3,z);m.scale.set(1,1.55,1);m.rotation.set(Math.cos(a)*tilt,0,-Math.sin(a)*tilt);return paint(m,EC);};
+     for(let ring=0;ring<2;ring++){const n=ring?9:15,rr=ring?.4:.8;for(let i=0;i<n;i++){const a=i/n*Math.PI*2+ring*.2;if(ring===0&&(i===3||i===10))continue;egg(Math.cos(a)*rr,Math.sin(a)*rr,a,.75-ring*.25);}}
+     // hatchling: big head + big eyes, short snout, soft pinkish-tan skin with faint stripes
+     const baby=(o)=>sub(()=>{const top=C('#9a6a4a'),mid=C('#d09a78'),bel=C('#f0d4bc');
+       const bc=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,14,.12);if(ny>0&&x<.1&&Math.sin(x*40)>.6)tc.lerp(C('#7a4a32'),.35);};
+       const BM=skin('scale',18,6,.012,{shininess:20});
+       const BB=body({mat:BM,col:bc,pts:[[-.42,.28,0],[-.25,.3,0],[-.08,.32,0],[.06,.36,0],[.14,.46,0],[.2,.54,0],[.3,.55,0],[.4,.5,0]],r:[[-.42,.012],[-.25,.055],[-.08,.13],[.05,.115],[.13,.075],[.2,.105],[.3,.088],[.4,.045]],sy:[[0,1.05],[.25,1.05]],sz:[[0,.85],[.25,.92]]});
+       for(const s of[1,-1]){const e=at(BB,.26,.35,.95);eye(e[0],e[1],s*e[2],.03,'#2a1a10',null,{ry:.4});
+         leg(BM,bc,[[-.05,.3,s*.08],[.05,.17,s*.1],[-.04,.07,s*.1],[.0,.025,s*.1]],[.07,.04,.028,.022],{thigh:.1,flat:.7,toes:3,tr:.013,tl:.055,claw:false});
+         leg(BM,bc,[[.07,.36,s*.07],[.12,.29,s*.1],[.18,.28,s*.1],[.2,.26,s*.1]],[.026,.018,.013,.011],{toes:3,tr:.004,tl:.015,hang:1,claw:false});}
+       lineT(ph('#7a3a2a'),[[.4,.49,0],[.35,.485,.04],[.29,.49,.06]],.003);lineT(ph('#7a3a2a'),[[.4,.49,0],[.35,.485,-.04],[.29,.49,-.06]],.003);});
+     for(const [x,z,ry,k] of[[-.28,.12,.5,1],[.24,-.18,-2.2,.92],[.05,.42,2.6,.85]]){const g=baby();g.position.set(x,.22,z);g.rotation.y=ry;g.scale.setScalar(k*.95);}
+     // breaking out: lower shell half + head peeking, shell fragments
+     {const sx=.52,sz=-.55;const sh=add(new T.Mesh(new T.SphereGeometry(.14,22,14,0,Math.PI*2,Math.PI*.42,Math.PI*.58),E),sx,.32,sz);sh.scale.set(1,1.5,1);paint(sh,EC);
+      const g=baby();g.position.set(sx-.14,.08,sz);g.scale.setScalar(.7);g.rotation.z=.75;
+      for(let i=0;i<5;i++){const f=add(new T.Mesh(new T.SphereGeometry(.05,8,6,0,2,0,1.2),E),sx+(R()-.5)*.4,.25,sz+(R()-.5)*.4);f.rotation.set(R()*3,R()*3,R()*3);paint(f,EC);}}
+     break;}
+   case 'ura':{// Uhangri web-footed bird (Hesperornis-like diver, photo): loon-like body, slate-blue back, white throat/breast, S-neck, long slender toothed beak, legs far back with three lobed/webbed toes
+     const top=C('#1e2a40'),mid=C('#3a4c68'),bel=C('#efefe8'),hd=C('#18202e');
+     const col=(tc,x,y,z,ny,nz,nx)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,8,.12);if(x>.18&&x<.9&&nx>-.1&&ny<.45)tc.lerp(bel,.9*Math.min(1,(nx+.1)*2.5));if(x>.7&&ny>-.2)tc.lerp(hd,.6);if(ny>.3&&x<.3&&spots(x,y,z,.05,.015))tc.lerp(C('#6a7a94'),.4);};
+     const M=skin('feather',20,7,.03,{shininess:24});
+     const B=body({mat:M,col,pts:[[-.78,.6,0],[-.52,.64,0],[-.12,.82,0],[.22,1.08,0],[.4,1.36,0],[.5,1.68,0],[.6,1.95,0],[.78,2.07,0],[.96,2.05,0]],
+       r:[[-.78,.04],[-.55,.2],[-.15,.31],[.2,.25],[.4,.13],[.52,.095],[.64,.095],[.8,.115],[.96,.075]],sy:[[-.3,1.0],[.9,1.05]],sz:[[-.3,.85],[.3,.88],[.9,.8]]});
+     {const K=ph('#c8a24e',{shininess:70,specular:'#776'});const b=add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(.93,2.07),V(1.2,2.02),V(1.42,1.96),V(1.6,1.9)]),26,12,t=>.058*(1-t)+.005),K));b.scale.z=.75;
+      lineT(ph('#6a4a20'),[[.95,2.04,.0],[1.3,1.98,0],[1.55,1.91,0]],.0045);for(let i=0;i<9;i++)for(const s of[1,-1])cone(ph('#fff'),1.0+i*.06,1.99-i*.011,s*(.028-i*.0025),.005,.018,Math.PI);}
+     for(const s of[1,-1]){const e=at(B,.83,.42,.97);eye(e[0],e[1],s*e[2],.025,'#e0b82e',hd.getStyle(),{ry:.35});
+       const w=ball(M,(tc,x,y,z,ny)=>shade3(tc,ny,top,mid,top),-.08,.86,s*.27,.22,.07,.05,0,s*.15,-.35);}
+     // short tail tuft
+     cone(ph('#1e2a40',{shininess:20}),-.86,.6,0,.05,.16,Math.PI/2+.2);
+     const FT=ph('#ffffff',{vertexColors:true,shininess:30}),FC=(tc,x,y,z,ny)=>{tc.copy(C('#b88a3a')).lerp(C('#6a4a22'),Math.max(0,-ny)*.6);mott(tc,x,y,z,20,.12);};
+     const W=ph('#a87a34',{side:T.DoubleSide,shininess:20,transparent:true,opacity:.92});
+     for(const s of[1,-1]){const f=[-.42,.05,s*.3];ball(M,col,-.46,.6,s*.19,.13,.14,.09);leg(FT,FC,[[-.46,.45,s*.22],[-.42,.33,s*.26],[-.53,.18,s*.29],f],[.045,.04,.03,.026]);
+       // three long toes, each with lobes, joined by a thin web
+       const tips=[];for(let i=0;i<3;i++){const a=(i-1)*.42,L=i===1?.26:.22,ex=f[0]+Math.cos(a)*L,ez=f[2]+Math.sin(a)*L;tips.push([ex,.02,ez]);
+         tube(FT,FC,[[f[0],.035,f[2]],[f[0]+Math.cos(a)*L*.5,.03,f[2]+Math.sin(a)*L*.5],[ex,.02,ez]],[.022,.016,.008],12,8);
+         for(let k=1;k<=3;k++){const p=[f[0]+Math.cos(a)*L*k/3.6,.02,f[2]+Math.sin(a)*L*k/3.6];const lb=add(new T.Mesh(new T.SphereGeometry(1,12,8),ph('#b88a3a',{shininess:20})),...p);lb.scale.set(.035,.006,.026);lb.rotation.y=-a;}
+         cone(CLAW,ex+Math.cos(a)*.015,.02,ez+Math.sin(a)*.015,.006,.025,-Math.PI/2,-a);}
+       const P=[];for(const [a,b] of[[0,1],[1,2]]){const A=tips[a],Bp=tips[b];P.push(f[0],.03,f[2],A[0]*.82+f[0]*.18,.022,A[2]*.82+f[2]*.18,Bp[0]*.82+f[0]*.18,.022,Bp[2]*.82+f[2]*.18);}
+       const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(P,3));g.computeVertexNormals();add(new T.Mesh(g,W));}
      G.scale.setScalar(1.25);break;}
-   case 'eggnest':{// nest from photo 2: a bowl of twigs and moss with a ring of long eggs and two hatchlings
-     const N=ph('#6a5034',{shininess:4}),tw=ph('#7a5a3a',{shininess:6}),moss=ph('#5a6a34',{shininess:4});
-     {const t=add(new T.Mesh(new T.TorusGeometry(1.2,.32,16,48),N),0,.2,0);t.rotation.x=Math.PI/2;t.scale.set(1,1,.6);}add(new T.Mesh(new T.CylinderGeometry(1.25,1.3,.12,48),N),0,.06,0);
-     let sd=3;const R=()=>(sd=(sd*9301+49297)%233280)/233280;
-     for(let i=0;i<90;i++){const a=R()*Math.PI*2,r=1.0+R()*.55,l=.5+R()*.7;const st=add(new T.Mesh(new T.CylinderGeometry(.012+R()*.012,.016,l,5),tw),Math.cos(a)*r,.18+R()*.3,Math.sin(a)*r);st.rotation.set(Math.PI/2*(.7+R()*.6),a+Math.PI/2+(R()-.5)*1.2,(R()-.5)*.8);}
-     for(let i=0;i<14;i++){const a=R()*Math.PI*2,r=1.1+R()*.3;const m=add(new T.Mesh(new T.SphereGeometry(.12,8,6),moss),Math.cos(a)*r,.4,Math.sin(a)*r);m.scale.set(1.4,.5,1);}
-     const E=ph('#f0ebe0',{map:f3Skin('eg','#efe8da','#c8bca8','#f6f2ea','spot'),shininess:18});
-     for(let ring=0;ring<2;ring++){const n=ring?10:14,rr=ring?.42:.82;for(let i=0;i<n;i++){const a=i/n*Math.PI*2+ring*.2,m=add(new T.Mesh(new T.SphereGeometry(.13,20,14),E),Math.cos(a)*rr,.24+ring*.08,Math.sin(a)*rr);m.scale.set(1,1.5,1);m.rotation.set(Math.cos(a)*.9,0,-Math.sin(a)*.9);}}
-     for(const [x,z,ry] of[[-.2,.05,.4],[.25,-.1,-.6]]){const H=new T.Group();H.position.set(x,.3,z);H.rotation.y=ry;G.add(H);const hm=(geo,c,px,py,pz,sx=1,sy=1,sz=1)=>{const m=new T.Mesh(geo,ph(c,{shininess:20}));m.position.set(px,py,pz);m.scale.set(sx,sy,sz);H.add(m);return m;};
-       hm(new T.SphereGeometry(.12,16,12),'#e0a07a',0,.22,0,1.2,1,.9);hm(new T.SphereGeometry(.07,14,10),'#e8aa82',.1,.4,0);hm(new T.SphereGeometry(.045,12,8),'#e8aa82',.18,.38,0,1.4,.8,.8);for(const z2 of[.04,-.04])hm(new T.SphereGeometry(.014,8,6),'#1a1208',.14,.43,z2);
-       for(const z2 of[.05,-.05]){const l=hm(new T.CylinderGeometry(.015,.012,.18,6),'#d8946a',-.02,.08,z2);}const tl=hm(new T.ConeGeometry(.04,.2,8),'#e0a07a',-.18,.22,0);tl.rotation.z=1.6;
-       const sh=add(new T.Mesh(new T.SphereGeometry(.13,16,10,0,Math.PI*2,Math.PI*.5,Math.PI*.5),E),x,.28,z);sh.scale.set(1,1.4,1);}
+   case 'cavebear':{// Danyang cave bear (photo): massive, rounded — shoulder hump, sloping back, big ROUND head with short muzzle and round ears, shaggy brown fur with frosted tips, thick legs and big clawed paws
+     const top=C('#33221a'),mid=C('#4e3424'),bel=C('#281a10'),hl=C('#8a6a4a');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,4,.24);const f=fbm(x*9,y*9,z*9);if(ny>.2&&f>.6)tc.lerp(hl,(f-.6)*1.6);if(x>1.55)tc.lerp(C('#6a5038'),.4);};
+     const M=skin('fur',24,9,.06,{shininess:4,specular:'#111'});
+     const shag=(x,y,z)=>(fbm(x*7,y*7,z*7)-.45)*(x>1.5?.015:.07);
+     const B=body({mat:M,col,dn:shag,pts:[[-1.6,1.12,0],[-1.15,1.36,0],[-.35,1.5,0],[.42,1.64,0],[.95,1.52,0],[1.2,1.46,0],[1.42,1.44,0],[1.62,1.34,0],[1.76,1.28,0]],
+       r:[[-1.6,.28],[-1.2,.62],[-.4,.74],[.4,.84],[.92,.56],[1.12,.44],[1.36,.42],[1.52,.3],[1.64,.2],[1.76,.13]],sy:[[-1,1.0],[.4,1.05],[1.36,1.02],[1.7,.88]],sz:[[-1,.82],[.4,.84],[1.12,.92],[1.36,1.05],[1.62,.9]]});
+     // round ears
+     for(const s of[1,-1]){const ep=at(B,1.26,1.0,.96);const e=ball(M,col,ep[0],ep[1]+.04,s*ep[2],.1,.11,.06,0,s*.3,0);const ie=add(new T.Mesh(new T.SphereGeometry(1,12,8),ph('#2a1a10',{shininess:4})),ep[0]+.035,ep[1]+.04,s*(ep[2]+.01));ie.scale.set(.05,.07,.03);ie.rotation.y=s*.3;
+       const ey=at(B,1.5,.42,1.06);eye(ey[0],ey[1],s*ey[2],.045,'#4a2a12','#3a2618',{ry:.4,brow:'#33221a'});}
+     add(new T.Mesh(new T.SphereGeometry(.08,16,12),ph('#141010',{shininess:90,specular:'#555'})),1.86,1.3,0).scale.set(.8,.75,1.1);
+     lineT(ph('#1a0e08'),[[1.84,1.2,0],[1.76,1.15,.07],[1.64,1.16,.14]],.01);lineT(ph('#1a0e08'),[[1.84,1.2,0],[1.76,1.15,-.07],[1.64,1.16,-.14]],.01);
+     ball(M,col,-1.78,1.22,0,.14,.12,.12);
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,5,.26);if(y<.35)tc.lerp(C('#2e2014'),.4);};
+     const CM=ph('#d8ccb4',{shininess:60});
+     for(const s of[1,-1]){leg(M,LC,[[.55,1.35,s*.42],[.64,.78,s*.46],[.6,.32,s*.46],[.66,.13,s*.46]],[.38,.29,.23,.21],{thigh:.34,flat:.55,toes:5,tr:.055,tl:.15,spread:.3,clawM:CM});
+       leg(M,LC,[[-1.05,1.3,s*.42],[-.92,.8,s*.46],[-1.1,.34,s*.46],[-1.0,.13,s*.46]],[.42,.3,.23,.21],{thigh:.4,flat:.55,toes:5,tr:.055,tl:.15,spread:.3,clawM:CM});}
      break;}
-   case 'cavebear':{// cave bear (photo 5): massive shoulder hump, sloping back, long head, shaggy brown fur
-     const top=C('#4a3220'),mid=C('#6e4e32'),bel=C('#3a2818'),hl=C('#a07a52');
-     body({pts:[[-1.5,1.1,0],[-.9,1.32,0],[-.2,1.46,0],[.5,1.56,0],[1.05,1.48,0],[1.45,1.4,0],[1.8,1.3,0],[2.1,1.18,0]],r:[[-1.5,.3],[-1.1,.62],[-.3,.72],[.4,.8],[1.0,.56],[1.35,.36],[1.75,.28],[2.1,.2]],sy:[[-1,1.05],[.4,1.1],[1.5,1],[2,.85]],sz:[[-1,.8],[.4,.82],[1.6,.85]],tex:furT,shin:6,
-       col:(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);if(ny>.3&&x>-.6&&x<.9)tc.lerp(hl,.35*Math.sin((x+.6)/1.5*Math.PI));}});
-     add(new T.Mesh(new T.SphereGeometry(.07,12,10),ph('#141010',{shininess:90})),2.17,1.2,0);
-     for(const z of[.2,-.2]){const e=add(new T.Mesh(new T.SphereGeometry(.09,12,10),ph('#4a3220')),1.45,1.68,z);e.scale.set(.6,1,.9);}ringEye(1.82,1.42,.17,.025,'#3a2010');ringEye(1.82,1.42,-.17,.025,'#3a2010');
-     {const m=add(new T.Mesh(new T.TorusGeometry(.12,.02,6,14,Math.PI),ph('#7a3a3a')),2.0,1.08,0);m.rotation.set(Math.PI/2,0,-.2);}
-     const L=ph('#ffffff',{map:furT,color:'#5a3e26',shininess:6});
-     for(const z of[.42,-.42]){limb(L,[[-.9,1.1,z],[-.95,.55,z],[-.9,.12,z]],[.36,.26,.22],5,.05);limb(L,[[.7,1.2,z],[.72,.6,z],[.8,.12,z]],[.34,.26,.22],5,.05);}
+   case 'whale':{// Pohang whale (humpback, photo): huge robust body, flat knobbly head, deep pleated throat, very long white pectoral fins with knobbed edges, broad serrated flukes — a school of small fish shows the scale
+     const top=C('#18233a'),mid=C('#2c3f5a'),bel=C('#e8ecf0'),pl=C('#8c98a8');
+     const col=(tc,x,y,z,ny,nz)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,1.6,.14);if(ny<-.2&&x>.4&&x<2.9){const g=Math.sin(z*34+Math.sin(x*2)*1.5);if(g>.55)tc.lerp(pl,.7);}
+       if(ny<.1&&ny>-.55&&x<.5&&spots(x,y,z,.12,.05))tc.lerp(C('#c8d0da'),.5);if(ny>.3&&spots(x,y,z,.18,.04))tc.lerp(C('#0e1626'),.4);};
+     const M=skin('smooth',20,6,.02,{shininess:22,specular:'#2a3038'});
+     const B=body({mat:M,col,pts:[[-3.2,1.78,0],[-2.75,1.6,0],[-2.0,1.45,0],[-1.0,1.44,0],[0,1.46,0],[1.0,1.44,0],[1.9,1.38,0],[2.6,1.3,0],[3.1,1.23,0],[3.42,1.17,0]],
+       r:[[-3.2,.1],[-2.75,.19],[-2.0,.4],[-1.0,.76],[0,.92],[1.0,.9],[1.9,.72],[2.6,.5],[3.1,.3],[3.42,.14]],sy:[[-2.8,1.4],[-2,1.08],[0,1.1],[1.8,.92],[2.8,.62],[3.4,.6]],sz:[[-2.8,.62],[-2,.86],[0,.92],[2.4,.92],[3.4,.85]],
+       dy:(x,ly)=>ly<0&&x>.6&&x<3.2?ly*.22*Math.sin((x-.6)/2.6*Math.PI):0});
+     // tubercles on the head and lower jaw
+     const TB=ph('#1a2438',{shininess:30});for(let i=0;i<34;i++){const x=2.3+hsh(i,1,1)*1.05,a=(hsh(i,2,2)-.5)*2.6+(i%3===0?-Math.PI/2:Math.PI/2)*(i%3?1:.0),p=at(B,x,i%3===0?-.6+hsh(i,3,3)*.3:Math.PI/2+(hsh(i,2,2)-.5)*.9,.99);add(new T.Mesh(new T.SphereGeometry(.035+hsh(i,4,4)*.02,8,6),TB),...p);}
+     for(const s of[1,-1]){lineT(ph('#0a0e18'),[[3.38,1.14,s*.05],[3.0,1.13,s*.22],[2.5,1.13,s*.36],[2.08,1.17,s*.46]],.012);const e=at(B,2.0,.05,1.0);eye(e[0],e[1],s*e[2],.035,'#141414',top.getStyle(),{ry:.2});}
+     // long white pectoral fins (flattened tapered bodies) with knobbed leading edge
+     const FC=(tc,x,y,z,ny)=>{tc.copy(bel);if(ny>.1)tc.lerp(mid,.75);mott(tc,x,y,z,4,.1);};
+     for(const s of[1,-1]){const F=body({mat:M,col:FC,pts:[[1.75,1.0,s*.62],[1.3,.82,s*1.0],[.8,.6,s*1.45],[.25,.42,s*1.9],[-.1,.32,s*2.15]],r:[[-.1,.06],[.25,.2],[.8,.28],[1.3,.3],[1.75,.24]],sy:[[0,.2]],seg:60,rad:20});
+       for(let i=0;i<8;i++){const p=F.c.getPointAt(.08+i*.11);add(new T.Mesh(new T.SphereGeometry(.05*(1-i*.07),8,6),ph('#e8ecf0',{shininess:30})),p.x+.12,p.y+.01,p.z);}}
+     // flukes with a serrated trailing edge
+     {const fl=new T.Shape();fl.moveTo(0,0);fl.bezierCurveTo(-.25,.45,-.55,.85,-.85,1.15);for(let i=0;i<=8;i++){const t=i/8;fl.lineTo(-.85+t*.5+(i%2?.06:0),1.15-t*1.15);}for(let i=0;i<=8;i++){const t=i/8;fl.lineTo(-.35-t*.5+(i%2?.06:0),-t*1.15);}fl.bezierCurveTo(-.55,-.85,-.25,-.45,0,0);
+      const m=add(new T.Mesh(new T.ExtrudeGeometry(fl,{depth:.05,bevelEnabled:true,bevelSize:.03,bevelThickness:.03,bevelSegments:3}),ph('#1c273c',{shininess:30})),-3.15,1.8,0);m.rotation.set(Math.PI/2,-.4,0);}
+     {const d=add(new T.Mesh(new T.ConeGeometry(.16,.3,10),ph('#1c273c')),-1.35,2.1,0);d.scale.z=.3;d.rotation.z=.55;}
+     for(const x of[-.6,1.2])add(new T.Mesh(new T.CylinderGeometry(.05,.05,1.0,8),ph('#55595e')),x,.5,0);
+     // school of small fish for scale
+     const FS=ph('#c8d4dc',{shininess:90,specular:'#fff'});for(let i=0;i<46;i++){const a=i*.37,r=.5+hsh(i,7,7)*.7,x=4.1+Math.cos(a)*r*.6+hsh(i,1,8)*.8,y=1.9+Math.sin(a)*r*.5,z=1.4+Math.sin(a*1.7)*r;
+       const f=new T.Group();f.position.set(x,y,z);f.rotation.y=Math.PI+(hsh(i,9,9)-.5)*.6;G.add(f);const b=new T.Mesh(new T.SphereGeometry(.035,8,6),FS);b.scale.set(1.8,.7,.5);f.add(b);const t=new T.Mesh(new T.ConeGeometry(.025,.04,4),FS);t.rotation.z=Math.PI/2;t.position.x=-.07;f.add(t);}
      break;}
-   case 'whale':{// humpback (photo 9): dark blue-grey back, white ventral pleats, very long white knobbly pectoral fins, tubercles on the head
-     const top=C('#1e2a3e'),mid=C('#344a62'),bel=C('#eef0f2');
-     body({pts:[[-2.9,1.25,0],[-2.0,1.3,0],[-1,1.38,0],[0,1.42,0],[1.0,1.42,0],[1.9,1.35,0],[2.6,1.25,0],[3.0,1.18,0]],r:[[-2.9,.08],[-2.2,.2],[-1.2,.48],[0,.66],[1.0,.66],[1.9,.52],[2.6,.34],[3.0,.22]],sy:[[-2.5,.85],[0,1],[2.6,.75]],sz:[[0,.9]],shin:55,spec:'#556',
-       col:(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);if(ny<-.25&&x>.6){const g=Math.sin(z*60);if(g>.4)tc.lerp(C('#9aa6b4'),.6);}if(ny>.4&&x>2.0&&spots(x,y,z,.07,.03))tc.lerp(C('#0e1420'),.7);}});
-     {const fl=new T.Shape();fl.moveTo(0,0);fl.bezierCurveTo(-.3,.4,-.7,.65,-1.0,.78);fl.quadraticCurveTo(-.6,.25,-.45,0);fl.quadraticCurveTo(-.6,-.25,-1.0,-.78);fl.bezierCurveTo(-.7,-.65,-.3,-.4,0,0);const m=add(new T.Mesh(new T.ExtrudeGeometry(fl,{depth:.05,bevelEnabled:true,bevelSize:.02,bevelThickness:.02}),ph('#2a3448')),-2.75,1.25,0);m.rotation.x=Math.PI/2;}
-     const FW=ph('#e8ecee',{shininess:40});for(const z of[1,-1]){const c=new T.CatmullRomCurve3([V(1.55,1.18,z*.5),V(1.15,1.1,z*1.0),V(.6,1.0,z*1.5),V(.05,.92,z*1.9)]);add(new T.Mesh(s3Taper(c,40,12,t=>.15*(1-t*.75)),FW));
-       for(let i=0;i<7;i++){const p=c.getPointAt(.1+i*.12);add(new T.Mesh(new T.SphereGeometry(.055*(1-i*.08),8,6),FW),p.x+.08,p.y+.02,p.z);}}
-     {const d=add(new T.Mesh(new T.ConeGeometry(.12,.22,6),ph('#1e2a3e')),-1.4,1.82,0);d.scale.z=.3;d.rotation.z=.5;}
-     for(const x of[-.4,1.0])add(new T.Mesh(new T.CylinderGeometry(.04,.04,1.0,8),ph('#55595e')),x,.5,0);
-     ringEye(2.45,1.22,.5,.03,'#1a1a1a');ringEye(2.45,1.22,-.5,.03,'#1a1a1a');add(new T.Mesh(new T.TorusGeometry(.62,.012,6,40,Math.PI*.55),ph('#0e1420')),2.4,1.08,0).rotation.set(Math.PI/2,0,-.25);
+   case 'gangchi':{// Dokdo sea lion (photo): propped on broad fore-flippers, thick neck, blunt head raised with open toothy mouth, small ears, whiskers, tawny coat, dark leathery flippers spread behind
+     const top=C('#57391c'),mid=C('#88602f'),bel=C('#a8824e'),FLc=C('#3c3834');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,4,.2);if(x>1.15)tc.lerp(C('#6a4a2a'),.35);if(x<-1.6)tc.lerp(FLc,Math.min(1,(-1.6-x)*3));};
+     const M=skin('fur',22,8,.025,{shininess:14});
+     const RK=ph('#ffffff',{vertexColors:true,bumpMap:bt('wrinkle',3,2),bumpScale:.06,flatShading:true,shininess:4});{const r=add(new T.Mesh(new T.DodecahedronGeometry(1.1,2),RK),0,.22,0);r.scale.set(2.0,.34,1.15);paint(r,(tc,x,y,z)=>{tc.copy(C('#4a4844'));mott(tc,x,y,z,2,.3);});}
+     const Y=.56;
+     const B=body({mat:M,col,pts:[[-1.95,.55+Y,0],[-1.35,.62+Y,0],[-.5,.78+Y,0],[.3,1.0+Y,0],[.72,1.36+Y,0],[.98,1.7+Y,0],[1.18,1.9+Y,0],[1.42,1.92+Y,0],[1.62,1.86+Y,0]],
+       r:[[-1.95,.12],[-1.4,.32],[-.5,.48],[.3,.5],[.72,.38],[.98,.29],[1.18,.24],[1.4,.17],[1.62,.1]],sy:[[-1,.92],[0,.95],[1.2,1.05]],sz:[[-1,.9],[0,.88],[1.2,.9],[1.6,.78]]});
+     // open mouth: lower jaw + pink inside + teeth
+     {const JC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);tc.lerp(C('#7a5a3a'),.3);};body({mat:M,col:JC,pts:[[1.2,1.8+Y,0],[1.42,1.74+Y,0],[1.58,1.7+Y,0]],r:[[1.2,.12],[1.42,.09],[1.58,.06]],sy:[[1.3,.7]],sz:[[1.3,1.0]]});
+      const mo=add(new T.Mesh(new T.SphereGeometry(1,16,10),ph('#7a2a2a',{shininess:30})),1.45,1.79+Y,0);mo.scale.set(.15,.05,.08);mo.rotation.z=-.2;
+      const TT=ph('#f4ecd8',{shininess:80});for(const s of[1,-1]){teeth(TT,[[1.4,1.84+Y,s*.07],[1.56,1.81+Y,s*.04]],3,.035);teeth(TT,[[1.4,1.76+Y,s*.065],[1.54,1.73+Y,s*.035]],3,.03,true);}}
+     for(const s of[1,-1]){const e=at(B,1.3,.42,.98);eye(e[0],e[1],s*e[2],.03,'#1a1008','#5a3a1e',{ry:.35});const ep=at(B,1.1,.55,.98);cone(ph('#5a3a1e'),ep[0],ep[1],s*ep[2],.022,.06,-.6,0,s*.4);
+       const n=at(B,1.6,.4,.95);add(new T.Mesh(new T.SphereGeometry(.018,8,6),ph('#100a06')),n[0],n[1],s*n[2]);
+       for(let i=0;i<4;i++){const w=at(B,1.5,.05-i*.09,.98);lineT(ph('#e8e0cc'),[w,[w[0]+.06,w[1]-.01-i*.01,w[2]*1.0+s*.1],[w[0]+.1,w[1]-.03-i*.02,w[2]+s*.2]],.003);}}
+     const FL=ph('#ffffff',{vertexColors:true,bumpMap:bt('wrinkle',4,2),bumpScale:.03,shininess:30}),FC=(tc,x,y,z,ny)=>{tc.copy(FLc);mott(tc,x,y,z,6,.18);if(ny>.3)tc.lerp(C('#57504a'),.3);};
+     for(const s of[1,-1]){tube(M,col,[[.4,.95+Y,s*.3],[.5,.66+Y,s*.4],[.6,.38+Y,s*.47],[.66,.2+Y,s*.5]],[.22,.17,.14,.12]);
+       body({mat:FL,col:FC,pts:[[.62,.34+Y,s*.5],[.7,.12+Y,s*.55],[.92,.05+Y,s*.62],[1.22,.04+Y,s*.68]],r:[[.62,.12],[.7,.16],[.92,.2],[1.22,.1]],sy:[[.7,.42],[.95,.2]],seg:50,rad:18});
+       body({mat:FL,col:FC,pts:[[-1.75,.4+Y,s*.15],[-1.98,.14+Y,s*.28],[-2.25,.06+Y,s*.42],[-2.5,.05+Y,s*.52]],r:[[-2.5,.06],[-2.25,.15],[-1.98,.13],[-1.75,.1]],sy:[[-2.3,.22],[-1.9,.4]],seg:50,rad:18});}
      break;}
-   case 'dolphin':{// spotted dolphin (photo 3): grey with dense dark/light freckles, darker cape, short beak, curved dorsal fin
-     const top=C('#3a4450'),mid=C('#6a7480'),bel=C('#c8ccd0');
-     body({pts:[[-2.1,1.25,0],[-1.4,1.3,0],[-.5,1.38,0],[.5,1.4,0],[1.3,1.35,0],[1.8,1.28,0],[2.15,1.22,0],[2.5,1.16,0]],r:[[-2.1,.06],[-1.5,.16],[-.6,.36],[.4,.42],[1.3,.33],[1.8,.22],[2.05,.12],[2.5,.08]],sy:[[0,1]],sz:[[0,.88]],shin:70,spec:'#666',
-       col:(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);if(spots(x,y,z,.03,.01))tc.lerp(ny>0?C('#b8bec6'):C('#3a424c'),.35);}});
-     {const df=new T.Shape();df.moveTo(0,0);df.bezierCurveTo(.1,.3,-.05,.5,-.35,.62);df.quadraticCurveTo(-.3,.3,-.5,0);df.lineTo(0,0);add(new T.Mesh(new T.ExtrudeGeometry(df,{depth:.04,bevelEnabled:true,bevelSize:.015,bevelThickness:.015}),ph('#3a4450')),.05,1.74,-.02);}
-     {const fl=new T.Shape();fl.moveTo(0,0);fl.quadraticCurveTo(-.25,.35,-.55,.45);fl.quadraticCurveTo(-.35,.15,-.3,0);fl.quadraticCurveTo(-.35,-.15,-.55,-.45);fl.quadraticCurveTo(-.25,-.35,0,0);const m=add(new T.Mesh(new T.ExtrudeGeometry(fl,{depth:.03,bevelEnabled:true,bevelSize:.01,bevelThickness:.01}),ph('#3a4450')),-2.0,1.25,0);m.rotation.x=Math.PI/2;}
-     for(const z of[1,-1]){const p=add(new T.Mesh(new T.SphereGeometry(1,16,10),ph('#4a525e')),1.2,1.1,z*.36);p.scale.set(.26,.05,.11);p.rotation.set(z*.5,z*-.6,-.4);}
-     ringEye(1.82,1.34,.21,.022,'#1a1a1a');ringEye(1.82,1.34,-.21,.022,'#1a1a1a');
+   case 'dolphin':{// Ulleungdo spotted dolphin (photo): streamlined, rounded melon and a short distinct beak, falcate dorsal fin, dark cape, grey flanks densely freckled light/dark, pale belly, horizontal flukes
+     const top=C('#2e3844'),mid=C('#66707c'),bel=C('#d2d6da');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);if(ny>.45&&x>-1.4&&x<1.6)tc.lerp(C('#222a34'),.5);mott(tc,x,y,z,3,.1);
+       if(spots(x,y,z,.035,.012))tc.lerp(ny>-.1?C('#c4cad2'):C('#4a525e'),.55);else if(spots(x+5,y,z,.05,.013))tc.lerp(C('#1e242c'),.35);if(x>2.0)tc.lerp(C('#3a4450'),.4);};
+     const M=skin('smooth',16,5,.012,{shininess:45,specular:'#4a4e54'});
+     const B=body({mat:M,col,pts:[[-2.15,1.24,0],[-1.45,1.3,0],[-.45,1.38,0],[.5,1.4,0],[1.3,1.36,0],[1.72,1.3,0],[1.98,1.2,0],[2.2,1.17,0],[2.36,1.16,0]],
+       r:[[-2.15,.06],[-1.55,.16],[-.6,.36],[.4,.42],[1.2,.34],[1.6,.26],[1.85,.16],[1.98,.085],[2.2,.065],[2.36,.04]],sy:[[-2,1.25],[-1.2,1.05],[0,1],[1.9,.95]],sz:[[-2,.6],[-1.2,.85],[0,.86],[2.0,.85]],
+       dy:(x,ly)=>ly>0&&x>1.45&&x<2.0?Math.sin((x-1.45)/.55*Math.PI)*.055*(ly/.2):0});
+     for(const s of[1,-1]){const e=at(B,1.82,.0,1.0);eye(e[0],e[1],s*e[2],.024,'#141414','#2e3844',{ry:.25});lineT(ph('#202830'),[[2.34,1.15,s*.015],[2.15,1.135,s*.05],[1.98,1.15,s*.09]],.005);}
+     {const df=new T.Shape();df.moveTo(.18,0);df.bezierCurveTo(.12,.28,-.05,.5,-.32,.64);df.quadraticCurveTo(-.26,.3,-.48,0);df.lineTo(.18,0);const m=add(new T.Mesh(new T.ExtrudeGeometry(df,{depth:.035,bevelEnabled:true,bevelSize:.02,bevelThickness:.02,bevelSegments:3}),ph('#2a333e',{shininess:40})),.12,1.72,-.03);}
+     const FC=(tc,x,y,z,ny)=>{tc.copy(C('#3a444e'));mott(tc,x,y,z,6,.1);};
+     for(const s of[1,-1])body({mat:M,col:FC,pts:[[1.18,1.16,s*.28],[1.0,1.02,s*.44],[.78,.92,s*.56]],r:[[.78,.03],[1.0,.08],[1.18,.1]],sy:[[1,.3]],seg:30,rad:16});
+     {const fl=new T.Shape();fl.moveTo(0,0);fl.quadraticCurveTo(-.2,.3,-.5,.48);fl.quadraticCurveTo(-.36,.2,-.32,0);fl.quadraticCurveTo(-.36,-.2,-.5,-.48);fl.quadraticCurveTo(-.2,-.3,0,0);const m=add(new T.Mesh(new T.ExtrudeGeometry(fl,{depth:.03,bevelEnabled:true,bevelSize:.02,bevelThickness:.02,bevelSegments:3}),ph('#2a333e',{shininess:40})),-2.08,1.26,0);m.rotation.x=Math.PI/2;}
      for(const x of[-.5,.9])add(new T.Mesh(new T.CylinderGeometry(.035,.035,1.0,8),ph('#55595e')),x,.5,0);
      break;}
-   case 'gangchi':{// Dokdo sea lion (photo 11): propped up on fore-flippers, head raised, mouth open with teeth, tawny coat, dark flippers
-     const top=C('#7a5428'),mid=C('#a8783e'),bel=C('#c89a5e'),R=ph('#6a6a64',{flatShading:true,shininess:5}),FL=ph('#3a3634',{shininess:30});
-     {const r=add(new T.Mesh(new T.DodecahedronGeometry(1.1,1),R),0,.28,0);r.scale.set(1.9,.42,1.1);}
-     body({pts:[[-1.8,.68,0],[-1.2,.74,0],[-.4,.9,0],[.3,1.15,0],[.75,1.55,0],[1.0,1.95,0],[1.15,2.2,0],[1.4,2.3,0],[1.62,2.28,0]],r:[[-1.8,.12],[-1.2,.3],[-.4,.44],[.3,.42],[.75,.3],[1.0,.22],[1.2,.19],[1.42,.14],[1.62,.12]],sy:[[0,.95]],sz:[[0,.85]],tex:furT,shin:30,
-       col:(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);if(x>1.2)tc.lerp(C('#5a3a20'),.3);}});
-     {const m=add(new T.Mesh(new T.TorusGeometry(.09,.02,6,12,Math.PI*1.1),ph('#4a1a14')),1.52,2.22,0);m.rotation.set(Math.PI/2,0,-.6);for(let i=0;i<5;i++)for(const z of[.04,-.04])cone(ph('#f4ecd8'),1.44+i*.04,2.27-i*.02,z,.008,.03,Math.PI);}
-     ringEye(1.38,2.36,.11,.025,'#1a1208');ringEye(1.38,2.36,-.11,.025,'#1a1208');for(const z of[.13,-.13])add(new T.Mesh(new T.ConeGeometry(.02,.05,6),ph('#6a4a2a')),1.24,2.38,z);
-     for(const z of[1,-1]){const c=new T.CatmullRomCurve3([V(.6,1.2,z*.3),V(.75,.8,z*.42),V(.95,.6,z*.5),V(1.35,.58,z*.55)]);const m=add(new T.Mesh(s3Taper(c,24,10,t=>.1-t*.05),FL));m.scale.y=1;
-       const h=add(new T.Mesh(new T.SphereGeometry(1,16,10),FL),-1.95,.62,z*.2);h.scale.set(.36,.04,.16);h.rotation.y=z*.6;}
-     break;}
-   case 'shell':{// West Sea shellfish (reference chart): Manila clam, ark cockle, surf clam, razor clams, scallop, geoduck-type big clam, blood cockle, oyster, mussel on sand
+   case 'shell':{// West Sea shellfish (reference chart): 바지락·새꼬막·동죽·맛조개·가리비·개량조개(+수관)·피조개·굴·홍합 — closed + opened pairs on sand
      const sand=s3Tex('f3sand2',256,256,(g,w,h)=>{g.fillStyle='#b8a47e';g.fillRect(0,0,w,h);let sd=3;const R=()=>(sd=(sd*9301+49297)%233280)/233280;for(let i=0;i<3000;i++){g.fillStyle=R()<.5?'rgba(110,88,56,.3)':'rgba(255,246,226,.3)';g.fillRect(R()*w,R()*h,1.5,1.5);}});
      add(new T.Mesh(new T.CylinderGeometry(1.75,1.85,.18,56),ph('#fff',{map:sand,shininess:4})),0,.09,0);
-     // one valve: a domed oval cap; ribs = radial ridges, col(tc,u along hinge->edge,a angle,ring) paints it
-     const valve=(w,l,h,o)=>{const NR=22,NA=48,pos=[],idx=[],cols=[],tc=new T.Color();for(let r=0;r<=NR;r++)for(let a=0;a<=NA;a++){const u=r/NR,th=(o.fan?Math.PI*(.12+.76*a/NA):Math.PI*2*a/NA);let x,z;if(o.fan){x=Math.cos(th)*u*l;z=Math.sin(th)*u*w-u*w*.0;}else{x=Math.cos(th)*u*l*.5;z=Math.sin(th)*u*w*.5;}
-         const rib=o.ribs?Math.pow(Math.abs(Math.sin(th*o.ribs)),.7)*o.rd*u:0,ring=o.rings?Math.max(0,Math.sin(u*o.rings*Math.PI))*.008:0;pos.push(x,h*(1-u*u)+rib+ring,z);o.col(tc,u,th,a);cols.push(tc.r,tc.g,tc.b);}
-       for(let r=0;r<NR;r++)for(let a=0;a<NA;a++){const k=r*(NA+1)+a;idx.push(k,k+1,k+NA+1,k+1,k+NA+2,k+NA+1);}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('color',new T.Float32BufferAttribute(cols,3));g.setIndex(idx);g.computeVertexNormals();
-       return new T.Mesh(g,ph('#ffffff',{vertexColors:true,side:T.DoubleSide,shininess:o.shin||30,specular:'#444'}));};
-     const bivalve=(x,z,ry,w,l,h,o,open,meat)=>{const P=new T.Group();P.position.set(x,.18,z);P.rotation.y=ry;G.add(P);const lo=valve(w,l,h,o);lo.rotation.x=Math.PI;lo.position.y=h*.9;P.add(lo);
-       const up=valve(w,l,h,o);P.add(up);up.position.y=h*.9;if(open){up.rotation.z=o.fan?.0:.9;if(o.fan){up.rotation.x=0;up.position.x=0;up.rotation.z=-.85;}up.position.y=h*1.1;if(meat){const m=new T.Mesh(new T.SphereGeometry(1,20,14),ph(meat,{shininess:60,specular:'#888'}));m.scale.set(l*.3,h*.35,w*.3);m.position.set(o.fan?l*.45:0,h*.75,0);P.add(m);}}return P;};
-     const Cc=c=>new T.Color(c);
-     // 바지락: brown/cream checker stripes
-     const baji=(tc,u,th)=>{const s2=Math.sin(th*14)>0,b=Math.sin(u*14)>.2;tc.copy(Cc(s2?'#7a5a3a':'#d8c4a0'));if(b)tc.lerp(Cc('#4a3420'),.35);};
-     bivalve(-1.05,-.85,.4,.42,.55,.13,{col:baji,rings:9,shin:40});bivalve(-.6,-1.1,-.3,.38,.5,.12,{col:baji,rings:9,shin:40},true,'#efe0c8');
-     // 새꼬막: deep radial ribs, dark brown/ivory
-     const kkom=(tc,u,th)=>{tc.copy(Cc(Math.sin(th*36)>0?'#5a4030':'#c8b090'));if(u<.25)tc.lerp(Cc('#e8dcc0'),.5);};
-     bivalve(.0,-1.2,0,.4,.42,.16,{col:kkom,ribs:18,rd:.02,shin:25});bivalve(.45,-1.0,.5,.38,.4,.15,{col:kkom,ribs:18,rd:.02},true,'#e89a4a');
-     // 동죽: smooth pale grey-white with growth lines
-     const dong=(tc,u)=>{tc.copy(Cc('#d8d6d0')).lerp(Cc('#8a8a88'),Math.max(0,Math.sin(u*22))*.25);};
-     bivalve(1.05,-.75,-.2,.5,.6,.15,{col:dong,rings:11,shin:50});bivalve(1.25,-.25,.6,.46,.56,.14,{col:dong,rings:11,shin:50},true,'#f0e6d6');
-     // 맛조개: long razor tubes
-     for(const [x,z,ry] of[[-1.25,.1,.2],[-1.15,.35,.15]]){const m=add(new T.Mesh(new T.CylinderGeometry(.075,.075,.95,20,1),ph('#fff',{map:s3Tex('f3razor',64,256,(g,w,h)=>{const gr=g.createLinearGradient(0,0,w,0);gr.addColorStop(0,'#5a4028');gr.addColorStop(.5,'#c8a878');gr.addColorStop(1,'#6a4a2a');g.fillStyle=gr;g.fillRect(0,0,w,h);g.strokeStyle='rgba(255,240,210,.35)';for(let y=0;y<h;y+=9){g.beginPath();g.moveTo(0,y);g.lineTo(w,y+4);g.stroke();}}),shininess:60})),x,.27,z);m.rotation.set(Math.PI/2,ry,0);m.scale.z=.7;}
-     {const m=add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(-1.0,.24,.6),V(-.75,.26,.62),V(-.55,.22,.6)]),16,10,t=>.05-.02*t),ph('#f0e2c8',{shininess:60})));}
-     // 가리비: orange fan with ears, one open with meat
-     const gari=(tc,u,th)=>{tc.copy(Cc('#e07a3a')).lerp(Cc('#f6d0a0'),Math.max(0,Math.sin(th*24))*.5);if(u>.85)tc.lerp(Cc('#f8e0c0'),.4);};
-     bivalve(-.25,-.1,.2,.55,.6,.1,{fan:1,col:gari,ribs:13,rd:.035,shin:35});bivalve(.35,.05,-.5,.5,.55,.1,{fan:1,col:gari,ribs:13,rd:.035},true,'#f0dcb8');
-     // 개량조개 with siphon
-     {const P=bivalve(1.0,.55,-.3,.6,.72,.2,{col:(tc,u)=>tc.copy(Cc('#d8d2c4')).lerp(Cc('#9a948a'),Math.max(0,Math.sin(u*26))*.3),rings:13,shin:40});const sp=new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(.3,.2),V(.6,.22),V(.85,.3)]),20,14,t=>.11-.03*t),ph('#c89a62',{shininess:30}));P.add(sp);}
-     // 피조개: dark ribbed with red flesh
-     const pi=(tc,u,th)=>{tc.copy(Cc(Math.sin(th*34)>0?'#3a2a20':'#8a6a4a'));};
-     bivalve(-1.0,.95,.5,.44,.46,.18,{col:pi,ribs:17,rd:.022,shin:25});bivalve(-.5,1.1,-.2,.42,.44,.17,{col:pi,ribs:17,rd:.022},true,'#d8584a');
-     // 굴: rough grey layered shell, open with pale meat
-     {const P=bivalve(.05,.95,.3,.5,.75,.12,{col:(tc,u,th)=>tc.copy(Cc('#a8a090')).lerp(Cc('#5a5448'),Math.max(0,Math.sin(u*30+th*3))*.6),rings:16,shin:15},true,'#e8e0cc');P.children.forEach(c=>{if(c.geometry&&c.geometry.attributes.color){const p=c.geometry.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,p.getY(i)+Math.sin(i*1.7)*.01);c.geometry.computeVertexNormals();}});}
-     // 홍합: glossy blue-black, elongated
-     const hong=(tc,u)=>tc.copy(Cc('#1a1e2a')).lerp(Cc('#3a3a5a'),Math.max(0,Math.sin(u*18))*.4);
-     bivalve(.65,1.25,.9,.3,.75,.12,{col:hong,rings:10,shin:110},false);bivalve(1.15,1.1,.4,.3,.72,.12,{col:hong,rings:10,shin:110},true,'#e8a050');
+     // one valve: dome over an outline, highest at the umbo (near the hinge), radial ribs + growth rings; both valves share the same rim at y=0
+     const valve=(L,W,H,o)=>{const NR=26,NA=64,pos=[],idx=[],cols=[],tc=new T.Color(),U=[o.ux*L/2,-W/2*(o.uz??.85)];
+       for(let r=0;r<=NR;r++)for(let a=0;a<=NA;a++){const u=r/NR,th=a/NA*Math.PI*2;let rr=o.shape?o.shape(th):1;const ex=Math.cos(th)*L/2*rr,ez=Math.sin(th)*W/2*rr;
+         let x=U[0]+(ex-U[0])*u,z=U[1]+(ez-U[1])*u;const ang=Math.atan2(ez-U[1],ex-U[0]);
+         const rib=o.ribs?Math.pow(Math.abs(Math.sin(ang*o.ribs)),.6)*o.rd*Math.min(1,u*1.6):0,ring=o.rings?Math.pow(Math.max(0,Math.sin(u*o.rings*Math.PI)),3)*.006*u:0,rough=o.rough?(fbm(x*9+3,z*9,u*3)-.5)*o.rough*u:0;
+         pos.push(x,H*(1-Math.pow(u,1.7))+(rib+ring+rough)*(1-Math.pow(u,6)*.7),z);o.col(tc,u,ang,x,z);cols.push(tc.r,tc.g,tc.b);}
+       for(let r=0;r<NR;r++)for(let a=0;a<NA;a++){const k=r*(NA+1)+a;idx.push(k,k+1,k+NA+1,k+1,k+NA+2,k+NA+1);}
+       const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('color',new T.Float32BufferAttribute(cols,3));g.setIndex(idx);g.computeVertexNormals();
+       const grp=new T.Group();grp.add(new T.Mesh(g,ph('#ffffff',{vertexColors:true,shininess:o.shin||30,specular:'#555'})));grp.add(new T.Mesh(g,ph(o.inner||'#f2ece2',{side:T.BackSide,shininess:90,specular:'#aaa'})));grp.userData.U=U;return grp;};
+     // bivalve: lower valve = mirror of the upper (scale.y=-1) so the rims meet exactly; open = upper valve swings on the hinge line through the umbo
+     const bivalve=(x,z,ry,L,W,H,o,open,meat)=>{const P=new T.Group();P.position.set(x,.18+H*.92,z);P.rotation.y=ry;G.add(P);
+       const lo=valve(L,W,H,o);lo.scale.y=-1;P.add(lo);const U=lo.userData.U;const hinge=new T.Group();hinge.position.set(0,0,U[1]);P.add(hinge);const up=valve(L,W,H,o);up.position.z=-U[1];hinge.add(up);
+       if(open){hinge.rotation.x=-(o.openA||.95);P.position.y=.18+H*.95;if(meat){const m=new T.Mesh(new T.SphereGeometry(1,24,16),ph(meat,{shininess:70,specular:'#fff'}));m.scale.set(L*.36,H*.55,W*.3);m.position.set(0,-H*.15,W*.04);P.add(m);}}
+       return P;};
+     const Cc=c=>new T.Color(c),clamS=th=>1-.12*Math.max(0,Math.sin(th))**3+.05*Math.cos(th);
+     // 바지락 Manila clam: brown/cream zig-zag check
+     const baji=(tc,u,a,x,z)=>{const s2=Math.sin(a*16+Math.sin(u*18)*1.2)>0;tc.copy(Cc(s2?'#6a4a30':'#d8c4a0'));if(Math.sin(u*16)>.4)tc.lerp(Cc('#3a2818'),.4);};
+     bivalve(-1.05,-.85,.4,.5,.42,.1,{col:baji,ux:-.15,rings:12,ribs:30,rd:.004,shape:clamS,shin:40});bivalve(-.6,-1.12,-.3,.46,.38,.1,{col:baji,ux:-.15,rings:12,ribs:30,rd:.004,shape:clamS},true,'#efe0c8');
+     // 새꼬막 ark cockle: deep radial ribs, dark brown/ivory
+     const kkom=(tc,u,a)=>{tc.copy(Cc(Math.sin(a*36)>0?'#5a4030':'#c8b090'));if(u<.25)tc.lerp(Cc('#e8dcc0'),.5);};
+     bivalve(.0,-1.22,0,.44,.4,.13,{col:kkom,ux:0,uz:.7,ribs:18,rd:.02,shin:25,inner:'#f6efe6'});bivalve(.45,-1.0,.5,.42,.38,.12,{col:kkom,ux:0,uz:.7,ribs:18,rd:.02},true,'#e89a4a');
+     // 동죽 surf clam: smooth pale grey-white with growth lines
+     const dong=(tc,u)=>{tc.copy(Cc('#dedad2')).lerp(Cc('#8a8882'),Math.max(0,Math.sin(u*24))*.3);};
+     bivalve(1.05,-.75,-.2,.58,.5,.13,{col:dong,ux:0,rings:12,shape:clamS,shin:55});bivalve(1.28,-.22,.6,.54,.46,.12,{col:dong,ux:0,rings:12,shape:clamS,shin:55},true,'#f0e6d6');
+     // 맛조개 razor clams: long tubes, both ends rounded shut
+     const RZ=ph('#fff',{map:s3Tex('f3razor',64,256,(g,w,h)=>{const gr=g.createLinearGradient(0,0,w,0);gr.addColorStop(0,'#5a4028');gr.addColorStop(.5,'#c8a878');gr.addColorStop(1,'#5a4028');g.fillStyle=gr;g.fillRect(0,0,w,h);g.strokeStyle='rgba(60,40,20,.5)';for(let y=0;y<h;y+=9){g.beginPath();g.moveTo(0,y);g.lineTo(w,y+4);g.stroke();}}),shininess:60});
+     for(const [x,z,ry] of[[-1.28,.08,.2],[-1.16,.36,.15]]){const g=new T.Group();g.position.set(x,.25,z);g.rotation.y=ry;G.add(g);const m=new T.Mesh(new T.CylinderGeometry(.07,.07,.9,20),RZ);m.rotation.z=Math.PI/2;m.scale.set(1,1,.8);g.add(m);
+       for(const e of[-1,1]){const cp=new T.Mesh(new T.SphereGeometry(.07,16,10),ph('#6a4a2e',{shininess:50}));cp.position.x=e*.45;cp.scale.set(.7,1,.8);g.add(cp);}}
+     {const m=add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(-1.0,.25,.62),V(-.78,.27,.64),V(-.56,.23,.6)]),16,12,t=>.05-.015*t),ph('#f0e2c8',{shininess:60})));add(new T.Mesh(new T.SphereGeometry(.036,12,8),ph('#f0e2c8',{shininess:60})),-.56,.23,.6);}
+     // 가리비 scallop: orange fan with ears
+     const fan=th=>{const s=Math.sin(th);return s<-.55?.55+.45*(-s>.9?0:1)*(1-(-s-.55)/.45)*.0+.62:1;};
+     const gari=(tc,u,a)=>{tc.copy(Cc('#e07a3a')).lerp(Cc('#f6d0a0'),Math.max(0,Math.sin(a*26))*.5);if(u>.85)tc.lerp(Cc('#f8e0c0'),.4);if(u<.15)tc.lerp(Cc('#b85a2a'),.4);};
+     const scal=(x,z,ry,open)=>{const P=bivalve(x,z,ry,.6,.6,.08,{col:gari,ux:0,uz:.98,ribs:14,rd:.03,shin:35,shape:th=>{const s=Math.sin(th);return s<-.7?.72+(-.7-s)*.2:1;},openA:.85,inner:'#fbe8d2'},open,open?'#f0dcb8':null);
+       for(const s of[1,-1]){const e=new T.Mesh(new T.ConeGeometry(.07,.12,3),ph('#d8743a',{shininess:30}));e.rotation.set(Math.PI/2,0,s*Math.PI/2);e.scale.set(1,1,.25);e.position.set(s*.08,0,-.3);P.add(e);}};
+     scal(-.25,-.1,.2,false);scal(.35,.05,-.5,true);
+     // 개량조개 with a rounded, closed-tip siphon
+     {const gc=(tc,u)=>tc.copy(Cc('#dcd4c4')).lerp(Cc('#9a948a'),Math.max(0,Math.sin(u*26))*.3);const P=bivalve(1.0,.6,-.3,.72,.6,.17,{col:gc,ux:-.1,rings:14,shape:clamS,shin:45},true,'#e8c8a0');
+      const SC=ph('#c8946a',{shininess:40}),cv=new T.CatmullRomCurve3([V(.22,-.02,.05),V(.42,.0,.12),V(.62,.06,.16),V(.8,.12,.14)]);const sp=new T.Mesh(s3Taper(cv,24,16,t=>.085-.022*t),SC);P.add(sp);
+      const tip=new T.Mesh(new T.SphereGeometry(.064,18,12),SC);tip.position.copy(cv.getPointAt(1));P.add(tip);const d=cv.getPointAt(1).clone().sub(cv.getPointAt(.95)).normalize();
+      for(const k of[-1,1]){const h=new T.Mesh(new T.CircleGeometry(.014,10),ph('#4a2a1a'));h.position.copy(cv.getPointAt(1)).add(d.clone().multiplyScalar(.06)).add(V(0,k*.02,0));h.lookAt(h.position.clone().add(d));P.add(h);}}
+     // 피조개 blood cockle: dark ribbed, red flesh
+     const pi=(tc,u,a)=>{tc.copy(Cc(Math.sin(a*34)>0?'#3a2a20':'#8a6a4a'));};
+     bivalve(-1.0,.95,.5,.5,.46,.15,{col:pi,ux:0,uz:.72,ribs:17,rd:.02,shin:25});bivalve(-.5,1.12,-.2,.48,.44,.14,{col:pi,ux:0,uz:.72,ribs:17,rd:.02},true,'#d8584a');
+     // 굴 oyster: rough grey layered irregular shell, open with pale meat
+     bivalve(.05,.98,.3,.52,.78,.1,{col:(tc,u,a,x,z)=>tc.copy(Cc('#a8a090')).lerp(Cc('#5a5448'),Math.max(0,Math.sin(u*30+a*3))*.6),ux:0,uz:.9,rings:16,rough:.06,shape:th=>1+.12*Math.sin(th*3)+.08*Math.cos(th*5),shin:12,inner:'#ece8e0'},true,'#e6dcc8');
+     // 홍합 mussel: glossy blue-black teardrop, umbo at the narrow end
+     const hong=(tc,u)=>tc.copy(Cc('#161a26')).lerp(Cc('#34365a'),Math.max(0,Math.sin(u*18))*.4);const msh=th=>1-.35*Math.max(0,-Math.cos(th));
+     bivalve(.65,1.28,.9,.78,.34,.1,{col:hong,ux:-.85,uz:0,rings:10,shape:msh,shin:110,inner:'#c8c8d8'});bivalve(1.15,1.12,.4,.74,.32,.1,{col:hong,ux:-.85,uz:0,rings:10,shape:msh,shin:110,inner:'#c8c8d8',openA:.8},true,'#e8a050');
      break;}
   }
   return G;}
