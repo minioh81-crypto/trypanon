@@ -674,7 +674,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v95 · 2026-11-05 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v96 · 2026-11-05 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2625,8 +2625,8 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
     if(sh_)g+=`<path d="M${ex1-6.5},${eyeY-6} L${ex1+5.5},${eyeY-3} M${ex2+6.5},${eyeY-6} L${ex2-5.5},${eyeY-3}" stroke="#2a1a14" stroke-width="2.2" stroke-linecap="round"/>`;}
   g+=A.capy?`<ellipse cx="26" cy="88" rx="5" ry="3" fill="#ff8fa3" opacity=".4"/><ellipse cx="74" cy="88" rx="5" ry="3" fill="#ff8fa3" opacity=".4"/>`:`<ellipse cx="25" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/><ellipse cx="75" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/>`;
   if(A.beak)g+=`<path d="M44,${eyeY+9} Q50,${eyeY+4} 56,${eyeY+9} Q50,${eyeY+17} 44,${eyeY+9}Z" fill="${A.beak}" stroke="${shade(A.beak,-.35)}" stroke-width="1.2"/>`;
-  else if(A.capy){g+=`<path d="M22,100 C24,86 38,82 50,82 C62,82 76,86 78,100 C76,110 64,114 50,114 C36,114 24,110 22,100Z" fill="${shade(A.f,-.07)}" opacity=".8"/>`
-      +`<ellipse cx="43" cy="93" rx="2.6" ry="1.9" fill="#2a1a10"/><ellipse cx="57" cy="93" rx="2.6" ry="1.9" fill="#2a1a10"/><path d="M50,96 v4 M46,103 q4,2.4 8,0" stroke="#2a1a10" stroke-width="1.7" fill="none" stroke-linecap="round"/>`;}
+  else if(A.capy){g+=`<rect x="27" y="84" width="46" height="29" rx="13" fill="${shade(A.f,-.24)}"/><rect x="31" y="86" width="38" height="9" rx="4.5" fill="${shade(A.f,-.12)}" opacity=".55"/>`
+      +`<ellipse cx="43.5" cy="91" rx="2.4" ry="1.7" fill="#1e120a"/><ellipse cx="56.5" cy="91" rx="2.4" ry="1.7" fill="#1e120a"/><path d="M50,95.5 Q49.4,101 43.5,106.5 M49.6,100 Q52.6,103.6 56.5,106.5" stroke="#1e120a" stroke-width="1.9" fill="none" stroke-linecap="round"/>`;}
   else{const big=k==='mole';g+=`<ellipse cx="50" cy="${big?92:91}" rx="${big?6:4}" ry="${big?4.6:2.9}" fill="${A.nose}"/><ellipse cx="${big?48:48.8}" cy="${big?90:90}" rx="1.4" ry="1" fill="#fff" opacity=".7"/>`;
     g+=ex==='shock'?`<ellipse cx="50" cy="101" rx="3" ry="3.6" fill="#7a2a2a"/>`:`<path d="M44,97 q3,3 6,0 q3,3 6,0" stroke="#3a2a22" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
     if(k==='cat')g+=`<path d="M30,95 h-12 M30,99 l-11,3 M70,95 h12 M70,99 l11,3" stroke="${A.d}" stroke-width="1.2"/>`;}
@@ -2638,8 +2638,8 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(hatOn)g+=`<g transform="${HTF}">${hatG(hat,u,{hf:`url(#${u}h)`,hd:shade(hcA,-.5)})}</g>`;
   if(A.baby){const bf=shade(A.f,.06),bD=shade(A.f,-.42);g+=`<g transform="${hatOn?'translate(84,140) scale(.78)':'translate(50,30)'}"><ellipse cx="0" cy="13" rx="17" ry="11" fill="${bf}" stroke="${bD}" stroke-width="1.6"/><ellipse cx="-9" cy="22" rx="4.5" ry="3" fill="${legC}" stroke="${bD}" stroke-width="1.2"/><ellipse cx="9" cy="22" rx="4.5" ry="3" fill="${legC}" stroke="${bD}" stroke-width="1.2"/>`
     +`<ellipse cx="-9" cy="-5.5" rx="3.2" ry="3.4" fill="${shade(A.f,-.08)}" stroke="${bD}" stroke-width="1.2"/><ellipse cx="9" cy="-5.5" rx="3.2" ry="3.4" fill="${shade(A.f,-.08)}" stroke="${bD}" stroke-width="1.2"/>`
-    +`<path d="M0,-6 C9,-6 14,-3 14,4 L14,10 C14,16 8,18 0,18 C-8,18 -14,16 -14,10 L-14,4 C-14,-3 -9,-6 0,-6Z" fill="${bf}" stroke="${bD}" stroke-width="1.6"/><path d="M-11,11 C-10,5 -5,4 0,4 C5,4 10,5 11,11 C9,16 4,17 0,17 C-4,17 -9,16 -11,11Z" fill="${shade(A.f,-.03)}" opacity=".8"/>`
-    +`<circle cx="-7.6" cy="1" r="1.7" fill="#1f1410"/><circle cx="7.6" cy="1" r="1.7" fill="#1f1410"/><circle cx="-7.1" cy=".4" r=".55" fill="#fff"/><circle cx="8.1" cy=".4" r=".55" fill="#fff"/><ellipse cx="-2.4" cy="8" rx="1.2" ry=".9" fill="#2a1a10"/><ellipse cx="2.4" cy="8" rx="1.2" ry=".9" fill="#2a1a10"/><path d="M-2,12.4 q2,1.4 4,0" stroke="#2a1a10" stroke-width="1" fill="none" stroke-linecap="round"/><ellipse cx="-11" cy="7" rx="2.4" ry="1.5" fill="#ff8fa3" opacity=".4"/><ellipse cx="11" cy="7" rx="2.4" ry="1.5" fill="#ff8fa3" opacity=".4"/></g>`;}
+    +`<path d="M0,-6 C9,-6 14,-3 14,4 L14,10 C14,16 8,18 0,18 C-8,18 -14,16 -14,10 L-14,4 C-14,-3 -9,-6 0,-6Z" fill="${bf}" stroke="${bD}" stroke-width="1.6"/><rect x="-9" y="4.5" width="18" height="12" rx="5.5" fill="${shade(A.f,-.22)}"/>`
+    +`<circle cx="-7.6" cy="1" r="1.7" fill="#1f1410"/><circle cx="7.6" cy="1" r="1.7" fill="#1f1410"/><circle cx="-7.1" cy=".4" r=".55" fill="#fff"/><circle cx="8.1" cy=".4" r=".55" fill="#fff"/><ellipse cx="-2.4" cy="7.4" rx="1.1" ry=".8" fill="#1e120a"/><ellipse cx="2.4" cy="7.4" rx="1.1" ry=".8" fill="#1e120a"/><path d="M0,9.6 Q-.3,12 -2.6,14.4 M-.2,11.6 Q1.2,13.2 2.6,14.4" stroke="#1e120a" stroke-width=".9" fill="none" stroke-linecap="round"/><ellipse cx="-11" cy="7" rx="2.4" ry="1.5" fill="#ff8fa3" opacity=".4"/><ellipse cx="11" cy="7" rx="2.4" ry="1.5" fill="#ff8fa3" opacity=".4"/></g>`;}
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="32" ry="5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
 
@@ -2884,7 +2884,7 @@ function yiSVG(c,o={}){const u='yi'+(++UID),ex=o.expr||'',up=o.pose==='raise',an
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="34" ry="5.5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
 const charG=(c,o)=>c.sex==='yi'?yiSVG(c,o||{}):(c.sex!=='m'&&c.sex!=='f'&&ANS[c.sex])?animalSVG(c,o||{}):humanSVG(c,o||{});
-if(window.__expose){window.__charG=charG;window.__OPT=OPT;setTimeout(()=>{try{window.__animal3=animal3;window.__animPose=animPose;window.__yiEvent=yiEvent;window.SND=SND;window.__grandY=grandYangban;window.__boreDps=boreDps;window.__expDps=expDps;}catch(e){}},0);}
+if(window.__expose){window.__charG=charG;window.__OPT=OPT;setTimeout(()=>{try{window.__animal3=animal3;window.__animPose=animPose;window.__yiEvent=yiEvent;window.SND=SND;window.__grandY=grandYangban;window.__L3=L3;window.__boreDps=boreDps;window.__expDps=expDps;}catch(e){}},0);}
 const fig=(c,x,y,h,o={})=>{const s=h/172;return `<g transform="translate(${(x-50*s).toFixed(1)},${(y-172*s).toFixed(1)}) scale(${s.toFixed(3)})">${charG(c,o)}</g>`;};
 const ME=()=>Object.assign({},DEFCHAR,S.char||{});
 // animals open per mode: normal 5, hard 5 (the other 5 species are retired; owned ones keep working)
@@ -3963,8 +3963,26 @@ function model3(id){const g=new THREE.Group(),A=f=>L3.anims.push(f);
   case 'dog':{g.add(B3(.5,.35,.45,'#c97a3a',0,0,-.1),gable(.5,.5,.25,'#c94a2a',.35,.04),B3(.18,.22,.02,'#2b211c',0,0,.13),C3(.08,.08,.03,'#3a6aa8',.25,0,.25));break;}
   case 'cat':{g.add(C3(.24,.28,.4,'#e7c9a0',0,0,-.1,10),K3(.28,.25,'#c96a5a',0,.4,-.1,10),C3(.09,.09,.02,'#2b211c',0,.1,.15,10),C3(.08,.08,.03,'#e05a7a',.25,0,.25));break;}
   default:if(isPetId(id)){const A=ANS[id];g.add(C3(.36,.4,.1,A.accC||'#c94a5a',0,0,-.05,18),C3(.3,.3,.04,shade(A.f,.08),0,.1,-.05,18),B3(.06,.4,.06,'#7a5a3c',.32,0,-.3),B3(.3,.18,.03,'#f4ece0',.32,.3,-.28));}break;
-  case 'monument':{g.add(B3(.6,.2,.6,'#a8a29a'),B3(.62,.04,.62,'#f2c14e',0,.12),B3(.26,.3,.26,'#e8a93a',0,.2));const bit=mesh(new THREE.ConeGeometry(.17,.45,10),'#c9d1d5');bit.rotation.x=Math.PI;bit.position.y=.5+.22+.3;
-    const bt=G3(bit);g.add(bt,S3(.04,'#ffd56a',.25,.75,0,{emissive:'#ffaa00'}));A(t=>{bt.rotation.y=t*4;});break;}
+  case 'monument':{// grand drill monument: stepped granite plinth with gold trim + plaque, a lattice derrick on top with a spinning drill head, beacon, sparks and corner lamps
+    g.add(B3(.92,.07,.92,'#7e7a72'),B3(.8,.08,.8,'#a8a29a',0,.07),B3(.82,.025,.82,'#f2c14e',0,.15),B3(.62,.36,.62,'#d9d3c6',0,.175),B3(.66,.04,.66,'#c9a03a',0,.53),B3(.6,.03,.6,'#3a3e44',0,.57));
+    for(const [x,z] of[[-.29,-.29],[.29,-.29],[-.29,.29],[.29,.29]])g.add(B3(.06,.38,.06,'#efe9dc',x,.17,z));
+    const pl=texFromCanvas(256,96,c=>{c.fillStyle='#20283a';c.fillRect(0,0,256,96);c.strokeStyle='#f2c14e';c.lineWidth=6;c.strokeRect(6,6,244,84);c.fillStyle='#f2c14e';c.font='bold 38px serif';c.textAlign='center';c.textBaseline='middle';c.fillText('드릴 기념비',128,40);c.font='bold 20px sans-serif';c.fillStyle='#e8dcc0';c.fillText('TRYPANON',128,72);});
+    for(const ry of[0,Math.PI]){const pm=new THREE.Mesh(new THREE.PlaneGeometry(.44,.165),new THREE.MeshBasicMaterial({map:pl}));pm.position.set(Math.sin(ry)*.312,.36,Math.cos(ry)*.312);pm.rotation.y=ry;g.add(pm);}
+    const rig=new THREE.Group();rig.position.y=.585;rig.scale.setScalar(1.15);g.add(rig);rig.add(B3(.46,.05,.46,'#3a3e44'));
+    for(const [x,z] of[[-1,-1],[1,-1],[-1,1],[1,1]]){const l=C3(.016,.02,1.0,'#d9573a',0,0,0,6);l.position.set(x*.12,.5,z*.12);l.rotation.set(z*-.2,0,x*-.2);rig.add(l);}
+    for(const y of[.25,.5,.75]){const w=.2-y*.16;for(const [x,z,ry] of[[0,-w,0],[0,w,0],[-w,0,Math.PI/2],[w,0,Math.PI/2]]){const b=B3(w*2,.016,.016,'#e8833a',x,y,z);b.rotation.y=ry;rig.add(b);}
+      for(const sg of[1,-1]){const d=B3(w*2.8,.01,.01,'#c86a2a',0,y+.125,sg*w);d.rotation.z=.6*sg;rig.add(d);}}
+    rig.add(B3(.14,.05,.14,'#3a3e44',0,1.0));const top=S3(.035,'#ffd56a',0,1.08,0,{emissive:'#ffaa00'});rig.add(top);
+    const flag=mesh(new THREE.PlaneGeometry(.16,.09),'#e0303a');flag.material.side=THREE.DoubleSide;flag.position.set(.09,1.2,0);rig.add(flag,C3(.006,.006,.2,'#ddd',0,1.05,0,5));
+    const head=new THREE.Group();head.position.y=.82;rig.add(head);head.add(B3(.26,.17,.2,'#e8a93a',0,-.18),B3(.28,.03,.22,'#3a3e44',0,-.2),B3(.14,.05,.02,'#0f171b',0,-.1,.101));const core=S3(.02,'#7cf0ff',0,-.075,.105,{emissive:'#3ab0d0'});head.add(core);
+    const fans=[];for(const s2 of[-1,1]){const fan=new THREE.Group();fan.position.set(s2*.145,-.1,0);fan.rotation.z=Math.PI/2;fan.add(C3(.055,.055,.025,'#1a2024',0,-.012,0,14));for(let i=0;i<4;i++){const bl=B3(.08,.005,.024,'#c9d1d5',0,.003,0);bl.rotation.y=i*Math.PI/2;bl.position.set(Math.cos(i*Math.PI/2)*.028,.003,Math.sin(i*Math.PI/2)*.028);fan.add(bl);}head.add(fan);fans.push([fan,s2]);}
+    const bit=new THREE.Group();bit.position.y=-.22;head.add(bit);const cone=mesh(new THREE.ConeGeometry(.095,.34,16),'#c9d1d5');cone.rotation.x=Math.PI;cone.position.y=-.17;bit.add(cone);
+    for(let i=0;i<5;i++){const r=mesh(new THREE.TorusGeometry(.08-i*.015,.01,5,18),'#8e979c');r.rotation.x=Math.PI/2;r.position.y=-.04-i*.06;r.rotation.z=i;bit.add(r);}
+    const sp=[];for(let i=0;i<10;i++){const q=S3(.011,i%2?'#ffd56a':'#ff8a3a',0,0,0,{emissive:'#ff7a00'});rig.add(q);sp.push(q);}
+    const lamps=[];for(const [x,z] of[[-.4,-.4],[.4,-.4],[-.4,.4],[.4,.4]]){g.add(C3(.012,.014,.32,'#2a2e34',x,.07,z,6));const lm=S3(.035,'#fff2c0',x,.42,z,{emissive:'#ffcf6a'});g.add(lm);lamps.push(lm);}
+    A(t=>{const n=L3.night||0;bit.rotation.y=t*7;fans.forEach(([f,s2])=>f.rotation.y=s2*t*9);head.position.y=.82+Math.sin(t*12)*.005;core.material.emissiveIntensity=.6+.4*Math.sin(t*4);top.visible=Math.sin(t*3)>-.2;flag.rotation.y=Math.sin(t*3)*.35;
+      lamps.forEach(l=>l.material.emissiveIntensity=.4+1.2*n);sp.forEach((q,i)=>{const k=(t*1.6+i/10)%1,a=i*2.4;q.position.set(Math.cos(a)*k*.3,.06+Math.sin(k*Math.PI)*.16,Math.sin(a)*k*.3);q.visible=k<.9;});});
+    break;}
   }
   return g;}
 // ---------------- My Land sky: real-time day/night, moon phase, home weather (rain splashes, settling snow) ----------------
@@ -4056,10 +4074,23 @@ function l3EnvTick(dt){const E=L3.env;if(!E)return;const now=new Date(),h=now.ge
   const isDay=sa>0,prog=isDay?(h-6)/12:(((h-18)+24)%24)/12,cel=$('#lcel');
   if(cel){const x=8+prog*84,lowK=Math.sin(Math.PI*Math.max(0,Math.min(1,prog))),y=34-lowK*22,key=(isDay?'d':'n'+Math.round(f*100))+w.id+(lowK<.25?'l':'');
     if(cel.dataset.k!==key){cel.dataset.k=key;cel.innerHTML=skySVG(isDay,f,w,kind,lowK<.25);}
-    cel.style.left=x+'%';cel.style.top=`max(${y}%, 58px)`;// stay below the top chips (sky / 360° hint) on small phones
-    cel.style.opacity=lowK<.08?.55:1;cel.title=(isDay?'낮 · 해':'밤 · '+moonName(f))+' · '+w.n;}
+    const P=celFit(cel,x,y,lowK<.08?.55:1);cel.style.left=P[0]+'px';cel.style.top=P[1]+'px';cel.style.opacity=P[2];cel.title=(isDay?'낮 · 해':'밤 · '+moonName(f))+' · '+w.n;}
   const chip=$('#lsky');if(chip){const nightClear=!isDay&&(w.id==='sunny'||w.id==='hot'),txt=(isDay?'☀️ 낮':'🌙 밤 · '+moonName(f))+' · '+(nightClear?'✨ 맑음':w.ic+' '+w.n);if(chip.textContent!==txt)chip.textContent=txt;}
   const cp=$('#lcomp');if(cp&&cp.hidden)cp.hidden=false;}
+// keep the sun/moon/cloud overlay off the buildings: project every tall object on the plot to the screen and slide the sky body up/sideways
+// into free sky (stays on its east→west arc as closely as possible); fade it right down only when there is no free spot (zoomed in on a big building)
+function celFit(cel,xp,yp,op){const wr=$('#lgWrap'),now=performance.now(),C=celFit.c||(celFit.c={t:0,r:null});if(!wr||!L3.cv||!L3.root)return [0,0,op];
+  const W=wr.clientWidth,H=wr.clientHeight,bx0=xp/100*W,by0=Math.max(yp/100*H,58);
+  if(now-C.t>350||!C.r||C.k!==xp.toFixed(1)+'|'+yp.toFixed(1)+'|'+W){C.t=now;C.k=xp.toFixed(1)+'|'+yp.toFixed(1)+'|'+W;
+    const wrr=wr.getBoundingClientRect(),cr=L3.cv.getBoundingClientRect(),v=new THREE.Vector3(),bx=new THREE.Box3(),R=[];
+    for(const o of L3.root.children){if(!o.visible)continue;bx.setFromObject(o);if(bx.isEmpty()||bx.max.y<.5)continue;let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+      for(let i=0;i<8;i++){v.set(i&1?bx.max.x:bx.min.x,i&2?bx.max.y:bx.min.y,i&4?bx.max.z:bx.min.z).project(L3.cam);if(v.z>1)continue;const sx=cr.left-wrr.left+(v.x+1)/2*cr.width,sy=cr.top-wrr.top+(1-v.y)/2*cr.height;x0=Math.min(x0,sx);x1=Math.max(x1,sx);y0=Math.min(y0,sy);y1=Math.max(y1,sy);}
+      if(x1>x0)R.push([x0,y0,x1,y1]);}
+    const r=cel.getBoundingClientRect(),hw=(r.width||60)/2+4,hh=(r.height||46)/2+4,hit=(cx,cy)=>R.some(q=>cx+hw>q[0]&&cx-hw<q[2]&&cy+hh>q[1]&&cy-hh<q[3]);
+    let best=null;const top=Math.max(46,hh+6);
+    for(let d=0;d<=W*.5&&!best;d+=14)for(const sgn of d?[1,-1]:[1]){const cx=bx0+sgn*d;if(cx<hw||cx>W-hw)continue;for(let cy=by0;cy>=top;cy-=8)if(!hit(cx,cy)){best=[cx,cy,op];break;}if(best)break;}
+    C.r=best||[bx0,by0,0];}
+  return C.r;}
 // small SVG sky scene (viewBox 80x60): sun / moon + the current weather in front of it
 // a photo-like moon: grey disc with limb darkening, dark maria, bright craters (Tycho rays), soft terminator; the unlit part keeps a faint earthshine
 function moonDisk(f,R,u){const k=Math.cos(2*Math.PI*f),rx=Math.abs(k)*R,wax=f<.5,lit=f>.02&&f<.98,full=f>.47&&f<.53,s=R/12;
