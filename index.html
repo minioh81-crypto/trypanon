@@ -276,6 +276,12 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .art svg{width:100%;height:auto;display:block}
 .art.locked svg{filter:grayscale(.75) brightness(.6)}
 .tright{display:flex;align-items:center;gap:10px}
+.avwrap{position:relative;display:inline-flex;flex:none}
+.avbadge{position:absolute;right:-5px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:#ffd34a;font-size:10px;line-height:1;display:grid;place-items:center;box-shadow:0 0 0 2px #101418;pointer-events:none}
+.avhint{position:absolute;top:calc(100% + 9px);right:-8px;white-space:nowrap;background:#ffd34a;color:#2a1f0a;font-size:11px;font-weight:800;padding:5px 9px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.35);animation:avPulse 1.3s ease-in-out infinite;pointer-events:none;z-index:40}
+.avhint::before{content:'';position:absolute;top:-6px;right:18px;border:6px solid transparent;border-top:0;border-bottom-color:#ffd34a}
+.avhint[hidden]{display:none}
+@keyframes avPulse{50%{transform:translateY(4px)}}
 .avatar{width:38px;height:38px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);overflow:hidden;padding:0;flex:none}
 .avatar svg{width:100%;height:100%;display:block}
 .eintro{position:absolute;inset:0;z-index:5;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto}
@@ -526,7 +532,7 @@ nav.tabs button{font-size:12px}
 <div id="app">
   <header class="topbar">
     <div class="brand"><b>TRYPANON</b><span>트리파논</span></div>
-    <div class="tright"><button class="yichip" id="yiChip" type="button" hidden></button><button class="menubtn" id="menuBtn" type="button" aria-label="메뉴 열기"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><div class="money" id="money">₩0</div><button class="avatar" id="avatarBtn" type="button" aria-label="주인공 옷장 열기"></button></div>
+    <div class="tright"><button class="yichip" id="yiChip" type="button" hidden></button><button class="menubtn" id="menuBtn" type="button" aria-label="메뉴 열기"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><div class="money" id="money">₩0</div><span class="avwrap"><button class="avatar" id="avatarBtn" type="button" aria-label="주인공 옷장 열기"></button><span class="avbadge" aria-hidden="true">👕</span><span class="avhint" id="avHint" hidden>눌러서 꾸미기</span></span></div>
   </header>
 
   <button type="button" class="evtbar" id="evtBar" hidden></button>
@@ -668,7 +674,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v94 · 2026-11-05 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v95 · 2026-11-05 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2137,7 +2143,7 @@ const OPT={
  sex:[{v:'m',n:'남자 주인공',p:0},{v:'f',n:'여자 주인공',p:0},{v:'yi',n:'★ 이순신 장군',get p(){return S.mode==='hard'?10000000:5000000;},d:'특수 캐릭터 · 보유 효과: 본공·원정 굴착력 +5% (하드 +3%, 다른 캐릭터로 바꿔도 유지) · 이순신 장군을 착용 중이면 가끔 지도에 출현해 「필사즉생 필생즉사」를 외치고 본공·원정 굴착량 +100% (보통 60초 / 하드 40초)'},{v:'mole',n:'두더지',p:0},
   {v:'chick',n:'병아리',p:2500},{v:'dog',n:'강아지',p:3000},{v:'cat',n:'고양이',p:3000},{v:'rabbit',n:'토끼',p:3000},{v:'panda',n:'판다',p:6000},
   {v:'bear',n:'곰',p:4000},{v:'fox',n:'여우',p:5000},{v:'penguin',n:'펭귄',p:5000},{v:'dragon',n:'드래곤',p:20000},{v:'unicorn',n:'유니콘',p:25000},{v:'tiger',n:'호랑이',p:8000},{v:'lion',n:'사자',p:8000},
-  {v:'squirrel',n:'다람쥐',p:3500},{v:'sheep',n:'양',p:4000},{v:'hedgehog',n:'고슴도치',p:4000},{v:'capy',n:'카피바라',p:6000},{v:'capyb',n:'카피바라 & 아기',p:9000}],
+  {v:'squirrel',n:'다람쥐',p:3500},{v:'sheep',n:'양',p:4000},{v:'hedgehog',n:'고슴도치',p:4000},{v:'polar',n:'북극곰',p:7000},{v:'capy',n:'카피바라',p:6000},{v:'capyb',n:'카피바라 & 아기',p:9000}],
  hair:[{v:'short',n:'짧은 머리',p:0},{v:'tail',n:'묶은 머리',p:0},{v:'part',n:'가르마',p:150},{v:'buzz',n:'삭발 (반짝 대머리)',p:80},{v:'regent',n:'폭주족 리젠트',p:1500},{v:'sangtu',n:'양반 상투',p:2500},{v:'noble',n:'귀족 쪽머리',p:3000},{v:'king',n:'임금 상투',p:8000},{v:'queen',n:'왕비 큰머리',p:9000}],
  hcol:[{v:0,n:'검정',p:0,c:'#1f1814'},{v:1,n:'갈색',p:100,c:'#4a2f20'},{v:2,n:'밝은 갈색',p:150,c:'#8a5a2b'},{v:3,n:'금발',p:300,c:'#c9a15a'},{v:4,n:'남색',p:400,c:'#3b4a78'},{v:5,n:'회색',p:400,c:'#8a8e95'}],
  eyes:[{v:'round',n:'동글',p:0},{v:'smile',n:'웃는 눈',p:200},{v:'sharp',n:'날카로운 눈',p:200}],
@@ -2569,6 +2575,7 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   // neck accessory
   if(A.acc==='collar')g+=`<path d="M30,106 Q50,116 70,106" stroke="${A.accC}" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="50" cy="114" r="4" fill="#f2c14e" stroke="#a87a1e" stroke-width="1"/>`;
   if(A.acc==='scarf'||A.acc==='bandana')g+=`<path d="M28,104 Q50,118 72,104 L70,110 Q50,124 30,110Z" fill="${A.accC}" stroke="${shade(A.accC,-.35)}" stroke-width="1.2"/><path d="M46,114 L54,114 L50,126Z" fill="${A.accC}" stroke="${shade(A.accC,-.35)}" stroke-width="1"/>`;
+  if(A.acc==='scarfW'){const c=A.accC,dc=shade(c,-.35);g+=`<path d="M27,103 Q50,119 73,103 L72,111 Q50,126 28,111Z" fill="${c}" stroke="${dc}" stroke-width="1.2"/><path d="M30,106 Q50,120 70,106" stroke="${shade(c,.2)}" stroke-width="1" fill="none" opacity=".7"/><path d="M58,112 L64,136 L72,134 L66,110Z" fill="${c}" stroke="${dc}" stroke-width="1.2"/><path d="M63.2,131 L64.4,137 L72.4,135 L71,129.4Z" fill="#fbfbf8" stroke="#cfcac0" stroke-width=".8"/><path d="M64.6,137 l-.6,3 M67,136.4 l-.2,3 M69.4,135.8 l.2,3 M71.8,135.2 l.6,2.8" stroke="#f0eee8" stroke-width="1.4" stroke-linecap="round"/><path d="M59.5,118 l9,-2 M61,124 l9,-2" stroke="${dc}" stroke-width=".8" opacity=".5"/>`;}
   if(A.acc==='bell')g+=`<path d="M32,106 Q50,114 68,106" stroke="#8a5a3a" stroke-width="3" fill="none"/><circle cx="50" cy="115" r="5" fill="${A.accC}" stroke="#a87a1e" stroke-width="1"/>`;
   // arms
   const slv=of.hood?'#5cae5a':(oc&&oc!=='none'&&!A.flipper?of.slv:A.f),paw=of.glove||(A.flipper?A.f:legC);
@@ -2585,14 +2592,14 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(A.ear==='long')g+=`<ellipse cx="36" cy="30" rx="9" ry="26" transform="rotate(-10 36 30)" fill="${F}" ${OL}/><ellipse cx="64" cy="30" rx="9" ry="26" transform="rotate(10 64 30)" fill="${F}" ${OL}/><ellipse cx="36" cy="32" rx="4.5" ry="19" transform="rotate(-10 36 32)" fill="${ein}"/><ellipse cx="64" cy="32" rx="4.5" ry="19" transform="rotate(10 64 32)" fill="${ein}"/>`;
   if(A.ear==='horn')g+=`<path d="M30,56 C22,40 26,30 32,24 C34,36 38,44 42,50Z M70,56 C78,40 74,30 68,24 C66,36 62,44 58,50Z" fill="${A.hornC}" stroke="${shade(A.hornC,-.4)}" stroke-width="1.6"/>`;
   if(A.ear==='side')g+=`<ellipse cx="14" cy="80" rx="13" ry="7" transform="rotate(20 14 80)" fill="${A.earC}" ${OL}/><ellipse cx="86" cy="80" rx="13" ry="7" transform="rotate(-20 86 80)" fill="${A.earC}" ${OL}/>`;
-  if(A.ear==='capy'&&!earHide)g+=`<ellipse cx="25" cy="55" rx="8" ry="9" transform="rotate(-20 25 55)" fill="${F}" ${OL}/><ellipse cx="75" cy="55" rx="8" ry="9" transform="rotate(20 75 55)" fill="${F}" ${OL}/><ellipse cx="25.5" cy="56" rx="4" ry="5" transform="rotate(-20 25 56)" fill="#e8b070"/><ellipse cx="74.5" cy="56" rx="4" ry="5" transform="rotate(20 74 56)" fill="#e8b070"/>`;
+  if(A.ear==='capy'&&!earHide)g+=`<ellipse cx="27" cy="51" rx="6.5" ry="7" fill="${shade(A.f,-.08)}" ${OL}/><ellipse cx="73" cy="51" rx="6.5" ry="7" fill="${shade(A.f,-.08)}" ${OL}/><ellipse cx="27.5" cy="52.5" rx="3" ry="3.6" fill="${shade(A.f,-.3)}"/><ellipse cx="72.5" cy="52.5" rx="3" ry="3.6" fill="${shade(A.f,-.3)}"/>`;
   if(A.ear==='tiny')g+=`<circle cx="18" cy="70" r="6" fill="${F}" ${OL}/><circle cx="82" cy="70" r="6" fill="${F}" ${OL}/>`;
   if(A.ram)g+=`<path d="M20,60 C4,62 4,86 18,88 C26,88 26,78 20,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M80,60 C96,62 96,86 82,88 C74,88 74,78 80,76" stroke="${A.ram}" stroke-width="7" fill="none" stroke-linecap="round"/>`;
   if(A.lmane)g+=Array.from({length:18},(_,i)=>{const a=i/18*Math.PI*2,x=50+Math.cos(a)*40,y=82+Math.sin(a)*37;return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="13" ry="9" transform="rotate(${(a*180/Math.PI).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${A.lmane[i%2]}" stroke="${shade(A.lmane[0],-.35)}" stroke-width="1.2"/>`;}).join('')+Array.from({length:12},(_,i)=>{const a=(i+.5)/12*Math.PI*2,x=50+Math.cos(a)*34,y=82+Math.sin(a)*31;return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="9" ry="6" transform="rotate(${(a*180/Math.PI).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${A.lmane[2]}"/>`;}).join('');
   if(AHP&&AHP.back)g+=`<g transform="${HTF}">${AHP.back}</g>`;if(hat&&hat!=='none'&&hatBack(hat))g+=`<g transform="${HTF}">${hatBack(hat)}</g>`;
   // head (big, soft)
   const hr=k==='chick'?0:1;
-  if(k==='chick')g+=`<ellipse cx="50" cy="112" rx="40" ry="40" fill="${F}" ${OL}/>`;else g+=`<ellipse cx="50" cy="80" rx="37" ry="33" fill="${A.wool?LG:F}" ${OL}/>`;
+  if(k==='chick')g+=`<ellipse cx="50" cy="112" rx="40" ry="40" fill="${F}" ${OL}/>`;else if(A.capy)g+=`<path d="M50,47 C70,47 84,54 84,72 L84,94 C84,110 70,116 50,116 C30,116 16,110 16,94 L16,72 C16,54 30,47 50,47Z" fill="${F}" ${OL}/>`;else g+=`<ellipse cx="50" cy="80" rx="37" ry="33" fill="${A.wool?LG:F}" ${OL}/>`;
   if(A.woolHead)g+=`<path d="M24,62 C18,48 30,38 42,42 C46,34 58,34 62,42 C74,38 84,50 76,62 Q50,52 24,62Z" fill="${LG}" stroke="${shade(A.f,-.16)}" stroke-width="1.2" stroke-linejoin="round"/><path d="M36,50 q6,-5 12,0 M52,48 q6,-5 12,0" stroke="${shade(A.f,-.1)}" stroke-width="1" fill="none"/>`;
   if(A.wool)g+=`<path d="M24,64 q-6,-12 8,-16 q4,-12 18,-8 q14,-6 20,6 q14,2 10,16 Q50,52 24,64Z" fill="${LG}" stroke="${shade(A.f,-.18)}" stroke-width="1.2"/><path d="M36,54 q5,-4 10,0 M52,52 q5,-4 10,0" stroke="${shade(A.f,-.12)}" stroke-width="1.1" fill="none"/><ellipse cx="50" cy="86" rx="25" ry="22" fill="${shade(A.l,.03)}"/>`;
   if(A.ear==='tuft')g+=`<path d="M46,74 q-2,-10 4,-12 q-1,6 2,8 q2,-8 8,-6 q-6,4 -4,10Z" fill="${A.f}" ${OL}/>`;
@@ -2610,15 +2617,16 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   if(A.ear==='flop')g+=`<path d="M20,58 C8,64 8,92 16,98 C24,100 28,84 28,66Z" fill="${A.earC}" ${OL}/><path d="M80,58 C92,64 92,92 84,98 C76,100 72,84 72,66Z" fill="${A.earC}" ${OL}/>`;
   // eyes: big glossy
   const eyeY=k==='chick'?100:A.capy?78:83,ex1=37,ex2=63;
-  if(ex==='happy')g+=`<path d="M${ex1-5},${eyeY+1} q5,-7 10,0 M${ex2-5},${eyeY+1} q5,-7 10,0" stroke="#2a1a14" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
+  if(A.capy&&ex!=='happy'&&ex!=='shock'&&eyes!=='smile')g+=[31,69].map(x=>`<ellipse cx="${x}" cy="74" rx="3.4" ry="3.8" fill="#1f1410"/><circle cx="${x+1.1}" cy="72.8" r="1.1" fill="#fff"/>`).join('');
+  else if(ex==='happy')g+=`<path d="M${ex1-5},${eyeY+1} q5,-7 10,0 M${ex2-5},${eyeY+1} q5,-7 10,0" stroke="#2a1a14" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
   else if(ex==='shock')g+=[ex1,ex2].map(x=>`<ellipse cx="${x}" cy="${eyeY}" rx="6.4" ry="7.4" fill="#fff" stroke="#2a1a14" stroke-width="2"/><circle cx="${x}" cy="${eyeY}" r="2.4" fill="#2a1a14"/>`).join('');
   else if(eyes==='smile')g+=`<path d="M${ex1-5.5},${eyeY+1} q5.5,-7 11,0 M${ex2-5.5},${eyeY+1} q5.5,-7 11,0" stroke="#2a1a14" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
   else{const sh_=eyes==='sharp',ry=sh_?4.8:6.8;for(const x of[ex1,ex2])g+=`<ellipse cx="${x}" cy="${eyeY}" rx="5.6" ry="${ry}" fill="#1f1410"/><ellipse cx="${x}" cy="${eyeY+ry*.38}" rx="4" ry="${ry*.44}" fill="${k==='cat'?'#5a8a3a':'#6a4028'}"/><circle cx="${x-1.8}" cy="${eyeY-ry*.4}" r="2.3" fill="#fff"/><circle cx="${x+2.2}" cy="${eyeY+ry*.32}" r="1" fill="#fff"/>`;
     if(sh_)g+=`<path d="M${ex1-6.5},${eyeY-6} L${ex1+5.5},${eyeY-3} M${ex2+6.5},${eyeY-6} L${ex2-5.5},${eyeY-3}" stroke="#2a1a14" stroke-width="2.2" stroke-linecap="round"/>`;}
-  g+=`<ellipse cx="25" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/><ellipse cx="75" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/>`;
+  g+=A.capy?`<ellipse cx="26" cy="88" rx="5" ry="3" fill="#ff8fa3" opacity=".4"/><ellipse cx="74" cy="88" rx="5" ry="3" fill="#ff8fa3" opacity=".4"/>`:`<ellipse cx="25" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/><ellipse cx="75" cy="${eyeY+11}" rx="6.4" ry="3.6" fill="#ff8fa3" opacity=".5"/>`;
   if(A.beak)g+=`<path d="M44,${eyeY+9} Q50,${eyeY+4} 56,${eyeY+9} Q50,${eyeY+17} 44,${eyeY+9}Z" fill="${A.beak}" stroke="${shade(A.beak,-.35)}" stroke-width="1.2"/>`;
-  else if(A.capy){const MZ=shade(A.f,-.13);g+=`<path d="M22,74 Q50,62 78,74" stroke="${shade(A.f,-.12)}" stroke-width="2" fill="none" opacity=".5"/><ellipse cx="50" cy="99" rx="22" ry="14.5" fill="${MZ}" ${OL}/><ellipse cx="46" cy="94" rx="11" ry="5" fill="${shade(A.f,-.06)}" opacity=".55"/>`
-      +`<path d="M41,95 q3,-3.4 6,.4 M53,95.4 q3,-3.8 6,-.4" stroke="#2a1a10" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M50,99 v4.5 M50,103.5 q-5,4 -9,1 M50,103.5 q5,4 9,1" stroke="#2a1a10" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;}
+  else if(A.capy){g+=`<path d="M22,100 C24,86 38,82 50,82 C62,82 76,86 78,100 C76,110 64,114 50,114 C36,114 24,110 22,100Z" fill="${shade(A.f,-.07)}" opacity=".8"/>`
+      +`<ellipse cx="43" cy="93" rx="2.6" ry="1.9" fill="#2a1a10"/><ellipse cx="57" cy="93" rx="2.6" ry="1.9" fill="#2a1a10"/><path d="M50,96 v4 M46,103 q4,2.4 8,0" stroke="#2a1a10" stroke-width="1.7" fill="none" stroke-linecap="round"/>`;}
   else{const big=k==='mole';g+=`<ellipse cx="50" cy="${big?92:91}" rx="${big?6:4}" ry="${big?4.6:2.9}" fill="${A.nose}"/><ellipse cx="${big?48:48.8}" cy="${big?90:90}" rx="1.4" ry="1" fill="#fff" opacity=".7"/>`;
     g+=ex==='shock'?`<ellipse cx="50" cy="101" rx="3" ry="3.6" fill="#7a2a2a"/>`:`<path d="M44,97 q3,3 6,0 q3,3 6,0" stroke="#3a2a22" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
     if(k==='cat')g+=`<path d="M30,95 h-12 M30,99 l-11,3 M70,95 h12 M70,99 l11,3" stroke="${A.d}" stroke-width="1.2"/>`;}
@@ -2628,10 +2636,10 @@ function animalSVG(c,o={}){const k=c.sex,A0=ANS[k]||ANS.dog,A=(c.skin|0)?Object.
   const hatOn=!!(hat&&hat!=='none'),cutA=hatOn?HATCUT[hat]:0;if(AHP&&!(of.hood&&!hatOn))g+=`<g transform="${HTF}">${cutA?`<clipPath id="${u}hc"><rect x="-40" y="${cutA}" width="180" height="200"/></clipPath><g clip-path="url(#${u}hc)">${AHP.front}</g>`:AHP.front}${hatOn?'':AHP.top}</g>`;
   if(held)g+=`<g transform="translate(0,14)">${held}</g>`;
   if(hatOn)g+=`<g transform="${HTF}">${hatG(hat,u,{hf:`url(#${u}h)`,hd:shade(hcA,-.5)})}</g>`;
-  if(A.baby){const by=30,bf=shade(A.f,.06),bD=shade(A.f,-.42);g+=`<g transform="${hatOn?'translate(84,140) scale(.78)':`translate(50,${by})`}"><ellipse cx="0" cy="12" rx="17" ry="12" fill="${bf}" stroke="${bD}" stroke-width="1.6"/><ellipse cx="-9" cy="22" rx="4.5" ry="3" fill="${legC}" stroke="${bD}" stroke-width="1.2"/><ellipse cx="9" cy="22" rx="4.5" ry="3" fill="${legC}" stroke="${bD}" stroke-width="1.2"/>`
-    +`<ellipse cx="-9" cy="-4" rx="4" ry="4.6" fill="${bf}" stroke="${bD}" stroke-width="1.3"/><ellipse cx="9" cy="-4" rx="4" ry="4.6" fill="${bf}" stroke="${bD}" stroke-width="1.3"/><ellipse cx="-9" cy="-3.6" rx="2" ry="2.4" fill="#e8b070"/><ellipse cx="9" cy="-3.6" rx="2" ry="2.4" fill="#e8b070"/>`
-    +`<ellipse cx="0" cy="6" rx="15" ry="12.5" fill="${bf}" stroke="${bD}" stroke-width="1.6"/><ellipse cx="0" cy="11" rx="9.5" ry="7" fill="${shade(A.f,-.16)}"/><circle cx="-6.4" cy="3" r="2.4" fill="#1f1410"/><circle cx="6.4" cy="3" r="2.4" fill="#1f1410"/><circle cx="-5.6" cy="2.2" r=".9" fill="#fff"/><circle cx="7.2" cy="2.2" r=".9" fill="#fff"/>`
-    +`<path d="M-3,9 q1.4,-1.5 2.6,.2 M.6,9.2 q1.4,-1.7 2.6,-.2 M0,11.4 v2 q-2.4,2 -4,.5 M0,13.4 q2.4,2 4,.5" stroke="#2a1a10" stroke-width="1.1" fill="none" stroke-linecap="round"/><ellipse cx="-11" cy="9" rx="3" ry="1.8" fill="#ff8fa3" opacity=".5"/><ellipse cx="11" cy="9" rx="3" ry="1.8" fill="#ff8fa3" opacity=".5"/></g>`;}
+  if(A.baby){const bf=shade(A.f,.06),bD=shade(A.f,-.42);g+=`<g transform="${hatOn?'translate(84,140) scale(.78)':'translate(50,30)'}"><ellipse cx="0" cy="13" rx="17" ry="11" fill="${bf}" stroke="${bD}" stroke-width="1.6"/><ellipse cx="-9" cy="22" rx="4.5" ry="3" fill="${legC}" stroke="${bD}" stroke-width="1.2"/><ellipse cx="9" cy="22" rx="4.5" ry="3" fill="${legC}" stroke="${bD}" stroke-width="1.2"/>`
+    +`<ellipse cx="-9" cy="-5.5" rx="3.2" ry="3.4" fill="${shade(A.f,-.08)}" stroke="${bD}" stroke-width="1.2"/><ellipse cx="9" cy="-5.5" rx="3.2" ry="3.4" fill="${shade(A.f,-.08)}" stroke="${bD}" stroke-width="1.2"/>`
+    +`<path d="M0,-6 C9,-6 14,-3 14,4 L14,10 C14,16 8,18 0,18 C-8,18 -14,16 -14,10 L-14,4 C-14,-3 -9,-6 0,-6Z" fill="${bf}" stroke="${bD}" stroke-width="1.6"/><path d="M-11,11 C-10,5 -5,4 0,4 C5,4 10,5 11,11 C9,16 4,17 0,17 C-4,17 -9,16 -11,11Z" fill="${shade(A.f,-.03)}" opacity=".8"/>`
+    +`<circle cx="-7.6" cy="1" r="1.7" fill="#1f1410"/><circle cx="7.6" cy="1" r="1.7" fill="#1f1410"/><circle cx="-7.1" cy=".4" r=".55" fill="#fff"/><circle cx="8.1" cy=".4" r=".55" fill="#fff"/><ellipse cx="-2.4" cy="8" rx="1.2" ry=".9" fill="#2a1a10"/><ellipse cx="2.4" cy="8" rx="1.2" ry=".9" fill="#2a1a10"/><path d="M-2,12.4 q2,1.4 4,0" stroke="#2a1a10" stroke-width="1" fill="none" stroke-linecap="round"/><ellipse cx="-11" cy="7" rx="2.4" ry="1.5" fill="#ff8fa3" opacity=".4"/><ellipse cx="11" cy="7" rx="2.4" ry="1.5" fill="#ff8fa3" opacity=".4"/></g>`;}
   const sd=o.noShadow?'':`<ellipse cx="50" cy="168" rx="32" ry="5" fill="rgba(0,0,0,.3)"/>`;
   return sd+(o.flip?`<g transform="translate(100,0) scale(-1,1)">${g}</g>`:g);}
 
@@ -3131,7 +3139,7 @@ const headVB=c=>{const ht=c.hat&&c.hat!=='none',tall=['regent','sangtu','king','
   if(c.sex==='m'||c.sex==='f'||!ANS[c.sex])return ht?'-6 4 112 112':tall?'2 12 96 96':'10 34 80 80';
   return ht?'-6 4 112 112':tall?'0 12 100 100':'8 30 84 84';};
 function avatarSVG(c){return `<svg viewBox="${headVB(c)}" aria-hidden="true">${charG(c)}</svg>`;}
-function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());shipMapTick();}
+function renderAvatar(){$('#avatarBtn').innerHTML=avatarSVG(ME());const h=$('#avHint');if(h)h.hidden=!!S.wardSeen;shipMapTick();}
 function wardChar(){const c=ME();if(wTry)c[wTry.k]=wTry.v;return c;}
 const WCACHE=new Map();function charGC(c,o){const k=JSON.stringify(c)+(o?JSON.stringify(o):'');let v=WCACHE.get(k);if(v===undefined){v=charG(c,o);if(WCACHE.size>500)WCACHE.clear();WCACHE.set(k,v);}return v;}
 const isAnimalSex=sx=>sx!=='m'&&sx!=='f'&&sx!=='yi'&&!!ANS[sx];
@@ -3295,12 +3303,15 @@ function renderWard(){
     b.innerHTML=`<div class="t">입어 보는 중<b>${o.n} · ${won(o.p)}</b>${o.d?`<small class="wdesc">${o.d}</small>`:''}</div><button class="primary" type="button" id="wBuyBtn" ${ok?'':'disabled'}>${ok?'구매하고 착용':'자금 부족'}</button>`;}
   else b.hidden=true;}
 function mapAnim(on){document.querySelectorAll('#map svg').forEach(sv=>{try{on?sv.unpauseAnimations():sv.pauseAnimations();}catch(e){}});$('#map').classList.toggle('frozen',!on);}
-function openWard(){wTry=null;wShip=false;$('#ward').hidden=false;mapAnim(false);
+function openWard(){if(!S.wardSeen){S.wardSeen=1;save();const h=$('#avHint');if(h)h.hidden=true;}wTry=null;wShip=false;$('#ward').hidden=false;mapAnim(false);
   // a special/animal hero is chosen in the 주인공·특수 tab — open there with the current pick in view (otherwise keep the last tab)
   const sp=S.char.sex!=='m'&&S.char.sex!=='f';if(sp)wTab='sex';renderWard();
   if(sp)setTimeout(()=>{const on=document.querySelector('#wOpts .wopt.on');if(on)on.scrollIntoView({block:'center'});},30);}
 function closeWard(){wTry=null;$('#ward').hidden=true;if(view==='map')mapAnim(true);renderAvatar();if(view==='map')renderCard();}
 $('#avatarBtn').addEventListener('click',openWard);
+// keep the phone screen awake while the game is on screen (Screen Wake Lock; re-acquired when coming back / on the next tap)
+let WAKE=null;async function wakeOn(){try{if(WAKE||document.hidden||!('wakeLock' in navigator))return;WAKE=await navigator.wakeLock.request('screen');WAKE.addEventListener('release',()=>{WAKE=null;});}catch(e){WAKE=null;}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)wakeOn();});addEventListener('pointerdown',wakeOn,{capture:true,passive:true});wakeOn();
 $('#wClose').addEventListener('click',closeWard);
 $('#wTabs').addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(!t)return;wTab=t.dataset.t;wTry=null;wShip=false;renderWard();const wb=document.querySelector('#ward .wbody');if(wb)setTimeout(()=>wb.scrollTop=0,1);});
 // PC: horizontal scrollers move with the mouse wheel and by dragging (touch already scrolls natively)
@@ -3725,6 +3736,7 @@ const ANS={
  turtle:{n:'거북이',f:'#6ac85a',l:'#c8f0a0',d:'#3a7a2a',shell:'#a8743e',ear:'none',nose:'#3a7a2a'},
  mole:{n:'두더지',f:'#7a675d',l:'#e8d6c6',d:'#4a3c36',ear:'tiny',nose:'#f08aa0'},
  tanuki:{n:'너구리',f:'#a08a76',l:'#f2e8da',d:'#3a2c22',ear:'round',earC:'#a08a76',face:'mask',tail:'ring',nose:'#2a1f1a'},
+ polar:{n:'북극곰',f:'#f7f5ef',l:'#ffffff',d:'#b8b4a8',ear:'round',acc:'scarfW',accC:'#d62a2a',nose:'#1c1c22',polar:1},
  capy:{n:'카피바라',f:'#a8703c',l:'#c08a56',d:'#5a3a1e',ear:'capy',capy:1,legC:'#6a4426',nose:'#3a2414'},
  capyb:{n:'카피바라 & 아기',f:'#a8703c',l:'#c08a56',d:'#5a3a1e',ear:'capy',capy:1,baby:1,legC:'#6a4426',nose:'#3a2414'}};
 const PETK=['dog','cat','rabbit','fox','panda','raccoon','bear','dragon','chick','penguin','unicorn','sheep','squirrel','hedgehog','turtle'];
