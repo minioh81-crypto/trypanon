@@ -686,7 +686,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v109 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v110 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1187,7 +1187,7 @@ const STKD={soil:'흙과 풀뿌리가 섞인 가장 얕은 층',sed:'오랜 세�
 function stratumAt(d){if(d>CORE)d=Math.max(0,2*CORE-d);let from=0;for(const [to,band,ks] of STSEQ){if(d<to){if(!band)return {k:ks[0],start:false};const bi=Math.floor((d-from)/band),k=ks[bi%ks.length];return {k,start:Math.abs((d-from)-bi*band)<1e-6||false,bi};}from=to;}return {k:'ironx'};}
 function boreBlock(abs){if(abs<0)return{sky:true};const t=absToDepth(abs),l=layerAt(t),st=l.gate&&Math.abs(t-l.from)<.5;
   const sk=stratumAt(t),pk=stratumAt(Math.max(0,absToDepth(abs-1))),newSk=sk.k!==pk.k||sk.bi!==pk.bi;
-  return{c:shade(STK[sk.k][0],l.req>S.dl?-.35:0),k:sk.k,sk:newSk&&abs>0&&!st?sk.k:null,label:fmtD(t)+(st?' · '+l.gate+(l.req>S.dl?' · 드릴 Lv.'+l.req+' 필요':''):''),warn:!!st};}
+  return{c:shade(STK[sk.k][0],l.req>S.dl?-.35:0),k:sk.k,sk:newSk&&abs>0&&!st?sk.k:null,label:fmtD(t)+(st?' · '+l.gate+(l.req>S.dl?' · 단단함 ×'+(1/Math.max(.04,1/Math.pow(1+.3*(l.req-S.dl),1.6))).toFixed(1):''):''),warn:!!st};}
 const bore=new Shaft($('#bCv'),boreBlock);bore.bg='#2a1f17';bore.hole='#3b2a1e';bore.strata=true;bore.banOn=true;bore.lamp=true;bore.labelX=88;
 function expBlock(abs){if(!exp||abs<0)return{sky:true};const r=exp.r;
   if(r.t==='sea'&&abs<r.water)return{water:true,label:altText(r,abs)};
@@ -1369,12 +1369,12 @@ function updateGauge(){const P=PLAY(),i=Math.max(0,P.indexOf(layerAt(Math.min(S.
 // ---------------- bore (automatic) ----------------
 let bgPop=0,bMoneyAcc=0;
 function boreAdvance(d,fx){const a0=depthToAbs(S.depth);let gain=0,n=0;
-  while(d>0&&!S.done&&n++<20){const l=layerAt(S.depth);if(l.req>S.dl)break;
+  while(d>0&&!S.done&&n++<20){const l=layerAt(S.depth);
     const need=(l.to-S.depth)*l.H;
     if(d<need){const m=d/l.H;S.depth+=m;gain+=m*l.v;d=0;}
     else{gain+=(l.to-S.depth)*l.v;S.depth=l.to;d-=need;
       if(S.depth>=GOAL()){S.depth=GOAL();S.done=true;toast(S.part===2?'지구 관통 성공! 반대편 바다에 도착!':'지구 중심 도달!');}
-      else{const nl=layerAt(S.depth);if(nl.req>S.dl)toast(nl.gate+' 도달 · 드릴 Lv.'+nl.req+' ('+dlName(nl.req)+')가 필요합니다');}}}
+      else{const nl=layerAt(S.depth);if(nl.req>S.dl)toast(nl.gate+' 통과 · 숙련이 낮아 지층이 단단해요 (속도 ×'+lvK().toFixed(2)+')');}}}
   gain*=(1+PK('tuber',.2))*(1+.01*rp('priv'))*(1+.15*setPow('joseon'))*(fosDone('kano')?1.1:1);bMoneyAcc+=gain;const w=Math.floor(bMoneyAcc);S.money+=w;bMoneyAcc-=w;bgPop+=gain;
   checkUnlocks();
   const broke=Math.floor(depthToAbs(S.depth))-Math.floor(a0);
