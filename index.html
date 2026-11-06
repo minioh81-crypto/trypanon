@@ -425,7 +425,11 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .lmark .lptr{position:absolute;right:-19px;top:50%;width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-right:14px solid #ffd56a;transform:translateY(-50%);filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));animation:lptr 1s ease-in-out infinite}
 @keyframes lptr{50%{right:-24px}}
 .lmark em{position:absolute;left:calc(100% + 24px);top:50%;transform:translateY(-50%);font-style:normal;font-family:var(--f-num);font-size:10px;font-weight:700;color:#1a1206;background:#ffd56a;border-radius:6px;padding:1px 5px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.6)}
-.lgauge{overflow:visible!important}.lgauge .lg:first-child{border-radius:8px 8px 0 0}.lgauge .lg:last-child{border-radius:0 0 8px 8px}
+.lgauge{overflow:visible!important;width:60px!important}.lg b{font-size:9.5px!important}.lg span{font-size:8.5px!important}
+.gate.soft{font-size:11px;padding:4px 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;justify-self:start;max-width:100%}
+.fuels{gap:6px!important}.fuel{padding:5px 7px!important;gap:0!important}.fuel .fn{font-size:11.5px!important}.fuel .fe{font-size:10px!important;line-height:1.35}.bfoot{padding-block:14px 8px!important}
+.bhud{gap:4px!important;padding-block:10px 14px!important}.bdepth{line-height:1.05}
+.lgauge .lg:first-child{border-radius:8px 8px 0 0}.lgauge .lg:last-child{border-radius:0 0 8px 8px}
 @media (prefers-reduced-motion:reduce){.lmark .lptr{animation:none}}
 .chest{position:absolute;z-index:3;width:68px;height:66px;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:3px;animation:bob 1s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(246,199,106,.8))}
 .chest svg{width:62px;height:auto}
@@ -686,7 +690,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v110 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v111 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -5706,7 +5710,9 @@ function evtStart(){const pool=REG.filter(isUnl);if(!pool.length)return;sfx('eve
   pushAlert({kind:'evt',btn:'바로 가기',icon:`<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#ffcf3a" stroke="#2b1606" stroke-width="2"/><text x="20" y="27" text-anchor="middle" font-size="18" font-weight="900" fill="#2b1606">×2</text></svg>`,
     title:`재료 2배 이벤트! ${r.n}`,text:`앞으로 3분 동안 ${r.n}에서 캐는 ${r.res}이(가) 2배로 나와요`,ttl:8});
   if(view==='map')updateMap();}
-function chipLayout(){const ev=$('#evtBar'),yi=$('#yiChip');if(!ev||!yi)return;const up=ev.hidden?0:ev.offsetHeight+6;let eb,yb;
+function gaugeLayout(){if(view!=='bore')return;const g=$('#lgauge'),h=document.querySelector('#v-bore .bhud'),f=document.querySelector('#v-bore .bfoot'),st=$('#bStage');if(!g||!h||!f||!st)return;
+  const t=Math.round(h.offsetHeight-6),b=Math.round(f.offsetHeight-6),H=st.clientHeight;const hide=H-t-b<120;if(g.style.visibility!==(hide?'hidden':''))g.style.visibility=hide?'hidden':'';if(hide)return;const tv=t+'px',bv=b+'px';if(g.style.top!==tv)g.style.top=tv;if(g.style.bottom!==bv)g.style.bottom=bv;}
+function chipLayout(){gaugeLayout();const ev=$('#evtBar'),yi=$('#yiChip');if(!ev||!yi)return;const up=ev.hidden?0:ev.offsetHeight+6;let eb,yb;
   const fu=view==='bore'&&$('#fuels'),r=fu&&fu.getBoundingClientRect();
   if(r&&r.height){const b=Math.round(innerHeight-r.top+8);eb=b+'px';yb=(b+up)+'px';}else{eb='';yb=`calc(env(safe-area-inset-bottom,0px) + ${104+up}px)`;}
   if(ev.style.bottom!==eb)ev.style.bottom=eb;if(yi.dataset.b!==yb){yi.dataset.b=yb;yi.style.bottom=yb;}}
@@ -5798,7 +5804,7 @@ function hud(){
     $('#bTier').textContent=tierName()+' · 본공 ×'+fmtN(dlMul(S.dl));
     const g=gateAt(),gt=$('#bGate');
     if(S.done){gt.hidden=false;gt.className='gate win';gt.textContent=S.part===2?'지구 관통 완료! 여기를 누르면 엔딩과 새 회차를 볼 수 있어요.':'지구 중심 도달! 여기를 누르면 1부 엔딩과 2부 시작을 볼 수 있어요.';gt.onclick=()=>{if(!S.endDone){openEnding();return;}if(endCur==null)endCur=(S.ends||[]).filter(k=>ENDS[k]&&ENDS[k].part===(S.part===2?2:1)).pop()||endPick();endI=99;$('#ending').hidden=false;endI=ENDS[endCur].sc.length;endScene();};}
-    else if(lvGap()){const l=layerAt(S.depth);gt.hidden=false;gt.className='gate soft';gt.textContent=`⚠ 숙련 부족 · 속도 ×${lvK().toFixed(2)} · 권장 Lv.${l.req}(${dlName(l.req)}) — 숙련을 올리면 빨라져요`;}
+    else if(lvGap()){const l=layerAt(S.depth);gt.hidden=false;gt.className='gate soft';gt.textContent=`⚠ 숙련 부족 · 속도 ×${lvK().toFixed(2)} · 권장 Lv.${l.req}`;}
     else gt.hidden=true;
     {const w=homeWx(),g=Math.round(Math.min(0,wxG(w))*.7),el=$('#bWx'),k=w.id+g;if(el&&el.dataset.k!==k){el.dataset.k=k;el.innerHTML=`<svg class="bwxi" viewBox="-11 -11 22 22" width="22" height="22" aria-hidden="true"><circle r="10.5" fill="rgba(14,19,21,.8)" stroke="rgba(255,255,255,.35)" stroke-width=".8"/>${wxIcon(w.id)}</svg><span>양구 ${w.n} · ${g?`굴착 ${g}% · 강타 ${Math.round(Math.min(0,wxG(w))*1.5)}%`:'굴착·강타 영향 없음'}</span>`;}}
     const bb=$('#bBoost');if(bm>1){bb.hidden=false;bb.textContent='🔥 부스터 ×'+bm+' · '+Math.ceil((S.boost.until-Date.now())/1000)+'초';}else bb.hidden=true;
