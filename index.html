@@ -446,7 +446,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .fos.done{border-color:var(--amber)}
 .shseg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 10px}.shseg button{height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--mute);font-weight:700}.shseg button.on{background:var(--amber);color:#1a1206;border-color:var(--amber)}
 .shlist{display:grid;gap:8px}.shrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel)}
-.shrow.lock{opacity:.5}.shn{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:6px}.shn b{font-size:15px}.shn span{grid-column:1/-1;font-size:11.5px;color:var(--mute)}
+.shrow.lock{opacity:.5}.shn{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:6px}.shn b{font-size:15px}.shn span{grid-column:1/-1;font-size:11.5px;color:var(--mute)}.shn .stk{color:var(--amber2);font-size:13px;font-weight:800}
 .shp{font-size:12px;color:var(--mute);align-self:center;text-align:right}.shp b{color:var(--fg);font-family:var(--f-num)}
 .shq{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.shq button{display:grid;gap:1px;height:auto;padding:6px 4px;font-weight:700}.shq em{font-style:normal;font-size:10.5px;font-family:var(--f-body);font-variant-numeric:tabular-nums;opacity:.85}
 .finds{border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:grid;gap:6px;background:var(--panel2)}.finds .fh{font-size:12px;font-weight:700;color:var(--amber2)}.finds ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
@@ -600,7 +600,7 @@ nav.tabs button{font-size:12px}
     <button type="button" data-tab="exp">원정<i class="badge cool" id="expBadge" hidden></i></button>
     <button type="button" data-tab="craft">제작<i class="badge" id="craftBadge" hidden></i></button>
     <button type="button" data-tab="store">창고</button>
-    <button type="button" data-tab="shop">상점</button>
+    <button type="button" data-tab="shop">도감</button>
     <button type="button" data-tab="invest">투자<i class="badge" id="invBadge" hidden></i></button>
     <button type="button" data-tab="land">내 땅</button>
   </nav>
@@ -686,7 +686,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v105 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v106 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2052,20 +2052,18 @@ function drawPreview(dt){const r=pcv.getBoundingClientRect();if(!r.width)return;
 
 // ---------------- store / fuels ----------------
 function renderStore(){
-  const item=k=>{const r=regOf(k),n=have(k);return `<div class="item ${n?'':'zero'}"><div class="in">${ric(k)}${k}</div><div class="ic">${n.toLocaleString('ko-KR')}</div><div class="is">${r.n} · ${r.area}</div></div>`;};
+  const item0=k=>{const r=regOf(k),n=have(k);return `<div class="item ${n?'':'zero'}"><div class="in">${ric(k)}${k}</div><div class="ic">${n.toLocaleString('ko-KR')}</div><div class="is">${r.n} · ${r.area}</div></div>`;};
   const eras=ERAS.map(e=>{const n=setCount(e.id),lv=setLv(e.id),rs=relicsOf(e.id);
     const gm=gradeMul(e.id);
     return `<div class="era ${lv?'on'+lv:''}"><div class="ehd"><div><div class="en">${e.n}</div><div class="ed">${e.sea?`해상 원정 · 해저 아래 ${WRECK[0]*BLK}~${WRECK[1]*BLK}m`:`출발점에서 ${(e.from*BLK).toLocaleString('ko-KR')}m부터`}</div></div><div class="cset">${rs.map(x=>`<i class="${hasRelic(x.id)?'f':''}"></i>`).join('')}</div></div>
       <div class="rgrid">${rs.map(x=>`<div class="rel ${hasRelic(x.id)?'':'no'}" style="--g:${hasRelic(x.id)?GR[S.relic[x.id]].c:'#26323a'}">${relicIcon(x,hasRelic(x.id))}${hasRelic(x.id)?gBadge(S.relic[x.id]):''}<span>${hasRelic(x.id)?x.n:'???'}</span></div>`).join('')}</div>
       <div class="eb"><span class="${lv>=1?'on':''}">3개 세트 · ${e.b(1*gm)}</span><span class="${lv>=2?'on':''}">4개 완성 · ${e.b(1.4*gm)}</span><span>등급 보너스 ×${gm.toFixed(2)} (평균 등급이 높을수록 최대 ×1.30)</span></div></div>`;}).join('');
   const fos=FOSSILS.map(f=>{const n=fosGot(f.id).length;return `<div class="fos ${n>=5?'done':''}">${fossilSVG(f)}<div class="fi"><div class="en">${f.n}</div><div class="ed">${f.where}</div><div class="fpn">${f.pn.map((x,i)=>`<span class="${fosGot(f.id).includes(i)?'on':''}">${x}</span>`).join('')}</div><div class="eb"><span class="${n>=5?'on':''}">복원 ${n}/5 · ${f.eff}</span></div></div></div>`;}).join('');
-  $('#storeList').innerHTML=`<div class="galbtns ${hasMuseum()?'':'lock'}"><button class="primary" type="button" data-gal="fos">${hasMuseum()?'':'🔒 '}화석관 열기</button><button class="ghost" type="button" data-gal="rel">${hasMuseum()?'':'🔒 '}유물관 열기</button>${hasMuseum()?'':'<p class="sub" style="grid-column:1/-1;margin:0">내 땅에 유물 전시관을 지으면 열 수 있어요.</p>'}</div><h2 class="h3">화석 복원</h2><p class="sub">화석은 정해진 원정 지형의 정해진 깊이에서만 조각이 나와요(지도에서 지형을 누르면 보여요). 조각 5개를 모으면 복원되고 효과가 생겨요.</p><div class="foss">${fos}</div>
-   <h2 class="h3" style="margin-top:22px">유물 도감</h2><p class="sub">원정에서 깊이 팔수록 더 오래된 시대가 나옵니다. 같은 시대 유물을 3개 모으면 드릴에 세트 효과가 붙어요. 더 높은 등급이 나오면 자동으로 바꾸고, 같거나 낮은 등급은 감정가에 팝니다. 발견 ${relicCount()}/${RELICS.length}</p>${eras}
-   <h2 class="h3" style="margin-top:22px">창고</h2><p class="sub">본공 ${fmtD(S.depth)} · 보유 ${won(S.money)}</p>
-   <div class="sect">육상 자원</div><div class="inv">${REG.filter(r=>r.t==='land').map(r=>item(r.res)).join('')}</div>
-   <div class="sect">해상 자원</div><div class="inv">${REG.filter(r=>r.t==='sea').map(r=>item(r.res)).join('')}</div>
-   <button class="reset" type="button" id="reset">진행 상황 초기화</button>`;}
-$('#storeList').addEventListener('click',e=>{const gb=e.target.closest('[data-gal]');if(gb){openGal(gb.dataset.gal);return;}const b=e.target.closest('#reset');if(!b)return;
+  $('#shopList').innerHTML=`<div class="galbtns ${hasMuseum()?'':'lock'}"><button class="primary" type="button" data-gal="fos">${hasMuseum()?'':'🔒 '}화석관 열기</button><button class="ghost" type="button" data-gal="rel">${hasMuseum()?'':'🔒 '}유물관 열기</button>${hasMuseum()?'':'<p class="sub" style="grid-column:1/-1;margin:0">내 땅에 유물 전시관을 지으면 열 수 있어요.</p>'}</div><h2 class="h3">화석 복원</h2><p class="sub">화석은 정해진 원정 지형의 정해진 깊이에서만 조각이 나와요(지도에서 지형을 누르면 보여요). 조각 5개를 모으면 복원되고 효과가 생겨요.</p><div class="foss">${fos}</div>
+   <h2 class="h3" style="margin-top:22px">유물 도감</h2><p class="sub">원정에서 깊이 팔수록 더 오래된 시대가 나옵니다. 같은 시대 유물을 3개 모으면 드릴에 세트 효과가 붙어요. 더 높은 등급이 나오면 자동으로 바꾸고, 같거나 낮은 등급은 감정가에 팝니다. 발견 ${relicCount()}/${RELICS.length}</p>${eras}`;}
+const renderDex=renderStore;
+$('#shopList').addEventListener('click',e=>{const gb=e.target.closest('[data-gal]');if(gb)openGal(gb.dataset.gal);});
+$('#storeList').addEventListener('click',e=>{const b=e.target.closest('#reset');if(!b)return;
   if(b.dataset.armed){resetGame();return;}
   b.dataset.armed='1';b.textContent='한 번 더 누르면 모든 진행이 지워집니다';});
 function renderFuels(){
@@ -3394,7 +3392,7 @@ let hudCache='';
 function show(v){view=v;if(v==='map')setTimeout(mapLonFit,40);if(v==='map'&&yiPend&&yiM()>1){yiPend=false;setTimeout(()=>playYi(),60);}for(const [sel,on] of [['#mapSvg','map'],['#lgWrap svg','land']]){const sv=$(sel);if(sv&&sv.pauseAnimations){if(v===on)sv.unpauseAnimations();else sv.pauseAnimations();}}
   for(const id of ['map','bore','craft','store','shop','invest','land'])$('#v-'+id).hidden=id!==v;
   document.querySelectorAll('nav.tabs button').forEach(b=>{if(b.dataset.tab===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
-  if(v==='map')updateMap();if(v==='craft')renderCraft();if(v==='store')renderStore();if(v==='invest')renderInvest();if(v==='shop')renderShop();if(v==='land')renderLand();if(v==='bore'){hudCache='';}}
+  if(v==='map')updateMap();if(v==='craft')renderCraft();if(v==='store')renderShop();if(v==='invest')renderInvest();if(v==='shop')renderDex();if(v==='land')renderLand();if(v==='bore'){hudCache='';}}
 document.querySelector('nav.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;
   if(b.dataset.tab!=='exp'&&exp){exp=null;$('#exp').hidden=true;}
   if(b.dataset.tab==='exp'){if(exp)return;if(S.ex.active){const r=regById(S.ex.active);openExp(r);startHere();}else{show('map');toast('진행 중인 원정이 없어요. 지도에서 산이나 바다를 눌러 시작하세요');}return;}
@@ -5651,13 +5649,15 @@ const buyP=k=>Math.round(resBase(k)*SHOP_BUY*MD().shop*shopMul()*demand(k)),sell
 let shopMode='buy';
 function renderShop(){const list=[...new Set(REG.map(r=>r.res))],QB=[10,100,1000];
   const row=k=>{const r=REG.find(x=>x.res===k),u=isUnl(r),n=have(k),p=shopMode==='buy'?buyP(k):sellP(k),uses=PARTS.filter(q=>q.res===k||q.sub===k).map(q=>q.n);const f=FUEL.find(x=>x.res===k);if(f)uses.push('부스터 연료');
-    if(!u)return `<div class="shrow lock"><div class="shn">${ric(k)}<b>${k}</b><span>${r.n} 해금 후 판매</span></div></div>`;
+    if(!u)return `<div class="shrow lock"><div class="shn">${ric(k)}<b>${k}</b><span>보유 ${n.toLocaleString('ko-KR')} · ${r.n} 해금 후 거래</span></div></div>`;
     const btn=q=>{const ok=shopMode==='buy'?S.money>=p*q:n>=q;return `<button class="${shopMode==='buy'?'primary':'ghost'} sm" type="button" data-sh="${k}" data-q="${q}" ${ok?'':'disabled'}>${shopMode==='buy'?'+':'-'}${q.toLocaleString('ko-KR')}<em>${won(p*q)}</em></button>`;};
-    return `<div class="shrow"><div class="shn">${ric(k)}<b>${k}</b><span>보유 ${n.toLocaleString('ko-KR')} · ${uses.join(', ')||'-'}</span></div><div class="shp">개당 <b>${won(p)}</b>${shopMode==='buy'&&demand(k)>1?`<br><small>수요 +${Math.round((demand(k)-1)*100)}%</small>`:''}</div><div class="shq">${QB.map(btn).join('')}</div></div>`;};
-  $('#shopList').innerHTML=`<h2 class="h3">재료 상점</h2><p class="sub">원정에서 해금한 지역의 재료를 원화로 사고팔 수 있어요. 재료 값은 그 재료로 강화하는 부품 레벨에 맞춰 오르고, 팔 때는 살 때의 약 1/9 값이에요. 같은 재료를 하루에 많이 살수록 100개마다 5%씩 비싸져요(자정에 초기화). 보유 ${won(S.money)}</p>
+    return `<div class="shrow"><div class="shn">${ric(k)}<b>${k}</b><span><b class="stk">${n.toLocaleString('ko-KR')}개</b> · ${r.n} · ${uses.join(', ')||'-'}</span></div><div class="shp">개당 <b>${won(p)}</b>${shopMode==='buy'&&demand(k)>1?`<br><small>수요 +${Math.round((demand(k)-1)*100)}%</small>`:''}</div><div class="shq">${QB.map(btn).join('')}</div></div>`;};
+  const sect=t=>[...new Set(REG.filter(r=>r.t===t).map(r=>r.res))].map(row).join('');
+  $('#storeList').innerHTML=`<h2 class="h3">창고</h2><p class="sub">본공 ${fmtD(S.depth)} · 보유 <b style="color:var(--amber2)">${won(S.money)}</b><br>재료를 바로 사고팔 수 있어요. 팔 때는 살 때의 약 1/9 값이고, 같은 재료를 하루에 많이 살수록 100개마다 5%씩 비싸져요(자정에 초기화).</p>
     <div class="shseg"><button type="button" class="${shopMode==='buy'?'on':''}" data-sm="buy">사기</button><button type="button" class="${shopMode==='sell'?'on':''}" data-sm="sell">팔기</button></div>
-    <div class="shlist">${list.map(row).join('')}</div>`;}
-$('#shopList').addEventListener('click',e=>{const m=e.target.closest('[data-sm]');if(m){shopMode=m.dataset.sm;renderShop();return;}
+    <div class="sect">육상 자원</div><div class="shlist">${sect('land')}</div><div class="sect">해상 자원</div><div class="shlist">${sect('sea')}</div>
+    <button class="reset" type="button" id="reset">진행 상황 초기화</button>`;}
+$('#storeList').addEventListener('click',e=>{const m=e.target.closest('[data-sm]');if(m){shopMode=m.dataset.sm;renderShop();return;}
   const b=e.target.closest('[data-sh]');if(!b||b.disabled)return;const k=b.dataset.sh,q=+b.dataset.q;
   if(shopMode==='buy'){const c=buyP(k)*q;if(S.money<c)return;S.money-=c;S.res[k]=(S.res[k]||0)+q;const sd=shopDay();sd.b[k]=(sd.b[k]||0)+q;toast(`${k} ${q}개 구매 · ${won(c)}`);}
   else{if(have(k)<q)return;const g=sellP(k)*q;S.res[k]-=q;S.money+=g;toast(`${k} ${q}개 판매 · +${won(g)}`);}
@@ -5695,10 +5695,11 @@ $('#tReset').addEventListener('click',e=>armReset(e.currentTarget));
 let mapInfoKey='',liveKey='',liveT=0,pressing=false;
 addEventListener('pointerdown',()=>pressing=true,true);addEventListener('pointerup',()=>setTimeout(()=>pressing=false,60),true);addEventListener('pointercancel',()=>pressing=false,true);
 function liveRefresh(dt){liveT-=dt;if(liveT>0||pressing)return;liveT=.4;
-  if(view==='shop'){const k='shop'+Math.floor(S.money)+JSON.stringify(S.res);if(k!==liveKey){liveKey=k;renderShop();}return;}
-  if(view!=='craft'&&view!=='store'&&view!=='land')return;
+  if(view==='store'){const k='store'+Math.floor(S.money)+JSON.stringify(S.res)+S.dl;if(k!==liveKey){liveKey=k;renderShop();}return;}
+  if(view==='shop'){const k='dex'+relicCount()+JSON.stringify(S.relic)+JSON.stringify(S.fos||{})+hasMuseum();if(k!==liveKey){liveKey=k;renderDex();}return;}
+  if(view!=='craft'&&view!=='land')return;
   const key=view+JSON.stringify(S.res)+Math.floor(S.money/(view==='store'?1:10))+JSON.stringify(S.parts)+S.dl+relicCount();if(key===liveKey)return;liveKey=key;
-  if(view==='craft')renderCraft(true);else if(view==='store')renderStore();else landAfford();}
+  if(view==='craft')renderCraft(true);else landAfford();}
 function landAfford(){document.querySelectorAll('#landView .lp[data-it]').forEach(b=>{const it=LITEM.find(i=>i.id===b.dataset.it),em=b.querySelector('em');if(em)em.classList.toggle('no',S.money<it.p);});const lb=$('#landBuy');if(lb){const L0=landOf();lb.disabled=S.money<LAND_COST[L0.lv];}}
 function hud(){
   {const m=$('#money'),full=won(S.money),t=S.money>=1e8?'₩'+(S.money>=1e10?Math.floor(S.money/1e8).toLocaleString('ko-KR'):String(+(S.money/1e8).toFixed(2)))+'억':S.money>=1e7?'₩'+Math.floor(S.money/1e4).toLocaleString('ko-KR')+'만':full;if(m.textContent!==t){m.textContent=t;m.title=full;}}
