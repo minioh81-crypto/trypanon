@@ -11,7 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="트리파논">
 <link rel="apple-touch-icon" href="icon-180.png">
-<link rel="icon" type="image/png" href="icon-512.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{color-scheme:dark only}html,body{margin:0;background:#0e1315;-webkit-text-size-adjust:100%;overscroll-behavior:none}</style>
 </head>
@@ -689,8 +690,9 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>풍경 계절</span><div class="segs" id="mSeason"></div></div>
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
+  <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v116 · 2026-11-06</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v117 · 2026-11-06</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -5852,7 +5854,19 @@ function armReset(b){if(b.dataset.armed){resetGame();return;}b.dataset.armed='1'
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=116;function verCheck(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname+'?vc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/게임 버전 v(\d+)/);if(m&&+m[1]>GVER){const b=$('#mReload');if(b){b.textContent='🔄 v'+m[1]+' 받기';b.classList.add('primary');}if(!verCheck.told){verCheck.told=1;toast('새 버전 v'+m[1]+'이 나왔어요 · 메뉴 ☰ → 🔄 최신 버전 받기');}}}).catch(()=>{});}
+const GVER=117;
+// home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
+let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();instEv=e;instShow();});addEventListener('appinstalled',()=>{instEv=null;instShow();toast('홈 화면에 트리파논 아이콘을 만들었어요');});
+function instShow(){const b=$('#mInstall');if(b)b.hidden=standalone()||window.top!==window||!/^https?:/.test(location.protocol);}
+instShow();
+$('#mInstall').addEventListener('click',async()=>{if(instEv){instEv.prompt();const r=await instEv.userChoice.catch(()=>null);instEv=null;if(r&&r.outcome==='accepted')toast('홈 화면에 추가했어요');return;}
+  const ua=navigator.userAgent,ios=/iPhone|iPad|iPod/.test(ua),sam=/SamsungBrowser/.test(ua),and=/Android/.test(ua);
+  const n=$('#mInstNote');n.hidden=false;n.textContent=(ios?'📲 홈 화면에 추가 (아이폰)\nSafari 아래 공유 버튼(□↑) → "홈 화면에 추가" → 추가'
+    :sam?'📲 홈 화면에 추가 (삼성 인터넷)\n아래 메뉴(≡) → "현재 페이지 추가" → "홈 화면" → 추가\n(주소창 오른쪽에 ⬇ 설치 아이콘이 보이면 그걸 눌러도 돼요)'
+    :and?'📲 홈 화면에 추가 (크롬)\n오른쪽 위 ⋮ 메뉴 → "홈 화면에 추가" 또는 "앱 설치" → 설치'
+    :'📲 브라우저 메뉴에서 "홈 화면에 추가" 또는 "앱 설치"를 눌러 주세요');});function verCheck(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname+'?vc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/게임 버전 v(\d+)/);if(m&&+m[1]>GVER){const b=$('#mReload');if(b){b.textContent='🔄 v'+m[1]+' 받기';b.classList.add('primary');}if(!verCheck.told){verCheck.told=1;toast('새 버전 v'+m[1]+'이 나왔어요 · 메뉴 ☰ → 🔄 최신 버전 받기');}}}).catch(()=>{});}
 setTimeout(verCheck,4000);setInterval(verCheck,30*60*1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verCheck();});
 $('#mReload').addEventListener('click',()=>{try{save();}catch(e){}const u=new URL(location.href);u.searchParams.set('r',Date.now().toString(36));location.replace(u.toString());});
 function renderVoiceSeg(){const el=$('#mVoice');if(!el)return;if(YIMP3){el.innerHTML='<button type="button" aria-pressed="true" style="flex:2 1 auto" disabled>🎙 장군 녹음 음성</button><button type="button" data-vc="test" style="flex:1 0 auto">▶ 들어보기</button>';return;}if(!window.speechSynthesis){el.innerHTML='<button type="button" disabled>이 기기는 음성 미지원</button>';return;}

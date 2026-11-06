@@ -16,7 +16,8 @@ head='''<!doctype html>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="트리파논">
 <link rel="apple-touch-icon" href="icon-180.png">
-<link rel="icon" type="image/png" href="icon-512.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{color-scheme:dark only}html,body{margin:0;background:#0e1315;-webkit-text-size-adjust:100%;overscroll-behavior:none}</style>
 </head>
