@@ -218,7 +218,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .tstart{width:min(320px,100%);height:60px;border-radius:16px;background:var(--amber);color:#1a1206;font-family:var(--f-latin);font-weight:700;font-size:22px;letter-spacing:.32em;
   animation:pulse 1.8s ease-in-out infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 9px rgba(232,169,58,.16)}}
-.tlink{font-size:13px;color:var(--mute);text-decoration:underline;padding:8px}
+.tlink{font-size:13px;color:var(--mute);text-decoration:underline;padding:8px}.tresets{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}.tnew{width:min(320px,100%);min-height:48px;border-radius:14px;border:1.5px solid var(--amber);background:rgba(255,190,80,.12);color:var(--amber);font-weight:800;font-size:15px;padding:6px 10px;line-height:1.3}.tnew small{display:block;font-weight:500;font-size:11.5px;color:#e8d8b8;opacity:.85}.tendp{margin:0;font-size:12px;color:#d8ccb4;max-width:340px;line-height:1.5}.tendp b{color:var(--amber)}
 /* story */
 .tmodes{display:grid;gap:8px;width:min(340px,100%)}.tmh{font-size:12px;letter-spacing:.2em;color:var(--amber2);text-align:center}
 .tmode{display:grid;gap:2px;text-align:left;border:1px solid var(--amber);border-radius:14px;padding:12px 14px;background:rgba(232,169,58,.14);color:var(--fg)}.tmode b{font-size:17px}.tmode span{font-size:12px;color:var(--mute)}
@@ -646,9 +646,11 @@ nav.tabs button{font-size:12px}
     <div class="tmodes" id="tModes" hidden><div class="tmh">새 게임 · 모드 선택</div>
       <button class="tmode" type="button" data-mode="normal"><b>보통 모드</b><span>엔딩까지 약 2주 · 부품 10단계 · 드릴 마스터(Lv.50)까지</span></button>
       <button class="tmode hard" type="button" data-mode="hard"><b>하드 모드</b><span id="tHardTxt">엔딩까지 약 1달 · 부품 20단계 · 드릴 무한(Lv.100)까지</span></button>
-      <p class="tmnote">새 게임은 돈·재료·부품·드릴·깊이·원정·투자자가 처음부터 시작돼요. 이름·옷장·내 땅·유물·화석·엔딩 기록은 유지돼요.</p></div>
+      <p class="tmnote">새 회차는 돈·재료·부품·드릴·깊이·원정·투자자가 처음부터 시작돼요. 이름·옷장·내 땅·유물·화석·엔딩 기록은 유지돼요.</p><p class="tmnote" id="tModeEnd"></p></div>
+    <button class="tnew" id="tNew" type="button" hidden></button>
+    <p class="tendp" id="tEndP" hidden></p>
     <button class="tlink" id="tStory" type="button" hidden>스토리 다시 보기</button>
-    <button class="tlink" id="tReset" type="button" hidden>게임 초기화</button>
+    <div class="tresets"><button class="tlink" id="tReset" type="button" hidden>게임 초기화</button><button class="tlink" id="tReset2" type="button" hidden>엔딩 기록은 남기고 초기화</button></div>
   </div>
 </section>
 <section id="story" hidden>
@@ -691,8 +693,9 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
-  <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v122 · 2026-11-06</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
+  <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v123 · 2026-11-06</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -6073,10 +6076,16 @@ $('#statClose').addEventListener('click',()=>$('#statDlg').hidden=true);
 
 $('#recClose').addEventListener('click',()=>$('#recDlg').hidden=true);
 function openTitleModes(){S.needMode=true;save();titleOn=true;$('#title').hidden=false;syncTitle();}
-function syncTitle(){const nm=!!S.needMode;$('#tStart').hidden=nm;$('#tModes').hidden=!nm;const hard=document.querySelector('.tmode.hard'),ok=!!S.hardOK||S.mode==='hard';
+// ending collection progress for the title: 1부 has 3 endings (TRUE/HAPPY/BAD) → finishing 1부 three times collects them all
+function endProg(){const E=S.ends||[],c=p=>ENDP(p).filter(k=>E.includes(k)).length,p1=c(1),p2=c(2),n1=ENDP(1).length,n2=ENDP(2).length,left1=n1-p1;
+  return {p1,p2,n1,n2,txt:`엔딩 수집 <b>${E.length}/${ENDK.length}</b> · 1부 <b>${p1}/${n1}</b> · 2부 <b>${p2}/${n2}</b>`+(left1>0?`<br>1부 엔딩은 회차마다 1개씩 골라요 → 1부만 끝내고 새 회차를 <b>${left1}번 더</b> 하면 1부 엔딩을 모두 모아요 (TRUE는 유물·화석, HAPPY는 투자 조건 필요)`:`<br>1부 엔딩 완성! 2부 엔딩은 2부를 끝낼 때마다 1개씩 모을 수 있어요`)};}
+function syncTitle(){const nm=!!S.needMode;$('#tStart').hidden=nm;$('#tModes').hidden=!nm;
+  {const can=!nm&&!!S.story&&((S.ends||[]).length>0||S.endDone),P=endProg(),tn=$('#tNew');tn.hidden=!can;if(can)tn.innerHTML=`🔁 새 회차 시작 · ${(S.ng||1)+1}회차<small>엔딩 기록·도감·내 땅은 그대로, 돈·깊이·드릴은 처음부터</small>`;
+   const ep=$('#tEndP');ep.hidden=nm||!((S.ends||[]).length);ep.innerHTML=P.txt;const me=$('#tModeEnd');if(me)me.innerHTML=(S.ends||[]).length?P.txt:'';}const hard=document.querySelector('.tmode.hard'),ok=!!S.hardOK||S.mode==='hard';
   hard.disabled=!ok;$('#tHardTxt').textContent=ok?'1부 약 3주 + 2부 · 부품 26단계 · 드릴 Lv.140까지':'🔒 보통 모드 1부·2부를 모두 끝내면 열려요';}
 function startRun(mode){setTimeout(setEraScale,0);Object.assign(S,{mode,part:1,money:0,res:{},parts:{},dl:1,depth:0,done:false,endDone:false,ex:{active:null,dig:{}},inv:{},ir:{},irN:[],boost:{m:1,until:0},unl:REG.filter(r=>r.un<=0).map(r=>r.id),st:{exp:0,sea:0},shopDay:null,evt:null,needMode:false,runStart:Date.now(),ng:(S.ng||1)+1});
   applyMode();save();closeTitle();show('map');toast(`${S.ng}회차 · ${MD().n} 모드 시작! 다시 지구 중심을 향해`);}
+$('#tNew').addEventListener('click',()=>{openTitleModes();});
 $('#tModes').addEventListener('click',e=>{const b=e.target.closest('[data-mode]');if(!b||b.disabled)return;startRun(b.dataset.mode);});
 // ---------------- double-material event ----------------
 let evtT=45;
@@ -6126,18 +6135,19 @@ $('#storeList').addEventListener('click',e=>{const m=e.target.closest('[data-sm]
   else{if(have(k)<q)return;const g=sellP(k)*q;S.res[k]-=q;S.money+=g;toast(`${k} ${q}개 판매 · +${won(g)}`);}
   save();renderShop();});
 // ---------------- menu / reset ----------------
-function resetGame(){try{localStorage.removeItem(KEY)}catch(_){}S=fresh();save();
+function resetGame(keepEnds){const K=keepEnds?{ends:(S.ends||[]).slice(),records:(S.records||[]).slice(),hardOK:S.hardOK,lastRec:S.lastRec}:null;try{localStorage.removeItem(KEY)}catch(_){}S=fresh();if(K)Object.assign(S,K);save();
   exp=null;for(const id of ['exp','ward','deal','menu','story','room'])$('#'+id).hidden=true;
   bore.scroll=0;boreAcc=0;exAcc=0;bMoneyAcc=0;bgPop=0;popQ=[];popT=0;selPart=null;sel='yanggu';
   renderAvatar();show('map');checkInvest();
-  titleOn=true;$('#title').hidden=false;$('#tStory').hidden=true;$('#tReset').hidden=true;
-  for(const id of ['mReset','tReset']){const b=$('#'+id);delete b.dataset.armed;b.textContent='게임 초기화';}
-  toast('게임을 초기화했습니다. START를 눌러 처음부터 시작하세요');}
-function armReset(b){if(b.dataset.armed){resetGame();return;}b.dataset.armed='1';b.textContent='한 번 더 누르면 모든 진행이 지워집니다';}
-$('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화';$('#menu').hidden=false;});
+  titleOn=true;$('#title').hidden=false;$('#tStory').hidden=true;$('#tReset').hidden=true;$('#tReset2').hidden=true;syncTitle();
+  for(const id of ['mReset','tReset']){const b=$('#'+id);delete b.dataset.armed;b.textContent=id==='mReset'?'게임 초기화 (엔딩 기록까지 모두)':'게임 초기화';}
+  for(const id of ['mReset2','tReset2']){const b=$('#'+id);delete b.dataset.armed;b.textContent='엔딩 기록은 남기고 초기화';}
+  toast(keepEnds?'엔딩 기록·완주 기록만 남기고 초기화했어요. START를 눌러 처음부터 시작하세요':'게임을 초기화했습니다. START를 눌러 처음부터 시작하세요');}
+function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.armed='1';b.textContent=keep?'한 번 더 누르면 엔딩 기록만 남고 모두 지워집니다':'한 번 더 누르면 엔딩 기록까지 모든 진행이 지워집니다';}
+$('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=122;
+const GVER=123;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
@@ -6169,12 +6179,12 @@ $('#mSnd').addEventListener('click',e=>{const b=e.target.closest('[data-snd],[da
 function renderSeasonSeg(){const cur=S.season||'auto';$('#mSeason').innerHTML=[{k:'auto',n:'자동·'+seasonName(autoSeason())},...SEASONS].map(x=>`<button type="button" data-se="${x.k}" aria-pressed="${x.k===cur}">${x.n}</button>`).join('');}
 $('#mSeason').addEventListener('click',e=>{const b=e.target.closest('[data-se]');if(!b)return;S.season=b.dataset.se;save();renderSeasonSeg();if(view==='map')renderCard();toast('풍경 계절: '+(S.season==='auto'?'자동':seasonName(S.season)));});
 $('#menu').addEventListener('click',e=>{if(e.target.id==='menu')$('#menu').hidden=true;});
-$('#mTitle').addEventListener('click',()=>{$('#menu').hidden=true;titleOn=true;$('#title').hidden=false;$('#tStory').hidden=!S.story;$('#tReset').hidden=false;syncTitle();});
+$('#mTitle').addEventListener('click',()=>{$('#menu').hidden=true;titleOn=true;$('#title').hidden=false;$('#tStory').hidden=!S.story;$('#tReset').hidden=false;$('#tReset2').hidden=!(S.ends||[]).length;syncTitle();});
 $('#mStory').addEventListener('click',()=>{$('#menu').hidden=true;openStory();});
 $('#mName').addEventListener('click',()=>{$('#menu').hidden=true;openName();});
 $('#mRec').addEventListener('click',()=>{$('#menu').hidden=true;renderRec();$('#recDlg').hidden=false;});
-$('#mReset').addEventListener('click',e=>armReset(e.currentTarget));
-$('#tReset').addEventListener('click',e=>armReset(e.currentTarget));
+$('#mReset').addEventListener('click',e=>armReset(e.currentTarget));$('#mReset2').addEventListener('click',e=>armReset(e.currentTarget,true));
+$('#tReset').addEventListener('click',e=>armReset(e.currentTarget));$('#tReset2').addEventListener('click',e=>armReset(e.currentTarget,true));
 
 // ---------------- HUD ----------------
 let mapInfoKey='',liveKey='',liveT=0,pressing=false;
@@ -6229,7 +6239,7 @@ function catchUp(sec,rate,quiet){const el=Math.min(offCap(),sec);if(el<=0)return
   save();if(msg&&!quiet)setTimeout(()=>toast((rate<1?'자리를 비운 동안 ':'창을 내려둔 동안 ')+msg+' 더 뚫었습니다'),400);}
 {const el=(Date.now()-(S.last||Date.now()))/1000;if(el>30)catchUp(el,.5);}
 buildMap();buildGauge();renderAvatar();show('map');syncTitle();
-if(S.story){$('#tStart').textContent='START';$('#tStory').hidden=false;$('#tReset').hidden=false;}
+if(S.story){$('#tStart').textContent='START';$('#tStory').hidden=false;$('#tReset').hidden=false;$('#tReset2').hidden=!(S.ends||[]).length;}syncTitle();
 checkInvest();
 let last=performance.now(),hudT=0,saveT=0;
 function loop(t){try{frame(t);}catch(err){console.error(err);}requestAnimationFrame(loop);}
