@@ -129,7 +129,7 @@ html.android .node .ricon,html.android .node.locked .ricon,html.android .node.ac
 .hbar.over div{background:var(--hot)}
 .fuels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .fuel{border:1px solid var(--line);background:rgba(21,28,31,.9);border-radius:12px;padding:8px;text-align:left;display:grid;gap:2px;min-width:0}
-.fuel .fn{display:flex;align-items:center;gap:3px;font-size:12px;font-weight:700;white-space:nowrap;min-width:0}.fuel .fn .fnm{overflow:hidden;text-overflow:ellipsis;min-width:0}.fuel .fn b{color:var(--amber2);flex:none}.fuel .fe{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10.5px}
+.fuel .fn{display:flex;align-items:center;gap:3px;font-size:12px;font-weight:700;white-space:nowrap;min-width:0}.fuel .fn .fnm{overflow:hidden;text-overflow:ellipsis;min-width:0}.fuel .fn b{color:var(--amber2);flex:none}.fuel .fe{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10.5px}.fuel .fhave b{color:var(--amber2);font-weight:800}
 .fuel:disabled{opacity:.4;cursor:default}
 .fn{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fe{font-size:11px;color:var(--mute);font-family:var(--f-body);font-variant-numeric:tabular-nums}
@@ -517,7 +517,7 @@ nav.tabs button{font-size:12px}
 .vped b{font-size:11.5px;color:#f2e6c8;line-height:1.2}.vit.no .vped b{color:var(--mute)}.vq{font-size:11px;color:var(--mute)}
 .roomart{border-radius:12px;overflow:hidden;line-height:0;border:1px solid var(--line)}.roomart svg{width:100%;height:auto}
 #v-map{position:relative}
-.yichip{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 104px);left:max(10px,calc(50% - 270px));z-index:45;box-shadow:0 3px 12px rgba(0,0,0,.45);font-size:13px!important;padding:6px 12px!important;border:1px solid #e0a040;background:linear-gradient(#a8261f,#5a0f0c);color:#ffe6a0;font-weight:800;font-size:12px;border-radius:999px;padding:4px 10px;white-space:nowrap;animation:yiPulse 1.6s ease-in-out infinite}
+.yichip{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 104px);right:max(10px,calc(50% - 270px));z-index:45;box-shadow:0 3px 12px rgba(0,0,0,.45);font-size:13px!important;padding:6px 12px!important;border:1px solid #e0a040;background:linear-gradient(#a8261f,#5a0f0c);color:#ffe6a0;font-weight:800;font-size:12px;border-radius:999px;padding:4px 10px;white-space:nowrap;animation:yiPulse 1.6s ease-in-out infinite}
 @keyframes yiPulse{50%{box-shadow:0 0 12px rgba(255,190,80,.7)}}
 .yiev{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(255,196,90,.42),rgba(40,8,6,.62) 72%)}
 .yiev[hidden]{display:none}#rotNote{display:none}
@@ -686,7 +686,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v106 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v107 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2068,7 +2068,8 @@ $('#storeList').addEventListener('click',e=>{const b=e.target.closest('#reset');
   b.dataset.armed='1';b.textContent='한 번 더 누르면 모든 진행이 지워집니다';});
 function renderFuels(){
   const lk=fuelLock();$('#fuels').innerHTML=FUEL.map((f,i)=>{const n=fuelNeed(f),c=fuelCost(f),busy=lk&&lk!==f.res,ok=!busy&&have(f.res)>=n&&S.money>=c;return `<button class="fuel ${busy?'busy':''}" type="button" data-f="${i}" ${ok?'':'disabled'} ${busy?`title="${lk} 부스터 가동 중"`:''}>
-    <span class="fn">${ric(f.res)}<span class="fnm">${f.res==='가스 하이드레이트'?'하이드레이트':f.res}</span> <b>${n}</b></span><span class="fe">×${f.m} · ${fuelSec(f)}초</span><span class="fe">${busy?'🔒 다른 부스터 가동 중':won(c)+' · 보유 '+have(f.res)}</span></button>`;}).join('');}
+    <span class="fn">${ric(f.res)}<span class="fnm">${f.res==='가스 하이드레이트'?'하이드레이트':f.res}</span> <b>${n}</b></span><span class="fe">×${f.m} · ${fuelSec(f)}초</span><span class="fe">${busy?'🔒 다른 부스터 가동 중':won(c)}</span><span class="fe fhave">보유 <b>${fmtQty(have(f.res))}</b></span></button>`;}).join('');}
+const fmtQty=n=>n>=1e8?(+(n/1e8).toFixed(2))+'억':n>=1e4?(+(n/1e4).toFixed(n>=1e5?0:1))+'만':n.toLocaleString('ko-KR');
 // one booster type at a time: while a booster runs only the SAME fuel can top it up (another fuel would stretch a stronger booster's time)
 function fuelLock(){if(!(boostM()>1))return null;if(S.boost.res)return S.boost.res;const f=FUEL.find(x=>x.m===S.boost.m);return f?f.res:null;}
 $('#fuels').addEventListener('click',e=>{const b=e.target.closest('.fuel');if(!b||b.disabled)return;const f=FUEL[+b.dataset.f];
@@ -5628,7 +5629,11 @@ function evtStart(){const pool=REG.filter(isUnl);if(!pool.length)return;sfx('eve
   pushAlert({kind:'evt',btn:'바로 가기',icon:`<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#ffcf3a" stroke="#2b1606" stroke-width="2"/><text x="20" y="27" text-anchor="middle" font-size="18" font-weight="900" fill="#2b1606">×2</text></svg>`,
     title:`재료 2배 이벤트! ${r.n}`,text:`앞으로 3분 동안 ${r.n}에서 캐는 ${r.res}이(가) 2배로 나와요`,ttl:8});
   if(view==='map')updateMap();}
-function evtTick(dt){const b=$('#evtBar');
+function chipLayout(){const ev=$('#evtBar'),yi=$('#yiChip');if(!ev||!yi)return;const up=ev.hidden?0:ev.offsetHeight+6;let eb,yb;
+  const fu=view==='bore'&&$('#fuels'),r=fu&&fu.getBoundingClientRect();
+  if(r&&r.height){const b=Math.round(innerHeight-r.top+8);eb=b+'px';yb=(b+up)+'px';}else{eb='';yb=`calc(env(safe-area-inset-bottom,0px) + ${104+up}px)`;}
+  if(ev.style.bottom!==eb)ev.style.bottom=eb;if(yi.dataset.b!==yb){yi.dataset.b=yb;yi.style.bottom=yb;}}
+function evtTick(dt){chipLayout();const b=$('#evtBar');
   if(evtOn()){const r=regById(S.evt.rid),left=Math.ceil((S.evt.until-Date.now())/1000);b.hidden=titleOn;const tm=`${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`,mini=!!S.evt.mini,t=mini?`${ric(S.evt.res)}×2 ${tm}`:`${ric(S.evt.res)}${r.n} ${S.evt.res} ×2 · ${tm}`;b.classList.toggle('mini',mini);if(b.dataset.t!==t){b.dataset.t=t;b.innerHTML=t;}}
   else{if(!b.hidden){b.hidden=true;if(S.evt){S.evt=null;if(view==='map')updateMap();}}
     evtT-=dt;if(evtT<=0){evtT=60;if(!titleOn&&Math.random()<.07)evtStart();}}}
