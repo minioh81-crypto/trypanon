@@ -690,7 +690,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v115 · 2026-11-06</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v116 · 2026-11-06</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -4873,12 +4873,32 @@ const FDEF={rug:{w:3,d:2,flat:1},bed:{w:2,d:3},sofa:{w:2,d:1},desk:{w:2,d:1},tv:
 const bid=id=>String(id).split('#')[0],FD=id=>FDEF[bid(id)],FMAX=id=>id==='frame'?1:2,fCopies=id=>[id,id+'#2'].slice(0,FMAX(id));
 const FDEFPOS={rug:[2,2],bed:[0,3],sofa:[2,4],desk:[4,0],tv:[2,0],shelf:[5,2],plant:[1,0],case:[0,0],frame:[3.5,0]};
 let roomPick=null,roomFloor=0;
-// interior zones per house & floor: [name,x0,y0,x1,y1,floor tint]
-const ROOMZ={house_s:[[['주방',0,0,2,2,'#e8dcc0'],['화장실',3,0,5,2,'#bcd8e4']]],
- house_h:[[['안방',0,0,3,3,'#e8c89a'],['부엌',4,0,6,3,'#d8cfc0']]],
- house_b:[[['주방',0,0,3,2,'#e8dcc0'],['화장실',4,0,6,2,'#bcd8e4']],[['안방',0,0,3,3,'#f0d8c8'],['작은 방',3,0,6,2,'#d8e4c8'],['드레스룸',0,4,2,6,'#e4d0e8']]],
- house_d:[[['주방',0,0,3,3,'#e8dcc0'],['세탁실',5,0,7,2,'#c8dcec'],['화장실',5,2,7,4,'#bcd8e4']],[['안방',0,0,4,3,'#f0d8c8'],['작은 방',4,0,7,3,'#d8e4c8'],['드레스룸',0,4,2,7,'#e4d0e8']]],
- house_y:[[['안방',0,0,4,4,'#f0d8c8'],['사랑방',6,0,10,4,'#e8d0b0'],['부엌',0,5,3,8,'#e8dcc0'],['작은 방',7,5,10,8,'#d8e4c8'],['세탁실',8,8,10,10,'#c8dcec'],['화장실',0,8,2,10,'#bcd8e4']]]};
+// interior walls: every grid edge inside the house can hold a wall ('w') or a door ('d'); room name tags sit on cells and
+// colour the floor of the walled area they are in (open-plan areas are split between their tags by distance)
+// default plans follow a typical Korean apartment: 욕실·주방·현관 along the back, 거실 in the middle, bedrooms in front
+const DEFROOMS={
+ house_s:[{w:[['v',2,0,2],['h',0,2,2]],d:[['h',1,2]],l:[['욕실',0,0],['주방',3,0],['방',2,3]]}],
+ house_h:[{w:[['v',3,0,3],['h',0,3,3],['v',4,0,2],['h',4,4,2],['v',4,4,2]],d:[['h',2,3],['v',4,1],['h',4,4]],l:[['안방',1,1],['부엌',5,0],['대청',2,4],['욕실',5,5]]}],
+ house_b:[{w:[['v',2,0,2],['h',0,2,2],['v',5,0,2],['h',5,2,1]],d:[['h',1,2],['h',5,2]],l:[['욕실',0,0],['주방',3,0],['현관',5,0],['거실',2,4]]},
+          {w:[['h',0,3,3],['v',3,0,3],['v',4,0,3],['h',4,3,2],['h',0,4,2],['v',2,4,2]],d:[['h',2,3],['h',4,3],['h',1,4]],l:[['안방',1,1],['작은 방',5,1],['드레스룸',0,5]]}],
+ house_d:[{w:[['v',2,0,3],['h',0,3,2],['v',5,0,2],['h',5,2,2],['h',0,5,2],['v',2,5,2]],d:[['h',1,3],['h',5,2],['h',1,5]],l:[['욕실',0,1],['주방',3,0],['현관',6,0],['세탁실',0,6],['거실',4,4]]},
+          {w:[['h',0,3,3],['v',3,0,3],['v',4,0,3],['h',4,3,3],['h',0,4,2],['v',2,4,3],['h',3,5,2],['v',3,5,2],['v',5,5,2]],d:[['h',2,3],['h',4,3],['h',1,4],['h',4,5]],l:[['안방',1,1],['작은 방',5,1],['드레스룸',0,5],['화장실',3,6]]}],
+ house_y:[{w:[['v',3,0,3],['h',0,3,3],['v',8,0,3],['h',9,3,1],['h',0,5,4],['v',4,5,5],['h',7,5,3],['v',7,5,5]],d:[['h',1,3],['h',9,3],['h',3,5],['h',7,5]],l:[['욕실',1,1],['부엌',5,1],['현관',9,1],['대청',5,6],['안방',2,7],['사랑방',8,7]]}]};
+const RNAMES=['거실','주방','안방','침실','작은 방','욕실','화장실','드레스룸','세탁실','현관','서재','대청','부엌','사랑방','방'];
+const RCOL={거실:'#ecd9b4',대청:'#e0c48e',주방:'#efe2c4',부엌:'#dccfb8',욕실:'#b8d8e6',화장실:'#b8d8e6',안방:'#f2d6c4',침실:'#f2d6c4',방:'#f0dcc0','작은 방':'#d6e6c6',드레스룸:'#e6d0ea',세탁실:'#c6dcee',현관:'#cec4b6',사랑방:'#e8d0ac',서재:'#d6d2ec'};
+function defLay(h,fl){const sp=(DEFROOMS[h]||[])[fl]||{w:[],d:[],l:[]},e={};
+  for(const [o,x,y,n] of sp.w)for(let i=0;i<n;i++)e[o==='h'?`h,${x+i},${y}`:`v,${x},${y+i}`]='w';for(const [o,x,y] of sp.d)e[`${o},${x},${y}`]='d';return {e,lb:sp.l.map(a=>a.slice())};}
+function roomLay(fl=roomFloor){const L0=landOf(),h=houseTile()?.[1]||'house_s',k=h+':'+fl;L0.rooms=L0.rooms||{};if(!L0.rooms[k])L0.rooms[k]=defLay(h,fl);return L0.rooms[k];}
+const ek=(ax,ay,bx,by)=>ax===bx?`h,${ax},${Math.max(ay,by)}`:`v,${Math.max(ax,bx)},${ay}`;
+// cell → room name (null = unnamed hallway); regions are bounded by walls and doors
+function cellRooms(fl=roomFloor){const N=RN(),{e,lb}=roomLay(fl),reg=[],nm=[];for(let y=0;y<N;y++){reg.push(Array(N).fill(-1));nm.push(Array(N).fill(null));}
+  let id=0;for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(reg[y][x]>=0)continue;const Q=[[x,y]];reg[y][x]=id;
+    while(Q.length){const [cx,cy]=Q.pop();for(const [dx,dy] of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=cx+dx,ny=cy+dy;if(nx<0||ny<0||nx>=N||ny>=N||reg[ny][nx]>=0||e[ek(cx,cy,nx,ny)])continue;reg[ny][nx]=id;Q.push([nx,ny]);}}id++;}
+  const tags=lb.filter(t=>t[1]<N&&t[2]<N);
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){let best=null,bd=1e9;for(const t of tags)if(reg[t[2]][t[1]]===reg[y][x]){const d=Math.abs(t[1]-x)+Math.abs(t[2]-y)+(t[1]===x&&t[2]===y?-.5:0);if(d<bd){bd=d;best=t;}}nm[y][x]=best;}
+  return {reg,nm,tags};}
+// a piece of furniture may not straddle a wall or door
+function wallCut(x,y,w,d,fl=roomFloor){const e=roomLay(fl).e;for(let i=0;i<w;i++)for(let j=0;j<d;j++){if(i<w-1&&e[ek(x+i,y+j,x+i+1,y+j)])return true;if(j<d-1&&e[ek(x+i,y+j,x+i,y+j+1)])return true;}return false;}
 const ROOMN={house_s:5,house_h:6,house_b:6,house_d:7,house_y:10},RN=()=>ROOMN[houseTile()?.[1]]||6;
 const FRMAX=wl=>wl?Math.max(0,RN()-4.5):RN()-1.8;
 const twoF=()=>['house_b','house_d'].includes(houseTile()?.[1]);
@@ -4895,12 +4915,14 @@ function occ(except){const o={},pos=roomPos();if(twoF()&&except!=='stair')for(co
   for(const id in pos){if(id===except||!pos[id]||!FD(id)||FD(id).flat||FD(id).wall||flOf(id)!==roomFloor)continue;const [x,y,r]=pos[id],[w,d]=dims(id,r||0);for(let i=0;i<w;i++)for(let j=0;j<d;j++)o[(x+i)+','+(y+j)]=id;}return o;}
 function fits(id,x,y,r=rotOf(id)){const [w,d]=dims(id,r);if(x<0||y<0||x+w>RN()||y+d>RN())return false;
   const o=FD(id).flat?(twoF()?Object.fromEntries(stKeys().map(k=>[k,1])):{}):occ(id);
-  for(let i=0;i<w;i++)for(let j=0;j<d;j++)if(o[(x+i)+','+(y+j)])return false;return true;}
+  for(let i=0;i<w;i++)for(let j=0;j<d;j++)if(o[(x+i)+','+(y+j)])return false;return FD(id).flat||!wallCut(x,y,w,d);}
 // new furniture goes to its matching room first (fridge → 주방, washer → 세탁실, bed → 안방 …)
-const ZPREF={fridge:['주방','부엌'],kimchi:['주방','부엌'],washer:['세탁실','화장실'],styler:['드레스룸','안방'],wardrobe:['드레스룸','안방','작은 방'],bed:['안방','작은 방','사랑방'],desk:['작은 방','사랑방'],shelf:['사랑방','작은 방'],robot:[]};
-function freeSpot(id,r=0){if(FD(id).wall)return [3.5,0];const pref=ZPREF[bid(id)];if(pref){const Z=(ROOMZ[houseTile()?.[1]]||[])[roomFloor]||[];for(const nm of pref){const z=Z.find(q=>q[0]===nm);if(!z)continue;for(let y=z[2];y<z[4];y++)for(let x=z[1];x<z[3];x++)if(fits(id,x,y,r)){const [w,d]=dims(id,r);if(x+w<=z[3]&&y+d<=z[4])return [x,y,r];}}}
-  const d=FDEFPOS[bid(id)];if(d&&fits(id,d[0],d[1],r))return [d[0],d[1],r];
-  for(let y=0;y<RN();y++)for(let x=0;x<RN();x++)if(fits(id,x,y,r))return [x,y,r];return null;}
+const ZPREF={fridge:['주방','부엌'],kimchi:['주방','부엌'],washer:['세탁실','욕실','화장실'],styler:['드레스룸','안방','침실'],wardrobe:['드레스룸','안방','침실','작은 방'],bed:['안방','침실','작은 방','사랑방','방'],desk:['서재','작은 방','사랑방'],shelf:['서재','사랑방','거실'],sofa:['거실','대청'],tv:['거실','대청']};
+function freeSpot(id,r=0){if(FD(id).wall)return [3.5,0];const pref=ZPREF[bid(id)];if(pref){const {nm}=cellRooms(),N=RN(),[w,d]=dims(id,r);for(const name of pref)for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(!nm[y][x]||nm[y][x][0]!==name||!fits(id,x,y,r))continue;let ok=true;for(let i=0;i<w&&ok;i++)for(let j=0;j<d;j++)if(nm[y+j][x+i]!==nm[y][x]){ok=false;break;}if(ok)return [x,y,r];}}
+  // otherwise keep living furniture out of the bathroom, entrance, laundry and kitchen when there is room elsewhere
+  const WET=['욕실','화장실','현관','세탁실','주방','부엌'],{nm:NM}=cellRooms(),[fw,fd]=dims(id,r),dry=(x,y)=>{for(let i=0;i<fw;i++)for(let j=0;j<fd;j++){const t=(NM[y+j]||[])[x+i];if(t&&WET.includes(t[0])&&!(pref||[]).includes(t[0]))return false;}return true;};
+  const d=FDEFPOS[bid(id)];if(d&&fits(id,d[0],d[1],r)&&dry(d[0],d[1]))return [d[0],d[1],r];
+  for(const strict of[1,0])for(let y=0;y<RN();y++)for(let x=0;x<RN();x++)if(fits(id,x,y,r)&&(!strict||dry(x,y)))return [x,y,r];return null;}
 function stairFits(x,y,r){const [w,d]=stDims(r);if(x<0||y<0||x+w>RN()||y+d>RN())return false;const ks=stKeys(x,y,r),rf=roomFloor,pos=roomPos();let ok=true;
   for(const fl of [0,1]){roomFloor=fl;const o=occ('stair');if(pos.rug&&flOf('rug')===fl){const [rx,ry,rr]=pos.rug,[rw,rd]=dims('rug',rr||0);for(let i=0;i<rw;i++)for(let j=0;j<rd;j++)o[(rx+i)+','+(ry+j)]=1;}
     if(ks.some(k=>o[k]))ok=false;}roomFloor=rf;return ok;}
@@ -4908,7 +4930,7 @@ function nearSpot(id,x0,y0,r){let best=null,bd=1e9;for(let y=0;y<RN();y++)for(le
 function meSpot(){const m=meR(),o=occ();if(!o[m.x+','+m.y]&&m.x<RN()&&m.y<RN())return m;for(let y=RN()-1;y>=0;y--)for(let x=RN()-1;x>=0;x--)if(!o[x+','+y]){m.x=x;m.y=y;return m;}return m;}
 function ensurePos(){const f=landOf().furn,pos=roomPos();
   if(pos.frame&&pos.frame.length<2)pos.frame=[pos.frame[0],0];if(pos.frame)pos.frame[0]=Math.min(pos.frame[0],FRMAX(pos.frame[1]));
-  if(!twoF()){roomFloor=0;for(const id in flMap()){setFl(id,0);if(pos[id]&&!FD(id).wall)pos[id]=freeSpot(id,rotOf(id));}}
+  if(!twoF()){roomFloor=0;for(const id in flMap()){setFl(id,0);if(pos[id]&&!FD(id).wall)pos[id]=freeSpot(id,rotOf(id));}for(const id in pos)if(pos[id]&&FD(id)&&!FD(id).wall&&!fits(id,pos[id][0],pos[id][1]))pos[id]=freeSpot(id,rotOf(id));}
   else{const st=stairR();if(!stairFits(st.x,st.y,st.r)){let done=0;for(let y=RN()-1;y>=0&&!done;y--)for(let x=RN()-1;x>=0&&!done;x--)for(const r of[0,1])if(!done&&stairFits(x,y,r)){st.x=x;st.y=y;st.r=r;done=1;}}
     const rf=roomFloor;for(const id in pos){if(!pos[id]||!FD(id)||FD(id).wall)continue;roomFloor=flOf(id);if(!fits(id,pos[id][0],pos[id][1]))pos[id]=freeSpot(id,rotOf(id));}roomFloor=rf;}
   for(const id in f)if(f[id]&&!(id in pos))pos[id]=freeSpot(id);}
@@ -5059,24 +5081,38 @@ function r3Init(){if(R3.ren)return;R3.cv=document.createElement('canvas');R3.cv.
   cv.addEventListener('wheel',e=>{e.preventDefault();R3.dist=Math.max(2.5,Math.min(R3.N*3+4,R3.dist*(e.deltaY<0?.9:1.1)));},{passive:false});}
 function r3Tap(e){const r=R3.cv.getBoundingClientRect(),v=new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);R3.ray.setFromCamera(v,R3.cam);
   const hits=R3.ray.intersectObjects(R3.root.children,true);let o=null;for(const h of hits){let x=h.object;if(!x.visible)continue;let hid=false;for(let p=x;p;p=p.parent)if(p.visible===false)hid=true;if(hid)continue;while(x&&!x.userData.tap)x=x.parent;if(x){o=x.userData.tap;break;}}if(!o)return;
+  if(roomPick==='wall'){if(o.k==='edge')wallTap(o.v);else if(o.k==='ft')tagTap(...o.v.split(',').map(Number));return;}
   const fake={target:{closest:s=>{if(o.k==='stair'&&s==='.stair')return {};if(o.k==='me'&&s==='.mech')return {};if(o.k==='fu'&&s==='.fu')return {dataset:{fu:o.v}};if(o.k==='ft'&&s==='.ft')return {dataset:{g:o.v}};return null;}}};roomClick(fake);}
 function r3Build(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()?.[1]||'house_s',N=RN();R3.N=N;if(!R3.dist)R3.home();
   if(R3.root){R3.scene.remove(R3.root);R3.root.traverse(o=>{if(o.geometry)o.geometry.dispose();});}R3.anims=[];R3.walls=[];const root=R3.root=new THREE.Group();R3.scene.add(root);
   const WL={house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee',house_d:'#f2efe8',house_y:'#f1e6cc'}[h],FL={house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a',house_d:'#b98a5a',house_y:'#a87a4a'}[h],HN=h==='house_h'||h==='house_y',WH=2.6;
   const W=(gx,gy)=>[gx-N/2,gy-N/2];root.add(B3(N+.3,.3,N+.3,shade(FL,-.35),0,-.32,0));
-  const o0=occ();for(let y=0;y<N;y++)for(let x=0;x<N;x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&!FD(roomPick).wall&&fits(roomPick,x,y);
+  const o0=occ();for(let y=0;y<N;y++)for(let x=0;x<N;x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&roomPick!=='wall'&&!FD(roomPick).wall&&fits(roomPick,x,y);
     const [wx,wz]=W(x+.5,y+.5),t=B3(.99,.04,.99,ok?'#b8e88a':(x+y)%2?FL:shade(FL,-.06),wx,-.04,wz);t.castShadow=false;t.userData.tap={k:'ft',v:x+','+y};root.add(t);}
-  // room zones: tinted floors, low partition walls with a doorway, floor labels (furniture can still go anywhere)
-  {const Z=(ROOMZ[h]||[])[roomFloor]||[],inZ=(z,x,y)=>x>=z[1]&&x<z[3]&&y>=z[2]&&y<z[4],zoneAt=(x,y)=>Z.find(z=>inZ(z,x,y))||null,PW=M3(shade(WL,-.08));
-   for(const z of Z){const [n,x0,y0,x1,y1,col]=z,[cx,cz]=W((x0+x1)/2,(y0+y1)/2),fl=new THREE.Mesh(new THREE.PlaneGeometry(x1-x0-.04,y1-y0-.04),new THREE.MeshLambertMaterial({color:col,transparent:true,opacity:.55,depthWrite:false}));fl.rotation.x=-Math.PI/2;fl.position.set(cx,.003,cz);root.add(fl);
-     const tx=texFromCanvas(256,64,c=>{c.font='900 46px sans-serif';c.textAlign='center';c.textBaseline='middle';c.lineWidth=9;c.strokeStyle='rgba(0,0,0,.55)';c.strokeText(n,128,34);c.fillStyle='#fff';c.fillText(n,128,34);}),lb=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false,depthTest:false}));lb.scale.set(2.2,.55,1);lb.position.set(cx,.28,cz);lb.renderOrder=5;root.add(lb);
-     // edges shared with other cells inside the house (not the outer walls); one segment on the longest open edge stays open as the door
-     const segs=[];for(let x=x0;x<x1;x++){if(y0>0)segs.push(['h',x,y0,zoneAt(x,y0-1)]);if(y1<N)segs.push(['h',x,y1,zoneAt(x,y1)]);}for(let y=y0;y<y1;y++){if(x0>0)segs.push(['v',x0,y,zoneAt(x0-1,y)]);if(x1<N)segs.push(['v',x1,y,zoneAt(x1,y)]);}
-     const open=segs.filter(q=>!q[3]),door=(open.length?open:segs)[Math.floor((open.length?open:segs).length/2)];
-     for(const q of segs){if(q===door||(q[3]&&Z.indexOf(q[3])<Z.indexOf(z)))continue;const [o,gx,gy]=q,[wx,wz]=o==='h'?W(gx+.5,gy):W(gx,gy+.5),b=B3(o==='h'?1.02:.08,1.0,o==='h'?.08:1.02,PW,wx,0,wz);b.castShadow=false;root.add(b,B3(o==='h'?1.02:.1,.05,o==='h'?.1:1.02,shade(WL,-.35),wx,1.0,wz));}}}
+  // rooms: floor tint per named area, name tags, interior walls (cut low so the room stays visible) with doors; edit mode shows every grid edge
+  {const {e,lb}=roomLay(),{nm}=cellRooms(),ED=roomPick==='wall',PW=M3(shade(WL,-.03)),CAP=M3(shade(WL,-.45)),DW=M3('#b88a5a'),DF=M3('#8a5e3a'),PH=1.5;
+   const tint={};for(let y=0;y<N;y++)for(let x=0;x<N;x++){const t=nm[y][x];if(!t)continue;const col=RCOL[t[0]]||'#e8dcc8';if(!tint[col])tint[col]=[];tint[col].push([x,y]);}
+   for(const col in tint){const gs=tint[col].map(([x,y])=>{const g=new THREE.PlaneGeometry(1,1);g.rotateX(-Math.PI/2);const [wx,wz]=W(x+.5,y+.5);g.translate(wx,.003,wz);return g;});
+     const pos=[],idx=[];let off=0;for(const g of gs){pos.push(...g.attributes.position.array);idx.push(...Array.from(g.index.array,v=>v+off));off+=g.attributes.position.count;}
+     const m=new THREE.BufferGeometry();m.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));m.setIndex(idx);m.computeVertexNormals();
+     const fl=new THREE.Mesh(m,new THREE.MeshLambertMaterial({color:col,transparent:true,opacity:.62,depthWrite:false}));fl.receiveShadow=true;root.add(fl);}
+   for(const t of lb){if(t[1]>=N||t[2]>=N)continue;let sx=0,sz=0,c=0;for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(nm[y][x]===t){sx+=x+.5;sz+=y+.5;c++;}
+     const [cx,cz]=ED||!c?W(t[1]+.5,t[2]+.5):W(sx/c,sz/c),tx=texFromCanvas(256,64,g=>{g.font='900 46px sans-serif';g.textAlign='center';g.textBaseline='middle';g.lineWidth=9;g.strokeStyle='rgba(0,0,0,.55)';g.strokeText(t[0],128,34);g.fillStyle=ED?'#ffe27a':'#fff';g.fillText(t[0],128,34);});
+     const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false,depthTest:false}));sp.scale.set(2.2,.55,1);sp.position.set(cx,ED?.5:.3,cz);sp.renderOrder=5;root.add(sp);
+     if(ED){const [ax,az]=W(t[1]+.5,t[2]+.5),dot=new THREE.Mesh(new THREE.CircleGeometry(.3,20),new THREE.MeshBasicMaterial({color:'#ffd56a',transparent:true,opacity:.75}));dot.rotation.x=-Math.PI/2;dot.position.set(ax,.02,az);root.add(dot);}}
+   const HB=new THREE.MeshBasicMaterial({color:'#3a9ae0',transparent:true,opacity:.75}),edges=[];
+   for(let a=1;a<N;a++)for(let b=0;b<N;b++){edges.push('h,'+b+','+a,'v,'+a+','+b);}
+   for(const k of edges){const v=e[k];if(!v&&!ED)continue;const [o,gx,gy]=k.split(','),x=+gx,y=+gy,[wx,wz]=o==='h'?W(x+.5,y):W(x,y+.5),g=new THREE.Group();g.position.set(wx,0,wz);if(o==='v')g.rotation.y=Math.PI/2;if(ED)g.userData.tap={k:'edge',v:k};
+     if(v==='w')g.add(B3(1.1,PH,.1,PW),B3(1.1,.04,.12,CAP,0,PH,0));
+     else if(v==='d'){g.add(B3(1.1,.16,.1,PW,0,PH-.16,0),B3(1.1,.04,.12,CAP,0,PH,0),B3(.06,PH-.16,.12,DF,-.47,0,0),B3(.06,PH-.16,.12,DF,.47,0,0));
+       const hinge=new THREE.Group();hinge.position.set(-.43,0,.06);hinge.rotation.y=-1.15;hinge.add(B3(.84,PH-.22,.04,DW,.42,.02,0),B3(.04,.04,.06,'#d8c070',.74,.66,.03));g.add(hinge);
+       const arc=new THREE.Mesh(new THREE.RingGeometry(.82,.86,18,1,0,1.15),new THREE.MeshBasicMaterial({color:'#8a6a4a',transparent:true,opacity:.5,side:THREE.DoubleSide}));arc.rotation.x=Math.PI/2;arc.position.set(-.43,.008,.06);g.add(arc);}
+     else{const hm=new THREE.Mesh(new THREE.BoxGeometry(.8,.03,.12),HB);hm.position.y=.03;g.add(hm);}
+     if(ED&&v){const hl=new THREE.Mesh(new THREE.BoxGeometry(1.0,.04,.36),new THREE.MeshBasicMaterial({color:v==='w'?'#ffc83a':'#2ac0a0',transparent:true,opacity:.9}));hl.position.y=.03;g.add(hl);}
+     g.traverse(m=>{m.castShadow=false;});root.add(g);}}
   // four walls; the ones between the camera and the room are hidden each frame (cut-away view)
   const wall=(w,x,z,ry,nx,nz)=>{const g=new THREE.Group();g.add(B3(w,WH,.12,WL,0,0,0),B3(w,.2,.14,shade(WL,-.35),0,0,0));if(HN){for(let i=0;i<=w;i+=2)g.add(B3(.1,WH,.16,'#7a5a3c',-w/2+i,0,0));g.add(B3(w,.18,.16,'#7a5a3c',0,WH-.18,0));}
-    g.add(B3(1.3,.9,.03,'#9ccde6',w/4,1.1,.07),B3(1.42,.06,.05,'#7a5a3c',w/4,1.06,.07),B3(.05,.9,.04,'#7a5a3c',w/4,1.1,.08));g.position.set(x,0,z);g.rotation.y=ry;g.userData.n=[nx,nz];root.add(g);R3.walls.push(g);return g;};
+    g.add(B3(1.3,.9,.03,'#9ccde6',w/4,1.1,.07),B3(1.42,.06,.05,'#7a5a3c',w/4,1.06,.07),B3(.05,.9,.04,'#7a5a3c',w/4,1.1,.08));g.position.set(x,0,z);g.rotation.y=ry;g.userData.n=[nx,nz];g.traverse(m=>{m.castShadow=false;});root.add(g);R3.walls.push(g);return g;};
   wall(N,0,-N/2-.06,0,0,-1);wall(N,-N/2-.06,0,Math.PI/2,-1,0);wall(N,0,N/2+.06,Math.PI,0,1);wall(N,N/2+.06,0,-Math.PI/2,1,0);
   // wall frame (fossil picture)
   if(f.frame&&pos.frame&&flOf('frame')===roomFloor){const [t,wl]=pos.frame,fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],fr=new THREE.Group();fr.add(B3(1.8,1.1,.06,'#a0703c'),B3(1.62,.92,.02,'#f4ece0',0,.09,.04));
@@ -5095,10 +5131,10 @@ function r3Build(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
   const me=meR();if(me.fl===roomFloor){const m=meSpot(),[wx,wz]=W(m.x+.5,m.y+.5),sp=svgSprite('me'+JSON.stringify(ME())+m.f,charG(ME(),{expr:'happy',flip:!!m.f,noShadow:true}),'-10 0 120 172',1.9);sp.position.set(wx,0,wz);sp.userData.tap={k:'me'};root.add(sp);
     if(roomPick==='me'){const ring=new THREE.Mesh(new THREE.RingGeometry(.32,.42,24),new THREE.MeshBasicMaterial({color:'#ffd56a'}));ring.rotation.x=-Math.PI/2;ring.position.set(wx,.015,wz);root.add(ring);}}
   // dogs, cats and the robot vacuum move about the free floor cells (BFS path cell by cell, smooth turning); the vacuum hunts crumbs and goes back to its dock
-  {const o1=occ(),own={},ck=(x,y)=>x+','+y;
+  {const o1=occ(),own={},ck=(x,y)=>x+','+y,LE=roomLay().e;
    const path=(a,b,home)=>{const ok=k=>!o1[k]||k===home;if(a[0]===b[0]&&a[1]===b[1])return [b];const prev={},Q=[a],sk=ck(...a);prev[sk]=null;
      while(Q.length){const c=Q.shift();if(c[0]===b[0]&&c[1]===b[1]){const out=[];let k=ck(...c);while(k){out.unshift(k.split(',').map(Number));k=prev[k];}return out.slice(1);}
-       for(const [dx,dy] of[[1,0],[-1,0],[0,1],[0,-1]]){const n=[c[0]+dx,c[1]+dy],kk=ck(...n);if(n[0]<0||n[1]<0||n[0]>=N||n[1]>=N||kk in prev||!ok(kk))continue;prev[kk]=ck(...c);Q.push(n);}}return null;};
+       for(const [dx,dy] of[[1,0],[-1,0],[0,1],[0,-1]]){const n=[c[0]+dx,c[1]+dy],kk=ck(...n);if(n[0]<0||n[1]<0||n[0]>=N||n[1]>=N||kk in prev||!ok(kk)||LE[ek(c[0],c[1],n[0],n[1])]==='w')continue;prev[kk]=ck(...c);Q.push(n);}}return null;};
    const freeCells=[];for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(!o1[ck(x,y)])freeCells.push([x,y]);
    const cellW=(c,jx=0,jz=0)=>{const [wx,wz]=W(c[0]+.5+jx,c[1]+.5+jz);return new THREE.Vector3(wx,0,wz);};
    const roamer=(obj,home,speed,face)=>{const R={obj,home,cell:home.slice(),wp:[],idle:1+Math.random()*2,last:null,moving:false};obj.position.copy(cellW(home));root.add(obj);
@@ -5149,7 +5185,7 @@ function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
   {const d=N-6;g+=wallR(3.4+d,5+d,30,62,'#7a5a3c')+wallR(3.55+d,4.85+d,34,58,'#9ccde6')+wallR(4.17+d,4.23+d,34,58,'#7a5a3c')+wallR(3.55+d,4.85+d,45,47,'#7a5a3c');}
   // clickable floor tiles (+ highlight targets when something is picked)
   const o0=occ();
-  for(let y=0;y<RN();y++)for(let x=0;x<RN();x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&!FD(roomPick).wall&&fits(roomPick,x,y);
+  for(let y=0;y<RN();y++)for(let x=0;x<RN();x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&roomPick!=='wall'&&!FD(roomPick).wall&&fits(roomPick,x,y);
     g+=`<polygon class="ft" data-g="${x},${y}" points="${PT([P(x,y),P(x+1,y),P(x+1,y+1),P(x,y+1)])}" fill="${ok?'rgba(154,216,110,.45)':'rgba(0,0,0,0)'}" stroke="${ok?'rgba(255,255,255,.5)':'rgba(0,0,0,.06)'}" stroke-width="1"/>`;}
   // wall frame (left wall along y, or right wall along x)
   if(f.frame&&pos.frame&&flOf('frame')===roomFloor){const [t,wl]=pos.frame,fo=FOSSILS.find(x=>fosDone(x.id))||FOSSILS[0],W=wl?wallR:wallL,c=wl?P(t+.9,0,47):P(0,t+.9,47),fs=16*SC;
@@ -5203,17 +5239,33 @@ function renderRoom(){const f=landOf().furn,pos=(ensurePos(),roomPos());if(L3OK)
   const TF=twoF(),B=(a,t)=>`<button class="ghost sm" type="button" data-rb="${a}">${t}</button>`,mv=TF?B('mv',roomFloor?'1층으로':'2층으로'):'';
   $('#roomTitle').textContent=TF?'집 안 꾸미기 · '+(roomFloor+1)+'층':'집 안 꾸미기';
   $('#roomFl').innerHTML=TF?[0,1].map(k=>`<button type="button" class="${roomFloor===k?'on':''}" data-fl="${k}">${k+1}층</button>`).join(''):'';
-  if(roomPick==='stair')$('#roomBar').innerHTML=`<span><b>계단</b> · 밝은 칸을 누르면 옮겨요 (1층·2층이 함께 움직여요)</span><div>${B('rot','↻ 회전')}${B('go',roomFloor?'1층으로 내려가기':'2층으로 올라가기')}${B('done','완료')}</div>`;
+  if(roomPick==='wall')$('#roomBar').innerHTML=`<span>🧱 벽·방 편집 — 바닥의 파란 선을 누르면 벽 → 문 → 없음 순서로 바뀌어요. 바닥 칸을 누르면 방 이름표가 그 칸으로 옮겨지고, 이름표(노란 점)를 다시 누르면 이름이 바뀌어요.${tagAdd?' ▶ 이름표를 놓을 칸을 누르세요':''}</span><div>${B('tagadd','＋ 이름표')}${B('tagdel','이름표 빼기')}${B('wreset','기본 구획')}${B('wclear','모두 지우기')}${B('done','완료')}</div>`;
+  else if(roomPick==='stair')$('#roomBar').innerHTML=`<span><b>계단</b> · 밝은 칸을 누르면 옮겨요 (1층·2층이 함께 움직여요)</span><div>${B('rot','↻ 회전')}${B('go',roomFloor?'1층으로 내려가기':'2층으로 올라가기')}${B('done','완료')}</div>`;
   else if(roomPick==='me')$('#roomBar').innerHTML=`<span><b>내 캐릭터</b> · 밝은 칸을 누르면 그 자리로 가요</span><div>${B('flip','방향 바꾸기')}${mv}${B('done','완료')}</div>`;
   else if(roomPick){const pk=FURN.find(x=>x.id===bid(roomPick)),wall=FD(pk.id).wall;
     $('#roomBar').innerHTML=`<span><b>${pk.n}</b> ${wall?'· 화살표로 벽을 따라 옮기고, 회전하면 반대쪽 벽으로 가요':'· 밝은 칸을 누르면 그 자리로 옮겨요'}</span><div>${wall?B('left','◀')+B('right','▶'):''}${B('rot','↻ 회전')}${mv}${B('store','보관')}${B('done','완료')}</div>`;}
-  else $('#roomBar').innerHTML=`<span>가구나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.${TF?' 계단도 눌러서 옮기거나 돌릴 수 있고, 위 1층·2층 버튼이나 계단 표시를 눌러 층을 바꿔요.':''}</span>`;
+  else $('#roomBar').innerHTML=`<span>가구나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.${TF?' 계단도 눌러서 옮기거나 돌릴 수 있고, 위 1층·2층 버튼이나 계단 표시를 눌러 층을 바꿔요.':''}</span><div>${L3OK?B('wall','🧱 벽·방 편집'):''}</div>`;
   $('#roomList').innerHTML=FURN.filter(i=>!isPetId(i.id)||i.id==='dog'||i.id==='cat').map(i=>{const cs=fCopies(i.id),n=cs.filter(c=>f[c]).length,pl=cs.filter(c=>f[c]&&pos[c]),st=n-pl.length,mx=cs.length;
     const stat=!n?won(i.p):st?`보관 ${st} · 배치`:(TF?pl.map(c=>(flOf(c)+1)+'층').join('·')+' · 옮기기':`${n}개 · 옮기기`);
     return `<div class="lpw"><button class="lp ${bid(roomPick||'')===i.id?'on':''}" type="button" data-fu="${i.id}">${L3OK&&thumb3('room',i.id)?`<img class="th3" src="${thumb3('room',i.id)}" alt="">`:''}<span>${i.n}${mx>1?` <small>${n}/${mx}</small>`:''}</span><em class="${n?'own':S.money>=i.p?'':'no'}">${stat}</em></button>${n&&n<mx?`<button class="lpplus ${S.money>=i.p?'':'no'}" type="button" data-fbuy="${i.id}">+1 구매 ${won(i.p)}</button>`:''}</div>`;}).join('');}
-$('#roomFl').addEventListener('click',e=>{const b=e.target.closest('[data-fl]');if(!b)return;roomFloor=+b.dataset.fl;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();});
+$('#roomFl').addEventListener('click',e=>{const b=e.target.closest('[data-fl]');if(!b)return;roomFloor=+b.dataset.fl;if(roomPick&&roomPick!=='wall'&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();});
+let tagAdd=0,tagDel=0;
+// edit mode: an edge cycles empty → wall → door → empty (refused if a piece of furniture or the stairs sit across it)
+function wallTap(k){const L=roomLay(),cur=L.e[k]||'',nx=cur===''?'w':cur==='w'?'d':'';
+  if(nx){const [o,gx,gy]=k.split(','),x=+gx,y=+gy,a=o==='h'?[x,y-1]:[x-1,y],b=[x,y],oc=occ(),pos=roomPos();
+    const across=id=>{if(!pos[id]||!FD(id)||FD(id).flat||FD(id).wall||flOf(id)!==roomFloor)return false;const [fx,fy,r]=pos[id],[w,d]=dims(id,r||0),inF=c=>c[0]>=fx&&c[0]<fx+w&&c[1]>=fy&&c[1]<fy+d;return inF(a)&&inF(b);};
+    const hit=Object.keys(pos).find(across);if(hit){toast((FURN.find(q=>q.id===bid(hit))||{n:'가구'}).n+'이(가) 걸려 있어요. 먼저 옮겨 주세요');return;}
+    if(twoF()&&oc[a.join(',')]==='stairs'&&oc[b.join(',')]==='stairs'){toast('계단이 걸려 있어요');return;}}
+  if(nx)L.e[k]=nx;else delete L.e[k];save();renderRoom();}
+// edit mode: tap a cell → add a tag (after ＋), remove one (after 빼기), rename the tag on that cell, or move the area's tag here
+function tagTap(x,y){const L=roomLay(),on=L.lb.find(t=>t[1]===x&&t[2]===y);
+  if(tagDel){tagDel=0;if(on){L.lb.splice(L.lb.indexOf(on),1);toast(on[0]+' 이름표를 뺐어요');}else toast('노란 점이 있는 칸을 눌러야 빠져요');}
+  else if(tagAdd){tagAdd=0;if(on)toast('이미 이름표가 있어요');else L.lb.push(['방',x,y]);}
+  else if(on)on[0]=RNAMES[(RNAMES.indexOf(on[0])+1)%RNAMES.length];
+  else{const t=cellRooms().nm[y][x];if(t){t[1]=x;t[2]=y;}else L.lb.push(['거실',x,y]);}
+  save();renderRoom();}
 function roomClick(e){
-  if(e.target.closest('.stairlb')){roomFloor=1-roomFloor;if(roomPick&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();return;}
+  if(e.target.closest('.stairlb')){roomFloor=1-roomFloor;if(roomPick&&roomPick!=='wall'&&flOf(roomPick)!==roomFloor)roomPick=null;renderRoom();return;}
   if(e.target.closest('.stair')){roomPick=roomPick==='stair'?null:'stair';renderRoom();return;}
   if(e.target.closest('.mech')){roomPick=roomPick==='me'?null:'me';renderRoom();return;}
   const fu=e.target.closest('.fu');if(fu){roomPick=roomPick===fu.dataset.fu?null:fu.dataset.fu;renderRoom();return;}
@@ -5226,8 +5278,12 @@ function roomClick(e){
   if(!fits(roomPick,cx,cy,r)){toast('다른 가구와 겹쳐요. 밝은 칸을 골라 주세요');return;}
   roomPos()[roomPick]=[cx,cy,r];save();renderRoom();}
 $('#roomArt').addEventListener('click',roomClick);
-$('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]');if(!b||!roomPick)return;const pos=roomPos(),a=b.dataset.rb,id=roomPick;
-  if(a==='done')roomPick=null;
+$('#roomBar').addEventListener('click',e=>{const b=e.target.closest('[data-rb]');if(!b)return;if(b.dataset.rb==='wall'){roomPick='wall';tagAdd=0;renderRoom();return;}if(!roomPick)return;const pos=roomPos(),a=b.dataset.rb,id=roomPick;
+  if(a==='done'){roomPick=null;tagAdd=0;}
+  else if(id==='wall'){const L=roomLay();
+    if(a==='tagadd'){tagAdd=1;tagDel=0;}else if(a==='tagdel'){tagDel=1;tagAdd=0;toast('뺄 이름표(노란 점)를 누르세요');}
+    else if(a==='wreset'){Object.assign(L,defLay(houseTile()?.[1]||'house_s',roomFloor));ensurePos();toast('기본 구획으로 되돌렸어요');}
+    else if(a==='wclear'){L.e={};toast('벽을 모두 지웠어요');}}
   else if(id==='stair'){const st=stairR();
     if(a==='go')roomFloor=1-roomFloor;
     else if(a==='rot'){const nr=(st.r+1)%4;let sp=stairFits(st.x,st.y,nr)?[st.x,st.y]:null;
@@ -5796,7 +5852,7 @@ function armReset(b){if(b.dataset.armed){resetGame();return;}b.dataset.armed='1'
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=115;function verCheck(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname+'?vc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/게임 버전 v(\d+)/);if(m&&+m[1]>GVER){const b=$('#mReload');if(b){b.textContent='🔄 v'+m[1]+' 받기';b.classList.add('primary');}if(!verCheck.told){verCheck.told=1;toast('새 버전 v'+m[1]+'이 나왔어요 · 메뉴 ☰ → 🔄 최신 버전 받기');}}}).catch(()=>{});}
+const GVER=116;function verCheck(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname+'?vc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/게임 버전 v(\d+)/);if(m&&+m[1]>GVER){const b=$('#mReload');if(b){b.textContent='🔄 v'+m[1]+' 받기';b.classList.add('primary');}if(!verCheck.told){verCheck.told=1;toast('새 버전 v'+m[1]+'이 나왔어요 · 메뉴 ☰ → 🔄 최신 버전 받기');}}}).catch(()=>{});}
 setTimeout(verCheck,4000);setInterval(verCheck,30*60*1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verCheck();});
 $('#mReload').addEventListener('click',()=>{try{save();}catch(e){}const u=new URL(location.href);u.searchParams.set('r',Date.now().toString(36));location.replace(u.toString());});
 function renderVoiceSeg(){const el=$('#mVoice');if(!el)return;if(YIMP3){el.innerHTML='<button type="button" aria-pressed="true" style="flex:2 1 auto" disabled>🎙 장군 녹음 음성</button><button type="button" data-vc="test" style="flex:1 0 auto">▶ 들어보기</button>';return;}if(!window.speechSynthesis){el.innerHTML='<button type="button" disabled>이 기기는 음성 미지원</button>';return;}
