@@ -42,10 +42,10 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;
   padding-top:calc(env(safe-area-inset-top,0px) + 10px);padding-bottom:10px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:baseline;gap:8px}
-.brand b{font-family:var(--f-latin);font-weight:700;font-size:20px;letter-spacing:.16em;color:var(--amber)}
+.brand{display:flex;align-items:baseline;gap:8px;min-width:0;flex:0 1 auto;overflow:hidden;white-space:nowrap}
+.brand b{font-family:var(--f-latin);font-weight:700;font-size:clamp(14px,4.4vw,20px);letter-spacing:clamp(.06em,1.2vw,.16em);white-space:nowrap;color:var(--amber)}
 .brand span{font-family:var(--f-kr);font-size:13px;color:var(--mute);letter-spacing:.04em}
-.money{font-family:var(--f-num);font-weight:600;font-size:16px;color:var(--amber2);font-variant-numeric:tabular-nums}
+.money{font-family:var(--f-num);font-weight:600;font-size:clamp(13px,4vw,16px);white-space:nowrap;flex:none;color:var(--amber2);font-variant-numeric:tabular-nums}
 
 .view{flex:1;min-height:0;display:flex;flex-direction:column}
 .scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-block:14px 20px;
@@ -286,7 +286,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .art{border-radius:12px;overflow:hidden;line-height:0;border:1px solid var(--line)}
 .art svg{width:100%;height:auto;display:block}
 .art.locked svg{filter:grayscale(.75) brightness(.6)}
-.tright{display:flex;align-items:center;gap:10px}
+.tright{display:flex;align-items:center;gap:clamp(6px,2vw,10px);flex:none}
 .avwrap{position:relative;display:inline-flex;flex:none}
 .avbadge{position:absolute;right:-5px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:#ffd34a;font-size:10px;line-height:1;display:grid;place-items:center;box-shadow:0 0 0 2px #101418;pointer-events:none}
 .avhint{position:absolute;top:calc(100% + 9px);right:-8px;white-space:nowrap;background:#ffd34a;color:#2a1f0a;font-size:11px;font-weight:800;padding:5px 9px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.35);animation:avPulse 1.3s ease-in-out infinite;pointer-events:none;z-index:40}
@@ -686,7 +686,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v104 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v105 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -5701,7 +5701,7 @@ function liveRefresh(dt){liveT-=dt;if(liveT>0||pressing)return;liveT=.4;
   if(view==='craft')renderCraft(true);else if(view==='store')renderStore();else landAfford();}
 function landAfford(){document.querySelectorAll('#landView .lp[data-it]').forEach(b=>{const it=LITEM.find(i=>i.id===b.dataset.it),em=b.querySelector('em');if(em)em.classList.toggle('no',S.money<it.p);});const lb=$('#landBuy');if(lb){const L0=landOf();lb.disabled=S.money<LAND_COST[L0.lv];}}
 function hud(){
-  $('#money').textContent=won(S.money);
+  {const m=$('#money'),full=won(S.money),t=S.money>=1e8?'₩'+(S.money>=1e10?Math.floor(S.money/1e8).toLocaleString('ko-KR'):String(+(S.money/1e8).toFixed(2)))+'억':S.money>=1e7?'₩'+Math.floor(S.money/1e4).toLocaleString('ko-KR')+'만':full;if(m.textContent!==t){m.textContent=t;m.title=full;}}
   $('#expBadge').hidden=!S.ex.active;
   if(view==='map'){const ex_=S.ex.active?regById(S.ex.active):null;
     const k=`<span class="mchip"><b class="modechip ${S.mode==='hard'?'hard':''}">${MD().n}</b></span><span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${gateAt()?' · <em>승급 필요</em>':''}</span>`+(ex_?(()=>{const w=wxOf(ex_.id),y=Math.round(wxY(w));return `<span class="mchip cool" title="원정지 날씨: ${wxFx(w)}"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}${rbOn()?`<span class="wxs good">🌈 무지개 +${RBY()}%</span>`:`<span class="wxs ${y>0?'good':y<0?'bad':''}">${w.ic} ${w.n}${y?` ${y>0?'+':''}${y}%`:''}</span>`}</span>`;})():'<span class="mchip dim">진행 중인 원정 없음</span>')+(rbOn()?`<span class="mchip rbc"><b>🌈 무지개</b> ${rbFx()}</span>`:'');
