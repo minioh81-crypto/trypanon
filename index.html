@@ -471,7 +471,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .al-bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;display:block}.al-bar i{display:block;height:100%;background:var(--amber2);width:100%}
 .al-btns{display:grid;gap:6px}.al-btns .primary{height:38px;padding:0 14px;font-size:15px}.al-x{font-size:11px;color:var(--mute)}
 .tpips{display:inline-flex;gap:3px;vertical-align:middle;margin-left:6px}.tpips i{width:10px;height:10px;border-radius:2px;background:var(--line)}.tpips i.f{background:var(--amber)}
-.ladder{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.ladder{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;cursor:grab}
 .ladder span{flex:none;display:grid;justify-items:center;gap:1px;font-size:11px;padding:6px 8px;border-radius:10px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
 .ladder span small{font-size:9.5px;font-family:var(--f-num)}
 .ladder span.done{color:var(--ok);border-color:rgba(120,211,154,.35)}.ladder span.cur{color:#1a1206;background:var(--amber);border-color:var(--amber);font-weight:700}
@@ -690,7 +690,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v112 · 2026-11-06</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v113 · 2026-11-06</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2013,7 +2013,8 @@ $('#card').addEventListener('click',e=>{const a=e.target.closest('[data-act]');i
 function costOf(p){const l=Math.min(L(p.id),MAXLV-1),c={};const rm=Math.max(.5,1-.1*setPow('iron'));c[p.res]=Math.ceil(RESC[l]*rm);if(p.sub)c[p.sub]=Math.ceil(RESC[l]*.5*rm);c.money=Math.round(MONC[l]*(1-PK('kim',.1))*(1-.01*rp('big')));return c;}
 const have=k=>k==='money'?S.money:(S.res[k]||0);
 const canPay=c=>Object.entries(c).every(([k,v])=>have(k)>=v);
-function renderCraft(live){if(!live)setTimeout(()=>{const cur=document.querySelector('#ladder .cur');if(cur&&cur.parentElement)cur.parentElement.scrollLeft=cur.offsetLeft-cur.parentElement.clientWidth/2+cur.clientWidth/2;},0);
+let ladScrollT=0;
+function renderCraft(live){if(live&&Date.now()-ladScrollT<1500)return;if(!live)setTimeout(()=>{const cur=document.querySelector('#ladder .cur');if(cur&&cur.parentElement)cur.parentElement.scrollLeft=cur.offsetLeft-cur.parentElement.clientWidth/2+cur.clientWidth/2;},0);
   const rows=PARTS.map(p=>{const l=L(p.id),max=l>=MAXLV,c=costOf(p),src=regOf(p.res),open=isUnl(src)||have(p.res)>0;
     const pips=Array.from({length:MAXLV},(_,i)=>`<i class="${i<l?'f':''}"></i>`).join('');
     const cost=max?'<span class="yes">최대 레벨</span>':Object.entries(c).map(([k,v])=>{const ok=have(k)>=v,rg=k!=='money'&&regOf(k);if(k==='money')return `<span class="${ok?'yes':'no'}">${won(v)}</span>`;
@@ -2023,7 +2024,9 @@ function renderCraft(live){if(!live)setTimeout(()=>{const cur=document.querySele
       ${selPart===p.id?`<div class="plook">모습 변화: ${p.look}</div>`:''}
       <div class="costs">${open?cost:`<span class="no">${src.n} 해금 필요 (본공 ${fmtD(src.un)})</span>`}</div></div>
       <button class="craft" type="button" data-p="${p.id}" ${!max&&open&&canPay(c)?'':'disabled'}>${max?'MAX':'제작'}</button></div>`;}).join('');
+  const lad0=document.getElementById('ladder'),ladX=lad0?lad0.scrollLeft:null,ladTouch=lad0&&lad0.dataset.touch;
   $('#craftList').innerHTML=tierCard()+`<h2 class="h3">드릴 부품 제작</h2><p class="sub">부품을 누르면 위 그림에 다음 레벨 모습이 미리 보입니다. 만든 부품은 본공과 원정 드릴에 바로 적용됩니다.</p><div class="parts">${rows}</div>`;
+  {const lad=document.getElementById('ladder');if(lad){hScroll(lad);if(ladX!=null&&live)lad.scrollLeft=ladX;lad.addEventListener('scroll',()=>{ladScrollT=Date.now();},{passive:true});}}
   updatePreviewInfo();}
 function tierCard(){const dl=S.dl,g=dlGrade(dl),nx=dl+1;
   const pips=Array.from({length:DSTEP},(_,i)=>`<i class="${i<dlStep(dl)?'f':''}"></i>`).join('');
@@ -5762,7 +5765,7 @@ function armReset(b){if(b.dataset.armed){resetGame();return;}b.dataset.armed='1'
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=112;function verCheck(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname+'?vc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/게임 버전 v(\d+)/);if(m&&+m[1]>GVER){const b=$('#mReload');if(b){b.textContent='🔄 v'+m[1]+' 받기';b.classList.add('primary');}if(!verCheck.told){verCheck.told=1;toast('새 버전 v'+m[1]+'이 나왔어요 · 메뉴 ☰ → 🔄 최신 버전 받기');}}}).catch(()=>{});}
+const GVER=113;function verCheck(){if(!/^https?:/.test(location.protocol))return;fetch(location.pathname+'?vc='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/게임 버전 v(\d+)/);if(m&&+m[1]>GVER){const b=$('#mReload');if(b){b.textContent='🔄 v'+m[1]+' 받기';b.classList.add('primary');}if(!verCheck.told){verCheck.told=1;toast('새 버전 v'+m[1]+'이 나왔어요 · 메뉴 ☰ → 🔄 최신 버전 받기');}}}).catch(()=>{});}
 setTimeout(verCheck,4000);setInterval(verCheck,30*60*1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verCheck();});
 $('#mReload').addEventListener('click',()=>{try{save();}catch(e){}const u=new URL(location.href);u.searchParams.set('r',Date.now().toString(36));location.replace(u.toString());});
 function renderVoiceSeg(){const el=$('#mVoice');if(!el)return;if(YIMP3){el.innerHTML='<button type="button" aria-pressed="true" style="flex:2 1 auto" disabled>🎙 장군 녹음 음성</button><button type="button" data-vc="test" style="flex:1 0 auto">▶ 들어보기</button>';return;}if(!window.speechSynthesis){el.innerHTML='<button type="button" disabled>이 기기는 음성 미지원</button>';return;}
