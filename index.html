@@ -446,7 +446,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .fos.done{border-color:var(--amber)}
 .shseg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 10px}.shseg button{height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--mute);font-weight:700}.shseg button.on{background:var(--amber);color:#1a1206;border-color:var(--amber)}
 .shlist{display:grid;gap:8px}.shrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel)}
-.shrow.lock{opacity:.5}.shn{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:6px}.shn b{font-size:15px}.shn span{grid-column:1/-1;font-size:11.5px;color:var(--mute)}.shn .stk{color:var(--amber2);font-size:13px;font-weight:800}
+.shrow.lock{opacity:.5}.shn{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:6px}.shn b{font-size:15px}.shn span{grid-column:1/-1;font-size:11.5px;color:var(--mute)}.egrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:6px}.ecard{display:grid;gap:3px;padding:0 0 8px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);overflow:hidden;text-align:center;font-size:12px;color:var(--fg)}.ecard b{font-size:10.5px;letter-spacing:.06em}.ecard span{font-size:11.5px}.ecard .eth{aspect-ratio:320/300;overflow:hidden;background:#000;display:grid;place-items:center}.ecard .eth svg{width:100%;height:auto;display:block;margin-top:-12%}.ecard.lock .eth span{font-size:28px;font-weight:900;color:#3a4a52}.ecard.lock{opacity:.6}.shn .stk{color:var(--amber2);font-size:13px;font-weight:800}
 .shp{font-size:12px;color:var(--mute);align-self:center;text-align:right}.shp b{color:var(--fg);font-family:var(--f-num)}
 .shq{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.shq button{display:grid;gap:1px;height:auto;padding:6px 4px;font-weight:700}.shq em{font-style:normal;font-size:10.5px;font-family:var(--f-body);font-variant-numeric:tabular-nums;opacity:.85}
 .finds{border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:grid;gap:6px;background:var(--panel2)}.finds .fh{font-size:12px;font-weight:700;color:var(--amber2)}.finds ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
@@ -686,7 +686,7 @@ nav.tabs button{font-size:12px}
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost danger" type="button" id="mReset">게임 초기화</button>
-  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v107 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
+  <p class="wnote" style="opacity:.6;margin:0">게임 버전 v108 · 2026-11-06 (바뀌지 않으면 새로고침)</p>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2060,9 +2060,14 @@ function renderStore(){
       <div class="eb"><span class="${lv>=1?'on':''}">3개 세트 · ${e.b(1*gm)}</span><span class="${lv>=2?'on':''}">4개 완성 · ${e.b(1.4*gm)}</span><span>등급 보너스 ×${gm.toFixed(2)} (평균 등급이 높을수록 최대 ×1.30)</span></div></div>`;}).join('');
   const fos=FOSSILS.map(f=>{const n=fosGot(f.id).length;return `<div class="fos ${n>=5?'done':''}">${fossilSVG(f)}<div class="fi"><div class="en">${f.n}</div><div class="ed">${f.where}</div><div class="fpn">${f.pn.map((x,i)=>`<span class="${fosGot(f.id).includes(i)?'on':''}">${x}</span>`).join('')}</div><div class="eb"><span class="${n>=5?'on':''}">복원 ${n}/5 · ${f.eff}</span></div></div></div>`;}).join('');
   $('#shopList').innerHTML=`<div class="galbtns ${hasMuseum()?'':'lock'}"><button class="primary" type="button" data-gal="fos">${hasMuseum()?'':'🔒 '}화석관 열기</button><button class="ghost" type="button" data-gal="rel">${hasMuseum()?'':'🔒 '}유물관 열기</button>${hasMuseum()?'':'<p class="sub" style="grid-column:1/-1;margin:0">내 땅에 유물 전시관을 지으면 열 수 있어요.</p>'}</div><h2 class="h3">화석 복원</h2><p class="sub">화석은 정해진 원정 지형의 정해진 깊이에서만 조각이 나와요(지도에서 지형을 누르면 보여요). 조각 5개를 모으면 복원되고 효과가 생겨요.</p><div class="foss">${fos}</div>
-   <h2 class="h3" style="margin-top:22px">유물 도감</h2><p class="sub">원정에서 깊이 팔수록 더 오래된 시대가 나옵니다. 같은 시대 유물을 3개 모으면 드릴에 세트 효과가 붙어요. 더 높은 등급이 나오면 자동으로 바꾸고, 같거나 낮은 등급은 감정가에 팝니다. 발견 ${relicCount()}/${RELICS.length}</p>${eras}`;}
+   <h2 class="h3" style="margin-top:22px">유물 도감</h2><p class="sub">원정에서 깊이 팔수록 더 오래된 시대가 나옵니다. 같은 시대 유물을 3개 모으면 드릴에 세트 효과가 붙어요. 더 높은 등급이 나오면 자동으로 바꾸고, 같거나 낮은 등급은 감정가에 팝니다. 발견 ${relicCount()}/${RELICS.length}</p>${eras}`+endArchive();}
+function endArchive(){const seen=S.ends||[],T={'TRUE END':'#ffd56a','HAPPY END':'#7bd88f','BAD END':'#ff8a8a','HARD END':'#ff9a7a'};
+  const card=k=>{const E=ENDS[k],o=seen.includes(k);return `<button type="button" class="ecard ${o?'':'lock'}" data-rend="${k}" ${o?'':'disabled'}><div class="eth">${o?EART[E.sc[0][0]]():'<span>?</span>'}</div><b style="color:${T[E.tag]||'#fff'}">${E.tag}</b><span>${o?E.n:'???'}</span></button>`;};
+  return `<h2 class="h3" style="margin-top:22px">엔딩 기록소</h2><p class="sub">한 번 본 엔딩은 여기서 언제든 다시 볼 수 있어요. 수집 ${seen.filter(k=>ENDS[k]).length}/${ENDK.length}</p>
+   <div class="sect">1부 · 지구 중심</div><div class="egrid">${ENDP(1).map(card).join('')}</div><div class="sect">2부 · 지구 반대편</div><div class="egrid">${ENDP(2).filter(k=>!ENDS[k].hard).map(card).join('')}</div>
+   <div class="sect">하드 모드</div><div class="egrid">${ENDK.filter(k=>ENDS[k].hard).map(card).join('')}</div>`;}
 const renderDex=renderStore;
-$('#shopList').addEventListener('click',e=>{const gb=e.target.closest('[data-gal]');if(gb)openGal(gb.dataset.gal);});
+$('#shopList').addEventListener('click',e=>{const gb=e.target.closest('[data-gal]');if(gb){openGal(gb.dataset.gal);return;}const r=e.target.closest('[data-rend]');if(r&&!r.disabled)replayEnding(r.dataset.rend);});
 $('#storeList').addEventListener('click',e=>{const b=e.target.closest('#reset');if(!b)return;
   if(b.dataset.armed){resetGame();return;}
   b.dataset.armed='1';b.textContent='한 번 더 누르면 모든 진행이 지워집니다';});
@@ -5534,29 +5539,81 @@ const ENDS={
  rich:{part:2,n:'세계 부호',tag:'HAPPY END',sc:[['rich1','투자자 회의','"이 구멍, 그냥 두기엔 아깝습니다." 뚫린 구멍을 보강해 지구 관통 고속 철도를 놓기로 했다.'],['rich2','GTX 지구선 개통','중력으로 떨어지듯 달리는 지구 관통 급행. 서울에서 지구 반대편까지 단 42분.'],['rich3','증권가','운임 수익이 폭발하고 트리파논 주가는 연일 상한가를 찍었다.'],['rich4','올해의 인물','지구를 뚫은 시추사는 이제 세계 최고 부호. 다음 목표는… 달?']]},
 };
 const ENDK=Object.keys(ENDS);let endCur=null,endI=0;
+// ===== HARD: 1부 기록 장면 + 2부 단독 엔딩 '불의 고리' =====
+const YOSHI={sex:'m',hair:'part',hcol:0,eyes:'round',skin:0,body:'normal',outfit:'suit',hat:'none',item:'none'};
+const eJapan=(x,y,k,col,st)=>`<g transform="translate(${x},${y}) scale(${k})" fill="${col}" stroke="${st}" stroke-width="1.4" stroke-linejoin="round">
+  <path d="M50,-82 L66,-90 L84,-86 L98,-72 L90,-60 L80,-50 L68,-48 L60,-56 L48,-62 L44,-72Z"/>
+  <path d="M58,-40 L68,-32 L66,-16 L58,-2 L46,12 L30,24 L12,34 L-6,40 L-24,46 L-40,50 L-48,44 L-40,36 L-24,32 L-6,24 L12,12 L28,-2 L40,-16 L48,-30Z"/>
+  <path d="M-30,56 L-12,52 L-4,58 L-14,64 L-28,64Z"/><path d="M-62,52 L-48,48 L-42,58 L-46,72 L-56,80 L-64,70 L-66,60Z"/><path d="M-80,96 l4,-3 l3,4 l-4,2Z"/></g>`;
+const EARTH={
+ hrec:()=>SVP(u=>`${eRG(u+'g',[[0,'#3a1418'],[1,'#0a0406']],.5,.4,.8)}<rect width="320" height="460" fill="url(#${u}g)"/>${eRays(160,200,16,400,'#ff6a4a',.12,50)}${eConf(24,8)}
+   <g transform="translate(160,200)"><g><animateTransform attributeName="transform" type="scale" values=".5;1" dur=".8s" fill="freeze"/><g transform="translate(-130,-150)"><rect width="260" height="290" rx="8" fill="#1a0e10" stroke="#ff5a4a" stroke-width="5"/><rect x="10" y="10" width="240" height="270" rx="4" fill="none" stroke="#ff9a7a" stroke-width="1.4"/>
+    <text x="130" y="44" text-anchor="middle" font-size="11" letter-spacing="4" fill="#ff9a7a">HARD MODE RECORD</text><text x="130" y="80" text-anchor="middle" font-size="22" font-weight="900" fill="#fff2e0">하드 모드 1부 돌파</text>
+    <text x="130" y="106" text-anchor="middle" font-size="16" font-weight="900" fill="#ffd56a">${escH(pName())}</text><text x="130" y="128" text-anchor="middle" font-size="11" fill="#d8b8b0">지구 중심 6,371km · 부품 20단계의 길</text>
+    <g transform="translate(-26,6)">${eHero(156,270,130,'happy',{free:1})}</g><g transform="translate(206,226)">${EA('rotate','-8;8;-8','2')}<circle r="24" fill="#c8302a" stroke="#ffd56a" stroke-width="3"/><text y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">HARD</text></g></g></g></g>
+   ${eTitle(420,'2부 · 지구 반대편이 기다린다','#ff9a7a',16)}`),
+ fire1:()=>SVP(u=>`<rect width="320" height="460" fill="#000"/>${eRG(u+'w',[[0,'#ffffff'],[.35,'#fff6d8'],[.7,'#ffd27a',.6],[1,'#ff9a3a',0]])}
+   <g>${eDrill(160,330,1.2,180,1)}</g><circle cx="160" cy="230" r="10" fill="url(#${u}w)"><animate attributeName="r" values="10;520" dur="2.2s" fill="freeze"/></circle>
+   ${eRays(160,230,24,460,'#ffffff',.35,12)}<path d="M0,380 L60,368 L110,384 L160,372 L210,386 L260,370 L320,382 V460 H0Z" fill="#2a1a12"/><path d="M146,372 L160,340 L174,372Z" fill="#fff6d8"/>
+   <rect width="320" height="460" fill="#fff"><animate attributeName="opacity" values="0;0;1;.8" keyTimes="0;.45;.7;1" dur="2.6s" fill="freeze"/></rect>
+   ${eRays(160,230,20,460,'#ffd27a',.25,18)}${eTitle(230,'번쩍—!','#c8902a',30)}`),
+ fire2:()=>SVP(u=>`${eLG(u+'k',['#f6d8b8','#f2b48a','#8ab8d8','#3a6a9a'])}<rect width="320" height="460" fill="url(#${u}k)"/><rect width="320" height="460" fill="#fff"><animate attributeName="opacity" values="1;0" dur="1.8s" fill="freeze"/></rect>
+   <circle cx="250" cy="130" r="30" fill="#fff6d8" opacity=".9"/><path d="M0,250 L40,214 L70,232 L118,186 L150,212 L176,198 V250Z" fill="#6a7a8a" opacity=".6"/>
+   <path d="M196,250 L236,180 L250,176 L290,250Z" fill="#4a4a5a"/><path d="M236,180 Q244,170 250,176" fill="#ff6a3a"/>${[0,1,2].map(i=>`<circle cx="243" cy="170" r="10" fill="#8a8a92" opacity=".6"><animate attributeName="cy" values="170;90" dur="4s" begin="${i*1.3}s" repeatCount="indefinite"/><animate attributeName="r" values="8;30" dur="4s" begin="${i*1.3}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0" dur="4s" begin="${i*1.3}s" repeatCount="indefinite"/></circle>`).join('')}
+   <rect x="0" y="250" width="320" height="210" fill="#2a5a8a"/>${Array.from({length:10},(_,i)=>`<path d="M${(hsh(i,3)*300).toFixed(0)},${(270+i*18).toFixed(0)} q12,-5 24,0" stroke="#bfe0f5" stroke-width="2" fill="none" opacity=".5">${EA('translate','0 0;10 0;0 0',(2+hsh(i,5)*2).toFixed(1))}</path>`).join('')}
+   <g>${EA('translate','0 0;0 -4;0 0','2.6')}<path d="M40,340 H280 L262,380 H62Z" fill="#c8ccd0" stroke="#4a5058" stroke-width="2"/><rect x="70" y="316" width="70" height="24" fill="#e8ecef" stroke="#4a5058"/><path d="M200,340 V230 M188,250 H212 M184,280 H216" stroke="#d9573a" stroke-width="4"/>${eHero(120,342,110,'shock')}</g>
+   ${eTitle(72,'여긴… 어디지?','#3a2a20',17)}`),
+ fire3:()=>SVP(u=>`${eLG(u+'w',['#2a2f3a','#1a1e26'])}<rect width="320" height="460" fill="url(#${u}w)"/>
+   <rect x="20" y="40" width="280" height="190" rx="6" fill="#0c1a2a" stroke="#5a6a7a" stroke-width="3"/>${eRG(u+'s',[[0,'#1e4a7a'],[1,'#0a1a2a']])}<rect x="26" y="46" width="268" height="178" fill="url(#${u}s)"/>
+   ${eJapan(170,140,1,'#4a7a5a','#9ad8a0')}<path d="M70,226 Q150,90 280,60" stroke="#ff4a2a" stroke-width="5" fill="none" opacity=".75" stroke-dasharray="10 6"><animate attributeName="stroke-dashoffset" values="0;-32" dur="1s" repeatCount="indefinite"/></path>
+   ${[[118,196],[176,150],[212,108],[248,80]].map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="6" fill="#ff5a2a"><animate attributeName="r" values="4;12;4" dur="1.2s" begin="${i*.3}s" repeatCount="indefinite"/></circle>`).join('')}
+   <text x="40" y="70" font-size="12" font-weight="900" fill="#ff7a5a">⚠ 불의 고리 경보</text>
+   <path d="M0,370 H320 V460 H0Z" fill="#3a2a20"/><rect x="40" y="350" width="240" height="20" rx="4" fill="#5a3a24"/>
+   <g>${EA('translate','0 0;0 -2;0 0','1.6')}${fig(YOSHI,220,440,170,{noShadow:true})}<g transform="translate(202,320)"><circle cx="8" cy="0" r="6" fill="none" stroke="#1a1a1a" stroke-width="2"/><circle cx="28" cy="0" r="6" fill="none" stroke="#1a1a1a" stroke-width="2"/><path d="M14,0 h8" stroke="#1a1a1a" stroke-width="2"/></g></g>
+   ${eHero(90,440,150,'')}${eSay(200,270,'도와주십시오!',130)}<text x="220" y="452" text-anchor="middle" font-size="11" font-weight="800" fill="#ffd56a">일본 정부 대표 · 다나카 요시</text>`),
+ fire4:()=>SVP(u=>`${eLG(u+'k',['#5a8ac8','#2a5a8a'])}<rect width="320" height="150" fill="url(#${u}k)"/>${eLG(u+'g',['#6a4a32','#8a3a1a','#c8401a','#ff8a2a'])}<rect y="150" width="320" height="310" fill="url(#${u}g)"/>
+   <path d="M0,150 H320" stroke="#2a5a8a" stroke-width="2"/><g>${EA('translate','0 0;0 10;0 6;0 14','6')}<path d="M100,150 L130,112 L170,104 L210,118 L240,150Z" fill="#4a7a5a" stroke="#2a4a3a" stroke-width="2"/></g>
+   <path d="M0,214 L150,232 L320,206" stroke="#2a1408" stroke-width="5" fill="none"/><path d="M150,232 L176,460" stroke="#2a1408" stroke-width="5"/>
+   ${[0,1,2,3].map(i=>`<path d="M${60+i*70},440 q-10,-60 10,-120" stroke="#ffcf6a" stroke-width="4" fill="none" opacity=".7"><animate attributeName="d" values="M${60+i*70},440 q-10,-60 10,-120;M${60+i*70},440 q14,-60 -6,-130;M${60+i*70},440 q-10,-60 10,-120" dur="${2+i*.4}s" repeatCount="indefinite"/></path>`).join('')}
+   ${eRise(24,4,'#ffe08a',0,320,200,460,2.4,2)}<path d="M170,150 V330" stroke="#1a0a06" stroke-width="10"/><g>${EA1('translate','0 -120;0 0','2')}${eDrill(170,360,.9,180,1)}</g>
+   <g transform="translate(250,300)">${[0,1,2].map(i=>`<circle r="12" fill="none" stroke="#7cf0ff" stroke-width="3"><animate attributeName="r" values="8;48" dur="1.8s" begin="${i*.6}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="1.8s" begin="${i*.6}s" repeatCount="indefinite"/></circle>`).join('')}</g>
+   ${eTitle(80,'맨틀을 안정시켜라','#fff6e8',18)}${eTitle(410,'열도 침강까지 D-?','#ffd56a',14)}`),
+ fire5:()=>SVP(u=>`<rect width="320" height="460" fill="#05080e"/>${eStars(50,6,460)}${eRG(u+'r',[[0,'#ff6a2a',.55],[1,'#ff6a2a',0]])}<circle cx="170" cy="190" r="170" fill="url(#${u}r)"><animate attributeName="opacity" values=".5;1;.5" dur="2s" repeatCount="indefinite"/></circle>
+   ${eJapan(176,180,1.25,'#3a5a4a','#9ad8a0')}<path d="M40,330 Q170,110 300,40" stroke="#ff5a2a" stroke-width="7" fill="none" stroke-linecap="round"><animate attributeName="stroke-opacity" values=".5;1;.5" dur="1.4s" repeatCount="indefinite"/></path>
+   <path d="M0,350 H320 V460 H0Z" fill="#0e1622"/>${fig(YOSHI,236,446,130,{expr:'happy',noShadow:true})}${eHero(96,446,130,'happy')}
+   <path d="M150,382 q14,-8 28,0" stroke="#e8c4a0" stroke-width="8" stroke-linecap="round" fill="none"/>${eConf(16,9)}
+   <rect x="34" y="40" width="252" height="70" rx="10" fill="rgba(0,0,0,.6)" stroke="#ffd56a" stroke-width="2"/><text x="160" y="70" text-anchor="middle" font-size="12" letter-spacing="4" fill="#ffd56a">NEXT STAGE</text><text x="160" y="98" text-anchor="middle" font-size="22" font-weight="900" fill="#fff">불의 고리</text>`)};
+Object.assign(EART,EARTH);
+ENDS.fire={part:2,hard:1,n:'불의 고리',tag:'HARD END',sc:[['fire1','지구 반대편','반대편 지각을 뚫는 순간 — 눈을 뜰 수 없을 만큼 하얀 빛이 터졌다.'],['fire2','???','빛이 걷히자 낯선 바다 위였다. 수평선 너머 화산이 연기를 뿜고 있었다.'],
+  ['fire3','다나카 요시','"일본 정부의 다나카 요시입니다. 불의 고리 아래 맨틀이 요동치고 있어요. 이대로면 열도가 바다에 가라앉습니다."'],['fire4','다나카 요시','"지각을 안정시킬 방법은 단 하나, 맨틀까지 시추해 압력을 빼는 것. 지구를 관통한 당신의 드릴만이 할 수 있습니다."'],
+  ['fire5','나','"좋아(よし)! 다시 파 보자." 두 나라 시추팀이 손을 맞잡았다. 다음 무대는 불의 고리.']]};
+ENDK.splice(0,ENDK.length,...Object.keys(ENDS));
+const endScs=k=>{const E=ENDS[k];return E.part===1&&S.mode==='hard'?[...E.sc,['hrec','하드 모드','남들보다 몇 배 험한 길을 지나 지구 중심에 닿았다. 하드 모드 1부 돌파 기록이 남았다.']]:E.sc;};
+
 const ENDP=p=>ENDK.filter(k=>ENDS[k].part===p);
 // which ending: scholar path (relics + fossils) -> TRUE, investor path (investment rounds) -> HAPPY, neither -> BAD
 function endScores(){const sch=relicCount()/RELICS.length+FOSSILS.filter(f=>fosDone(f.id)).length/FOSSILS.length,ty=Object.values(S.ir||{}).reduce((a,b)=>a+b,0)/(S.part===2?60:35);return {sch,ty};}
-function endPick(){const {sch,ty}=endScores(),p=S.part===2?2:1,K=p===1?['p1bad','p1true','p1happy']:['doom','record','rich'];if(sch>=.5&&sch>=ty)return K[1];if(ty>=.5)return K[2];return K[0];}
+function endPick(){if(S.part===2&&S.mode==='hard')return 'fire';const {sch,ty}=endScores(),p=S.part===2?2:1,K=p===1?['p1bad','p1true','p1happy']:['doom','record','rich'];if(sch>=.5&&sch>=ty)return K[1];if(ty>=.5)return K[2];return K[0];}
+function replayEnding(k){if(!ENDS[k])return;endCur=k;endI=0;$('#ending').hidden=false;$('#eArtE').innerHTML='';endMusic(ENDS[k].tag);endScene();}
 function openEnding(k){S.ends=S.ends||[];const auto=!k;if(!k)k=endPick();
   endCur=k;endI=0;if(!S.ends.includes(k))S.ends.push(k);S.endDone=true;if(auto){recordRun(k);if(ENDS[k].part===2&&S.mode==='normal')S.hardOK=true;}save();$('#ending').hidden=false;$('#eArtE').innerHTML='';endMusic(ENDS[k].tag);endScene();}
 function endScene(){const E=ENDS[endCur];
-  if(endI>=E.sc.length){const got=S.ends.length,p1=E.part===1,{sch,ty}=endScores();
+  const SC=endScs(endCur);if(endI>=SC.length){const got=S.ends.length,p1=E.part===1,{sch,ty}=endScores();
     clearInterval(endType.t);$('#eArtE').classList.add('esum');$('#eDots').innerHTML='';$('#eArtE').innerHTML=`<div class="endsum"><div class="etag">${p1?'1부':'2부'} · ${E.tag}</div><h2>${E.n}</h2><p>엔딩 수집 ${got}/${ENDK.length}</p>
       ${[1,2].map(pp=>`<div class="elist"><b style="grid-column:1/-1;font-size:12px;color:var(--mute)">${pp}부 · ${pp===1?'지구 중심':'지구 반대편'}</b>${ENDP(pp).map(x=>`<button type="button" class="${S.ends.includes(x)?'seen':''}" data-end="${x}" ${S.ends.includes(x)?'':'disabled'}><b>${ENDS[x].tag}</b>${S.ends.includes(x)?ENDS[x].n:'???'}</button>`).join('')}</div>`).join('')}
-      <p class="sub">엔딩은 플레이 방식으로 정해져요 · <b>TRUE</b>: 유물·화석을 많이 모으면(조건 달성 ${Math.round(Math.min(1,sch/.5)*100)}%) · <b>HAPPY</b>: 투자 라운드를 많이 받으면(조건 달성 ${Math.round(Math.min(1,ty/.5)*100)}%) · <b>BAD</b>: 둘 다 부족하면</p>
-      ${p1?`<button class="primary" type="button" id="endP2" style="width:100%;margin:6px 0">2부 시작 · 지구 반대편(12,742km)으로</button>`:(S.mode==='normal'?'<p class="sub" style="color:#7bd88f">보통 모드 1·2부 완주! 타이틀에서 하드 모드가 열렸어요.</p>':'')}
+      <p class="sub">하드 모드 2부는 단 하나의 엔딩 <b>HARD END · 불의 고리</b>로 이어져요. 보통 모드 엔딩은 플레이 방식으로 정해져요 · <b>TRUE</b>: 유물·화석을 많이 모으면(조건 달성 ${Math.round(Math.min(1,sch/.5)*100)}%) · <b>HAPPY</b>: 투자 라운드를 많이 받으면(조건 달성 ${Math.round(Math.min(1,ty/.5)*100)}%) · <b>BAD</b>: 둘 다 부족하면</p>
+      ${p1?`<button class="primary" type="button" id="endP2" style="width:100%;margin:6px 0">2부 시작 · 지구 반대편(12,742km)으로</button>`:(E.hard?'<p class="sub" style="color:#ff9a7a">하드 모드 완주! 다음 무대 「불의 고리」는 곧 이어집니다.</p>':S.mode==='normal'?'<p class="sub" style="color:#7bd88f">보통 모드 1·2부 완주! 타이틀에서 하드 모드가 열렸어요.</p>':'')}
       ${S.lastRec&&S.lastRec.end===endCur?`<div class="rnow" style="width:100%"><span>${escH(S.lastRec.name)} · ${MODES[S.lastRec.mode].n} 모드 · ${S.lastRec.days}일 만에 완주</span><b>${S.lastRec.score.toLocaleString('ko-KR')}점</b></div>`:''}
       <div class="ebtns"><button class="primary" type="button" id="endNew">타이틀로</button><button class="ghost" type="button" id="endClose">계속 둘러보기</button></div></div>`;
     $('#eWho').textContent='엔딩';$('#eText').textContent=`${E.tag} · ${E.n}`;$('#eNext').textContent='';return;}
-  const [a,who,t]=E.sc[endI],box=$('#eArtE');box.classList.remove('esum');box.querySelectorAll('.elayer.out').forEach(x=>x.remove());const old=box.querySelector('.elayer'),L=document.createElement('div');L.className='elayer';L.innerHTML=EART[a]();box.appendChild(L);
+  const [a,who,t]=SC[endI],box=$('#eArtE');box.classList.remove('esum');box.querySelectorAll('.elayer.out').forEach(x=>x.remove());const old=box.querySelector('.elayer'),L=document.createElement('div');L.className='elayer';L.innerHTML=EART[a]();box.appendChild(L);
   if(old){old.classList.add('out');setTimeout(()=>old.remove(),950);}if(!old&&!box.querySelector('.ebar'))box.insertAdjacentHTML('beforeend','<i class="ebar t"></i><i class="ebar b"></i>');
   $('#eWho').textContent=who;endType(t);
-  $('#eDots').innerHTML=E.sc.map((_,i)=>`<i class="${i<=endI?'f':''}"></i>`).join('');$('#eNext').textContent='탭하여 계속 ▸';}
+  $('#eDots').innerHTML=SC.map((_,i)=>`<i class="${i<=endI?'f':''}"></i>`).join('');$('#eNext').textContent='탭하여 계속 ▸';}
 // caption types out; the first tap finishes the line, the next one moves on
 function endType(t){clearInterval(endType.t);const el=$('#eText');let i=0;endType.full=t;endType.done=false;el.textContent='';endType.t=setInterval(()=>{i+=1;el.textContent=t.slice(0,i);if(i>=t.length){clearInterval(endType.t);endType.done=true;}},38);}
-$('#eBox').addEventListener('click',()=>{if(!endCur||endI>=ENDS[endCur].sc.length)return;if(!endType.done){clearInterval(endType.t);$('#eText').textContent=endType.full;endType.done=true;return;}endI++;endScene();});
-$('#eSkip').addEventListener('click',()=>{if(endCur){endI=ENDS[endCur].sc.length;endScene();}});
+$('#eBox').addEventListener('click',()=>{if(!endCur||endI>=endScs(endCur).length)return;if(!endType.done){clearInterval(endType.t);$('#eText').textContent=endType.full;endType.done=true;return;}endI++;endScene();});
+$('#eSkip').addEventListener('click',()=>{if(endCur){endI=endScs(endCur).length;endScene();}});
 $('#eArtE').addEventListener('click',e=>{const b=e.target.closest('[data-end]');if(b&&!b.disabled){endCur=b.dataset.end;endI=0;$('#eArtE').innerHTML='';endMusic(ENDS[endCur].tag);endScene();return;}
   if(e.target.closest('#endClose')){$('#ending').hidden=true;endMusicStop();return;}
   if(e.target.closest('#endNew')){$('#ending').hidden=true;endMusicStop();openTitleModes();}
@@ -5701,7 +5758,7 @@ let mapInfoKey='',liveKey='',liveT=0,pressing=false;
 addEventListener('pointerdown',()=>pressing=true,true);addEventListener('pointerup',()=>setTimeout(()=>pressing=false,60),true);addEventListener('pointercancel',()=>pressing=false,true);
 function liveRefresh(dt){liveT-=dt;if(liveT>0||pressing)return;liveT=.4;
   if(view==='store'){const k='store'+Math.floor(S.money)+JSON.stringify(S.res)+S.dl;if(k!==liveKey){liveKey=k;renderShop();}return;}
-  if(view==='shop'){const k='dex'+relicCount()+JSON.stringify(S.relic)+JSON.stringify(S.fos||{})+hasMuseum();if(k!==liveKey){liveKey=k;renderDex();}return;}
+  if(view==='shop'){const k='dex'+(S.ends||[]).join()+relicCount()+JSON.stringify(S.relic)+JSON.stringify(S.fos||{})+hasMuseum();if(k!==liveKey){liveKey=k;renderDex();}return;}
   if(view!=='craft'&&view!=='land')return;
   const key=view+JSON.stringify(S.res)+Math.floor(S.money/(view==='store'?1:10))+JSON.stringify(S.parts)+S.dl+relicCount();if(key===liveKey)return;liveKey=key;
   if(view==='craft')renderCraft(true);else landAfford();}
