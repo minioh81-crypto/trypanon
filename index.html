@@ -43,9 +43,9 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;
   padding-top:calc(env(safe-area-inset-top,0px) + 10px);padding-bottom:10px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:baseline;gap:8px;min-width:0;flex:0 1 auto;overflow:hidden;white-space:nowrap}
+.brand{display:grid;grid-template-columns:auto auto;align-items:baseline;column-gap:8px;row-gap:2px;min-width:0;flex:0 1 auto;overflow:hidden;white-space:nowrap}
 .brand b{font-family:var(--f-latin);font-weight:700;font-size:clamp(14px,4.4vw,20px);letter-spacing:clamp(.06em,1.2vw,.16em);white-space:nowrap;color:var(--amber)}
-.brand span{font-family:var(--f-kr);font-size:13px;color:var(--mute);letter-spacing:.04em}.runb{font-style:normal;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(123,216,143,.16);color:#9fe0ad;border:1px solid rgba(123,216,143,.4);align-self:center;white-space:nowrap}.runb.hard{background:rgba(255,120,90,.16);color:#ffab92;border-color:rgba(255,120,90,.45)}
+.brand span{font-family:var(--f-kr);font-size:13px;color:var(--mute);letter-spacing:.04em}.runb{grid-column:1/-1;justify-self:start;font-style:normal;font-size:10.5px;font-weight:700;line-height:1;padding:3px 7px;border-radius:999px;background:rgba(123,216,143,.16);color:#9fe0ad;border:1px solid rgba(123,216,143,.4);white-space:nowrap}.runb.hard{background:rgba(255,120,90,.16);color:#ffab92;border-color:rgba(255,120,90,.45)}
 .money{font-family:var(--f-num);font-weight:600;font-size:clamp(13px,4vw,16px);white-space:nowrap;flex:none;color:var(--amber2);font-variant-numeric:tabular-nums}
 
 .view{flex:1;min-height:0;display:flex;flex-direction:column}
@@ -696,7 +696,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v124 · 2026-11-07</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v125 · 2026-11-07</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -6166,7 +6166,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=124;
+const GVER=125;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
@@ -6220,7 +6220,7 @@ function hud(){
   {const m=$('#money'),full=won(S.money),t=S.money>=1e8?'₩'+(S.money>=1e10?Math.floor(S.money/1e8).toLocaleString('ko-KR'):String(+(S.money/1e8).toFixed(2)))+'억':S.money>=1e7?'₩'+Math.floor(S.money/1e4).toLocaleString('ko-KR')+'만':full;if(m.textContent!==t){m.textContent=t;m.title=full;}}
   $('#expBadge').hidden=!S.ex.active;
   if(view==='map'){const ex_=S.ex.active?regById(S.ex.active):null;
-    const k=`<span class="mchip"><b class="modechip ${S.mode==='hard'?'hard':''}">${MD().n} ${S.part===2?2:1}부 · ${S.ng||1}회차</b></span><span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${lvGap()?` · <em>숙련 부족 ×${lvK().toFixed(2)}</em>`:''}</span>`+(ex_?(()=>{const w=wxOf(ex_.id),y=Math.round(wxY(w));return `<span class="mchip cool" title="원정지 날씨: ${wxFx(w)}"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}${rbOn()?`<span class="wxs good">🌈 무지개 +${RBY()}%</span>`:`<span class="wxs ${y>0?'good':y<0?'bad':''}">${w.ic} ${w.n}${y?` ${y>0?'+':''}${y}%`:''}</span>`}</span>`;})():'<span class="mchip dim">진행 중인 원정 없음</span>')+(rbOn()?`<span class="mchip rbc"><b>🌈 무지개</b> ${rbFx()}</span>`:'');
+    const k=`<span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${lvGap()?` · <em>숙련 부족 ×${lvK().toFixed(2)}</em>`:''}</span>`+(ex_?(()=>{const w=wxOf(ex_.id),y=Math.round(wxY(w));return `<span class="mchip cool" title="원정지 날씨: ${wxFx(w)}"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}${rbOn()?`<span class="wxs good">🌈 무지개 +${RBY()}%</span>`:`<span class="wxs ${y>0?'good':y<0?'bad':''}">${w.ic} ${w.n}${y?` ${y>0?'+':''}${y}%`:''}</span>`}</span>`;})():'<span class="mchip dim">진행 중인 원정 없음</span>')+(rbOn()?`<span class="mchip rbc"><b>🌈 무지개</b> ${rbFx()}</span>`:'');
     if(k!==mapInfoKey){mapInfoKey=k;$('#mapInfo').innerHTML=k;}}
   if(view==='bore'&&!exp){const m=S.depth,bm=boostM(),l=layerAt(m),sp=boreDps()/l.H;
     $('#bDepth').textContent=fmtD(m);updateGauge();
