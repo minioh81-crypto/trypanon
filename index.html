@@ -696,7 +696,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v125 · 2026-11-07</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v126 · 2026-11-07</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -837,6 +837,9 @@ try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&typeof d==='obje
 if(S.seg!=null){S.depth=Math.max(S.depth||0,Math.min(segTop(S.seg),14999));}if(S.tier!=null&&(S.dl||1)===1)S.dl=[1,6,16,26,36,46][S.tier]||1;S.dl=S.dl||1;delete S.tier;delete S.seg;delete S.hp;
 S.char=Object.assign({},DEFCHAR_,S.char||{});S.ex=Object.assign({active:null,dig:{}},S.ex||{});S.relic=S.relic||{};if(!S.bv5){for(const k in (S.ex.dig||{})){const g0=S.ex.dig[k];g0.i=Math.round(g0.i*2/5);g0.hp=0;}S.bv5=1;}if(!S.rv){for(const k in S.relic)S.relic[k]=0;S.rv=2;}if(S.rv===2){const mp=[0,1,2,4,5,6,7,8,12];for(const k in S.relic)S.relic[k]=mp[S.relic[k]]??0;S.rv=3;}if(S.rv===3){for(const k in S.relic){const g0=S.relic[k];S.relic[k]=Math.floor(g0/4)*6+g0%4;}S.rv=4;}S.own=S.own||[];S.inv=S.inv||{};S.invN=S.invN||[];S.st=Object.assign({exp:0,sea:0},S.st||{});
 S.mode=S.mode||'normal';S.part=S.part||1;
+// repair: an old bug (2부 started from an ending replay) could put a run into 2부 before it reached the centre. Such a run is really still in 1부:
+// keep its depth and continue 1부 — reaching 6,371km then opens 2부 properly (starting at the centre).
+if(S.part===2&&S.depth<CORE){S.part=1;S.done=false;S.endDone=false;S.fixP2=1;}
 {const C=S.char;if(C.sex==='tanuki'||C.sex==='turtle'){C.sex='m';C.hair=C.hair||'short';}if(C.hat==='pig')C.hat='none';
  if(S.land&&S.land.tiles){const back={turtle:2000,raccoon:2600};for(const k in S.land.tiles){const v=S.land.tiles[k];if(back[v]){delete S.land.tiles[k];S.money=(S.money||0)+back[v];}}}if(['bob','long','pig'].includes(C.hair))C.hair='tail';if(['helmet','explorer','beanie','cap','beret','bowler'].includes(C.hat))C.hat='none';if(C.outfit==='dino')C.outfit='track';if(C.ahair===undefined)C.ahair='none';}S.ng=S.ng||1;S.runStart=S.runStart||Date.now();applyMode();
 let saveLock=false;
@@ -1975,9 +1978,10 @@ function updateMap(){document.querySelectorAll('#map .rcnt').forEach(t=>{t.textC
 // Some iPhones (newer iOS with Reduce Motion / "Auto-Play Animated Images" off, or Low Power Mode) freeze SVG SMIL clocks.
 // If a visible SVG's clock stops advancing, drive it from script by seeking it every frame (seeking still redraws).
 const SMILW=new WeakMap();
+const SMIL_FORCE=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)||(/Safari/.test(navigator.userAgent)&&!/Chrome|Chromium|Android|CriOS|FxiOS|EdgiOS/.test(navigator.userAgent));
 function smilWatch(){const now=performance.now()/1000;
-  document.querySelectorAll('#card .art svg,#eArt svg,#mapSvg,#lgWrap svg,#lcel svg,.yiev svg,#wStage svg,#rpop svg').forEach(sv=>{if(!sv.getCurrentTime||!sv.isConnected||(sv.animationsPaused&&sv.animationsPaused())||!$('#ward').hidden&&sv.closest('#map'))return;const r=sv.getBoundingClientRect();if(!r.width||!r.height||(sv.id==='mapSvg'&&view!=='map'))return;
-    let st=SMILW.get(sv);if(!st){st={t0:now,c0:sv.getCurrentTime(),drive:false,base:sv.getCurrentTime()};SMILW.set(sv,st);return;}
+  document.querySelectorAll('#card .art svg,#eArt svg,#mapSvg,#lgWrap svg,#lcel svg,.yiev svg,#wStage svg,#rpop svg,#bWx svg,#yiChip svg,#evtBar svg').forEach(sv=>{if(!sv.getCurrentTime||!sv.isConnected||(sv.animationsPaused&&sv.animationsPaused())||!$('#ward').hidden&&sv.closest('#map'))return;const r=sv.getBoundingClientRect();if(!r.width||!r.height||(sv.id==='mapSvg'&&view!=='map'))return;
+    let st=SMILW.get(sv);if(!st){st={t0:now,c0:sv.getCurrentTime(),drive:SMIL_FORCE,base:sv.getCurrentTime()};SMILW.set(sv,st);if(!SMIL_FORCE)return;}
     if(!st.drive){if(now-st.t0>.6){if(sv.getCurrentTime()-st.c0<.15){st.drive=true;st.base=sv.getCurrentTime();st.t0=now;}else{st.t0=now;st.c0=sv.getCurrentTime();}}}
     if(st.drive){try{sv.setCurrentTime(st.base+(now-st.t0));}catch(e){}}});}
 (function smilLoop(){smilWatch();setTimeout(()=>requestAnimationFrame(smilLoop),33);})();
@@ -6039,8 +6043,9 @@ $('#eArtE').addEventListener('click',e=>{const pk=e.target.closest('[data-pick]'
   if(e.target.closest('#endNew')){$('#ending').hidden=true;endMusicStop();endLive=null;openTitleModes();}
   if(e.target.closest('#endP2')){endMusicStop();endLive=null;startPart2();}});
 // part 2: keep everything, open the higher part/drill caps and head for the far side
-function startPart2(){if(S.part===2)return;S.part=2;S.done=false;S.endDone=false;applyMode();buildGauge();save();$('#ending').hidden=true;show('bore');
+function startPart2(){if(S.part===2||S.depth<CORE-1)return;S.part=2;S.done=false;S.endDone=false;applyMode();buildGauge();save();$('#ending').hidden=true;show('bore');
   toast(`2부 시작! 지구 반대편 우루과이 앞바다까지 ${fmtD(CORE)} · 부품 Lv.${MAXLV} · 드릴 Lv.${DLOPEN}까지 열림`);}
+setTimeout(()=>{if(S.fixP2){delete S.fixP2;save();toast('이번 회차는 아직 지구 중심에 닿지 않아 1부로 되돌렸어요. 6,371km에 닿으면 2부가 중심에서 시작돼요',6000);}},2500);
 function endingTick(){if(S.done&&!S.endDone&&!titleOn&&$('#ending').hidden&&$('#story').hidden)openEnding();}
 
 // ---------------- name, score, modes ----------------
@@ -6166,7 +6171,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=125;
+const GVER=126;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
