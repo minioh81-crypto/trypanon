@@ -521,7 +521,7 @@ nav.tabs button{font-size:12px}
 .vglass svg{filter:drop-shadow(0 6px 6px rgba(0,0,0,.55))}.vit.no .vglass svg{opacity:.28}
 .vped{background:linear-gradient(#4a3a2a,#2e241a);border-top:3px solid var(--g);border-radius:0 0 6px 6px;padding:5px 6px 7px;display:grid;justify-items:center;gap:3px;text-align:center}
 .vped b{font-size:11.5px;color:#f2e6c8;line-height:1.2}.vit.no .vped b{color:var(--mute)}.vq{font-size:11px;color:var(--mute)}
-.roomart{border-radius:12px;overflow:hidden;line-height:0;border:1px solid var(--line)}.roomart svg{width:100%;height:auto}
+.roomart{border-radius:12px;overflow:hidden;line-height:0;border:1px solid var(--line);position:relative}.roomart .l3c,#fos3d canvas,.s3wrap canvas{touch-action:none}.rpan b{position:absolute;z-index:2;line-height:1;font-size:12px;font-weight:700;color:#fff;background:rgba(10,20,40,.5);border-radius:999px;padding:6px 9px;cursor:pointer;user-select:none;-webkit-user-select:none;text-shadow:0 1px 2px rgba(0,0,0,.5)}.rpan b:active{background:rgba(255,213,106,.6)}.rpan .pl{left:6px;top:50%;transform:translateY(-50%)}.rpan .pr{right:6px;top:50%;transform:translateY(-50%)}.rpan .pu{left:50%;top:6px;transform:translateX(-50%)}.rpan .pd{left:50%;bottom:6px;transform:translateX(-50%)}.rcomp{position:absolute;z-index:2;right:8px;top:8px;width:46px;height:46px;border-radius:50%;background:rgba(10,20,40,.45);pointer-events:none}.rcomp svg{width:100%;height:100%;display:block}.roomart svg{width:100%;height:auto}
 #v-map{position:relative}
 .yichip{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 104px);right:max(10px,calc(50% - 270px));z-index:45;box-shadow:0 3px 12px rgba(0,0,0,.45);font-size:13px!important;padding:6px 12px!important;border:1px solid #e0a040;background:linear-gradient(#a8261f,#5a0f0c);color:#ffe6a0;font-weight:800;font-size:12px;border-radius:999px;padding:4px 10px;white-space:nowrap;animation:yiPulse 1.6s ease-in-out infinite}
 @keyframes yiPulse{50%{box-shadow:0 0 12px rgba(255,190,80,.7)}}
@@ -696,7 +696,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v126 · 2026-11-07</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v127 · 2026-11-07</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -4411,7 +4411,7 @@ function l3Init(){if(L3.ren)return;L3.cv=document.createElement('canvas');L3.cv.
   const up=e=>{if(!dn)return;const tap=dn.mv<6&&!cv._pz;if(cv._pz&&e.pointerId!==dn.id)return;dn=null;e.stopPropagation();if(tap)l3Tap(e);};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',()=>{dn=null;});
   cv.addEventListener('click',e=>e.stopPropagation());
   cv.addEventListener('wheel',e=>{e.preventDefault();L3.dist=Math.max(2.5,Math.min(L3.N*3+4,L3.dist*(e.deltaY<0?.9:1.1)));},{passive:false});
-  pinchZoom(cv,()=>L3.dist,v=>{L3.dist=Math.max(2.5,Math.min(L3.N*3+4,v));},(dx,dy)=>{const k=L3.dist/(cv.clientHeight||400)*.9;l3Pan(-dx*k,-dy*k*1.4,1);});}
+  cv.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});pinchZoom(cv,()=>L3.dist,v=>{L3.dist=Math.max(2.5,Math.min(L3.N*3+4,v));},(dx,dy)=>{const k=L3.dist/(cv.clientHeight||400)*.9;l3Pan(-dx*k,-dy*k*1.4,1);});}
 function l3Tap(e){const r=L3.cv.getBoundingClientRect(),v=new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);L3.ray.setFromCamera(v,L3.cam);
   const hits=L3.ray.intersectObjects(L3.root.children,true),placing=!!(landSel||landPick);let o=null;for(const h of hits){let x=h.object;while(x&&!x.userData.tap)x=x.parent;if(x&&(!placing||x.userData.tap.k==='tile')){o=x.userData.tap;break;}}if(!o)return;
   const fake={target:{closest:s=>{if(o.k==='pet'&&s==='.petg')return {dataset:{pet:o.v}};if(o.k==='me'&&s==='.mech')return {};if((o.k==='tile'&&o.own||o.k==='item')&&s==='.it.own,.ii')return {dataset:{xy:o.v}};return null;}}};
@@ -5184,7 +5184,7 @@ function isoSort(L){const n=L.length,pre=L.map(()=>0),nx=L.map(()=>[]);
     done[k]=true;out.push(L[k]);for(const j of nx[k])pre[j]--;}return out;}
 // ---------------- 3D room (house interior) ----------------
 const R3={on:false,cv:null,ren:null,scene:null,cam:null,root:null,anims:[],walls:[],t:0,yaw:Math.PI/4,pitch:.72,dist:0,N:6,
-  home(){this.yaw=Math.PI/4;this.pitch=.72;this.dist=this.N*1.95+2.4;}};
+  home(){this.yaw=Math.PI/4;this.pitch=.72;this.dist=this.N*1.95+2.4;this.tx=0;this.tz=0;}};
 // furniture models: local footprint w (x) by d (z), centred at origin, front faces +z
 function robot3(){const P=(c,o)=>new THREE.MeshPhongMaterial(Object.assign({color:c,shininess:100,specular:'#aaaaaa'},o||{})),g=new THREE.Group();
   const b=new THREE.Mesh(new THREE.CylinderGeometry(.17,.17,.07,40),P('#f2f2f0'));b.position.y=.045;b.castShadow=true;g.add(b);
@@ -5374,7 +5374,8 @@ function r3Init(){if(R3.ren)return;R3.cv=document.createElement('canvas');R3.cv.
   cv.addEventListener('pointermove',e=>{if(cv._pz){if(dn)dn.mv=99;return;}if(!dn||e.pointerId!==dn.id)return;const dx=e.clientX-dn.x,dy=e.clientY-dn.y;dn.mv=Math.max(dn.mv,Math.hypot(dx,dy));R3.yaw=dn.yaw-dx*.008;R3.pitch=Math.max(.08,Math.min(1.5,dn.pitch+dy*.006));e.preventDefault();e.stopPropagation();});
   cv.addEventListener('pointerup',e=>{if(!dn)return;if(cv._pz&&e.pointerId!==dn.id)return;const tap=dn.mv<6&&!cv._pz;dn=null;e.stopPropagation();if(tap)r3Tap(e);});cv.addEventListener('pointercancel',()=>{dn=null;});cv.addEventListener('click',e=>e.stopPropagation());
   cv.addEventListener('wheel',e=>{e.preventDefault();R3.dist=Math.max(2.5,Math.min(R3.N*3+4,R3.dist*(e.deltaY<0?.9:1.1)));},{passive:false});
-  pinchZoom(cv,()=>R3.dist,v=>{R3.dist=Math.max(2.5,Math.min(R3.N*3+4,v));});}
+  pinchZoom(cv,()=>R3.dist,v=>{R3.dist=Math.max(2.5,Math.min(R3.N*3+4,v));},(dx,dy)=>{const k=R3.dist/(cv.clientHeight||400)*.9;r3Pan(-dx*k,-dy*k*1.4,1);});
+  cv.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});}
 function r3Tap(e){const r=R3.cv.getBoundingClientRect(),v=new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);R3.ray.setFromCamera(v,R3.cam);
   const hits=R3.ray.intersectObjects(R3.root.children,true);let o=null;for(const h of hits){let x=h.object;if(!x.visible)continue;let hid=false;for(let p=x;p;p=p.parent)if(p.visible===false)hid=true;if(hid)continue;while(x&&!x.userData.tap)x=x.parent;if(x){o=x.userData.tap;break;}}if(!o)return;
   if(roomPick==='wall'){if(o.k==='edge')wallTap(o.v);else if(o.k==='ft')tagTap(...o.v.split(',').map(Number));return;}
@@ -5461,11 +5462,19 @@ function r3Build(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()
          else if(R.cell[0]!==home[0]||R.cell[1]!==home[1]){R.go(home);rest=.2;}
          else{crumbs.forEach(q=>root.remove(q.m));rest=10;spawn();}});}}}
 }
-function r3Mount(){const a=$('#roomArt');if(!a)return;r3Init();a.innerHTML='';a.appendChild(R3.cv);R3.on=true;r3Build();r3Size();}
+function r3Mount(){const a=$('#roomArt');if(!a)return;r3Init();a.innerHTML='';a.appendChild(R3.cv);
+  a.insertAdjacentHTML('beforeend',`<div class="rpan"><b class="pl" data-rp="-1,0" title="왼쪽으로">◀</b><b class="pr" data-rp="1,0" title="오른쪽으로">▶</b><b class="pu" data-rp="0,-1" title="안쪽으로">▲</b><b class="pd" data-rp="0,1" title="앞쪽으로">▼</b></div>
+   <div class="rcomp" title="방위"><svg viewBox="-23 -23 46 46"><g id="rCompR"><path d="M0,-11 L3.6,0 L0,-2 L-3.6,0Z" fill="#ff5a4a"/><path d="M0,11 L3.6,0 L0,2 L-3.6,0Z" fill="#e8eef2"/></g>${['북','동','남','서'].map((t,i)=>`<text class="rcl" data-i="${i}" text-anchor="middle" dominant-baseline="central" font-size="${i?7:8}" font-weight="900" fill="${i?'#cfd8de':'#ff8a7a'}">${t}</text>`).join('')}</svg></div>`);
+  R3.tx=R3.tx||0;R3.tz=R3.tz||0;R3.on=true;r3Build();r3Size();}
+// move the room view; the target stays over the floor
+function r3Pan(sx,sy,step=1){const r=[Math.cos(R3.yaw),-Math.sin(R3.yaw)],f=[-Math.sin(R3.yaw),-Math.cos(R3.yaw)],h=(R3.N||6)/2;
+  R3.tx=Math.max(-h,Math.min(h,(R3.tx||0)+(r[0]*sx-f[0]*sy)*step));R3.tz=Math.max(-h,Math.min(h,(R3.tz||0)+(r[1]*sx-f[1]*sy)*step));}
+document.addEventListener('click',e=>{const b=e.target.closest('#roomArt [data-rp]');if(!b)return;const [a,c]=b.dataset.rp.split(',').map(Number);r3Pan(a,c,Math.max(.8,R3.dist/10));});
 function r3Size(){const a=$('#roomArt');if(!a||!R3.ren)return;R3.cv.style.width='100%';const W=Math.round(R3.cv.getBoundingClientRect().width||a.clientWidth||320);if(W<50){requestAnimationFrame(r3Size);return;}const H=Math.round(Math.min(520,Math.max(260,W*.78)));R3.ren.setPixelRatio(Math.min(2,window.devicePixelRatio||1));R3.ren.setSize(W,H,false);R3.cv.style.height=H+'px';R3.cam.aspect=W/H;R3.cam.updateProjectionMatrix();R3.sizedW=W;}
 if(window.ResizeObserver)new ResizeObserver(()=>{if(R3.on&&R3.cv&&R3.cv.isConnected&&Math.abs((R3.cv.getBoundingClientRect().width|0)-(R3.sizedW|0))>2)r3Size();}).observe(document.documentElement);
 window.addEventListener('resize',()=>{if(R3.on)r3Size();});
-function r3Tick(dt){if(!R3.on||!R3.cv.isConnected)return;R3.t+=dt;const t=R3.t,cp=Math.cos(R3.pitch),c=R3.cam;c.position.set(Math.sin(R3.yaw)*cp*R3.dist,Math.sin(R3.pitch)*R3.dist+.6,Math.cos(R3.yaw)*cp*R3.dist);c.lookAt(0,.6,0);
+function r3Tick(dt){if(!R3.on||!R3.cv.isConnected)return;R3.t+=dt;const t=R3.t,cp=Math.cos(R3.pitch),c=R3.cam;const tx=R3.tx||0,tz=R3.tz||0;c.position.set(tx+Math.sin(R3.yaw)*cp*R3.dist,Math.sin(R3.pitch)*R3.dist+.6,tz+Math.cos(R3.yaw)*cp*R3.dist);c.lookAt(tx,.6,tz);
+  {const cr=document.getElementById('rCompR'),a=(R3.yaw*180/Math.PI).toFixed(1);if(cr&&cr.dataset.a!==a){cr.dataset.a=a;cr.setAttribute('transform',`rotate(${a})`);cr.parentNode.querySelectorAll('.rcl').forEach(t=>{const th=R3.yaw+t.dataset.i*Math.PI/2;t.setAttribute('x',(Math.sin(th)*16.5).toFixed(1));t.setAttribute('y',(-Math.cos(th)*16.5).toFixed(1));});}}
   for(const w of R3.walls){const [nx,nz]=w.userData.n;w.visible=!(c.position.x*nx+c.position.z*nz>R3.N/2-.2);}for(const f of R3.anims)f(t);R3.ren.render(R3.scene,c);}
 function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()?.[1]||'house_s';
   const WL={house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee',house_d:'#f2efe8',house_y:'#f1e6cc'}[h],FL={house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a',house_d:'#b98a5a',house_y:'#a87a4a'}[h];
@@ -5740,7 +5749,7 @@ function crowd(y,n,seed=3){return Array.from({length:n},(_,i)=>{const x=8+i*(304
   return `<g>${EA('translate',`0 0;0 ${-1.5-hsh(i,seed+2)*2};0 0`,(.6+hsh(i,seed+4)*.6).toFixed(2))}<circle cx="${x}" cy="${y-h}" r="5.4" fill="#e8c4a0"/><path d="M${x-6},${y} V${y-h+8} Q${x},${y-h+3} ${x+6},${y-h+8} V${y}Z" fill="${c}"/>${hsh(i,seed+5)>.6?`<path d="M${x+5},${y-h+10} l6,-10" stroke="${c}" stroke-width="3" stroke-linecap="round"/>`:''}</g>`;}).join('');}
 const flashes=n=>Array.from({length:n},(_,i)=>`<circle cx="${(20+hsh(i,31)*280).toFixed(0)}" cy="${(90+hsh(i,33)*40).toFixed(0)}" r="6" fill="#fff"><animate attributeName="opacity" values="0;0;1;0" dur="${(1.2+hsh(i,35)*1.4).toFixed(1)}s" begin="${(hsh(i,37)*2).toFixed(1)}s" repeatCount="indefinite"/></circle>`).join('');
 // ---------------- endings (portrait illustrations 320x460, cross-fade + slow push-in, typed captions, procedural score) ----------------
-const SVP=inner=>{const u='s'+(++UID);return `<svg viewBox="0 0 320 460" preserveAspectRatio="xMidYMax slice" role="img" aria-hidden="true">${inner(u)}</svg>`;};
+const SVP=inner=>{const u='s'+(++UID);return `<svg viewBox="0 0 320 460" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true">${inner(u)}</svg>`;};
 const eLG=(id,stops,x2=0,y2=1)=>`<linearGradient id="${id}" x1="0" y1="0" x2="${x2}" y2="${y2}">${stops.map((c,i)=>`<stop offset="${(i/(stops.length-1)).toFixed(2)}" stop-color="${c}"/>`).join('')}</linearGradient>`;
 const eRG=(id,stops,cx=.5,cy=.5,r=.6)=>`<radialGradient id="${id}" cx="${cx}" cy="${cy}" r="${r}">${stops.map(([o,c,a])=>`<stop offset="${o}" stop-color="${c}" stop-opacity="${a??1}"/>`).join('')}</radialGradient>`;
 const eBlur=(id,s)=>`<filter id="${id}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="${s}"/></filter>`;
@@ -5756,6 +5765,18 @@ const eCity=(y,col,seed,win)=>{let d=`M0,460 V${y}`,w='';let x=0,i=0;while(x<320
 // pets: the first animal living on the plot or in the house follows the hero into every ending
 const ePetK=()=>{const L=S.land||{},ids=[...Object.values(L.tiles||{}),...Object.keys(L.furn||{}).filter(k=>L.furn[k])].map(bid);return ids.find(k=>PETK.includes(k)&&ANS[k])||null;};
 const ePet=(x,y,h,ex='')=>{const k=ePetK();if(!k)return '';return `<g>${EA('translate','0 0;0 -5;0 0','.9')}${fig(Object.assign({},ME(),{sex:k,outfit:'none',hat:'none',item:'none'}),x,y,h,{expr:ex,noShadow:true})}</g>`;};
+// a small cheering person for ending crowds: hair, face with eyes + smile, suit or casual top with arms (cheer / clap / wave), legs and shoes
+const ePerson=(x,y,s,o={})=>{const i=o.i||0,sk=['#f2cfae','#e8b890','#f6d8bc','#d8a47a'][i%4],hc=['#2a1a10','#4a2e1a','#121014','#6a4a2a','#8a8a8a'][i%5],tc=o.top||['#2a3a5a','#5a2a2a','#2a4a3a','#3a3a3a','#7a5a2a','#1e5aa8'][i%6],pc=o.pants||'#2a2a32',pose=o.pose||['cheer','clap','wave'][i%3],d=(.5+((i*37)%10)/20).toFixed(2);
+  const arm=(sd)=>{const sx=sd*9;if(pose==='cheer')return `<g>${EA('rotate',`${sd*-6} ${sx} -30;${sd*8} ${sx} -30;${sd*-6} ${sx} -30`,d)}<path d="M${sx},-30 L${sx+sd*6},-44 L${sx+sd*4},-56" stroke="${tc}" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${sx+sd*4}" cy="-58" r="3" fill="${sk}"/></g>`;
+    if(pose==='clap')return `<g>${EA('rotate',`0 ${sx} -30;${sd*-12} ${sx} -30;0 ${sx} -30`,(+d*.6).toFixed(2))}<path d="M${sx},-30 L${sx+sd*3},-20 L${sd*2},-26" stroke="${tc}" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${sd*2}" cy="-27" r="2.8" fill="${sk}"/></g>`;
+    return sd>0?`<g>${EA('rotate',`-10 ${sx} -30;20 ${sx} -30;-10 ${sx} -30`,d)}<path d="M${sx},-30 L${sx+8},-40 L${sx+8},-52" stroke="${tc}" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${sx+8}" cy="-54" r="3" fill="${sk}"/></g>`:`<path d="M${sx},-30 L${sx-3},-18" stroke="${tc}" stroke-width="5" stroke-linecap="round"/><circle cx="${sx-3}" cy="-16" r="2.6" fill="${sk}"/>`;};
+  return `<g transform="translate(${x},${y}) scale(${s})"><g>${EA('translate',`0 0;0 -2;0 0`,(+d*.9).toFixed(2))}
+    <path d="M-5,-12 V0 M5,-12 V0" stroke="${pc}" stroke-width="5" stroke-linecap="round"/><path d="M-8,1 H-2 M2,1 H8" stroke="#1a1a1e" stroke-width="3" stroke-linecap="round"/>
+    <path d="M-10,-12 Q-11,-30 -8,-34 Q0,-38 8,-34 Q11,-30 10,-12Z" fill="${tc}"/>${o.suit?`<path d="M-3,-34 L0,-26 L3,-34Z" fill="#f4f2ee"/><path d="M0,-32 L-1.6,-22 L0,-18 L1.6,-22Z" fill="${['#c8302a','#e8b030','#2a6ab8'][i%3]}"/>`:''}
+    ${arm(-1)}${arm(1)}<rect x="-2.5" y="-39" width="5" height="5" fill="${sk}"/>
+    <circle cy="-47" r="9" fill="${sk}"/><path d="M-9,-48 Q-9,-58 0,-58 Q9,-58 9,-48 Q6,-53 0,-53 Q-5,-53 -9,-48Z" fill="${hc}"/>
+    <circle cx="-3.2" cy="-46.5" r="1.3" fill="#1a1010"/><circle cx="3.2" cy="-46.5" r="1.3" fill="#1a1010"/><path d="M-3.4,-42.5 Q0,-39.2 3.4,-42.5" stroke="#8a2a2a" stroke-width="1.3" fill="#fff"/><circle cx="-5.6" cy="-43.6" r="1.5" fill="#f08a8a" opacity=".5"/><circle cx="5.6" cy="-43.6" r="1.5" fill="#f08a8a" opacity=".5"/>
+    ${o.flag?`<path d="M${pose==='wave'?17:13},-54 V-74" stroke="#7a5a3c" stroke-width="1.4"/><rect x="${pose==='wave'?17:13}" y="-74" width="14" height="9" fill="#fff" stroke="#ccc" stroke-width=".4"/><circle cx="${pose==='wave'?24:20}" cy="-69.5" r="2.6" fill="#c8302a"/><path d="M${pose==='wave'?21.4:17.4},-69.5 a2.6,2.6 0 0,0 5.2,0Z" fill="#1e5aa8"/>`:''}</g></g>`;};
 const eHero=(x,y,h,ex='',o={})=>(y=o.free?y:Math.min(y,424),`<ellipse cx="${x}" cy="${y-2}" rx="${h*.24}" ry="${h*.035}" fill="rgba(0,0,0,.35)"/>${fig(ME(),x,y,h,Object.assign({expr:ex,noShadow:true},o))}${o.noPet?'':ePet(x+h*.42,y,h*.5,ex)}`);
 const eSay=(x,y,t,w)=>`<g transform="translate(${x},${y})"><rect x="${-w/2}" y="-15" width="${w}" height="30" rx="15" fill="#fff" stroke="#2b211c" stroke-width="1.6"/><path d="M-8,14 L0,26 L6,14Z" fill="#fff" stroke="#2b211c" stroke-width="1.6"/><path d="M-9,13 H7" stroke="#fff" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13" font-weight="900" fill="#2b211c">${t}</text></g>`;
 const eTitle=(y,t,col='#ffd56a',sz=15)=>`<text x="160" y="${y<200?Math.max(y,72):Math.min(y,412)}" text-anchor="middle" font-size="${sz}" font-weight="900" fill="${col}" stroke="rgba(0,0,0,.55)" stroke-width="3" paint-order="stroke" letter-spacing="1">${t}</text>`;
@@ -5823,12 +5844,25 @@ const EART={
    <circle cx="160" cy="310" r="6" fill="#7cf0ff"><animate attributeName="opacity" values="1;.2;1" dur=".8s" repeatCount="indefinite"/></circle><text x="172" y="322" font-size="11" font-weight="800" fill="#7cf0ff">우루과이 앞바다</text>
    <path d="M0,370 H320 V460 H0Z" fill="#0c1424"/><path d="M40,370 L100,330 H220 L280,370Z" fill="#7cf0ff" opacity=".12"/>${eHero(104,446,140,'happy')}${eTitle(40,'다음 목표 · 12,742km','#7cf0ff',16)}`),
  // ===== 1부 HAPPY · 지열 발전소 =====
- p1h1:()=>SVP(u=>`${eLG(u+'k',['#6fb8ec','#bfe4f8','#fff2d8'])}<rect width="320" height="460" fill="url(#${u}k)"/><circle cx="262" cy="70" r="26" fill="#fff2a0"/>
-   <path d="M0,250 L60,190 L110,230 L170,170 L230,226 L290,180 L320,200 V460 H0Z" fill="#7aa8c8" opacity=".7"/><path d="M0,290 L70,240 L140,280 L210,230 L320,270 V460 H0Z" fill="#5a9a5a"/>
-   ${[[70,286,70],[140,276,86],[210,286,70]].map(([x,y,h],i)=>`<path d="M${x-26},${y+60} Q${x-14},${y} ${x-20},${y-h+80} H${x+20} Q${x+14},${y} ${x+26},${y+60}Z" fill="#e8ecef" stroke="#8a949c" stroke-width="2"/><path d="M${x-20},${y-h+86} H${x+20}" stroke="#c8d0d6" stroke-width="3"/>
-     ${[0,1,2].map(k=>`<circle cx="${x}" cy="${y-h+70}" r="16" fill="#ffffff" opacity=".9"><animate attributeName="cy" values="${y-h+72};${y-h-60}" dur="3s" begin="${(k+i*.4).toFixed(1)}s" repeatCount="indefinite"/><animate attributeName="r" values="12;34" dur="3s" begin="${(k+i*.4).toFixed(1)}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".95;0" dur="3s" begin="${(k+i*.4).toFixed(1)}s" repeatCount="indefinite"/></circle>`).join('')}`).join('')}
-   <rect x="0" y="346" width="320" height="10" fill="#9aa4ac"/><rect x="236" y="300" width="70" height="46" fill="#f4f2ee" stroke="#8a949c"/><text x="271" y="328" text-anchor="middle" font-size="11" font-weight="900" fill="#b3261e">지열발전</text>
-   <path d="M0,370 H320 V460 H0Z" fill="#6aa850"/>${eHero(120,446,150,'happy')}${eTitle(40,'양구 · 세계 최대 지열 발전소','#1a3a5a',15)}`),
+ p1h1:()=>SVP(u=>{const tower=(x,b,h,w,i)=>{const t=b-h;return `<path d="M${x-w},${b} C${x-w*.55},${b-h*.45} ${x-w*.5},${t+h*.3} ${x-w*.62},${t} H${x+w*.62} C${x+w*.5},${t+h*.3} ${x+w*.55},${b-h*.45} ${x+w},${b}Z" fill="url(#${u}ct)" stroke="#7a848c" stroke-width="1.5"/>
+      <ellipse cx="${x}" cy="${t}" rx="${w*.62}" ry="4" fill="#9aa4ac"/><path d="M${x-w*.9},${b-10} H${x+w*.9}" stroke="#b8c0c6" stroke-width="2"/>${[0,1,2,3].map(k=>`<ellipse cx="${x}" cy="${t-4}" rx="14" ry="10" fill="#ffffff" opacity=".9"><animate attributeName="cy" values="${t-4};${t-90}" dur="4s" begin="${(k+i*.5).toFixed(1)}s" repeatCount="indefinite"/><animate attributeName="rx" values="${w*.5};${w*1.3}" dur="4s" begin="${(k+i*.5).toFixed(1)}s" repeatCount="indefinite"/><animate attributeName="ry" values="8;24" dur="4s" begin="${(k+i*.5).toFixed(1)}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".95;0" dur="4s" begin="${(k+i*.5).toFixed(1)}s" repeatCount="indefinite"/></ellipse>`).join('')}`;};
+   const pylon=(x,b,h)=>`<g stroke="#5a646c" stroke-width="1.6" fill="none"><path d="M${x-9},${b} L${x-2},${b-h} M${x+9},${b} L${x+2},${b-h} M${x-8},${b-8} L${x+6},${b-30} M${x+8},${b-8} L${x-6},${b-30} M${x-6},${b-30} L${x+4},${b-50} M${x+6},${b-30} L${x-4},${b-50} M${x-14},${b-h+8} H${x+14} M${x-10},${b-h+18} H${x+10}"/></g>`;
+   return `${eLG(u+'k',['#6fb8ec','#bfe4f8','#fff2d8'])}<linearGradient id="${u}ct" x1="0" x2="1"><stop offset="0" stop-color="#c9d0d5"/><stop offset=".45" stop-color="#f2f4f5"/><stop offset="1" stop-color="#aeb6bc"/></linearGradient>
+   <linearGradient id="${u}pp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f7"/><stop offset="1" stop-color="#9aa4ac"/></linearGradient>
+   <rect width="320" height="460" fill="url(#${u}k)"/><circle cx="270" cy="62" r="24" fill="#fff2a0"/>
+   <path d="M0,230 L60,176 L110,214 L170,160 L230,212 L290,170 L320,186 V460 H0Z" fill="#7aa8c8" opacity=".7"/><path d="M0,262 L70,222 L140,252 L210,214 L320,246 V460 H0Z" fill="#5a9a5a"/>
+   <rect x="0" y="300" width="320" height="70" fill="#b8b2a4"/>
+   ${tower(58,312,116,30,0)}${tower(126,312,96,25,1)}
+   ${pylon(300,300,96)}${pylon(268,302,70)}<path d="M266,236 Q290,246 302,208 M266,246 Q290,256 302,218 M270,236 Q240,250 214,262" stroke="#3a444c" stroke-width=".8" fill="none"/>
+   <g><rect x="160" y="236" width="104" height="70" fill="#eef0f1" stroke="#7a848c" stroke-width="1.5"/><path d="M160,236 L178,222 L196,236 L214,222 L232,236 L250,222 L264,236Z" fill="#c9d0d5" stroke="#7a848c"/>
+     ${[0,1,2,3,4,5].map(i=>`<rect x="${166+i*16}" y="246" width="11" height="14" fill="#ffd56a" opacity=".85"/>`).join('')}<rect x="164" y="270" width="96" height="16" fill="#1e5aa8"/><text x="212" y="282" text-anchor="middle" font-size="9.5" font-weight="900" fill="#fff">트리파논 지열발전소</text>
+     <rect x="200" y="288" width="22" height="18" fill="#7a848c"/><rect x="246" y="196" width="12" height="40" fill="#d8dde0" stroke="#7a848c"/><rect x="246" y="196" width="12" height="5" fill="#c8302a"/><circle cx="252" cy="194" r="2.4" fill="#ff3a2a"><animate attributeName="opacity" values="1;.1;1" dur="1.2s" repeatCount="indefinite"/></circle>
+     ${[0,1].map(k=>`<circle cx="252" cy="192" r="6" fill="#fff" opacity=".7"><animate attributeName="cy" values="192;140" dur="3s" begin="${k*1.5}s" repeatCount="indefinite"/><animate attributeName="r" values="5;16" dur="3s" begin="${k*1.5}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;0" dur="3s" begin="${k*1.5}s" repeatCount="indefinite"/></circle>`).join('')}</g>
+   <g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20,342 H40 V326 H60 V342 H96 V318 H112 V342 H150 V296 H160" stroke="#6a747c" stroke-width="9"/><path d="M20,342 H40 V326 H60 V342 H96 V318 H112 V342 H150 V296 H160" stroke="url(#${u}pp)" stroke-width="6.5"/>
+     <path d="M150,352 H178 V306" stroke="#6a747c" stroke-width="7"/><path d="M150,352 H178 V306" stroke="#d07a2a" stroke-width="4.5"/></g>
+   ${[[20,350],[150,358]].map(([x,y])=>`<rect x="${x-6}" y="${y-14}" width="12" height="16" fill="#8a949c"/><rect x="${x-9}" y="${y-18}" width="18" height="5" fill="#5a646c"/><circle cx="${x}" cy="${y-22}" r="5" fill="none" stroke="#c8302a" stroke-width="2.2"/><path d="M${x-5},${y-22} H${x+5} M${x},${y-27} V${y-17}" stroke="#c8302a" stroke-width="1.4"/>`).join('')}
+   <rect x="232" y="318" width="26" height="22" fill="#6a747c"/><path d="M234,322 h22 M234,328 h22 M234,334 h22" stroke="#4a545c"/><text x="245" y="314" text-anchor="middle" font-size="7" fill="#3a444c">⚡ 변전</text>
+   <path d="M0,370 H320 V460 H0Z" fill="#6aa850"/><path d="M0,370 H320" stroke="#4e8a3c" stroke-width="3"/>${eHero(120,446,150,'happy')}${eTitle(40,'양구 · 세계 최대 지열 발전소','#1a3a5a',15)}`;}),
  p1h2:()=>SVP(u=>`${eLG(u+'k',['#04060e','#0c1430','#1c2a4a'])}<rect width="320" height="460" fill="url(#${u}k)"/>${eStars(40,9,200)}
    ${[[80,90,'#ff6b8a'],[230,70,'#ffd56a'],[160,120,'#7cc8ff']].map(([x,y,c],i)=>`<g transform="translate(${x},${y})">${Array.from({length:14},(_,k)=>{const a=k/14*6.28;return `<circle r="2.4" fill="${c}"><animateMotion dur="2.2s" begin="${i*.7}s" repeatCount="indefinite" path="M0,0 L${(Math.cos(a)*46).toFixed(0)},${(Math.sin(a)*46+16).toFixed(0)}"/><animate attributeName="opacity" values="1;1;0" dur="2.2s" begin="${i*.7}s" repeatCount="indefinite"/></circle>`;}).join('')}</g>`).join('')}
    ${eCity(300,'#141c30',3,'#ffd56a')}${eCity(360,'#0c1222',8,'#ffe9a0')}<path d="M0,400 H320 V460 H0Z" fill="#080c16"/>${eHero(160,452,120,'happy')}${eTitle(40,'전기 요금 0원 · 에너지 독립','#ffd56a',15)}`),
@@ -5840,7 +5874,8 @@ const EART={
  p1h4:()=>SVP(u=>`${eLG(u+'k',['#2a2018','#3a2c20'])}<rect width="320" height="460" fill="url(#${u}k)"/>
    <rect x="30" y="40" width="260" height="140" rx="8" fill="#0e1418" stroke="#c9a54a" stroke-width="3"/><text x="160" y="84" text-anchor="middle" font-size="12" fill="#93a0a2" letter-spacing="2">NEXT PROJECT</text><text x="160" y="122" text-anchor="middle" font-size="24" font-weight="900" fill="#ffd56a">2부 · 지구 반대편</text><text x="160" y="152" text-anchor="middle" font-size="13" font-weight="800" fill="#7cf0ff">12,742km · 투자 확정</text>
    <path d="M20,300 H300 L320,340 H0Z" fill="#5a3a22"/><path d="M0,340 H320 V460 H0Z" fill="#1a120c"/>
-   ${[40,80,240,280].map((x,i)=>`<g transform="translate(${x},300)"><circle cy="-40" r="11" fill="#e8c4a0"/><path d="M-14,0 V-26 Q0,-34 14,-26 V0Z" fill="${['#2a2a3a','#3a2a2a','#2a3a3a','#3a3a2a'][i]}"/><g>${EA('rotate',`${i%2?-30:30} ${i%2?10:-10} -20;${i%2?10:-10} ${i%2?10:-10} -20;${i%2?-30:30} ${i%2?10:-10} -20`,'.4')}<path d="M${i%2?10:-10},-20 L${i%2?20:-20},-44" stroke="#e8c4a0" stroke-width="5" stroke-linecap="round"/></g></g>`).join('')}
+   ${[[28,300,.82,0],[64,298,.86,1],[100,300,.8,2],[220,300,.8,3],[256,298,.86,4],[292,300,.82,5]].map(([x,y,k,i])=>ePerson(x,y,k,{i,suit:1,pose:['cheer','clap','wave'][i%3],top:['#2a3446','#3a2a2a','#26343a','#3a3a3a','#2a2a40','#40302a'][i]})).join('')}
+   ${[[46,340,1.0,6],[86,342,1.04,7],[234,342,1.04,8],[274,340,1.0,9]].map(([x,y,k,i])=>ePerson(x,y,k,{i,suit:1,pose:i%2?'clap':'cheer',top:['#1e2a40','#40242a','#24343a','#383024'][i-6]})).join('')}
    ${eConf(24,7)}${eHero(160,444,150,'happy')}${eSay(160,216,'투자는 저희가!',140)}`),
  // ===== 2부 BAD · 지구 멸망 =====
  doom1:()=>SVP(u=>`<rect width="320" height="460" fill="#04060c"/>${eStars(50,3,460)}${eEarth(160,230,130,u,1)}
@@ -6002,6 +6037,9 @@ function endPick(){if(S.part===2&&S.mode==='hard')return 'fire';const {sch,ty}=e
 // endLive = the ending this run just reached (its summary offers 2부 / 새 회차); anything replayed from 도감 or the list is view-only with a single 닫기
 let endLive=null;
 function endSkipLbl(){$('#eSkip').textContent=endLive===endCur&&endCur?'건너뛰기':'닫기';}
+// tall boxes (phones) fill the frame and trim a little off the sides; wide or short boxes (laptops) show the whole picture with side bars
+function endFit(){const box=$('#eArtE');if(!box)return;const r=box.getBoundingClientRect();if(!r.width)return;const par=r.height/r.width>=460/320-.04?'xMidYMid slice':'xMidYMid meet';box.querySelectorAll('.elayer > svg').forEach(v=>v.setAttribute('preserveAspectRatio',par));}
+window.addEventListener('resize',()=>{if(!$('#ending').hidden)endFit();});
 function replayEnding(k){if(!ENDS[k])return;endLive=null;endCur=k;endI=0;$('#ending').hidden=false;$('#eArtE').innerHTML='';endMusic(ENDS[k].tag);endSkipLbl();endScene();}
 // end of a part: the player chooses the ending; TRUE / HAPPY need their play-style condition, BAD (keep drilling) is always open
 const ECHO={p1true:['🔬 학자의 길','내핵 시료를 채취해 과학에 바친다'],p1happy:['💼 사업가의 길','구멍에 지열 발전소를 세운다'],p1bad:['⛏ 멈추지 않는다','열기 따위 무시하고 그대로 판다'],
@@ -6030,7 +6068,7 @@ function endScene(){const E=ENDS[endCur];
          <button class="ghost" type="button" id="endClose">계속 둘러보기</button></div>`}</div>`;
     $('#eWho').textContent='엔딩';$('#eText').textContent=`${E.tag} · ${E.n}`;$('#eNext').textContent='';return;}
   $('#eBox').hidden=false;
-  const [a,who,t]=SC[endI],box=$('#eArtE');box.classList.remove('esum');box.querySelectorAll('.elayer.out').forEach(x=>x.remove());const old=box.querySelector('.elayer'),L=document.createElement('div');L.className='elayer';L.innerHTML=EART[a]();box.appendChild(L);
+  const [a,who,t]=SC[endI],box=$('#eArtE');box.classList.remove('esum');box.querySelectorAll('.elayer.out').forEach(x=>x.remove());const old=box.querySelector('.elayer'),L=document.createElement('div');L.className='elayer';L.innerHTML=EART[a]();box.appendChild(L);endFit();
   if(old){old.classList.add('out');setTimeout(()=>old.remove(),950);}if(!old&&!box.querySelector('.ebar'))box.insertAdjacentHTML('beforeend','<i class="ebar t"></i><i class="ebar b"></i>');
   $('#eWho').textContent=who;endType(t);
   $('#eDots').innerHTML=SC.map((_,i)=>`<i class="${i<=endI?'f':''}"></i>`).join('');$('#eNext').textContent='탭하여 계속 ▸';}
@@ -6171,7 +6209,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=126;
+const GVER=127;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
