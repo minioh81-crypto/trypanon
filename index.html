@@ -707,7 +707,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v131 · 2026-11-08</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v132 · 2026-11-08</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1201,13 +1201,13 @@ class Shaft{
     c.globalAlpha=1;
     if(this.banOn){const sk=stratumAt(absToDepth(Math.max(0,st.abs0))).k;if(this.curK&&sk!==this.curK)this.ban={k:sk,l:4.2};this.curK=sk;}
     if(this.ban&&this.ban.l>0){this.ban.l-=dt;const b2=this.ban,a=Math.min(1,b2.l*1.6,(4.2-b2.l)*4),sc=1+.12*Math.max(0,1-(4.2-b2.l)*3),nm=STK[b2.k][1],col=STK[b2.k][0],cy=Math.min(H-70,this.tipY+125),lx=this.labelX||12,cx2=(W+lx-8)/2;
-      c.save();c.globalAlpha=a;c.translate(cx2,cy);c.scale(sc,sc);const bw=Math.min(W-lx-4,340),bh2=78;
+      c.save();c.globalAlpha=a;c.translate(cx2,cy);c.scale(sc,sc);c.font="800 22px 'IBM Plex Sans KR',sans-serif";const w1=c.measureText(nm).width;c.font="500 11.5px 'IBM Plex Sans KR',sans-serif";const w2=c.measureText(STKD[b2.k]||'').width;const bw=Math.max(170,Math.min(W-lx-4,Math.max(w1,w2,86)+50)),bh2=70;
       c.fillStyle='rgba(10,8,6,.86)';c.beginPath();c.roundRect?c.roundRect(-bw/2,-bh2/2,bw,bh2,16):c.rect(-bw/2,-bh2/2,bw,bh2);c.fill();
       const gg=c.createLinearGradient(-bw/2,0,bw/2,0);gg.addColorStop(0,col);gg.addColorStop(1,'#ffe08a');c.strokeStyle=gg;c.lineWidth=3;c.stroke();
       c.fillStyle=col;c.fillRect(-bw/2+10,-bh2/2+10,12,bh2-20);c.strokeStyle='rgba(255,255,255,.6)';c.lineWidth=1;c.strokeRect(-bw/2+10,-bh2/2+10,12,bh2-20);
-      c.textAlign='left';c.fillStyle='#ffd56a';c.font="700 11px 'IBM Plex Sans KR',sans-serif";c.fillText('▼ 새 지층 진입',-bw/2+32,-bh2/2+20);
-      c.fillStyle='#fff';let fs=24;c.font=`800 ${fs}px 'IBM Plex Sans KR',sans-serif`;while(c.measureText(nm).width>bw-48&&fs>14){fs--;c.font=`800 ${fs}px 'IBM Plex Sans KR',sans-serif`;}c.fillText(nm,-bw/2+32,6);
-      c.fillStyle='rgba(255,246,220,.8)';c.font="500 11.5px 'IBM Plex Sans KR',sans-serif";c.fillText(STKD[b2.k]||'',-bw/2+32,28);c.restore();c.textAlign='start';}
+      c.textAlign='left';c.fillStyle='#ffd56a';c.font="700 11px 'IBM Plex Sans KR',sans-serif";c.fillText('▼ 새 지층 진입',-bw/2+32,-bh2/2+18);
+      c.fillStyle='#fff';let fs=22;c.font=`800 ${fs}px 'IBM Plex Sans KR',sans-serif`;while(c.measureText(nm).width>bw-48&&fs>14){fs--;c.font=`800 ${fs}px 'IBM Plex Sans KR',sans-serif`;}c.fillText(nm,-bw/2+32,5);
+      c.fillStyle='rgba(255,246,220,.8)';c.font="500 11.5px 'IBM Plex Sans KR',sans-serif";c.fillText(STKD[b2.k]||'',-bw/2+32,25);c.restore();c.textAlign='start';}
     for(const f of this.fl){f.y-=40*dt;f.l-=dt;}
     this.fl=this.fl.filter(f=>f.l>0);
     c.font="600 13px 'IBM Plex Sans KR',sans-serif";c.textAlign='right';
@@ -3464,10 +3464,11 @@ $('#wBuy').addEventListener('click',e=>{if(!e.target.closest('#wBuyBtn')||!wTry)
 
 // ---------------- tabs ----------------
 let hudCache='';
-function show(v){view=v;if(v==='map')setTimeout(mapLonFit,40);if(v==='map'&&yiPend&&yiM()>1){yiPend=false;setTimeout(()=>playYi(),60);}for(const [sel,on] of [['#mapSvg','map'],['#lgWrap svg','land']]){const sv=$(sel);if(sv&&sv.pauseAnimations){if(v===on)sv.unpauseAnimations();else sv.pauseAnimations();}}
+function show(v){const prevV=view;view=v;if(v==='map')setTimeout(mapLonFit,40);if(v==='map'&&yiPend&&yiM()>1){yiPend=false;setTimeout(()=>playYi(),60);}for(const [sel,on] of [['#mapSvg','map'],['#lgWrap svg','land']]){const sv=$(sel);if(sv&&sv.pauseAnimations){if(v===on)sv.unpauseAnimations();else sv.pauseAnimations();}}
   for(const id of ['map','bore','craft','store','shop','invest','land'])$('#v-'+id).hidden=id!==v;
   document.querySelectorAll('nav.tabs button').forEach(b=>{if(b.dataset.tab===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
-  if(v==='map')updateMap();if(v==='craft')renderCraft();if(v==='store')renderShop();if(v==='invest')renderInvest();if(v==='shop')renderDex();if(v==='land')renderLand();if(v==='bore'){hudCache='';}}
+  if(v==='map')updateMap();if(v==='craft')renderCraft();if(v==='store')renderShop();if(v==='invest')renderInvest();if(v==='shop')renderDex();if(v==='land')renderLand();if(v==='bore'){hudCache='';}
+  if(prevV!==v){const sc=$('#v-'+v+' .scroll');if(sc)sc.scrollTop=0;const sl=document.querySelector('#v-'+v+' .scroll, #v-'+v);if(sl&&sl.scrollTop)sl.scrollTop=0;}}
 document.querySelector('nav.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;
   if(b.dataset.tab!=='exp'&&exp){exp=null;$('#exp').hidden=true;}
   if(b.dataset.tab==='exp'){if(exp)return;if(S.ex.active){const r=regById(S.ex.active);openExp(r);startHere();}else{show('map');toast('진행 중인 원정이 없어요. 지도에서 산이나 바다를 눌러 시작하세요');}return;}
@@ -3476,7 +3477,7 @@ document.querySelector('nav.tabs').addEventListener('click',e=>{const b=e.target
 // ---------------- my land (garden + house + interior) ----------------
 const LAND_SIZE=[3,4,5,6,8,10],LAND_COST=[0,20000,100000,400000,1500000,5000000];
 const LITEM=[
- {id:'house_s',n:'작은 집',p:3000,house:1,off:1},{id:'house_h',n:'한옥',p:15000,house:1,off:2},{id:'house_b',n:'2층 주택',p:60000,house:1,off:3},{id:'house_d',n:'단독 주택',p:150000,house:1,off:4},{id:'house_y',n:'양반 가옥',p:400000,house:1,off:5},
+ {id:'house_s',n:'작은 집',p:3000,house:1,off:1,hide:1},{id:'house_h',n:'한옥',p:15000,house:1,off:2},{id:'house_b',n:'2층 주택',p:60000,house:1,off:3},{id:'house_d',n:'단독 주택',p:150000,house:1,off:4},{id:'house_y',n:'양반 가옥',p:400000,house:1,off:5},{id:'house_v',n:'한남동 고급 빌라',p:900000,house:1,off:6},
  {id:'tree',n:'소나무',p:200},{id:'cherry',n:'벚나무',p:500},{id:'flower',n:'꽃밭',p:150},{id:'veg',n:'텃밭',p:300},
  {id:'pond',n:'연못',p:800},{id:'cairn',n:'오층 석탑',p:1500},{id:'bench',n:'벤치',p:250},{id:'lamp',n:'가로등',p:300},{id:'fountain',n:'분수',p:2500},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800},
  {id:'bbq',n:'바비큐 그릴',p:3500},{id:'campfire',n:'캠프파이어',p:1200},{id:'campchair',n:'캠핑 의자',p:900},{id:'car',n:'스포츠카',p:80000},{id:'monument',n:'드릴 기념비',p:5000},{id:'museum',n:'유물 전시관',p:10000,get fx(){return '화석 발견 +'+MUSEUMP()+'%';}},
@@ -3486,7 +3487,7 @@ const FURN=[
  {id:'shelf',n:'책장',p:700},{id:'plant',n:'화분',p:200},{id:'case',n:'유물 진열장',p:3000},{id:'frame',n:'화석 액자',p:2000},{id:'tank',n:'어항',p:2500},{id:'fridge',n:'냉장고',p:3000},{id:'kimchi',n:'김치냉장고',p:2800},{id:'styler',n:'스타일러',p:3500},{id:'aircon',n:'에어컨',p:3200},{id:'washer',n:'세탁기',p:2500},{id:'wardrobe',n:'옷장',p:2000},{id:'robot',n:'로봇청소기',p:2200},{id:'toilet',n:'비데 변기',p:1800},{id:'basin',n:'세면대',p:1400},{id:'shower',n:'샤워 부스',p:2600},{id:'sinkU',n:'ㄷ자 싱크대',p:4800},{id:'sinkL',n:'ㄴ자 싱크대',p:3800},{id:'island',n:'아일랜드 식탁',p:3000},{id:'table4',n:'4인 식탁',p:2400},{id:'shoe',n:'신발장',p:900},{id:'purifier',n:'공기청정기',p:1600},{id:'dryer',n:'건조기',p:2600},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800},{id:'chick',n:'병아리',p:1500},{id:'rabbit',n:'토끼',p:2200},{id:'squirrel',n:'다람쥐',p:2000},{id:'hedgehog',n:'고슴도치',p:2400},{id:'sheep',n:'양',p:2500},{id:'fox',n:'여우',p:3000},{id:'penguin',n:'펭귄',p:3000},{id:'bear',n:'곰',p:3500},{id:'panda',n:'판다',p:4000},{id:'dragon',n:'드래곤',p:12000},{id:'unicorn',n:'유니콘',p:15000}];
 const landOf=()=>{S.land=S.land||{lv:1,tiles:{},furn:{}};return S.land;};
 const landSize=()=>LAND_SIZE[landOf().lv-1];
-const BIG={house_s:2,house_h:2,house_b:2,house_d:3,house_y:3,museum:3,pond:2,fountain:2},BIGS={house_s:1.75,house_h:1.75,house_b:1.7,house_d:1,house_y:1,museum:1,pond:2,fountain:1.75},GRAND={house_d:1,house_y:1,museum:1};
+const BIG={house_v:3,house_s:2,house_h:2,house_b:2,house_d:3,house_y:3,museum:3,pond:2,fountain:2},BIGS={house_v:1,house_s:1.75,house_h:1.75,house_b:1.7,house_d:1,house_y:1,museum:1,pond:2,fountain:1.75},GRAND={house_d:1,house_y:1,museum:1};
 const bsz=id=>BIG[id]||1;
 function landOcc(except){const o={},T=landOf().tiles;for(const k in T){if(k===except)continue;const [x,y]=k.split(',').map(Number),n=bsz(T[k]);for(let i=0;i<n;i++)for(let j=0;j<n;j++)o[(x+i)+','+(y+j)]=k;}return o;}
 // tapping any tile places a big building so that the tapped tile sits under it (centre first), instead of demanding the top-left corner
@@ -3698,7 +3699,7 @@ function isoItem(id,cx,cy){let g='';if(isPetId(id)&&id!=='dog'&&id!=='cat')retur
   case 'house_b':{g+=shadowE(cx,cy,26,11);const b=isoBox(cx,cy,.6,48,'#d6dde2');g+=b.svg;
     for(const v of[8,30])for(const [u0,u1] of [[.15,.4],[.6,.85]]){g+=facePoly(b,'l',u0,u1,v,v+10,'#9cd0ea',ISK);if(v>10||u0>.5)g+=facePoly(b,'r',u0,u1,v,v+10,'#9cd0ea',ISK);}
     g+=facePoly(b,'r',.15,.42,0,17,'#7a5a3c',ISK)+facePoly(b,'l',0,1,24,26,'#b8c2c8')+facePoly(b,'r',0,1,24,26,'#8a969c')+isoRoof(cx,cy,.6,48,16,'#3a5a9a',1.12);break;}
-  case 'house_d':if(!NOGRAND){g+=grandVilla(cx,cy);break;}{g+=shadowE(cx,cy,30,12);const b=isoBox(cx,cy,.7,30,'#f3f1ec');g+=b.svg+facePoly(b,'l',.1,.48,5,26,'#9cd0ea',ISK)+facePoly(b,'l',.29,.31,5,26,'#4a4f55')+facePoly(b,'r',.12,.38,0,20,'#a0703c',ISK)+facePoly(b,'r',.5,.88,12,24,'#9cd0ea',ISK)+facePoly(b,'l',.6,.92,0,10,'#6a6e74',ISK);
+  case 'house_v':case 'house_d':if(!NOGRAND){g+=grandVilla(cx,cy);break;}{g+=shadowE(cx,cy,30,12);const b=isoBox(cx,cy,.7,30,'#f3f1ec');g+=b.svg+facePoly(b,'l',.1,.48,5,26,'#9cd0ea',ISK)+facePoly(b,'l',.29,.31,5,26,'#4a4f55')+facePoly(b,'r',.12,.38,0,20,'#a0703c',ISK)+facePoly(b,'r',.5,.88,12,24,'#9cd0ea',ISK)+facePoly(b,'l',.6,.92,0,10,'#6a6e74',ISK);
     g+=isoBox(cx,cy-30,.78,3,'#4a4f55').svg;const u=isoBox(cx-5,cy-35,.42,16,'#e6e2da');g+=u.svg+facePoly(u,'l',.2,.8,4,12,'#9cd0ea',ISK)+facePoly(u,'r',.3,.7,4,12,'#9cd0ea',ISK)+isoBox(cx-5,cy-51,.48,3,'#4a4f55').svg
       +`<rect x="${cx+16}" y="${cy-44}" width="5" height="10" fill="#9a5a3a" ${ISK}/>`;break;}
   case 'house_y':if(!NOGRAND){g+=grandYangban(cx,cy);break;}{g+=shadowE(cx,cy,34,14);g+=isoBox(cx,cy,.9,7,'#a8a29a').svg+isoBox(cx,cy-7,.84,2,'#8f8a80').svg;const b=isoBox(cx,cy-9,.7,24,'#f3e8d0');g+=b.svg;
@@ -4016,6 +4017,38 @@ function model3(id){const g=new THREE.Group(),A=f=>L3.anims.push(f);
     nightLit(g,.32);lampFx(g,-.66,.62,.56,{c:'#ffb070',pool:.55,pz:.8});lampFx(g,.66,.62,.56,{c:'#ffb070',pool:.55,pz:.8});break;}
   case 'house_b':{g.add(B3(1.5,.08,1.4,'#a8a29a'),B3(1.15,1.5,1.05,'#d6dde2',0,.08),B3(1.2,.06,1.1,'#b8c2c8',0,.82));windowsOn(g,.9,.28,.36,.53,2);windowsOn(g,.9,.28,1.1,.53,2);
     g.add(B3(.24,.44,.04,'#7a5a3c',.0,.08,.531));const r=mesh(new THREE.ConeGeometry(.95,.55,4),'#3a5a9a');r.rotation.y=Math.PI/4;r.position.y=1.58+.27;r.scale.set(1,1,.92);g.add(r);nightLit(g,.3);lampFx(g,.22,.6,.58,{pool:.6,pz:.85});break;}
+  case 'house_v':{// 한남동 고급 빌라: modern two-storey villa — pale stone ground floor with a glass front, dark cantilevered upper floor with a glass band,
+    // timber louvres, balcony with glass rail, roof garden; walled garden with gate lamps, stone path, reflecting pool, topiary, cypress and flower beds; lit at night
+    const P=(c,o)=>new THREE.MeshPhongMaterial(Object.assign({color:c,shininess:40,specular:'#555'},o||{})),glass=new THREE.MeshPhongMaterial({color:'#bfe6f4',transparent:true,opacity:.35,shininess:200,specular:'#fff',depthWrite:false});
+    g.add(B3(2.94,.06,2.94,'#7cb85a'));
+    // boundary wall + gate
+    const WLc='#d6cfc2';g.add(B3(2.9,.24,.08,WLc,0,.06,-1.42),B3(.08,.24,2.9,WLc,-1.42,.06,0),B3(.08,.24,2.9,WLc,1.42,.06,0),B3(1.1,.24,.08,WLc,-.9,.06,1.42),B3(1.1,.24,.08,WLc,.9,.06,1.42));
+    for(const x of[-.34,.34]){g.add(B3(.14,.38,.14,'#b8ae9e',x,.06,1.42));lampFx(g,x,.5,1.42,{r:.025,pool:.5,pz:1.2,h:.25});}
+    g.add(B3(.5,.012,.03,'#2a2c30',0,.3,1.42));
+    // stone path + stepping stones
+    g.add(B3(.42,.02,1.25,'#dcd5c8',.55,.06,.78));for(let i=0;i<4;i++)g.add(C3(.08,.08,.02,'#c8c0b2',-.05-i*.2,.06,1.15-i*.05,10));
+    // ground floor: stone wing (left) + white volume with glass front, entrance canopy
+    g.add(B3(.7,.88,1.15,P('#8c7d6a'),-.8,.06,-.55),B3(1.55,.88,1.15,P('#f3f0ea'),.32,.06,-.55));
+    g.add(B3(1.0,.62,.03,WIN,.0,.14,.035),...[-.25,.25].map(x=>B3(.025,.62,.04,'#2a2c30',x,.14,.04)));
+    g.add(B3(.3,.68,.05,'#3a2a1e',.68,.06,.04),B3(.02,.2,.02,'#d8c070',.6,.36,.07),B3(.62,.04,.38,'#2a2c30',.62,.78,.16));lampFx(g,.62,.74,.2,{r:.02,pool:.45,pz:.45,h:.2});
+    for(let i=0;i<5;i++)g.add(B3(.03,.6,.03,'#6a5a48',-1.12+i*.08,.16,.03));
+    // upper floor: dark cantilever with a full glass band + timber louvres, balcony with glass rail
+    g.add(B3(2.4,.72,1.24,P('#2e3035',{shininess:80}),.08,.94,-.52),B3(1.5,.48,.03,WIN,.35,1.06,.11));
+    for(let i=0;i<8;i++)g.add(B3(.035,.56,.04,'#b07a44',-.95+i*.075,1.02,.12));
+    g.add(B3(1.05,.05,.42,P('#d8d4cc'),.55,.92,.3));const rail=new THREE.Mesh(new THREE.BoxGeometry(1.05,.24,.02),glass);rail.position.set(.55,1.09,.5);g.add(rail);g.add(B3(1.05,.02,.03,'#c8ced4',.55,1.2,.5));
+    // roof with garden and parapet
+    g.add(B3(2.5,.06,1.32,'#1f2124',.08,1.66,-.52));for(const [x,z] of[[-.8,-.8],[-.4,-.2],[.7,-.9],[.9,-.3]])g.add(S3(.12,'#4a9a44',x,1.78,z));g.add(B3(.6,.08,.3,'#7a5a3c',.2,1.72,-.6));
+    // reflecting pool (glows at night) + garden
+    {const wm=new THREE.MeshLambertMaterial({color:'#3fa3d6',emissive:'#0a3050'}),w=new THREE.Mesh(new THREE.BoxGeometry(.9,.05,.5),wm);w.position.set(-.75,.085,.85);w.userData.noLit=1;g.add(w);g.add(B3(1.0,.04,.6,'#e2dccf',-.75,.06,.85));
+     A(()=>{const n=L3.night||0;wm.emissive.setRGB(.04+.1*n,.19+.5*n,.31+.65*n);});}
+    for(const [x,z] of[[-1.2,-.1],[1.25,.3],[1.2,-1.15],[-1.2,-1.2]])g.add(K3(.17,.62,'#2f6a34',x,.36,z),C3(.03,.03,.1,WOOD,x,.06,z));
+    for(const [x,z] of[[1.15,1.1],[-1.25,1.15]])g.add(S3(.2,'#4a9a44',x,.24,z),C3(.03,.03,.1,WOOD,x,.06,z));
+    for(let i=0;i<10;i++){const x=1.0+(i%5)*.08,z=.6+((i/5)|0)*.12;g.add(S3(.04,['#f06a8a','#f2c14e','#ffffff','#c88ae8','#ff8a4a'][i%5],x,.11,z));}
+    for(let i=0;i<6;i++)g.add(S3(.035,['#f06a8a','#ffffff','#f2c14e'][i%3],-1.25+i*.09,.11,.45));
+    nightLit(g,.32);
+    for(const [x,z] of[[.3,.4],[.3,1.0],[.85,.4],[.85,1.0]]){g.add(C3(.02,.025,.1,'#3a3e44',x,.06,z,8));lampFx(g,x,.18,z,{r:.018,pool:.35,h:.16,pk:.5});}
+    for(const [x,z] of[[-1.2,-.1],[1.25,.3]])lampFx(g,x,.12,z+.18,{r:.015,pool:.4,h:.12,c:'#ffe8b0'});
+    break;}
   case 'house_d':{g.add(B3(2.9,.06,2.9,'#86c060'));const M=B3(1.6,.95,1.2,'#f4f2ee',-.4,.06,-.5);g.add(M,B3(1.7,.06,1.3,'#3a3e44',-.4,1.01,-.5));
     g.add(B3(.6,.5,.04,WIN,-.75,.25,.11,{emissive:'#554422'}),B3(.24,.6,.04,'#5b3d24',-.1,.06,.11),B3(.04,.5,.8,WIN,-1.21,.3,-.5));
     g.add(B3(1.3,.7,1.0,'#e9e6e0',-.55,1.07,-.6),B3(1.4,.06,1.1,'#2f3338',-.55,1.77,-.6),B3(1.1,.45,.04,WIN,-.55,1.2,-.09),B3(.04,.45,.7,WIN,-1.21,1.2,-.6));
@@ -5054,7 +5087,7 @@ function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
    ${isMe?`<div class="pickbar"><span><svg viewBox="-20 -2 140 178" aria-hidden="true">${charG(ME())}</svg><b>내 캐릭터</b></span><div>${B('lpStat','📊 능력치','primary')}${B('lpFlip','방향 바꾸기')}${B('lpCancel','완료')}</div></div>`
      :pk?`<div class="pickbar"><span>${isoIcon(pk.id)}<b>${pk.n}</b></span><div>${pk.house?B('lpRoom','집 안 꾸미기','primary'):''}${pk.id==='museum'?B('lpGal','전시관 들어가기','primary'):''}${B('lpFlip','↻ 방향')}${B('lpDel','철거')}${B('lpCancel','완료')}</div></div>`:''}
    <p class="sub" style="margin:0">${msg}</p>
-   <div class="lpal">${LITEM.filter(i=>!isPetId(i.id)||petOpen(i.id)).map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${L3OK&&thumb3('land',i.id)?`<img class="th3" src="${thumb3('land',i.id)}" alt="">`:isoIcon(i.id)}<span>${i.n}</span>${i.house?`<small class="hoff">🌙 오프라인 +${i.off}시간</small>`:i.fx?`<small class="hoff">🦴 ${i.fx}</small>`:''}<em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;if(L3OK)l3Mount();}
+   <div class="lpal">${LITEM.filter(i=>(!isPetId(i.id)||petOpen(i.id))&&!i.hide).map(i=>`<button class="lp ${landSel===i.id?'on':''}" type="button" data-it="${i.id}">${L3OK&&thumb3('land',i.id)?`<img class="th3" src="${thumb3('land',i.id)}" alt="">`:isoIcon(i.id)}<span>${i.n}</span>${i.house?`<small class="hoff">🌙 오프라인 +${i.off}시간</small>`:i.fx?`<small class="hoff">🦴 ${i.fx}</small>`:''}<em class="${S.money>=i.p?'':'no'}">${won(i.p)}</em></button>`).join('')}</div>`;if(L3OK)l3Mount();}
 function removeTile(k){const L0=landOf(),it=LITEM.find(i=>i.id===L0.tiles[k]);if(!it)return;S.money+=Math.floor(it.p/2);delete L0.tiles[k];delete landRot()[k];save();toast(it.n+' 철거 · '+won(it.p/2)+' 환급');}
 let lgD=null,lgSup=false,lgPts=new Map(),lgPinch=null;
 // rotate the view 90 degrees with a short smooth turn (objects stay on their tiles, only the camera turns)
@@ -5118,6 +5151,8 @@ const DEFROOMS={
           {w:[['h',0,3,3],['v',3,0,3],['v',4,0,3],['h',4,3,2],['h',0,4,2],['v',2,4,2]],d:[['h',2,3],['h',4,3],['h',1,4]],l:[['안방',1,1],['작은 방',5,1],['드레스룸',0,5]]}],
  house_d:[{w:[['v',2,0,3],['h',0,3,2],['v',5,0,2],['h',5,2,2],['h',0,5,2],['v',2,5,2]],d:[['h',1,3],['h',5,2],['h',1,5]],l:[['욕실',0,1],['주방',3,0],['현관',6,0],['세탁실',0,6],['거실',4,4]]},
           {w:[['h',0,3,3],['v',3,0,3],['v',4,0,3],['h',4,3,3],['h',0,4,2],['v',2,4,3],['h',3,5,2],['v',3,5,2],['v',5,5,2]],d:[['h',2,3],['h',4,3],['h',1,4],['h',4,5]],l:[['안방',1,1],['작은 방',5,1],['드레스룸',0,5],['화장실',3,6]]}],
+ house_v:[{w:[['v',3,0,3],['h',0,3,3],['v',7,0,2],['h',7,2,2],['v',7,3,2],['h',7,5,2],['h',7,3,2],['h',0,6,3],['v',3,6,3]],d:[['h',1,3],['h',7,2],['v',7,4],['h',2,6]],l:[['욕실',1,1],['주방',5,1],['현관',8,0],['세탁실',8,4],['서재',1,7],['거실',5,6]]},
+          {w:[['h',0,4,4],['v',4,0,4],['h',0,5,3],['v',3,5,4],['v',5,0,4],['h',5,4,4],['h',5,6,2],['v',5,6,3],['v',7,6,3]],d:[['h',3,4],['h',2,5],['h',5,4],['h',5,6]],l:[['안방',2,2],['작은 방',7,2],['드레스룸',1,7],['화장실',6,8]]}],
  house_y:[{w:[['v',3,0,3],['h',0,3,3],['v',8,0,3],['h',9,3,1],['h',0,5,4],['v',4,5,5],['h',7,5,3],['v',7,5,5]],d:[['h',1,3],['h',9,3],['h',3,5],['h',7,5]],l:[['욕실',1,1],['부엌',5,1],['현관',9,1],['대청',5,6],['안방',2,7],['사랑방',8,7]]}]};
 const RNAMES=['거실','주방','안방','침실','작은 방','욕실','화장실','드레스룸','세탁실','현관','서재','대청','부엌','사랑방','방'];
 const RCOL={거실:'#ecd9b4',대청:'#e0c48e',주방:'#efe2c4',부엌:'#dccfb8',욕실:'#b8d8e6',화장실:'#b8d8e6',안방:'#f2d6c4',침실:'#f2d6c4',방:'#f0dcc0','작은 방':'#d6e6c6',드레스룸:'#e6d0ea',세탁실:'#c6dcee',현관:'#cec4b6',사랑방:'#e8d0ac',서재:'#d6d2ec'};
@@ -5134,9 +5169,9 @@ function cellRooms(fl=roomFloor){const N=RN(),{e,lb}=roomLay(fl),reg=[],nm=[];fo
   return {reg,nm,tags};}
 // a piece of furniture may not straddle a wall or door
 function wallCut(x,y,w,d,fl=roomFloor){const e=roomLay(fl).e;for(let i=0;i<w;i++)for(let j=0;j<d;j++){if(i<w-1&&e[ek(x+i,y+j,x+i+1,y+j)])return true;if(j<d-1&&e[ek(x+i,y+j,x+i,y+j+1)])return true;}return false;}
-const ROOMN={house_s:5,house_h:6,house_b:6,house_d:7,house_y:10},RN=()=>ROOMN[houseTile()?.[1]]||6;
+const ROOMN={house_v:9,house_s:5,house_h:6,house_b:6,house_d:7,house_y:10},RN=()=>ROOMN[houseTile()?.[1]]||6;
 const FRMAX=wl=>wl?Math.max(0,RN()-4.5):RN()-1.8;
-const twoF=()=>['house_b','house_d'].includes(houseTile()?.[1]);
+const twoF=()=>['house_b','house_d','house_v'].includes(houseTile()?.[1]);
 const stairR=()=>{const L0=landOf();if(!L0.stair){const N=RN();L0.stair={x:N-1,y:N-2,r:0};}return L0.stair;};
 const stDims=r=>r%2?[2,1]:[1,2];
 function stKeys(x,y,r){const st=stairR();if(x==null){x=st.x;y=st.y;r=st.r;}const [w,d]=stDims(r),k=[];for(let i=0;i<w;i++)for(let j=0;j<d;j++)k.push((x+i)+','+(y+j));return k;}
@@ -5417,7 +5452,7 @@ function r3Tap(e){const r=R3.cv.getBoundingClientRect(),v=new THREE.Vector2((e.c
   const fake={target:{closest:s=>{if(o.k==='stair'&&s==='.stair')return {};if(o.k==='me'&&s==='.mech')return {};if(o.k==='fu'&&s==='.fu')return {dataset:{fu:o.v}};if(o.k==='ft'&&s==='.ft')return {dataset:{g:o.v}};return null;}}};roomClick(fake);}
 function r3Build(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()?.[1]||'house_s',N=RN();R3.N=N;if(!R3.dist)R3.home();
   if(R3.root){R3.scene.remove(R3.root);R3.root.traverse(o=>{if(o.geometry)o.geometry.dispose();});}R3.anims=[];R3.walls=[];const root=R3.root=new THREE.Group();R3.scene.add(root);
-  const WL={house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee',house_d:'#f2efe8',house_y:'#f1e6cc'}[h],FL={house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a',house_d:'#b98a5a',house_y:'#a87a4a'}[h],HN=h==='house_h'||h==='house_y',WH=2.6;
+  const WL={house_v:'#f4f2ee',house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee',house_d:'#f2efe8',house_y:'#f1e6cc'}[h],FL={house_v:'#b88a5e',house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a',house_d:'#b98a5a',house_y:'#a87a4a'}[h],HN=h==='house_h'||h==='house_y',WH=2.6;
   const W=(gx,gy)=>[gx-N/2,gy-N/2];root.add(B3(N+.3,.3,N+.3,shade(FL,-.35),0,-.32,0));
   const o0=occ();for(let y=0;y<N;y++)for(let x=0;x<N;x++){const ok=roomPick==='me'?!o0[x+','+y]:roomPick==='stair'?stairFits(x,y,stairR().r):roomPick&&roomPick!=='wall'&&!FD(roomPick).wall&&fits(roomPick,x,y);
     const [wx,wz]=W(x+.5,y+.5),t=B3(.99,.04,.99,ok?'#b8e88a':(x+y)%2?FL:shade(FL,-.06),wx,-.04,wz);t.castShadow=false;t.userData.tap={k:'ft',v:x+','+y};root.add(t);}
@@ -5512,7 +5547,7 @@ function r3Tick(dt){if(!R3.on||!R3.cv.isConnected)return;R3.t+=dt;const t=R3.t,c
   {const cr=document.getElementById('rCompR'),a=(R3.yaw*180/Math.PI).toFixed(1);if(cr&&cr.dataset.a!==a){cr.dataset.a=a;cr.setAttribute('transform',`rotate(${a})`);cr.parentNode.querySelectorAll('.rcl').forEach(t=>{const th=R3.yaw+t.dataset.i*Math.PI/2;t.setAttribute('x',(Math.sin(th)*16.5).toFixed(1));t.setAttribute('y',(-Math.cos(th)*16.5).toFixed(1));});}}
   for(const w of R3.walls){const [nx,nz]=w.userData.n;w.visible=!(c.position.x*nx+c.position.z*nz>R3.N/2-.2);}for(const f of R3.anims)f(t);R3.ren.render(R3.scene,c);}
 function roomSVG(){ensurePos();const f=landOf().furn,pos=roomPos(),h=houseTile()?.[1]||'house_s';
-  const WL={house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee',house_d:'#f2efe8',house_y:'#f1e6cc'}[h],FL={house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a',house_d:'#b98a5a',house_y:'#a87a4a'}[h];
+  const WL={house_v:'#f4f2ee',house_s:'#f3e6cf',house_h:'#efe4c8',house_b:'#e2e9ee',house_d:'#f2efe8',house_y:'#f1e6cc'}[h],FL={house_v:'#b88a5e',house_s:'#c9935a',house_h:'#b08050',house_b:'#c4b29a',house_d:'#b98a5a',house_y:'#a87a4a'}[h];
   const N=RN(),SC=6/N,TX=160,TY=66+(N>6?(N-6)*5:0),U=24*SC,V=12*SC,WH=78,HN=h==='house_h'||h==='house_y';
   const P=(x,y,z=0)=>[TX+(x-y)*U,TY+(x+y)*V-z*SC];
   const poly=(pts,col,ex='')=>`<polygon points="${PT(pts)}" fill="${col}" ${ISK} ${ex}/>`;
@@ -6194,7 +6229,7 @@ function evtStart(){const pool=REG.filter(isUnl);if(!pool.length)return;sfx('eve
 function gaugeLayout(){if(view!=='bore')return;const g=$('#lgauge'),h=document.querySelector('#v-bore .bhud'),f=document.querySelector('#v-bore .bfoot'),st=$('#bStage');if(!g||!h||!f||!st)return;
   const t=Math.round(h.offsetHeight-6),b=Math.round(f.offsetHeight-6),H=st.clientHeight;const hide=H-t-b<120;if(g.style.visibility!==(hide?'hidden':''))g.style.visibility=hide?'hidden':'';if(hide)return;const tv=t+'px',bv=b+'px';if(g.style.top!==tv)g.style.top=tv;if(g.style.bottom!==bv)g.style.bottom=bv;}
 // ── 미니게임 · 암석 캐기 (지뢰찾기): a chip pops up now and then; inside, break rocks for random money / materials, numbers tell how many gas pockets
-// touch the rock; hitting a gas pocket ends the game (what you already dug stays yours); clearing every safe rock doubles the haul
+// hitting a gas pocket ends the game and loses half of what you dug; clearing every safe rock doubles the haul; 「그만 · 챙기기」 keeps everything
 const MG={W:7,H:8,B:8};let mg=null;
 function mgSchedule(a=240,b=480){S.mgT=a+Math.random()*(b-a);S.mgOn=0;}
 function mgTick(dt){if(titleOn||!S.story||document.hidden)return;if(S.mgT==null)mgSchedule(150,300);const c=$('#mgChip');
@@ -6214,7 +6249,8 @@ function mgReveal(i){const st=[i];let any=false;while(st.length){const j=st.pop(
 function mgTap(i){if(!mg||mg.over)return;const c=mg.cells[i];if(c.o)return;
   if(mg.flag){c.f=c.f?0:1;sfx('select');mgRender();return;}if(c.f)return;
   if(!mg.started)mgPlace(i);
-  if(c.b){c.o=1;mg.over='boom';mg.cells.forEach(x=>{if(x.b)x.o=1;});sfx('thunder');if(navigator.vibrate)navigator.vibrate([60,40,120]);mgEnd();return;}
+  if(c.b){c.o=1;mg.over='boom';mg.cells.forEach(x=>{if(x.b)x.o=1;});const g=mg.got,lm=Math.floor(g.money/2);S.money=Math.max(0,S.money-lm);g.lost={money:lm,res:{}};g.money-=lm;
+    for(const k in g.res){const l=Math.floor(g.res[k]/2);S.res[k]=Math.max(0,(S.res[k]||0)-l);g.res[k]-=l;if(l)g.lost.res[k]=l;}sfx('thunder');if(navigator.vibrate)navigator.vibrate([60,40,120]);mgEnd();return;}
   mgReveal(i);sfx(c.loot?(c.loot.k==='money'?'coin':'pickup'):'dig');
   if(mg.left<=0){mg.over='clear';const g=mg.got;S.money+=g.money;for(const k in g.res)S.res[k]+=g.res[k];g.money*=2;for(const k in g.res)g.res[k]*=2;sfx('levelup');mg.cells.forEach(x=>{if(x.b)x.f=1;});mgEnd();return;}
   save();mgRender();}
@@ -6226,12 +6262,12 @@ function mgRender(){if(!mg)return;const NUMC=['','#5ab0ff','#6ad08a','#ffb04a','
     if(c.o){cls+=' o';if(c.b)inner='<span class="mgb">💥</span>',cls+=' bomb';else{if(c.loot)inner=c.loot.k==='money'?`<span class="mgl ${c.loot.big?'big':''}">${c.loot.big?'💰':'🪙'}</span>`:`<span class="mgl">${ric(c.loot.k)}</span>`;if(c.n)inner+=`<span class="mgn" style="color:${NUMC[c.n]}">${c.n}</span>`;}}
     else if(c.f)inner='<span class="mgf">🚩</span>';
     return `<button type="button" class="${cls}" data-mg="${i}">${inner}</button>`;}).join('');
-  const st=mg.over==='boom'?`<div class="mgend boom"><b>💥 가스 주머니를 건드렸어요!</b><span>게임 종료 · 지금까지 캔 것은 챙겼어요: ${mgGotTxt()}</span></div>`
+  const st=mg.over==='boom'?`<div class="mgend boom"><b>💥 가스 주머니를 건드렸어요! 캔 것의 절반을 잃었어요</b><span>남은 보상: ${mgGotTxt()}</span>${(()=>{const L=mg.got.lost||{},p=[];if(L.money)p.push(won(L.money));for(const k in L.res||{})p.push(`${k} ${L.res[k]}`);return p.length?`<span style="opacity:.75">잃은 것: ${p.join(' · ')}</span>`:'';})()}</div>`
     :mg.over==='clear'?`<div class="mgend clear"><b>🎉 모든 암석 정복! 보상 2배</b><span>${mgGotTxt()}</span></div>`
     :`<div class="mgstat"><span>캔 것: ${mgGotTxt()}</span><span>남은 암석 ${mg.left} · 💥 ${MG.B}개</span></div>`;
   $('#mgBody').innerHTML=`${st}<div class="mgrid" style="grid-template-columns:repeat(${MG.W},1fr)">${cells}</div>
     <div class="mgbar">${mg.over?`<button class="primary" type="button" id="mgDone">닫기</button>`:`<button class="ghost ${mg.flag?'on':''}" type="button" id="mgFlag">🚩 깃발 ${mg.flag?'켜짐':'꽂기'}</button><button class="primary" type="button" id="mgStop">그만 · 챙기기</button>`}</div>
-    <p class="sub" style="margin:0">숫자 = 주변 8칸의 💥 가스 주머니 수 · 첫 칸은 항상 안전 · 💥를 깨면 바로 끝 · 안전한 암석을 다 깨면 보상 2배 · 길게 누르면 🚩</p>`;}
+    <p class="sub" style="margin:0">숫자 = 주변 8칸의 💥 가스 주머니 수 · 첫 칸은 항상 안전 · 💥를 깨면 끝 + 캔 것 절반 잃음 · 안전한 암석을 다 깨면 보상 2배 · 길게 누르면 🚩</p>`;}
 
 function chipLayout(){gaugeLayout();const ev=$('#evtBar'),yi=$('#yiChip');if(!ev||!yi)return;const up=ev.hidden?0:ev.offsetHeight+6;let eb,yb;
   const fu=view==='bore'&&$('#fuels'),r=fu&&fu.getBoundingClientRect();
@@ -6284,7 +6320,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=131;
+const GVER=132;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
