@@ -372,8 +372,8 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .tk{font-size:11px;color:var(--mute);letter-spacing:.06em}.tn{font-family:var(--f-kr);font-size:22px;line-height:1.2}
 .tm{font-family:var(--f-body);font-variant-numeric:tabular-nums;font-size:13px;color:var(--amber2);text-align:right}
 .tnext{font-size:13px;color:#cfc8bb}.tnext b{color:var(--fg)}
-.treq{display:flex;flex-wrap:wrap;gap:6px}.treq span{font-size:11px;font-family:var(--f-body);font-variant-numeric:tabular-nums;padding:4px 8px;border-radius:999px;border:1px solid var(--line);color:var(--hot)}
-.treq span.ok{color:var(--ok);border-color:rgba(120,211,154,.4)}
+.treq{display:flex;flex-wrap:wrap;gap:6px}.treqhint{margin:6px 0 0;font-size:11px;color:var(--mute)}.treq button:active{transform:scale(.96)}.treq span,.treq button{cursor:pointer;background:none;font-size:11px;font-family:var(--f-body);font-variant-numeric:tabular-nums;padding:4px 8px;border-radius:999px;border:1px solid var(--line);color:var(--hot)}
+.treq span.ok,.treq button.ok{color:var(--ok);border-color:rgba(120,211,154,.4)}.part.jump{animation:pjump 1.4s ease}@keyframes pjump{0%,60%{box-shadow:0 0 0 3px var(--amber)}100%{box-shadow:0 0 0 0 transparent}}
 .tfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;font-family:var(--f-body);font-variant-numeric:tabular-nums}
 .tfoot .primary{height:44px;padding:0 18px;font-size:16px}
 @media (max-width:440px){.brand span{display:none}}
@@ -698,7 +698,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v129 · 2026-11-08</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v130 · 2026-11-08</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2060,7 +2060,7 @@ function tierCard(){const dl=S.dl,g=dlGrade(dl),nx=dl+1;
   const req=dlPartReq(nx),cost=dlCost(nx),ok=PARTS.filter(p=>L(p.id)>=req).length,all=ok===PARTS.length,money=S.money>=cost,promo=dlStep(nx)===1,un=LAY.find(l=>l.req===nx);
   return `<div class="tier ${all&&money?'ready':''}">${head}
    <div class="tnext">${promo?'승급':'강화'} → <b>Lv.${nx} ${dlName(nx)}</b> · 본공 ×${fmtN(dlMul(nx))}${un?` · <b>${un.n}</b> 진입`:''}</div>
-   ${req>0?`<div class="treq">${PARTS.map(p=>`<span class="${L(p.id)>=req?'ok':''}">${p.n} ${Math.min(L(p.id),req)}/${req}</span>`).join('')}</div>`:''}
+   ${req>0?`<div class="treq">${PARTS.map(p=>`<button type="button" data-jump="${p.id}" class="${L(p.id)>=req?'ok':''}" title="${p.n} 제작으로 이동">${p.n} ${Math.min(L(p.id),req)}/${req}${L(p.id)>=req?' ✓':' ›'}</button>`).join('')}</div><p class="treqhint">부품을 누르면 아래 제작으로 바로 이동해요</p>`:''}
    <div class="tfoot"><span>${req>0?`부품 ${ok}/10 · `:''}${won(cost)}</span><button class="primary" id="tierUp" type="button" ${all&&money?'':'disabled'}>${all?(money?(promo?'승급':'강화'):'자금 부족'):'부품 레벨 부족'}</button></div></div>`;}
 function updatePreviewInfo(){const P=levels(),p=selPart&&PARTS.find(x=>x.id===selPart),next=p&&L(p.id)<MAXLV;
   const Q=next?Object.assign({},P,{[p.id]:P[p.id]+1}):P;
@@ -2068,7 +2068,8 @@ function updatePreviewInfo(){const P=levels(),p=selPart&&PARTS.find(x=>x.id===se
   const m=$('#pMode');m.className='pmode'+(next?' next':'');
   m.textContent=next?`미리보기 · ${p.n} Lv${P[p.id]+1}`:p?`${p.n} 최대 레벨`:'현재 드릴 · 부품을 눌러 미리보기';
   $('#pStat').innerHTML=`굴착력 <b>${fmtN(dpsOf(Q)*dpsPerk())}</b>/초<br>강타 <b>${Math.round((.04*Q.shock+.05*setPow('bronze'))*100)}%</b><br>원정 <b>+${10*Q.insul}%</b>`;}
-$('#craftList').addEventListener('click',e=>{const go=e.target.closest('[data-go]');if(go){e.stopPropagation();const r=regById(go.dataset.go);if(!r)return;if(!isUnl(r)){toast(`${r.n}은(는) 본공 ${fmtD(r.un)}에서 열려요 · 상점에서 살 수도 있어요`);return;}openExp(r);return;}
+$('#craftList').addEventListener('click',e=>{const jp=e.target.closest('[data-jump]');if(jp){selPart=jp.dataset.jump;renderCraft(false);const row=document.querySelector(`#craftList .part[data-sel="${selPart}"]`);if(row){row.scrollIntoView({behavior:'smooth',block:'center'});row.classList.add('jump');setTimeout(()=>row.classList.remove('jump'),1500);}return;}
+  const go=e.target.closest('[data-go]');if(go){e.stopPropagation();const r=regById(go.dataset.go);if(!r)return;if(!isUnl(r)){toast(`${r.n}은(는) 본공 ${fmtD(r.un)}에서 열려요 · 상점에서 살 수도 있어요`);return;}openExp(r);return;}
   if(e.target.closest('#tierUp')){const nx=S.dl+1,c=dlCost(nx);if(nx>DLOPEN||S.money<c||PARTS.some(p=>L(p.id)<dlPartReq(nx)))return;sfx('levelup');
     S.money-=c;S.dl=nx;save();flash=1.4;toast((dlStep(nx)===1?'드릴 승급 · ':'드릴 강화 · ')+dlName(nx)+' (Lv.'+nx+')');renderCraft();
     const cur=document.querySelector('#ladder .cur');if(cur)cur.scrollIntoView({inline:'center',block:'nearest'});return;}
@@ -6225,7 +6226,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=129;
+const GVER=130;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
