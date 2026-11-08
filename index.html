@@ -692,11 +692,12 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mStory">스토리 다시 보기</button>
   <div class="seasonrow"><span>풍경 계절</span><div class="segs" id="mSeason"></div></div>
   <div class="seasonrow"><span>소리</span><div class="segs" id="mSnd"></div></div>
+  <div class="seasonrow"><span>배터리</span><div class="segs" id="mPwr"></div></div>
   <div class="seasonrow"><span>장군 목소리</span><div class="segs" id="mVoice" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v127 · 2026-11-07</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v128 · 2026-11-08</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -840,6 +841,12 @@ S.mode=S.mode||'normal';S.part=S.part||1;
 // repair: an old bug (2부 started from an ending replay) could put a run into 2부 before it reached the centre. Such a run is really still in 1부:
 // keep its depth and continue 1부 — reaching 6,371km then opens 2부 properly (starting at the centre).
 if(S.part===2&&S.depth<CORE){S.part=1;S.done=false;S.endDone=false;S.fixP2=1;}
+// battery / power mode (see 배터리 in the menu)
+const PWR={eco:true,act:performance.now()};function pwrInit(){const d=matchMedia&&matchMedia('(pointer:coarse)').matches;PWR.eco=S.pwr?S.pwr==='eco':d;}pwrInit();
+['pointerdown','keydown','wheel','touchstart'].forEach(ev=>addEventListener(ev,()=>{PWR.act=performance.now();},{capture:true,passive:true}));
+function pwrIdle(){return PWR.eco&&performance.now()-PWR.act>60000;}
+function pwrDpr(){return Math.min(PWR.eco?1.5:2,window.devicePixelRatio||1);}
+
 {const C=S.char;if(C.sex==='tanuki'||C.sex==='turtle'){C.sex='m';C.hair=C.hair||'short';}if(C.hat==='pig')C.hat='none';
  if(S.land&&S.land.tiles){const back={turtle:2000,raccoon:2600};for(const k in S.land.tiles){const v=S.land.tiles[k];if(back[v]){delete S.land.tiles[k];S.money=(S.money||0)+back[v];}}}if(['bob','long','pig'].includes(C.hair))C.hair='tail';if(['helmet','explorer','beanie','cap','beret','bowler'].includes(C.hat))C.hat='none';if(C.outfit==='dino')C.outfit='track';if(C.ahair===undefined)C.ahair='none';}S.ng=S.ng||1;S.runStart=S.runStart||Date.now();applyMode();
 let saveLock=false;
@@ -1984,7 +1991,7 @@ function smilWatch(){const now=performance.now()/1000;
     let st=SMILW.get(sv);if(!st){st={t0:now,c0:sv.getCurrentTime(),drive:SMIL_FORCE,base:sv.getCurrentTime()};SMILW.set(sv,st);if(!SMIL_FORCE)return;}
     if(!st.drive){if(now-st.t0>.6){if(sv.getCurrentTime()-st.c0<.15){st.drive=true;st.base=sv.getCurrentTime();st.t0=now;}else{st.t0=now;st.c0=sv.getCurrentTime();}}}
     if(st.drive){try{sv.setCurrentTime(st.base+(now-st.t0));}catch(e){}}});}
-(function smilLoop(){smilWatch();setTimeout(()=>requestAnimationFrame(smilLoop),33);})();
+(function smilLoop(){smilWatch();setTimeout(()=>requestAnimationFrame(smilLoop),PWR.eco?(pwrIdle()?120:50):33);})();
 function kickArt(el){if(!el)return;requestAnimationFrame(()=>{const h=el.innerHTML;el.innerHTML=h;});}
 function openRegion(id){sel=id;updateMap();$('#rpop').hidden=false;const sh=$('#rpop .rsheet');sh.scrollTop=0;kickArt($('#card .art'));}
 function closeRegion(){$('#rpop').hidden=true;}
@@ -3408,7 +3415,9 @@ function openWard(){if(!S.wardSeen){S.wardSeen=1;save();const h=$('#avHint');if(
 function closeWard(){wTry=null;$('#ward').hidden=true;if(view==='map')mapAnim(true);renderAvatar();if(view==='map')renderCard();}
 $('#avatarBtn').addEventListener('click',openWard);
 // keep the phone screen awake while the game is on screen (Screen Wake Lock; re-acquired when coming back / on the next tap)
-let WAKE=null;async function wakeOn(){try{if(WAKE||document.hidden||!('wakeLock' in navigator))return;WAKE=await navigator.wakeLock.request('screen');WAKE.addEventListener('release',()=>{WAKE=null;});}catch(e){WAKE=null;}}
+// 배터리: 절전(기본, 폰) = 화면 30fps · 1분 손대지 않으면 12fps · 3D 해상도 1.5배 / 보통 = 60fps · 2배. 화면 켜둠(Wake Lock)은 따로 끌 수 있음
+function pwrApply(){for(const o of[L3,R3])if(o&&o.ren){o.ren.setPixelRatio(pwrDpr());if(o===L3&&typeof l3Size==='function')l3Size();if(o===R3&&typeof r3Size==='function')r3Size();}if(S.wake===0){if(WAKE){WAKE.release().catch(()=>{});WAKE=null;}}else wakeOn();}
+let WAKE=null;async function wakeOn(){try{if(S.wake===0||WAKE||document.hidden||!('wakeLock' in navigator))return;WAKE=await navigator.wakeLock.request('screen');WAKE.addEventListener('release',()=>{WAKE=null;});}catch(e){WAKE=null;}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)wakeOn();});addEventListener('pointerdown',wakeOn,{capture:true,passive:true});wakeOn();
 $('#wClose').addEventListener('click',closeWard);
 $('#wTabs').addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(!t)return;wTab=t.dataset.t;wTry=null;wShip=false;renderWard();const wb=document.querySelector('#ward .wbody');if(wb)setTimeout(()=>wb.scrollTop=0,1);});
@@ -4392,13 +4401,13 @@ function pinchZoom(cv,get,set,pan){const P=new Map();let d0=0,z0=0,m0=null;const
   cv.addEventListener('pointermove',e=>{if(!P.has(e.pointerId))return;P.set(e.pointerId,[e.clientX,e.clientY]);if(P.size>=2&&d0){set(z0*d0/Math.max(20,dist()));if(pan){const m=mid();pan(m[0]-m0[0],m[1]-m0[1]);m0=m;}e.preventDefault();}},true);
   const up=e=>{P.delete(e.pointerId);if(P.size<2)d0=0;if(!P.size)setTimeout(()=>{cv._pz=0;},0);};cv.addEventListener('pointerup',up,true);cv.addEventListener('pointercancel',up,true);}
 // adaptive quality: if a phone keeps missing frames, render at a lower pixel ratio and with cheaper shadows
-function perfWatch(o,ren,dt){o._pf=o._pf||{n:0,s:0,low:0};const f=o._pf;if(f.low>=1||(devicePixelRatio||1)<=1.5)return;f.n++;f.s+=dt;if(f.n<120)return;const avg=f.s/f.n;f.n=0;f.s=0;
+function perfWatch(o,ren,dt){o._pf=o._pf||{n:0,s:0,low:0};const f=o._pf;if(PWR.eco||f.low>=1||(devicePixelRatio||1)<=1.5)return;f.n++;f.s+=dt;if(f.n<120)return;const avg=f.s/f.n;f.n=0;f.s=0;
   if(avg>.03){f.low++;ren.setPixelRatio(1.5);ren.shadowMap.type=THREE.PCFShadowMap;ren.shadowMap.needsUpdate=true;if(o===L3)l3Size();else if(o===R3&&typeof r3Size==='function')r3Size();}}
 // move the view across a big plot: right/left along the screen, up/down = away/toward on the ground; the target stays over the land
 function l3Pan(sx,sy,step=1){const r=[Math.cos(L3.yaw),-Math.sin(L3.yaw)],f=[-Math.sin(L3.yaw),-Math.cos(L3.yaw)],h=L3.N/2;
   L3.tx=Math.max(-h,Math.min(h,L3.tx+(r[0]*sx-f[0]*sy)*step));L3.tz=Math.max(-h,Math.min(h,L3.tz+(r[1]*sx-f[1]*sy)*step));}
 function l3Init(){if(L3.ren)return;L3.cv=document.createElement('canvas');L3.cv.className='l3c';
-  L3.ren=new THREE.WebGLRenderer({canvas:L3.cv,antialias:true,alpha:true,powerPreference:'high-performance'});L3.ren.setPixelRatio(Math.min(2,window.devicePixelRatio||1));L3.ren.shadowMap.enabled=true;L3.ren.shadowMap.type=THREE.PCFShadowMap;
+  L3.ren=new THREE.WebGLRenderer({canvas:L3.cv,antialias:true,alpha:true,powerPreference:'default'});L3.ren.setPixelRatio(pwrDpr());L3.ren.shadowMap.enabled=true;L3.ren.shadowMap.type=THREE.PCFShadowMap;
   L3.scene=new THREE.Scene();L3.scene.fog=new THREE.Fog('#cfe6ef',18,40);L3.cam=new THREE.PerspectiveCamera(38,1,.05,100);
   L3.scene.add(new THREE.HemisphereLight('#eaf6ff','#6a7a4a',.75));const sun=new THREE.DirectionalLight('#fff4dc',.75);sun.position.set(-5,9,4);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);
   const sc=sun.shadow.camera;sc.left=-8;sc.right=8;sc.top=8;sc.bottom=-8;sc.near=1;sc.far=30;sun.shadow.bias=-.0015;L3.scene.add(sun);L3.sun=sun;
@@ -4591,7 +4600,7 @@ function shipLive(el){if(typeof THREE==='undefined')return false;const w=el.clie
   const place=()=>{cam.position.set(Math.sin(yaw)*Math.cos(pitch)*dist-.3,Math.sin(pitch)*dist+1.1,Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(-.3,1.1,0);};
   const cv=ren.domElement;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
   cv.addEventListener('pointermove',e=>{if(!drag)return;yaw=drag.yaw-(e.clientX-drag.x)*.01;pitch=Math.max(.05,Math.min(1.1,drag.pitch+(e.clientY-drag.y)*.006));});cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>auto=true,2500);});
-  const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000;if(auto)yaw+=dt*.18;place();S.tick(t,dt);ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
+  const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}if(PWR.eco&&now-last<29){requestAnimationFrame(loop);return;}const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000;if(auto)yaw+=dt*.18;place();S.tick(t,dt);ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
 
 // ---------------- 3D life reconstructions for completed fossils (three.js, built from primitives; head toward +X, feet on y=0) ----------------
 const F3={shots:{}};
@@ -5001,7 +5010,7 @@ function fosLive(el,id){if(typeof THREE==='undefined')return false;const w=el.cl
   const cv=ren.domElement;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
   cv.addEventListener('pointermove',e=>{if(!drag||cv._pz)return;yaw=drag.yaw-(e.clientX-drag.x)*.01;pitch=Math.max(-.1,Math.min(1.2,drag.pitch+(e.clientY-drag.y)*.006));});cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>auto=true,2500);});
   cv.addEventListener('wheel',e=>{dist=Math.max(S.R*1.1,Math.min(S.R*4,dist*(1+Math.sign(e.deltaY)*.08)));e.preventDefault();},{passive:false});pinchZoom(cv,()=>dist,v=>{dist=Math.max(S.R*1.1,Math.min(S.R*4,v));auto=false;});
-  const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}const dt=Math.min(.05,(now-last)/1000);last=now;if(auto)yaw+=dt*.3;place();ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
+  const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}if(PWR.eco&&now-last<29){requestAnimationFrame(loop);return;}const dt=Math.min(.05,(now-last)/1000);last=now;if(auto)yaw+=dt*.3;place();ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
 
 function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
   const nx=L0.lv<LAND_SIZE.length?LAND_COST[L0.lv]:0;if(landPick&&landPick!=='me'&&!L0.tiles[landPick])landPick=null;
@@ -5365,7 +5374,7 @@ function furn3(id,w,d,o){const g=new THREE.Group(),A=f=>R3.anims.push(f),k=bid(i
     if(!(o&&o.noPet)){const rb=robot3();rb.position.set(0,0,.05);g.add(rb);A(t=>{rb.userData.brush.rotation.y=t*8;});}break;}
   default:{if(isPetId(k)&&(k==='dog'||k==='cat')){g.add(C3(.36,.4,.08,'#c94a5a',0,0,0,18),C3(.3,.32,.05,'#e07a86',0,.06,0,18));if(!(o&&o.noPet)){const a=animal3(k);a.scale.setScalar(1.6);g.add(a);A(t=>animPose(a,k==='dog'?'sit':k==='cat'?'sleep':'stand',t));}}}}
   return g;}
-function r3Init(){if(R3.ren)return;R3.cv=document.createElement('canvas');R3.cv.className='l3c';R3.ren=new THREE.WebGLRenderer({canvas:R3.cv,antialias:true,alpha:true,powerPreference:'high-performance'});R3.ren.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+function r3Init(){if(R3.ren)return;R3.cv=document.createElement('canvas');R3.cv.className='l3c';R3.ren=new THREE.WebGLRenderer({canvas:R3.cv,antialias:true,alpha:true,powerPreference:'default'});R3.ren.setPixelRatio(pwrDpr());
   R3.ren.shadowMap.enabled=true;R3.ren.shadowMap.type=THREE.PCFShadowMap;R3.scene=new THREE.Scene();R3.cam=new THREE.PerspectiveCamera(40,1,.05,100);
   R3.scene.add(new THREE.HemisphereLight('#fff8ee','#5a4a38',.58));const l=new THREE.DirectionalLight('#fff2d8',.9);l.position.set(-4,8,5);l.castShadow=true;l.shadow.mapSize.set(1024,1024);
   Object.assign(l.shadow.camera,{left:-7,right:7,top:7,bottom:-7,near:1,far:30});l.shadow.bias=-.0015;R3.scene.add(l);R3.ray=new THREE.Raycaster();
@@ -5470,7 +5479,7 @@ function r3Mount(){const a=$('#roomArt');if(!a)return;r3Init();a.innerHTML='';a.
 function r3Pan(sx,sy,step=1){const r=[Math.cos(R3.yaw),-Math.sin(R3.yaw)],f=[-Math.sin(R3.yaw),-Math.cos(R3.yaw)],h=(R3.N||6)/2;
   R3.tx=Math.max(-h,Math.min(h,(R3.tx||0)+(r[0]*sx-f[0]*sy)*step));R3.tz=Math.max(-h,Math.min(h,(R3.tz||0)+(r[1]*sx-f[1]*sy)*step));}
 document.addEventListener('click',e=>{const b=e.target.closest('#roomArt [data-rp]');if(!b)return;const [a,c]=b.dataset.rp.split(',').map(Number);r3Pan(a,c,Math.max(.8,R3.dist/10));});
-function r3Size(){const a=$('#roomArt');if(!a||!R3.ren)return;R3.cv.style.width='100%';const W=Math.round(R3.cv.getBoundingClientRect().width||a.clientWidth||320);if(W<50){requestAnimationFrame(r3Size);return;}const H=Math.round(Math.min(520,Math.max(260,W*.78)));R3.ren.setPixelRatio(Math.min(2,window.devicePixelRatio||1));R3.ren.setSize(W,H,false);R3.cv.style.height=H+'px';R3.cam.aspect=W/H;R3.cam.updateProjectionMatrix();R3.sizedW=W;}
+function r3Size(){const a=$('#roomArt');if(!a||!R3.ren)return;R3.cv.style.width='100%';const W=Math.round(R3.cv.getBoundingClientRect().width||a.clientWidth||320);if(W<50){requestAnimationFrame(r3Size);return;}const H=Math.round(Math.min(520,Math.max(260,W*.78)));R3.ren.setPixelRatio(pwrDpr());R3.ren.setSize(W,H,false);R3.cv.style.height=H+'px';R3.cam.aspect=W/H;R3.cam.updateProjectionMatrix();R3.sizedW=W;}
 if(window.ResizeObserver)new ResizeObserver(()=>{if(R3.on&&R3.cv&&R3.cv.isConnected&&Math.abs((R3.cv.getBoundingClientRect().width|0)-(R3.sizedW|0))>2)r3Size();}).observe(document.documentElement);
 window.addEventListener('resize',()=>{if(R3.on)r3Size();});
 function r3Tick(dt){if(!R3.on||!R3.cv.isConnected)return;R3.t+=dt;const t=R3.t,cp=Math.cos(R3.pitch),c=R3.cam;const tx=R3.tx||0,tz=R3.tz||0;c.position.set(tx+Math.sin(R3.yaw)*cp*R3.dist,Math.sin(R3.pitch)*R3.dist+.6,tz+Math.cos(R3.yaw)*cp*R3.dist);c.lookAt(tx,.6,tz);
@@ -6209,7 +6218,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=127;
+const GVER=128;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
@@ -6236,7 +6245,9 @@ function renderVoiceSeg(){const el=$('#mVoice');if(!el)return;if(YIMP3){el.inner
 $('#mVoice').addEventListener('click',e=>{const b=e.target.closest('[data-vc]');if(!b)return;const ko=yiKoVoices();
   if(b.dataset.vc==='next'&&ko.length>1){const v=yiPick(),i=ko.indexOf(v);S.snd=Object.assign(sndPref(),{vname:ko[(i+1)%ko.length].name});save();renderVoiceSeg();}
   if(!yiVoice.busy)yiVoice();});
-function renderSndSeg(){renderVoiceSeg();const p=sndPref();$('#mSnd').innerHTML=[['bgm','🎵 음악'],['sfx','🔊 효과음'],['voice','🗣 음성']].map(([k,n])=>`<button type="button" data-snd="${k}" aria-pressed="${!!p[k]}">${n}</button>`).join('')+[['.4','작게'],['.8','보통'],['1','크게']].map(([v,n])=>`<button type="button" data-vol="${v}" aria-pressed="${Math.abs(p.vol-v)<.01}">${n}</button>`).join('');}
+function renderPwrSeg(){const e=$('#mPwr');if(!e)return;e.innerHTML=[['eco','🔋 절전'],['hi','⚡ 보통']].map(([k,n])=>`<button type="button" data-pwr="${k}" aria-pressed="${(k==='eco')===PWR.eco}">${n}</button>`).join('')+`<button type="button" data-wake="1" aria-pressed="${S.wake!==0}">☀ 화면 켜둠</button>`;}
+$('#mPwr').addEventListener('click',e=>{const b=e.target.closest('[data-pwr],[data-wake]');if(!b)return;if(b.dataset.pwr){S.pwr=b.dataset.pwr;pwrInit();toast(PWR.eco?'절전: 화면 30fps, 1분 동안 안 만지면 12fps — 진행 속도는 같아요':'보통: 화면 60fps (배터리·발열 ↑)');}else{S.wake=S.wake===0?1:0;toast(S.wake?'게임 중 화면이 꺼지지 않아요':'폰 설정대로 화면이 꺼져요 (꺼져 있는 동안은 절반 속도로 진행)');}save();pwrApply();renderPwrSeg();});
+function renderSndSeg(){renderVoiceSeg();renderPwrSeg();const p=sndPref();$('#mSnd').innerHTML=[['bgm','🎵 음악'],['sfx','🔊 효과음'],['voice','🗣 음성']].map(([k,n])=>`<button type="button" data-snd="${k}" aria-pressed="${!!p[k]}">${n}</button>`).join('')+[['.4','작게'],['.8','보통'],['1','크게']].map(([v,n])=>`<button type="button" data-vol="${v}" aria-pressed="${Math.abs(p.vol-v)<.01}">${n}</button>`).join('');}
 $('#mSnd').addEventListener('click',e=>{const b=e.target.closest('[data-snd],[data-vol]');if(!b)return;const p=sndPref();if(b.dataset.snd)p[b.dataset.snd]=p[b.dataset.snd]?0:1;else p.vol=+b.dataset.vol;S.snd=p;save();sndInit();if(SND.ctx&&SND.ctx.state==='suspended')SND.ctx.resume();sndApply();renderSndSeg();if(b.dataset.snd==='sfx'&&p.sfx)sfx('coin');});
 function renderSeasonSeg(){const cur=S.season||'auto';$('#mSeason').innerHTML=[{k:'auto',n:'자동·'+seasonName(autoSeason())},...SEASONS].map(x=>`<button type="button" data-se="${x.k}" aria-pressed="${x.k===cur}">${x.n}</button>`).join('');}
 $('#mSeason').addEventListener('click',e=>{const b=e.target.closest('[data-se]');if(!b)return;S.season=b.dataset.se;save();renderSeasonSeg();if(view==='map')renderCard();toast('풍경 계절: '+(S.season==='auto'?'자동':seasonName(S.season)));});
@@ -6305,10 +6316,11 @@ buildMap();buildGauge();renderAvatar();show('map');syncTitle();
 if(S.story){$('#tStart').textContent='START';$('#tStory').hidden=false;$('#tReset').hidden=false;$('#tReset2').hidden=!(S.ends||[]).length;}syncTitle();
 checkInvest();
 let last=performance.now(),hudT=0,saveT=0;
-function loop(t){try{frame(t);}catch(err){console.error(err);}requestAnimationFrame(loop);}
+let lastF=0;function loop(t){const minMs=PWR.eco?(pwrIdle()?1000/12:1000/30):0;if(minMs&&t-lastF<minMs-4){requestAnimationFrame(loop);return;}lastF=t;try{frame(t);}catch(err){console.error(err);}requestAnimationFrame(loop);}
 let hidAt=0;
 function frame(t){const raw=(t-last)/1000,dt=Math.min(.05,raw);last=t;
   if(raw>1.5&&!hidAt)catchUp(raw-dt,1,raw<30);
+  else if(raw>.055&&!titleOn&&!S.done){const x=raw-dt;if(!gateAt())boreAdvance(boreDps()*x,false);if(S.ex.active){const r=regById(S.ex.active);if(r)exDamage(r,expDps()*x,false);}}
   boreTick(dt);
   exTick(dt);popTick(dt);petTick(dt);evtTick(dt);endingTick();chestTick(dt);alertTick(dt);liveRefresh(dt);
   const blocked=S.done||!!gateAt();
