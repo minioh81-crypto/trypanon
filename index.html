@@ -748,7 +748,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v136 · 2026-11-08</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v137 · 2026-11-08</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -6332,7 +6332,7 @@ function mgTick(dt){if(titleOn||!S.story||document.hidden)return;if(S.mgT==null)
   if(!c.hidden)c.hidden=true;if(mg)return;S.mgT-=dt;if(S.mgT<=0){S.mgOn=90;}}
 function mgUnit(){const cap=Math.max(200,dlCost(Math.min(DLOPEN,S.dl+1))*.12),ips=gateAt()?cap/240:incomePerSec();return Math.round(Math.min(cap,Math.max(60,ips*14)));}
 function mgMats(){const pool=[...new Set(REG.filter(isUnl).map(x=>x.res))];while(pool.length<3)pool.push(['원유','석영','장석'][pool.length]);return pool.sort(()=>Math.random()-.5).slice(0,4);}
-function mgOpen(){S.mgOn=0;$('#mgChip').hidden=true;const U=mgUnit();mg={free:1,bet:1,spinning:false,mats:mgMats(),U,cost:Math.max(100,Math.round(U*1.2)),last:null,total:{money:0,res:{}},spins:0,reels:[null,null,null]};$('#mgame').hidden=false;mgRender();mgFit();}
+function mgOpen(){S.mgOn=0;$('#mgChip').hidden=true;const U=mgUnit();mg={free:1,bet:1,paid:0,spinning:false,mats:mgMats(),U,cost:Math.max(100,Math.round(U*1.2)),last:null,total:{money:0,res:{}},spins:0,reels:[null,null,null]};$('#mgame').hidden=false;mgRender();mgFit();}
 const SL_DEFS=`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <linearGradient id="sgG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8d0"/><stop offset=".35" stop-color="#ffd85a"/><stop offset=".55" stop-color="#e8a21e"/><stop offset=".8" stop-color="#ffe08a"/><stop offset="1" stop-color="#a8641a"/></linearGradient>
 <linearGradient id="sgGh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a3a08"/><stop offset=".2" stop-color="#ffe9a0"/><stop offset=".38" stop-color="#c8862a"/><stop offset=".52" stop-color="#fff6c8"/><stop offset=".7" stop-color="#a8741a"/><stop offset=".86" stop-color="#ffe08a"/><stop offset="1" stop-color="#5a3006"/></linearGradient>
@@ -6361,7 +6361,8 @@ function mgRoll(){const M=mg.mats,deco=SL_DECO,r=Math.random(),pick=a=>a[(Math.r
   const all=[...M,...deco,'7'];let s;do{s=[pick(all),pick(all),pick(all)];}while(s[0]===s[1]||s[1]===s[2]||s[0]===s[2]);
   const shown=s.filter(x=>M.includes(x));return r<.64&&shown.length?{k:'small',m:pick(shown),s}:{k:'lose',s};}
 function mgBet(d){if(!mg||mg.spinning||mg.free)return;mg.bet=d==='max'?3:Math.max(1,Math.min(3,(mg.bet||1)+d));sfx('select');mgRender(false);}
-function mgSpin(){if(!mg||mg.spinning)return;const bet=mg.free?1:(mg.bet||1),cost=mg.cost*bet;if(!mg.free){if(S.money<cost){toast(`${bet}배 베팅에는 ${won(cost)}이 필요해요`);return;}S.money-=cost;mg.total.money-=cost;}else mg.free=0;
+const MG_PAID=3;
+function mgSpin(){if(!mg||mg.spinning)return;if(!mg.free&&mg.paid>=MG_PAID){toast('이번 머신은 끝났어요 · 다음 머신을 기다려 주세요');return;}const bet=mg.free?1:(mg.bet||1),cost=mg.cost*bet;if(!mg.free){if(S.money<cost){toast(`${bet}배 베팅에는 ${won(cost)}이 필요해요`);return;}S.money-=cost;mg.total.money-=cost;mg.paid++;}else mg.free=0;
   const out=mgRoll(),base=10+Math.floor(S.dl/4),bx=bet>1?` (×${bet})`:'';mg.spinning=true;mg.spins++;mg.last=null;
   let pay={money:0,res:{}},msg='';
   if(out.k==='jack'){pay.money=mg.U*20*3*bet;msg=`💰 JACKPOT! 7 7 7 · ${won(pay.money)}${bx}`;}
@@ -6381,7 +6382,7 @@ function mgClose(){if(mg&&mg.spinning)return;mgSchedule(300,540);mg=null;$('#mga
 function mgTotTxt(){const t=mg.total,p=[];if(t.money)p.push((t.money>0?'+':'−')+won(Math.abs(t.money)));for(const k in t.res)p.push(`${ric(k)}${k} +${t.res[k]}`);return p.length?p.join(' · '):'아직 없음';}
 function mgFit(){if(!mg)return;const sh=$('#mgame .dsheet'),w=$('#mgBody .slm-wrap');if(!sh||!w)return;w.style.zoom='';const h=w.offsetHeight,over=sh.scrollHeight-sh.clientHeight;const z=over>0?Math.max(.55,Math.floor((h-over-8)/h*100)/100):1;mg.z=z<1?z:0;w.style.zoom=mg.z||'';}
 addEventListener('resize',()=>{if(mg&&!mg.spinning)mgFit();});
-function mgRender(spinning){if(!mg)return;const L=mg.last,win=L&&L.k!=='lose',jack=L&&L.k==='jack',bet=mg.free?1:(mg.bet||1),cost=mg.cost*bet,dis=spinning?'disabled':'';
+function mgRender(spinning){if(!mg)return;const L=mg.last,win=L&&L.k!=='lose',jack=L&&L.k==='jack',bet=mg.free?1:(mg.bet||1),cost=mg.cost*bet,dis=spinning?'disabled':'',left=mg.free?MG_PAID:MG_PAID-mg.paid,over=!mg.free&&left<=0;
   const reel=(i)=>{const st=mg.reels[i]||[mg.mats[(i+1)%mg.mats.length],[mg.mats[0],'BAR','cherry'][i],['bell','diamond','crown'][i]];const end=mg.reels[i]?SL_N-2:1;
     const cells=st.map(k=>`<div class="slc">${mgSym(k)}</div>`).join('');const y=-end*SL_H;
     return `<div class="slreel"><div class="slstrip ${spinning?'go':''}" style="--y:${y}px;--d:${1.3+i*.47}s;${spinning?'':`transform:translateY(${y}px)`}">${cells}</div></div>`;};
@@ -6409,13 +6410,13 @@ function mgRender(spinning){if(!mg)return;const L=mg.last,win=L&&L.k!=='lose',ja
     </svg></div>
     <div class="slcab"><div class="slbody">
       <div class="slwin"><div class="slwbulb">${wb}</div><div class="slreels">${reel(0)}${reel(1)}${reel(2)}</div><div class="slline"></div><i class="slarr l"></i><i class="slarr r"></i></div>
-      <div class="sllcd ${L?(win?'good':'bad'):''}"><div>${ctr(spinning?'🎰 돌아가는 중…':L?L.msg:mg.free?'무료 1회! 레버를 당기거나 SPIN':'한 판 더 · '+won(cost))}<small>${mg.free?'<b>FREE</b> 1회 · BET 1':`1회 <b>${won(cost)}</b>`} · 보유 ${won(S.money)}</small></div></div>
+      <div class="sllcd ${L?(win?'good':'bad'):''}"><div>${ctr(spinning?'🎰 돌아가는 중…':L?L.msg:mg.free?'무료 1회! 레버를 당기거나 SPIN':over?'이번 머신은 끝! 다음 머신을 기다려요':'한 판 더 · '+won(cost))}<small>${mg.free?`<b>FREE</b> 1회 + 유료 ${MG_PAID}판`:over?'유료 판 모두 사용':`남은 판 <b>${left}/${MG_PAID}</b> · 1회 <b>${won(cost)}</b>`} · 보유 ${won(S.money)}</small></div></div>
       <div class="sldeck"><div class="slbets">
-        <button type="button" class="slbtn" data-bet="-1" ${spinning||mg.free||bet<=1?'disabled':''}>BET −</button>
+        <button type="button" class="slbtn" data-bet="-1" ${spinning||mg.free||over||bet<=1?'disabled':''}>BET −</button>
         <div class="slbetv">BET<b>${bet}</b></div>
-        <button type="button" class="slbtn" data-bet="1" ${spinning||mg.free||bet>=3?'disabled':''}>BET +</button>
-        <button type="button" class="slbtn slmax ${bet===3?'on':''}" data-bet="max" ${spinning||mg.free?'disabled':''}>MAX BET ×3</button></div>
-        <button type="button" class="slspin" id="slSpin" ${dis}>SPIN<small>${mg.free?'FREE':'×'+bet}</small></button></div>
+        <button type="button" class="slbtn" data-bet="1" ${spinning||mg.free||over||bet>=3?'disabled':''}>BET +</button>
+        <button type="button" class="slbtn slmax ${bet===3?'on':''}" data-bet="max" ${spinning||mg.free||over?'disabled':''}>MAX BET ×3</button></div>
+        <button type="button" class="slspin" id="slSpin" ${spinning||over?'disabled':''}>${over?'END':'SPIN'}<small>${mg.free?'FREE':over?'0/'+MG_PAID:'×'+bet}</small></button></div>
       <div class="slbase">${SLI.club}</div>
     </div></div>
     <button type="button" class="sllever" id="slLever" aria-label="레버 당기기"><span class="mt"></span><i></i><b></b></button>
@@ -6425,7 +6426,7 @@ function mgRender(spinning){if(!mg)return;const L=mg.last,win=L&&L.k!=='lose',ja
   ${jack?`<div class="slcoins">${Array.from({length:22},(_,i)=>`<i style="--x:${(i*37)%100}%;--d:${(i%7)*.12}s">${SLI.coin}</i>`).join('')}</div>`:''}
   </div>
   <div class="mgfoot"><span>합계 ${mgTotTxt()} · ${mg.spins}판</span><button class="ghost" type="button" id="mgDone" ${dis}>그만하기</button></div>
-  <details class="slpay"><summary>배당표</summary><span>${SLI['7']}${SLI['7']}${SLI['7']} 잭팟 · 큰 돈</span><span>같은 재료 3개 · 재료 많이 + 돈</span><span>2개 일치 · 그 재료</span><span>나머지 · 재료 조금 또는 꽝</span><span>BET ×2·×3 → 비용·보상 함께 배수</span></details>`;}
+  <details class="slpay"><summary>배당표</summary><span>${SLI['7']}${SLI['7']}${SLI['7']} 잭팟 · 큰 돈</span><span>같은 재료 3개 · 재료 많이 + 돈</span><span>2개 일치 · 그 재료</span><span>나머지 · 재료 조금 또는 꽝</span><span>BET ×2·×3 → 비용·보상 함께 배수</span><span>머신마다 무료 1판 + 유료 3판</span></details>`;}
 function chipLayout(){gaugeLayout();const ev=$('#evtBar'),yi=$('#yiChip');if(!ev||!yi)return;const up=ev.hidden?0:ev.offsetHeight+6;let eb,yb;
   const fu=view==='bore'&&$('#fuels'),r=fu&&fu.getBoundingClientRect();
   if(r&&r.height){const b=Math.round(innerHeight-r.top+8);eb=b+'px';yb=(b+up)+'px';}else{eb='';yb=`calc(env(safe-area-inset-bottom,0px) + ${104+up}px)`;}
@@ -6477,7 +6478,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=136;
+const GVER=137;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
