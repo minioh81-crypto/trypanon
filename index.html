@@ -764,7 +764,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v142 · 2026-11-09</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v143 · 2026-11-09</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -3130,14 +3130,16 @@ function kimSVG(c,o={}){const u='km'+(++UID),ex=o.expr||'',up=o.pose==='raise',a
   const GF=`url(#${u}g)`,NF=`url(#${u}n)`,HF=`url(#${u}h)`;
   // gold lamellar scales clipped into a shape (gold on ★★, navy with gold rivets on ★)
   const lam=(id,path,step=3.6)=>{let d='',dr='';const nm=path.match(/-?[\d.]+/g).map(Number),xs=nm.filter((_,i)=>i%2===0),ys=nm.filter((_,i)=>i%2);let row=0;for(let y=Math.min(...ys)-1;y<Math.max(...ys)+step;y+=step,row++)for(let x=Math.min(...xs)-4+(row%2)*1.8;x<Math.max(...xs)+4;x+=3.6){d+=`M${x.toFixed(1)},${y.toFixed(1)} v2.3 q1.8,1.7 3.6,0 v-2.3Z`;if((row+Math.round(x))%3===0)dr+=`M${(x+1.8).toFixed(1)},${(y+1.6).toFixed(1)}m-.45,0a.45,.45 0 1,0 .9,0a.45,.45 0 1,0 -.9,0`;}
-    return `<clipPath id="${u}${id}"><path d="${path}"/></clipPath><g clip-path="url(#${u}${id})"><path d="${path}" fill="${GR?'#1a2560':N}"/><path d="${d}" fill="${GR?'#2c3e8e':'#2c4294'}" stroke="${GR?GD:ND}" stroke-width=".45"/><path d="${dr}" fill="${G}"/></g>`;};
+    return `<clipPath id="${u}${id}"><path d="${path}"/></clipPath><g clip-path="url(#${u}${id})"><path d="${path}" fill="${GR?'#6a4210':N}"/><path d="${d}" fill="${GR?GF:'#2c4294'}" stroke="${GR?'#7a4a10':ND}" stroke-width=".5"/>${GR?`<path d="${dr}" fill="#fff6c8"/>`:''}</g>`;};
   // Silla war banner (★★) on a gilded pole behind the right shoulder
   if(GR){const fA='M93,-6 L120,-4 L117,4 L121,12 L117,20 L121,28 L117,34 L93,34Z',fB='M93,-6 L118,-2 L115,6 L119,14 L115,22 L119,30 L115,36 L93,34Z';
     g+=`<path d="M92,-12 V160" stroke="#2a1a12" stroke-width="2.6"/><path d="M92,-12 V160" stroke="#c89a3a" stroke-width="1.2"/><path d="M89.4,-10 L92,-18 L94.6,-10Z" fill="${GF}" stroke="${GD}" stroke-width=".6"/>
       <path d="${fA}" fill="#1f2f7a" stroke="${G}" stroke-width="1.3">${an?`<animate attributeName="d" values="${fA};${fB};${fA}" dur="1.4s" repeatCount="indefinite"/>`:''}</path>`+sillaMark(106,12,1.25,GF,GD);}
   // flowing navy cape with gold border and trefoil pattern
+  if(GR){const fl=(sx)=>{let d='';for(let k=0;k<5;k++){const y=96+k*12,l=26+(k%2)*8;d+=`M${50+sx*24},${y} Q${50+sx*(30+l*.5)},${y-10} ${50+sx*(24+l)},${y-16} Q${50+sx*(26+l*.6)},${y-2} ${50+sx*(24+l*.8)},${y+6} Q${50+sx*(28)},${y+4} ${50+sx*24},${y+8}Z `;}return d;};
+    g+=`<defs><linearGradient id="${u}fw" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#e8701a" stop-opacity=".9"/><stop offset=".5" stop-color="#ffc83a"/><stop offset="1" stop-color="#fff6c8" stop-opacity=".9"/></linearGradient></defs><g fill="url(#${u}fw)" stroke="#c8781a" stroke-width=".6" opacity=".95">${an?'<animate attributeName="opacity" values=".75;1;.75" dur="1.2s" repeatCount="indefinite"/>':''}<path d="${fl(-1)}"/><path d="${fl(1)}"/></g>`;}
   const capeA='M28,104 C14,128 10,150 12,166 Q50,172 88,166 C90,150 86,128 72,104Z',capeB='M28,104 C10,128 4,150 7,165 Q50,172 92,166 C94,150 90,128 72,104Z';
-  g+=`<path d="${capeA}" fill="url(#${u}nv)" stroke="${ND}" stroke-width="1.6" stroke-linejoin="round">${an?`<animate attributeName="d" values="${capeA};${capeB};${capeA}" dur="1.6s" repeatCount="indefinite"/>`:''}</path><path d="M13,163 Q50,170 87,164" stroke="${G}" stroke-width="2" fill="none"/>`+sillaMark(22,148,.8,G,GD)+sillaMark(78,148,.8,G,GD);
+  g+=`<path d="${capeA}" fill="url(#${u}nv)" stroke="${ND}" stroke-width="1.6" stroke-linejoin="round">${an?`<animate attributeName="d" values="${capeA};${capeB};${capeA}" dur="1.6s" repeatCount="indefinite"/>`:''}</path><path d="M13,163 Q50,170 87,164" stroke="${G}" stroke-width="${GR?4.4:1.6}" fill="none"/>`+(GR?`<path d="M28,104 C16,126 12,148 13,162 L20,160 C20,146 24,128 34,110Z M72,104 C84,126 88,148 87,162 L80,160 C80,146 76,128 66,110Z" fill="#b8141e" stroke="${GD}" stroke-width=".8"/><path d="M13,160 Q50,167 87,161" stroke="#fff2b0" stroke-width="1" fill="none"/>`+sillaMark(18,140,.9,GF,GD)+sillaMark(82,140,.9,GF,GD)+sillaMark(22,156,.7,GF,GD)+sillaMark(78,156,.7,GF,GD):sillaMark(22,150,.65,G,GD)+sillaMark(78,150,.65,G,GD));
   // ponytail (behind the head): long black tail swinging out to the right
   const ptA='M56,30 C70,22 86,30 88,48 C90,66 86,84 80,100 C78,86 79,70 77,58 C75,48 68,40 60,38Z',ptB='M56,30 C71,21 89,31 91,50 C93,68 88,86 82,102 C80,88 80,72 78,60 C76,49 68,41 60,38Z';
   g+=`<path d="${ptA}" fill="${HF}" stroke="#000" stroke-width="1.3" stroke-linejoin="round">${an?`<animate attributeName="d" values="${ptA};${ptB};${ptA}" dur="1.5s" repeatCount="indefinite"/>`:''}</path><path d="M70,32 C82,38 85,56 83,78" stroke="#4a4458" stroke-width="1.2" fill="none" opacity=".7"/>`;
@@ -3147,17 +3149,18 @@ function kimSVG(c,o={}){const u='km'+(++UID),ex=o.expr||'',up=o.pose==='raise',a
   // armour skirt: navy lamellar panels with gold borders and red tassels
   const sk1='M25,134 L21,157 Q35,161 48.6,158 L49,134Z',sk2='M51,134 L51.4,158 Q65,161 79,157 L75,134Z';
   g+=lam('k1',sk1)+lam('k2',sk2)+`<path d="${sk1}" fill="none" stroke="${G}" stroke-width="1.5"/><path d="${sk2}" fill="none" stroke="${G}" stroke-width="1.5"/>`;
-  g+=`<path d="M41,134 L40,160 Q50,162 60,160 L59,134Z" fill="${R}" stroke="${RD}" stroke-width="1"/>`+sillaMark(50,146,.75,G,GD);
+  g+=GR?`<path d="M40,134 L38.5,161 Q50,164 61.5,161 L60,134Z" fill="${GF}" stroke="${GD}" stroke-width="1.2"/><path d="M42,136 L41,158 Q50,160.5 59,158 L58,136Z" fill="#1f2f7a" stroke="${GD}" stroke-width=".7"/>`+sillaMark(50,146,.95,GF,GD)+`<circle cx="44" cy="156" r="1.3" fill="#2ab07a"/><circle cx="56" cy="156" r="1.3" fill="#2ab07a"/>`:`<path d="M41,134 L40,160 Q50,162 60,160 L59,134Z" fill="${R}" stroke="${RD}" stroke-width="1"/>`+sillaMark(50,146,.7,G,GD);
   if(!ride)for(const x of[23,77])g+=`<path d="M${x},157 v6" stroke="${GD}" stroke-width="1"/><path d="M${x-2},162 h4 l1,6 h-6Z" fill="${R}" stroke="${RD}" stroke-width=".6"/>`;
   // torso: navy breastplate, gold trim, Silla emblem
   const tor='M29,108 Q50,101 71,108 L75,136 H25Z';
   g+=lam('t',tor)+`<path d="${tor}" fill="none" stroke="#000" stroke-width="1.5" stroke-linejoin="round"/><path d="M38,106 Q50,101 62,106 L60,128 Q50,132 40,128Z" fill="${NF}" stroke="${G}" stroke-width="1.6"/>`+sillaMark(50,115,1.15,GF,GD);
   // red sash belt + gold buckle
-  g+=`<path d="M24,128 Q50,124 76,128 L76,137 Q50,133 24,137Z" fill="${R}" stroke="${RD}" stroke-width="1.1"/><path d="M58,134 l6,12 l3,-2 l-4,-11Z" fill="${R}" stroke="${RD}" stroke-width=".8"/><rect x="45" y="126.5" width="10" height="9" rx="2" fill="${GF}" stroke="${GD}" stroke-width="1"/><circle cx="50" cy="131" r="2" fill="#2a6ae8" stroke="${GD}" stroke-width=".6"/>`;
+  if(GR)g+=`<path d="M24,127 Q50,123 76,127 L76,138 Q50,134 24,138Z" fill="${GF}" stroke="${GD}" stroke-width="1.2"/>${[28,35,42,58,65,72].map((x,i)=>`<ellipse cx="${x}" cy="${(131.6-Math.sin((x-24)/52*Math.PI)*2.2).toFixed(1)}" rx="2" ry="2.6" fill="${i%2?'#c8242a':'#2ab07a'}" stroke="${GD}" stroke-width=".6"/>`).join('')}<circle cx="50" cy="130.5" r="5.4" fill="${GF}" stroke="${GD}" stroke-width="1"/>`+sillaMark(50,130.5,.55,'#c8242a',GD);
+  else g+=`<path d="M24,128 Q50,124 76,128 L76,137 Q50,133 24,137Z" fill="${R}" stroke="${RD}" stroke-width="1.1"/><path d="M58,134 l6,12 l3,-2 l-4,-11Z" fill="${R}" stroke="${RD}" stroke-width=".8"/><rect x="45" y="126.5" width="10" height="9" rx="2" fill="${GF}" stroke="${GD}" stroke-width="1"/><circle cx="50" cy="131" r="2" fill="#2a6ae8" stroke="${GD}" stroke-width=".6"/>`;
   // shoulder plates (gold rimmed, layered)
-  for(const s of[-1,1]){const x=50+s*21;g+=`<path d="M${x-s*10},104 Q${x+s*6},97 ${x+s*14},110 Q${x+s*9},121 ${x-s*6},118Z" fill="${GF}" stroke="${GD}" stroke-width="1.3"/><path d="M${x-s*7},106 Q${x+s*5},101 ${x+s*10},110 Q${x+s*6},116 ${x-s*5},114Z" fill="${NF}" stroke="${GD}" stroke-width=".8"/>`+sillaMark(x+s*2,109,.42,GF,GD);g+=`<path d="M${x-s*9},105 Q${x+s*5},100 ${x+s*12},112" fill="none" stroke="none"/><path d="M${x-s*6},113 Q${x+s*5},115 ${x+s*10},110" stroke="${G}" stroke-width="1.2" fill="none"/><circle cx="${x+s*2}" cy="${107.5}" r="1.4" fill="${GF}" stroke="${GD}" stroke-width=".5"/>`;}
+  for(const s of[-1,1]){const x=50+s*21;g+=(GR?`<path d="M${x+s*4},101 l${s*6},-6 l${s*1},7 M${x+s*10},104 l${s*7},-3 l${s*-2},7" fill="${GF}" stroke="${GD}" stroke-width=".8"/>`:'')+`<path d="M${x-s*10},104 Q${x+s*6},97 ${x+s*14},110 Q${x+s*9},121 ${x-s*6},118Z" fill="${GR?GF:NF}" stroke="${GD}" stroke-width="1.3"/><path d="M${x-s*7},106 Q${x+s*5},101 ${x+s*10},110 Q${x+s*6},116 ${x-s*5},114Z" fill="${NF}" stroke="${GD}" stroke-width=".8"/>`+sillaMark(x+s*2,109,.42,GF,GD);g+=`<path d="M${x-s*9},105 Q${x+s*5},100 ${x+s*12},112" fill="none" stroke="none"/><path d="M${x-s*6},113 Q${x+s*5},115 ${x+s*10},110" stroke="${G}" stroke-width="1.2" fill="none"/><circle cx="${x+s*2}" cy="${107.5}" r="1.4" fill="${GF}" stroke="${GD}" stroke-width=".5"/>`;}
   const arm=d=>`<path d="${d}" stroke="${ND}" stroke-width="12.6" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${N}" stroke-width="8.8" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${G}" stroke-width="1.2" fill="none" stroke-dasharray=".1 3.2" stroke-linecap="round"/>`,
-    cuff=(x,y)=>`<circle cx="${x}" cy="${y}" r="5.4" fill="${GF}" stroke="${GD}" stroke-width="1.1"/><circle cx="${x}" cy="${y}" r="3.4" fill="none" stroke="${GD}" stroke-width=".6"/>`,
+    cuff=(x,y)=>`<circle cx="${x}" cy="${y}" r="${GR?6.2:5.2}" fill="${GR?GF:NF}" stroke="${GD}" stroke-width="1.1"/><circle cx="${x}" cy="${y}" r="3.4" fill="none" stroke="${GR?GD:G}" stroke-width=".7"/>${GR?`<circle cx="${x}" cy="${y-4.4}" r="1.3" fill="#c8242a"/>`:''}`,
     fist=(x,y,r=5)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="url(#${u}s)" stroke="${skD}" stroke-width="1.4"/><path d="M${x-2.4},${y-1} h4.8 M${x-2.2},${y+1.2} h4.4" stroke="${skD}" stroke-width=".8"/>`;
   const sword=(x1,y1,ang,len)=>{const r=ang*Math.PI/180,dx=Math.sin(r),dy=-Math.cos(r),px=-dy,py=dx,tx=x1+dx*len,ty=y1+dy*len,w=2.8;
     return `<path d="M${(x1+px*w).toFixed(1)},${(y1+py*w).toFixed(1)} L${(tx+px*w*.8).toFixed(1)},${(ty+py*w*.8).toFixed(1)} L${(tx+dx*6).toFixed(1)},${(ty+dy*6).toFixed(1)} L${(tx-px*w*.8).toFixed(1)},${(ty-py*w*.8).toFixed(1)} L${(x1-px*w).toFixed(1)},${(y1-py*w).toFixed(1)}Z" fill="url(#${u}b)" stroke="#4a565e" stroke-width=".8" stroke-linejoin="round"/>
@@ -4925,11 +4928,11 @@ function s3Horse(){const T=THREE,G=new T.Group(),anims=[];
   const sph=(rx,ry,rz,m,x,y,z,par,seg=28)=>{const o=M(new T.SphereGeometry(1,seg,Math.round(seg*.65)),m,x,y,z,par);o.scale.set(rx,ry,rz);return o;};
   const root=new T.Group();G.add(root);const body=new T.Group();root.add(body);const BY=1.78;
   sph(1.12,.56,.5,WH,0,BY,0,body);sph(.62,.64,.52,WH,-.82,BY+.08,0,body);sph(.66,.64,.54,WH,.84,BY+.1,0,body);sph(.9,.3,.38,WH2,0,BY-.3,0,body);
-  {const cp=M(new T.SphereGeometry(1,48,24,0,Math.PI*2,0,Math.PI*.62),bardM,.02,BY+.06,0,body);cp.scale.set(1.63,.69,.61);
-   const hy=BY+.06-.69*.37;for(const [dy,r] of[[0,.04],[-.06,.025]]){const hem=M(new T.TorusGeometry(1,r,8,72),GOLD,.02,hy+dy,0,body);hem.rotation.x=Math.PI/2;hem.scale.set(1.63*.93,.61*.93,1);}
-   for(let i=0;i<26;i++){const a=i/26*Math.PI*2,x=.02+Math.cos(a)*1.52,z=Math.sin(a)*.57;if(Math.abs(Math.cos(a))>.95)continue;M(new T.SphereGeometry(.04,8,6),GOLD,x,hy-.08,z,body);const tz=M(new T.ConeGeometry(.05,.22,8),i%2?NAVY:GOLD,x,hy-.2,z,body);tz.rotation.x=Math.PI;}}
+  {const PH=.84,cp=M(new T.SphereGeometry(1,64,32,0,Math.PI*2,0,Math.PI*PH),bardM,.02,BY+.02,0,body);cp.scale.set(1.8,.76,.64);const hr=Math.sin(Math.PI*PH),hc=Math.cos(Math.PI*PH);
+   const hy=BY+.02+.76*hc;for(const [dy,r] of[[0,.04]]){const hem=M(new T.TorusGeometry(1,r,8,80),GOLD,.02,hy+dy,0,body);hem.rotation.x=Math.PI/2;hem.scale.set(1.8*hr,.64*hr,1);}
+   for(let i=0;i<24;i++){const a=i/24*Math.PI*2,x=.02+Math.cos(a)*1.8*hr,z=Math.sin(a)*.64*hr;M(new T.SphereGeometry(.045,10,8),GOLD,x,hy-.05,z,body);M(new T.CylinderGeometry(.03,.055,.2,10),i%2?NAVY:RED,x,hy-.18,z,body);}}
   // gold breast plate with a flower medallion
-  {const md=M(new T.CylinderGeometry(.17,.17,.06,24),GOLD,-1.42,BY+.1,0,body);md.rotation.z=Math.PI/2;M(new T.CylinderGeometry(.09,.09,.07,20),RED,-1.45,BY+.1,0,body).rotation.z=Math.PI/2;for(const sd of[1,-1]){const sp=M(new T.CylinderGeometry(.04,.04,.75,8),GOLD,-1.3,BY+.15,sd*.3,body);sp.rotation.x=sd*.9;sp.rotation.z=.2;}}
+  {const md=M(new T.CylinderGeometry(.18,.18,.06,24),GOLD,-1.8,BY+.02,0,body);md.rotation.z=Math.PI/2;M(new T.CylinderGeometry(.09,.09,.07,20),RED,-1.83,BY+.02,0,body).rotation.z=Math.PI/2;}
   // saddle: navy seat with gold trim, gold pommel + cantle, stirrups
   {sph(.5,.16,.44,NAVY,.04,BY+.68,0,body);M(new T.TorusGeometry(.42,.035,6,28),GOLD,.04,BY+.71,0,body).rotation.x=Math.PI/2;
    const pm=M(new T.CylinderGeometry(.16,.2,.22,18),GOLD,-.4,BY+.82,0,body);pm.rotation.z=.25;const ct=M(new T.CylinderGeometry(.2,.24,.18,18),GOLD,.48,BY+.8,0,body);ct.rotation.z=-.3;
@@ -4939,7 +4942,7 @@ function s3Horse(){const T=THREE,G=new T.Group(),anims=[];
   {const n=M(new T.CylinderGeometry(.28,.44,1.05,24),WH,-.32,.42,0,neck);n.rotation.z=.68;sph(.36,.42,.34,WH,-.05,.08,0,neck);
    for(let i=0;i<3;i++){const pl=M(new T.CylinderGeometry(.33-i*.03,.36-i*.03,.2,24,1,true,-Math.PI*.5,Math.PI),bardM,-.12-i*.2,.2+i*.24,0,neck);pl.rotation.set(0,Math.PI/2,.68);const rm=M(new T.TorusGeometry(.35-i*.03,.02,6,24,Math.PI),GOLD,-.12-i*.2,.2+i*.24-.1,0,neck);rm.rotation.set(0,Math.PI/2,.68);}
    for(let i=0;i<8;i++){const m=sph(.11,.26,.13,MANE,0,0,0,neck,16);m.position.set(.05-i*.11,.36+i*.13,(i%2?.05:-.05));m.rotation.z=.95;}}
-  const head=new T.Group();head.position.set(-.86,1.06,0);head.rotation.z=-.42;neck.add(head);
+  const head=new T.Group();head.position.set(-.78,1.02,0);head.rotation.z=.5;neck.add(head);
   sph(.4,.34,.31,WH,0,0,0,head);sph(.36,.25,.26,WH,-.4,-.08,0,head);sph(.25,.21,.24,WH2,-.66,-.1,0,head);
   for(const sd of[1,-1]){sph(.05,.035,.025,BLK,-.84,-.06,sd*.12,head,12);sph(.085,.1,.05,BLK,-.06,.08,sd*.27,head,16);M(new T.SphereGeometry(.028,8,6),ph('#ffffff',{emissive:'#fff'}),-.09,.12,sd*.31,head);
     const ear=M(new T.ConeGeometry(.08,.26,12),WH,.16,.36,sd*.14,head);ear.rotation.set(sd*.3,0,-.15);M(new T.ConeGeometry(.045,.16,8),ph('#f0c4b8'),.15,.35,sd*.16,head).rotation.set(sd*.3,0,-.15);
@@ -4960,16 +4963,16 @@ function s3Horse(){const T=THREE,G=new T.Group(),anims=[];
     M(new T.CylinderGeometry(fr?.2:.24,.13,.7,16),WH,0,-.35,0,hip);sph(fr?.2:.24,.24,fr?.2:.24,WH,0,-.02,0,hip,16);
     const knee=new T.Group();knee.position.set(0,-.7,0);hip.add(knee);sph(.13,.12,.13,WH,0,0,0,knee,14);M(new T.CylinderGeometry(.1,.095,.6,14),WH,0,-.3,0,knee);
     M(new T.CylinderGeometry(.13,.125,.16,16),GOLD,0,-.1,0,knee);M(new T.TorusGeometry(.13,.018,6,16),NAVY,0,-.1,0,knee).rotation.x=Math.PI/2;M(new T.CylinderGeometry(.13,.11,.1,14),WH2,0,-.56,0,knee);M(new T.CylinderGeometry(.12,.15,.13,16),HOOF,0,-.66,0,knee);
-    legs.push({hip,knee,fr,ph:fr?(z>0?0:.12):(z>0?.5:.62)});}
-  const reset=()=>{root.position.set(0,0,0);root.rotation.set(0,0,0);body.position.set(0,0,0);body.rotation.set(0,0,0);neck.rotation.z=0;tail.rotation.z=0;};
+    legs.push({hip,knee,fr,ph:fr?(z>0?0:.12):(z>0?.5:.62),h0:fr?0:.32,k0:fr?0:-.36});}
+  const reset=()=>{root.position.set(0,0,0);root.rotation.set(0,0,0);body.position.set(0,0,0);body.rotation.set(0,0,0);neck.rotation.z=0;tail.rotation.z=0;for(const L of legs){L.hip.rotation.z=L.h0;L.knee.rotation.z=L.k0;}};
   G.userData.anims=anims;
-  G.userData.gallop=(t,k=1)=>{reset();const c=t*2*Math.PI*1.6;for(const L of legs){const a=c+L.ph*2*Math.PI;L.hip.rotation.z=k*(L.fr?.55:.45)*Math.sin(a);L.knee.rotation.z=k*(L.fr?.95:-.7)*Math.max(0,Math.sin(a+(L.fr?-1.2:1.2)));}
+  G.userData.gallop=(t,k=1)=>{reset();const c=t*2*Math.PI*1.6;for(const L of legs){const a=c+L.ph*2*Math.PI;L.hip.rotation.z=L.h0+k*(L.fr?.55:.42)*Math.sin(a);L.knee.rotation.z=L.k0+k*(L.fr?.95:.85)*Math.max(0,Math.sin(a+(L.fr?-1.2:-1.4)));}
     body.position.y=k*.14*Math.abs(Math.sin(c));body.rotation.z=k*.06*Math.sin(c);neck.rotation.z=k*.1*Math.sin(c+.8);
     tail.rotation.z=.35*k+.18*k*Math.sin(c*.5);tufts.forEach((tf,i)=>tf.rotation.z=.55-i*.08+k*.12*Math.sin(c+i*.6));};
-  G.userData.idle=t=>{reset();for(const L of legs){L.hip.rotation.z=0;L.knee.rotation.z=0;}body.position.y=Math.sin(t*1.6)*.015;neck.rotation.z=Math.sin(t*.9)*.05;tail.rotation.z=Math.sin(t*1.3)*.12;tufts.forEach((tf,i)=>tf.rotation.z=.55-i*.08+.06*Math.sin(t*2+i*.6));};
+  G.userData.idle=t=>{reset();body.position.y=Math.sin(t*1.6)*.015;neck.rotation.z=Math.sin(t*.9)*.05;tail.rotation.z=Math.sin(t*1.3)*.12;tufts.forEach((tf,i)=>tf.rotation.z=.55-i*.08+.06*Math.sin(t*2+i*.6));};
   // rearing: front lifted ~33°, pivoting on the hind hooves; front legs paw up and down (u = 0..1 through one paw)
   G.userData.rear=u=>{reset();const th=-.58,P=[.9,0],c=Math.cos(th),s=Math.sin(th);root.rotation.z=th;root.position.set(P[0]-(P[0]*c-P[1]*s),P[1]-(P[0]*s+P[1]*c),0);
-    const w=Math.sin(u*Math.PI*2);legs.forEach((L,i)=>{if(L.fr){const o=i?Math.PI:0,ww=Math.sin(u*Math.PI*2+o);L.hip.rotation.z=-.85+.35*ww;L.knee.rotation.z=1.3-.45*ww;}else{L.hip.rotation.z=-th-.12;L.knee.rotation.z=-.1;}});
+    const w=Math.sin(u*Math.PI*2);legs.forEach((L,i)=>{if(L.fr){const o=i?Math.PI:0,ww=Math.sin(u*Math.PI*2+o);L.hip.rotation.z=-.85+.35*ww;L.knee.rotation.z=1.3-.45*ww;}else{L.hip.rotation.z=-th+.22;L.knee.rotation.z=-.36;}});
     neck.rotation.z=.25+.06*w;tail.rotation.z=-.5;tufts.forEach((tf,i)=>tf.rotation.z=.3-i*.05);};
   G.userData.saddle=new T.Vector3(.04,BY+.8,0);G.userData.body=body;
   G.traverse(o=>{if(o.isMesh)o.castShadow=true;});return G;}
@@ -6767,7 +6770,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=142;
+const GVER=143;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
