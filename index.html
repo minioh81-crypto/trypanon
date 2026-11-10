@@ -777,7 +777,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v153 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v154 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -3663,7 +3663,7 @@ function swordSVG(kind,id='s',anim=true){
    ${one(56,0)}${one(126,1)}`;}
  // 김유신 환두대도: long straight sword in gilt scabbard, ring pommel with trefoil
  const y=78;
- let cord='';for(let i=0;i<10;i++){const x=58+i*7.2;cord+=`<path d="M${x} ${y-6} l7.2 12" stroke="#5f7f96" stroke-width="2.4"/><path d="M${x} ${y-6} l7.2 12" stroke="#cfe2ee" stroke-width=".7" opacity=".7"/>`;}
+ let cord='';for(let i=0;i<8;i++){const x=54+i*7.5;cord+=`<path d="M${x} ${y-6} l7.2 12" stroke="#5f7f96" stroke-width="2.4"/><path d="M${x} ${y-6} l7.2 12" stroke="#cfe2ee" stroke-width=".7" opacity=".7"/>`;}
  let dots='';for(let i=0;i<14;i++)dots+=`<circle cx="${150+i*15}" cy="${y-6.2}" r=".9" fill="#fff3c4" opacity=".8"/><circle cx="${157+i*15}" cy="${y+6.2}" r=".9" fill="#fff3c4" opacity=".8"/>`;
  return `<defs>
   <linearGradient id="${u('g')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0a8"/><stop offset=".3" stop-color="#e3b542"/><stop offset=".62" stop-color="#a87418"/><stop offset="1" stop-color="#e8c060"/></linearGradient>
@@ -5136,19 +5136,23 @@ function hrsShot(kind='q',w=480,h=360,fr=-1){const key=kind+w+'x'+h+'f'+fr;if(HS
   S.sc.updateMatrixWorld(true);const sv=U.saddle.clone();U.body.localToWorld(sv);sv.project(cam);HSAD[key]=[(sv.x+1)/2,(1-sv.y)/2];
   s3Ren.setClearColor(0,0);s3Ren.render(S.sc,cam);HSHOT[key]=s3Ren.domElement.toDataURL();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});}catch(e){HSHOT[key]=null;}return HSHOT[key];}
 // live rotatable view in the wardrobe: gallops in place; drag to turn
-function hrsLive(el){if(typeof THREE==='undefined')return false;const w=el.clientWidth||360,h=el.clientHeight||240;const ren=new THREE.WebGLRenderer({antialias:true,alpha:true});ren.setPixelRatio(Math.min(2,devicePixelRatio||1));ren.setSize(w,h);ren.domElement.className='ship3 hrs3';el.appendChild(ren.domElement);
+// 회전 미리보기(군마·거북선·화석)는 WebGL 렌더러 하나를 돌려 써요 — 열 때마다 새로 만들면 브라우저 한도(약 16개)를 넘어 내 땅 3D가 꺼졌어요
+let liveR=null,liveTok=0;
+function liveMount(el,w,h,cls){if(!liveR||liveR.getContext().isContextLost()){liveR=new THREE.WebGLRenderer({antialias:true,alpha:true});}
+  liveR.setPixelRatio(Math.min(1.5,devicePixelRatio||1));liveR.setSize(w,h);liveR.setClearColor(0,0);liveR.domElement.className=cls;liveR.domElement.style.pointerEvents='none';el.appendChild(liveR.domElement);return {ren:liveR,tok:++liveTok};}
+function hrsLive(el){if(typeof THREE==='undefined')return false;const w=el.clientWidth||360,h=el.clientHeight||240;const {ren,tok}=liveMount(el,w,h,'ship3 hrs3');
   const S=hrsScene(),cam=new THREE.PerspectiveCamera(30,w/h,.1,100);let yaw=-.7,pitch=.2,dist=11,auto=true,drag=null,t0=performance.now(),last=t0;
   const place=()=>{cam.position.set(Math.sin(yaw)*Math.cos(pitch)*dist-.2,Math.sin(pitch)*dist+1.1,Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(-.2,1.1,0);};
-  const cv=ren.domElement;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
+  const cv=el;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
   cv.addEventListener('pointermove',e=>{if(!drag)return;yaw=drag.yaw-(e.clientX-drag.x)*.01;pitch=Math.max(.02,Math.min(1.1,drag.pitch+(e.clientY-drag.y)*.006));});cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>auto=true,2500);});
-  const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}if(PWR.saving&&now-last<120){requestAnimationFrame(loop);return;}const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000;if(auto)yaw+=dt*.2;place();S.tick(t,'gallop');ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
+  const loop=now=>{if(!cv.isConnected||tok!==liveTok){S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}if(now-last<(PWR.saving?120:31)){requestAnimationFrame(loop);return;}const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000;if(auto)yaw+=dt*.2;place();S.tick(t,'gallop');ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
 // live, rotatable view mounted into an element (wardrobe stage); stops when the element leaves the page
-function shipLive(el){if(typeof THREE==='undefined')return false;const w=el.clientWidth||360,h=el.clientHeight||240;const ren=new THREE.WebGLRenderer({antialias:true,alpha:true});ren.setPixelRatio(Math.min(2,devicePixelRatio||1));ren.setSize(w,h);ren.domElement.className='ship3';el.appendChild(ren.domElement);
+function shipLive(el){if(typeof THREE==='undefined')return false;const w=el.clientWidth||360,h=el.clientHeight||240;const {ren,tok}=liveMount(el,w,h,'ship3');
   const S=s3Scene({}),cam=new THREE.PerspectiveCamera(30,w/h,.1,100);let yaw=-.55,pitch=.32,dist=13,auto=true,drag=null,t0=performance.now(),last=t0;
   const place=()=>{cam.position.set(Math.sin(yaw)*Math.cos(pitch)*dist-.3,Math.sin(pitch)*dist+1.1,Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(-.3,1.1,0);};
-  const cv=ren.domElement;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
+  const cv=el;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
   cv.addEventListener('pointermove',e=>{if(!drag)return;yaw=drag.yaw-(e.clientX-drag.x)*.01;pitch=Math.max(.05,Math.min(1.1,drag.pitch+(e.clientY-drag.y)*.006));});cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>auto=true,2500);});
-  const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}if(PWR.saving&&now-last<120){requestAnimationFrame(loop);return;}const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000;if(auto)yaw+=dt*.18;place();S.tick(t,dt);ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
+  const loop=now=>{if(!cv.isConnected||tok!==liveTok){S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}if(now-last<(PWR.saving?120:31)){requestAnimationFrame(loop);return;}const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000;if(auto)yaw+=dt*.18;place();S.tick(t,dt);ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
 
 // ---------------- 3D life reconstructions for completed fossils (three.js, built from primitives; head toward +X, feet on y=0) ----------------
 const F3={shots:{}};
@@ -5552,13 +5556,13 @@ function fosShot(id,w=480,h=300){const key=id+w+'x'+h;if(F3.shots[key]||typeof T
   if(!s3Ren){s3Ren=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});s3Ren.setPixelRatio(1);}s3Ren.setSize(w,h,false);
   const S=f3Scene(id),cam=new THREE.PerspectiveCamera(30,w/h,.05,100),R=S.R;cam.position.set(S.ctr.x+R*.5,S.ctr.y+R*.42,S.ctr.z+R*1.55);cam.lookAt(S.ctr.x,S.ctr.y*.85,S.ctr.z);
   s3Ren.setClearColor(0,0);s3Ren.render(S.sc,cam);F3.shots[key]=s3Ren.domElement.toDataURL();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});}catch(e){F3.shots[key]=null;}return F3.shots[key];}
-function fosLive(el,id){if(typeof THREE==='undefined')return false;const w=el.clientWidth||360,h=el.clientHeight||300;const ren=new THREE.WebGLRenderer({antialias:true,alpha:true});ren.setPixelRatio(Math.min(2,devicePixelRatio||1));ren.setSize(w,h);ren.domElement.className='fos3cv';el.appendChild(ren.domElement);
+function fosLive(el,id){if(typeof THREE==='undefined')return false;const w=el.clientWidth||360,h=el.clientHeight||300;const {ren,tok}=liveMount(el,w,h,'fos3cv');
   const S=f3Scene(id),cam=new THREE.PerspectiveCamera(30,w/h,.05,100);let yaw=.4,pitch=.28,dist=S.R*1.7,auto=true,drag=null,last=performance.now();
   const place=()=>{cam.position.set(S.ctr.x+Math.sin(yaw)*Math.cos(pitch)*dist,S.ctr.y+Math.sin(pitch)*dist,S.ctr.z+Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(S.ctr);};
-  const cv=ren.domElement;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
+  const cv=el;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
   cv.addEventListener('pointermove',e=>{if(!drag||cv._pz)return;yaw=drag.yaw-(e.clientX-drag.x)*.01;pitch=Math.max(-.1,Math.min(1.2,drag.pitch+(e.clientY-drag.y)*.006));});cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>auto=true,2500);});
   cv.addEventListener('wheel',e=>{dist=Math.max(S.R*1.1,Math.min(S.R*4,dist*(1+Math.sign(e.deltaY)*.08)));e.preventDefault();},{passive:false});pinchZoom(cv,()=>dist,v=>{dist=Math.max(S.R*1.1,Math.min(S.R*4,v));auto=false;});
-  const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}if(PWR.saving&&now-last<120){requestAnimationFrame(loop);return;}const dt=Math.min(.05,(now-last)/1000);last=now;if(auto)yaw+=dt*.3;place();ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
+  const loop=now=>{if(!cv.isConnected||tok!==liveTok){S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}if(now-last<(PWR.saving?120:31)){requestAnimationFrame(loop);return;}const dt=Math.min(.05,(now-last)/1000);last=now;if(auto)yaw+=dt*.3;place();ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
 
 function renderLand(){fixBig();const L0=landOf(),n=landSize(),hb=houseBonus();
   const nx=L0.lv<LAND_SIZE.length?LAND_COST[L0.lv]:0;if(landPick&&landPick!=='me'&&!L0.tiles[landPick])landPick=null;
@@ -6673,7 +6677,7 @@ function renderRec(){const rs=S.records||[];
     <h3 class="h3" style="margin:14px 0 4px">완주 기록</h3>${rs.length?`<table class="rect"><tr><th>#</th><th>이름</th><th>모드</th><th>점수</th><th>기간</th><th>엔딩</th></tr>${rs.map((r,i)=>`<tr><td>${i+1}</td><td>${escH(r.name)}</td><td class="modechip ${r.mode==='hard'?'hard':''}">${MODES[r.mode].n}</td><td class="sc">${r.score.toLocaleString('ko-KR')}</td><td>${r.days}일</td><td>${ENDS[r.end]?ENDS[r.end].n:'-'}</td></tr>`).join('')}</table>`:'<p class="sub">아직 완주 기록이 없어요. 지구를 관통하면 점수가 기록돼요.</p>'}`;}
 
 // ---------------- hero stats: every number that shapes drilling, plus all perks currently in force ----------------
-function openStats(){renderStats();$('#statDlg').hidden=false;}
+function openStats(){renderStats();$('#statDlg').hidden=false;mapAnim(false);}
 function renderStats(){const c=ME(),l=layerAt(Math.min(S.depth,GOAL()-1)),pc=v=>(v>=0?'+':'')+(Math.round(v*1000)/10)+'%',pp=v=>(v>=0?'+':'')+(Math.round(v*1000)/10)+'%p',w=homeWx();
   const rid=S.ex.active,er=rid?regById(rid):null,yf=(MD().yf||3)*(S.part===2?MD().y2||1:1);
   const cards=[['드릴',`Lv.${S.dl} · ${dlName(S.dl)}`],['본공 배수',`×${fmtN(dlMul(S.dl))}`],['기본 굴착력',fmtN(dps())+'/초'],['본공 굴착력',fmtN(boreDps())+'/초'],
@@ -6709,7 +6713,7 @@ function renderStats(){const c=ME(),l=layerAt(Math.min(S.depth,GOAL()-1)),pc=v=>
     <div class="st-sec">적용 중인 보유 효과 (${perks.length})</div><div class="st-l">${perks.join('')||'<p class="sub">아직 적용 중인 효과가 없어요. 투자자·유물 세트·화석·소품으로 늘어나요.</p>'}</div>
     <div class="st-sec">부품</div><div class="st-l">${parts}</div>`;}
 $('#mapStat').addEventListener('click',()=>openStats());
-$('#statClose').addEventListener('click',()=>$('#statDlg').hidden=true);
+$('#statClose').addEventListener('click',()=>{$('#statDlg').hidden=true;if(view==='map'&&$('#ward').hidden)mapAnim(true);});
 
 $('#recClose').addEventListener('click',()=>$('#recDlg').hidden=true);
 function openTitleModes(){S.needMode=true;save();titleOn=true;$('#title').hidden=false;syncTitle();}
@@ -6930,7 +6934,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=153;
+const GVER=154;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
@@ -7035,8 +7039,8 @@ if(S.story){$('#tStart').textContent='START';$('#tStory').hidden=false;$('#tRese
 checkInvest();
 let last=performance.now(),hudT=0,saveT=0;
 // warm-up: draw the 내 땅 shop thumbnails a few at a time while the game is idle, so the first visit to 내 땅 opens quickly
-setTimeout(function warm(){if(typeof THREE==='undefined'||!L3OK)return;const ids=LITEM.filter(i=>!THUMB['land'+i.id]).map(i=>i.id);if(!ids.length)return;const ric_=window.requestIdleCallback||(f=>setTimeout(()=>f({timeRemaining:()=>8}),60));
-  ric_(d=>{let n=0;while(ids.length&&(d.timeRemaining()>4||n===0)&&n<3){try{thumb3('land',ids.shift());}catch(e){}n++;}if(ids.length)setTimeout(warm,120);});},5000);
+setTimeout(function warm(){if(typeof THREE==='undefined'||!L3OK)return;const ids=LITEM.filter(i=>!THUMB['land'+i.id]).map(i=>i.id);if(!ids.length){if(!warm.s&&!exp&&!titleOn){warm.s=1;try{shipShot('q',640,380,{sea:false});hrsShot('q',480,360);}catch(e){}}return;}if(exp||titleOn||document.hidden||!$('#ward').hidden){setTimeout(warm,2000);return;}const ric_=window.requestIdleCallback||(f=>setTimeout(()=>f({timeRemaining:()=>8}),60));
+  ric_(d=>{if(d.timeRemaining()>6){try{thumb3('land',ids.shift());}catch(e){}}setTimeout(warm,ids.length>1?400:0);},{timeout:3000});},15000);
 let lastF=0;function loop(t){pwrCheck();const minMs=PWR.saving?250:0;if(minMs&&t-lastF<minMs-4){requestAnimationFrame(loop);return;}lastF=t;try{frame(t);}catch(err){console.error(err);}requestAnimationFrame(loop);}
 let hidAt=0;
 function frame(t){const raw=(t-last)/1000,dt=Math.min(.05,raw);last=t;
