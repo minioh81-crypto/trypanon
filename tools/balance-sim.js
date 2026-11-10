@@ -15,7 +15,7 @@ function run(C,log=false){
   const can=c=>Object.entries(c).every(([k,v])=>k==='money'?S.money>=v:(S.res[k]||0)>=v);
   const pay=c=>{for(const[k,v]of Object.entries(c)){if(k==='money')S.money-=v;else S.res[k]-=v;}};
   const expHP=(r,i)=>r.t==='sea'&&i<r.water?2:C.expBase*r.diff*Math.pow(1+.1*(i-(r.water||0)),C.expGrow);
-  const yieldOf=(r,i)=>(h1!==null&&C.y2mul?C.y2mul:1)*(C.yFlat?C.yFlat:Math.max(2,Math.round(C.yBase*Math.pow(expHP(r,i)/(C.expBase*r.diff),C.yExp))))*(1+.08+.05*L('sensor')+(C.yAdd||0))*(r.t==='land'?(C.landY||1):1);
+  const yieldOf=(r,i)=>(h1!==null&&C.y2mul?C.y2mul:1)*(C.yFlat?C.yFlat:Math.max(2,Math.round(C.yBase*Math.pow(expHP(r,i)/(C.expBase*r.diff),C.yExp))))*(1+.08+.05*L('sensor')+(C.yAdd||0))*(r.t==='land'?(C.landY||1):(C.seaY||1));
   let h1=null;const INV=C.INV;let marks=[],lastDl=0,regCur=null,regHP=0;
   const dt=5;
   const GOAL=C.part2?12742000:6371000;
