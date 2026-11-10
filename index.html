@@ -775,7 +775,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v151 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v152 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -3627,7 +3627,7 @@ function swordSVG(kind,id='s',anim=true){
  const u=k=>`${k}${id}`;
  if(kind==='yi'){
   // one long sword + scabbard pair (y offset), curve: slight upward arc to the tip
-  const one=(y,j)=>{const B=`M108 ${y+2} Q240 ${y+3} 372 ${y-9} L374 ${y-6.5} Q244 ${y+8.6} 108 ${y+8.2}Z`;
+  const one=(y,j)=>{const B=`M108 ${y+.4} Q240 ${y+1.2} 366 ${y-11.6} Q374 ${y-11.2} 378 ${y-8.6} Q246 ${y+11.4} 108 ${y+10.2}Z`;
    // grip: 18..100 wrap with diamonds
    let dia='';for(let i=0;i<8;i++){const x=22+i*9.6;dia+=`${i?`<path d="M${x-3.6} ${y+5.3} l3.6 -3.7 l3.6 3.7 l-3.6 3.7z" fill="url(#${u('rd')})"/>`:''}<path d="M${x} ${y+.6} l9.6 9.4 M${x} ${y+10} l9.6 -9.4" stroke="#0f0b08" stroke-width="1.6"/><path d="M${x} ${y+.6} l9.6 9.4" stroke="rgba(255,255,255,.14)" stroke-width=".5"/>`;}
    const sy=y-26; // scabbard above
@@ -3640,15 +3640,15 @@ function swordSVG(kind,id='s',anim=true){
    <path d="M170 ${sy+1} C150 ${sy-22} 175 ${sy-30} 196 ${sy-24} C214 ${sy-19} 214 ${sy-12} 223 ${sy+1}" fill="none" stroke="#8a6a44" stroke-width="3.4" stroke-linecap="round"/>
    <path d="M170 ${sy+1} C150 ${sy-22} 175 ${sy-30} 196 ${sy-24} C214 ${sy-19} 214 ${sy-12} 223 ${sy+1}" fill="none" stroke="#c9a77a" stroke-width="1.1" stroke-dasharray="3 2" stroke-linecap="round"/>
    <path d="${B}" fill="url(#${u('bl')})" stroke="#7d848c" stroke-width=".5"/>
-   <path d="M110 ${y+3.4} Q240 ${y+4.4} 368 ${y-7.4}" stroke="#ffffff" stroke-width=".9" opacity=".85" fill="none"/>
-   <path d="M120 ${y+6.2} Q200 ${y+6.6} 250 ${y+4.2}" stroke="#9aa6b2" stroke-width=".7" fill="none" opacity=".8"/>
-   <path d="M128 ${y+5.6} c4 -3 8 3 12 0 c4 -3 8 3 12 0 M262 ${y+2.6} c5 -2.4 9 2.4 14 0 c5 -2.4 9 2.2 14 -.6 c4 -2 7 1.6 11 -.8 M300 ${y+.6} q6 -4 12 -1" stroke="#5f6a76" stroke-width=".8" fill="none" opacity=".9"/>
-   <path d="M100 ${y+1.2} h10 v8.6 h-10z" fill="url(#${u('cu')})"/>
-   <ellipse cx="99" cy="${y+5.4}" rx="2.8" ry="9" fill="url(#${u('gd')})" stroke="#2a2117" stroke-width=".8"/>
+   <path d="M110 ${y+1.6} Q240 ${y+2.4} 364 ${y-10.2}" stroke="#ffffff" stroke-width="1.1" opacity=".9" fill="none"/><path d="M110 ${y+4.4} Q240 ${y+5.4} 366 ${y-8.4}" stroke="#7e8994" stroke-width=".6" opacity=".7" fill="none"/><path d="M110 ${y+8.6} Q244 ${y+9.4} 372 ${y-8.4}" stroke="#ffffff" stroke-width=".8" opacity=".55" fill="none"/>
+   
+   <path d="M128 ${y+6.6} c4 -3 8 3 12 0 c4 -3 8 3 12 0 M262 ${y+3.4} c5 -2.4 9 2.4 14 0 c5 -2.4 9 2.2 14 -.6 c4 -2 7 1.6 11 -.8 M300 ${y+1.4} q6 -4 12 -1" stroke="#5f6a76" stroke-width=".8" fill="none" opacity=".9"/>
+   <path d="M100 ${y-.4} h10 v11.4 h-10z" fill="url(#${u('cu')})"/>
+   <ellipse cx="99" cy="${y+5.3}" rx="3" ry="10" fill="url(#${u('gd')})" stroke="#2a2117" stroke-width=".8"/>
    <rect x="20" y="${y+.4}" width="78" height="9.8" rx="2" fill="#1a140f"/>${dia}
    <path d="M20 ${y+1} h78" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
    <path d="M12 ${y} h9 v10.6 h-9 q-3.4 -5.3 0 -10.6z" fill="url(#${u('sv')})" stroke="#4a463e" stroke-width=".6"/>
-   ${anim&&j===0?`<rect x="100" y="${y-10}" width="22" height="22" fill="url(#${u('sh')})" opacity=".9"><animate attributeName="x" values="100;380;380" keyTimes="0;.45;1" dur="4.2s" repeatCount="indefinite"/></rect>`:''}
+   ${anim?`<clipPath id="${u('bc'+j)}"><path d="${B}"/></clipPath><g clip-path="url(#${u('bc'+j)})"><path d="M0 ${y-16} h14 l-8 32 h-14z" fill="url(#${u('sh')})"><animateTransform attributeName="transform" type="translate" values="100 0;390 0;390 0" keyTimes="0;.42;1" dur="4.2s" begin="${j*0.35}s" repeatCount="indefinite"/></path></g>`:''}
    </g>`;};
   return `<defs>
    <linearGradient id="${u('bl')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fa"/><stop offset=".45" stop-color="#c3cbd3"/><stop offset=".55" stop-color="#9aa3ad"/><stop offset="1" stop-color="#dfe5ea"/></linearGradient>
@@ -3657,9 +3657,8 @@ function swordSVG(kind,id='s',anim=true){
    <linearGradient id="${u('cu')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4b48e"/><stop offset=".5" stop-color="#a86a45"/><stop offset="1" stop-color="#d49c74"/></linearGradient>
    <linearGradient id="${u('gd')}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a3026"/><stop offset=".5" stop-color="#7a6648"/><stop offset="1" stop-color="#2c241b"/></linearGradient>
    <linearGradient id="${u('rd')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0785a"/><stop offset="1" stop-color="#9c3c26"/></linearGradient>
-   <linearGradient id="${u('sh')}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-   <clipPath id="${u('bc')}"><path d="M108 58 Q240 59 372 47 L374 49.5 Q244 64.6 108 64.2Z M108 128 Q240 129 372 117 L374 119.5 Q244 134.6 108 134.2Z"/></clipPath></defs>
-   <g clip-path="none">${one(56,0)}${one(126,1)}</g>`;}
+   <linearGradient id="${u('sh')}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+   ${one(56,0)}${one(126,1)}`;}
  // 김유신 환두대도: long straight sword in gilt scabbard, ring pommel with trefoil
  const y=78;
  let cord='';for(let i=0;i<10;i++){const x=58+i*7.2;cord+=`<path d="M${x} ${y-6} l7.2 12" stroke="#5f7f96" stroke-width="2.4"/><path d="M${x} ${y-6} l7.2 12" stroke="#cfe2ee" stroke-width=".7" opacity=".7"/>`;}
@@ -3692,7 +3691,6 @@ function swordSVG(kind,id='s',anim=true){
    <path d="M44 ${y-5} h4 v10 h-4z" fill="url(#${u('g2')})"/></g>
   ${anim?`<g clip-path="url(#${u('cl')})"><rect x="0" y="${y-30}" width="26" height="60" fill="url(#${u('sh')})"><animate attributeName="x" values="-30;400;400" keyTimes="0;.5;1" dur="4.6s" repeatCount="indefinite"/></rect></g>`:''}
  </g>`;}
-
 let wSw=null;
 function renderWard(){
   const c=wardChar();
@@ -6930,7 +6928,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=151;
+const GVER=152;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
