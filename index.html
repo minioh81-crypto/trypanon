@@ -773,7 +773,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v148 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v149 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -992,7 +992,7 @@ function shipPhase(now=Date.now()){if(!shipOn())return {vis:false};const c=shipC
 const SHIP={sea:{normal:.2,hard:.12},all:{normal:.03,hard:.02}},YISET={m:2.5,p:1.5,d:1.5};
 const shipSea=()=>shipOwn()?1+(SHIP.sea[S.mode]??.2):1,shipAll=()=>shipOwn()?1+(SHIP.all[S.mode]??.03):1;
 const yiM=()=>S.yiB&&S.yiB>Date.now()?yiInfo().m:1;
-const YI={p:{normal:.054,hard:.04},dur:{normal:60,hard:40}};
+const YI={p:{normal:.054,hard:.05},dur:{normal:60,hard:40}};
 const yiOn=()=>(yiOwn()||yi2Own())&&isYi(ME().sex); // owning gives the passive; the map event needs him equipped
 const isUnl=r=>r.un===0||S.unl.includes(r.id);
 function gateAt(){return null;} // v109: the drill never stops at a boundary any more
@@ -2083,7 +2083,7 @@ function bgmSched(){const c=SND.ctx;if(!c||c.state!=='running')return;const want
     else{if(st%8===0)tone({f:70,f2:38,t,d:.3,v:.2,bus:B});if(st%4===2)noise({f:2500,q:4,t,d:.12,v:.02,bus:B});}
     SND.next+=spb;SND.step++;}}
 // ---------------- Admiral Yi event: owned special character appears on the map ----------------
-let yiPend=false,yiRoll=Date.now()+60000;
+let yiPend=false,yiRoll=Date.now()+20000;
 function playYi(){$('#yiEv').className='yiev';const el=$('#yiEv'),left=Math.max(0,Math.ceil((S.yiB-Date.now())/1000));
   el.innerHTML=`<div class="yirays"></div><svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${yiSVG({sex:yi2Own()?'yi2':'yi'},{pose:'raise',anim:true})}</svg><div class="yitxt"><b>必死則生 必生則死</b><span>필사즉생 필생즉사</span><em>본공·원정 굴착량 +${Math.round((yiM()>1?yiM():yiInfo().m)*100-100)}% · ${left}초</em></div>${yiSet()?(L3OK&&shipShot('side',640,300,{sea:false})?`<img class="yiship" src="${shipShot('side',640,300,{sea:false})}" alt="">`:`<svg class="yiship" viewBox="-70 -16 380 216" aria-hidden="true">${turtleSVG({id:'y',sea:true})}</svg>`):''}`;
   el.hidden=false;el.classList.remove('go','out');void el.offsetWidth;el.classList.add('go');clearTimeout(playYi.t);clearTimeout(playYi.t2);const t0=Date.now();
@@ -6832,7 +6832,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=148;
+const GVER=149;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
