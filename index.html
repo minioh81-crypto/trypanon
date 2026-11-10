@@ -202,7 +202,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .preview{position:relative;border:1px solid var(--line);border-radius:16px;background:radial-gradient(ellipse at 50% 70%,#1d2a2f,#0c1113 75%);overflow:hidden;margin-bottom:14px}
 .preview canvas{display:block;width:100%;height:clamp(170px,30vh,320px);height:clamp(170px,30dvh,320px)}
 /* fixed top + list-only scroll (craft · land · room) */
-#v-craft>.scroll{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}#landView{overflow-y:auto}#landView>#lgWrap{position:sticky;top:-14px;z-index:4;box-shadow:0 8px 14px -6px rgba(0,0,0,.55)}#v-craft .preview{flex:none;margin-bottom:10px}#v-craft #craftList{flex:1 1 auto;min-height:120px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:20px}#landView>*{flex:none}
+#v-craft>.scroll{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}#landView{overflow-y:auto}#landView>#lgWrap{position:sticky;top:-14px;z-index:4;box-shadow:0 8px 14px -6px rgba(0,0,0,.55)}#v-craft .preview{flex:none;margin-bottom:10px}#v-craft #craftList{flex:1 1 auto;min-height:120px;overflow-y:auto;overflow-anchor:none;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:20px}#landView>*{flex:none}
 #room .dsheet{display:flex;flex-direction:column;overflow:hidden;height:92vh;height:92dvh}#room .dsheet>*{flex:none}#room #roomList{flex:1 1 auto;min-height:110px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;align-content:start;padding-bottom:16px}
 .pinfo{position:absolute;left:14px;right:14px;top:12px;display:flex;justify-content:space-between;gap:10px;pointer-events:none}
 .ptier{font-family:var(--f-kr);font-size:20px;line-height:1.1}
@@ -788,7 +788,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v157 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v158 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2203,7 +2203,8 @@ function renderCraft(live){if(live&&Date.now()-ladScrollT<1500)return;if(!live)s
       <div class="costs">${open?cost:`<span class="no">${src.n} 해금 필요 (본공 ${fmtD(src.un)})</span>`}</div></div>
       <button class="craft" type="button" data-p="${p.id}" ${!max&&open&&canPay(c)?'':'disabled'}>${max?'MAX':'제작'}</button></div>`;}).join('');
   const lad0=document.getElementById('ladder'),ladX=lad0?lad0.scrollLeft:null,ladTouch=lad0&&lad0.dataset.touch;
-  $('#craftList').innerHTML=tierCard()+`<h2 class="h3">드릴 부품 제작</h2><p class="sub">부품을 누르면 위 그림에 다음 레벨 모습이 미리 보입니다. 만든 부품은 본공과 원정 드릴에 바로 적용됩니다.</p><div class="parts">${rows}</div>`;
+  const clEl=$('#craftList'),clY=clEl.scrollTop;
+  $('#craftList').innerHTML=tierCard()+`<h2 class="h3">드릴 부품 제작</h2><p class="sub">부품을 누르면 위 그림에 다음 레벨 모습이 미리 보입니다. 만든 부품은 본공과 원정 드릴에 바로 적용됩니다.</p><div class="parts">${rows}</div>`;clEl.scrollTop=clY;
   {const lad=document.getElementById('ladder');if(lad){hScroll(lad);if(ladX!=null&&live)lad.scrollLeft=ladX;lad.addEventListener('scroll',()=>{ladScrollT=Date.now();},{passive:true});}}
   updatePreviewInfo();}
 function tierCard(){const dl=S.dl,g=dlGrade(dl),nx=dl+1;
@@ -6617,8 +6618,8 @@ const RECART={
      `${eLG(u+'b1',['#6b2232','#250b12'])}<rect x="6" y="6" width="128" height="112" fill="url(#${u}b1)"/><g opacity=".35" stroke="#ffb0b8" fill="none">${[20,40,60,80].map(k=>`<path d="M6 ${k+6} Q70 ${k-8} 134 ${k+6}"/>`).join('')}${[30,60,90,120].map(k=>`<path d="M${k} 6 V118"/>`).join('')}</g>`,
      `${eLG(u+'b2',['#215c47','#0b2219'])}<rect x="6" y="6" width="128" height="112" fill="url(#${u}b2)"/><circle cx="104" cy="44" r="26" fill="#3a8a6a" opacity=".55"/><path d="M84 40 q10 -10 22 -4 q4 10 -8 14 q-10 0 -14 -10Z M100 56 q8 -4 14 2 q-2 8 -10 8Z" fill="#7bd8a8" opacity=".6"/>`,
      `<rect x="6" y="6" width="128" height="112" fill="#fff"/>${Array.from({length:9},(_,k)=>k%2?`<rect x="6" y="${(6+k*112/9).toFixed(1)}" width="128" height="${(112/9).toFixed(1)}" fill="#0038a8" opacity=".85"/>`:'').join('')}<rect x="6" y="6" width="42" height="62" fill="#fff"/><circle cx="27" cy="31" r="10" fill="#fcd116"/>`][i];
-    return `<g transform="translate(${x},${y}) scale(.914)"><rect width="140" height="124" rx="7" fill="#05070a" stroke="#3d4b5c" stroke-width="3"/>${bg}
-     <g transform="translate(${[0,8,-6,10][i]},${[6,0,4,8][i]})">${fig(ME(),70,124+[22,0,8,0][i],[118,96,104,92][i],{expr:'happy',noShadow:true})}</g>
+    return `<g transform="translate(${x},${y}) scale(.914)"><rect width="140" height="124" rx="7" fill="#05070a" stroke="#3d4b5c" stroke-width="3"/><clipPath id="${u}sc${i}"><rect x="6" y="6" width="128" height="112"/></clipPath><g clip-path="url(#${u}sc${i})">${bg}
+     <g transform="translate(${[0,8,-6,10][i]},${[6,0,4,8][i]})">${fig(ME(),70,124+[22,0,8,0][i],[118,96,104,92][i],{expr:'happy',noShadow:true})}</g></g>
      <rect x="6" y="94" width="128" height="24" fill="rgba(0,0,0,.72)"/><rect x="6" y="94" width="4" height="24" fill="${['#2f8fff','#e8302a','#c8302a','#fcd116'][i]}"/><text x="14" y="110" font-size="10" font-weight="900" fill="#fff">${['KBS · LIVE','CNN · BREAKING','BBC · WORLD','TV URUGUAY'][i]}</text>
      <circle cx="122" cy="18" r="4" fill="#ff3a3a"><animate attributeName="opacity" values="1;.2;1" dur="1s" repeatCount="indefinite"/></circle><text x="104" y="21" font-size="7" font-weight="900" fill="#fff">LIVE</text></g>`;};
   return `<rect width="320" height="460" fill="#0f1620"/>${eRG(u+'gl',[[0,'#2a3e5a'],[1,'#0f1620']],.5,.3,.7)}<rect width="320" height="300" fill="url(#${u}gl)"/>
@@ -6629,9 +6630,9 @@ const RECART={
    <path d="M0 300 H96 L106 319 L96 338 H0Z" fill="#7a1410"/><text x="66" y="325" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">속보</text><circle cx="38" cy="319" r="3" fill="#fff"><animate attributeName="opacity" values="1;.2;1" dur=".8s" repeatCount="indefinite"/></circle>
    ${eLG(u+'st',['#1c2633','#0b1118'])}<rect x="0" y="338" width="320" height="122" fill="url(#${u}st)"/>
    ${Array.from({length:5},(_,i)=>`<path d="M${40+i*60} 338 L${20+i*70} 460" stroke="#ffffff" stroke-opacity=".04" stroke-width="18"/>`).join('')}
-   ${eHero(150,446,104,'happy')}
-   <g transform="translate(160 446)"><path d="M-36 0 L-30 -46 H30 L36 0Z" fill="#2a3442" stroke="#4d5d70" stroke-width="1.5"/><rect x="-30" y="-46" width="60" height="7" fill="#3d4b5c"/><circle cx="0" cy="-24" r="9" fill="#e8c45a"/><text x="0" y="-21" text-anchor="middle" font-size="8" font-weight="900" fill="#2a1d05">TP</text>
-     ${[[-20,'#2f8fff'],[-8,'#e8302a'],[6,'#7bd88f'],[18,'#fcd116']].map(([x,c],k)=>`<path d="M${x} -46 L${x*.4} -64" stroke="#1a1d22" stroke-width="2"/><rect x="${x*.4-3.5}" y="-72" width="7" height="10" rx="3" fill="#1a1d22"/><rect x="${x*.4-4}" y="-62" width="8" height="4" fill="${c}"/>`).join('')}</g>
+   ${eHero(160,432,104,'happy',{free:1,noPet:1})}${ePet(214,446,48,'happy')}
+   <g transform="translate(160 456)"><path d="M-38 0 L-32 -30 H32 L38 0Z" fill="#2a3442" stroke="#4d5d70" stroke-width="1.5"/><rect x="-32" y="-30" width="64" height="6" fill="#3d4b5c"/><circle cx="0" cy="-14" r="8" fill="#e8c45a"/><text x="0" y="-11" text-anchor="middle" font-size="7.4" font-weight="900" fill="#2a1d05">TP</text>
+     ${[[-26,'#2f8fff'],[-14,'#e8302a'],[14,'#7bd88f'],[26,'#fcd116']].map(([x,c],k)=>`<path d="M${x} -30 L${x*.9} -42" stroke="#1a1d22" stroke-width="2"/><rect x="${x*.9-3.5}" y="-50" width="7" height="10" rx="3" fill="#1a1d22"/><rect x="${x*.9-4}" y="-40" width="8" height="4" fill="${c}"/>`).join('')}</g>
    ${Array.from({length:6},(_,i)=>`<circle cx="${(20+hsh(i,51)*280).toFixed(0)}" cy="${(380+hsh(i,53)*60).toFixed(0)}" r="9" fill="#fff"><animate attributeName="opacity" values="0;0;.9;0" dur="${(1+hsh(i,55)*1.6).toFixed(1)}s" begin="${(hsh(i,57)*2).toFixed(1)}s" repeatCount="indefinite"/></circle>`).join('')}`;}),
  rec4:()=>SVP(u=>{const gold='#c9a54a',dk='#8a6a2a';
   const corner=(x,y,sx,sy)=>`<g transform="translate(${x} ${y}) scale(${sx} ${sy})"><path d="M0 0 h26 M0 0 v26" stroke="${gold}" stroke-width="2.2"/><path d="M6 6 q14 -2 18 10 q-10 -2 -12 8 q-4 -12 -6 -18Z" fill="${gold}" opacity=".85"/><circle cx="4" cy="4" r="2.6" fill="${gold}"/></g>`;
@@ -6720,7 +6721,7 @@ ENDS.fire={part:2,hard:1,n:'불의 고리',tag:'HARD END',sc:[['fire1','지구 �
   ['fire3','다나카 요시','"일본 정부의 다나카 요시입니다. 불의 고리 아래 맨틀이 요동치고 있어요. 이대로면 열도가 바다에 가라앉습니다."'],['fire4','다나카 요시','"지각을 안정시킬 방법은 단 하나, 맨틀까지 시추해 압력을 빼는 것. 지구를 관통한 당신의 드릴만이 할 수 있습니다."'],
   ['fire5','나','"좋아(よし)! 다시 파 보자." 두 나라 시추팀이 손을 맞잡았다. 다음 무대는 불의 고리.']]};
 ENDK.splice(0,ENDK.length,...Object.keys(ENDS));
-const endScs=k=>{const E=ENDS[k];return E.part===1&&S.mode==='hard'?[...E.sc,['hrec','하드 모드','남들보다 몇 배 험한 길을 지나 지구 중심에 닿았다. 하드 모드 1부 돌파 기록이 남았다.']]:E.sc;};
+const endScs=k=>{const E=ENDS[k];return E.part===1&&S.mode==='hard'&&endLive===k&&S.part!==2?[...E.sc,['hrec','하드 모드','남들보다 몇 배 험한 길을 지나 지구 중심에 닿았다. 하드 모드 1부 돌파 기록이 남았다.']]:E.sc;};
 
 const ENDP=p=>ENDK.filter(k=>ENDS[k].part===p);
 // which ending: scholar path (relics + fossils) -> TRUE, investor path (investment rounds) -> HAPPY, neither -> BAD
@@ -7096,7 +7097,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=157;
+const GVER=158;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
@@ -7146,12 +7147,13 @@ $('#tReset').addEventListener('click',e=>armReset(e.currentTarget));$('#tReset2'
 // ---------------- HUD ----------------
 let mapInfoKey='',liveKey='',liveT=0,pressing=false;
 addEventListener('pointerdown',()=>pressing=true,true);addEventListener('pointerup',()=>setTimeout(()=>pressing=false,60),true);addEventListener('pointercancel',()=>pressing=false,true);
-function liveRefresh(dt){liveT-=dt;if(liveT>0||pressing)return;liveT=.4;
+function liveRefresh(dt){liveT-=dt;if(liveT>0||pressing||Date.now()-userScrollT<900)return;liveT=.4;
   if(view==='store'){const k='store'+Math.floor(S.money)+JSON.stringify(S.res)+S.dl;if(k!==liveKey){liveKey=k;renderShop();liveT=1.5;}return;}
   if(view==='shop'){const k='dex'+(S.ends||[]).join()+relicCount()+JSON.stringify(S.relic)+JSON.stringify(S.fos||{})+hasMuseum();if(k!==liveKey){liveKey=k;renderDex();}return;}
   if(view!=='craft'&&view!=='land')return;
   const key=view+JSON.stringify(S.res)+Math.floor(S.money/(view==='store'?1:10))+JSON.stringify(S.parts)+S.dl+relicCount();if(key===liveKey)return;liveKey=key;
   if(view==='craft')renderCraft(true);else landAfford();}
+let userScrollT=0;['wheel','touchmove','scroll'].forEach(ev=>document.addEventListener(ev,e=>{const t=e.target;if(t&&t.closest&&t.closest('#craftList,#v-store,#v-shop,#landView'))userScrollT=Date.now();},{passive:true,capture:true}));
 function landAfford(){document.querySelectorAll('#landView .lp[data-it]').forEach(b=>{const it=LITEM.find(i=>i.id===b.dataset.it),em=b.querySelector('em');if(em)em.classList.toggle('no',S.money<it.p);});const lb=$('#landBuy');if(lb){const L0=landOf();lb.disabled=S.money<LAND_COST[L0.lv];}}
 function hud(){
   {const rb=$('#runB'),t=`${MD().n} ${S.part===2?2:1}부 · ${curNg()}회차 · ${S.runStart?Math.floor(runDays())+1:1}일째`;if(rb&&rb.textContent!==t){rb.textContent=t;rb.className='runb'+(S.mode==='hard'?' hard':'');}}
