@@ -788,7 +788,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v159 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v160 · 2026-11-11</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -858,7 +858,7 @@ const dlGrade=dl=>Math.ceil(dl/DSTEP),dlStep=dl=>(dl-1)%DSTEP+1,dlStyle=dl=>Math
 const dlName=dl=>GRADE_T[dlGrade(dl)-1]+' '+dlStep(dl);
 // ---- difficulty modes (balance targets, continuous play: 보통 ≈ 150h (1주), 하드 ≈ 480h (3주) — sim notes in CHANGELOG 32) ----
 const MODES={
- normal:{n:'보통',MAXLV:10,DLOPEN:50,LREQ:[1,1,6,16,26,36,46],Hmul:1.5,Hm:[1,1,1,1.6,1.6,1.6,1.6],vmul:[1,1,1,1.5,2,2,2.5],dlMul:1.07,dlGrow:1.2,expBase:100,expGrow:1.2,yf:3,inv:1,shop:1,chest:1,set:1,MAXLV2:15,DLOPEN2:75,LREQ2:[50,54,59,64,69,73],Hm2:[1.6,1.782,13.4,210.7,2049,113207],vmul2:[2.5,2.228,16.8,197.5,2049,113207],p2:{base:50,lv:10,step:8},y2:1,
+ normal:{n:'보통',MAXLV:10,DLOPEN:50,LREQ:[1,1,6,16,26,36,46],Hmul:1.5,Hm:[1,1,1,1.6,1.6,1.6,1.6],vmul:[1,1,1,1.5,2,2,2.5],dlMul:1.07,dlGrow:1.2,expBase:100,expGrow:1.2,yf:3,inv:1,shop:1,chest:1,set:1,MAXLV2:15,DLOPEN2:75,LREQ2:[50,54,59,64,69,73],Hm2:[3.6,4.01,30.2,474.1,4610,254716],vmul2:[5.625,5.013,37.8,444.4,4610,254716],p2:{base:50,lv:10,step:8},y2:1,
   fuel:[20,20,12],fs:[6,10,15],fc:[.01,.02,.04],RESC:[10,25,70,170,400,800,1400,2300,3500,5000,5000,5300,5600,5900,6200],MONC:[250,750,3000,8750,25000,75000,200000,500000,1125000,2250000,4200000,7500000,13000000,22000000,36000000]},
  hard:{n:'하드',MAXLV:20,DLOPEN:100,LREQ:[1,1,11,31,51,71,91],Hmul:10,Hm:[1,1,1.5,2.5,2.5,2.5,2.5],vmul:[1,1,2,5,10,10,12],dlMul:1.06,dlGrow:1.115,expBase:200,expGrow:1.25,yf:2.5,inv:.5,shop:1.5,chest:.7,set:0.3,MAXLV2:26,DLOPEN2:140,LREQ2:[92,100,110,120,130,136],Hm2:[2.5,3.654,37,826.2,11828,750000],vmul2:[12,14.6,148.2,1652,23656,750000],p2:{base:100,lv:20,step:12},y2:2,fs:[5,8,12],fc:[.015,.03,.06],
   fuel:[30,30,18],RESC:[17,26,43,67,103,158,241,362,546,768,1071,1494,2081,2889,4021,5596,6400,7200,8000,8800,14000,15000,16000,17000,18000,19000],
@@ -866,7 +866,9 @@ const MODES={
 const MD=()=>MODES[S.mode]||MODES.normal;
 const dlMul=dl=>Math.pow(MD().dlMul,dl-1);
 const dlPartReq=dl=>{const m=MD();if(S.part===2&&dl>m.p2.base)return Math.min(MAXLV,m.p2.lv+Math.floor((dl-m.p2.base)/m.p2.step));return dl>=m.DLOPEN?m.MAXLV:Math.min(m.MAXLV,Math.floor((dl-1)/5));};
-const dlCost=dl=>Math.round(150*Math.pow(MD().dlGrow,dl-2));
+// 보통 2부는 「쉬어 가는」 구간: 숙련·부품 강화의 금화와 재료를 크게 줄여요 (지층은 더 단단하게)
+const p2Disc=()=>S.mode==='normal'&&S.part===2?.2:1;
+const dlCost=dl=>Math.round(150*Math.pow(MD().dlGrow,dl-2)*p2Disc());
 const LAY0=[];const LAY=[
  {from:0,to:30,n:'표토',c:'#8f6440',H:36,v:3,u:5,req:1},
  {from:30,to:15000,n:'화강암 상부 지각',c:'#a29a8e',H:30,v:2,u:5,req:1},
@@ -1743,7 +1745,11 @@ function expBreak(r,vis){const g=digOf(r.id),below=belowOf(r,g.i);
   g.i++;g.hp=expHP(r,g.i);if(vis){const wet=r.t==='sea'&&g.i<=r.water;exBroke++;ex.broke(wet?'#4a8aa0':r.rock,!wet);}}
 let exBroke=0;
 let expPopped=0;
-function exDamage(r,d,vis){expPopped=0;let n=0;while(d>0&&n++<400){const g=digOf(r.id);if(g.hp>d){g.hp-=d;d=0;}else{d-=g.hp;expBreak(r,vis);}}}
+// 파는 동안(블록이 아직 안 깨져도) 친 만큼 확률로 재료 1조각 — 블록 하나를 다 파면 평균 약 1.2개(하드 0.7개) 더
+function expChip(r,f,vis){const g=digOf(r.id);if(belowOf(r,g.i)<0)return;if(Math.random()>=Math.min(.5,f*1.2*(S.mode==='hard'?.6:1)))return;
+  let a=1*(r.t!=='sea'?landMatM()*kimM():matAll());a=Math.floor(a)+(Math.random()<a%1?1:0);if(evtOn()&&S.evt.rid===r.id)a*=2;if(!a)return;
+  S.res[r.res]=(S.res[r.res]||0)+a;if(vis&&!expPopped)ex.pop('⛏ +'+a+' '+r.res,RES[r.res]);}
+function exDamage(r,d,vis){expPopped=0;let n=0;while(d>0&&n++<400){const g=digOf(r.id);if(g.hp>d){const hm=expHP(r,g.i);g.hp-=d;expChip(r,d/hm,vis);d=0;}else{d-=g.hp;expBreak(r,vis);}}}
 function exTick(dt){const id=S.ex.active;if(!id)return;const r=regById(id);exAcc+=dt;
   while(exAcc>=TICK){exAcc-=TICK;let d=expDps()*TICK;const crit=Math.random()<critP();if(crit)d*=critMul();
     const vis=!!exp&&exp.r.id===id&&$('#eIntro').hidden&&$('#eResult').hidden;
@@ -2198,7 +2204,7 @@ $('#card').addEventListener('click',e=>{const a=e.target.closest('[data-act]');i
 
 // ---------------- workshop ----------------
 
-function costOf(p){const l=Math.min(L(p.id),MAXLV-1),c={};const rm=Math.max(.5,1-.1*setPow('iron'));c[p.res]=Math.ceil(RESC[l]*rm);if(p.sub)c[p.sub]=Math.ceil(RESC[l]*.5*rm);c.money=Math.round(MONC[l]*(1-PK('kim',.1))*(1-.01*rp('big')));return c;}
+function costOf(p){const l=Math.min(L(p.id),MAXLV-1),c={},dc=p2Disc();const rm=Math.max(.5,1-.1*setPow('iron'))*dc;c[p.res]=Math.ceil(RESC[l]*rm);if(p.sub)c[p.sub]=Math.ceil(RESC[l]*.5*rm);c.money=Math.round(MONC[l]*(1-PK('kim',.1))*(1-.01*rp('big'))*dc);return c;}
 const have=k=>k==='money'?S.money:(S.res[k]||0);
 const canPay=c=>Object.entries(c).every(([k,v])=>have(k)>=v);
 let ladScrollT=0;
@@ -7107,7 +7113,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=159;
+const GVER=160;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
