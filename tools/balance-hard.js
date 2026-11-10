@@ -1,0 +1,7 @@
+const {run}=require('./balance-sim.js');
+const LAY=[[0,30,36,3,1],[30,15000,30,2,1],[15000,35000,396,4,6],[35000,660000,137,1,16],[660000,2900000,374,.8,26],[2900000,5150000,1587,2,36],[5150000,6371000,2193,4,46]].map(([from,to,H,v,req])=>({from,to,H,v,req}));
+const INV=[['mom',100,S=>true],['kim',300,S=>S.depth>=100],['prof',800,S=>S.t>3600*3],['tuber',2500,S=>S.depth>=1000],['sea',6000,S=>S.t>3600*8],['vc',15000,(S,L)=>Object.values(S.parts).reduce((a,b)=>a+b,0)>=20],['inst',60000,S=>S.depth>=12262],['global',500000,S=>S.depth>=35000],['farm',1200,S=>S.blocks>=40],['miner',9000,S=>S.depth>=5000],['museum',22000,S=>S.t>3600*8],['paleo',30000,S=>S.t>3600*10],['ship',45000,S=>S.sea>=400],['energy',300000,S=>S.depth>=200000],['space',1500000,S=>S.depth>=660000]].map(([id,amt,cond])=>({id,amt,cond}));
+const H=require('./hard.json');
+const base={INV,dlBase:150,dlGrow:1.2,MAXLV:10,reqStep:5,DLOPEN:50,RESC:[],MONC:[],bitK:.6,dlMul:1.1,expBase:100,expGrow:1.6,yBase:2,yExp:.55,moneyMul:1.4,expDpsMul:1,exMoney:5,exMExp:0,rounds:1};
+function mk(ov){const c=Object.assign({},base,H,ov);c.LAY=LAY.map((l,i)=>Object.assign({},l,{H:l.H*(i>=2?c.Hmul:1)*c.Hm[i],v:l.v*c.vmul[i],req:c.req[i]}));return c;}
+const sc=JSON.parse(process.argv[2]||'{}');const r=run(mk(sc),true);console.log(JSON.stringify({money:r.money,marks:sc.marks?r.marks:undefined,h:r.h.toFixed(0),dl:r.dl,parts:r.parts,full:r.full,slowH:r.blockedH.toFixed(0),km:r.km}));

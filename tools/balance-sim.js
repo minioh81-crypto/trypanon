@@ -7,19 +7,19 @@ function run(C,log=false){
   const S={ir:{priv:0,gov:0,mid:0,big:0,org:0},blocks:0,sea:0,blk:0,depth:0,dl:1,parts:Object.fromEntries(PARTS.map(p=>[p.id,0])),money:0,res:{},dig:{},t:0,inv:{}};
   const L=id=>S.parts[id];
   const dpsOf=()=>(3+2*L('housing'))*(1+C.bitK*L('bit'))*(1+.12*L('bearing'))*(1+.25*L('cable'));
-  const pmv=C.pm||1,perks=()=>(S.inv.vc?1+.15*pmv:1)*(S.inv.inst?1+.25*pmv:1)*(S.inv.space?1+.1*pmv:1)*(C.rounds?1+.01*Math.min(20,S.ir.gov)*pmv:1)*(S.yi?(1+(C.yiP||0))*(1+(C.yiU||0)):1);
+  const pmv=C.pm??1,perks=()=>(S.inv.vc?1+.15*pmv:1)*(S.inv.inst?1+.25*pmv:1)*(S.inv.space?1+.1*pmv:1)*(C.rounds?1+.01*Math.min(20,S.ir.gov)*pmv:1)*(S.yi?(1+(C.yiP||0))*(1+(C.yiU||0)):1);
   const layerAt=m=>C.LAY.find(l=>m<l.to)||C.LAY[C.LAY.length-1];
   const dlCost=dl=>Math.round(C.dlBase*Math.pow(C.dlGrow,dl-2));
-  const partReq=dl=>C.p2base&&dl>C.p2base?Math.min(C.MAXLV,C.p2lv+Math.floor((dl-C.p2base)/C.p2step)):Math.min(C.MAXLV,Math.floor((dl-1)/C.reqStep));
+  const partReq=dl=>C.p2base&&dl>C.p2base?Math.min(C.MAXLV,C.p2lv+Math.floor((dl-C.p2base)/C.p2step)):dl>=C.DLOPEN?C.MAXLV:Math.min(C.MAXLV,Math.floor((dl-1)/C.reqStep));
   const cost=p=>{const l=L(p.id),c={};c[p.res]=Math.ceil(C.RESC[l]);if(p.sub)c[p.sub]=Math.ceil(C.RESC[l]*.5);c.money=C.MONC[l];return c;};
   const can=c=>Object.entries(c).every(([k,v])=>k==='money'?S.money>=v:(S.res[k]||0)>=v);
   const pay=c=>{for(const[k,v]of Object.entries(c)){if(k==='money')S.money-=v;else S.res[k]-=v;}};
   const expHP=(r,i)=>r.t==='sea'&&i<r.water?2:C.expBase*r.diff*Math.pow(1+.1*(i-(r.water||0)),C.expGrow);
-  const yieldOf=(r,i)=>(h1!==null&&C.y2mul?C.y2mul:1)*(C.yFlat?C.yFlat:Math.max(2,Math.round(C.yBase*Math.pow(expHP(r,i)/(C.expBase*r.diff),C.yExp))))*(1+.08+.05*L('sensor'));
+  const yieldOf=(r,i)=>(h1!==null&&C.y2mul?C.y2mul:1)*(C.yFlat?C.yFlat:Math.max(2,Math.round(C.yBase*Math.pow(expHP(r,i)/(C.expBase*r.diff),C.yExp))))*(1+.08+.05*L('sensor')+(C.yAdd||0))*(r.t==='land'?(C.landY||1):1);
   let h1=null;const INV=C.INV;let marks=[],lastDl=0,regCur=null,regHP=0;
   const dt=5;
   const GOAL=C.part2?12742000:6371000;
-  while(S.depth<GOAL&&S.t<6e7){
+  while((C.untilFull?S.dl<C.DLOPEN:S.depth<GOAL)&&S.t<6e7){
     if(C.part2&&h1===null&&S.depth>=6371000){h1=S.t/3600;C.MAXLV=C.MAXLV2;C.DLOPEN=C.DLOPEN2;}
     const l=layerAt(S.depth);
     // investors
@@ -29,7 +29,7 @@ function run(C,log=false){
       const RC={priv:[()=>S.depth>=300*Math.pow(2.3,S.ir.priv),.25],gov:[()=>S.dl>=3+4*S.ir.gov,.4],mid:[()=>S.blocks>=60*Math.pow(1.75,S.ir.mid),.32],big:[()=>sumL>=12+8*S.ir.big,.45],org:[()=>S.t/3600*1.2>=2+3*S.ir.org,.28]};
       for(const k in RC){while(RC[k][0]()){S.money+=ra(RC[k][1],S.ir[k]);S.ir[k]++;}}}
     // bore
-    if(l.req>S.dl)S.blk+=dt;if(l.req<=S.dl){const d=dpsOf()*perks()*Math.pow(C.dlMul,S.dl-1)*dt*(S.depth>=35000?1+(C.hk||0)*L('heat'):1)*(S.depth>=660000?1+(C.pk||0)*L('press'):1);const m=Math.min(d/l.H,l.to-S.depth);S.depth+=m;S.money+=m*l.v*C.moneyMul*(C.rounds?1+.01*Math.min(20,S.ir.priv)*pmv:1);}
+    const gap=Math.max(0,l.req-S.dl),lk=gap?Math.max(.04,1/Math.pow(1+.3*gap,1.6)):1;if(gap)S.blk+=dt;if(C.slow||l.req<=S.dl){const d=lk*(C.boreK||1)*dpsOf()*perks()*Math.pow(C.dlMul,S.dl-1)*dt*(S.depth>=35000?1+(C.hk||0)*L('heat'):1)*(S.depth>=660000?1+(C.pk||0)*L('press'):1);const m=Math.min(d/l.H,l.to-S.depth);S.depth+=m;S.money+=m*l.v*(C.incK||1)*C.moneyMul*(C.rounds?1+.01*Math.min(20,S.ir.priv)*pmv:1);}
     // pick needed part & region
     const req=partReq(Math.min(C.DLOPEN,S.dl+1));
     let need=PARTS.filter(p=>L(p.id)<req);if(!need.length)need=PARTS.filter(p=>L(p.id)<C.MAXLV);
@@ -39,13 +39,15 @@ function run(C,log=false){
     if(target){const r=target,g=S.dig[r.id]=S.dig[r.id]||{i:0,hp:0};if(!g.hp)g.hp=expHP(r,g.i);
       // restarts: 5 per 24h, used when the current block has become much harder than the top
       if(C.rstAt){const day=Math.floor(S.t/86400);if(S.rd!==day){S.rd=day;S.rn=0;}if(S.rn<5&&expHP(r,g.i)>C.rstAt*expHP(r,r.t==='sea'?r.water:0)){g.i=0;g.hp=expHP(r,0);S.rn++;S.rsts=(S.rsts||0)+1;}}
-      let d=dpsOf()*perks()*(1+.1*L('insul'))*C.expDpsMul*dt*(C.wxG||1)*(S.inv.paleo?1+.1*pmv:1)*(r.t==='sea'?(1+(C.sk||0)*L('press'))*(S.inv.ship?1+.15*pmv:1):1);
+      let d=(C.expK||1)*dpsOf()*perks()*(1+.1*L('insul'))*C.expDpsMul*dt*(C.wxG||1)*(S.inv.paleo?1+.1*pmv:1)*(r.t==='sea'?(C.seaK||1)*(1+(C.sk||0)*L('press'))*(S.inv.ship?1+.15*pmv:1):1);
       while(d>0){if(g.hp>d){g.hp-=d;d=0;}else{d-=g.hp;const below=r.t==='sea'?g.i-r.water:g.i;if(below>=0){S.res[r.res]=(S.res[r.res]||0)+yieldOf(r,g.i)*(C.wxY||1);S.blocks++;if(r.t==='sea')S.sea++;S.money+=C.exMoney*r.diff*Math.pow(expHP(r,g.i)/(C.expBase*r.diff),C.exMExp);S.blkMoney=(S.blkMoney||0);}g.i++;g.hp=expHP(r,g.i);}}}
     // buy parts
     for(const p of need){const c=cost(p);if(L(p.id)<C.MAXLV&&can(c)){pay(c);S.parts[p.id]++;}}
     const nx=S.dl+1;if(nx<=C.DLOPEN&&PARTS.every(p=>L(p.id)>=partReq(nx))&&S.money>=dlCost(nx)){S.money-=dlCost(nx);S.dl=nx;}
-    if(log&&S.dl!==lastDl&&S.dl%(C.markStep||10)===0){marks.push(`dl${S.dl}@${(S.t/3600).toFixed(1)}h d=${(S.depth/1000).toFixed(1)}km`);}lastDl=S.dl;
+    if(log&&S.dl!==lastDl&&S.dl%(C.markStep||10)===0){if(C.why){const nx=S.dl+1;}marks.push(`dl${S.dl}@${(S.t/3600).toFixed(1)}h d=${(S.depth/1000).toFixed(1)}km`);}lastDl=S.dl;
+    for(const km of [660,1000,2000,2900,4000,5150,6000]){if(!S.km)S.km={};if(!S.km[km]&&S.depth>=km*1000)S.km[km]=`${km}km@${(S.t/3600).toFixed(0)}h dl${S.dl} p${Math.min(...Object.values(S.parts))}`;}
+    if(!S.full&&S.dl>=C.DLOPEN){S.full=(S.t/3600).toFixed(0)+'h@'+(S.depth/1000).toFixed(0)+'km';}
     S.t+=dt;}
-  return {h1,rst:S.rsts||0,h:S.t/3600,yiH:S.yiAt?+(S.yiAt/3600).toFixed(1):null,blockedH:S.blk/3600,dl:S.dl,parts:Object.values(S.parts).join(','),marks,money:Math.round(S.money),dig:Object.fromEntries(Object.entries(S.dig).map(([k,v])=>[k,v.i]))};
+  return {res:S.res,km:S.km,full:S.full||null,h1,rst:S.rsts||0,h:S.t/3600,yiH:S.yiAt?+(S.yiAt/3600).toFixed(1):null,blockedH:S.blk/3600,dl:S.dl,parts:Object.values(S.parts).join(','),marks,money:Math.round(S.money),dig:Object.fromEntries(Object.entries(S.dig).map(([k,v])=>[k,v.i]))};
 }
 module.exports={run,REG,PARTS};
