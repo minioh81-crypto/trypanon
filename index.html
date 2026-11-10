@@ -764,7 +764,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v145 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" style="opacity:.6;margin:0;flex:1 1 auto">게임 버전 v146 · 2026-11-10</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2087,9 +2087,9 @@ let kimRoll=Date.now()+75000,kimPend=false;
 function kimFig(){const k2=kim2Own(),set=kimSet(),sx=k2?'kim2':'kim';
   if(!set||!L3OK)return `<svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${kimSVG({sex:sx},{pose:'raise',anim:true})}</svg>`;
   const kind=k2?'rear':'ride',W=600,H=k2?560:430,fr=[0,1,2,3,4,5].map(i=>hrsShot(kind,W,H,i)).filter(Boolean);if(!fr.length)return `<svg class="yifig" viewBox="-14 -8 128 182" aria-hidden="true">${kimSVG({sex:sx},{pose:'raise',anim:true})}</svg>`;
-  const sad=HSAD[kind+W+'x'+H+'f0']||[.5,.4],sw=k2?31:30,svH=sw*(206/128)*(W/H);
+  const sad=HSAD[kind+W+'x'+H+'f0']||[.5,.4],sw=k2?31:30,svH=sw*(190/128)*(W/H);
   return `<div class="kimmount ${k2?'':'gal'}"><img id="kimHrs" src="${fr[0]}" alt="">${k2?'':'<i class="dust" style="right:6%"></i><i class="dust" style="right:22%;animation-delay:.35s"></i>'}
-    <svg viewBox="-14 -8 128 206" aria-hidden="true" style="width:${sw}%;left:${(sad[0]*100-sw*(64/128)).toFixed(1)}%;top:${(sad[1]*100-svH*(150/206)).toFixed(1)}%;${k2?'transform:rotate(-12deg);transform-origin:50% 82%':''}">${kimSVG({sex:sx},{pose:'raise',anim:true,ride:true,noShadow:true})}</svg></div>`;}
+    <svg viewBox="-14 -8 128 190" aria-hidden="true" style="width:${sw}%;left:${(sad[0]*100-sw*(64/128)).toFixed(1)}%;top:${(sad[1]*100-svH*(150/190)).toFixed(1)}%;${k2?'transform:rotate(-12deg);transform-origin:50% 82%':''}">${kimSVG({sex:sx},{pose:'raise',anim:true,ride:true,noShadow:true})}</svg></div>`;}
 function playKim(){const el=$('#yiEv'),I=kimEvInfo(),left=Math.max(0,Math.ceil((S.kimB-Date.now())/1000));
   el.className='yiev kim'+(I.up?' k2':'');el.innerHTML=`<div class="yirays"></div>${kimFig()}<div class="yitxt"><b>三國統一</b><span>삼국통일의 기세!</span><em>육상 원정 재료 +${Math.round((I.m-1)*100)}% · ${left}초</em></div>`;
   el.hidden=false;el.classList.remove('go','out');void el.offsetWidth;el.classList.add('go');
@@ -3152,7 +3152,7 @@ function kimSVG(c,o={}){const u='km'+(++UID),ex=o.expr||'',up=o.pose==='raise',a
   const ptA='M56,30 C70,22 86,30 88,48 C90,66 86,84 80,100 C78,86 79,70 77,58 C75,48 68,40 60,38Z',ptB='M56,30 C71,21 89,31 91,50 C93,68 88,86 82,102 C80,88 80,72 78,60 C76,49 68,41 60,38Z';
   g+=`<path d="${ptA}" fill="${HF}" stroke="#000" stroke-width="1.3" stroke-linejoin="round">${an?`<animate attributeName="d" values="${ptA};${ptB};${ptA}" dur="1.5s" repeatCount="indefinite"/>`:''}</path><path d="M70,32 C82,38 85,56 83,78" stroke="#4a4458" stroke-width="1.2" fill="none" opacity=".7"/>`;
   // legs + boots (riding: legs straddle the saddle, boots hang down in the stirrups)
-  if(ride)g+=`<path d="M58,146 Q64,160 63,176" stroke="#0c143e" stroke-width="11" fill="none" stroke-linecap="round"/><path d="M57,176 Q56,186 63,188 H74 Q74,180 69,176Z" fill="#0f0e12" stroke="#000" stroke-width="1.2"/><path d="M42,146 Q35,162 37,180" stroke="${ND}" stroke-width="12.5" fill="none" stroke-linecap="round"/><path d="M42,146 Q35,162 37,180" stroke="${N}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M30,180 Q28,192 36,194 H48 Q49,184 43,179Z" fill="#17161c" stroke="#000" stroke-width="1.3"/><path d="M31,183 H45" stroke="${G}" stroke-width="1.8"/><path d="M33,193 H47" stroke="${G}" stroke-width="1.1"/>`;
+  if(ride)g+=`<path d="M60,150 Q72,156 75,166" stroke="#0c143e" stroke-width="10" fill="none" stroke-linecap="round"/><path d="M70,164 Q68,175 75,177 H88 Q88,168 82,164Z" fill="#17161c" stroke="#000" stroke-width="1.2"/><path d="M70,167 H84" stroke="${G}" stroke-width="1.9"/><path d="M40,150 Q28,156 25,166" stroke="${N}" stroke-width="10.5" fill="none" stroke-linecap="round"/><path d="M30,164 Q32,175 25,177 H12 Q12,168 18,164Z" fill="#17161c" stroke="#000" stroke-width="1.3"/><path d="M16,167 H30" stroke="${G}" stroke-width="1.9"/><path d="M13,176 H25 M75,176 H87" stroke="${G}" stroke-width="1.1"/>`;
   if(!ride)g+=`<rect x="37" y="142" width="11" height="14" rx="3" fill="#1a2050"/><rect x="52" y="142" width="11" height="14" rx="3" fill="#1a2050"/>`;
   if(!ride)g+=`<path d="M33,167 Q32,153 37,152 H49 V167Z M51,167 V152 H63 Q68,153 67,167Z" fill="#17161c" stroke="#000" stroke-width="1.4" stroke-linejoin="round"/><path d="M36,155.5 H49 M51,155.5 H64" stroke="${G}" stroke-width="2"/><path d="M34,165 H49 M51,165 H66" stroke="${G}" stroke-width="1.2"/>`;
   // armour skirt: navy lamellar panels with gold borders and red tassels
@@ -4925,84 +4925,85 @@ function shipShot(kind='q',w=640,h=380,o={}){const key=kind+w+'x'+h+(o.sea===fal
 // ---- 신라 군마 (Silla warhorse): white horse in navy-and-gold barding, gold chanfron with crest, red tassels; head toward -X, hooves on y=0 ----
 function s3Horse(){const T=THREE,G=new T.Group(),anims=[];
   const ph=(c,o={})=>new T.MeshPhongMaterial(Object.assign({color:c,shininess:40,specular:'#333'},o));
-  const WH=ph('#f8f5ef',{shininess:60,specular:'#aaa'}),WH2=ph('#ebe4d8',{shininess:30}),MANE=ph('#ffffff',{shininess:25,specular:'#666'}),MANE2=ph('#e9e6de',{shininess:20}),HOOF=ph('#3a3236',{shininess:70}),
-    GOLD=ph('#e8b23a',{shininess:100,specular:'#fff1b0',emissive:'#4a2e00'}),RED=ph('#c8242a',{shininess:30}),LEA=ph('#6a3a1e',{shininess:40}),BLK=ph('#121014',{shininess:120,specular:'#fff'}),NAVY=ph('#1e2c70',{shininess:50,specular:'#556'});
+  const WH=ph('#f9f6f0',{shininess:55,specular:'#999'}),WH2=ph('#ece6da',{shininess:30}),MANE=ph('#ffffff',{shininess:20,specular:'#555'}),MANE2=ph('#eeebe4',{shininess:15}),HOOF=ph('#3a2a24',{shininess:70}),
+    GOLD=ph('#e8b23a',{shininess:100,specular:'#fff1b0',emissive:'#4a2e00'}),RED=ph('#c8242a',{shininess:30}),LEA=ph('#3a2416',{shininess:40}),SEAT=ph('#7a2a1a',{shininess:60,specular:'#a66'}),BLK=ph('#121014',{shininess:120,specular:'#fff'}),NAVY=ph('#1e2c70',{shininess:50,specular:'#556'});
   const flower=(g,cx,cy,r)=>{g.fillStyle='#e8b23a';for(let k=0;k<6;k++){const a=k/6*Math.PI*2;g.save();g.translate(cx+Math.cos(a)*r*.55,cy+Math.sin(a)*r*.55);g.rotate(a);g.beginPath();g.ellipse(0,0,r*.5,r*.3,0,0,7);g.fill();g.restore();}g.fillStyle='#fff3c0';g.beginPath();g.arc(cx,cy,r*.28,0,7);g.fill();g.fillStyle='#c98a1e';g.beginPath();g.arc(cx,cy,r*.14,0,7);g.fill();};
-  // skirt cloth (u around the body, v top→bottom): navy, gold scrollwork, Silla flowers, gold double hem
-  const skT=s3Tex('hskirt',1024,256,(g,w,h)=>{g.fillStyle='#1e2c70';g.fillRect(0,0,w,h);g.fillStyle='#24358a';for(let i=0;i<32;i++)g.fillRect(i*w/32,0,w/64,h);
-    g.strokeStyle='rgba(232,178,58,.4)';g.lineWidth=2;for(let i=0;i<24;i++){const x=i*w/24;g.beginPath();g.moveTo(x,h*.12);g.bezierCurveTo(x+16,h*.3,x-16,h*.5,x+6,h*.7);g.stroke();}
-    g.fillStyle='#e8b23a';g.fillRect(0,0,w,h*.06);g.fillRect(0,h*.76,w,h*.09);g.fillRect(0,h*.9,w,h*.1);g.fillStyle='#fff0b0';g.fillRect(0,h*.78,w,h*.015);
-    for(let i=0;i<8;i++)flower(g,w/16+i*w/8,h*.42,30);for(let i=0;i<32;i++){g.fillStyle='#e8b23a';g.beginPath();g.arc(i*w/32+w/64,h*.875,4,0,7);g.fill();}});
-  const capT=s3Tex('hcap',512,256,(g,w,h)=>{g.fillStyle='#1e2c70';g.fillRect(0,0,w,h);g.strokeStyle='rgba(232,178,58,.45)';g.lineWidth=2;for(let i=0;i<10;i++){g.beginPath();g.arc(w/2,h*1.1,40+i*26,Math.PI,2*Math.PI);g.stroke();}g.fillStyle='#e8b23a';g.fillRect(0,h*.9,w,h*.1);});
+  const skT=s3Tex('hskirt2',1024,256,(g,w,h)=>{g.fillStyle='#1c2a6c';g.fillRect(0,0,w,h);g.fillStyle='#e8b23a';g.fillRect(0,0,w,h*.07);g.fillRect(0,h*.8,w,h*.2);g.fillStyle='#fff0b0';g.fillRect(0,h*.82,w,h*.02);g.fillStyle='#1c2a6c';g.fillRect(0,h*.86,w,h*.06);
+    g.strokeStyle='#e8b23a';g.lineWidth=3;g.strokeRect(10,h*.12,w-20,h*.62);for(let i=0;i<6;i++)flower(g,w/12+i*w/6,h*.43,34);for(let i=0;i<48;i++){g.fillStyle='#e8b23a';g.beginPath();g.arc(i*w/48+w/96,h*.89,3.5,0,7);g.fill();}});
+  const capT=s3Tex('hcap2',512,256,(g,w,h)=>{g.fillStyle='#1c2a6c';g.fillRect(0,0,w,h);g.strokeStyle='rgba(232,178,58,.55)';g.lineWidth=2.5;for(let i=0;i<8;i++){g.beginPath();g.arc(w/2,h*1.15,50+i*30,Math.PI,2*Math.PI);g.stroke();}g.fillStyle='#e8b23a';g.fillRect(0,h*.88,w,h*.12);});
   const skM=ph('#ffffff',{map:skT,shininess:45,specular:'#667',side:T.DoubleSide}),capM=ph('#ffffff',{map:capT,shininess:55,specular:'#778',side:T.DoubleSide});
   const M=(geo,m,x=0,y=0,z=0,par=G)=>{const o=new T.Mesh(geo,m);o.position.set(x,y,z);par.add(o);return o;};
   const sph=(rx,ry,rz,m,x,y,z,par,seg=28)=>{const o=M(new T.SphereGeometry(1,seg,Math.round(seg*.65)),m,x,y,z,par);o.scale.set(rx,ry,rz);return o;};
-  // rounded-rectangle footprint (squircle) so the caparison reads as draped cloth, not a round capsule
   const SQ=3.2,sq=a=>1/Math.pow(Math.pow(Math.abs(Math.cos(a)),SQ)+Math.pow(Math.abs(Math.sin(a)),SQ),1/SQ);
   const squircle=geo=>{const p=geo.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i),a=Math.atan2(z,x),f=sq(a);p.setX(i,x*f);p.setZ(i,z*f);}geo.computeVertexNormals();return geo;};
-  const root=new T.Group();G.add(root);const body=new T.Group();root.add(body);const BY=1.78;
-  sph(1.12,.56,.5,WH,0,BY,0,body);sph(.62,.64,.52,WH,-.82,BY+.08,0,body);sph(.66,.64,.54,WH,.84,BY+.1,0,body);sph(.9,.3,.38,WH2,0,BY-.3,0,body);
-  // caparison: softly domed top + vertical skirt that hangs from it and swings with the gallop
-  const RX=1.62,RZ=.6,TOP=BY+.3;
-  {const cap=M(squircle(new T.SphereGeometry(1,64,16,0,Math.PI*2,0,Math.PI/2)),capM,.02,TOP,0,body);cap.scale.set(RX,.36,RZ);}
-  const skirt=new T.Group();skirt.position.set(.02,TOP,0);body.add(skirt);const SH=.76;
-  {const sk=M(squircle(new T.CylinderGeometry(1,1.06,SH,64,6,true)),skM,0,-SH/2,0,skirt);sk.scale.set(RX,1,RZ);
-   const top=M(squircle(new T.CylinderGeometry(1.004,1.004,.07,64,1,true)),GOLD,0,-.02,0,skirt);top.scale.set(RX,1,RZ);
-   const hem=M(squircle(new T.CylinderGeometry(1.07,1.07,.07,64,1,true)),GOLD,0,-SH+.03,0,skirt);hem.scale.set(RX,1,RZ);
-   for(let i=0;i<28;i++){const a=i/28*Math.PI*2,f=sq(a)*1.07,x=Math.cos(a)*RX*f,z=Math.sin(a)*RZ*f;M(new T.SphereGeometry(.045,10,8),GOLD,x,-SH-.01,z,skirt);M(new T.CylinderGeometry(.03,.055,.18,10),i%2?NAVY:RED,x,-SH-.12,z,skirt);}
-   // gold breast medallion on the front panel
-   const md=M(new T.CylinderGeometry(.17,.17,.05,24),GOLD,-RX*1.03-.01,-.32,0,skirt);md.rotation.z=Math.PI/2;M(new T.CylinderGeometry(.085,.085,.06,20),RED,-RX*1.03-.03,-.32,0,skirt).rotation.z=Math.PI/2;}
-  // saddle on the domed top
-  {const SY=TOP+.36;sph(.5,.14,.44,NAVY,.04,SY,0,body);M(new T.TorusGeometry(.42,.035,6,28),GOLD,.04,SY+.03,0,body).rotation.x=Math.PI/2;
-   const pm=M(new T.CylinderGeometry(.16,.2,.22,18),GOLD,-.4,SY+.12,0,body);pm.rotation.z=.25;const ct=M(new T.CylinderGeometry(.2,.24,.18,18),GOLD,.48,SY+.1,0,body);ct.rotation.z=-.3;
-   for(const sd of[1,-1]){M(new T.BoxGeometry(.05,.5,.03),LEA,.04,SY-.3,sd*(RZ*1.03+.02),body);M(new T.TorusGeometry(.08,.024,6,14),GOLD,.04,SY-.58,sd*(RZ*1.03+.03),body);}}
-  // neck, crinet, mane
-  const neck=new T.Group();neck.position.set(-1.0,BY+.3,0);body.add(neck);
-  {const n=M(new T.CylinderGeometry(.28,.44,1.05,24),WH,-.32,.42,0,neck);n.rotation.z=.68;sph(.36,.42,.34,WH,-.05,.08,0,neck);
-   for(let i=0;i<3;i++){const pl=M(new T.CylinderGeometry(.33-i*.03,.36-i*.03,.2,24,1,true,-Math.PI*.5,Math.PI),capM,-.12-i*.2,.2+i*.24,0,neck);pl.rotation.set(0,Math.PI/2,.68);const rm=M(new T.TorusGeometry(.35-i*.03,.02,6,24,Math.PI),GOLD,-.12-i*.2,.2+i*.24-.1,0,neck);rm.rotation.set(0,Math.PI/2,.68);}
-   for(let i=0;i<9;i++){const m=sph(.12,.28,.13,i%2?MANE2:MANE,0,0,0,neck,16);m.position.set(.08-i*.11,.38+i*.13,(i%2?.06:-.06));m.rotation.z=.95+(i%3)*.05;}}
-  const head=new T.Group();head.position.set(-.78,1.02,0);head.rotation.z=.5;neck.add(head);
-  sph(.4,.34,.31,WH,0,0,0,head);sph(.36,.25,.26,WH,-.4,-.08,0,head);sph(.25,.21,.24,WH2,-.66,-.1,0,head);
-  for(const sd of[1,-1]){sph(.05,.035,.025,BLK,-.84,-.06,sd*.12,head,12);sph(.085,.1,.05,BLK,-.06,.08,sd*.27,head,16);M(new T.SphereGeometry(.028,8,6),ph('#ffffff',{emissive:'#fff'}),-.09,.12,sd*.31,head);
-    const ear=M(new T.ConeGeometry(.08,.26,12),WH,.16,.36,sd*.14,head);ear.rotation.set(sd*.3,0,-.15);M(new T.ConeGeometry(.045,.16,8),ph('#f0c4b8'),.15,.35,sd*.16,head).rotation.set(sd*.3,0,-.15);
-    M(new T.TorusGeometry(.09,.02,6,14),GOLD,-.5,-.18,sd*.22,head);}
-  {const ch=sph(.44,.11,.29,GOLD,-.2,.2,0,head,24);ch.rotation.z=-.12;const inn=sph(.3,.06,.18,NAVY,-.24,.26,0,head,20);inn.rotation.z=-.12;
-   for(let k=0;k<6;k++){const a=k/6*Math.PI*2;M(new T.SphereGeometry(.035,8,6),GOLD,-.24+Math.cos(a)*.07,.32,Math.sin(a)*.07,head);}M(new T.SphereGeometry(.04,8,6),RED,-.24,.33,0,head);
-   M(new T.ConeGeometry(.06,.28,10),GOLD,.05,.44,0,head);const pl=M(new T.ConeGeometry(.08,.42,10),RED,.18,.58,0,head);pl.rotation.z=.6;
-   const nb=M(new T.TorusGeometry(.27,.03,6,24),LEA,-.48,-.1,0,head);nb.rotation.set(0,Math.PI/2,-.3);const br=M(new T.TorusGeometry(.31,.03,6,24),LEA,.02,.0,0,head);br.rotation.set(0,Math.PI/2,.35);const fl=sph(.08,.2,.06,MANE,.02,.36,0,head,14);fl.rotation.z=.7;}
-  for(const sd of[1,-1]){const r=M(new T.CylinderGeometry(.016,.016,1.15,6),LEA,-1.0,BY+.95,sd*.2,body);r.rotation.z=1.05;}
-  // tail: thick dock clamped in a gold band (navy rings), then a full, fanned-out plume of hair
-  const tail=new T.Group();tail.position.set(RX+.12,BY+.4,0);body.add(tail);const tufts=[];
-  {const dock=new T.Group();dock.rotation.z=.42;tail.add(dock);M(new T.CylinderGeometry(.13,.15,.3,20),GOLD,0,-.12,0,dock);for(const y of[-.02,-.22])M(new T.TorusGeometry(.145,.025,8,22),NAVY,0,y,0,dock).rotation.x=Math.PI/2;
-   M(new T.SphereGeometry(.05,10,8),RED,0,-.12,.15,dock);M(new T.SphereGeometry(.05,10,8),RED,0,-.12,-.15,dock);
-   const fan=new T.Group();fan.position.set(0,-.28,0);dock.add(fan);
-   for(let i=0;i<9;i++){const sp=(i-4)/4,t=sph(.17-Math.abs(sp)*.03,.6-Math.abs(sp)*.08,.15-Math.abs(sp)*.03,i%2?MANE2:MANE,0,0,0,fan,20);t.position.set(sp*.03,-.46,sp*.08);t.rotation.set(sp*.2,0,sp*.06);tufts.push({m:t,b:sp*.06});}
-   for(let i=0;i<5;i++){const sp=(i-2)/2,t=sph(.13,.5,.12,i%2?MANE:MANE2,0,0,0,fan,18);t.position.set(sp*.03+.04,-.92,sp*.07);t.rotation.z=sp*.05+.08;tufts.push({m:t,b:sp*.05+.08});}
-   for(let i=0;i<3;i++){const t=sph(.08,.3,.07,MANE,0,0,0,fan,14);t.position.set((i-1)*.06+.08,-1.28,(i-1)*.04);t.rotation.z=.18+(i-1)*.12;tufts.push({m:t,b:.18+(i-1)*.12});}}
-  // legs: hip → upper leg, knee → cannon; hind legs keep a hock angle (gaskin back, cannon vertical)
-  const legs=[];
-  for(const [x,z,fr,lead] of[[-.86,.27,1,0],[-.86,-.27,1,1],[.9,.29,0,0],[.9,-.29,0,1]]){const hip=new T.Group();hip.position.set(x,BY-.22,z);body.add(hip);
-    M(new T.CylinderGeometry(fr?.2:.24,.13,.7,16),WH,0,-.35,0,hip);sph(fr?.2:.24,.24,fr?.2:.24,WH,0,-.02,0,hip,16);
-    const knee=new T.Group();knee.position.set(0,-.7,0);hip.add(knee);sph(.13,.12,.13,WH,0,0,0,knee,14);M(new T.CylinderGeometry(.1,.095,.6,14),WH,0,-.3,0,knee);
-    M(new T.CylinderGeometry(.13,.125,.16,16),GOLD,0,-.1,0,knee);M(new T.TorusGeometry(.13,.018,6,16),NAVY,0,-.1,0,knee).rotation.x=Math.PI/2;M(new T.CylinderGeometry(.13,.11,.1,14),WH2,0,-.56,0,knee);M(new T.CylinderGeometry(.12,.15,.13,16),HOOF,0,-.66,0,knee);M(new T.TorusGeometry(.14,.018,6,16),GOLD,0,-.6,0,knee).rotation.x=Math.PI/2;
-    // rotary gallop footfall order: hind-left, hind-right, front-left, front-right (phase in cycles)
-    legs.push({hip,knee,fr,ph:fr?(lead?.48:.38):(lead?.1:0),h0:fr?0:.32,k0:fr?0:-.36});}
+  const root=new T.Group();G.add(root);const body=new T.Group();root.add(body);
+  // chunky pony proportions: round barrel, deep chest, big rump, short sturdy legs
+  const BY=1.3;
+  sph(1.0,.56,.52,WH,0,BY,0,body);sph(.6,.64,.54,WH,-.76,BY+.08,0,body);sph(.66,.64,.57,WH,.8,BY+.1,0,body);sph(.82,.28,.4,WH2,0,BY-.32,0,body);
+  // saddle blanket: navy with gold border + Silla flowers, hanging to mid-belly, swings with the gait
+  const RX=.84,RZ=.62,CX=.04,TOP=BY+.36;
+  {const cap=M(squircle(new T.SphereGeometry(1,48,14,0,Math.PI*2,0,Math.PI/2)),capM,CX,TOP,0,body);cap.scale.set(RX,.26,RZ);}
+  const skirt=new T.Group();skirt.position.set(CX,TOP,0);body.add(skirt);const SH=.62;
+  {const sk=M(squircle(new T.CylinderGeometry(1,1.06,SH,56,4,true)),skM,0,-SH/2,0,skirt);sk.scale.set(RX,1,RZ);
+   for(let i=0;i<26;i++){const a=i/26*Math.PI*2,f=sq(a)*1.07,x=Math.cos(a)*RX*f,z=Math.sin(a)*RZ*f;if(Math.abs(z)<.34)continue;M(new T.SphereGeometry(.04,10,8),GOLD,x,-SH-.01,z,skirt);M(new T.CylinderGeometry(.026,.05,.15,10),GOLD,x,-SH-.1,z,skirt);}}
+  // breast collar with a big gold medallion + tassel
+  {const bc=M(new T.TorusGeometry(.56,.05,8,40,Math.PI*1.05),LEA,-.5,BY+.16,0,body);bc.rotation.set(Math.PI/2,0,Math.PI/2+Math.PI*.475);bc.scale.set(1.45,1,1);
+   const bg=M(new T.TorusGeometry(.56,.02,6,40,Math.PI*1.05),GOLD,-.5,BY+.2,0,body);bg.rotation.copy(bc.rotation);bg.scale.copy(bc.scale);
+   const md=M(new T.CylinderGeometry(.16,.16,.05,24),GOLD,-1.33,BY+.12,0,body);md.rotation.z=Math.PI/2;M(new T.CylinderGeometry(.08,.08,.06,20),NAVY,-1.36,BY+.12,0,body).rotation.z=Math.PI/2;
+   M(new T.SphereGeometry(.04,8,6),GOLD,-1.33,BY-.06,0,body);M(new T.CylinderGeometry(.03,.06,.2,10),GOLD,-1.32,BY-.18,0,body);}
+  // crupper strap with gold pendants around the rump
+  {const cr=M(new T.TorusGeometry(.58,.04,8,40,Math.PI*1.05),LEA,.76,BY+.26,0,body);cr.rotation.set(Math.PI/2,0,-Math.PI/2+Math.PI*.475);cr.scale.set(1.2,1,1);
+   for(const a of[-.95,-.5,.5,.95]){const z=Math.sin(a)*.58,x=.76+Math.cos(a)*.58*1.2;M(new T.CylinderGeometry(.05,.05,.02,12),GOLD,x,BY+.22,z,body).rotation.x=Math.PI/2;M(new T.ConeGeometry(.04,.12,8),GOLD,x,BY+.12,z,body).rotation.x=Math.PI;}}
+  // saddle: red-brown leather seat with gold rim, gold pommel/cantle, stirrups
+  {const SY=TOP+.27;sph(.42,.12,.4,SEAT,.02,SY,0,body);M(new T.TorusGeometry(.36,.03,6,28),GOLD,.02,SY+.02,0,body).rotation.x=Math.PI/2;
+   const pm=M(new T.CylinderGeometry(.13,.17,.18,18),GOLD,-.33,SY+.1,0,body);pm.rotation.z=.25;const ct=M(new T.CylinderGeometry(.17,.2,.15,18),SEAT,.4,SY+.08,0,body);ct.rotation.z=-.3;
+   for(const sd of[1,-1]){M(new T.BoxGeometry(.05,.5,.03),LEA,.02,SY-.3,sd*(RZ*1.06+.02),body);M(new T.TorusGeometry(.07,.022,6,14),GOLD,.02,SY-.57,sd*(RZ*1.06+.03),body);}}
+  // short, thick neck + fluffy white mane
+  const neck=new T.Group();neck.position.set(-.85,BY+.32,0);body.add(neck);
+  {const n=M(new T.CylinderGeometry(.34,.5,.8,24),WH,-.22,.3,0,neck);n.rotation.z=.55;sph(.42,.44,.4,WH,0,.02,0,neck);
+   for(let i=0;i<8;i++){const m=sph(.17,.26,.17,i%2?MANE2:MANE,0,0,0,neck,16);m.position.set(.14-i*.085,.42+i*.085,(i%2?.1:-.08));m.rotation.z=.6;}
+   for(let i=0;i<5;i++){const m=sph(.1,.24,.12,MANE,0,0,0,neck,14);m.position.set(.08-i*.1,.22+i*.08,.3);m.rotation.set(.5,0,.4);}}
+  // big cute head (×1.3): long face, rounded muzzle, large eyes; gold face plate with navy center; gold-studded dark bridle
+  const head=new T.Group();head.position.set(-.6,.82,0);head.rotation.z=.42;head.scale.setScalar(1.3);neck.add(head);
+  sph(.4,.34,.31,WH,0,0,0,head);sph(.36,.25,.26,WH,-.4,-.08,0,head);sph(.26,.22,.25,WH2,-.66,-.1,0,head);
+  for(const sd of[1,-1]){sph(.05,.035,.025,BLK,-.85,-.06,sd*.12,head,12);sph(.095,.11,.05,BLK,-.06,.08,sd*.27,head,16);M(new T.SphereGeometry(.03,8,6),ph('#ffffff',{emissive:'#fff'}),-.09,.12,sd*.31,head);
+    const ear=M(new T.ConeGeometry(.08,.24,12),WH,.16,.34,sd*.15,head);ear.rotation.set(sd*.3,0,-.15);M(new T.ConeGeometry(.045,.15,8),ph('#f0c4b8'),.15,.33,sd*.17,head).rotation.set(sd*.3,0,-.15);
+    M(new T.SphereGeometry(.05,10,8),GOLD,-.5,-.18,sd*.25,head);}
+  {const ch=sph(.42,.1,.28,GOLD,-.22,.19,0,head,24);ch.rotation.z=-.12;const inn=sph(.28,.06,.17,NAVY,-.26,.25,0,head,20);inn.rotation.z=-.12;
+   for(let k=0;k<6;k++){const a=k/6*Math.PI*2;M(new T.SphereGeometry(.032,8,6),GOLD,-.26+Math.cos(a)*.065,.31,Math.sin(a)*.065,head);}M(new T.SphereGeometry(.035,8,6),RED,-.26,.32,0,head);
+   const nb=M(new T.TorusGeometry(.27,.032,6,24),LEA,-.48,-.1,0,head);nb.rotation.set(0,Math.PI/2,-.3);const br=M(new T.TorusGeometry(.31,.032,6,24),LEA,.02,.0,0,head);br.rotation.set(0,Math.PI/2,.35);
+   for(let k=0;k<5;k++){const a=-.6+k*.3;M(new T.SphereGeometry(.025,6,6),GOLD,.02+Math.sin(a)*.0,Math.cos(a)*.31,Math.sin(a)*.31,head);}
+   const fl=sph(.12,.2,.13,MANE,.06,.36,0,head,14);fl.rotation.z=.6;const fl2=sph(.09,.16,.1,MANE2,-.02,.33,.06,head,12);fl2.rotation.z=.9;}
+  for(const sd of[1,-1]){const r=M(new T.CylinderGeometry(.016,.016,.95,6),LEA,-.95,BY+.75,sd*.2,body);r.rotation.z=1.0;}
+  // fluffy tail: gold band (navy rings, gold tassel) at the root, full white hair below
+  const tail=new T.Group();tail.position.set(1.36,BY+.42,0);body.add(tail);const tufts=[];
+  {const dock=new T.Group();dock.rotation.z=.5;tail.add(dock);M(new T.CylinderGeometry(.12,.14,.24,20),GOLD,0,-.1,0,dock);for(const y of[0,-.2])M(new T.TorusGeometry(.135,.022,8,22),NAVY,0,y,0,dock).rotation.x=Math.PI/2;
+   M(new T.CylinderGeometry(.025,.045,.18,8),GOLD,.12,-.2,0,dock);
+   const fan=new T.Group();fan.position.set(0,-.24,0);dock.add(fan);
+   for(let i=0;i<9;i++){const sp=(i-4)/4,t=sph(.21-Math.abs(sp)*.04,.5-Math.abs(sp)*.08,.19-Math.abs(sp)*.04,i%2?MANE2:MANE,0,0,0,fan,20);t.position.set(sp*.04,-.4,sp*.1);t.rotation.set(sp*.25,0,sp*.08);tufts.push({m:t,b:sp*.08});}
+   for(let i=0;i<5;i++){const sp=(i-2)/2,t=sph(.17,.42,.15,i%2?MANE:MANE2,0,0,0,fan,18);t.position.set(sp*.04+.05,-.78,sp*.09);t.rotation.z=sp*.06+.1;tufts.push({m:t,b:sp*.06+.1});}}
+  // short sturdy legs with muscle: shoulder / thigh masses, forearm / gaskin, gold leg guard, dark hoof
+  const legs=[];const HY=.98;
+  for(const [x,z,fr,lead] of[[-.82,.27,1,0],[-.82,-.27,1,1],[.86,.3,0,0],[.86,-.3,0,1]]){const hip=new T.Group();hip.position.set(x,HY,z);body.add(hip);
+    if(fr){sph(.24,.36,.21,WH,.03,.05,0,hip,20);sph(.17,.27,.15,WH,0,-.24,0,hip,18);M(new T.CylinderGeometry(.14,.11,.3,16),WH,0,-.33,0,hip);}
+    else{sph(.32,.4,.25,WH,-.03,.08,0,hip,22);sph(.19,.28,.17,WH,.02,-.26,0,hip,18);M(new T.CylinderGeometry(.16,.12,.3,16),WH,0,-.33,0,hip);}
+    const knee=new T.Group();knee.position.set(0,-.46,0);hip.add(knee);sph(.13,.12,.13,WH,0,0,0,knee,14);M(new T.CylinderGeometry(.11,.1,.36,14),WH,0,-.18,0,knee);
+    M(new T.CylinderGeometry(.13,.13,.1,16),GOLD,0,-.06,0,knee);M(new T.CylinderGeometry(.13,.12,.08,14),WH2,0,-.36,0,knee);M(new T.CylinderGeometry(.13,.16,.14,16),HOOF,0,-.45,0,knee);M(new T.TorusGeometry(.145,.016,6,16),GOLD,0,-.39,0,knee).rotation.x=Math.PI/2;
+    legs.push({hip,knee,fr,ph:fr?(lead?.48:.38):(lead?.1:0),h0:fr?0:.25,k0:fr?0:-.28});}
   const reset=()=>{root.position.set(0,0,0);root.rotation.set(0,0,0);body.position.set(0,0,0);body.rotation.set(0,0,0);neck.rotation.z=0;tail.rotation.z=0;skirt.rotation.set(0,0,0);for(const L of legs){L.hip.rotation.z=L.h0;L.knee.rotation.z=L.k0;}};
   G.userData.anims=anims;
-  // powerful gallop: legs reach far forward and drive far back, knees snap up in the swing, the body rocks (front lifts as the hinds push),
-  // the head and neck pump, the skirt and tail swing behind the motion
-  G.userData.gallop=(t,k=1)=>{reset();const c=t*2*Math.PI*1.75;
+  G.userData.gallop=(t,k=1)=>{reset();const c=t*2*Math.PI*1.9;
     for(const L of legs){const a=c-L.ph*2*Math.PI,sw=Math.sin(a),fold=Math.max(0,Math.sin(a-Math.PI/2));
-      if(L.fr){L.hip.rotation.z=k*(-.08+.78*sw);L.knee.rotation.z=k*(1.5*fold*fold+(sw<-.2?.12:0));}
-      else{L.hip.rotation.z=L.h0+k*(.06+.62*sw);L.knee.rotation.z=L.k0+k*(1.15*fold*fold);}}
-    const p=Math.sin(c);body.position.y=k*(.16+.16*Math.sin(2*c+.6));body.rotation.z=k*.13*p;body.position.x=k*.04*Math.cos(c);
-    neck.rotation.z=k*(.16*Math.sin(c+1.4)-.04);skirt.rotation.z=k*-.07*Math.sin(c+.9);skirt.rotation.x=k*.03*Math.sin(c*2);
-    tail.rotation.z=k*(.22+.14*Math.sin(c+2));tufts.forEach((tf,i)=>tf.m.rotation.z=tf.b+k*.14*Math.sin(c+2.4+i*.3));};
-  G.userData.idle=t=>{reset();body.position.y=Math.sin(t*1.6)*.015;neck.rotation.z=Math.sin(t*.9)*.05;tail.rotation.z=Math.sin(t*1.3)*.1;skirt.rotation.z=Math.sin(t*1.1)*.012;tufts.forEach((tf,i)=>tf.m.rotation.z=tf.b+.05*Math.sin(t*2+i*.6));};
-  G.userData.rear=u=>{reset();const th=-.66,P=[.9,0],c=Math.cos(th),s=Math.sin(th);root.rotation.z=th;root.position.set(P[0]-(P[0]*c-P[1]*s),P[1]-(P[0]*s+P[1]*c),0);
-    const w=Math.sin(u*Math.PI*2);legs.forEach((L,i)=>{if(L.fr){const ww=Math.sin(u*Math.PI*2+(i?Math.PI:0));L.hip.rotation.z=-1.2+.55*ww;L.knee.rotation.z=1.25-.7*ww;}else{L.hip.rotation.z=-th+.22;L.knee.rotation.z=-.36;}});
-    neck.rotation.z=.25+.06*w;skirt.rotation.z=-th*.35;tail.rotation.z=-.3;tufts.forEach((tf,i)=>tf.m.rotation.z=tf.b+.1*w);};
-  G.userData.saddle=new T.Vector3(.04,TOP+.48,0);G.userData.body=body;
+      if(L.fr){L.hip.rotation.z=k*(-.1+.7*sw);L.knee.rotation.z=k*(1.4*fold*fold);}
+      else{L.hip.rotation.z=L.h0+k*(.05+.55*sw);L.knee.rotation.z=L.k0+k*(1.05*fold*fold);}}
+    body.position.y=k*(.12+.12*Math.sin(2*c+.6));body.rotation.z=k*.12*Math.sin(c);body.position.x=k*.03*Math.cos(c);
+    neck.rotation.z=k*(.14*Math.sin(c+1.4)-.04);skirt.rotation.z=k*-.06*Math.sin(c+.9);skirt.rotation.x=k*.03*Math.sin(c*2);
+    tail.rotation.z=k*(.25+.14*Math.sin(c+2));tufts.forEach((tf,i)=>tf.m.rotation.z=tf.b+k*.12*Math.sin(c+2.4+i*.3));};
+  G.userData.idle=t=>{reset();body.position.y=Math.sin(t*1.6)*.012;neck.rotation.z=Math.sin(t*.9)*.05;tail.rotation.z=Math.sin(t*1.3)*.1;skirt.rotation.z=Math.sin(t*1.1)*.01;tufts.forEach((tf,i)=>tf.m.rotation.z=tf.b+.05*Math.sin(t*2+i*.6));};
+  G.userData.rear=u=>{reset();const th=-.62,P=[.86,0],c=Math.cos(th),s=Math.sin(th);root.rotation.z=th;root.position.set(P[0]-(P[0]*c-P[1]*s),P[1]-(P[0]*s+P[1]*c),0);
+    const w=Math.sin(u*Math.PI*2);legs.forEach((L,i)=>{if(L.fr){const ww=Math.sin(u*Math.PI*2+(i?Math.PI:0));L.hip.rotation.z=-1.15+.5*ww;L.knee.rotation.z=1.3-.65*ww;}else{L.hip.rotation.z=-th+.18;L.knee.rotation.z=-.3;}});
+    neck.rotation.z=.25+.06*w;skirt.rotation.z=-th*.3;tail.rotation.z=-.3;tufts.forEach((tf,i)=>tf.m.rotation.z=tf.b+.1*w);};
+  G.userData.saddle=new T.Vector3(.04,TOP+.38,0);G.userData.body=body;
   G.traverse(o=>{if(o.isMesh)o.castShadow=true;});return G;}
 function hrsScene(){const T=THREE,sc=new T.Scene();sc.add(new T.HemisphereLight('#fff8ec','#506070',.9));const d=new T.DirectionalLight('#fff2d6',.85);d.position.set(-4,7,6);sc.add(d);const d2=new T.DirectionalLight('#9fd0ff',.35);d2.position.set(5,3,-6);sc.add(d2);
   const h=s3Horse();sc.add(h);const gr=new T.Mesh(new T.CircleGeometry(2.6,40),new T.MeshBasicMaterial({color:'#000',transparent:true,opacity:.18,depthWrite:false}));gr.rotation.x=-Math.PI/2;gr.position.y=.005;sc.add(gr);
@@ -5013,15 +5014,15 @@ function hrsShot(kind='q',w=480,h=360,fr=-1){const key=kind+w+'x'+h+'f'+fr;if(HS
   if(!s3Ren){s3Ren=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});s3Ren.setPixelRatio(1);}s3Ren.setSize(w,h,false);
   const S=hrsScene(),U=S.h.userData;if(kind==='rear')U.rear(Math.max(0,fr)/6);else if(fr>=0)U.gallop(fr/6/1.6);else U.idle(0);
   const cam=new THREE.PerspectiveCamera(28,w/h,.1,100);
-  if(kind==='side'){cam.position.set(0,1.75,12);cam.lookAt(0,1.65,0);S.gr.visible=false;}else if(kind==='ride'){cam.position.set(-.2,1.7,9.2);cam.lookAt(-.2,1.6,0);S.gr.visible=false;}
-  else if(kind==='rear'){cam.position.set(-.4,2.45,11.6);cam.lookAt(-.3,2.15,0);S.gr.visible=false;}
-  else{cam.position.set(-6.4,3.4,8.6);cam.lookAt(-.25,1.55,0);}
+  if(kind==='side'){cam.position.set(0,1.35,10.5);cam.lookAt(0,1.25,0);S.gr.visible=false;}else if(kind==='ride'){cam.position.set(-.2,1.3,8.2);cam.lookAt(-.2,1.25,0);S.gr.visible=false;}
+  else if(kind==='rear'){cam.position.set(.1,1.85,10.6);cam.lookAt(.05,1.6,0);S.gr.visible=false;}
+  else{cam.position.set(-5.6,2.8,7.6);cam.lookAt(-.2,1.15,0);}
   S.sc.updateMatrixWorld(true);const sv=U.saddle.clone();U.body.localToWorld(sv);sv.project(cam);HSAD[key]=[(sv.x+1)/2,(1-sv.y)/2];
   s3Ren.setClearColor(0,0);s3Ren.render(S.sc,cam);HSHOT[key]=s3Ren.domElement.toDataURL();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});}catch(e){HSHOT[key]=null;}return HSHOT[key];}
 // live rotatable view in the wardrobe: gallops in place; drag to turn
 function hrsLive(el){if(typeof THREE==='undefined')return false;const w=el.clientWidth||360,h=el.clientHeight||240;const ren=new THREE.WebGLRenderer({antialias:true,alpha:true});ren.setPixelRatio(Math.min(2,devicePixelRatio||1));ren.setSize(w,h);ren.domElement.className='ship3 hrs3';el.appendChild(ren.domElement);
-  const S=hrsScene(),cam=new THREE.PerspectiveCamera(30,w/h,.1,100);let yaw=-.7,pitch=.2,dist=13.5,auto=true,drag=null,t0=performance.now(),last=t0;
-  const place=()=>{cam.position.set(Math.sin(yaw)*Math.cos(pitch)*dist-.2,Math.sin(pitch)*dist+1.35,Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(-.2,1.35,0);};
+  const S=hrsScene(),cam=new THREE.PerspectiveCamera(30,w/h,.1,100);let yaw=-.7,pitch=.2,dist=11,auto=true,drag=null,t0=performance.now(),last=t0;
+  const place=()=>{cam.position.set(Math.sin(yaw)*Math.cos(pitch)*dist-.2,Math.sin(pitch)*dist+1.1,Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(-.2,1.1,0);};
   const cv=ren.domElement;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
   cv.addEventListener('pointermove',e=>{if(!drag)return;yaw=drag.yaw-(e.clientX-drag.x)*.01;pitch=Math.max(.02,Math.min(1.1,drag.pitch+(e.clientY-drag.y)*.006));});cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>auto=true,2500);});
   const loop=now=>{if(!cv.isConnected){ren.dispose();S.sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}if(PWR.saving&&now-last<120){requestAnimationFrame(loop);return;}const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000;if(auto)yaw+=dt*.2;place();S.tick(t,'gallop');ren.render(S.sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
@@ -6801,7 +6802,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=145;
+const GVER=146;
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
 let instEv=null;const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator&&window.top===window)navigator.serviceWorker.register('sw.js').catch(()=>{});
