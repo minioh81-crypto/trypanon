@@ -877,3 +877,375 @@
 아소산	Mt. Aso	阿蘇山
 사쿠라지마	Sakurajima	桜島
 온타케산	Mt. Ontake	御嶽山
+다이센	Mt. Daisen	大山
+미야노우라다케	Mt. Miyanoura	宮之浦岳
+하쿠산	Mt. Hakusan	白山
+기타다케	Mt. Kita	北岳
+아사히다케	Mt. Asahi	旭岳
+이토이가와	Itoigawa	糸魚川
+난카이 해곡	Nankai Trough	南海トラフ
+오키나와 해곡	Okinawa Trough	沖縄トラフ
+일본 해구	Japan Trench	日本海溝
+미나미토리시마 앞바다	Off Minamitorishima	南鳥島沖
+미나미토리시마	Minamitorishima	南鳥島
+시즈오카·야마나시	Shizuoka · Yamanashi	静岡・山梨
+돗토리	Tottori	鳥取
+가고시마 야쿠시마	Yakushima, Kagoshima	鹿児島・屋久島
+이시카와·기후	Ishikawa · Gifu	石川・岐阜
+야마나시 남알프스	Southern Alps, Yamanashi	山梨・南アルプス
+구마모토	Kumamoto	熊本
+나가노·기후	Nagano · Gifu	長野・岐阜
+홋카이도	Hokkaido	北海道
+니가타	Niigata	新潟
+가고시마	Kagoshima	鹿児島
+태평양	Pacific Ocean	太平洋
+동중국해	East China Sea	東シナ海
+태평양 먼 바다	Open Pacific	太平洋の遠洋
+도호쿠	Tohoku	東北
+간토	Kanto	関東
+주부	Chubu	中部
+긴키	Kinki	近畿
+주고쿠	Chugoku	中国地方
+시코쿠	Shikoku	四国
+규슈	Kyushu	九州
+오키나와	Okinawa	沖縄
+도쿄	Tokyo	東京
+일본 시추 지도	Japan Drilling Map	日本掘削マップ
+스루가만	Suruga Bay	駿河湾
+도쿄만 북부	Northern Tokyo Bay	東京湾北部
+기이 반도 앞바다	Off the Kii Peninsula	紀伊半島沖
+시코쿠 앞바다	Off Shikoku	四国沖
+산리쿠 앞바다	Off Sanriku	三陸沖
+아키타 앞바다	Off Akita	秋田沖
+노토 반도	Noto Peninsula	能登半島
+나가노 북부	Northern Nagano	長野北部
+일본에서 가장 높은 성층화산. 검은 현무암과 스코리아로 하우징을 만든다.	Japan's tallest stratovolcano. Black basalt and scoria become the drill housing.	日本一高い成層火山。黒い玄武岩とスコリアでハウジングを作る。
+서쪽 바다를 내려다보는 주고쿠의 영봉. 회색 안산암을 깎아 세라믹 베어링을 굽는다.	Chugoku's sacred peak above the western sea. Grey andesite is cut and fired into ceramic bearings.	西の海を見下ろす中国地方の霊峰。灰色の安山岩を削ってセラミックベアリングを焼く。
+이끼 낀 삼나무 숲 위로 솟은 화강암 봉우리. 화강암 속 석영으로 정밀 센서를 만든다.	A granite peak rising above mossy cedar forest. Quartz in the granite makes precision sensors.	苔むした杉の森にそびえる花崗岩の峰。花崗岩の石英で精密センサーを作る。
+흰 눈을 이고 있는 신앙의 산. 공룡 화석이 나오는 셰일 층으로 충격 흡수 장치를 만든다.	A snow-capped holy mountain. Dinosaur-bearing shale becomes shock absorbers.	白い雪をいただく信仰の山。恐竜化石が出る頁岩層で衝撃吸収装置を作る。
+남알프스의 지붕. 부싯돌처럼 단단한 처트로 드릴 비트를 벼린다.	The roof of the Southern Alps. Flint-hard chert is forged into drill bits.	南アルプスの屋根。火打ち石のように硬いチャートでドリルビットを鍛える。
+세계 최대급 칼데라 안에서 연기를 뿜는 화산. 화산재로 열 차폐판을 굽는다.	A smoking volcano inside one of the world's largest calderas. Its ash is fired into heat shields.	世界最大級のカルデラの中で噴煙を上げる火山。火山灰で熱遮蔽板を焼く。
+유황 냄새가 감도는 높은 활화산. 노란 유황으로 내압 실린더의 밀봉재를 만든다.	A tall active volcano reeking of sulfur. Yellow sulfur seals the pressure cylinders.	硫黄の匂いが漂う高い活火山。黄色い硫黄で耐圧シリンダーの封止材を作る。
+홋카이도 지붕의 화산. 칠흑 같은 흑요석 유리로 절연체를 만든다.	The volcano on Hokkaido's roof. Jet-black obsidian glass becomes insulators.	北海道の屋根の火山。漆黒の黒曜石ガラスで絶縁体を作る。
+푸른 비취가 강바닥을 구르는 계곡. 단단한 비취로 냉각 코어를 깎는다.	A valley where green jade tumbles along the riverbed. Hard jade is carved into cooling cores.	青いヒスイが川底を転がる渓谷。硬いヒスイで冷却コアを削る。
+바다 위에서 쉬지 않고 분화하는 섬 화산. 용암석을 녹여 뽑은 섬유로 케이블을 꼰다.	An island volcano erupting nonstop at sea. Fibers spun from molten lava rock are twisted into cables.	海の上で休まず噴火する島の火山。溶岩石を溶かして引いた繊維でケーブルを撚る。
+태평양판이 파고드는 깊은 해곡. 해저 아래 얼어붙은 메탄 하이드레이트를 캔다.	A deep trough where the Pacific Plate dives under. Frozen methane hydrate is mined below the seabed.	太平洋プレートが沈み込む深いトラフ。海底下に凍ったメタンハイドレートを掘る。
+뜨거운 물이 솟는 해저 굴뚝. 굴뚝 둘레에 쌓인 열수 광물을 모은다.	Seafloor chimneys gushing hot water. Hydrothermal ore piles up around them.	熱水が噴き出す海底のチムニー。周りに積もった熱水鉱物を集める。
+깊이 7km가 넘는 바다 밑 골짜기. 해저에 깔린 망간 단괴를 줍는다.	A seafloor canyon more than 7 km deep. Manganese nodules lie scattered on the bottom.	深さ7kmを超える海の谷。海底に転がるマンガン団塊を拾う。
+일본 최동단 섬 앞 먼 바다. 해저 진흙 속 희토류를 퍼 올린다.	Far waters off Japan's easternmost island. Rare earths are dredged from the seabed mud.	日本最東端の島の沖。海底の泥からレアアースをすくい上げる。
+성층화산 (현무암·스코리아)	Stratovolcano (basalt · scoria)	成層火山(玄武岩・スコリア)
+안산암 화산	Andesite volcano	安山岩の火山
+화강암 산괴	Granite massif	花崗岩の山塊
+화산 아래 중생대 셰일층	Mesozoic shale under a volcano	火山の下の中生代頁岩層
+부가체 처트·사암	Accretionary chert · sandstone	付加体のチャート・砂岩
+칼데라 화산	Caldera volcano	カルデラ火山
+활화산 분기공	Active fumaroles	活火山の噴気孔
+화산 (흑요석 산지)	Volcano (obsidian source)	火山(黒曜石の産地)
+사문암 속 비취 광맥	Jade veins in serpentinite	蛇紋岩の中のヒスイ鉱脈
+활화산 섬	Active volcanic island	活火山の島
+해곡 퇴적층	Trough sediments	トラフの堆積層
+열수 분출공	Hydrothermal vent	熱水噴出孔
+해구 바닥	Trench floor	海溝の底
+심해 점토	Deep-sea clay	深海粘土
+현무암	Basalt	玄武岩
+안산암	Andesite	安山岩
+셰일	Shale	頁岩
+처트	Chert	チャート
+화산재	Volcanic ash	火山灰
+유황	Sulfur	硫黄
+흑요석	Obsidian	黒曜石
+비취	Jade	ヒスイ
+용암석	Lava rock	溶岩石
+메탄 하이드레이트	Methane hydrate	メタンハイドレート
+열수 광물	Hydrothermal ore	熱水鉱物
+망간 단괴	Manganese nodule	マンガン団塊
+희토류 진흙	Rare-earth mud	レアアース泥
+겐가미네	Kengamine	剣ヶ峰
+고젠가미네	Gozengamine	御前峰
+다카다케	Takadake	高岳
+묘조산	Mt. Myōjō	明星山
+에도 시대	Edo period	江戸時代
+헤이안 시대	Heian period	平安時代
+고훈·아스카 시대	Kofun–Asuka period	古墳・飛鳥時代
+야요이 후기 (철기)	Late Yayoi (Iron Age)	弥生後期(鉄器)
+야요이 시대	Yayoi period	弥生時代
+조몬 시대	Jōmon period	縄文時代
+이마리 백자 항아리	Imari porcelain jar	伊万里焼の壺
+간에이쓰호 동전	Kan'ei Tsūhō coin	寛永通宝
+도자기 찻잔	Ceramic tea bowl	陶器の茶碗
+청동 촛대	Bronze candlestick	青銅の燭台
+헤이안 청자 병	Heian celadon bottle	平安の青磁瓶
+목판 경전	Woodblock sutra	木版の経典
+은제 술병	Silver sake flask	銀の徳利
+마키에 칠기 함	Maki-e lacquer box	蒔絵の漆箱
+소형 오층탑	Miniature five-story pagoda	小型の五重塔
+금동 관	Gilt-bronze crown	金銅の冠
+금 귀걸이	Gold earrings	金の耳飾り
+단갑 (고훈 시대 판갑옷)	Tankō (Kofun plate armor)	短甲(古墳時代の板甲冑)
+하니와 인형	Haniwa figure	埴輪
+철 덩이	Iron ingot	鉄鋌
+쇠도끼	Iron axe	鉄斧
+청동 창끝	Bronze spearhead	銅矛
+동탁 거푸집	Dōtaku bell mold	銅鐸の鋳型
+청동검	Bronze sword	銅剣
+돌칼	Stone reaping knife	石包丁
+야요이 토기	Yayoi pottery	弥生土器
+청동 거울	Bronze mirror	銅鏡
+불꽃 모양 토기	Flame-style pottery	火焔型土器
+갈돌	Grinding stone	石皿
+흙구슬	Clay bead	土玉
+뼈 낚싯바늘	Bone fishhook	骨角の釣り針
+흑요석 찌르개	Obsidian point	黒曜石の尖頭器
+난파선 금괴	Shipwreck gold bar	沈没船の金塊
+은화 꾸러미	Bundle of silver coins	銀貨の包み
+수출 자기 접시	Export porcelain plate	輸出用の磁器皿
+닻돌	Anchor stone	碇石
+류큐 항아리	Ryukyu jar	琉球の壺
+바다나리 화석	Crinoid fossil	ウミユリの化石
+호상철광층	Banded iron formation	縞状鉄鉱層
+카무이사우루스	Kamuysaurus	カムイサウルス
+후쿠이티탄	Fukuititan	フクイティタン
+알바로포사우루스	Albalophosaurus	アルバロフォサウルス
+후쿠이 공룡 발자국	Fukui dinosaur trackway	福井の恐竜足跡
+단바 공룡알	Tamba dinosaur egg	丹波の恐竜卵
+혼슈 동굴곰	Honshu cave bear	本州のヒグマ化石
+일본 해구 고래 화석	Japan Trench whale fossil	日本海溝のクジラ化石
+난카이 고대 돌고래	Nankai ancient dolphin	南海の古代イルカ
+오키나와 조개 화석	Okinawa shell fossil	沖縄の貝化石
+홋카이도 무카와에서 발견된 오리주둥이 공룡(하드로사우루스류)	A duck-billed dinosaur (hadrosaur) found in Mukawa, Hokkaido	北海道むかわ町で見つかったカモノハシ恐竜(ハドロサウルス類)
+후쿠이현 가쓰야마에서 발견된 목 긴 용각류	A long-necked sauropod found in Katsuyama, Fukui	福井県勝山市で見つかった首の長い竜脚類
+이시카와현 하쿠산 구와지마에서 발견된 작은 각룡류	A small ceratopsian found at Kuwajima, Hakusan, Ishikawa	石川県白山市桑島で見つかった小型の角竜類
+후쿠이현 데토리층군의 공룡 보행렬	A dinosaur trackway in Fukui's Tetori Group	福井県手取層群の恐竜の足跡列
+효고현 단바 지역에서 나온 공룡알 화석	Dinosaur egg fossils from the Tamba area, Hyogo	兵庫県丹波地域から出た恐竜の卵化石
+혼슈 석회 동굴에서 나온 큰곰 뼈 화석	Brown bear bone fossils from a Honshu limestone cave	本州の鍾乳洞から出たヒグマの骨の化石
+태평양 해저 신생대 지층의 고래 뼈	Whale bones from Cenozoic strata under the Pacific	太平洋海底の新生代地層のクジラの骨
+난카이 해곡 퇴적층의 고대 돌고래 뼈	Ancient dolphin bones from Nankai Trough sediments	南海トラフ堆積層の古代イルカの骨
+류큐 열도 산호초 지대의 조개·굴 화석	Shell and oyster fossils from Ryukyu coral reefs	琉球列島のサンゴ礁の貝・カキ化石
+후쿠이현 가쓰야마에서 발견된 두 발 육식 공룡	A two-legged carnivore found in Katsuyama, Fukui	福井県勝山市で見つかった二足歩行の肉食恐竜
+후쿠이현 가쓰야마에서 발견된 이구아노돈류 초식 공룡	An iguanodontian herbivore found in Katsuyama, Fukui	福井県勝山市で見つかったイグアノドン類の草食恐竜
+효고현 아와지섬에서 발견된 오리주둥이 공룡	A duck-billed dinosaur found on Awaji Island, Hyogo	兵庫県淡路島で見つかったカモノハシ恐竜
+후쿠시마현 이와키에서 발견된 목 긴 수장룡	A long-necked plesiosaur found in Iwaki, Fukushima	福島県いわき市で見つかった首長竜
+북태평양 연안 지층에서 나오는 하마를 닮은 바다 포유류	A hippo-like sea mammal from North Pacific coastal strata	北太平洋沿岸の地層から出るカバに似た海の哺乳類
+일본 각지 빙하기 지층에서 나오는 고대 코끼리	An ancient elephant from Ice Age strata across Japan	日本各地の氷河期の地層から出る古代のゾウ
+목뼈·앞발톱	Neck · fore claws	首の骨・前足の爪
+목뼈·엄지 가시	Neck · thumb spike	首の骨・親指のスパイク
+목뼈·앞다리뼈	Neck · forelimbs	首の骨・前脚
+머리뼈(오리 부리)	Skull (duck bill)	頭骨(カモのくちばし)
+꼬리·뒷지느러미	Tail · hind flippers	尾・後ろヒレ
+몸통·갈비뼈	Body · ribs	胴体・肋骨
+앞지느러미	Fore flippers	前ヒレ
+긴 목뼈	Long neck	長い首の骨
+머리뼈(기둥 이빨)	Skull (pillar teeth)	頭骨(柱状の歯)
+머리뼈·엄니	Skull · tusks	頭骨・牙
+골반·꼬리뼈	Pelvis · tail	骨盤・尾の骨
+뒷다리뼈	Hind limbs	後ろ脚
+앞다리뼈	Forelimbs	前脚
+{} 전시	{} exhibit	{} 展示
+스즈키 씨	Mr. Suzuki	鈴木さん
+동네 철물점 주인	Local hardware store owner	町の金物屋の主人
+시추라니, 대단하네! 공구는 우리 가게에서 싸게 가져가요.	Drilling? Amazing! Take tools from my shop at a discount.	掘削だって?すごいね!工具はうちの店で安く持っていきな。
+사토 교수	Prof. Sato	佐藤教授
+대학 지질학 교수	University geology professor	大学の地質学教授
+이 표본들, 연구실에서도 귀한 것들이에요. 연구비를 나눠 드리죠.	These samples are rare even in my lab. I'll share my research grant.	この標本、研究室でも貴重です。研究費を分けましょう。
+호리호리짱	HoriHori-chan	ホリホリちゃん
+구독자 120만 유튜버	YouTuber with 1.2M subscribers	登録者120万人のYouTuber
+이거 완전 콘텐츠예요! 광고 수익 나눌게요, 대신 촬영 좀!	This is pure content! I'll share ad revenue — just let me film!	これは最高のネタ!広告収入を分けるから撮影させて!
+세토 해양건설	Seto Marine Construction	瀬戸海洋建設
+해양 플랜트 회사	Offshore plant company	海洋プラント会社
+해저 시추 실력, 인정합니다. 시추선 정비를 지원하겠습니다.	Your seabed drilling is the real deal. We'll maintain your drill ship.	海底掘削の腕前、認めます。掘削船の整備を支援しましょう。
+사쿠라 캐피털	Sakura Capital	サクラ・キャピタル
+벤처캐피털	Venture capital	ベンチャーキャピタル
+기술력은 확인했습니다. 시리즈 A, 함께 가시죠.	We've seen your tech. Series A — let's do this together.	技術力は確認しました。シリーズA、一緒に行きましょう。
+일본 심부시추 연구회	Japan Deep Drilling Society	日本深部掘削研究会
+시추 연구 단체	Drilling research group	掘削研究団体
+인류 최심 시추 기록을 넘었군요. 공동 연구로 지원하겠습니다.	You've beaten humanity's deepest borehole. We'll back you with joint research.	人類最深の掘削記録を超えましたね。共同研究で支援します。
+유노하나 여관 여주인	Proprietress of Yunohana Inn	湯の花旅館の女将
+온천 여관 주인	Hot-spring inn owner	温泉旅館の主人
+후지산 아래서 큰일이 나는군요. 마을 사람들 마음을 모아 보탭니다.	Something big is happening under Fuji. The village is pitching in.	富士山の下で大ごとですね。村のみんなの気持ちを集めました。
+알프스 산악 가이드회	Alps Mountain Guide Club	アルプス山岳ガイド会
+산악 가이드 모임	Mountain guide club	山岳ガイドの会
+바위를 읽는 요령 하나 알려 드리지요.	Let me teach you a trick for reading rock.	岩を読むコツを一つ教えましょう。
+사쿠라 역사 박물관	Sakura History Museum	さくら歴史博物館
+지역 박물관	Local museum	地域の博物館
+발굴품이 훌륭합니다. 특별전을 열고 탐사를 지원하겠습니다.	Wonderful finds. We'll hold a special exhibition and fund your digs.	素晴らしい出土品です。特別展を開いて探査を支援します。
+데토리 공룡 연구회	Tetori Dinosaur Society	手取恐竜研究会
+화석 연구 모임	Fossil research club	化石研究の会
+이 정도 화석이면 논문 몇 편은 나옵니다. 장비를 지원하죠.	Fossils like these are worth several papers. We'll supply equipment.	これだけの化石なら論文が何本も書けます。機材を支援しましょう。
+나니와 조선소	Naniwa Shipyard	浪速造船所
+시추선 조선사	Drill-ship builder	掘削船の造船会社
+시추선 한 척 새로 뽑아 드리겠습니다. 바다는 저희가 책임지죠.	We'll build you a brand-new drill ship. Leave the sea to us.	掘削船を一隻新しく造りましょう。海は任せてください。
+태평양 딥 펀드	Pacific Deep Fund	パシフィック・ディープ・ファンド
+해외 투자 펀드	Overseas investment fund	海外投資ファンド
+지각을 처음 뚫은 민간 팀이군요. 다음 무대는 세계입니다.	The first private team through the crust. Next stage: the world.	地殻を初めて貫いた民間チームですね。次の舞台は世界です。
+히노데 지열 에너지	Hinode Geothermal Energy	日の出地熱エナジー
+지열 에너지 회사	Geothermal energy company	地熱エネルギー会社
+맨틀 속 지열 데이터, 에너지 정책이 바뀔 수준입니다.	Your mantle heat data could change national energy policy.	マントルの地熱データ、エネルギー政策が変わるレベルです。
+긴가 우주개발	Ginga Space Development	銀河宇宙開発
+우주 개발 회사	Space company	宇宙開発会社
+행성 내부 탐사 기술은 곧 우주 탐사 기술입니다. 함께 가시죠.	Planet-interior tech is space tech. Let's go together.	惑星内部の探査技術は宇宙探査技術です。一緒に行きましょう。
+세계 무대 · 다음 나라 탐사 지원	World stage · support for the next country	世界の舞台・次の国の探査を支援
+상점가 모임	Shopping-street association	商店街の会
+개인 엔젤 투자자	Private angel investor	個人エンジェル投資家
+크라우드펀딩 후원자들	Crowdfunding backers	クラウドファンディング支援者
+은퇴한 광산 기술자	Retired mining engineer	引退した鉱山技師
+부동산 투자자	Real-estate investor	不動産投資家
+IT 창업가 출신 엔젤	Angel and former IT founder	IT起業家出身のエンジェル
+해외 교민 투자 모임	Overseas community investors	海外在住者の投資会
+유명 배우 개인 투자	Famous actor's personal investment	有名俳優の個人投資
+시즈오카현 지역 사업	Shizuoka Prefecture project	静岡県の地域事業
+야마나시현 과제	Yamanashi Prefecture grant	山梨県の課題
+국가 R&D 과제	National R&D project	国家R&D課題
+지질 조사 공동 과제	Joint geological survey	地質調査の共同課題
+국가 전략 기술 지원	National strategic tech support	国家戦略技術支援
+국제 공동 연구	International joint research	国際共同研究
+지역 역사 보존회	Local history society	地域歴史保存会
+고생물 학회	Paleontological society	古生物学会
+문화재 보존 재단	Cultural heritage foundation	文化財保存財団
+자연사 박물관 후원회	Natural history museum patrons	自然史博物館後援会
+국제 지질 학회	International geological society	国際地質学会
+세계 유산 위원회	World Heritage committee	世界遺産委員会
+후지 정밀 공구	Fuji Precision Tools	富士精密工具
+미나토 굴착기계	Minato Excavators	みなと掘削機械
+세토 해양 플랜트	Seto Offshore Plant	瀬戸海洋プラント
+가가 특수강	Kaga Special Steel	加賀特殊鋼
+신세이 베어링	Shinsei Bearing	新星ベアリング
+미라이 센서 테크	Mirai Sensor Tech	ミライセンサーテック
+다이와 케이블	Daiwa Cable	大和ケーブル
+야마토 중공업	Yamato Heavy Industries	大和重工業
+히노데 에너지 그룹	Hinode Energy Group	日の出エナジーグループ
+사쿠라 테크 홀딩스	Sakura Tech Holdings	サクラテック・ホールディングス
+아오이 소재 그룹	Aoi Materials Group	葵素材グループ
+미라이 모빌리티	Mirai Mobility	ミライ・モビリティ
+긴가 항공 그룹	Ginga Aerospace Group	銀河航空グループ
+화석 발견 +{}% · 천재지변 피해 −30%	Fossil found +{}% · disaster damage −30%	化石発見 +{}% · 天災の被害 −30%
+육상 원정 재료 +5% · 오다 노부나가 보유 필요	Land materials +5% · requires Oda Nobunaga	陸上遠征の素材 +5% · 織田信長の所持が必要
+천재지변 피해 −30% · 화석 발견 +{}%	Disaster damage −30% · fossil found +{}%	天災の被害 −30% · 化石発見 +{}%
+지금 {}% (신사 −30%, 구키·오다 보유 각 −5%)	Now {}% (shrine −30%, Kuki/Oda owned −5% each)	現在 {}%(神社 −30%、九鬼・織田の所持で各 −5%)
+구키 요시타카	Kuki Yoshitaka	九鬼嘉隆
+구키 수군 대장	Admiral Kuki	九鬼水軍の大将
+오다 노부나가	Oda Nobunaga	織田信長
+검은 갑옷의 노부나가	Nobunaga in Black Armor	黒き甲冑の信長
+철갑선	Ironclad ship	鉄甲船
+지휘 부채	Command fan	軍配
+화승총	Matchlock	火縄銃
+장검	Katana	太刀
+일본 전국시대 수군 장수, 철갑선으로 알려진 인물 · 보유 효과: 본공·원정 굴착력 +5%, 해상 원정 +6% · 착용하면 가끔 지도에 출현(본공·원정 굴착량 +100%)	Sengoku-era naval commander known for ironclad ships · owned: main bore & expedition power +5%, sea expeditions +6% · when worn, sometimes appears on the map (main bore & expedition digging +100%)	戦国時代の水軍の将、鉄甲船で知られる人物 · 所持効果:本坑・遠征の掘削力 +5%、海上遠征 +6% · 着用するとときどきマップに出現(本坑・遠征の掘削量 +100%)
+구키 승급 · 수군 투구와 깃발 · 보유 효과: 굴착력 +12%, 해상 원정 +10% · 둘 다 보유하면 계승 +4%	Kuki upgrade · naval helmet and banner · owned: drill power +12%, sea expeditions +10% · own both for legacy +4%	九鬼の昇格 · 水軍の兜と旗 · 所持効果:掘削力 +12%、海上遠征 +10% · 両方所持で継承 +4%
+일본 전국시대 무장, 화승총과 아즈치성으로 알려진 인물 · 보유 효과: 육상 원정 재료 +5%, 굴착력 +1% · 착용하면 가끔 지도에 출현(육상 원정 재료 +100%)	Sengoku-era warlord known for matchlocks and Azuchi Castle · owned: land materials +5%, drill power +1% · when worn, sometimes appears on the map (land materials +100%)	戦国時代の武将、火縄銃と安土城で知られる人物 · 所持効果:陸上遠征の素材 +5%、掘削力 +1% · 着用するとときどきマップに出現(陸上遠征の素材 +100%)
+오다 승급 · 검은 갑옷과 투구 · 보유 효과: 육상 원정 재료 +8%, 굴착력 +2% · 둘 다 보유하면 계승 +1.5%	Oda upgrade · black armor and helmet · owned: land materials +8%, drill power +2% · own both for legacy +1.5%	織田の昇格 · 黒い甲冑と兜 · 所持効果:陸上遠征の素材 +8%、掘削力 +2% · 両方所持で継承 +1.5%
+특수 소장품 · 선체를 철판으로 덮은 대형 전투선 · 보유 효과: 해상 원정 +12%, 본공·원정 굴착력 +5% · 구키와 함께 보유하면 출현 때 포문 일제 사격(세트 효과)	Special collectible · a large warship clad in iron plates · owned: sea expeditions +12%, main bore & expedition power +5% · with Kuki: full broadside on appearance (set bonus)	特別な所蔵品 · 船体を鉄板で覆った大型の軍船 · 所持効果:海上遠征 +12%、本坑・遠征の掘削力 +5% · 九鬼と一緒に所持すると出現時に一斉砲撃(セット効果)
+특수 소장품 · 수군을 지휘하던 부채 · 보유 효과: 본공 굴착력 +6%, 본공 수입 +6%	Special collectible · the fan used to command the navy · owned: main bore power +6%, main bore income +6%	特別な所蔵品 · 水軍を指揮した軍配 · 所持効果:本坑の掘削力 +6%、本坑の収入 +6%
+특수 소장품 · 전국시대 화승총 · 보유 효과: 원정 굴착력 +6% · 오다와 함께 보유하면 출현 때 3단 사격(세트 효과)	Special collectible · a Sengoku-era matchlock · owned: expedition power +6% · with Oda: three-rank volley on appearance (set bonus)	特別な所蔵品 · 戦国時代の火縄銃 · 所持効果:遠征の掘削力 +6% · 織田と一緒に所持すると出現時に三段撃ち(セット効果)
+특수 소장품 · 금장식 일본도 · 보유 효과: 원정 재료(육상·해상) +3%	Special collectible · a gold-mounted Japanese sword · owned: expedition materials (land · sea) +3%	特別な所蔵品 · 金装飾の日本刀 · 所持効果:遠征の素材(陸上・海上) +3%
+⛴ 철갑선 (보유)	⛴ Ironclad ship (owned)	⛴ 鉄甲船(所持)
+🔫 화승총 (보유)	🔫 Matchlock (owned)	🔫 火縄銃(所持)
+🪭 지휘 부채 (보유)	🪭 Command fan (owned)	🪭 軍配(所持)
+🗡 장검 (보유)	🗡 Katana (owned)	🗡 太刀(所持)
+★ 구키 요시타카 (보유)	★ Kuki Yoshitaka (owned)	★ 九鬼嘉隆(所持)
+★★ 구키 수군 대장 (보유)	★★ Admiral Kuki (owned)	★★ 九鬼水軍の大将(所持)
+★ 오다 노부나가 (보유)	★ Oda Nobunaga (owned)	★ 織田信長(所持)
+★★ 검은 갑옷의 노부나가 (보유)	★★ Nobunaga in Black Armor (owned)	★★ 黒き甲冑の信長(所持)
+해상 원정 +12% · 굴착력 +5%	Sea expeditions +12% · drill power +5%	海上遠征 +12% · 掘削力 +5%
+해상 원정 +12% · 굴착력 +5% · 구키 세트: 포문 일제 사격	Sea expeditions +12% · drill power +5% · Kuki set: full broadside	海上遠征 +12% · 掘削力 +5% · 九鬼セット:一斉砲撃
+본공 굴착력·수입 +6%	Main bore power · income +6%	本坑の掘削力・収入 +6%
+원정 굴착력 +6%	Expedition power +6%	遠征の掘削力 +6%
+원정 굴착력 +6% · 오다 세트: 3단 사격	Expedition power +6% · Oda set: three-rank volley	遠征の掘削力 +6% · 織田セット:三段撃ち
+원정 재료 +3%	Expedition materials +3%	遠征の素材 +3%
+굴착력 +{}% · 해상 원정 +{}% · 출현 시 굴착량 +{}%	Drill power +{}% · sea expeditions +{}% · digging +{}% on appearance	掘削力 +{}% · 海上遠征 +{}% · 出現時の掘削量 +{}%
+육상 원정 재료 +{}% · 굴착력 +{}% · 출현 시 육상 재료 +{}%	Land materials +{}% · drill power +{}% · land materials +{}% on appearance	陸上遠征の素材 +{}% · 掘削力 +{}% · 出現時の陸上素材 +{}%
+· 출현 이벤트 가능	· appearance event available	· 出現イベントあり
+· 이벤트는 착용 시	· event when worn	· イベントは着用時
+굴착력 +{}% · 해상 +{}%	Drill power +{}% · sea +{}%	掘削力 +{}% · 海上 +{}%
+철갑선 해상 +12% · 굴착 +5%	Ironclad: sea +12% · digging +5%	鉄甲船 海上 +12% · 掘削 +5%
+지휘 부채 본공·수입 +6%	Command fan: main bore · income +6%	軍配 本坑・収入 +6%
+⚓ 계승 +4%	⚓ Legacy +4%	⚓ 継承 +4%
+🔥 계승 +1.5%	🔥 Legacy +1.5%	🔥 継承 +1.5%
+세트: 포문 일제 사격	Set: full broadside	セット:一斉砲撃
+세트: 3단 사격	Set: three-rank volley	セット:三段撃ち
+출현 이벤트(+{}%, {}초)	Appearance event (+{}%, {}s)	出現イベント(+{}%、{}秒)
+육상 재료 +{}% · 굴착 +{}%	Land materials +{}% · digging +{}%	陸上素材 +{}% · 掘削 +{}%
+화승총 원정 +6%	Matchlock: expeditions +6%	火縄銃 遠征 +6%
+장검 재료 +3%	Katana: materials +3%	太刀 素材 +3%
+⚓ {} 출현! 본공·원정 굴착량 +{}% · {}초	⚓ {} appears! Main bore & expedition digging +{}% · {}s	⚓ {} 出現!本坑・遠征の掘削量 +{}% · {}秒
+🔥 {} 출현! 육상 원정 재료 +{}% · {}초	🔥 {} appears! Land materials +{}% · {}s	🔥 {} 出現!陸上遠征の素材 +{}% · {}秒
+🌏 지진 M{} · {} · 본공 −20%	🌏 Earthquake M{} · {} · main bore −20%	🌏 地震 M{} · {} · 本坑 −20%
+🌊 쓰나미 · 해상 −60% · 육상 −15%	🌊 Tsunami · sea −60% · land −15%	🌊 津波 · 海上 −60% · 陸上 −15%
+🌀 태풍 · 해상 −30%	🌀 Typhoon · sea −30%	🌀 台風 · 海上 −30%
+⚡ 정전 · 보급 끊김 · 시추 멈춤	⚡ Blackout · supply cut · drilling stopped	⚡ 停電 · 補給途絶 · 掘削停止
+본공 시추와 원정이 잠시 멈췄어요	Main bore and expeditions have paused	本坑と遠征が一時停止しました
+40초 동안 해상 원정 −60%, 육상 원정 −15%	Sea expeditions −60%, land −15% for 40 s	40秒間 海上遠征 −60%、陸上 −15%
+열도 침강 경보 {}단계 · 45초 동안 본공 −20%	Sinking alert Lv.{} · main bore −20% for 45 s	列島沈降警報 {}段階 · 45秒間 本坑 −20%
+열도 침강 경보	Archipelago sinking alert	列島沈降警報
+🗾 열도 침강 경보	🗾 Archipelago sinking alert	🗾 列島沈降警報
+· {} 원정 {}% (진원에서 {}km)	· {} expedition {}% ({} km from epicenter)	· {} 遠征 {}%(震源から{}km)
+· 지금 {} {}%	· now {} {}%	· 現在 {} {}%
+{} 흐림	{} cloudy	{} くもり
+{} 맑음	{} clear	{} 晴れ
+{} 비	{} rain	{} 雨
+{} 눈	{} snow	{} 雪
+상부 지각 (부가체·화강암)	Upper crust (accretionary · granite)	上部地殻(付加体・花崗岩)
+후지산 화산 퇴적층 (현무암·스코리아)	Fuji volcanic deposits (basalt · scoria)	富士山の火山堆積層(玄武岩・スコリア)
+화산 퇴적층 바닥	Bottom of volcanic deposits	火山堆積層の底
+섭입대 (태평양판 슬래브)	Subduction zone (Pacific slab)	沈み込み帯(太平洋スラブ)
+태평양판 경계	Pacific Plate boundary	太平洋プレート境界
+맨틀 전이대 (멈춰 있는 슬래브)	Mantle transition zone (stagnant slab)	マントル遷移層(停滞スラブ)
+410km 불연속면	410 km discontinuity	410km不連続面
+상부·하부 맨틀 경계	Upper–lower mantle boundary	上部・下部マントル境界
+외핵 (액체 철·니켈)	Outer core (liquid iron · nickel)	外核(液体の鉄・ニッケル)
+내핵 (고체 철·니켈)	Inner core (solid iron · nickel)	内核(固体の鉄・ニッケル)
+내핵 (반대편)	Inner core (far side)	内核(反対側)
+지구 중심 · 안정 장치 설치	Earth's center · stabilizer installed	地球の中心・安定装置の設置
+외핵 (반대편 · 액체 철)	Outer core (far side · liquid iron)	外核(反対側・液体の鉄)
+레만 불연속면 (반대편)	Lehmann discontinuity (far side)	レーマン不連続面(反対側)
+하부 맨틀 (반대편)	Lower mantle (far side)	下部マントル(反対側)
+구텐베르크 불연속면 (반대편)	Gutenberg discontinuity (far side)	グーテンベルク不連続面(反対側)
+상부 맨틀 (반대편)	Upper mantle (far side)	上部マントル(反対側)
+상부·하부 맨틀 경계 (반대편)	Upper–lower mantle boundary (far side)	上部・下部マントル境界(反対側)
+해양 암석권 (남대서양)	Oceanic lithosphere (South Atlantic)	海洋リソスフェア(南大西洋)
+암석권 아래 (반대편)	Below the lithosphere (far side)	リソスフェアの下(反対側)
+해양 지각 (베개용암)	Oceanic crust (pillow lava)	海洋地殻(枕状溶岩)
+모호면 (반대편)	Moho (far side)	モホ面(反対側)
+모호면 (지각·맨틀 경계)	Moho (crust–mantle boundary)	モホ面(地殻・マントル境界)
+대서양 해저 퇴적층	Atlantic seabed sediments	大西洋海底の堆積層
+우루과이 앞바다 해저	Seabed off Uruguay	ウルグアイ沖の海底
+NHK 뉴스	NHK News	NHKニュース
+도쿄 ⇄ 몬테비데오	Tokyo ⇄ Montevideo	東京 ⇄ モンテビデオ
+전문가들 “원인 불명” · 후지산·아소산·사쿠라지마 일제히 안정 · 정부 “특별한 조치는 없었다”	Experts: "cause unknown" · Fuji, Aso and Sakurajima all calm at once · Government: "we took no special action"	専門家「原因不明」 · 富士山・阿蘇山・桜島が一斉に安定 · 政府「特別な措置はしていない」
+¡Otra vez! 또 당신이군요!	¡Otra vez! You again!	¡Otra vez! またあなたですか!
+양구→몬테비데오 · 후지→남대서양	Yanggu→Montevideo · Fuji→South Atlantic	楊口→モンテビデオ · 富士→南大西洋
+🗾 일본편 · {}	🗾 Japan · {}	🗾 日本編 · {}
+엔딩은 플레이 방식으로 정해져요	Endings depend on how you play	エンディングはプレイの仕方で決まります
+언제나	always	いつでも
+{} · 일본편 · {}일 만에 완주	{} · Japan · cleared in {} days	{} · 日本編 · {}日でクリア
+모은 엔딩 {}/{}	endings {}/{}	集めたエンディング {}/{}
+각 효과를 30%로 적용	each effect at 30%	各効果を30%で適用
+{} · 각 효과를 30%로 적용	{} · each effect at 30%	{} · 各効果を30%で適用
+🔨 표시 = 지금 제작할 수 있는 부품 {} · 부품을 누르면 아래 제작으로 이동	🔨 = parts you can craft now: {} · tap a part to jump to crafting below	🔨 = 今作れる部品 {} · 部品をタップすると下の製作へ
+구슬 {} · {} ({}회 남음)	{} balls · {} ({} left)	玉 {} · {}(残り{}回)
+이번 기계 합계: {}	This machine total: {}	この台の合計:{}
+대박	Jackpot	大当たり
+구슬	Balls	玉
+일본편	Japan	日本編
+🗾 일본	🗾 Japan	🗾 日本
+🦴 신사: 천재지변 피해 −30% · 화석 발견 +{}% (칸당 {}% · {})	🦴 Shrine: disaster damage −30% · fossil found +{}% ({}% per tile · {})	🦴 神社:天災の被害 −30% · 化石発見 +{}%(1マスあたり{}% · {})
+해상	Sea	海上
+해상 원정	Sea expeditions	海上遠征
+출현 시 육상 재료	land materials on appearance	出現時の陸上素材
+동안 본공 −20%	main bore −20% for	本坑 −20%
+진원에서	from epicenter	震源から
+칸당	per tile	1マスあたり
+남음	left	残り
+모은 엔딩	endings	集めたエンディング
+민간	Private	民間
+천재지변 피해	disaster damage	天災の被害
+지금	now	現在
+지진	Earthquake	地震
+🔨 표시 = 지금 제작할 수 있는 부품	🔨 = parts you can craft now:	🔨 = 今作れる部品
+출현 이벤트	Appearance event	出現イベント
+육상 재료	Land materials	陸上素材
+전이대	Transition zone	遷移帯
+원정지 날씨	Expedition weather	遠征地の天気
+후지	Fuji	富士
+🌋 화산 활동! {}	🌋 Volcanic activity! {}	🌋 火山活動! {}
+🌊 해저 열수 분출! {}	🌊 Hydrothermal eruption! {}	🌊 海底熱水噴出! {}
+🗾 일본 · {}회차 · {}일째	🗾 Japan · Run {} · Day {}	🗾 日本 · {}周目 · {}日目
