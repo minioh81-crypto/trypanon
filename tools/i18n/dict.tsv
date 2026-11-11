@@ -1274,3 +1274,46 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 ⚓ 철갑선 자동 출항을 껐어요	⚓ Ironclad auto-sail turned off	⚓ 鉄甲船の自動出航をオフにしました
 ⛵ 철갑선 자동 출항: {}	⛵ Ironclad auto-sail: {}	⛵ 鉄甲船の自動出航:{}
 철갑선 3D 미리보기 · 끌어서 돌려 보기	Ironclad 3D preview · drag to rotate	鉄甲船の3Dプレビュー・ドラッグで回転
+일본 · {}회차 · {}일째	Japan · Run {} · Day {}	日本 · {}周目 · {}日目
+쓰쿠바산	Mt. Tsukuba	筑波山
+요테이산	Mt. Yōtei	羊蹄山
+이와테산	Mt. Iwate	岩手山
+오미네산	Mt. Ōmine	大峰山
+자오산	Mt. Zaō	蔵王山
+반다이산	Mt. Bandai	磐梯山
+이시즈치산	Mt. Ishizuchi	石鎚山
+아사마산	Mt. Asama	浅間山
+이바라키	Ibaraki	茨城
+이와테	Iwate	岩手
+나라	Nara	奈良
+미야기·야마가타	Miyagi · Yamagata	宮城・山形
+후쿠시마	Fukushima	福島
+에히메	Ehime	愛媛
+군마·나가노	Gunma · Nagano	群馬・長野
+뇨타이산	Mt. Nyotai	女体山
+야쿠시다케	Yakushidake	薬師岳
+핫쿄가타케	Hakkyōgatake	八経ヶ岳
+구마노다케	Kumanodake	熊野岳
+덴구다케	Tengudake	天狗岳
+화강암·반려암 산괴	Granite–gabbro massif	花崗岩・斑れい岩の山塊
+성층화산 (안산암)	Stratovolcano (andesite)	成層火山(安山岩)
+성층화산 (현무암 용암류)	Stratovolcano (basalt lava flows)	成層火山(玄武岩溶岩流)
+부가체 처트	Accretionary chert	付加体のチャート
+화구호 화산 (유황)	Crater-lake volcano (sulfur)	火口湖の火山(硫黄)
+붕괴 화산 (화산재)	Collapsed volcano (ash)	山体崩壊した火山(火山灰)
+결정편암·셰일	Crystalline schist · shale	結晶片岩・頁岩
+활화산 (용암류)	Active volcano (lava flows)	活火山(溶岩流)
+간토 평야에 홀로 솟은 쌍봉. 단단한 화강암을 깎아 정밀 센서 받침을 만든다.	A twin peak rising alone over the Kanto Plain. Hard granite is cut into sensor mounts.	関東平野にひとりそびえる双峰。硬い花崗岩を削って精密センサーの台座を作る。
+홋카이도의 후지라 불리는 원뿔 화산. 회색 안산암으로 베어링을 굽는다.	The cone volcano called Hokkaido's Fuji. Grey andesite is fired into bearings.	北海道の富士と呼ばれる円錐形の火山。灰色の安山岩でベアリングを焼く。
+이와테의 남부 후지. 검은 현무암 용암류로 하우징 철판을 보강한다.	Iwate's "Nanbu Fuji". Black basalt lava reinforces the housing plates.	岩手の南部富士。黒い玄武岩の溶岩流でハウジングの鉄板を補強する。
+수행자들이 걷는 기이 산지의 험한 능선. 부가체 처트로 드릴 비트를 벼린다.	A rugged Kii ridge walked by mountain ascetics. Accretionary chert is forged into drill bits.	修験者が歩く紀伊山地の険しい稜線。付加体のチャートでドリルビットを鍛える。
+에메랄드빛 화구호 오카마를 품은 화산. 유황으로 내압 실린더를 밀봉한다.	A volcano cradling the emerald crater lake Okama. Sulfur seals the pressure cylinders.	エメラルド色の火口湖「御釜」を抱く火山。硫黄で耐圧シリンダーを密封する。
+1888년 대폭발로 산이 무너진 화산. 쌓인 화산재로 열 차폐판을 굽는다.	A volcano that collapsed in the great 1888 eruption. Its piled ash is fired into heat shields.	1888年の大噴火で山が崩れた火山。積もった火山灰で熱遮蔽板を焼く。
+시코쿠에서 가장 높은 영산. 결정편암·셰일 층으로 충격 흡수 장치를 만든다.	Shikoku's highest sacred peak. Its schist and shale layers become shock absorbers.	四国で最も高い霊山。結晶片岩・頁岩の層で衝撃吸収装置を作る。
+지금도 연기를 뿜는 간토의 활화산. 오니오시다시 용암석으로 케이블 섬유를 뽑는다.	Kanto's still-smoking active volcano. Onioshidashi lava rock is spun into cable fiber.	今も噴煙を上げる関東の活火山。鬼押出しの溶岩石からケーブル繊維を引く。
+사용 중	In use	使用中
+선택	Select	選択
+🇰🇷 한국편 엔딩 {}종 (효과 30%)	🇰🇷 Korea endings ×{} (30% effect)	🇰🇷 韓国編エンディング {}種(効果30%)
+엔딩 하나당 본공 굴착력·수입 +{}% → 지금 ×{}	Each ending: main bore power · income +{}% → now ×{}	エンディング1つごとに本坑の掘削力・収入 +{}% → 現在 ×{}
+🇰🇷 한국 칭호 {}개 (효과 30%)	🇰🇷 Korean titles ×{} (30% effect)	🇰🇷 韓国の称号 {}個(効果30%)
+각 효과를 30%로 적용 → 굴착력 ×{} · 육상 재료 ×{}	each effect at 30% → drill power ×{} · land materials ×{}	各効果を30%で適用 → 掘削力 ×{} · 陸上素材 ×{}

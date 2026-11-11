@@ -1,13 +1,15 @@
 import json,math,sys
 G=json.load(open('japan.geojson'))
-TH=math.radians(float(sys.argv[1]) if len(sys.argv)>1 else -35);K=float(sys.argv[2]) if len(sys.argv)>2 else 30
-C0=(137.6,36.4);CX,CY=float(sys.argv[3]) if len(sys.argv)>3 else 160,float(sys.argv[4]) if len(sys.argv)>4 else 285
+# v2 (v180): 북쪽이 위인 실제 각도. 도호쿠(37.2°N 이북) 세로 0.74배·140.6°E 동쪽 가로 0.85배, 홋카이도는 하코다테 기준 0.5배로 줄여 서쪽으로 0.6° 당김 · 쓰시마·고토(129.55°E 서쪽)는 생략
+C36=math.cos(math.radians(36));K=29.26;X0=-6.512;Y0=-5.575;LX,TY=8,104
 def P(lon,lat):
-  bx=(lon-C0[0])*math.cos(math.radians(36))*K;by=(C0[1]-lat)*K
-  x=bx*math.cos(TH)-by*math.sin(TH);y=bx*math.sin(TH)+by*math.cos(TH)
-  return (x+CX,y+CY)
-# insets (in final coords): move Okinawa main islands & Minamitori into empty corners
-OKI_T=(62,262);MT_T=(272,478)
+  if lat>41.35 and lon>139.3:lon=140.12+(lon-140.72)*.5;lat=41.78+(lat-41.78)*.5
+  x=(lon-137.6)*C36;y=36.4-lat
+  if lon>140.6:x=(140.6-137.6)*C36+(lon-140.6)*C36*.85
+  if lat>37.2:y=-0.8-(lat-37.2)*.74
+  return (LX+(x-X0)*K,TY+(y-Y0)*K)
+TH=0
+OKI_T=(50,506);MT_T=(282,508)
 ok_c=P(127.8,26.4);OKI=(OKI_T[0]-ok_c[0],OKI_T[1]-ok_c[1])
 mt_c=P(153.98,24.28);MT=(MT_T[0]-mt_c[0],MT_T[1]-mt_c[1])
 def reg(i):return 'hokkaido' if i==1 else 'tohoku' if i<=7 else 'kanto' if i<=14 else 'chubu' if i<=23 else 'kinki' if i<=30 else 'chugoku' if i<=35 else 'shikoku' if i<=39 else 'kyushu'
@@ -37,11 +39,12 @@ for f in G['features']:
       if not(126.5<clon<128.6 and clat>25.9):continue
       inset=True
     if pid==46 and clat<29.6:continue
+    if clon<129.55 and pid!=47:continue  # 쓰시마·고토 생략
     if pid==32 and clon>131.5 and clat>37.0:continue  # 독도는 넣지 않음
     if pid==13 and clat<34.2:continue
     if pid==1 and clon>145.9:continue   # 지도 밖 동쪽 섬들은 생략
     pr=[P(lo,la) for lo,la in ring]
-    if inset:pr=[(OKI_T[0]+(x-ok_c[0])*2.4,OKI_T[1]+(y-ok_c[1])*2.4) for x,y in pr]
+    if inset:pr=[(OKI_T[0]+(x-ok_c[0])*1.9,OKI_T[1]+(y-ok_c[1])*1.9) for x,y in pr]
     A=area(pr)
     if A<(1.2 if inset else 2.5):continue
     d=ring_d(pr,.45)
@@ -54,7 +57,7 @@ for f in G['features']:
           t=ring_d(pr,1.4)
           if t:tide.append(t)
   if ds:out.append({'id':'p%d'%pid,'reg':R,'d':''.join(ds),'c':[round(cx/ca,1),round(cy/ca,1)] if ca else [0,0],'col':COL[R],'e':ELE[R]})
-json.dump({'prov':out,'tide':''.join(tide),'oki':[round(OKI[0],2),round(OKI[1],2)],'mt':[round(MT[0],2),round(MT[1],2)],'th':math.degrees(TH),'K':K,'C0':C0,'CXY':[CX,CY]},open('jp_map2.json','w'),separators=(',',':'))
+json.dump({'prov':out,'tide':''.join(tide),'oki':[round(OKI[0],2),round(OKI[1],2)],'mt':[round(MT[0],2),round(MT[1],2)],'K':K},open('jp_map2.json','w'),separators=(',',':'))
 print('bbox',min(allx),max(allx),min(ally),max(ally),'size',sum(len(p['d']) for p in out)+len(''.join(tide)))
 s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 560" width="640" height="1120"><rect width="320" height="560" fill="#2386cc"/>'+''.join(f'<path d="{p["d"]}" fill="{p["col"]}" stroke="#333" stroke-width=".3"/>' for p in out)
 for n,(lo,la) in {'fuji':(138.73,35.36),'kita':(138.24,35.67),'ontake':(137.48,35.89),'haku':(136.77,36.15),'itoi':(137.86,36.94),'daisen':(133.54,35.37),'aso':(131.1,32.88),'saku':(130.66,31.58),'miya':(130.5,30.34),'asahi':(142.85,43.66),'nankai':(136.6,33.0),'trench':(144.2,38.4)}.items():
