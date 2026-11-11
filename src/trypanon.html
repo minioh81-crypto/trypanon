@@ -795,7 +795,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v183 · 2026-11-11</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v184 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -5764,10 +5764,10 @@ function s3Ship(){const T=THREE,G=new T.Group(),anims=[];
   ring(-.02,.07,RED,1.005);ring(.06,.05,GOLD,1.01);ring(HW-.02,.07,GOLD,1.012);ring(HW*.5,.025,GOLD2,1.008);
   // gun ports, cannons, gold brackets on both sides
   const portG=new T.BoxGeometry(.3,.24,.08),lidG=new T.BoxGeometry(.36,.06,.12),canG=new T.CylinderGeometry(.065,.075,.42,14),muz=new T.TorusGeometry(.07,.02,6,14),brG=new T.BoxGeometry(.06,HW*.92,.05);
-  for(const s of [1,-1]){for(let i=0;i<6;i++){const x=-1.85+i*.74,z=beam(x),ang=Math.atan2(-(x/RX)*RZ/RX,1);
+  const MZ=[];for(const s of [1,-1]){for(let i=0;i<6;i++){const x=-1.85+i*.74,z=beam(x),ang=Math.atan2(-(x/RX)*RZ/RX,1);
       const n=new T.Vector3(x/(RX*RX),0,z/(RZ*RZ)*s).normalize();const yaw=Math.atan2(n.x,n.z*s)*s;
       const pt=M(portG,BLACK,x,.42,s*(z+.01));pt.rotation.y=-yaw*s;const lid=M(lidG,WOODD,x,.58,s*(z+.04));lid.rotation.y=-yaw*s;
-      const c=M(canG,IRON,x+n.x*.12,.42,s*(z+.14));c.rotation.x=Math.PI/2;c.rotation.z=-n.x*1.2;const mz=M(muz,IRON2,x+n.x*.3,.42,s*(z+.34));mz.rotation.y=-yaw*s;}
+      const c=M(canG,IRON,x+n.x*.12,.42,s*(z+.14));c.rotation.x=Math.PI/2;c.rotation.z=-n.x*1.2;const mz=M(muz,IRON2,x+n.x*.3,.42,s*(z+.34));mz.rotation.y=-yaw*s;MZ.push({p:new T.Vector3(x+n.x*.33,.42,s*(z+.38)),s,ph:i*.14+(s<0?.5:0)});}
     for(let i=0;i<7;i++){const x=-2.22+i*.74,z=beam(x),b=M(brG,GOLD,x,HW/2,s*(z+.015));b.rotation.y=Math.atan2(x/(RX*RX),z/(RZ*RZ))*-1*s;}}
   // ---- iron turtle-shell roof (upper half ellipsoid) with hex plates, ridge cross, spikes ----
   const hexT=s3Tex('hex',1024,512,(g,w,h)=>{g.fillStyle='#2b3037';g.fillRect(0,0,w,h);const R=22,W=R*Math.sqrt(3);for(let r=0;r*R*1.5<h+R;r++)for(let c=-1;c*W<w+W;c++){const x=c*W+(r%2?W/2:0),y=r*R*1.5;g.beginPath();for(let k=0;k<6;k++){const a=Math.PI/3*k+Math.PI/6;g.lineTo(x+R*.95*Math.cos(a),y+R*.95*Math.sin(a));}g.closePath();const gr=g.createRadialGradient(x-6,y-6,2,x,y,R);gr.addColorStop(0,'#5a626d');gr.addColorStop(1,'#1c1f24');g.fillStyle=gr;g.fill();g.strokeStyle='#b8913e';g.lineWidth=2.2;g.stroke();}});
@@ -5855,7 +5855,13 @@ function s3Ship(){const T=THREE,G=new T.Group(),anims=[];
   for(let i=0;i<46;i++){const sp=new T.Sprite(new T.SpriteMaterial({map:fireT,blending:T.AdditiveBlending,depthWrite:false,transparent:true}));fireG.add(sp);FP.push({sp,t:Math.random(),v:.8+Math.random()*.5,dy:(Math.random()-.5)*.5,dz:(Math.random()-.5)*.5});}
   const fireTick=(dt)=>{for(const f of FP){f.t+=dt*f.v*1.4;if(f.t>1){f.t-=1;f.dy=(Math.random()-.5)*.5;f.dz=(Math.random()-.5)*.5;}const t=f.t,d=t*2.5;f.sp.position.set(mouthW.x-d,mouthW.y-.05+f.dy*t+t*t*.25,f.dz*t);const s=.26+t*1.15;f.sp.scale.set(s,s,s);
       const c=f.sp.material.color;if(t<.15)c.setRGB(1,.95,.7);else if(t<.45)c.setRGB(1,.55,.12);else c.setRGB(.9,.18,.04);f.sp.material.opacity=(t<.1?t*10:Math.max(0,1-(t-.1)/.9))*.85;}};
-  G.userData={anims,fireTick,fire:fireG};return G;}
+  // 옆 포문 일제 사격 (철갑선과 같은 방식): 섬광 + 불꽃 + 연기, 앞에서 뒤로 차례로
+  const smokeT=s3Tex('smk',64,64,(g,w,h)=>{const r=g.createRadialGradient(32,32,2,32,32,32);r.addColorStop(0,'rgba(230,230,230,.9)');r.addColorStop(1,'rgba(200,200,200,0)');g.fillStyle=r;g.fillRect(0,0,w,h);});
+  const BP=[];for(const m of MZ)for(let k=0;k<5;k++){const fl=new T.Sprite(new T.SpriteMaterial({map:fireT,blending:T.AdditiveBlending,depthWrite:false,transparent:true}));const sm=new T.Sprite(new T.SpriteMaterial({map:smokeT,depthWrite:false,transparent:true}));fireG.add(fl);fireG.add(sm);BP.push({m,fl,sm,k});}
+  let bt=0;const broadTick=dt=>{bt+=dt;for(const f of BP){const c=((bt*.55-f.m.ph-f.k*.03)%1.6+1.6)%1.6;const on=c<.5,t=c/.5,d=.25+t*(1.4+f.k*.5);f.fl.visible=on&&t<.55;f.sm.visible=on;
+      if(f.fl.visible){f.fl.position.set(f.m.p.x+(Math.random()-.5)*.05,f.m.p.y+f.k*.02,f.m.p.z+f.m.s*(.1+t*(.9+f.k*.35)));const sc=.35+(1-t)*.5+f.k*.08;f.fl.scale.set(sc,sc,sc);f.fl.material.opacity=Math.max(0,1-t*1.8);f.fl.material.color.setRGB(1,.75-t*.5,.3);}
+      if(on){f.sm.position.set(f.m.p.x+t*.2,f.m.p.y+t*.35+f.k*.05,f.m.p.z+f.m.s*d);const s2=.3+t*1.1+f.k*.15;f.sm.scale.set(s2,s2,s2);f.sm.material.opacity=Math.max(0,.7-t*.7);}}};
+  G.userData={anims,fireTick:dt=>{fireTick(dt);broadTick(dt);},fire:fireG};return G;}
 // ---- 철갑선 (구키 수군, 참고 그림 기준): 뱃머리 -X · 금 용머리 · 철판 리벳 선체 · 붉은 난간 · 옆면 대포 6문씩(옆으로 일제 사격) · 물속으로 내려가 젓는 노 · 망루·천수각 · 옆을 향한 큰 돛(검은 문장) ----
 function s3Tekko(){const T=THREE,G=new T.Group(),anims=[];
   const ph=(c,o={})=>new T.MeshPhongMaterial(Object.assign({color:c,shininess:30,specular:'#222'},o));
@@ -8425,7 +8431,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=183;
+const GVER=184;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
