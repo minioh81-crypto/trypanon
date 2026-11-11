@@ -794,7 +794,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v176 · 2026-11-11</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v177 · 2026-11-11</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -877,7 +877,7 @@ const MODES={
   MONC:[300,900,2700,6600,15000,30000,57000,102000,174000,285000,450000,690000,1050000,1560000,2280000,3300000,4800000,6900000,9900000,14100000,19700000,27600000,38700000,54000000,76000000,106000000]}};
 // 일본: 하드급 한 판 · 숙련 Lv.120(무한 91~100 → 초월 101~110 → 창세 111~120) · 부품 24단계. 지층 H·v는 LAY_JP 기본값에 Hm/vmul을 곱한 값
 MODES.jp={n:'일본',MAXLV:24,DLOPEN:120,MAXLV2:24,DLOPEN2:120,LREQ:[1,6,16,26,36,46,56,66,76],LREQ2:[84,92,100,108,114,118],Hmul:1,
-  Hm:[0.36,0.8301,0.6533,3.84,7.139,23.52,6.878,6.386,22.5],vmul:[0.2,0.2391,0.384,1.502,1.868,7.079,3.467,5.046,12.08],Hm2:[45.68,79.61,616.7,12640,49100,5.046e+06],vmul2:[28.86,69.49,384.8,2327,7327,77660],p2:{base:999,lv:0,step:1},dlMul:1.06,dlGrow:1.115,expBase:200,expGrow:1.25,yf:2.5,inv:.5,shop:1.5,chest:.7,set:.3,y2:2,
+  Hm:[1.113,6.284,3.775,20.41,34.81,102.9,27.85,24.33,78.95],vmul:[1.368,2.762,4.053,13.82,10.59,35.11,12.22,11.06,17.79],Hm2:[166.9,275.4,2350,3.932e+04,1.35e+05,9.212e+06],vmul2:[25.84,75.68,202.6,1556,5.878e+05,1.152e+05],p2:{base:999,lv:0,step:1},dlMul:1.06,dlGrow:1.115,expBase:200,expGrow:1.25,yf:2.5,inv:.5,shop:1.5,chest:.7,set:.3,y2:2,
   fuel:[30,30,18],fs:[5,8,12],fc:[.015,.03,.06],RESC:MODES.hard.RESC.slice(0,24),MONC:MODES.hard.MONC.slice(0,24)};
 const MD=()=>isJP?MODES.jp:MODES[S.mode]||MODES.normal;
 const dlMul=dl=>Math.pow(MD().dlMul,dl-1);
@@ -2864,12 +2864,12 @@ const OPT={
  horse:[{v:'none',n:'없음',p:0},{v:'silla',n:'★ 신라 군마',get p(){return S.mode==='hard'?16000000:8000000;},get d(){const h=S.mode==='hard';return `특수 소장품 · 보유 효과: 육상 원정 재료 +${pcF(HRS.mat[md_()])}%, 본공·원정 굴착력 +${pcF(HRS.all[md_()])}% · 사면 정해진 주기로 지도 위 육지를 달려요 · 김유신 장군과 함께 보유하면 세트 효과(육상 재료 +${pcF(KIMSET[md_()])}% 추가)`;}}],
  item:[{v:'none',n:'없음',p:0},{v:'shovel',n:'삽',p:3000,d:'보유 효과: 본공·원정 굴착력 +3% (하드 +1.8%)'},{v:'pick',n:'곡괭이',p:15000,d:'보유 효과: 강타 확률 +2%p (하드 +1.2%p)'},{v:'tablet',n:'탐사 태블릿',p:60000,d:'보유 효과: 원정 재료 추가 획득 +4%p · 유물 발견 +10% (하드 60%)'},{v:'hdrill',n:'휴대용 드릴',p:300000,d:'보유 효과: 굴착력 +4% · 강타 확률 +2%p (하드 60%)'}],
 };
-if(isJP){OPT.sex.push({v:'kuki',n:'★ 구키 요시타카',p:10000000,d:`일본 전국시대 수군 장수, 철갑선으로 알려진 인물 · 보유 효과: 본공·원정 굴착력 +5%, 해상 원정 +6% · 착용하면 가끔 지도에 출현(본공·원정 굴착량 +100%)`},
-  {v:'kuki2',n:'★★ 구키 수군 대장',req:'sex:kuki',p:40000000,d:`구키 승급 · 수군 투구와 깃발 · 보유 효과: 굴착력 +12%, 해상 원정 +10% · 둘 다 보유하면 계승 +4%`},
-  {v:'oda',n:'★ 오다 노부나가',p:10000000,d:`일본 전국시대 무장, 화승총과 아즈치성으로 알려진 인물 · 보유 효과: 육상 원정 재료 +5%, 굴착력 +1% · 착용하면 가끔 지도에 출현(육상 원정 재료 +100%)`},
-  {v:'oda2',n:'★★ 검은 갑옷의 노부나가',req:'sex:oda',p:40000000,d:`오다 승급 · 검은 갑옷과 투구 · 보유 효과: 육상 원정 재료 +8%, 굴착력 +2% · 둘 다 보유하면 계승 +1.5%`});
-  OPT.ship.push({v:'tekko',n:'★ 철갑선',p:16000000,d:'특수 소장품 · 선체를 철판으로 덮은 대형 전투선 · 보유 효과: 해상 원정 +12%, 본공·원정 굴착력 +5% · 구키와 함께 보유하면 출현 때 포문 일제 사격(세트 효과)'});
-  OPT.sword.push({v:'fan',n:'★ 지휘 부채',p:12000000,d:'특수 소장품 · 수군을 지휘하던 부채 · 보유 효과: 본공 굴착력 +6%, 본공 수입 +6%'},{v:'teppo',n:'★ 화승총',p:12000000,d:'특수 소장품 · 전국시대 화승총 · 보유 효과: 원정 굴착력 +6% · 오다와 함께 보유하면 출현 때 3단 사격(세트 효과)'},{v:'katana',n:'★ 장검',p:12000000,d:'특수 소장품 · 금장식 일본도 · 보유 효과: 원정 재료(육상·해상) +3%'});}
+if(isJP){OPT.sex.push({v:'kuki',n:'★ 구키 요시타카',p:200000,d:`일본 전국시대 수군 장수, 철갑선으로 알려진 인물 · 보유 효과: 본공·원정 굴착력 +5%, 해상 원정 +6% · 착용하면 가끔 지도에 출현(본공·원정 굴착량 +100%)`},
+  {v:'kuki2',n:'★★ 구키 수군 대장',req:'sex:kuki',p:5000000,d:`구키 승급 · 수군 투구와 깃발 · 보유 효과: 굴착력 +12%, 해상 원정 +10% · 둘 다 보유하면 계승 +4%`},
+  {v:'oda',n:'★ 오다 노부나가',p:200000,d:`일본 전국시대 무장, 화승총과 아즈치성으로 알려진 인물 · 보유 효과: 육상 원정 재료 +5%, 굴착력 +1% · 착용하면 가끔 지도에 출현(육상 원정 재료 +100%)`},
+  {v:'oda2',n:'★★ 검은 갑옷의 노부나가',req:'sex:oda',p:5000000,d:`오다 승급 · 검은 갑옷과 투구 · 보유 효과: 육상 원정 재료 +8%, 굴착력 +2% · 둘 다 보유하면 계승 +1.5%`});
+  OPT.ship.push({v:'tekko',n:'★ 철갑선',p:1200000,d:'특수 소장품 · 선체를 철판으로 덮은 대형 전투선 · 보유 효과: 해상 원정 +12%, 본공·원정 굴착력 +5% · 구키와 함께 보유하면 출현 때 포문 일제 사격(세트 효과)'});
+  OPT.sword.push({v:'fan',n:'★ 지휘 부채',p:600000,d:'특수 소장품 · 수군을 지휘하던 부채 · 보유 효과: 본공 굴착력 +6%, 본공 수입 +6%'},{v:'teppo',n:'★ 화승총',p:600000,d:'특수 소장품 · 전국시대 화승총 · 보유 효과: 원정 굴착력 +6% · 오다와 함께 보유하면 출현 때 3단 사격(세트 효과)'},{v:'katana',n:'★ 장검',p:400000,d:'특수 소장품 · 금장식 일본도 · 보유 효과: 원정 재료(육상·해상) +3%'});}
 const DEFCHAR={sex:'m',skin:0,hair:'short',hcol:0,eyes:'round',body:'normal',hat:'none',outfit:'track',item:'none',ship:'none'};
 const OFC={
  track:{top:'#24366e',slv:'#24366e',pan:'#24366e',shoe:'#eeece6',legStripe:'#eeece6',slvStripe:'#eeece6',
@@ -7978,7 +7978,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=176;
+const GVER=177;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
