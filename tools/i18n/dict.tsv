@@ -1,0 +1,709 @@
+트리파논	TRYPANON	トリパノン
+지구를 뚫어라	Drill Through the Earth	地球を掘り抜け
+지도	Map	マップ
+본공	Main Bore	本坑
+원정	Expedition	遠征
+제작	Craft	製作
+창고	Storage	倉庫
+도감	Collection	図鑑
+투자	Invest	投資
+내 땅	My Land	マイランド
+메뉴	Menu	メニュー
+닫기	Close	閉じる
+확인	OK	OK
+취소	Cancel	キャンセル
+다음	Next	次へ
+완료	Done	完了
+건너뛰기	Skip	スキップ
+재시작	Restart	再開
+나가기	Exit	退出
+지도로	To Map	マップへ
+시추 시작	Start Drilling	掘削開始
+새 게임	New Game	ニューゲーム
+모드 선택	Select Mode	モード選択
+보통	Normal	ノーマル
+하드	Hard	ハード
+보통 모드	Normal Mode	ノーマルモード
+하드 모드	Hard Mode	ハードモード
+모드	Mode	モード
+회차	Run	周目
+타이틀 화면으로	Back to Title	タイトル画面へ
+이름 바꾸기	Rename	名前変更
+기록실	Records	記録室
+스코어	Score	スコア
+스토리 다시 보기	Replay Story	ストーリーを見る
+풍경 계절	Scenery Season	景色の季節
+소리	Sound	サウンド
+배터리	Battery	バッテリー
+장군 목소리	General's Voice	将軍の声
+언어	Language	言語
+게임 초기화	Reset Game	ゲーム初期化
+엔딩 기록은 남기고 초기화	Reset (keep endings)	初期化(エンディング記録は保持)
+게임 버전	Game version	ゲームバージョン
+최신 버전 받기	Get latest version	最新版を取得
+홈 화면에 추가	Add to Home Screen	ホーム画面に追加
+홈 화면에 아이콘 추가	Add icon to Home Screen	ホーム画面にアイコン追加
+앱 설치	Install app	アプリをインストール
+자동 절전	Auto power save	自動省電力
+화면 켜둠	Keep screen on	画面を点灯
+절전 모드	Power save	省電力モード
+주인공 이름	Hero name	主人公の名前
+주인공 옷장	Hero Wardrobe	主人公クローゼット
+주인공 옷장 열기	Open wardrobe	クローゼットを開く
+주인공을 고르세요	Choose your hero	主人公を選んでください
+눌러서 꾸미기	Tap to dress up	タップで着せ替え
+능력치	Stats	ステータス
+메뉴 열기	Open menu	メニューを開く
+화면 전환	Switch view	画面切替
+아이콘	Icon	アイコン
+그 지역 재료	local material	その地域の素材
+흐림	Cloudy	くもり
+잠김	Locked	ロック
+지형을 눌러 보세요	Tap the terrain	地形をタップしてみて
+양구	Yanggu	楊口
+양구 본공	Yanggu Main Bore	楊口本坑
+양구 국토정중앙	Yanggu, center of Korea	楊口・国土正中央
+양구 국토정중앙 옆 부지	Lot next to Korea's center (Yanggu)	楊口・国土正中央そばの土地
+굴착력	Drill power	掘削力
+본공 굴착력	Main bore power	本坑掘削力
+원정 굴착력	Expedition power	遠征掘削力
+본공·원정 굴착력	Bore & expedition power	本坑・遠征掘削力
+해상 원정 굴착력	Sea expedition power	海上遠征掘削力
+기본 굴착력	Base power	基本掘削力
+굴착량	Dug amount	掘削量
+굴착	Drilling	掘削
+강타	Critical	強打
+강타 확률	Critical chance	強打確率
+강타 피해	Critical damage	強打ダメージ
+확률	Chance	確率
+보유	Owned	所持
+보유 효과	Owned bonus	所持効果
+본공 수입	Bore income	本坑収入
+돈	Money	お金
+자원	Resources	資源
+재료	Materials	素材
+부품	Parts	部品
+드릴	Drill	ドリル
+부스터	Booster	ブースター
+부스터 연료	Booster fuel	ブースター燃料
+부스터 지속	Booster duration	ブースター持続
+부스터 가동 중	Booster active	ブースター稼働中
+유물	Relics	遺物
+화석	Fossils	化石
+유물 발견	Relic found	遺物発見
+유물 발견 확률	Relic chance	遺物発見確率
+화석 발견	Fossil found	化石発見
+화석 발견 확률	Fossil chance	化石発見確率
+엔딩	Endings	エンディング
+엔딩 수집	Endings collected	エンディング収集
+옷장	Wardrobe	クローゼット
+투자자	Investors	投資家
+투자 받기	Take investment	投資を受ける
+투자 라운드	Funding round	投資ラウンド
+투자 유치	Raise funds	投資誘致
+투자 제안 도착	Investment offer!	投資提案到着
+조건 미달	Locked	条件未達
+조건 달성	Requirement met	条件達成
+자금 부족	Not enough money	資金不足
+자금이 부족해요	Not enough money	資金が足りません
+제작 비용	Craft cost	製作費用
+부품 레벨 합계	Total part level	部品レベル合計
+레벨	Level	レベル
+최대 레벨	Max level	最大レベル
+강화	Upgrade	強化
+승급	Promote	昇級
+드릴 승급	Drill promotion	ドリル昇級
+드릴 부품 제작	Drill Parts Crafting	ドリル部品製作
+드릴 단계	Drill tier	ドリル段階
+제작으로 이동	Go to crafting	製作へ移動
+부품 레벨 부족	Part levels too low	部品レベル不足
+숙련 부족	Not skilled enough	熟練不足
+미리보기	Preview	プレビュー
+일시 정지	Paused	一時停止
+이어서 시추	Continue drilling	掘削を続ける
+오늘 재시작	Restart today	今日再開
+오늘 남은 횟수	Left today	今日の残り回数
+지금 위치	Current position	現在位置
+현재	Now	現在
+현재 드릴	Current drill	現在のドリル
+출발	Depart	出発
+원정 출발	Start expedition	遠征出発
+원정으로 가기	Go on expedition	遠征へ
+원정 현장 보기	View site	現場を見る
+현장 보기	View site	現場を見る
+원정 시추 중	Expedition drilling	遠征掘削中
+본공 보기	View bore	本坑を見る
+시추 중	Drilling	掘削中
+아직 시추 전	Not drilled yet	未掘削
+지질	Geology	地質
+쓰임	Uses	用途
+난이도	Difficulty	難易度
+해금 필요	Unlock required	解放が必要
+새 지역 해금	New region unlocked	新地域解放
+도달 시 해금	unlocks on reach	到達で解放
+구간	Section	区間
+달성	Achieved	達成
+진입	Entered	進入
+안내	Info	案内
+계속 파기	Keep digging	掘り続ける
+판매	Sell	売却
+세트	Set	セット
+세트 효과 발동	Set bonus active	セット効果発動
+세트 효과 강화	Set bonus up	セット効果強化
+해발	Alt.	海抜
+지하	Depth	地下
+수심	Depth	水深
+해수면	Sea level	海面
+지층	Strata	地層
+새 지층 진입	New stratum	新しい地層へ
+지구 중심	Earth's core	地球の中心
+지구 중심 도달	Reached Earth's core	地球の中心に到達
+지구 반대편	Other side of Earth	地球の裏側
+반대편	Other side	裏側
+지구 관통 성공	Earth pierced!	地球貫通成功
+표토	Topsoil	表土
+표토층	Topsoil layer	表土層
+퇴적층	Sedimentary layer	堆積層
+석회암층	Limestone layer	石灰岩層
+화강암층	Granite layer	花崗岩層
+상부 지각	Upper crust	上部地殻
+하부 지각	Lower crust	下部地殻
+상부 맨틀	Upper mantle	上部マントル
+하부 맨틀	Lower mantle	下部マントル
+외핵	Outer core	外核
+내핵	Inner core	内核
+모호면	Moho	モホ面
+해양 지각	Oceanic crust	海洋地殻
+해저	Seabed	海底
+장석	Feldspar	長石
+석영	Quartz	石英
+텅스텐	Tungsten	タングステン
+규사	Silica sand	珪砂
+원유	Crude oil	原油
+천연가스	Natural gas	天然ガス
+가스 하이드레이트	Gas hydrate	ガスハイドレート
+역암	Conglomerate	礫岩
+운모	Mica	雲母
+화산유리	Volcanic glass	火山ガラス
+현무암 섬유	Basalt fiber	玄武岩繊維
+화강암	Granite	花崗岩
+응회암	Tuff	凝灰岩
+편마암	Gneiss	片麻岩
+다이아몬드	Diamond	ダイヤモンド
+초보	Beginner	初心者
+견습	Apprentice	見習い
+초급	Novice	初級
+중급	Intermediate	中級
+상급	Advanced	上級
+숙련	Skilled	熟練
+숙련자	Expert	熟練者
+전문가	Professional	専門家
+고수	Master	達人
+장인	Artisan	職人
+명장	Grand artisan	名匠
+달인	Virtuoso	名人
+마스터	Master	マスター
+그랜드마스터	Grandmaster	グランドマスター
+영웅	Hero	英雄
+전설	Legend	伝説
+신화	Myth	神話
+불멸	Immortal	不滅
+천상	Celestial	天上
+절대	Absolute	絶対
+초월	Transcendent	超越
+창조	Creation	創造
+창세	Genesis	創世
+태초	Primordial	太初
+우주	Cosmos	宇宙
+궁극	Ultimate	究極
+무한	Infinite	無限
+노멀	Normal	ノーマル
+레어	Rare	レア
+에픽	Epic	エピック
+맑음	Sunny	晴れ
+눈	Snow	雪
+비	Rain	雨
+바람	Wind	風
+땡볕	Scorching sun	炎天
+무지개	Rainbow	虹
+거센 바람	Strong wind	強風
+거센 비	Heavy rain	大雨
+거센 폭풍	Storm	嵐
+거센 눈보라	Blizzard	猛吹雪
+밤	Night	夜
+낮	Day	昼
+서울	Seoul	ソウル
+강원	Gangwon	江原
+충남	S. Chungcheong	忠清南道
+충북	N. Chungcheong	忠清北道
+전남	S. Jeolla	全羅南道
+전북	N. Jeolla	全羅北道
+경남	S. Gyeongsang	慶尚南道
+경북	N. Gyeongsang	慶尚北道
+경기	Gyeonggi	京畿
+인천	Incheon	仁川
+세종	Sejong	世宗
+대전	Daejeon	大田
+대구	Daegu	大邱
+울산	Ulsan	蔚山
+부산	Busan	釜山
+광주	Gwangju	光州
+제주	Jeju	済州
+울릉도	Ulleungdo	鬱陵島
+독도	Dokdo	独島
+북한산	Bukhansan	北漢山
+계룡산	Gyeryongsan	鶏龍山
+속리산	Songnisan	俗離山
+마이산	Maisan	馬耳山
+태백산	Taebaeksan	太白山
+무등산	Mudeungsan	無等山
+지리산	Jirisan	智異山
+설악산	Seoraksan	雪岳山
+주왕산	Juwangsan	周王山
+한라산	Hallasan	漢拏山
+서해	West Sea	西海
+남해	South Sea	南海
+동해	East Sea	東海
+동해 심해	East Sea deep	東海深海
+불의 고리	Ring of Fire	環太平洋火山帯
+이순신 장군	Admiral Yi Sun-sin	李舜臣将軍
+충무공 이순신	Admiral Yi Sun-sin	忠武公李舜臣
+충무공	Admiral Yi	忠武公
+거북선	Turtle ship	亀甲船
+드릴 비트	Drill bit	ドリルビット
+하우징	Housing	ハウジング
+회전 속도	Rotation speed	回転速度
+정밀 센서	Precision sensor	精密センサー
+열 차폐판	Heat shield	熱遮蔽板
+내압 실린더	Pressure cylinder	耐圧シリンダー
+절연체	Insulator	絶縁体
+냉각 코어	Cooling core	冷却コア
+강화 케이블	Reinforced cable	強化ケーブル
+기본	Basic	基本
+기본 확률	Base chance	基本確率
+오프라인	Offline	オフライン
+오프라인 굴착	Offline drilling	オフライン掘削
+시간	h	時間
+철거	Demolish	撤去
+철거 중	Demolishing	撤去中
+땅 넓히기	Expand land	土地を広げる
+방향 바꾸기	Turn	向きを変える
+내 캐릭터	My character	マイキャラ
+집 안 꾸미기	Decorate home	インテリア
+전시관 들어가기	Enter museum	展示館に入る
+벽·방 편집	Edit walls/rooms	壁・部屋編集
+욕실	Bathroom	浴室
+주방	Kitchen	キッチン
+부엌	Kitchen	台所
+거실	Living room	リビング
+안방	Master bedroom	主寝室
+침실	Bedroom	寝室
+작은 방	Small room	小部屋
+화장실	Toilet	トイレ
+현관	Entrance	玄関
+세탁실	Laundry	洗濯室
+드레스룸	Dressing room	ドレスルーム
+서재	Study	書斎
+대청	Main hall	大庁
+사랑방	Guest room	客間
+방	Room	部屋
+단독 주택	Detached house	一戸建て
+한남동 고급 빌라	Hannam-dong luxury villa	漢南洞の高級ヴィラ
+바비큐 그릴	BBQ grill	BBQグリル
+캠프파이어	Campfire	キャンプファイヤー
+스포츠카	Sports car	スポーツカー
+드릴 기념비	Drill monument	ドリル記念碑
+세면대	Washbasin	洗面台
+신발장	Shoe cabinet	下駄箱
+공기청정기	Air purifier	空気清浄機
+건조기	Dryer	乾燥機
+고양이	Cat	ネコ
+강아지	Puppy	イヌ
+곰	Bear	クマ
+여우	Fox	キツネ
+펭귄	Penguin	ペンギン
+병아리	Chick	ヒヨコ
+토끼	Rabbit	ウサギ
+판다	Panda	パンダ
+드래곤	Dragon	ドラゴン
+유니콘	Unicorn	ユニコーン
+다람쥐	Squirrel	リス
+양	Sheep	ヒツジ
+고슴도치	Hedgehog	ハリネズミ
+카피바라	Capybara	カピバラ
+호랑이	Tiger	トラ
+사자	Lion	ライオン
+북극곰	Polar bear	シロクマ
+두더지	Mole	モグラ
+너구리	Raccoon	タヌキ
+전시관	Museum	展示館
+유물 전시관	Relic museum	遺物展示館
+착용 중	Wearing	着用中
+들어보기	Listen	試聴
+자동	Auto	自動
+없음	None	なし
+항상	Always	常に
+끔	Off	オフ
+켬	On	オン
+새 회차 시작	Start new run	新しい周回を開始
+세계 기록	World record	世界記録
+속보	Breaking news	速報
+잭팟 머신	Jackpot Machine	ジャックポットマシン
+미니게임	Mini-game	ミニゲーム
+그만하기	Stop	やめる
+배당표	Payouts	配当表
+꽝	Miss	ハズレ
+꽝! 다음 기회에…	Miss! Next time…	ハズレ!また次回…
+돌아가는 중…	Spinning…	回転中…
+합계	Total	合計
+아직 없음	None yet	まだなし
+남은 판	Spins left	残り回数
+보너스	Bonus	ボーナス
+두 개 일치	Two match	2つ一致
+작은 보상	Small reward	小さな報酬
+세 개	three	3つ
+무료	Free	無料
+유료 판 모두 사용	All paid spins used	有料回数を使い切り
+이번 머신은 끝	This machine is done	このマシンは終了
+레버를 당기거나	Pull the lever or press	レバーを引くか
+한 판 더	One more	もう1回
+보유	Owned	所持
+기록실 (스코어)	Records (Score)	記録室(スコア)
+게임 초기화 (엔딩 기록까지 모두)	Reset game (including endings)	ゲーム初期化(エンディング記録も全て)
+초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.	Resetting returns depth, parts, drill tier, resources, relics, wardrobe and investors to the start.	初期化すると深さ・部品・ドリル段階・資源・遺物・クローゼット・投資家がすべて最初に戻ります。
+휴대폰을 세로로 돌려 주세요	Please rotate your phone upright	スマホを縦にしてください
+트리파논은 세로 화면 전용 게임이에요	TRYPANON is portrait-only	トリパノンは縦画面専用です
+언제든 메뉴에서 바꿀 수 있어요	You can change it anytime in the menu	メニューでいつでも変更できます
+끌어서 360° 둘러보기	Drag to look around 360°	ドラッグで360°見回す
+처음 시점	reset view	初期視点
+해·달이 동쪽에서 떠서 서쪽으로 져요	Sun and moon rise in the east and set in the west	太陽と月は東から昇り西に沈む
+동	E	東
+서	W	西
+남	S	南
+북	N	北
+층	F	階
+일째	day	日目
+초	s	秒
+분	min	分
+개	pcs	個
+판	spins	回
+봄	Spring	春
+여름	Summer	夏
+가을	Autumn	秋
+겨울	Winter	冬
+자동·가을	Auto·Autumn	自動·秋
+음악	Music	音楽
+효과음	SFX	効果音
+음성	Voice	音声
+작게	Low	小
+크게	High	大
+장군 녹음 음성	Recorded voice	録音ボイス
+자동 절전 (1분)	Auto save (1m)	自動省電力(1分)
+한옥	Hanok	韓屋
+2층 주택	2-story house	2階建て住宅
+양반 가옥	Yangban manor	両班の屋敷
+작은 집	Small house	小さな家
+소나무	Pine tree	松
+벚나무	Cherry tree	桜
+꽃밭	Flower bed	花畑
+분수	Fountain	噴水
+연못	Pond	池
+벤치	Bench	ベンチ
+가로등	Street lamp	街灯
+텃밭	Vegetable patch	家庭菜園
+오층 석탑	Five-story pagoda	五重石塔
+거북이	Turtle	カメ
+캠핑 의자	Camping chair	キャンプチェア
+유물 진열장	Relic cabinet	遺物ケース
+화석 액자	Fossil frame	化石の額
+카피바라 & 아기	Capybara & baby	カピバラ親子
+가구	Furniture	家具
+냉장고	Fridge	冷蔵庫
+김치냉장고	Kimchi fridge	キムチ冷蔵庫
+세탁기	Washer	洗濯機
+스타일러	Clothes styler	スタイラー
+로봇청소기	Robot vacuum	ロボット掃除機
+에어컨	Air conditioner	エアコン
+소파	Sofa	ソファ
+침대	Bed	ベッド
+책상	Desk	机
+책장	Bookshelf	本棚
+러그	Rug	ラグ
+어항	Fish tank	水槽
+화분	Plant pot	植木鉢
+샤워 부스	Shower booth	シャワーブース
+비데 변기	Bidet toilet	温水洗浄便座
+아일랜드 식탁	Island table	アイランドテーブル
+4인 식탁	4-seat table	4人用テーブル
+ㄱ자 싱크대	L-shaped sink	L字キッチン
+ㄴ자 싱크대	L-shaped sink	L字キッチン
+ㄷ자 싱크대	U-shaped sink	コの字キッチン
+헤어	Hair	ヘア
+헤어 색	Hair color	髪色
+피부	Skin	肌
+체형	Body	体型
+모자	Hat	帽子
+의상	Outfit	衣装
+소품	Props	小物
+주인공·특수	Heroes·Special	主人公·特別
+추리닝	Tracksuit	ジャージ
+남자 주인공	Male hero	男性主人公
+여자 주인공	Female hero	女性主人公
+남성	Male	男性
+여성	Female	女性
+검정	Black	黒
+갈색	Brown	茶
+밝은 갈색	Light brown	明るい茶
+금발	Blond	金髪
+회색	Gray	灰色
+남색	Navy	紺
+짧은 머리	Short hair	ショート
+묶은 머리	Tied hair	まとめ髪
+가르마	Parted hair	分け目
+웃는 눈	Smiling eyes	笑顔の目
+날카로운 눈	Sharp eyes	鋭い目
+동글	Round	まる
+밝은 톤	Light tone	明るい肌
+중간 톤	Medium tone	中間の肌
+짙은 톤	Dark tone	濃い肌
+깊은 톤	Deep tone	深い肌
+마른 체형	Slim	細身
+튼튼	Sturdy	がっしり
+보통 체형	Average	標準
+오렌지 작업복	Orange coverall	オレンジ作業服
+안전 조끼	Safety vest	安全ベスト
+랜턴 안전모	Lantern helmet	ランタンヘルメット
+밀짚모자	Straw hat	麦わら帽子
+잠수복	Diving suit	潜水服
+잠수 마스크	Diving mask	潜水マスク
+댄스옷	Dance wear	ダンス衣装
+스포츠옷	Sportswear	スポーツウェア
+투자 미팅 정장	Pitch-meeting suit	投資会議スーツ
+곡괭이	Pickaxe	つるはし
+삽	Shovel	スコップ
+휴대용 드릴	Hand drill	ハンドドリル
+탐사 태블릿	Survey tablet	探査タブレット
+리본	Ribbon	リボン
+양머리 수건	Sheep-head towel	羊巻きタオル
+뿔 머리띠	Horn headband	角カチューシャ
+꽃 화관	Flower crown	花冠
+어머니	Mother	母
+유물 감정가	Appraisal	遺物鑑定額
+판매가	Sale price	売値
+세계 부호	World's richest	世界長者
+지구 멸망	End of the world	地球滅亡
+자기장 붕괴	Magnetic collapse	磁場崩壊
+지열 발전소	Geothermal plant	地熱発電所
+지구 중심 탐험가	Core explorer	地球中心の探検家
+지구 관통자	Earth piercer	地球貫通者
+엔딩 정복자	Ending conqueror	エンディング制覇者
+불의 고리 수호자	Ring of Fire guardian	環太平洋火山帯の守護者
+첫 1km	First 1 km	最初の1km
+코리아케라톱스	Koreaceratops	コリアケラトプス
+코리아노사우루스	Koreanosaurus	コリアノサウルス
+부경고사우루스	Pukyongosaurus	プキョンゴサウルス
+해남이크누스	Haenamichnus	ヘナミクヌス
+단양 동굴곰	Danyang cave bear	丹陽ホラアナグマ
+포항 고래 화석	Pohang whale fossil	浦項クジラ化石
+울릉도 돌고래 화석	Ulleungdo dolphin fossil	鬱陵島イルカ化石
+독도 강치 뼈	Dokdo sea lion bones	独島アシカの骨
+고성 공룡 발자국	Goseong dinosaur tracks	固城恐竜足跡
+화성 공룡알 둥지	Hwaseong dinosaur egg nest	華城恐竜卵の巣
+조선 시대	Joseon era	朝鮮時代
+고려 시대	Goryeo era	高麗時代
+삼국 시대	Three Kingdoms era	三国時代
+철기 시대	Iron Age	鉄器時代
+청동기 시대	Bronze Age	青銅器時代
+신석기 시대	Neolithic	新石器時代
+구석기 시대	Paleolithic	旧石器時代
+중생대 화석층	Mesozoic fossil bed	中生代化石層
+고생대 화석층	Paleozoic fossil bed	古生代化石層
+선캄브리아 지층	Precambrian strata	先カンブリア地層
+난파선 지층	Shipwreck layer	沈没船の地層
+보급 상자	Supply crate	補給箱
+현금 뭉치	Cash bundle	札束
+엽전 항아리	Coin jar	古銭の壺
+금괴 상자	Gold bar crate	金塊箱
+없음 (털)	None (fur)	なし(毛)
+원정 없음	No expedition	遠征なし
+진행 중인 원정 없음	No expedition running	進行中の遠征なし
+미발굴	Not excavated	未発掘
+트리파논 Mk.I	TRYPANON Mk.I	トリパノン Mk.I
+트리파논 Mk.II	TRYPANON Mk.II	トリパノン Mk.II
+트리파논 Mk.III	TRYPANON Mk.III	トリパノン Mk.III
+트리파논 Mk.IV	TRYPANON Mk.IV	トリパノン Mk.IV
+세라믹 베어링	Ceramic bearing	セラミックベアリング
+충격 흡수 장치	Shock absorber	衝撃吸収装置
+견습 쇠송곳	Apprentice awl	見習いの錐
+아다마스	Adamas	アダマス
+현재 드릴 · 부품을 눌러 미리보기	Current drill · tap a part to preview	現在のドリル · 部品をタップでプレビュー
+부품을 누르면 아래 제작 쪽으로 바로 이동해요	Tap a part to jump to crafting below	部品をタップすると製作へ移動
+숙련 구간	Skilled tier	熟練区間
+물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.	Tap an item or character to move or turn it.	アイテムやキャラをタップで移動・向き変更。
+아래에서 물건을 고르고 빈 땅을 눌러 놓으세요. 놓인 물건이나 캐릭터를 누르면 옮기거나 방향을 바꿀 수 있어요.	Pick an item below and tap empty land to place it. Tap a placed item or character to move or turn it.	下でアイテムを選び、空き地をタップして置きます。置いた物やキャラをタップで移動・向き変更。
+새 지역 해금!	New region unlocked!	新地域解放!
+보통 1부	Normal Part 1	ノーマル 第1部
+낮	Day	昼
+아이콘 = 그 지역 재료	Icon = local material	アイコン = その地域の素材
+흐림 = 잠김	Cloudy = locked	くもり = ロック
+양구 본공	Yanggu Main Bore	楊口本坑
+잭팟 · 큰 돈	Jackpot · big money	ジャックポット · 大金
+눈 모양	Eyes	目
+★ 김유신 장군	★ General Kim Yu-sin	★ 金庾信将軍
+★★ 명장 김유신	★★ Great General Kim Yu-sin	★★ 名将 金庾信
+★ 신라 군마	★ Silla Warhorse	★ 新羅の軍馬
+김유신 장군	General Kim Yu-sin	金庾信将軍
+명장 김유신	Great General Kim Yu-sin	名将 金庾信
+신라 군마	Silla Warhorse	新羅の軍馬
+🐎 신라 군마	🐎 Silla Warhorse	🐎 新羅の軍馬
+신라의 명장 · 특수 캐릭터 · 보유 효과: 육상 원정 재료 +{}%, 본공·원정 굴착력 +{}% (다른 캐릭터로 바꿔도 유지) · 신라 군마와 함께 보유하면 세트 효과	Silla's great general · Special character · Owned bonus: land expedition materials +{}%, bore & expedition power +{}% (kept even if you switch) · Set bonus with the Silla Warhorse	新羅の名将 · 特別キャラ · 所持効果:陸上遠征の素材 +{}%、本坑·遠征掘削力 +{}%(他のキャラに替えても維持) · 新羅の軍馬と一緒に所持するとセット効果
+김유신 장군 승급 · 삼국통일의 영웅 · 김유신 장군을 보유해야 구매 가능 · 보유 효과: 육상 원정 재료 +{}%, 본공·원정 굴착력 +{}% (장군 효과 대체) · 신라 군마 세트면 육상 재료가 더 늘어나요	Promotion of General Kim · Hero of the Three Kingdoms' unification · requires General Kim Yu-sin · Owned bonus: land expedition materials +{}%, bore & expedition power +{}% (replaces the General's bonus) · With the warhorse set, even more land materials	金庾信将軍の昇級 · 三国統一の英雄 · 金庾信将軍の所持が必要 · 所持効果:陸上遠征の素材 +{}%、本坑·遠征掘削力 +{}%(将軍効果を置換) · 軍馬セットなら陸上素材がさらに増加
+특수 소장품 · 보유 효과: 육상 원정 재료 +{}%, 본공·원정 굴착력 +{}% · 사면 정해진 주기로 지도 위 육지를 달려요 · 김유신 장군과 함께 보유하면 세트 효과(육상 재료 +{}% 추가)	Special collectible · Owned bonus: land expedition materials +{}%, bore & expedition power +{}% · Once bought, it gallops across the land on the map on a cycle · Set bonus with General Kim Yu-sin (land materials +{}% more)	特別コレクション · 所持効果:陸上遠征の素材 +{}%、本坑·遠征掘削力 +{}% · 買うと決まった周期でマップの陸地を駆けます · 金庾信将軍と一緒に所持するとセット効果(陸上素材 +{}% 追加)
+보유 · 달리기 꺼짐	Owned · running off	所持 · 走行オフ
+🐎 달리는 중	🐎 Galloping	🐎 疾走中
+⛺ 쉬는 중 · {}초 뒤 출발	⛺ Resting · runs in {}s	⛺ 休憩中 · {}秒後に出発
+달리기 주기	Run cycle	走行周期
+지도 위 육지를 쉬지 않고 달려요.	Gallops across the land nonstop.	マップの陸地を休まず駆けます。
+달리지 않아요. 보유 효과는 그대로 적용돼요.	Doesn't run. Owned bonus still applies.	走りません。所持効果はそのまま適用されます。
+한 번 달리기({}초)를 마치면 {} 쉬었다가 다시 달려요.	After one run ({}s) it rests {} then runs again.	1回の走行({}秒)を終えると{}休んで再び走ります。
+— 사서 갖고 있으면 보유 효과가 적용되고, 아래 '달리기 주기'마다 지도 위 육지를 달려요. 주인공은 그대로예요.	— owning it applies its bonus, and it gallops across the land on the map each 'run cycle' below. Your hero stays the same.	— 買って持てば所持効果が適用され、下の「走行周期」ごとにマップの陸地を駆けます。主人公はそのまま。
+· 보유: 육상 원정 재료 +{}%, 본공·원정 굴착력 +{}%	· Owned: land expedition materials +{}%, bore & expedition power +{}%	· 所持:陸上遠征の素材 +{}%、本坑·遠征掘削力 +{}%
+김유신 장군 + 신라 군마 세트	General Kim Yu-sin + Silla Warhorse set	金庾信将軍 + 新羅の軍馬セット
+: 육상 원정 재료 +{}% 추가	: land expedition materials +{}% more	:陸上遠征の素材 +{}% 追加
+· 육상 원정 재료 +{}% · 본공·원정 굴착력 +{}% — 다른 캐릭터로 바꿔도 계속 적용	· Land expedition materials +{}% · bore & expedition power +{}% — keeps applying even if you switch heroes	· 陸上遠征の素材 +{}% · 本坑·遠征掘削力 +{}% — 他のキャラに替えても適用
+· 지금 육상 원정 재료 합계 ×{}	· Land expedition materials now ×{} in total	· 現在の陸上遠征素材 合計 ×{}
+김유신 장군은 전용 갑옷·머리띠를 입어요. 여기서 고른 꾸미기는 다른 주인공으로 바꾸면 보여요.	General Kim wears his own armor and headband. Customization chosen here shows when you switch heroes.	金庾信将軍は専用の鎧と鉢巻を着けます。ここで選んだ着せ替えは他の主人公に替えると表示されます。
+🔒 먼저 ★ 김유신 장군을 보유해야 승급할 수 있어요	🔒 You must own ★ General Kim Yu-sin first to promote	🔒 先に★金庾信将軍を所持すると昇級できます
+🐎 신라 군마 달리기를 껐어요	🐎 Silla Warhorse running off	🐎 新羅の軍馬の走行をオフにしました
+🐎 신라 군마 달리기:	🐎 Silla Warhorse runs:	🐎 新羅の軍馬の走行:
+★★ 명장 김유신 (보유)	★★ Great General Kim Yu-sin (owned)	★★ 名将 金庾信(所持)
+★ 김유신 장군 (보유)	★ General Kim Yu-sin (owned)	★ 金庾信将軍(所持)
+육상 원정 재료 +{}% · 굴착력 +{}%	Land expedition materials +{}% · drill power +{}%	陸上遠征の素材 +{}% · 掘削力 +{}%
+🐎 신라 군마 (보유)	🐎 Silla Warhorse (owned)	🐎 新羅の軍馬(所持)
+⚔🐎 김유신·군마 세트	⚔🐎 Kim Yu-sin · warhorse set	⚔🐎 金庾信·軍馬セット
+육상 원정 재료 +{}% 추가 · 합계 ×{}	Land expedition materials +{}% more · total ×{}	陸上遠征の素材 +{}% 追加 · 合計 ×{}
+신라 군마 3D 미리보기 · 끌어서 돌려 보기	Silla Warhorse 3D preview · drag to rotate	新羅の軍馬3Dプレビュー · ドラッグで回転
+신라 군마 필요)	Silla Warhorse required)	新羅の軍馬が必要)
+김유신 장군 필요)	General Kim Yu-sin required)	金庾信将軍が必要)
+둘 다 필요)	both required)	両方が必要)
+삼국통일의 기세!	Momentum of Unification!	三国統一の勢い!
+육상 원정 재료 +{}% · {}초	Land expedition materials +{}% · {}s	陸上遠征の素材 +{}% · {}秒
+⚔🐎 {} 기마 출격! 「삼국통일의 기세」 육상 원정 재료 +{}% · {}초	⚔🐎 {} charges on horseback! "Momentum of Unification" land materials +{}% · {}s	⚔🐎 {} 騎馬出撃!「三国統一の勢い」陸上素材 +{}% · {}秒
+⚔ {} 출현! 「삼국통일의 기세」 육상 원정 재료 +{}% · {}초	⚔ {} appears! "Momentum of Unification" land materials +{}% · {}s	⚔ {} 出現!「三国統一の勢い」陸上素材 +{}% · {}秒
+⚔ 삼국통일의 기세 — 육상 원정 재료 ×{} 적용 중	⚔ Momentum of Unification — land materials ×{} active	⚔ 三国統一の勢い — 陸上素材 ×{} 適用中
+육상 원정 재료 +{}% · 굴착력 +{}% · 출현 시 육상 재료 +{}% · {}초 · 출현 이벤트 가능	Land materials +{}% · drill power +{}% · on appearance land materials +{}% · {}s · appearance event available	陸上素材 +{}% · 掘削力 +{}% · 出現時の陸上素材 +{}% · {}秒 · 出現イベント可能
+육상 원정 재료 +{}% · 굴착력 +{}% · 출현 시 육상 재료 +{}% · {}초 · 이벤트는 착용 시	Land materials +{}% · drill power +{}% · on appearance land materials +{}% · {}s · event when worn	陸上素材 +{}% · 掘削力 +{}% · 出現時の陸上素材 +{}% · {}秒 · イベントは着用時
+· 출현 이벤트(육상 재료 +{}%, {}초, 확률 {}%/분{}):	· Appearance event (land materials +{}%, {}s, chance {}%/min{}):	· 出現イベント(陸上素材 +{}%、{}秒、確率 {}%/分{}):
+, 군마를 타고 등장	, rides in on the warhorse	、軍馬に乗って登場
+김유신 장군을 착용해야 발동	Wear General Kim Yu-sin to trigger	金庾信将軍を着用すると発動
+↻ {} 방향 ({}/4)	↻ {} direction ({}/4)	↻ {}の向き ({}/4)
+기본	Default	基本
+⚔ 이순신 계승	⚔ Admiral Yi legacy	⚔ 李舜臣の継承
+⚔ 김유신 계승	⚔ Kim Yu-sin legacy	⚔ 金庾信の継承
+장군·충무공 모두 보유 · 굴착력 +{}%	Own both Admiral & Chungmugong · drill power +{}%	将軍·忠武公を両方所持 · 掘削力 +{}%
+장군·명장 모두 보유 · 육상 원정 재료 +{}%	Own both General & Great General · land materials +{}%	将軍·名将を両方所持 · 陸上素材 +{}%
+· ⚔ 이순신 계승(장군·충무공 모두 보유): 굴착력 +{}%	· ⚔ Admiral Yi legacy (own both): drill power +{}%	· ⚔ 李舜臣の継承(両方所持):掘削力 +{}%
+· ⚔ 김유신 계승(장군·명장 모두 보유): 육상 원정 재료 +{}%	· ⚔ Kim Yu-sin legacy (own both): land materials +{}%	· ⚔ 金庾信の継承(両方所持):陸上素材 +{}%
+(적용 중)	(active)	(適用中)
+(둘 다 필요)	(both required)	(両方が必要)
+1부 엔딩 3종 · 본공 굴착력 +6% · 본공 수입 +3%	3 Part-1 endings · Bore power +6% · Bore income +3%	第1部エンディング3種 · 本坑掘削力 +6% · 本坑収入 +3%
+2부 엔딩 3종 · 원정 굴착력 +6% · 본공 수입 +6%	3 Part-2 endings · Expedition power +6% · Bore income +6%	第2部エンディング3種 · 遠征掘削力 +6% · 本坑収入 +6%
+보통 엔딩 6종 · 본공·원정 굴착력 +10% · 본공 수입 +10%	6 Normal endings · Bore & expedition power +10% · Bore income +10%	ノーマルエンディング6種 · 本坑·遠征掘削力 +10% · 本坑収入 +10%
+하드 엔딩 · 본공·원정 굴착력 +10%	Hard ending · Bore & expedition power +10%	ハードエンディング · 本坑·遠征掘削力 +10%
+🎬 엔딩 {}종 수집	🎬 {} endings collected	🎬 エンディング{}種収集
+엔딩 하나당 본공·원정 굴착력 +{}% · 본공 수입 +{}% → 지금 ×{}	Each ending: bore & expedition power +{}% · bore income +{}% → now ×{}	エンディング1つごとに本坑·遠征掘削力 +{}% · 本坑収入 +{}% → 現在 ×{}
+주인공	Heroes	主人公
+특수 영웅	Special Heroes	特別英雄
+보유 {}/3	Owned {}/3	所持 {}/3
+⚓ 이순신 · 거북선	⚓ Yi Sun-sin · Turtle Ship	⚓ 李舜臣 · 亀甲船
+🐎 김유신 · 신라 군마	🐎 Kim Yu-sin · Silla Warhorse	🐎 金庾信 · 新羅の軍馬
+ⓘ 보유 효과 자세히 보기	ⓘ Show owned bonus details	ⓘ 所持効果の詳細を見る
+장군 굴착력 +{}%	General: power +{}%	将軍 掘削力 +{}%
+거북선 해상 +{}% · 굴착 +{}%	Turtle ship: sea +{}% · power +{}%	亀甲船 海上 +{}% · 掘削 +{}%
+⚔ 계승 +{}%	⚔ Heir +{}%	⚔ 継承 +{}%
+✓ ⚔ 계승 +{}%	✓ ⚔ Heir +{}%	✓ ⚔ 継承 +{}%
+세트: 출현 +150%	Set: appearance +150%	セット: 出現 +150%
+✓ 세트: 출현 +150%	✓ Set: appearance +150%	✓ セット: 出現 +150%
+출현 이벤트 (착용 중)	Appearance event (equipped)	出現イベント (着用中)
+✓ 출현 이벤트 (착용 중)	✓ Appearance event (equipped)	✓ 出現イベント (着用中)
+장군 육상 재료 +{}%	General: land materials +{}%	将軍 陸上素材 +{}%
+✓ 장군 육상 재료 +{}%	✓ General: land materials +{}%	✓ 将軍 陸上素材 +{}%
+✓ 장군 굴착력 +{}%	✓ General: power +{}%	✓ 将軍 掘削力 +{}%
+군마 육상 재료 +{}%	Warhorse: land materials +{}%	軍馬 陸上素材 +{}%
+✓ 군마 육상 재료 +{}%	✓ Warhorse: land materials +{}%	✓ 軍馬 陸上素材 +{}%
+✓ 거북선 해상 +{}% · 굴착 +{}%	✓ Turtle ship: sea +{}% · power +{}%	✓ 亀甲船 海上 +{}% · 掘削 +{}%
+세트 +{}%	Set +{}%	セット +{}%
+✓ 세트 +{}%	✓ Set +{}%	✓ セット +{}%
+육상 재료 합계 ×{}	Land materials total ×{}	陸上素材 合計 ×{}
+⚔ 이순신·김유신 장군과 거북선·신라 군마는 「특수 영웅」 탭에 있어요.	⚔ Generals Yi Sun-sin & Kim Yu-sin, the turtle ship and the Silla warhorse are in the "Special Heroes" tab.	⚔ 李舜臣·金庾信将軍と亀甲船·新羅の軍馬は「特別英雄」タブにあります。
+왼쪽 더 보기	Scroll left	左をもっと見る
+오른쪽 더 보기	Scroll right	右をもっと見る
+{} (하드 {}%)	{} (Hard {}%)	{} (ハード {}%)
+엔딩 하나당 본공 굴착력 +{}% · 본공 수입 +{}% → 지금 ×{}	Each ending: bore power +{}% · bore income +{}% → now ×{}	エンディング1つごとに本坑掘削力 +{}% · 本坑収入 +{}% → 現在 ×{}
+🔁 새 회차 · 1부부터 · {}회차	🔁 New run · from Part 1 · Run {}	🔁 新しい周回 · 第1部から · {}周目
+⏪ 2부 다시 하기 · {}	⏪ Replay Part 2 · {}	⏪ 第2部をやり直す · {}
+2부 시작 때 상태로 · 드릴 Lv.{} · 부품 Lv.{}+ · 2부 엔딩 모으기	Back to your Part 2 start · Drill Lv.{} · Parts Lv.{}+ · collect Part 2 endings	第2部開始時の状態へ · ドリル Lv.{} · 部品 Lv.{}+ · 第2部エンディング収集
+1부 클리어 기본 상태로 2부부터 · 2부 엔딩 모으기	Start Part 2 from a standard Part 1 clear · collect Part 2 endings	第1部クリアの標準状態で第2部から · 第2部エンディング収集
+{}회차 · {} 2부 다시 하기 — 2부 시작 때 상태로 돌아왔어요	Run {} · {} Part 2 replay — back to your Part 2 start	{}周目 · {} 第2部やり直し — 第2部開始時の状態に戻りました
+{}회차 · {} 2부 다시 하기 — 2부 시작 때 상태로 돌아왔어요 (기록이 없어 1부 클리어 기본 상태로 시작)	Run {} · {} Part 2 replay — no saved start, so you begin from a standard Part 1 clear	{}周目 · {} 第2部やり直し — 記録がないため第1部クリアの標準状態で開始
+★ 이순신 쌍 장검	★ Yi Sun-sin's Twin Long Swords	★ 李舜臣の双長剣
+★ 김유신 환두대도	★ Kim Yu-sin's Ring-Pommel Sword	★ 金庾信の環頭大刀
+⚔ 이순신 쌍 장검	⚔ Yi Sun-sin's Twin Long Swords	⚔ 李舜臣の双長剣
+⚔ 김유신 환두대도	⚔ Kim Yu-sin's Ring-Pommel Sword	⚔ 金庾信の環頭大刀
+⚔ 이순신 쌍 장검 (보유)	⚔ Yi Sun-sin's Twin Swords (owned)	⚔ 李舜臣の双長剣 (所持)
+⚔ 김유신 환두대도 (보유)	⚔ Kim Yu-sin's Ring-Pommel Sword (owned)	⚔ 金庾信の環頭大刀 (所持)
+보유 · 효과 적용 중	Owned · effect active	所持 · 効果適用中
+살펴보는 중	Viewing	確認中
+구매하기	Buy	購入する
+보유 {}/4	Owned {}/4	所持 {}/4
+쌍 장검 본공 +{}% · 수입 +{}%	Twin swords: bore +{}% · income +{}%	双長剣 本坑 +{}% · 収入 +{}%
+✓ 쌍 장검 본공 +{}% · 수입 +{}%	✓ Twin swords: bore +{}% · income +{}%	✓ 双長剣 本坑 +{}% · 収入 +{}%
+환두대도 원정 +{}% · 재료 +{}%	Ring sword: expedition +{}% · materials +{}%	環頭大刀 遠征 +{}% · 素材 +{}%
+✓ 환두대도 원정 +{}% · 재료 +{}%	✓ Ring sword: expedition +{}% · materials +{}%	✓ 環頭大刀 遠征 +{}% · 素材 +{}%
+본공 굴착력 +{}% · 본공 수입 +{}%	Bore power +{}% · bore income +{}%	本坑掘削力 +{}% · 本坑収入 +{}%
+원정 굴착력 +{}% · 원정 재료 +{}%	Expedition power +{}% · expedition materials +{}%	遠征掘削力 +{}% · 遠征素材 +{}%
+특수 소장품 · 아산 현충사의 이순신 장검 한 쌍 · 「三尺誓天 山河動色 一揮掃蕩 血染山河」 · 보유 효과: 본공 굴착력 +{}%, 본공 수입 +{}%	Special collectible · the pair of long swords of Admiral Yi kept at Hyeonchungsa, Asan · 「三尺誓天 山河動色 一揮掃蕩 血染山河」 · Owned bonus: bore power +{}%, bore income +{}%	特別所蔵品 · 牙山・顕忠祠に伝わる李舜臣の長剣一対 · 「三尺誓天 山河動色 一揮掃蕩 血染山河」 · 所持効果: 本坑掘削力 +{}%、本坑収入 +{}%
+특수 소장품 · 세잎 고리 손잡이의 신라 금동 환두대도 · 보유 효과: 원정 굴착력 +{}%, 원정 재료(육상·해상) +{}%	Special collectible · a Silla gilt-bronze sword with a trefoil ring pommel · Owned bonus: expedition power +{}%, expedition materials (land & sea) +{}%	特別所蔵品 · 三葉文の環頭をもつ新羅の金銅環頭大刀 · 所持効果: 遠征掘削力 +{}%、遠征素材(陸上・海上) +{}%
+🔄 새 버전 v{}이 나왔어요 · 눌러서 받기	🔄 New version v{} is out · tap to update	🔄 新バージョン v{} が出ました · タップで更新
+⚔ 하드 모드 시작 · {}회차	⚔ Start Hard mode · Run {}	⚔ ハードモード開始 · {}周目
+더 단단한 지층 · 수집한 것은 그대로	Tougher strata · your collection stays	より硬い地層 · 集めたものはそのまま
+모드 고르기 · 엔딩·도감·내 땅은 그대로, 돈·깊이·드릴은 처음부터	Choose a mode · endings, collection and land stay; money, depth and drill reset	モード選択 · エンディング・図鑑・マイランドはそのまま、お金・深さ・ドリルは最初から
+보통 / ⚔ 하드 모드 고르기 · 엔딩 기록·도감·내 땅은 그대로, 돈·깊이·드릴은 처음부터	Choose Normal / ⚔ Hard · endings, collection and land stay; money, depth and drill reset	ノーマル / ⚔ ハードを選択 · エンディング記録・図鑑・マイランドはそのまま、お金・深さ・ドリルは最初から
+🌏 세계 투어	🌏 World Tour	🌏 ワールドツアー
+한국	Korea	韓国
+일본	Japan	日本
+1막 · 지구를 뚫어라	Act 1 · Drill Through the Earth	第1幕 · 地球を掘り抜け
+2막 · 불의 고리	Act 2 · Ring of Fire	第2幕 · 火の環
+다음 무대	Next stage	次の舞台
+진행 중	In progress	進行中
+✓ 완주	✓ Cleared	✓ 完走
+곧 열려요	Opening soon	まもなく公開
+🔒 하드 엔딩	🔒 Hard ending	🔒 ハードエンド
+🇰🇷 1막 한국 — 양구에서 지구 중심, 그리고 반대편까지	🇰🇷 Act 1 Korea — from Yanggu to the Earth's core and through to the other side	🇰🇷 第1幕 韓国 — 楊口から地球の中心、そして反対側へ
+🗾 2막 일본 — 불의 고리를 따라 후지산으로! 다음 업데이트에서 열려요	🗾 Act 2 Japan — follow the Ring of Fire to Mt. Fuji! Opens in a coming update	🗾 第2幕 日本 — 火の環をたどって富士山へ! 今後のアップデートで公開
+🔒 하드 모드 2부 엔딩 「불의 고리」를 보면 일본 무대가 이어져요	🔒 See the Hard mode Part 2 ending "Ring of Fire" to continue to the Japan stage	🔒 ハードモード第2部エンディング「火の環」を見ると日本の舞台へ続きます
+🌏 다음 무대는 준비 중이에요 · COMING SOON	🌏 The next stage is in the works · COMING SOON	🌏 次の舞台は準備中です · COMING SOON
+{} 모드 {}회차 시작! 다시 지구 중심을 향해	{} mode, run {} — back toward the Earth's core!	{}モード {}周目開始! 再び地球の中心へ
+{} {}회차 · 2부 다시 하기 — 2부 시작 때 상태로 돌아왔어요	{} run {} · Part 2 replay — back to your Part 2 start	{} {}周目 · 第2部やり直し — 第2部開始時の状態に戻りました
+{} {}회차 · 2부 다시 하기 — 2부 시작 때 상태로 돌아왔어요 (기록이 없어 1부 클리어 기본 상태로 시작)	{} run {} · Part 2 replay — no saved start, so you begin from a standard Part 1 clear	{} {}周目 · 第2部やり直し — 記録がないため第1部クリアの標準状態で開始
+🔁 새 회차 시작	🔁 Start a new run	🔁 新しい周回を開始
+🔁 새 회차 · 1부부터	🔁 New run · from Part 1	🔁 新しい周回 · 第1部から
+🔁 새 회차 시작 · {} {}회차	🔁 New run · {} run {}	🔁 新しい周回 · {} {}周目
+우루과이 · 몬테비데오 독립 광장	Uruguay · Plaza Independencia, Montevideo	ウルグアイ · モンテビデオ独立広場
+¡Bienvenido! 환영합니다!	¡Bienvenido! Welcome!	¡Bienvenido! ようこそ!
+이 증서를 다음 시추사에게 수여합니다	This certificate is awarded to	この証書を次の掘削士に授与します
+세계 시추 기록 위원회	World Drilling Records Committee	世界掘削記録委員会
+대한민국 양구 → 우루과이 몬테비데오 · 굴착 거리 12,742km	Yanggu, Korea → Montevideo, Uruguay · 12,742km drilled	韓国・楊口 → ウルグアイ・モンテビデオ · 掘削距離 12,742km
+한국 시추사, 인류 최초로 지구를 관통하다 · 대한민국 양구 → 우루과이 몬테비데오 12,742km · 세계 기록 공식 인증 · 	Korean driller is the first human to drill through the Earth · Yanggu → Montevideo 12,742km · Officially certified world record · 	韓国の掘削士、人類初の地球貫通 · 楊口 → モンテビデオ 12,742km · 世界記録に公式認定 · 
+{} 모드 · {}	{} mode · {}	{}モード · {}
+여긴… 어디지?	Where… am I?	ここは… どこ?
+열도 침강까지 D-?	Until the islands sink: D-?	列島沈没まで D-?
+▶ 이순신	▶ Yi Sun-sin	▶ 李舜臣
+▶ 김유신	▶ Kim Yu-sin	▶ 金庾信
+🔧 {} 제작 가능	🔧 {} can be crafted	🔧 {} 製作可能
+🔧 {} 제작 가능 · 외 {}개	🔧 {} can be crafted · {} more	🔧 {} 製作可能 · ほか{}個
+급할 때 재료를 바로 사고팔 수 있어요. 팔 때는 살 때의 약 60% 값이고, 같은 재료를 하루에 많이 살수록 100개마다 5%씩 비싸져요(자정에 초기화).	Buy or sell materials instantly when you're in a hurry. Selling pays about 60% of the buying price, and buying a lot of the same material in a day costs 5% more per 100 (resets at midnight).	急ぎのときは素材をすぐ売買できます。売値は買値の約60%で、同じ素材を1日にたくさん買うほど100個ごとに5%ずつ高くなります(深夜0時にリセット)。
+전부	All	全部
+보통 1부 최고 단계(마스터 10) 달성! 그랜드마스터~전설은 2부에서, 신화·무한은 하드 모드에서 열려요.	Normal Part 1 top grade (Master 10) reached! Grandmaster–Legend open in Part 2, Mythic–Infinite in Hard mode.	ノーマル第1部の最高段階(マスター10)達成! グランドマスター〜伝説は第2部で、神話・無限はハードモードで開放されます。
+보통 2부 최고 단계(전설 10) 달성! 신화·무한은 하드 모드에서 열려요.	Normal Part 2 top grade (Legend 10) reached! Mythic and Infinite open in Hard mode.	ノーマル第2部の最高段階(伝説10)達成! 神話・無限はハードモードで開放されます。
+하드 2부 최고 단계 달성! 드릴이 한계를 넘어 진화했어요.	Hard Part 2 top grade reached! Your drill has evolved beyond its limits.	ハード第2部の最高段階達成! ドリルが限界を超えて進化しました。

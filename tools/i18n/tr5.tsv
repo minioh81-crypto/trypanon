@@ -1,0 +1,240 @@
+1232	🔬 The scholar's path	🔬 学者の道
+1233	Collect inner-core samples and give them to science	内核の試料を採って科学に捧げる
+1234	💼 The entrepreneur's path	💼 実業家の道
+1235	Build a geothermal plant in the hole	穴に地熱発電所を建てる
+1236	⛏ Never stop	⛏ 止まらない
+1237	Ignore the heat and keep digging	熱なんて無視してそのまま掘る
+1238	🏅 The path of records	🏅 記録の道
+1239	Get the world's first Earth piercing officially certified	世界初の地球貫通を公式認定してもらう
+1240	🚄 The entrepreneur's path	🚄 実業家の道
+1241	Turn the hole into an Earth-through railway	穴を地球貫通鉄道にする
+1242	Keep the drill on and push to the end	ドリルを止めず最後まで押し切る
+1243	Reached Earth's core	地球の中心に届いた
+1244	Just below the far crust	反対側の地殻のすぐ下
+1245	 · always available	 · いつでも可能
+1246	 · requirement met	 · 条件達成
+1247	Relics · fossils	遺物·化石
+1248	 · seen	 · 見たエンディング
+1249	Part {} final choice	第{}部 最後の選択
+1250	What now? You can only pick paths whose requirements are met. Endings you've seen can be replayed in the Collection's Ending Archive, so pick a different path next run.	さあどうする?条件を満たした道だけ選べます。一度見たエンディングは図鑑のエンディング記録所で見返せるので、次の周回では別の道を選んで集めてみて。
+1251	Choose	選択
+1252	Tap a path to choose	選ぶ道をタップ
+1253	Part 1	第1部
+1254	Part 2	第2部
+1255	Part {} · {}	第{}部 · {}
+1256	{} · {} mode · finished in {} days	{} · {}モード · {}日で完走
+1257	{} pts	{}点
+1258	What next?	次はどうする?
+1259	▶ Continue to Part 2	▶ 第2部へ続ける
+1260	Same run · to the other side of Earth (12,742 km)	今の周回のまま · 地球の裏側(12,742km)まで
+1261	🔁 Start new run · run {}	🔁 新しい周回を開始 · {}周目
+1262	Back to Part 1 · collect other Part 1 endings (endings, collection and land kept)	第1部からやり直し · 別の第1部エンディングを集める(エンディング·図鑑·マイランドは維持)
+1263	Keep looking around · choose later	このまま見て回る · 後で選ぶ
+1264	Hard mode complete! The next stage, "Ring of Fire", is coming soon.	ハードモード完走!次の舞台「環太平洋火山帯」はまもなく。
+1265	Normal mode Parts 1 & 2 complete! You can pick Hard mode in a new run.	ノーマルモード第1·2部完走!新しい周回でハードモードを選べます。
+1266	Endings, collection and land stay; money, depth and drill restart	エンディング·図鑑·マイランドはそのまま、お金·深さ·ドリルは最初から
+1267	Keep looking around	このまま見て回る
+1268	Endings collected {}/{}	エンディング収集 {}/{}
+1269	Hard mode Part 2 has a single ending	ハードモード第2部はただ一つのエンディング
+1270	HARD END · Ring of Fire	HARD END · 環太平洋火山帯
+1271	. Normal mode endings depend on how you play ·	へ続きます。ノーマルモードのエンディングはプレイ方法で決まります ·
+1272	: collect many relics · fossils (requirement {}%) ·	:遺物·化石をたくさん集めると(条件達成 {}%) ·
+1273	: take many funding rounds (requirement {}%) ·	:投資ラウンドをたくさん受けると(条件達成 {}%) ·
+1274	: if both fall short	:どちらも足りないと
+1276	Part 2 begins! To the sea off Uruguay {} · parts up to Lv.{} · drill up to Lv.{}	第2部開始!地球の裏側ウルグアイ沖まで{} · 部品Lv.{} · ドリルLv.{}まで解放
+1277	This run hasn't reached Earth's core yet, so it was set back to Part 1. Part 2 starts from the core once you reach 6,371 km	この周回はまだ地球の中心に届いていないので第1部に戻しました。6,371kmに届くと第2部が中心から始まります
+1278	Drilling King	掘削王
+1279	Name:	名前:
+1280	{} days	{}日
+1281	Name	名前
+1283	Score	スコア
+1284	Time	期間
+1285	No finished runs yet. Pierce the Earth to record a score.	まだ完走記録がありません。地球を貫くとスコアが記録されます。
+1286	Current run ·	現在の周回 ·
+1287	{} mode	{}モード
+1288	 · {} · run {} · day {}	 · {} · {}周目 · {}日目
+1289	Built from depth, drill level, relics and fossils; finishing adds a completion bonus plus a time bonus for finishing fast.	深さ·ドリルレベル·遺物·化石で積み上がり、エンディングを見ると完走ボーナスと早く終えた分の時間ボーナスが加わります。
+1290	Finished runs	完走記録
+1292	Bore multiplier	本坑倍率
+1293	Bore speed	本坑速度
+1294	Stopped at the gate	関門で停止
+1295	m/s	m/秒
+1298	/s ·	/秒 ·
+1300	Materials per expedition tile	遠征1マスあたりの素材
+1301	 + bonus	個 + 追加
+1304	%/tile	%/マス
+1306	{}h · 50%	{}時間 · 50%
+1308	×{} running	×{} 作動中
+1309	Off	オフ
+1310	Weather (Yanggu)	天気(楊口)
+1311	{} {} · digging {}%	{} {} · 掘削 {}%
+1312	(endings collected {}/{})	(集めたエンディング {}/{})
+1313	🐢 Turtle ship (owned)	🐢 亀甲船(所持)
+1314	Sea expedition power +{}% · drill power +{}%	海上遠征掘削力 +{}% · 掘削力 +{}%
+1315	⚔🐢 Admiral Yi · turtle ship set	⚔🐢 李舜臣·亀甲船セット
+1316	Appearance ×1.5 · duration ×1.5 · digging during appearance ×	出現確率 ×1.5 · 出現時間 ×1.5 · 出現中の掘削量 ×
+1317	★★ Admiral Yi Sun-sin (Chungmugong) (owned)	★★ 忠武公 李舜臣(所持)
+1318	★ Admiral Yi Sun-sin (owned)	★ 李舜臣将軍(所持)
+1319	% · digging on appearance +	% · 出現時の掘削量 +
+1320	 · appearance event available	 · 出現イベント可能
+1321	 · event when worn	 · イベントは着用時
+1322	⚔ Pilsa-jeuksaeng active	⚔ 必死則生 発動中
+1323	Digging ×	掘削量 ×
+1324	Props ·	小物 ·
+1325	Investors ·	投資家 ·
+1326	 (Hard 60%)	(ハード60%)
+1327	Bore income +1%/round	本坑収入 +1%/回
+1328	Drill power +1%/round	掘削力 +1%/回
+1329	Relic find +0.2%p/round	遺物発見 +0.2%p/回
+1330	Expedition bonus +0.5%p/round	遠征追加獲得 +0.5%p/回
+1331	Crafting discount/round	製作費用割引/回
+1332	Funding rounds · {} {}×	投資ラウンド · {} {}回
+1333	/round	/回
+1334	complete	完成
+1335	3-piece	3種
+1336	Relic set · {} {}	遺物セット · {} {}
+1337	Fossil ·	化石 ·
+1338	My land · house	マイランド · 家
+1339	Offline +	オフライン +
+1340	My land · relic museum	マイランド · 遺物展示館
+1341	Fossil chance +	化石発見確率 +
+1342	No active effects yet. Investors, relic sets, fossils and props add them.	まだ適用中の効果がありません。投資家·遺物セット·化石·小物で増えます。
+1343	{} mode · {} · {} / {}	{}モード · {} · {} / {}
+1344	Relics {}/{} · fossils {}/{} · funding {}×	遺物 {}/{} · 化石 {}/{} · 投資 {}回
+1345	Digging ability	掘削能力
+1346	Active owned bonuses ({})	適用中の所持効果({})
+1349	 · Part 1	 · 第1部
+1350	 · Part 2	 · 第2部
+1351	One Part 1 ending per run → finish just Part 1 and start a new run	第1部エンディングは周回ごとに1つ → 第1部だけ終えて新しい周回を
+1352	{} more time(s)	あと{}回
+1353	 to collect all Part 1 endings (TRUE needs relics/fossils, HAPPY needs funding)	すると第1部エンディングが全部揃います(TRUEは遺物·化石、HAPPYは投資条件が必要)
+1354	Part 1 endings complete! Part 2 endings are collected one per Part 2 finish	第1部エンディング完成!第2部エンディングは第2部を終えるたびに1つずつ集められます
+1355	Ending records, collection and land stay; money, depth and drill restart	エンディング記録·図鑑·マイランドはそのまま、お金·深さ·ドリルは最初から
+1356	Part 1 about 3 weeks + Part 2 · 26 part tiers · drill up to Lv.140	第1部 約3週間 + 第2部 · 部品26段階 · ドリルLv.140まで
+1357	🔒 Opens after finishing Normal mode Parts 1 & 2	🔒 ノーマルモード第1部·第2部を両方終えると開きます
+1358	Run {} · {} mode start! Toward Earth's core again	{}周目 · {}モード開始!再び地球の中心へ
+1359	Go	移動
+1360	Double materials event! {}	素材2倍イベント!{}
+1361	For the next 3 minutes, {} mined at {} comes out doubled	これから3分間、{}で掘る{}が2倍出ます
+1362	🎰 Jackpot Machine · 1 free spin	🎰 ジャックポットマシン · 無料1回
+1363	This machine is done · wait for the next one	このマシンは終了 · 次のマシンを待ってね
+1364	A ×{} bet needs {}	{}倍ベットには{}が必要です
+1365	{} ×{}	{} {}個
+1366	 · Bonus ×2	 · ボーナス ×2
+1367	✨ Three {}! {} + {}	✨ {}が3つ!{} + {}
+1368	Two match · {} + {}	2つ一致 · {} + {}
+1369	Small reward · {}	小さな報酬 · {}
+1371	Two match! Last reel…	2つ一致!最後のリール…
+1373	🎰 Spinning…	🎰 回転中…
+1374	1 free spin! Pull the lever or SPIN	無料1回!レバーを引くかSPIN
+1375	Machine done! Wait for the next one	このマシンは終了!次のマシンを待とう
+1376	One more ·	もう1回 ·
+1377	 1 + {} paid spins	 1回 + 有料{}回
+1380	 · 1 spin	 · 1回
+1381	Jackpot	ジャックポット
+1382	Reward	報酬
+1383	{} doubled!	{}2倍!
+1384	Pull lever	レバーを引く
+1385	Total {} · {} spins	合計 {} · {}回
+1388	{} Jackpot · big money	{} ジャックポット · 大金
+1389	12% of wins · Bonus ×2	勝った回の12% · ボーナス ×2
+1390	Three of a material · lots of it + money	同じ素材3つ · 素材たくさん + お金
+1391	Two match · that material	2つ一致 · その素材
+1392	Others · a little material or a miss	その他 · 素材少しかハズレ
+1393	BET ×2·×3 → cost and reward both multiply	BET ×2·×3 → 費用·報酬ともに倍
+1394	Each machine: 1 free + 3 paid spins	マシンごとに無料1回 + 有料3回
+1396	Owned {} · trade after unlocking {}	所持 {} · {}解放後に取引
+1397	Demand +{}%	需要 +{}%
+1398	{}	{}個
+1399	each	1個あたり
+1401	Bore {} · owned	本坑 {} · 所持
+1402	Buy and sell materials instantly. Selling gives about 1/9 of the buy price, and buying a lot of one material in a day raises its price 5% per 100 (resets at midnight).	素材をすぐ売買できます。売値は買値の約1/9で、同じ素材を1日にたくさん買うほど100個ごとに5%ずつ高くなります(深夜0時にリセット)。
+1403	Buy	買う
+1404	Sell	売る
+1405	Land resources	陸上資源
+1406	Sea resources	海上資源
+1407	Reset progress	進行状況の初期化
+1408	Bought {} ×{} · {}	{} {}個購入 · {}
+1409	Sold {} ×{} · +{}	{} {}個売却 · +{}
+1413	Reset, keeping only ending and finish records. Press START to begin again	エンディング記録·完走記録だけ残して初期化しました。STARTを押して最初から始めてください
+1414	Game reset. Press START to begin again	ゲームを初期化しました。STARTを押して最初から始めてください
+1415	Tap once more to erase everything except ending records	もう一度押すとエンディング記録以外すべて消えます
+1416	Tap once more to erase all progress including endings	もう一度押すとエンディング記録まで全進行が消えます
+1417	TRYPANON icon added to your home screen	ホーム画面にトリパノンのアイコンを作りました
+1418	Added to home screen	ホーム画面に追加しました
+1419	📲 Add to Home Screen (iPhone) Safari Share button (□↑) at the bottom → "Add to Home Screen" → Add	📲 ホーム画面に追加(iPhone) Safari下の共有ボタン(□↑) → 「ホーム画面に追加」 → 追加
+1420	📲 Add to Home Screen (Samsung Internet) Bottom menu (≡) → "Add page to" → "Home screen" → Add (or tap the ⬇ install icon right of the address bar)	📲 ホーム画面に追加(Samsung Internet) 下のメニュー(≡) → 「現在のページを追加」 → 「ホーム画面」 → 追加(アドレスバー右に⬇インストールアイコンがあればそれでもOK)
+1421	📲 Add to Home Screen (Chrome) Top-right ⋮ menu → "Add to Home screen" or "Install app" → Install	📲 ホーム画面に追加(Chrome) 右上の⋮メニュー → 「ホーム画面に追加」または「アプリをインストール」 → インストール
+1422	📲 Tap "Add to Home Screen" or "Install app" in your browser menu	📲 ブラウザのメニューで「ホーム画面に追加」または「アプリをインストール」を押してください
+1423	Get	取得
+1424	New version v	新バージョン v
+1425	 is out · Menu ☰ → 🔄 Get latest version	が出ました · メニュー ☰ → 🔄 最新版を取得
+1426	⏳ Checking…	⏳ 確認中…
+1427	🔄 Get latest version	🔄 最新版を取得
+1428	✅ You're on the latest version (v{})	✅ 最新バージョンです(v{})
+1429	⏳ Downloading…	⏳ 取得中…
+1430	Getting new version v{} · your game continues	新バージョン v{} を取得 · ゲームはそのまま続きます
+1431	Reloading… your game continues	再読み込み中… ゲームはそのまま続きます
+1432	🎙 Recorded voice	🎙 録音ボイス
+1433	▶ Listen	▶ 試聴
+1434	Voice not supported on this device	この端末は音声非対応
+1435	Device default	端末の既定
+1436	Only one Korean voice on this device — played at a lower pitch	端末に韓国語の声が1つだけ — 低い音程で再生
+1437	🔋 Auto save (1m)	🔋 自動省電力(1分)
+1438	☀ Keep screen on	☀ 画面を点灯
+1439	If untouched for 1 minute, the screen dims to save power — touch to return (progress speed unchanged)	1分間触らないと画面を暗くして省電力 — 触るとすぐ戻ります(進行速度はそのまま)
+1440	Auto power save off	自動省電力をオフにしました
+1441	The screen stays on while playing	ゲーム中は画面が消えません
+1442	Screen turns off per phone settings (progress at half speed while off)	スマホの設定どおり画面が消えます(消えている間は半分の速度で進行)
+1443	🎵 Music	🎵 音楽
+1444	🔊 SFX	🔊 効果音
+1445	🗣 Voice	🗣 音声
+1448	Auto ·	自動·
+1449	Scenery season:	景色の季節:
+1451	{} Part {} · Run {} · Day {}	{} 第{}部 · {}周目 · {}日目
+1452	Not skilled enough ×{}	熟練不足 ×{}
+1454	🌈 Rainbow +{}%	🌈 虹 +{}%
+1455	Expedition weather:  	遠征地の天気:  
+1457	🌈 Rainbow	🌈 虹
+1458	To the other side	地球の裏側まで
+1459	To Earth's core	地球の中心まで
+1460	(not skilled enough ×{})	(熟練不足 ×{})
+1461	Stopped	停止
+1462	per sec	毎秒
+1463	per min	毎分
+1464	 · Critical	 · 強打
+1465	 to	まで
+1466	 · bore ×	 · 本坑 ×
+1467	Earth pierced! Tap here for the ending and a new run.	地球貫通完了!ここを押すとエンディングと新しい周回が見られます。
+1468	Reached Earth's core! Tap here for the Part 1 ending and the start of Part 2.	地球の中心に到達!ここを押すと第1部エンディングと第2部開始が見られます。
+1469	⚠ Not skilled enough · speed ×{} · recommended Lv.{}	⚠ 熟練不足 · 速度 ×{} · 推奨Lv.{}
+1470	Digging {}% · critical {}%	掘削 {}% · 強打 {}%
+1471	No effect on digging · critical	掘削·強打に影響なし
+1472	Yanggu {} · {}	楊口 {} · {}
+1473	🔥 Booster ×	🔥 ブースター ×
+1474	● Auto drilling	● 自動掘削中
+1475	 · drill power	 · 掘削力
+1476	Water depth zone · {} m to seabed	水深区間 · 海底まで{}m
+1477	Deep-sea sediment	深海堆積層
+1478	Strata · set	地層 · セット
+1479	 · {} m to {}	 · {}まで{}m
+1480	 · {} new relics	 · 新しい遺物{}個
+1481	While you were away	留守の間に
+1482	While the window was minimized	ウィンドウを閉じていた間に
+1483	 dug further	さらに掘りました
+1486	View hero stats	主人公の能力値を見る
+1487	Terrain info	地形情報
+1488	Earth's interior and your position	地球内部の構造と現在位置
+1490	Max 10 chars	最大10文字
+1504	New Game · Select Mode	ニューゲーム · モード選択
+1506	About 2 weeks to the ending · 10 part tiers · drill up to Master (Lv.50)	エンディングまで約2週間 · 部品10段階 · ドリルマスター(Lv.50)まで
+1507	About 1 month to the ending · 20 part tiers · drill up to Infinite (Lv.100)	エンディングまで約1ヶ月 · 部品20段階 · ドリル無限(Lv.100)まで
+1508	A new run restarts money, materials, parts, drill, depth, expeditions and investors. Name, wardrobe, land, relics, fossils and ending records are kept.	新しい周回はお金·素材·部品·ドリル·深さ·遠征·投資家が最初から。名前·クローゼット·マイランド·遺物·化石·エンディング記録は維持されます。
+1511	You can change it anytime in the menu. This name appears on the world-record certificate and in Records.	メニューでいつでも変更できます。世界記録の認定証と記録室にこの名前が載ります。
+1516	Skin tone and body are free to change. Hair, eyes, hats, outfits and props are bought with money earned from drilling. Anything bought can be worn again anytime.	肌の色と体型は無料で変えられます。ヘア·目·帽子·衣装·小物は掘削で稼いだお金で買います。一度買った物はいつでも着用できます。
+1518	Choose a human or animal hero. Animal heroes unlock in the wardrobe with money. Everyone starts in a tracksuit, and you can change heroes in the wardrobe anytime.	人か動物の主人公を選んでください。動物の主人公はお金を稼いでクローゼットで開けます。みんなジャージ姿で始まり、主人公は後でクローゼットでいつでも変えられます。
+1526	🌐 Language	🌐 言語
+1528	📲 Add icon to Home Screen	📲 ホーム画面にアイコン追加
+1534	🎰 Mini-game · Jackpot Machine	🎰 ミニゲーム · ジャックポットマシン
+1535	🔋 Power save	🔋 省電力モード
+1536	Tap the screen to return · bore and expeditions keep going	画面に触れると戻ります · 本坑·遠征は進行中

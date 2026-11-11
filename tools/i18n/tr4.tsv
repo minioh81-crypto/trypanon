@@ -1,0 +1,220 @@
+970	Full moon	満月
+971	Waning gibbous	寝待月
+972	Last quarter	下弦の月
+973	Waning crescent	有明月
+974	Yanggu Daily	楊口日報
+975	Day · Sun	昼 · 太陽
+976	Night ·	夜 ·
+977	☀️ Day	☀️ 昼
+978	🌙 Night ·	🌙 夜 ·
+979	✨ Clear	✨ 晴れ
+981	 (not better than your current house +{}h, so no change)	(今の家 +{}時間より良くないので増えません)
+982	 + Neolithic relics +{}	 + 新石器遺物 +{}
+983	🌙 House effect: even with the app closed	🌙 家の効果:アプリを閉じても
+984	+{}h	+{}時間
+985	 more digging · offline	長く掘る · オフライン
+986	Base {}h + house +{}h{}	基本{}時間 + 家 +{}時間{}
+987	Tap an item to demolish. You get half its price back.	撤去する物をタップ。買値の半分が戻ります。
+988	: tap an empty tile to place it. Tap again to deselect.{}	を置く空き地をタップ。もう一度押すと選択解除。{}
+989	Tap an empty (bright) tile to stand your character.	キャラを立たせる空き地(明るいマス)をタップ。
+990	 (a better house +{}h is active)	(より良い家 +{}時間が適用中)
+991	active	適用中
+992	🌙 This house: offline drilling	🌙 この家の効果:オフライン掘削
+993	{} · offline now	{} · 今のオフライン
+994	 selected · tap an empty (bright) tile to move it.{}	選択中 · 移動先の空き地(明るいマス)をタップ。{}
+995	Tap an item or character to move or turn it. With a house you dig {}h more with the app closed.	物やキャラをタップで移動・向き変更。家があるとアプリを閉じても{}時間長く掘ります。
+997	Expand land {}	土地を広げる {}
+1000	Drag to look around 360° · ⌂ reset view	ドラッグで360°見回す · ⌂ 初期視点
+1001	Drag to move · +/− zoom	ドラッグで移動 · +/− 拡大
+1002	Move left	左へ移動
+1003	Move right	右へ移動
+1004	Move up	上へ移動
+1005	Move down	下へ移動
+1006	◀ E	◀ 東
+1008	W ▶	西 ▶
+1009	📊 Stats	📊 能力値
+1014	↻ Turn	↻ 向き
+1015	🌙 Offline +{}h	🌙 オフライン +{}時間
+1016	Rotate left	左に回す
+1017	Zoom out	縮小
+1018	Reset view	視点リセット
+1019	Zoom in	拡大
+1020	Rotate right	右に回す
+1021	My land · {}×{} tiles	マイランド · {}×{}マス
+1023	Demolished ·	撤去 ·
+1024	Land expanded ·	土地を広げました ·
+1025	Turning land	土地を
+1026	°	°回転
+1027	Pick a spot where the tiles are empty	マスが空いている所を選んでください
+1028	Pick an empty tile	空きマスを選んでください
+1029	 needs	は
+1030	 tiles. Pick bright tiles	マス必要です。明るいマスを選んでください
+1031	You can build only one house. Move or demolish the existing one	家は1つしか建てられません。今の家を移動か撤去してください
+1052	Left	左へ
+1053	Right	右へ
+1054	Back	奥へ
+1055	Front	手前へ
+1056	Compass	方位
+1057	▼ 1F	▼ 1階
+1058	▲ 2F	▲ 2階
+1059	Home  F	家の中  階
+1060	To 1F	1階へ
+1061	To 2F	2階へ
+1062	Decorate home ·	インテリア ·
+1064	{}F	{}階
+1065	▶ Tap a tile to place the label	▶ 名札を置くマスをタップ
+1066	＋ Label	＋ 名札
+1067	Remove label	名札を外す
+1068	Default layout	基本の間取り
+1069	Clear all	すべて消す
+1070	🧱 Edit walls/rooms — tap a blue line on the floor to cycle wall → doorway → none. Tap a floor tile to move the room label there; tap a label (yellow dot) again to rename.{}	🧱 壁・部屋編集 — 床の青い線をタップすると壁→出入口→なしの順に変わります。床のマスをタップすると部屋の名札がそこへ移り、名札(黄色い点)をもう一度押すと名前が変わります。{}
+1071	↻ Rotate	↻ 回転
+1072	Go down to 1F	1階へ下りる
+1073	Go up to 2F	2階へ上がる
+1074	Stairs	階段
+1075	 · tap a bright tile to move (1F and 2F move together)	 · 明るいマスで移動(1階・2階が一緒に動きます)
+1076	 · tap a bright tile to go there	 · 明るいマスをタップするとそこへ行きます
+1077	 · move along the wall with arrows; rotate to go to the opposite wall	 · 矢印で壁沿いに移動、回転すると反対側の壁へ
+1078	 · tap a bright tile to move it there	 · 明るいマスをタップでそこへ移動
+1079	Stored	保管
+1080	Tap the stairs to move or rotate them, and switch floors with the 1F/2F buttons or the stair marker.	階段もタップで移動・回転でき、上の1階・2階ボタンか階段の表示で階を切り替えます。
+1081	🧱 Edit walls/rooms	🧱 壁・部屋編集
+1082	Tap furniture or a character to move or turn it.{}	家具やキャラをタップで移動・向き変更。{}
+1083	Stored {} · place	保管 {} · 配置
+1084	 · move	 · 移動
+1085	{} · move	{}個 · 移動
+1086	+1 buy {}	+1 購入 {}
+1088	 is in the way. Move it first	が邪魔です。先に移動してください
+1089	The stairs are in the way	階段が邪魔です
+1090	Label removed	名札を外しました
+1091	Tap the tile with a yellow dot to remove it	黄色い点のマスを押すと外れます
+1092	There's already a label	もう名札があります
+1093	Overlaps 1F or 2F furniture. Pick a bright tile	1階か2階の家具と重なります。明るいマスを選んでください
+1094	Furniture is on that tile. Pick a bright tile	家具があるマスです。明るいマスを選んでください
+1095	Overlaps other furniture. Pick a bright tile	他の家具と重なります。明るいマスを選んでください
+1096	Tap the label (yellow dot) to remove	外す名札(黄色い点)をタップ
+1097	Reset to the default layout	基本の間取りに戻しました
+1098	All walls cleared	壁をすべて消しました
+1099	No room to rotate. Move nearby furniture	回転する空間がありません。周りの家具を移動してください
+1100	No space on this floor	この階に置く場所がありません
+1101	No space. Store or move furniture	置く場所がありません。家具を保管か移動してください
+1102	1 more	もう1個
+1103	Placed · tap any tile to move it	配置 · 好きなマスを押して移動できます
+1104	No space to place it	置く場所がありません
+1105	Woof!	ワン!
+1106	Hehehe	へへへ
+1107	♥ Rub my belly	♥ お腹なでて
+1108	Meow~	ニャ〜
+1109	Lick lick	ペロペロ
+1110	Stretch~	のび〜
+1111	  Life-size restoration	  実物復元模型
+1112	Life-size restoration	実物復元模型
+1113	Brought back to life from the bone fossils	骨の化石をもとに生きていた姿を再現しました
+1114	🔍 Rotate in 3D	🔍 3Dで回して見る
+1115	Restored ·	復元完了 ·
+1116	Restoring {}/5 · empty spots are parts not found yet	復元中 {}/5 · 空いている所はまだ見つけていない部位
+1117	  Exhibit	  展示
+1119	Fossil hall	化石館
+1120	Relic hall	遺物館
+1121	Skeletons built from the bones you found. Empty parts are not found yet. Restored {}/{}	見つけた骨で骨格を組んで展示します。空いている部分はまだ見つけていない部位です。復元完了 {}/{}
+1122	🦴 Museum owned bonus: fossil chance +{}% ({}% per tile · {})	🦴 展示館の所持効果:化石発見確率 +{}%(1マスあたり{}% · {})
+1123	 · Completed fossils are shown with a life-size 3D model.	 · 揃った化石は実物3D復元模型と一緒に展示されます。
+1124	Relics dug up on expeditions are shown in era cabinets. Excavated {}/{}	遠征で発掘した遺物を時代別ケースに展示します。発掘 {}/{}
+1125	 · Set bonus	 · セット効果
+1126	Build a relic museum on your land first (₩10,000)	先にマイランドに遺物展示館を建ててください(₩10,000)
+1127	 · Life-size model	 · 実物復元模型
+1128	 · Drag to rotate 360°; zoom with the wheel on PC.	 · ドラッグで360°回転、PCはホイールで拡大。
+1129	5,400℃ · drill bit melting	5,400℃ · ドリルビット溶解中
+1130	Magnetic field	磁場
+1131	Satellite signal	衛星信号
+1132	Compass	コンパス
+1133	{} error	{} エラー
+1134	Going to the other side!	反対側まで行く!
+1135	Zero gravity · the very center of Earth	重力0 · 地球のど真ん中
+1136	Inner-core iron crystal sample · a first for humanity	内核の鉄結晶試料 · 人類初
+1137	A first for humanity,	人類初、
+1139	▲ {} driller, at 6,371 km	▲ {}の掘削者、6,371km地点で
+1140	Next goal · 12,742 km	次の目標 · 12,742km
+1142	Off Uruguay	ウルグアイ沖
+1143	Yanggu · world's largest geothermal plant	楊口 · 世界最大の地熱発電所
+1144	TRYPANON Geothermal Plant	トリパノン地熱発電所
+1145	⚡ Substation	⚡ 変電
+1146	Power bill ₩0 · energy independence	電気代0ウォン · エネルギー自立
+1147	Limit-up day after day	連日ストップ高
+1148	▲ TRYPANON Energy +29.9% limit-up · ▲ Yanggu Geothermal +30% · ▲ CoreTech +28%	▲ トリパノンエナジー +29.9% ストップ高 · ▲ 楊口地熱 +30% · ▲ コアテック +28%
+1149	We'll invest!	投資はお任せを!
+1150	12,742 km · investment confirmed	12,742km · 投資確定
+1151	The drill that won't stop	止まらないドリル
+1152	Drill escapes into space	ドリル、宇宙へ離脱
+1153	The Earth splits apart	地球が割れる
+1154	BAD END · End of the world	BAD END · 地球滅亡
+1155	Uruguay · Montevideo plaza	ウルグアイ · モンテビデオ広場
+1156	Korean driller becomes the first to pierce the Earth · Yanggu → Montevideo 12,742 km · officially certified world record	韓国の掘削者、人類初の地球貫通 · 楊口 → モンテビデオ 12,742km · 世界記録公式認定
+1157	TRUE END · World record	TRUE END · 世界記録
+1158	World's first Earth piercing	世界初の地球貫通
+1159	Yanggu, Korea → Montevideo, Uruguay	大韓民国・楊口 → ウルグアイ・モンテビデオ
+1160	Drilled 12,742 km · {} mode	掘削距離 12,742km · {}モード
+1161	Certified	認定
+1162	Earth-through high-speed rail construction	地球貫通高速鉄道工事
+1163	GTX Earth Line	GTX地球線
+1164	Seoul ⇄ Montevideo 42 min	ソウル ⇄ モンテビデオ 42分
+1165	TRYPANON stock hits limit-up	トリパノン株ストップ高
+1166	HAPPY END · World's richest	HAPPY END · 世界長者
+1167	No. 1 richest person of the year	今年の世界長者1位
+1168	Next: the Moon?	次は:月?
+1169	TRYPANON Group Chair · assets ₩∞	トリパノングループ会長 · 資産∞ウォン
+1171	The moment we reached the core, 5,400℃ heat began to melt the drill bit.	地球の中心に届いた瞬間、5,400℃の熱がドリルビットを溶かし始めた。
+1172	Control room	管制室
+1173	"Magnetic readings are going wild! We've lost satellite signal!"	「磁場の数値が乱れています!衛星信号が途絶えました!」
+1174	Seoul that night	その夜のソウル
+1175	Auroras spread across the whole sky, and every compass in the world spun wildly.	空一面にオーロラが広がり、世界中のコンパスが狂ったように回った。
+1176	…Maybe I rushed it. Still, I can't stop here.	…急ぎすぎたかな。それでもここで止まるわけにはいかない。
+1177	The very center of Earth	地球のど真ん中
+1178	Gravity vanished. A place where every direction is up, and every direction is down.	重力が消えた。すべての方向が上で、すべての方向が下の場所。
+1179	I sealed a sparkling iron-crystal sample in a capsule. The heart of the Earth, held by a human hand for the first time.	輝く鉄結晶の試料をカプセルに収めた。人類が初めて手にした地球の心臓。
+1180	World press	世界のメディア
+1181	"Korean driller is first to reach Earth's core" — the relics and fossils gathered over time proved the journey.	「韓国の掘削者、人類初の地球中心到達」— 長く集めた遺物と化石がその道を証明した。
+1182	This is the halfway point. The real goal is the other side, off Uruguay.	ここが半分。本当の目標は反対側、ウルグアイ沖。
+1184	Endless geothermal heat rises from the hole reaching the core. The world's largest geothermal plant was built.	地球の中心まで開いた穴から果てしない地熱が噴き出す。世界最大の地熱発電所ができた。
+1185	South Korea	大韓民国
+1186	Lights across the country came on with free electricity. Energy Independence Day.	全国の明かりがタダの電気で灯った。エネルギー自立の日。
+1187	Stock market	証券街
+1188	TRYPANON Energy hit limit-up day after day. Investors lined up.	トリパノンエナジーの株価は連日ストップ高。投資家が列をなした。
+1189	Investor meeting	投資家会議
+1190	"Let's go to the other side. We'll invest again!"	「反対側まで行きましょう。今回も投資は我々が!」
+1192	Main bore · Earth's core	本坑 · 地球の中心
+1193	The moment we passed the core and pierced the far crust, the Adamas drill didn't stop…	地球の中心を過ぎ反対側の地殻まで貫いた瞬間、アダマスドリルは止まらなかった…
+1194	"The drill shot out the other side! It's… flying into space!"	「ドリルが反対側に飛び出しました!そのまま…宇宙へ飛んでいきます!」
+1195	Breaking news	緊急速報
+1196	Cracks spread along the hole, and the Earth began to split in two.	開いた穴に沿ってひびが広がり、地球が真っ二つに割れ始めた。
+1197	…Maybe I dug too deep.	…掘りすぎたみたい。
+1199	In the middle of Montevideo's plaza, the ground rose and the drill poked its head out.	ウルグアイ・モンテビデオ広場の真ん中で地面が盛り上がり、ドリルが顔を出した。
+1200	Montevideo citizens	モンテビデオ市民
+1201	"¡Increíble! Someone came out of the ground!" A crowd gathered in an instant.	「¡Increíble! 人が地面から出てきた!」あっという間に人だかりができた。
+1202	World broadcast	世界の放送
+1203	TV cameras from every country lined up. "Korean driller is first to pierce the Earth!"	各国のテレビカメラが並んだ。「韓国の掘削者、人類初の地球貫通!」
+1204	Official certification	公式認定
+1205	12,742 km from Yanggu. The name clearly engraved on the certificate — officially listed in world records as the first driller to pierce the Earth.	楊口から12,742km。認定証にくっきり刻まれた名前 — 地球を貫いた最初の掘削者として世界記録に公式登録された。
+1207	"It'd be a waste to leave this hole." They reinforced it to build an Earth-through high-speed railway.	「この穴、そのままにするのはもったいない。」穴を補強して地球貫通高速鉄道を敷くことにした。
+1208	GTX Earth Line opens	GTX地球線開通
+1209	An express through the Earth that runs as if falling by gravity. Seoul to the other side in just 42 minutes.	重力で落ちるように走る地球貫通急行。ソウルから地球の裏側までわずか42分。
+1210	Fare revenue exploded and TRYPANON stock hit limit-up day after day.	運賃収入が爆発し、トリパノン株は連日ストップ高。
+1211	Person of the year	今年の人物
+1212	The driller who pierced the Earth is now the world's richest. Next goal… the Moon?	地球を貫いた掘削者は今や世界一の富豪。次の目標は…月?
+1213	Part 2 · the other side awaits	第2部 · 地球の裏側が待っている
+1214	Hard mode Part 1 cleared	ハードモード第1部突破
+1215	Earth's core 6,371 km · the 20-tier path	地球の中心 6,371km · 部品20段階の道
+1216	Flash—!	ピカッ—!
+1217	Where… am I?	ここは…どこ?
+1218	Please help us!	助けてください!
+1219	⚠ Ring of Fire alert	⚠ 環太平洋火山帯警報
+1220	Japanese government envoy · Yoshi Tanaka	日本政府代表 · 田中よし
+1221	Stabilize the mantle	マントルを安定させろ
+1222	Archipelago sinking in D-?	列島沈降まで D-?
+1224	The moment we pierced the far crust — a light so white we couldn't open our eyes burst out.	反対側の地殻を貫いた瞬間 — 目を開けられないほど白い光が弾けた。
+1225	When the light cleared, we were on an unfamiliar sea. Beyond the horizon, a volcano was belching smoke.	光が消えると見知らぬ海の上だった。水平線の向こうで火山が煙を噴いていた。
+1226	Yoshi Tanaka	田中よし
+1227	"I'm Yoshi Tanaka from the Japanese government. The mantle beneath the Ring of Fire is churning. At this rate the islands will sink into the sea."	「日本政府の田中よしです。環太平洋火山帯の下でマントルが揺れています。このままでは列島が海に沈みます。」
+1228	"There's only one way to stabilize the crust: drill to the mantle and release the pressure. Only your Earth-piercing drill can do it."	「地殻を安定させる方法はただ一つ、マントルまで掘って圧力を抜くこと。地球を貫いたあなたのドリルにしかできません。」
+1229	"Yoshi! Let's dig again." The two nations' drilling teams joined hands. Next stage: the Ring of Fire.	「よし!もう一度掘ろう。」両国の掘削チームが手を取り合った。次の舞台は環太平洋火山帯。
+1230	Through a path several times harder than others, you reached Earth's core. A Hard mode Part 1 record was left.	人より何倍も険しい道を通って地球の中心に届いた。ハードモード第1部突破の記録が残った。
