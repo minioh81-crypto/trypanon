@@ -795,7 +795,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v182 · 2026-11-11</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v183 · 2026-11-11</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1463,9 +1463,24 @@ function sakuraP(c,x,y,r,col,rot=0){c.save();c.translate(x,y);c.rotate(rot);c.fi
 function waveP(c,x,y,w,h,col,ink){c.save();c.beginPath();c.rect(x,y,w,h);c.clip();c.fillStyle=col;c.fillRect(x,y,w,h);c.strokeStyle=ink;c.lineWidth=Math.max(1,h*.08);
   for(let r=0;r<3;r++)for(let i=-1;i<4;i++){const ox=x+i*w/3+(r%2)*w/6,oy=y+h*.35+r*h*.3;c.beginPath();c.arc(ox,oy,w/6,Math.PI,0);c.stroke();c.beginPath();c.arc(ox,oy,w/10,Math.PI,0);c.stroke();}
   c.fillStyle='#fff';for(let i=0;i<3;i++){c.beginPath();c.arc(x+w*(.2+i*.3),y+h*.2,h*.07,0,7);c.fill();}c.restore();}
+// 로봇 스킨별 최종 효과 색 [빛 색, 날개 끝 색] + 11등급부터 스킨마다 다른 오라
+const ROBOFX={samurai:['#ffd23a','rgba(255,214,90,.5)'],ninja:['#b46aff','rgba(150,90,230,.5)'],kitsune:['#6ad8ff','rgba(120,220,255,.5)'],oni:['#ff5a1a','rgba(255,110,30,.55)'],miko:['#ff7ac0','rgba(255,140,200,.5)'],mecha:['#3af0ff','rgba(60,240,255,.5)']};
+function robotAura(c,cx,cy,k,skin,t,bw,top,hip,gr){const R=bw*1.05,n=gr>=12?1:.6;c.save();
+  if(skin==='samurai'){for(let i=0;i<14;i++){const p=((t*.35+i/14)%1),x=cx+Math.sin(i*2.4+t)*R*.95,y=top-20*k+p*(hip-top+60*k);c.globalAlpha=(1-p)*n;sakuraP(c,x,y,(3+i%3)*k,i%2?'#ffd23a':'#fff0a0');}}
+  else if(skin==='ninja'){for(let i=0;i<12;i++){const p=((t*.4+i/12)%1),a=i/12*Math.PI*2,x=cx+Math.cos(a)*R*(.7+p*.4),y=hip-p*(hip-top+30*k);c.globalAlpha=(1-p)*.45*n;c.fillStyle=i%2?'#b46aff':'#5a3a8a';c.beginPath();c.arc(x,y,(6+p*14)*k,0,7);c.fill();}}
+  else if(skin==='kitsune'){for(let i=0;i<6;i++){const a=t*1.4+i/6*Math.PI*2,x=cx+Math.cos(a)*R,y=cy+Math.sin(a)*R*.42,s=(5+Math.sin(t*6+i)*1.2)*k;c.globalAlpha=.85*n;
+      const g=c.createRadialGradient(x,y,0,x,y,s*1.8);g.addColorStop(0,'#ffffff');g.addColorStop(.4,'#6ad8ff');g.addColorStop(1,'rgba(40,120,255,0)');c.fillStyle=g;c.beginPath();c.moveTo(x,y-s*2.4);c.quadraticCurveTo(x+s*1.6,y,x,y+s);c.quadraticCurveTo(x-s*1.6,y,x,y-s*2.4);c.fill();}}
+  else if(skin==='oni'){for(let i=0;i<16;i++){const p=((t*.9+i/16)%1),x=cx+(i/15-.5)*bw*2.1+Math.sin(t*5+i)*3*k,y=hip+10*k-p*(hip-top+10*k)*.9,s=(9-p*7)*k;c.globalAlpha=(1-p)*.8*n;
+      const g=c.createRadialGradient(x,y,0,x,y,s*1.5);g.addColorStop(0,'#fff2a0');g.addColorStop(.45,'#ff7a1a');g.addColorStop(1,'rgba(200,20,0,0)');c.fillStyle=g;c.beginPath();c.moveTo(x,y-s*2);c.quadraticCurveTo(x+s,y,x,y+s*.6);c.quadraticCurveTo(x-s,y,x,y-s*2);c.fill();}}
+  else if(skin==='miko'){for(let i=0;i<8;i++){const a=t*.7+i/8*Math.PI*2,x=cx+Math.cos(a)*R,y=cy+Math.sin(a)*R*.5+Math.sin(t*2+i)*4*k;c.globalAlpha=.9*n;c.save();c.translate(x,y);c.rotate(Math.sin(t*2+i)*.3);c.fillStyle='#fffaf0';c.fillRect(-3.4*k,-9*k,6.8*k,18*k);c.strokeStyle='#d8283a';c.lineWidth=1*k;c.strokeRect(-3.4*k,-9*k,6.8*k,18*k);c.beginPath();c.moveTo(0,-6*k);c.lineTo(0,6*k);c.moveTo(-2*k,-2*k);c.lineTo(2*k,-2*k);c.stroke();c.restore();}
+    for(let i=0;i<8;i++){const p=((t*.3+i/8)%1);c.globalAlpha=(1-p)*n;sakuraP(c,cx+Math.sin(i*3.1+t)*R,top+p*(hip-top),3.4*k,'#ff9ac8');}}
+  else if(skin==='mecha'){c.strokeStyle='#3af0ff';c.lineWidth=1.6*k;c.shadowColor='#3af0ff';c.shadowBlur=8*k;for(let i=0;i<5;i++){if(((t*7+i*1.7)|0)%3===0)continue;const a=i/5*Math.PI*2+t*.6;let x=cx+Math.cos(a)*R*.55,y=cy+Math.sin(a)*R*.3;c.globalAlpha=.9*n;c.beginPath();c.moveTo(x,y);
+      for(let j=0;j<5;j++){x+=Math.cos(a)*R*.14+(Math.random()-.5)*8*k;y+=Math.sin(a)*R*.08+(Math.random()-.5)*8*k;c.lineTo(x,y);}c.stroke();}c.shadowBlur=0;
+    c.globalAlpha=.35*n;c.beginPath();c.ellipse(cx,cy,R*1.05,R*.42,0,0,7);c.stroke();}
+  c.restore();}
 function drawRobot(c,cx,tipY,k,P,o){k*=.74;
   const D=drillDims(P,k),R={},t=o.t||0,spin=o.spin||0,dl=o.dl??S.dl,gr=Math.min(12,Math.max(1,dlGrade(dl))),skin=o.skin||jpSkin();
-  const PAL=skin==='samurai'?JPTIER[gr-1]:SKINPAL[skin],[AR,DK,GD,T2,EY,PT]=PAL,stp=dlStep(dl),hue=gr>=12?(t*60)%360:null,FX=hue!=null?`hsl(${hue},90%,68%)`:EY;
+  const PAL=skin==='samurai'?JPTIER[gr-1]:SKINPAL[skin],[AR,DK,GD,T2,EY,PT]=PAL,stp=dlStep(dl),SC=ROBOFX[skin]||ROBOFX.samurai,FX=gr>=12?SC[0]:EY;
   const coneTop=tipY-D.cl,ringY=coneTop-D.rh,tw=D.bw*.74,th=D.bh*.9,hipY=ringY,torsoTop=hipY-th,hr=D.bw*.31,hy=torsoTop-hr*.72,helmTop=hy-hr*1.18,rodTop=o.rodTop??0;
   // cable/rod down to the helmet
   const rx=cx-D.rodW/2;c.fillStyle=P.cable?'#323a40':'#46525a';c.fillRect(rx,rodTop,D.rodW,helmTop-rodTop+2);
@@ -1476,8 +1491,9 @@ function drawRobot(c,cx,tipY,k,P,o){k*=.74;
   if(gr>=10){c.save();c.translate(cx,cyB);c.rotate(t*.4);c.strokeStyle=FX;c.globalAlpha=.5;c.lineWidth=1.4*k;c.beginPath();c.arc(0,0,D.bw*1.02,0,7);c.stroke();c.beginPath();c.arc(0,0,D.bw*.86,0,7);c.stroke();
     for(let i=0;i<12;i++){c.rotate(Math.PI/6);sakuraP(c,D.bw*.94,0,4*k,FX);}c.restore();c.globalAlpha=1;}
   if(gr>=9){const fl=Math.sin(t*3)*.1;for(const s2 of[-1,1]){c.save();c.translate(cx+s2*tw*.42,cyB-8*k);c.rotate(s2*(-.4+fl));c.scale(s2,1);const wl=(50+(gr-9)*10)*k;
-      for(let f=0;f<4;f++){const g=c.createLinearGradient(0,0,wl,0);g.addColorStop(0,DK);g.addColorStop(1,gr>=11?'rgba(255,255,255,.35)':'rgba(255,200,120,.25)');c.fillStyle=g;c.beginPath();c.moveTo(0,f*8*k);c.lineTo(wl*(1-f*.16),-wl*.4+f*13*k);c.lineTo(wl*(.55-f*.08),f*8*k+9*k);c.closePath();c.fill();}
+      for(let f=0;f<4;f++){const g=c.createLinearGradient(0,0,wl,0);g.addColorStop(0,DK);g.addColorStop(1,gr>=11?SC[1]:'rgba(255,200,120,.25)');c.fillStyle=g;c.beginPath();c.moveTo(0,f*8*k);c.lineTo(wl*(1-f*.16),-wl*.4+f*13*k);c.lineTo(wl*(.55-f*.08),f*8*k+9*k);c.closePath();c.fill();}
       c.strokeStyle=FX;c.lineWidth=1.3*k;c.beginPath();c.moveTo(0,0);c.lineTo(wl,-wl*.4);c.stroke();c.restore();}}
+  if(gr>=11)robotAura(c,cx,cyB,k,skin,t,D.bw,helmTop,hipY,gr);
   if(gr>=7){c.save();c.globalAlpha=.55+.25*Math.sin(t*2);c.strokeStyle=FX;c.lineWidth=3*k;c.beginPath();c.ellipse(cx,helmTop-10*k,hr*1.15,6*k,0,0,7);c.stroke();c.restore();}
   if(skin==='kitsune'){for(let i=0;i<Math.min(9,1+Math.floor(gr*.75));i++){const a=-1.1+i/(Math.max(1,Math.min(9,1+Math.floor(gr*.75))-1)||1)*2.2,sw=Math.sin(t*2+i)*.08;c.save();c.translate(cx,hipY-8*k);c.rotate(a+sw);
     const L=(40+gr*2)*k,g=c.createLinearGradient(0,0,0,-L);g.addColorStop(0,'#f6e8d6');g.addColorStop(.75,'#fbf8f2');g.addColorStop(1,'#ff8a5a');c.fillStyle=g;c.beginPath();c.moveTo(-6*k,0);c.quadraticCurveTo(-14*k,-L*.6,0,-L);c.quadraticCurveTo(14*k,-L*.6,6*k,0);c.fill();c.restore();}}
@@ -1562,7 +1578,7 @@ function drawRobot(c,cx,tipY,k,P,o){k*=.74;
   {const ns=JPSTAR[gr-1],sy2=torsoTop+th*.68;for(let i=0;i<ns;i++){const sx=cx+(i-(ns-1)/2)*7*k;c.fillStyle=gr>=10?FX:GD;c.save();c.translate(sx,sy2);c.beginPath();for(let j=0;j<10;j++){const a=-Math.PI/2+j*Math.PI/5,rr=j%2?1.4*k:3.3*k;c.lineTo(Math.cos(a)*rr,Math.sin(a)*rr);}c.closePath();c.fill();c.restore();}
     for(let i=0;i<DSTEP;i++){c.fillStyle=i<stp?GD:'rgba(0,0,0,.3)';c.fillRect(cx+tw/2-(8+i*3.3)*k,hipY-4*k,2.2*k,2.2*k);}}
   // sparkles for 초월/창세
-  if(gr>=11){for(let i=0;i<8;i++){const a=(t*.6+i/8)%1,px=cx+(hsh(i,3)-.5)*tw*1.8,py=hipY-a*th*2.4;c.fillStyle=gr>=12?`hsla(${(hue+i*40)%360},90%,75%,${1-a})`:`rgba(255,255,255,${1-a})`;c.fillRect(px,py,2.2*k,2.2*k);}}
+  if(gr>=11){for(let i=0;i<8;i++){const a=(t*.6+i/8)%1,px=cx+(hsh(i,3)-.5)*tw*1.8,py=hipY-a*th*2.4;c.globalAlpha=1-a;c.fillStyle=gr>=12?SC[0]:'#fff';c.fillRect(px,py,2.2*k,2.2*k);}c.globalAlpha=1;}
   if(o.hl&&R[o.hl]){const r=R[o.hl];c.setLineDash([4,3]);c.strokeStyle='#f6c76a';c.lineWidth=1.5;c.strokeRect(r.x,r.y,r.w,r.h);c.setLineDash([]);}
   return{R,bodyTop:helmTop};}
 
@@ -8409,7 +8425,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=182;
+const GVER=183;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
