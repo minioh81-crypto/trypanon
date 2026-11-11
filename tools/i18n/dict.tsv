@@ -1317,3 +1317,11 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 엔딩 하나당 본공 굴착력·수입 +{}% → 지금 ×{}	Each ending: main bore power · income +{}% → now ×{}	エンディング1つごとに本坑の掘削力・収入 +{}% → 現在 ×{}
 🇰🇷 한국 칭호 {}개 (효과 30%)	🇰🇷 Korean titles ×{} (30% effect)	🇰🇷 韓国の称号 {}個(効果30%)
 각 효과를 30%로 적용 → 굴착력 ×{} · 육상 재료 ×{}	each effect at 30% → drill power ×{} · land materials ×{}	各効果を30%で適用 → 掘削力 ×{} · 陸上素材 ×{}
+★ 아즈치성	★ Azuchi Castle	★ 安土城
+오다 노부나가의 성 · 사면 내 땅에 아즈치성을 지을 수 있어요(건설비 ₩300,000) · 내 땅에 지으면 육상 원정 재료 +5%	Oda Nobunaga's castle · buy it to build Azuchi Castle on your land (₩300,000 to build) · land materials +5% once built	織田信長の城 · 購入すると自分の土地に安土城を建てられます(建設費 ₩300,000) · 建てると陸上遠征の素材 +5%
+육상 원정 재료 +5% · 옷장에서 아즈치성을 먼저 구매	Land materials +5% · buy Azuchi Castle in the wardrobe first	陸上遠征の素材 +5% · 先に衣装で安土城を購入
+🔒 아즈치성은 옷장(특수 영웅 · 오다)에서 먼저 구매해야 지을 수 있어요	🔒 Buy Azuchi Castle in the wardrobe (Special heroes · Oda) before building it	🔒 安土城は衣装(特別な英雄・織田)で先に購入すると建てられます
+🏯 아즈치성 보유 · 「내 땅」 상점에서 지을 수 있어요(건설비 ₩300,000).	🏯 Azuchi Castle owned · build it from the My Land shop (₩300,000).	🏯 安土城を所持・「マイランド」のショップで建てられます(建設費 ₩300,000)。
+🏯 아즈치성을 옷장에서 사면 「내 땅」에 지을 수 있어요.	🏯 Buy Azuchi Castle here to build it on My Land.	🏯 ここで安土城を買うと「マイランド」に建てられます。
+아즈치성 3D · 끌어서 돌려 보기	Azuchi Castle 3D · drag to rotate	安土城の3D・ドラッグで回転
+화승총 3D · 끌어서 돌려 보기	Matchlock 3D · drag to rotate	火縄銃の3D・ドラッグで回転
