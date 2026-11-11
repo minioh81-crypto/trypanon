@@ -795,7 +795,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v184 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v185 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -934,10 +934,7 @@ const REG_JP=[
  {id:'yotei',fl:'홋카이도의 후지라 불리는 원뿔 화산. 회색 안산암으로 베어링을 굽는다.',n:'요테이산',area:'홋카이도',t:'land',lon:140.81,lat:42.83,res:'안산암',geo:'성층화산 (안산암)',diff:2.4,un:600,rock:'#5e5c5a'},
  {id:'iwate',fl:'이와테의 남부 후지. 검은 현무암 용암류로 하우징 철판을 보강한다.',n:'이와테산',area:'이와테',t:'land',lon:141.00,lat:39.85,res:'현무암',geo:'성층화산 (현무암 용암류)',diff:2.8,un:1500,rock:'#3e3836'},
  {id:'omine',fl:'수행자들이 걷는 기이 산지의 험한 능선. 부가체 처트로 드릴 비트를 벼린다.',n:'오미네산',area:'나라',t:'land',lon:135.94,lat:34.25,res:'처트',geo:'부가체 처트',diff:3.2,un:2500,rock:'#6a5048'},
- {id:'zao',fl:'에메랄드빛 화구호 오카마를 품은 화산. 유황으로 내압 실린더를 밀봉한다.',n:'자오산',area:'미야기·야마가타',t:'land',lon:140.44,lat:38.14,res:'유황',geo:'화구호 화산 (유황)',diff:3.8,un:3000,rock:'#6b6448'},
- {id:'bandai',fl:'1888년 대폭발로 산이 무너진 화산. 쌓인 화산재로 열 차폐판을 굽는다.',n:'반다이산',area:'후쿠시마',t:'land',lon:140.07,lat:37.60,res:'화산재',geo:'붕괴 화산 (화산재)',diff:4.6,un:5000,rock:'#6a6150'},
  {id:'ishizuchi',fl:'시코쿠에서 가장 높은 영산. 결정편암·셰일 층으로 충격 흡수 장치를 만든다.',n:'이시즈치산',area:'에히메',t:'land',lon:133.12,lat:33.77,res:'셰일',geo:'결정편암·셰일',diff:5.2,un:6000,rock:'#4f5a56'},
- {id:'asama',fl:'지금도 연기를 뿜는 간토의 활화산. 오니오시다시 용암석으로 케이블 섬유를 뽑는다.',n:'아사마산',area:'군마·나가노',t:'land',lon:138.52,lat:36.40,res:'용암석',geo:'활화산 (용암류)',diff:7.5,un:12000,rock:'#2e2f32'},
  {id:'nankai',fl:'태평양판이 파고드는 깊은 해곡. 해저 아래 얼어붙은 메탄 하이드레이트를 캔다.',n:'난카이 해곡',area:'태평양',t:'sea',lon:136.6,lat:33.0,res:'메탄 하이드레이트',geo:'해곡 퇴적층',diff:1,water:4,ws:1000,un:0,rock:'#4a4f52'},
  {id:'okinawa',fl:'뜨거운 물이 솟는 해저 굴뚝. 굴뚝 둘레에 쌓인 열수 광물을 모은다.',n:'오키나와 해곡',area:'동중국해',t:'sea',lon:126.9,lat:27.4,res:'열수 광물',geo:'열수 분출공',diff:1.6,water:6,ws:250,un:0,rock:'#5e4e3e'},
  {id:'trench',fl:'깊이 7km가 넘는 바다 밑 골짜기. 해저에 깔린 망간 단괴를 줍는다.',n:'일본 해구',area:'태평양',t:'sea',lon:144.2,lat:38.4,res:'망간 단괴',geo:'해구 바닥',diff:3,water:8,ws:900,un:500,rock:'#3a3c40'},
@@ -1012,6 +1009,8 @@ try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&typeof d==='obje
 if(S.seg!=null){S.depth=Math.max(S.depth||0,Math.min(segTop(S.seg),14999));}if(S.tier!=null&&(S.dl||1)===1)S.dl=[1,6,16,26,36,46][S.tier]||1;S.dl=S.dl||1;delete S.tier;delete S.seg;delete S.hp;
 S.char=Object.assign({},DEFCHAR_,S.char||{});S.ex=Object.assign({active:null,dig:{}},S.ex||{});S.relic=S.relic||{};if(!S.bv5){for(const k in (S.ex.dig||{})){const g0=S.ex.dig[k];g0.i=Math.round(g0.i*2/5);g0.hp=0;}S.bv5=1;}if(!S.rv){for(const k in S.relic)S.relic[k]=0;S.rv=2;}if(S.rv===2){const mp=[0,1,2,4,5,6,7,8,12];for(const k in S.relic)S.relic[k]=mp[S.relic[k]]??0;S.rv=3;}if(S.rv===3){for(const k in S.relic){const g0=S.relic[k];S.relic[k]=Math.floor(g0/4)*6+g0%4;}S.rv=4;}S.own=S.own||[];S.inv=S.inv||{};S.invN=S.invN||[];S.st=Object.assign({exp:0,sea:0},S.st||{});
 S.mode=S.mode||'normal';S.part=S.part||1;
+// 빠진 원정지(자오·반다이·아사마)에 걸린 저장 정리
+if(S.ex.active&&!REG.some(r=>r.id===S.ex.active))S.ex.active=null;if(S.evt&&!REG.some(r=>r.id===S.evt.rid))S.evt=null;
 // 일본: 하드 수준 한 판(보통/하드 고르기 없음). 처음 들어오면 한국의 특수 영웅 보유 목록만 가져와 효과 30%로 (입을 수는 없고 출현 이벤트도 없음)
 if(isJP){S.mode='hard';S.needMode=false;S.stage='jp';if(!S.leg){const k=krSave();S.leg=(k.own||[]).filter(x=>KRSPEC.includes(x));S.name=S.name||k.name;const kc=k.char||{};S.char=Object.assign({},DEFCHAR_,{sex:kc.sex==='f'?'f':'m',skin:kc.skin||0,hair:kc.sex==='f'?'tail':'spiky',eyes:'anime',hcol:kc.sex==='f'?4:0});S.story=true;S.runStart=Date.now();}}
 // repair: an old bug (2부 started from an ending replay) could put a run into 2부 before it reached the centre. Such a run is really still in 1부:
@@ -2153,7 +2152,7 @@ function relicIcon(rl,found=true,sz=40){const u='ri'+(++UID),k=rl.ic,c=rl.c;let 
   return `<svg viewBox="0 0 40 40" width="${sz}" height="${sz}" aria-hidden="true">${defs?`<defs>${defs}</defs>`:''}${g}</svg>`;}
 
 // ---------------- expedition (continuous, per-region, restartable) ----------------
-const PEAK_JP={fuji:['겐가미네',3776],daisen:['겐가미네',1729],miyanoura:['미야노우라다케',1936],hakusan:['고젠가미네',2702],kitadake:['기타다케',3193],aso:['다카다케',1592],ontake:['겐가미네',3067],asahidake:['아사히다케',2291],itoigawa:['묘조산',1189],sakurajima:['기타다케',1117],tsukuba:['뇨타이산',877],yotei:['요테이산',1898],iwate:['야쿠시다케',2038],omine:['핫쿄가타케',1915],zao:['구마노다케',1841],bandai:['반다이산',1816],ishizuchi:['덴구다케',1982],asama:['아사마산',2568]};
+const PEAK_JP={fuji:['겐가미네',3776],daisen:['겐가미네',1729],miyanoura:['미야노우라다케',1936],hakusan:['고젠가미네',2702],kitadake:['기타다케',3193],aso:['다카다케',1592],ontake:['겐가미네',3067],asahidake:['아사히다케',2291],itoigawa:['묘조산',1189],sakurajima:['기타다케',1117],tsukuba:['뇨타이산',877],yotei:['요테이산',1898],iwate:['야쿠시다케',2038],omine:['핫쿄가타케',1915],ishizuchi:['덴구다케',1982]};
 const PEAK={bukhan:['백운대',836],gyeryong:['천황봉',845],songni:['천왕봉',1058],mai:['암마이봉',687],taebaek:['장군봉',1567],mudeung:['천왕봉',1187],jiri:['천왕봉',1915],seorak:['대청봉',1708],juwang:['주봉',721],halla:['한라산 정상',1947]};if(isJP)Object.assign(PEAK,PEAK_JP);
 const expHP=(r,i)=>r.t==='sea'&&i<r.water?2:Math.round(MD().expBase*r.diff*Math.pow(1+.1*(i-(r.water||0)),MD().expGrow));
 const regById=id=>REG.find(x=>x.id===id);let SHIPR=null,HRSR=null,HRSFR=[];
@@ -8431,7 +8430,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=184;
+const GVER=185;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
