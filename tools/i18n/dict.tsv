@@ -1473,3 +1473,12 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 🌊 쓰나미 · {} · 원정 {}%	🌊 Tsunami · {} · expedition {}%	🌊 津波 · {} · 遠征 {}%
 {} 근처 바다·해안이 크게 피해 · {}초 동안 해상 원정 최대 −70%, 가까운 육상 최대 −25% (멀수록 작아져요)	Heavy damage to seas and coasts near {} · for {}s: sea expeditions up to −70%, nearby land up to −25% (less farther away)	{}付近の海・沿岸に大きな被害 · {}秒間 海上遠征 最大 −70%、近くの陸上 最大 −25%(遠いほど小さく)
 {} 근처 바다·해안이 크게 피해 · {}초 동안 해상 원정 최대 −70%, 가까운 육상 최대 −25% (멀수록 작아져요) · 지금 {} {}% (진원에서 {}km)	Heavy damage to seas and coasts near {} · for {}s: sea expeditions up to −70%, nearby land up to −25% (less farther away) · now {} {}% ({} km from epicenter)	{}付近の海・沿岸に大きな被害 · {}秒間 海上遠征 最大 −70%、近くの陸上 最大 −25%(遠いほど小さく) · 今 {} {}%(震源から{}km)
+🌀 태풍 {}호 발생	🌀 Typhoon No. {} forms	🌀 台風{}号発生
+남쪽 바다에서 북상해요 · {}초 동안 태풍이 지나가는 곳마다 원정 피해 (바다 최대 −55%, 육상 최대 −35%) · 예상 경로는 지도에 점선	Moving north from the southern sea · for {}s, expeditions along its path take damage (sea up to −55%, land up to −35%) · forecast track dotted on the map	南の海から北上します · {}秒間 通り道の遠征に被害(海上 最大 −55%、陸上 最大 −35%) · 予想進路は地図に点線
+🌀 태풍 {}호 · {}	🌀 Typhoon No. {} · {}	🌀 台風{}号 · {}
+🌀 태풍 {}호 · {} · 원정 {}%	🌀 Typhoon No. {} · {} · expedition {}%	🌀 台風{}号 · {} · 遠征 {}%
+🌀 태풍 {}호	🌀 Typhoon No. {}	🌀 台風{}号
+{} 앞바다	off {}	{}沖
+{} 상륙	landfall: {}	{}に上陸
+니가타	Niigata	新潟
+호쿠리쿠	Hokuriku	北陸
