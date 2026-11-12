@@ -640,12 +640,12 @@ nav.tabs button{font-size:12px}
 @keyframes yiRise{from{transform:translateY(45%) scale(.35);opacity:0}to{transform:none;opacity:1}}
 .yitxt{position:relative;text-align:center;display:grid;gap:4px;padding:0 16px}
 .yiev .jpvol{position:absolute;left:0;width:100%;bottom:4%;pointer-events:none;z-index:3}
-.pkgrid{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:8px;align-items:stretch}#pkCv{width:100%;max-height:64dvh;aspect-ratio:300/430;object-fit:contain;display:block;border-radius:18px;align-self:start}
+.pkgrid{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:8px;align-items:stretch}#pkCv{width:100%;max-height:58dvh;aspect-ratio:300/430;object-fit:contain;display:block;border-radius:18px;align-self:start}
 .pkside{display:flex;flex-direction:column;gap:8px;min-width:0}.pkballs{display:grid;place-items:center;padding:6px 4px;border-radius:14px;background:linear-gradient(#3a1250,#1a0828);border:1.5px solid #ffd23a;box-shadow:0 0 12px rgba(255,180,60,.35)}.pkballs span{font-size:11px;color:#ffe6a0}.pkballs b{font:900 26px var(--f-num);color:#fff;text-shadow:0 0 8px #ff6aa8}
 .pkfire{display:grid;place-items:center;align-content:center;gap:0;height:100px;border-radius:50%;border:3px solid #fff2b0;background:radial-gradient(circle at 40% 35%,#ff7a8a,#e8203a 60%,#8a0a1a);color:#fff;font:900 16px var(--f-kr);box-shadow:0 4px 0 #5a0610,0 0 18px rgba(255,60,90,.6);animation:pkpulse 1.2s ease-in-out infinite}.pkfire svg{width:46px;height:46px;margin-top:-4px}.pkfire:active{transform:translateY(3px);box-shadow:0 1px 0 #5a0610}.pkfire:disabled{filter:grayscale(1) brightness(.6);animation:none}@keyframes pkpulse{50%{box-shadow:0 4px 0 #5a0610,0 0 30px rgba(255,90,120,.9)}}
 .pklog{flex:1;display:flex;flex-direction:column;gap:4px;font-size:11.5px;line-height:1.3;min-height:0;overflow:hidden}.pklog p{margin:0;padding:4px 6px;border-radius:8px;background:rgba(255,255,255,.05);color:var(--mute)}.pklog p.new{background:rgba(255,210,90,.16);color:#ffe6a0;font-weight:700}.pklog p.hint{color:var(--mute)}.pklog .ric{width:13px;height:13px}
 .pktot{display:flex;flex-wrap:wrap;gap:3px;font-size:11px;max-height:132px;overflow:hidden}.pktot span{width:100%;color:var(--mute)}.pktot em{font-style:normal;padding:2px 5px;border-radius:6px;background:rgba(122,224,140,.12);color:#9ff0b0;font-weight:700}
-.pkbuy{display:flex;flex-direction:column;align-items:center;gap:4px}.pkbuy .pkmats{display:flex;gap:4px;order:2;opacity:.85}.pkbuy button{width:min(100%,320px);display:grid;gap:1px;font-size:14px;padding:10px 8px;justify-items:center}.pkbuy button small{font-size:11px;opacity:.85;font-weight:600}.pkbuy .pkend{flex:1;text-align:center;color:var(--mute);font-size:12px}
+.pkleft{display:flex;flex-direction:column;gap:8px;min-width:0}.pkbuy{display:block}.pkbuy button{width:100%;box-sizing:border-box;display:grid;gap:1px;font-size:13.5px;padding:9px 6px;justify-items:center;margin:0}.pkmats{display:flex;flex-wrap:wrap;gap:3px;opacity:.85}.pkbuy button small{font-size:11px;opacity:.85;font-weight:600}.pkbuy .pkend{flex:1;text-align:center;color:var(--mute);font-size:12px}
 .pkbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.pkbar b{font:800 15px var(--f-kr);color:var(--amber2)}.pkbar.sub{font-size:12px;color:var(--mute)}
 .kimchip{bottom:calc(env(safe-area-inset-bottom,0px) + 140px);background:linear-gradient(#2a3e9a,#101a50);border-color:#e8b23a}
 .yiev.kim{background:radial-gradient(circle at 50% 42%,rgba(200,215,255,.42),rgba(8,12,40,.7) 72%)}.yiev.kim.k2{background:radial-gradient(circle at 50% 42%,rgba(255,214,110,.45),rgba(10,12,40,.72) 72%)}
@@ -821,7 +821,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v198 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v199 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -8775,14 +8775,14 @@ const pkEdges=(()=>{const tw=PKP.reduce((s,p)=>s+p.w,0);let x=12;const e=[x];for
 function pkOpen(){S.mgOn=0;$('#mgChip').hidden=true;const U=mgUnit();pk={balls:3,free:1,paid:0,U,mats:mgMats(),cost:Math.max(300,Math.round(U*8)),fly:[],total:{money:0,res:{}},log:[],t:0,raf:0,jack:0,fx:[],rain:[],ph:{},lh:{}};
   $('#mgame .iname').textContent='🎯 미니게임 · 파친코';$('#mgame').hidden=false;pkRender();pkLoop();}
 function pkRender(){const b=$('#mgBody'),left=MG_PAID-pk.paid;
-  b.innerHTML=`<div class="pkgrid"><canvas id="pkCv" width="${PKW*2}" height="${PKH*2}"></canvas>
+  b.innerHTML=`<div class="pkgrid"><div class="pkleft"><canvas id="pkCv" width="${PKW*2}" height="${PKH*2}"></canvas>
+   <div class="pkbuy">${left>0?`<button class="primary" type="button" id="pkBuy" ${S.money>=pk.cost?'':'disabled'}>🔮 구슬 10개 사기 · ${won(pk.cost)}<small>${left}번 남음</small></button>`:'<span class="pkend">이번 기계는 구매 끝</span>'}</div></div>
    <div class="pkside"><div class="pkballs"><span>구슬</span><b id="pkBalls">${pk.balls}</b></div><button class="pkfire" type="button" id="pkShoot" ${pk.balls?'':'disabled'}><svg viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="pkbl" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#d8dee6"/><stop offset="1" stop-color="#5a6674"/></radialGradient></defs><path d="M10,44 Q12,22 30,10" stroke="#fff2b0" stroke-width="3" fill="none" stroke-dasharray="3 3"/><path d="M26,6 L36,8 L31,17Z" fill="#fff2b0"/><circle cx="30" cy="12" r="8" fill="url(#pkbl)" stroke="#2a2a30" stroke-width="1.2"/><path d="M8,30 h7 M6,36 h8 M10,24 h6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".85"/></svg>발사!</button>
-    <div class="pklog" id="pkLog">${pkLogH()}</div><div class="pktot" id="pkTot"><span>합계</span>${pkTot()}</div></div></div>
-   <div class="pkbuy"><span class="pkmats">${pk.mats.map(m=>ric(m)).join('')}</span>${left>0?`<button class="primary" type="button" id="pkBuy" ${S.money>=pk.cost?'':'disabled'}>🔮 구슬 10개 사기 · ${won(pk.cost)}<small>${left}번 남음</small></button>`:'<span class="pkend">이번 기계는 구매 끝</span>'}</div>`;
+    <div class="pklog" id="pkLog">${pkLogH()}</div><div class="pktot" id="pkTot"><span>합계</span>${pkTot()}</div><div class="pkmats">${pk.mats.map(m=>ric(m)).join('')}</div></div></div>`;
   $('#pkShoot').onclick=pkShoot;const bb=$('#pkBuy');if(bb)bb.onclick=()=>{if(S.money<pk.cost||pk.paid>=MG_PAID)return;S.money-=pk.cost;pk.total.money-=pk.cost;pk.paid++;pk.balls+=10;sfx('coin');pkRender();};}
 function pkLogH(){return pk.log.length?pk.log.slice(-5).reverse().map((m,i)=>`<p class="${i?'':'new'}">${m}</p>`).join(''):'<p class="hint">가운데 🎯 칸에 들어가면 대박!</p>';}
 function pkTot(){const t=pk.total,p=[];if(t.money)p.push(`<em>${(t.money>0?'+':'−')+won(Math.abs(t.money))}</em>`);for(const k in t.res)p.push(`<em>${ric(k)}+${t.res[k]}</em>`);return p.length?p.join(''):'<em>아직 없음</em>';}
-function pkShoot(){if(!pk||!pk.balls)return;pk.balls--;pk.free=0;sfx('tab');pk.fly.push({x:PKW-22,y:PKH-40,vx:0,vy:-(14.2+Math.random()*1.2),st:0,tr:[]});const e=$('#pkBalls');if(e)e.textContent=pk.balls;const s=$('#pkShoot');if(s)s.disabled=!pk.balls;}
+function pkShoot(){if(!pk||!pk.balls)return;pk.balls--;pk.free=0;pkLaunch();pk.fly.push({x:PKW-22,y:PKH-40,vx:0,vy:-(14.2+Math.random()*1.2),st:0,tr:[]});const e=$('#pkBalls');if(e)e.textContent=pk.balls;const s=$('#pkShoot');if(s)s.disabled=!pk.balls;}
 function pkLand(i){const P=PKP[i],base=25+Math.floor(S.dl/2);let msg='',m=0,res={};pk.lh[i]=pk.t;const px=(pkEdges[i]+pkEdges[i+1])/2,py=PKH-30;
   if(P.k==='jack'){m=pk.U*12;for(const r of pk.mats)res[r]=base*3;msg=`🎯 대박! ${won(m)} + 재료 ×${base*3}`;pk.jack=3.2;sfx('levelup');pkFanfare();pkCoinFall(26,1);pkPop(1);setTimeout(()=>pkMeow(1.4),350);pkRain(['coin','bill','coin',...pk.mats],70);pkBurst(px,py,60,PKC,3.6,1.6);if(navigator.vibrate)navigator.vibrate([60,40,160]);}
   else if(P.k==='money'){m=Math.round(pk.U*1.6);msg=`🪙 +${won(m)}`;sfx('coin');pkCoinFall(8);setTimeout(()=>pkMeow(),250);pkRain(['coin'],14);pkBurst(px,py,22,['#ffd23a','#fff6b0'],2.4,1);}
@@ -8791,10 +8791,10 @@ function pkLand(i){const P=PKP[i],base=25+Math.floor(S.dl/2);let msg='',m=0,res=
   if(m){S.money+=m;pk.total.money+=m;}for(const k in res){S.res[k]=(S.res[k]||0)+res[k];pk.total.res[k]=(pk.total.res[k]||0)+res[k];}
   pk.log.push(msg);const l=$('#pkLog');if(l)l.innerHTML=pkLogH();const tt=$('#pkTot');if(tt)tt.innerHTML='<span>합계</span>'+pkTot();save();}
 function pkStep(dt){for(const b of pk.fly){const n=3;for(let s=0;s<n;s++){const h=dt/n*60;
-    if(b.st===0){b.vy+=.28*h;b.x+=b.vx*h;b.y+=b.vy*h;if(b.vy>-1.2){b.st=1;b.vx=-(1.2+Math.random()*4.4);b.vy=.5;}// launched up the right rail → over the top arc
+    if(b.st===0){b.vy+=.28*h;b.x+=b.vx*h;b.y+=b.vy*h;if(b.vy>-1.2||b.y<26){b.st=1;b.vx=-(1.2+Math.random()*4.4);b.vy=Math.max(.5,b.vy*-.25);if(b.y<26){b.y=26;pkClank();}}// launched up the right rail → 위 테두리 아치에 맞고 안으로
       if(b.x<14){b.x=14;b.vx=Math.abs(b.vx)*.5;}}
     else{b.vy+=.22*h;b.vx*=.995;b.x+=b.vx*h;b.y+=b.vy*h;
-      if(b.x<14){b.x=14;b.vx=Math.abs(b.vx)*.55;}if(b.x>PKW-30&&b.y>90){b.x=PKW-30;b.vx=-Math.abs(b.vx)*.55;}
+      if(b.x<14){b.x=14;b.vx=Math.abs(b.vx)*.55;}if(b.x>PKW-30&&b.y>90){b.x=PKW-30;b.vx=-Math.abs(b.vx)*.55;}if(b.x>PKW-14){b.x=PKW-14;b.vx=-Math.abs(b.vx)*.6;}if(b.y<20){b.y=20;b.vy=Math.abs(b.vy)*.4;}
       for(let pi=0;pi<PKPINS.length;pi++){const [px,py]=PKPINS[pi],dx=b.x-px,dy=b.y-py,d=Math.hypot(dx,dy),R=7.4;if(d<R&&d>0){const nx=dx/d,ny=dy/d,vn=b.vx*nx+b.vy*ny;if(vn<0){b.vx-=1.55*vn*nx;b.vy-=1.55*vn*ny;b.vx+=(Math.random()-.5)*.6;if(vn<-.3){pk.ph[pi]=pk.t;pkTing(pi);}}b.x=px+nx*R;b.y=py+ny*R;}}
       if(b.y>PKH-34&&!b.done){b.done=1;let i=0;while(i<PKP.length-1&&b.x>pkEdges[i+1])i++;pkLand(i);}}}
     b.tr.push([b.x,b.y]);if(b.tr.length>6)b.tr.shift();}
@@ -8806,12 +8806,20 @@ function pkTing(i){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c
 function pkCoinFall(n=8,big){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const t=c.currentTime;for(let i=0;i<n;i++){const tt=t+.05+i*(big?.045:.07)+Math.random()*.03,f=2000+Math.random()*1800;tone({t:tt,f,d:.12,v:.05,type:'triangle'});tone({t:tt,f:f*2.4,d:.06,v:.025});noise({t:tt,f:6500,q:3,d:.02,v:.05});}noise({t:t+.05+n*(big?.045:.07),f:700,q:1.2,d:.12,v:.1});}
 function pkDrop(){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const t=c.currentTime;tone({t,f:420,f2:180,glide:.12,d:.16,v:.12,type:'triangle'});noise({t,f:900,q:1,d:.08,v:.12});[0,.06,.12].forEach((o,i)=>tone({t:t+.1+o,f:[1568,1976,2349][i],d:.18,v:.04,type:'sine'}));}
 // 야옹~: 톱니파 + 두 개의 모음 필터(포먼트)를 미끄러뜨려 고양이 울음처럼
-function pkMeow(k=1){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const t=c.currentTime+.02,o=c.createOscillator(),f1=c.createBiquadFilter(),f2=c.createBiquadFilter(),g=c.createGain(),v=c.createOscillator(),vg=c.createGain(),D=.55*k;
-  o.type='sawtooth';const b=520+Math.random()*80;o.frequency.setValueAtTime(b*.85,t);o.frequency.linearRampToValueAtTime(b*1.35,t+D*.28);o.frequency.linearRampToValueAtTime(b*1.15,t+D*.6);o.frequency.exponentialRampToValueAtTime(b*.7,t+D);
-  v.frequency.value=7;vg.gain.value=b*.03;v.connect(vg);vg.connect(o.frequency);f1.type='bandpass';f1.Q.value=5;f1.frequency.setValueAtTime(700,t);f1.frequency.linearRampToValueAtTime(1500,t+D*.3);f1.frequency.linearRampToValueAtTime(900,t+D);f2.type='bandpass';f2.Q.value=6;f2.frequency.setValueAtTime(1800,t);f2.frequency.linearRampToValueAtTime(2600,t+D*.35);f2.frequency.linearRampToValueAtTime(1300,t+D);
-  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.32,t+.04);g.gain.setValueAtTime(.3,t+D*.6);g.gain.exponentialRampToValueAtTime(.001,t+D);const m=c.createGain();m.gain.value=1;o.connect(f1);o.connect(f2);f1.connect(g);f2.connect(m);m.connect(g);g.connect(SND.sfxG);o.start(t);v.start(t);o.stop(t+D+.05);v.stop(t+D+.05);}
+function pkMeow(k=1){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const t=c.currentTime+.02,D=.62*k,o=c.createOscillator(),f1=c.createBiquadFilter(),f2=c.createBiquadFilter(),lp=c.createBiquadFilter(),g=c.createGain(),g2=c.createGain();
+  // 미-야~옹: 높은 목소리(700→1000→600Hz), 모음 i→a→o 로 포먼트가 내려감
+  const b=720+Math.random()*80;o.type='sawtooth';o.frequency.setValueAtTime(b,t);o.frequency.linearRampToValueAtTime(b*1.38,t+D*.22);o.frequency.linearRampToValueAtTime(b*1.25,t+D*.5);o.frequency.exponentialRampToValueAtTime(b*.8,t+D);
+  f1.type='bandpass';f1.Q.value=7;f1.frequency.setValueAtTime(1400,t);f1.frequency.linearRampToValueAtTime(1700,t+D*.25);f1.frequency.linearRampToValueAtTime(1000,t+D*.7);f1.frequency.linearRampToValueAtTime(800,t+D);
+  f2.type='bandpass';f2.Q.value=9;f2.frequency.setValueAtTime(3200,t);f2.frequency.linearRampToValueAtTime(2600,t+D*.3);f2.frequency.linearRampToValueAtTime(1500,t+D);
+  lp.type='lowpass';lp.frequency.value=4200;g2.gain.value=.7;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.22,t+.06);g.gain.linearRampToValueAtTime(.3,t+D*.3);g.gain.setValueAtTime(.26,t+D*.65);g.gain.exponentialRampToValueAtTime(.001,t+D);
+  o.connect(f1);o.connect(f2);f2.connect(g2);f1.connect(lp);g2.connect(lp);lp.connect(g);g.connect(SND.sfxG);o.start(t);o.stop(t+D+.05);}
 // 폭죽: 펑(낮은 쿵) + 타닥타닥(높은 잔소리)
 function pkPop(big){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const t=c.currentTime;if(t-(pkPop.l||0)<.25&&!big)return;pkPop.l=t;tone({t,f:big?140:180,f2:50,d:big?.5:.3,v:big?.3:.18,type:'sine'});noise({t,f:300,ft:'lowpass',d:big?.35:.2,v:big?.35:.2});for(let i=0;i<(big?18:9);i++)noise({t:t+.12+Math.random()*(big?.8:.5),f:4000+Math.random()*3000,q:4,d:.02,v:big?.1:.07});}
+// 발사: 「철컥」 손잡이 + 스프링 「슝」 + 쇠구슬이 레일 타고 올라가는 구르는 소리
+function pkLaunch(){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const t=c.currentTime;noise({t,f:2600,q:3,d:.03,v:.18});tone({t,f:180,f2:90,d:.08,v:.12,type:'square',lp:900});
+  tone({t:t+.02,f:300,f2:1600,glide:.22,d:.26,v:.06,type:'triangle'});noise({t:t+.03,f:1800,q:1.2,d:.32,v:.06,ft:'bandpass'});for(let i=0;i<6;i++)noise({t:t+.06+i*.045,f:4200,q:5,d:.015,v:.04});}
+function pkClank(){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const t=c.currentTime;noise({t,f:5200,q:3,d:.025,v:.1});tone({t,f:2100,d:.08,v:.05,type:'triangle'});tone({t,f:3300,d:.05,v:.03});}
 function pkBell(v=.035){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const t=c.currentTime;[0,.07].forEach((o,k)=>{const f=2350+Math.random()*120;tone({t:t+o,f,d:.35,v:v*(k?.6:1),type:'sine'});tone({t:t+o,f:f*1.505,d:.25,v:v*.5*(k?.6:1),type:'sine'});tone({t:t+o,f:f*2.7,d:.12,v:v*.3,type:'sine'});});}
 function pkFanfare(){const p=sndPref();if(!p.sfx)return;const c=sndInit();if(!c||c.state!=='running')return;const t=c.currentTime;
   [523,659,784,1047,784,1047,1319].forEach((f,i)=>tone({t:t+i*.09,f,d:.16,v:.12,type:'square'}));[0,1,2,3,4,5,6,7,8,9,10,11].forEach(i=>tone({t:t+.7+i*.06,f:2200+(i%4)*300,d:.05,v:.05,type:'triangle'}));noise({t:t+.62,f:5000,ft:'highpass',d:.5,v:.12});}
@@ -8852,9 +8860,12 @@ function pkCat(c,cx,cy,r,t){// 귀여운 삼색 마네키네코: 큰 머리·반
   // 목걸이 + 방울
   c.fillStyle='#e8302a';c.strokeStyle='#8a1a14';c.lineWidth=1;c.beginPath();c.moveTo(-r*.4,r*.1);c.quadraticCurveTo(0,r*.22,r*.4,r*.1);c.lineTo(r*.4,r*.18);c.quadraticCurveTo(0,r*.3,-r*.4,r*.18);c.closePath();c.fill();c.stroke();
   pkSuzu(c,0,r*.3,r*.1);
-  // 흔드는 오른발: 머리 옆으로 번쩍 들어 손짓(앞에 그려서 잘 보이게)
-  c.save();c.translate(r*.6,r*.12);c.rotate(.25+paw*1.2);c.fillStyle=W;c.strokeStyle=OL;c.lineWidth=1.6;c.beginPath();c.moveTo(-r*.1,0);c.quadraticCurveTo(-r*.14,-r*.32,-r*.02,-r*.5);c.quadraticCurveTo(r*.1,-r*.6,r*.17,-r*.48);c.quadraticCurveTo(r*.2,-r*.2,r*.1,0);c.closePath();c.fill();c.stroke();
-    c.fillStyle='#ffa8bc';c.beginPath();c.ellipse(r*.06,-r*.44,r*.06,r*.05,0,0,7);c.fill();[-1,0,1].forEach(k=>{c.beginPath();c.arc(r*.06+k*r*.05,-r*.53+Math.abs(k)*r*.02,r*.022,0,7);c.fill();});c.restore();
+  // 손짓하는 오른발(마네키네코): 어깨에서 위로 든 팔은 그대로, 손목이 앞뒤로 까딱(손님을 부르는 동작)
+  {const sx=r*.36,sy=r*.24,ex=r*.56,ey=-r*.22;c.fillStyle=W;c.strokeStyle=OL;c.lineWidth=1.6;
+    c.beginPath();c.moveTo(sx-r*.1,sy);c.quadraticCurveTo(ex-r*.16,ey+r*.2,ex-r*.11,ey);c.lineTo(ex+r*.11,ey);c.quadraticCurveTo(ex+r*.06,ey+r*.24,sx+r*.12,sy+r*.04);c.closePath();c.fill();c.stroke();
+    c.save();c.translate(ex,ey);const bend=(Math.sin(t*4.2)*.5+.5);c.scale(1,1-bend*.55);c.rotate(-bend*.25);c.fillStyle=W;c.beginPath();c.ellipse(0,-r*.1,r*.13,r*.14,0,0,7);c.fill();c.stroke();
+    c.fillStyle='#ffa8bc';c.beginPath();c.ellipse(0,-r*.09,r*.06,r*.05,0,0,7);c.fill();[-1,0,1].forEach(q=>{c.beginPath();c.arc(q*r*.055,-r*.18+Math.abs(q)*r*.02,r*.022,0,7);c.fill();});c.restore();
+    c.strokeStyle=OL;c.lineWidth=1.2;c.beginPath();c.moveTo(ex-r*.1,ey+r*.02);c.lineTo(ex+r*.1,ey+r*.02);c.stroke();}
   c.restore();}
 function pkDraw(){const cv=$('#pkCv');if(!cv)return;const c=cv.getContext('2d');c.setTransform(2,0,0,2,0,0);const t=pk.t,J=pk.jack>0;
   c.save();c.beginPath();c.roundRect(0,0,PKW,PKH,18);c.clip();
@@ -9062,7 +9073,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=198;
+const GVER=199;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
