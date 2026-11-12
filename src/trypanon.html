@@ -802,7 +802,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v199 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v200 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -8809,44 +8809,50 @@ const PKC=['#ff3a6a','#ffd23a','#3ae0ff','#7aff6a','#ff7a2a','#c86aff'];
 function pkBurst(x,y,n,cols,sp=2.4,life=1.1){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=sp*(.4+Math.random());pk.fx.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:life*(.6+Math.random()*.6),l0:life,c:cols[i%cols.length],r:1.2+Math.random()*1.6});}}
 function pkRain(kind,n){for(let i=0;i<n;i++)pk.rain.push({k:kind[i%kind.length],x:20+Math.random()*(PKW-40),y:-20-Math.random()*240,vy:1.2+Math.random()*1.6,vx:(Math.random()-.5)*1.2,r:Math.random()*6,vr:(Math.random()-.5)*.25,s:.8+Math.random()*.5});}
 function pkSuzu(c,x,y,s,col='#ffd23a'){c.save();c.translate(x,y);c.strokeStyle='#c8302a';c.lineWidth=1.2;c.beginPath();c.moveTo(0,-s*1.1);c.lineTo(0,-s*1.6);c.stroke();const g=c.createRadialGradient(-s*.35,-s*.35,s*.1,0,0,s);g.addColorStop(0,'#fffbe0');g.addColorStop(.5,col);g.addColorStop(1,'#a8700a');c.fillStyle=g;c.beginPath();c.arc(0,0,s,0,7);c.fill();c.strokeStyle='#8a5a0a';c.lineWidth=.8;c.stroke();c.beginPath();c.moveTo(-s*.75,-s*.1);c.lineTo(s*.75,-s*.1);c.stroke();c.fillStyle='#5a3a0a';c.beginPath();c.arc(0,s*.35,s*.18,0,7);c.fill();c.fillRect(-s*.07,s*.35,s*.14,s*.55);c.restore();}
-function pkCat(c,cx,cy,r,t){// 귀여운 삼색 마네키네코: 큰 머리·반짝이는 큰 눈·볼터치·흔드는 앞발·빨간 목걸이와 방울·금화(고반)
-  c.save();c.translate(cx,cy+r*.06);const OL='#4a2e2a',paw=Math.sin(t*5)*.32,blink=(t%3.4)<.12;c.lineJoin='round';c.lineCap='round';
-  const W='#fffaf2',sh='rgba(220,190,170,.55)';
-  // 몸
-  c.fillStyle=W;c.strokeStyle=OL;c.lineWidth=1.6;c.beginPath();c.ellipse(0,r*.5,r*.46,r*.38,0,0,7);c.fill();c.stroke();
-  c.fillStyle=sh;c.beginPath();c.ellipse(r*.12,r*.62,r*.28,r*.18,0,0,7);c.fill();
-  c.fillStyle='#f4a040';c.beginPath();c.ellipse(-r*.28,r*.42,r*.14,r*.16,.4,0,7);c.fill();
-  // 꼬리
-  c.strokeStyle=OL;c.lineWidth=1.6;c.fillStyle=W;c.beginPath();c.ellipse(r*.44,r*.7,r*.16,r*.08,-.5,0,7);c.fill();c.stroke();
-  // 고반(금화) 든 왼발
-  {const g=c.createLinearGradient(-r*.4,r*.4,-r*.05,r*.8);g.addColorStop(0,'#fff6b0');g.addColorStop(.5,'#ffcc3a');g.addColorStop(1,'#c8860a');c.fillStyle=g;c.beginPath();c.ellipse(-r*.2,r*.6,r*.2,r*.27,0,0,7);c.fill();c.strokeStyle='#8a5a12';c.lineWidth=1.2;c.stroke();
-    c.strokeStyle='rgba(138,90,18,.5)';c.lineWidth=.7;for(let k=-2;k<=2;k++){c.beginPath();c.moveTo(-r*.36,r*.6+k*r*.08);c.lineTo(-r*.04,r*.6+k*r*.08);c.stroke();}
-    c.fillStyle='#8a2a12';c.font=`900 ${Math.round(r*.12)}px serif`;c.textAlign='center';c.fillText('千',-r*.2,r*.56);c.fillText('両',-r*.2,r*.72);
-    c.fillStyle=W;c.strokeStyle=OL;c.lineWidth=1.4;c.beginPath();c.ellipse(-r*.1,r*.5,r*.11,r*.1,0,0,7);c.fill();c.stroke();}
-  // 귀
-  [-1,1].forEach(s=>{c.fillStyle=s<0?'#f4a040':'#3a3030';c.strokeStyle=OL;c.lineWidth=1.6;c.beginPath();c.moveTo(s*r*.2,-r*.5);c.quadraticCurveTo(s*r*.44,-r*.98,s*r*.52,-r*.88);c.quadraticCurveTo(s*r*.6,-r*.6,s*r*.5,-r*.36);c.closePath();c.fill();c.stroke();
-    c.fillStyle='#ffb0c4';c.beginPath();c.moveTo(s*r*.27,-r*.52);c.quadraticCurveTo(s*r*.44,-r*.86,s*r*.5,-r*.8);c.quadraticCurveTo(s*r*.53,-r*.6,s*r*.46,-r*.44);c.closePath();c.fill();});
+function pkCat(c,cx,cy,r,t){// 마네키네코(참고 사진): 하얀 도자기 고양이 · 감은 웃는 눈 · 붉은 수염·귀 · 이마 삼색 무늬 · 붉은 꼰 목걸이와 큰 금방울 · 금꽃 붉은 턱받이 · 「招福」 금 고반 · 손짓하는 왼발 · 금 술 달린 붉은 방석
+  c.save();c.translate(cx,cy+r*.02);c.lineJoin='round';c.lineCap='round';const OL='#b8a494',RD='#d81e1e',GD='#e8b030',bend=(Math.sin(t*4)*.5+.5);
+  const por=(x,y,rx,ry)=>{const g=c.createRadialGradient(x-rx*.35,y-ry*.45,rx*.05,x,y,Math.max(rx,ry)*1.05);g.addColorStop(0,'#ffffff');g.addColorStop(.65,'#fbf7f1');g.addColorStop(1,'#e2d6c8');return g;};
+  const sak=(x,y,s,col=RD)=>{c.save();c.translate(x,y);c.fillStyle=col;for(let k=0;k<5;k++){c.rotate(Math.PI*2/5);c.beginPath();c.ellipse(0,-s*.55,s*.36,s*.5,0,0,7);c.fill();}c.fillStyle=GD;c.beginPath();c.arc(0,0,s*.22,0,7);c.fill();c.strokeStyle=GD;c.lineWidth=.7;for(let k=0;k<5;k++){c.rotate(Math.PI*2/5);c.beginPath();c.ellipse(0,-s*.55,s*.36,s*.5,0,0,7);c.stroke();}c.restore();};
+  const toes=(x,y,s,rot=0)=>{c.save();c.translate(x,y);c.rotate(rot);c.strokeStyle=RD;c.lineWidth=1.3;[-1,0,1].forEach(k=>{c.beginPath();c.moveTo(k*s*.32,-s*.35);c.lineTo(k*s*.32,s*.05);c.stroke();});c.restore();};
+  // 방석 + 금 술
+  {const g=c.createLinearGradient(0,r*.52,0,r*.82);g.addColorStop(0,'#e83030');g.addColorStop(1,'#8a0e10');c.fillStyle=g;c.beginPath();c.roundRect(-r*.78,r*.56,r*1.56,r*.24,r*.12);c.fill();c.strokeStyle=GD;c.lineWidth=1.4;c.stroke();
+    c.strokeStyle='rgba(255,210,90,.55)';c.lineWidth=.8;c.beginPath();c.moveTo(-r*.7,r*.64);c.quadraticCurveTo(0,r*.6,r*.7,r*.64);c.stroke();for(let k=-3;k<=3;k++){c.fillStyle='rgba(255,215,110,.7)';c.beginPath();c.arc(k*r*.2,r*.7,r*.025,0,7);c.fill();}
+    [-1,1].forEach(sx=>{c.fillStyle=GD;c.beginPath();c.arc(sx*r*.78,r*.6,r*.05,0,7);c.fill();c.beginPath();c.moveTo(sx*r*.78-r*.04,r*.63);c.lineTo(sx*r*.82,r*.82);c.lineTo(sx*r*.74,r*.82);c.closePath();c.fill();});}
+  // 몸통 + 뒷발
+  c.fillStyle=por(0,r*.3,r*.56,r*.4);c.strokeStyle=OL;c.lineWidth=1.2;c.beginPath();c.ellipse(0,r*.3,r*.56,r*.38,0,0,7);c.fill();c.stroke();
+  sak(-r*.42,r*.38,r*.12);c.fillStyle='#2a2626';c.beginPath();c.ellipse(-r*.58,r*.36,r*.07,r*.12,.3,0,7);c.fill();
+  [-1,1].forEach(sx=>{c.fillStyle=por(sx*r*.24,r*.6,r*.14,r*.09);c.beginPath();c.ellipse(sx*r*.24,r*.6,r*.15,r*.09,0,0,7);c.fill();c.strokeStyle=OL;c.stroke();toes(sx*r*.24,r*.62,r*.12);});
+  // 붉은 턱받이(금꽃 무늬)
+  c.fillStyle=RD;c.beginPath();c.moveTo(-r*.36,r*.02);c.quadraticCurveTo(0,r*.1,r*.36,r*.02);c.lineTo(r*.3,r*.24);c.quadraticCurveTo(0,r*.42,-r*.3,r*.24);c.closePath();c.fill();c.strokeStyle=GD;c.lineWidth=1.3;c.stroke();
+  sak(-r*.12,r*.2,r*.08,'#ffe6a0');sak(r*.06,r*.3,r*.06,'#ffe6a0');sak(-r*.24,r*.12,r*.05,'#ffe6a0');
+  // 「招福」 금 고반 + 받쳐 든 오른발
+  c.save();c.translate(r*.26,r*.3);c.rotate(.12);{const g=c.createLinearGradient(-r*.17,-r*.25,r*.17,r*.25);g.addColorStop(0,'#fff4b8');g.addColorStop(.45,'#f2c040');g.addColorStop(1,'#a8700a');c.fillStyle=g;c.beginPath();c.roundRect(-r*.17,-r*.25,r*.34,r*.5,r*.12);c.fill();c.strokeStyle='#8a5a12';c.lineWidth=1.3;c.stroke();
+    c.strokeStyle='rgba(138,90,18,.35)';c.lineWidth=.6;for(let k=-5;k<=5;k++){c.beginPath();c.moveTo(-r*.13,k*r*.04);c.lineTo(r*.13,k*r*.04);c.stroke();}
+    c.fillStyle='#2a1a0e';c.font=`900 ${Math.round(r*.17)}px serif`;c.textAlign='center';c.fillText('招',0,-r*.03);c.fillText('福',0,r*.17);}c.restore();
+  c.fillStyle=por(r*.42,r*.08,r*.13,r*.12);c.beginPath();c.ellipse(r*.42,r*.08,r*.14,r*.12,-.3,0,7);c.fill();c.strokeStyle=OL;c.lineWidth=1.2;c.stroke();toes(r*.44,r*.06,r*.11,-.4);
+  // 귀(머리 뒤)
+  [-1,1].forEach(sx=>{c.fillStyle=por(sx*r*.36,-r*.66,r*.2,r*.2);c.strokeStyle=OL;c.lineWidth=1.2;c.beginPath();c.moveTo(sx*r*.14,-r*.62);c.quadraticCurveTo(sx*r*.36,-r*1.02,sx*r*.52,-r*.96);c.quadraticCurveTo(sx*r*.62,-r*.68,sx*r*.56,-r*.44);c.closePath();c.fill();c.stroke();
+    c.fillStyle=RD;c.beginPath();c.moveTo(sx*r*.22,-r*.62);c.quadraticCurveTo(sx*r*.38,-r*.92,sx*r*.49,-r*.88);c.quadraticCurveTo(sx*r*.55,-r*.66,sx*r*.5,-r*.5);c.closePath();c.fill();c.strokeStyle=GD;c.lineWidth=.8;c.stroke();});
   // 머리
-  c.fillStyle=W;c.strokeStyle=OL;c.lineWidth=1.7;c.beginPath();c.ellipse(0,-r*.3,r*.58,r*.46,0,0,7);c.fill();c.stroke();
-  c.save();c.beginPath();c.ellipse(0,-r*.3,r*.57,r*.45,0,0,7);c.clip();c.fillStyle='#f4a040';c.beginPath();c.ellipse(-r*.42,-r*.62,r*.3,r*.26,.3,0,7);c.fill();c.fillStyle='#3a3030';c.beginPath();c.ellipse(r*.46,-r*.6,r*.22,r*.2,-.3,0,7);c.fill();c.restore();
-  // 눈
-  [-1,1].forEach(s=>{const ex=s*r*.22,ey=-r*.3;if(blink){c.strokeStyle='#2a1a1a';c.lineWidth=2;c.beginPath();c.arc(ex,ey-r*.02,r*.09,Math.PI*.15,Math.PI*.85);c.stroke();return;}
-    c.fillStyle='#2a1a22';c.beginPath();c.ellipse(ex,ey,r*.11,r*.14,0,0,7);c.fill();const g=c.createLinearGradient(0,ey-r*.1,0,ey+r*.14);g.addColorStop(0,'rgba(90,60,160,0)');g.addColorStop(1,'rgba(140,110,230,.75)');c.fillStyle=g;c.beginPath();c.ellipse(ex,ey+r*.02,r*.09,r*.1,0,0,7);c.fill();
-    c.fillStyle='#fff';c.beginPath();c.arc(ex-r*.035,ey-r*.06,r*.045,0,7);c.fill();c.beginPath();c.arc(ex+r*.04,ey+r*.05,r*.022,0,7);c.fill();});
-  // 볼·코·입·수염
-  c.fillStyle='rgba(255,130,160,.45)';[-1,1].forEach(s=>{c.beginPath();c.ellipse(s*r*.36,-r*.16,r*.09,r*.055,0,0,7);c.fill();});
-  c.fillStyle='#ff7a9a';c.beginPath();c.moveTo(-r*.045,-r*.2);c.lineTo(r*.045,-r*.2);c.lineTo(0,-r*.15);c.closePath();c.fill();
-  c.strokeStyle=OL;c.lineWidth=1.3;c.beginPath();c.moveTo(0,-r*.15);c.quadraticCurveTo(-r*.03,-r*.09,-r*.08,-r*.11);c.moveTo(0,-r*.15);c.quadraticCurveTo(r*.03,-r*.09,r*.08,-r*.11);c.stroke();
-  c.lineWidth=.9;[-1,1].forEach(s=>{for(let k=-1;k<=1;k++){c.beginPath();c.moveTo(s*r*.3,-r*.18+k*r*.04);c.lineTo(s*r*.58,-r*.2+k*r*.08);c.stroke();}});
-  // 목걸이 + 방울
-  c.fillStyle='#e8302a';c.strokeStyle='#8a1a14';c.lineWidth=1;c.beginPath();c.moveTo(-r*.4,r*.1);c.quadraticCurveTo(0,r*.22,r*.4,r*.1);c.lineTo(r*.4,r*.18);c.quadraticCurveTo(0,r*.3,-r*.4,r*.18);c.closePath();c.fill();c.stroke();
-  pkSuzu(c,0,r*.3,r*.1);
-  // 손짓하는 오른발(마네키네코): 어깨에서 위로 든 팔은 그대로, 손목이 앞뒤로 까딱(손님을 부르는 동작)
-  {const sx=r*.36,sy=r*.24,ex=r*.56,ey=-r*.22;c.fillStyle=W;c.strokeStyle=OL;c.lineWidth=1.6;
-    c.beginPath();c.moveTo(sx-r*.1,sy);c.quadraticCurveTo(ex-r*.16,ey+r*.2,ex-r*.11,ey);c.lineTo(ex+r*.11,ey);c.quadraticCurveTo(ex+r*.06,ey+r*.24,sx+r*.12,sy+r*.04);c.closePath();c.fill();c.stroke();
-    c.save();c.translate(ex,ey);const bend=(Math.sin(t*4.2)*.5+.5);c.scale(1,1-bend*.55);c.rotate(-bend*.25);c.fillStyle=W;c.beginPath();c.ellipse(0,-r*.1,r*.13,r*.14,0,0,7);c.fill();c.stroke();
-    c.fillStyle='#ffa8bc';c.beginPath();c.ellipse(0,-r*.09,r*.06,r*.05,0,0,7);c.fill();[-1,0,1].forEach(q=>{c.beginPath();c.arc(q*r*.055,-r*.18+Math.abs(q)*r*.02,r*.022,0,7);c.fill();});c.restore();
-    c.strokeStyle=OL;c.lineWidth=1.2;c.beginPath();c.moveTo(ex-r*.1,ey+r*.02);c.lineTo(ex+r*.1,ey+r*.02);c.stroke();}
+  c.fillStyle=por(0,-r*.3,r*.62,r*.44);c.strokeStyle=OL;c.lineWidth=1.3;c.beginPath();c.ellipse(0,-r*.3,r*.62,r*.43,0,0,7);c.fill();c.stroke();
+  c.fillStyle='rgba(255,255,255,.9)';c.beginPath();c.ellipse(-r*.26,-r*.56,r*.16,r*.07,-.3,0,7);c.fill();
+  // 이마 삼색 무늬
+  c.fillStyle='#f0a838';c.beginPath();c.ellipse(-r*.06,-r*.66,r*.22,r*.08,.1,0,7);c.fill();c.fillStyle='#2a2626';c.beginPath();c.ellipse(-r*.02,-r*.68,r*.11,r*.05,.1,0,7);c.fill();c.strokeStyle=GD;c.lineWidth=.6;c.beginPath();c.ellipse(-r*.06,-r*.66,r*.22,r*.08,.1,0,7);c.stroke();
+  // 감은 웃는 눈 + 속눈썹
+  c.strokeStyle='#1a1214';c.lineWidth=2.2;[-1,1].forEach(sx=>{const ex=sx*r*.24,ey=-r*.34;c.beginPath();c.arc(ex,ey+r*.06,r*.1,Math.PI*1.15,Math.PI*1.85);c.stroke();c.lineWidth=1.2;c.beginPath();c.moveTo(ex+sx*r*.09,ey);c.lineTo(ex+sx*r*.13,ey-r*.03);c.stroke();c.lineWidth=2.2;});
+  // 볼·붉은 수염·코·웃는 입
+  c.fillStyle='rgba(255,120,140,.35)';[-1,1].forEach(sx=>{c.beginPath();c.ellipse(sx*r*.36,-r*.2,r*.1,r*.06,0,0,7);c.fill();});
+  c.strokeStyle=RD;c.lineWidth=1.4;[-1,1].forEach(sx=>{for(let k=0;k<3;k++){c.beginPath();c.moveTo(sx*r*.3,-r*.24+k*r*.06);c.quadraticCurveTo(sx*r*.42,-r*.27+k*r*.07,sx*r*.52,-r*.26+k*r*.09);c.stroke();}});
+  c.fillStyle='#e84a5a';c.beginPath();c.moveTo(-r*.04,-r*.24);c.lineTo(r*.04,-r*.24);c.lineTo(0,-r*.19);c.closePath();c.fill();
+  c.strokeStyle=RD;c.lineWidth=1.5;c.beginPath();c.moveTo(-r*.16,-r*.17);c.quadraticCurveTo(-r*.08,-r*.09,0,-r*.17);c.quadraticCurveTo(r*.08,-r*.09,r*.16,-r*.17);c.stroke();
+  // 붉은 꼰 목걸이 + 매듭 술 + 큰 금방울
+  c.strokeStyle='#c8141a';c.lineWidth=r*.09;c.beginPath();c.moveTo(-r*.42,-r*.02);c.quadraticCurveTo(0,r*.1,r*.42,-r*.02);c.stroke();c.strokeStyle='rgba(255,140,120,.7)';c.lineWidth=1;c.setLineDash([2,2]);c.stroke();c.setLineDash([]);
+  c.fillStyle='#c8141a';c.beginPath();c.arc(-r*.26,r*.07,r*.05,0,7);c.fill();c.fillStyle=GD;c.beginPath();c.moveTo(-r*.3,r*.1);c.lineTo(-r*.22,r*.1);c.lineTo(-r*.2,r*.26);c.lineTo(-r*.32,r*.26);c.closePath();c.fill();c.strokeStyle='#a8700a';c.lineWidth=.6;for(let k=0;k<4;k++){c.beginPath();c.moveTo(-r*.3+k*r*.03,r*.12);c.lineTo(-r*.31+k*r*.035,r*.25);c.stroke();}
+  pkSuzu(c,0,r*.12,r*.13);
+  // 손짓하는 왼발(보는 쪽 왼쪽): 어깨에서 위로 든 팔 + 손목이 앞뒤로 까딱
+  {const sx=-r*.4,sy=r*.12,ex=-r*.6,ey=-r*.5;c.fillStyle=por(ex,(sy+ey)/2,r*.18,r*.36);c.strokeStyle=OL;c.lineWidth=1.3;c.beginPath();c.moveTo(sx+r*.14,sy+r*.04);c.quadraticCurveTo(ex+r*.2,ey+r*.3,ex+r*.15,ey);c.lineTo(ex-r*.15,ey);c.quadraticCurveTo(ex-r*.2,ey+r*.36,sx-r*.12,sy+r*.02);c.closePath();c.fill();c.stroke();
+    sak(ex+r*.02,(sy+ey)/2+r*.06,r*.1);
+    c.save();c.translate(ex,ey);c.scale(1,1-bend*.5);c.fillStyle=por(0,-r*.12,r*.17,r*.16);c.beginPath();c.ellipse(0,-r*.12,r*.17,r*.16,0,0,7);c.fill();c.strokeStyle=OL;c.stroke();toes(0,-r*.1,r*.15);c.restore();}
   c.restore();}
 function pkDraw(){const cv=$('#pkCv');if(!cv)return;const c=cv.getContext('2d');c.setTransform(2,0,0,2,0,0);const t=pk.t,J=pk.jack>0;
   c.save();c.beginPath();c.roundRect(0,0,PKW,PKH,18);c.clip();
@@ -9054,7 +9060,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=199;
+const GVER=200;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
