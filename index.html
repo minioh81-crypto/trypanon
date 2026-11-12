@@ -821,7 +821,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v201 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v202 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -8858,9 +8858,15 @@ function pkCat(c,cx,cy,r,t){// 마네키네코(참고 사진): 하얀 도자기 
     c.fillStyle=RD;c.beginPath();c.moveTo(sx*r*.22,-r*.62);c.quadraticCurveTo(sx*r*.38,-r*.92,sx*r*.49,-r*.88);c.quadraticCurveTo(sx*r*.55,-r*.66,sx*r*.5,-r*.5);c.closePath();c.fill();c.strokeStyle=GD;c.lineWidth=.8;c.stroke();});
   // 머리
   c.fillStyle=por(0,-r*.3,r*.62,r*.44);c.strokeStyle=OL;c.lineWidth=1.3;c.beginPath();c.ellipse(0,-r*.3,r*.62,r*.43,0,0,7);c.fill();c.stroke();
-  c.fillStyle='rgba(255,255,255,.9)';c.beginPath();c.ellipse(-r*.26,-r*.56,r*.16,r*.07,-.3,0,7);c.fill();
+  c.fillStyle='rgba(255,255,255,.9)';c.beginPath();c.ellipse(-r*.36,-r*.42,r*.1,r*.05,-.4,0,7);c.fill();
   // 이마 삼색 무늬
-  c.fillStyle='#f0a838';c.beginPath();c.ellipse(-r*.06,-r*.66,r*.22,r*.08,.1,0,7);c.fill();c.fillStyle='#2a2626';c.beginPath();c.ellipse(-r*.02,-r*.68,r*.11,r*.05,.1,0,7);c.fill();c.strokeStyle=GD;c.lineWidth=.6;c.beginPath();c.ellipse(-r*.06,-r*.66,r*.22,r*.08,.1,0,7);c.stroke();
+  // 머리 무늬: 보는 쪽 왼쪽은 검은 반점, 오른쪽은 황금빛 주황 반점(머리 안쪽으로 잘라 붙임, 가장자리 금선)
+  c.save();c.beginPath();c.ellipse(0,-r*.3,r*.61,r*.42,0,0,7);c.clip();
+  {const gB=c.createLinearGradient(-r*.5,-r*.75,-r*.05,-r*.45);gB.addColorStop(0,'#3a3434');gB.addColorStop(1,'#141010');c.fillStyle=gB;c.beginPath();c.moveTo(-r*.58,-r*.62);c.bezierCurveTo(-r*.5,-r*.78,-r*.18,-r*.8,-r*.04,-r*.72);c.bezierCurveTo(-r*.02,-r*.6,-r*.1,-r*.5,-r*.22,-r*.5);c.bezierCurveTo(-r*.34,-r*.5,-r*.46,-r*.44,-r*.6,-r*.4);c.closePath();c.fill();
+   const gO=c.createLinearGradient(r*.05,-r*.78,r*.55,-r*.45);gO.addColorStop(0,'#ffcc5a');gO.addColorStop(.6,'#f09a2a');gO.addColorStop(1,'#c8701a');c.fillStyle=gO;c.beginPath();c.moveTo(-r*.04,-r*.72);c.bezierCurveTo(r*.14,-r*.8,r*.46,-r*.76,r*.6,-r*.6);c.bezierCurveTo(r*.62,-r*.44,r*.48,-r*.42,r*.36,-r*.47);c.bezierCurveTo(r*.24,-r*.52,r*.08,-r*.5,-r*.02,-r*.58);c.closePath();c.fill();
+   c.strokeStyle=GD;c.lineWidth=.9;c.beginPath();c.moveTo(-r*.6,-r*.4);c.bezierCurveTo(-r*.46,-r*.44,-r*.34,-r*.5,-r*.22,-r*.5);c.bezierCurveTo(-r*.1,-r*.5,-r*.02,-r*.6,-r*.02,-r*.58);c.bezierCurveTo(r*.08,-r*.5,r*.24,-r*.52,r*.36,-r*.47);c.bezierCurveTo(r*.48,-r*.42,r*.62,-r*.44,r*.62,-r*.5);c.stroke();
+   c.fillStyle='rgba(255,255,255,.35)';c.beginPath();c.ellipse(-r*.3,-r*.68,r*.1,r*.03,-.2,0,7);c.fill();c.beginPath();c.ellipse(r*.28,-r*.68,r*.1,r*.03,.2,0,7);c.fill();}
+  c.restore();
   // 감은 웃는 눈 + 속눈썹
   c.strokeStyle='#1a1214';c.lineWidth=2.2;[-1,1].forEach(sx=>{const ex=sx*r*.24,ey=-r*.34;c.beginPath();c.arc(ex,ey+r*.06,r*.1,Math.PI*1.15,Math.PI*1.85);c.stroke();c.lineWidth=1.2;c.beginPath();c.moveTo(ex+sx*r*.09,ey);c.lineTo(ex+sx*r*.13,ey-r*.03);c.stroke();c.lineWidth=2.2;});
   // 볼·붉은 수염·코·웃는 입
@@ -9089,7 +9095,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=201;
+const GVER=202;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
