@@ -1469,3 +1469,7 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 꼭대기 보주	top jewel	頂の宝珠
 💼 {} 투자 제안 · 외 {}건	💼 Investment offer: {} · {} more	💼 {}の投資提案 · ほか{}件
 💼 {} 투자 제안	💼 Investment offer: {}	💼 {}の投資提案
+🌊 쓰나미 · {}	🌊 Tsunami · {}	🌊 津波 · {}
+🌊 쓰나미 · {} · 원정 {}%	🌊 Tsunami · {} · expedition {}%	🌊 津波 · {} · 遠征 {}%
+{} 근처 바다·해안이 크게 피해 · {}초 동안 해상 원정 최대 −70%, 가까운 육상 최대 −25% (멀수록 작아져요)	Heavy damage to seas and coasts near {} · for {}s: sea expeditions up to −70%, nearby land up to −25% (less farther away)	{}付近の海・沿岸に大きな被害 · {}秒間 海上遠征 最大 −70%、近くの陸上 最大 −25%(遠いほど小さく)
+{} 근처 바다·해안이 크게 피해 · {}초 동안 해상 원정 최대 −70%, 가까운 육상 최대 −25% (멀수록 작아져요) · 지금 {} {}% (진원에서 {}km)	Heavy damage to seas and coasts near {} · for {}s: sea expeditions up to −70%, nearby land up to −25% (less farther away) · now {} {}% ({} km from epicenter)	{}付近の海・沿岸に大きな被害 · {}秒間 海上遠征 最大 −70%、近くの陸上 最大 −25%(遠いほど小さく) · 今 {} {}%(震源から{}km)
