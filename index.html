@@ -824,7 +824,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v207 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v208 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -4968,7 +4968,7 @@ const FURN=[
  {id:'shelf',n:'책장',p:700},{id:'plant',n:'화분',p:200},{id:'case',n:'유물 진열장',p:3000},{id:'frame',n:'화석 액자',p:2000},{id:'tank',n:'어항',p:2500},{id:'fridge',n:'냉장고',p:3000},{id:'kimchi',n:'김치냉장고',p:2800},{id:'styler',n:'스타일러',p:3500},{id:'aircon',n:'에어컨',p:3200},{id:'washer',n:'세탁기',p:2500},{id:'wardrobe',n:'옷장',p:2000},{id:'robot',n:'로봇청소기',p:2200},{id:'toilet',n:'비데 변기',p:1800},{id:'basin',n:'세면대',p:1400},{id:'shower',n:'샤워 부스',p:2600},{id:'sinkU',n:'ㄷ자 싱크대',p:4800},{id:'sinkL',n:'ㄴ자 싱크대',p:3800},{id:'island',n:'아일랜드 식탁',p:3000},{id:'table4',n:'4인 식탁',p:2400},{id:'shoe',n:'신발장',p:900},{id:'purifier',n:'공기청정기',p:1600},{id:'dryer',n:'건조기',p:2600},{id:'dog',n:'강아지',p:1800},{id:'cat',n:'고양이',p:1800},{id:'chick',n:'병아리',p:1500},{id:'rabbit',n:'토끼',p:2200},{id:'squirrel',n:'다람쥐',p:2000},{id:'hedgehog',n:'고슴도치',p:2400},{id:'sheep',n:'양',p:2500},{id:'fox',n:'여우',p:3000},{id:'penguin',n:'펭귄',p:3000},{id:'bear',n:'곰',p:3500},{id:'panda',n:'판다',p:4000},{id:'dragon',n:'드래곤',p:12000},{id:'unicorn',n:'유니콘',p:15000}];
 const landOf=()=>{S.land=S.land||{lv:1,tiles:{},furn:{}};return S.land;};
 const landSize=()=>LAND_SIZE[landOf().lv-1];
-const BIG={hwaseong:4,house_mk:2,house_mc:2,house_bk:2,house_ry:3,house_sr:3,jinja:3,azuchi:3,house_v:3,house_s:2,house_h:2,house_b:2,house_d:2,house_y:3,museum:3,pond:2,fountain:2},BIGS={hwaseong:1,house_mk:1.75,house_mc:1.75,house_bk:1.75,house_ry:2.5,house_sr:2.5,jinja:2.5,azuchi:2.5,house_v:1,house_s:1.75,house_h:1.75,house_b:1.7,house_d:1.7,house_y:1,museum:1,pond:2,fountain:1.75},GRAND={house_y:1,museum:1,hwaseong:1};
+const BIG={hwaseong:4,house_mk:2,house_mc:2,house_bk:2,house_ry:3,house_sr:3,jinja:3,azuchi:4,house_v:3,house_s:2,house_h:2,house_b:2,house_d:2,house_y:3,museum:3,pond:2,fountain:2},BIGS={hwaseong:1,house_mk:1.75,house_mc:1.75,house_bk:1.75,house_ry:2.5,house_sr:2.5,jinja:2.5,azuchi:2.5,house_v:1,house_s:1.75,house_h:1.75,house_b:1.7,house_d:1.7,house_y:1,museum:1,pond:2,fountain:1.75},GRAND={house_y:1,museum:1,hwaseong:1};
 const bsz=id=>BIG[id]||1;
 function landOcc(except){const o={},T=landOf().tiles;for(const k in T){if(k===except)continue;const [x,y]=k.split(',').map(Number),n=bsz(T[k]);for(let i=0;i<n;i++)for(let j=0;j<n;j++)o[(x+i)+','+(y+j)]=k;}return o;}
 // tapping any tile places a big building so that the tapped tile sits under it (centre first), instead of demanding the top-left corner
@@ -5684,7 +5684,31 @@ function model3(id){const g=new THREE.Group(),A=f=>L3.anims.push(f);
       const fl=new THREE.Mesh(new THREE.ConeGeometry(.06,.18,8),new THREE.MeshBasicMaterial(Object.assign({color:'#ffb030',opacity:.95},AD)));fl.position.set(x,.56,z);g.add(fl);fires.push(fl);lampFx(g,x,.55,z,{c:'#ff9a40',pool:.45,h:.35,r:.03});}
     A(t=>{fires.forEach((f,i)=>{const k=1+Math.sin(t*12+i*2)*.15+Math.sin(t*7.3+i)*.1;f.scale.set(1,k,1);});});
     nightLit(g,.35);break;}
-  case 'azuchi':{g.add(B3(2.8,.06,2.8,'#a8a29a'));const c=s3Azuchi();c.scale.setScalar(.82);c.position.y=.06;g.add(c);nightLit(g,.3);break;}
+  case 'azuchi':{const AD={transparent:true,depthWrite:false,blending:THREE.AdditiveBlending};g.add(B3(3.9,.06,3.9,'#8ab060'));g.add(B3(3.1,.02,3.1,'#c8bc9a',0,.06,-.2));
+    // 천수(본성): 넓게 휘어 오르는 돌담 위 5층 — 흰 벽·검은 판자 → 붉은 팔각층 금 난간 → 금빛 꼭대기 · 금 샤치호코
+    const c=s3Azuchi();c.scale.setScalar(1.02);c.position.set(0,.06,-.25);g.add(c);
+    // 처마 등불(밤에 빛남)
+    for(const [y,w] of[[1.42,.9],[1.85,.72],[2.25,.58]])for(const sx of[-1,1])lampFx(g,sx*w,y,-.25+w*.85,{c:'#ffc070',pool:.25,h:.22,r:.025});
+    // 정면 돌계단 + 양옆 석등
+    const ST=L3M('#fff',{map:L3W(L3TX.dark(),1,.4)});for(let i=0;i<9;i++){const m=new THREE.Mesh(new THREE.BoxGeometry(.56,.06+i*.06,.13),ST);m.position.set(0,.06+(.06+i*.06)/2,1.88-i*.12);g.add(m);}
+    for(const sx of[-1,1])for(const z of[1.85,1.35]){g.add(B3(.08,.18,.08,'#a8a294',sx*.42,.06,z));g.add(B3(.16,.1,.16,'#bcb6a8',sx*.42,.24,z));const r=new THREE.Mesh(new THREE.ConeGeometry(.14,.08,4),L3M('#8a857c'));r.rotation.y=Math.PI/4;r.position.set(sx*.42,.38,z);g.add(r);lampFx(g,sx*.42,.29,z,{c:'#ffb060',pool:.35,h:.25,r:.03});}
+    // 앞 양 모서리 망루(야구라): 작은 돌담 + 흰 벽 2층 + 박공 지붕
+    const WL=L3M('#fff',{map:L3W(L3TX.plaster(),1,1)});for(const sx of[-1,1]){const y=new THREE.Group();y.position.set(sx*1.5,0,1.35);g.add(y);
+      const b=new THREE.Mesh(l3Lathe([[0,0],[.42,0],[.34,.36],[0,.36]],4),L3M('#fff',{map:L3W(L3TX.dark(),1,.6)}));b.rotation.y=Math.PI/4;b.position.y=.06;y.add(b);
+      const fl2=(w,h,yy)=>{const bx=new THREE.Mesh(new THREE.BoxGeometry(w,h,w),WL);bx.position.y=yy+h/2;y.add(bx);y.add(B3(w+.005,h*.35,w+.005,'#22222a',0,yy));const r=l3JRoof(w+.18,w+.18,h*.55,'#2e333c',{ridge:.25,lift:.12});r.position.y=yy+h;y.add(r);};
+      fl2(.44,.24,.42);fl2(.3,.18,.42+.24+.1);
+      lampFx(y,0,.55,.24,{c:'#ffc070',pool:.2,h:.2,r:.02});}
+    // 낮은 흰 담(도베이) — 좌우로
+    for(const sx of[-1,1]){g.add(B3(.9,.22,.08,'#f4f2ea',sx*.85,.06,1.35));g.add(B3(.96,.05,.16,'#2e333c',sx*.85,.28,1.35));}
+    // 오다 문장 노보리(보라 깃발) — 계단 양옆 · 바람에 흔들림
+    const mon=s3Tex('odamon',64,160,(x,w,h)=>{x.fillStyle='#3a1a5a';x.fillRect(0,0,w,h);x.fillStyle='#e8b030';x.save();x.translate(w/2,h*.32);for(let i=0;i<5;i++){x.rotate(Math.PI*2/5);x.beginPath();x.ellipse(0,-11,8,10,0,0,7);x.fill();}x.fillStyle='#3a1a5a';x.beginPath();x.arc(0,0,5,0,7);x.fill();x.restore();x.strokeStyle='#e8b030';x.lineWidth=3;x.strokeRect(2,2,w-4,h-4);});
+    const fl=[];for(const sx of[-1,1])for(const z of[1.6,1.1]){const px=sx*.62;g.add(C3(.012,.012,.85,'#2a1a10',px,.06,z,5));const f=new THREE.Mesh(new THREE.PlaneGeometry(.16,.4),L3M('#fff',{map:mon,side:THREE.DoubleSide}));f.position.set(px+sx*.08,.68,z);g.add(f);fl.push(f);}
+    A(t=>fl.forEach((f,i)=>{f.rotation.y=Math.sin(t*2.6+i)*.3;}));
+    // 벚나무 + 흩날리는 꽃잎
+    for(const [x,z,k] of[[-1.65,-1.55,1.1],[1.65,-1.55,1.1],[-1.7,.35,1],[1.7,.35,1],[-1.2,1.75,.85],[1.2,1.75,.85]]){const t2=new THREE.Group();l3Tree(t2,0,0,k,'',{sakura:1});t2.position.set(x,.06,z);g.add(t2);}
+    const PT=s3Tex('petal',32,32,(x,w,h)=>{x.fillStyle='#ffc0d4';x.beginPath();x.ellipse(16,16,12,7,.4,0,7);x.fill();}),PS=[];for(let i=0;i<34;i++){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:PT,transparent:true,depthWrite:false}));sp.scale.set(.07,.07,.07);g.add(sp);PS.push({sp,a:Math.random()*6.3,r:.6+Math.random()*1.3,y:Math.random()*2.6,v:.15+Math.random()*.2});}
+    let lt=0;A(t=>{const dt=Math.min(.05,Math.max(0,t-lt));lt=t;for(const p of PS){p.y-=p.v*dt;p.a+=dt*.2;if(p.y<.06)p.y=2.4+Math.random()*.4;p.sp.position.set(Math.cos(p.a)*p.r,p.y,Math.sin(p.a)*p.r-.2);}});
+    nightLit(g,.35);break;}
   case 'house_sr':{const az=false,W1='#f6f4ee',RF='#4a7a6a';g.add(B3(2.8,.06,2.8,'#a8a29a'));
     const st=mesh(new THREE.CylinderGeometry(1.0,1.3,.55,4),'#8a8a84');st.rotation.y=Math.PI/4;st.position.y=.06+.275;g.add(st);
     let y=.61;[[1.4,.5,W1],[1.05,.42,az?'#c8242a':W1],[.75,.38,az?'#e8b030':W1]].forEach(([w,h,c],i)=>{g.add(B3(w,h,w,c,0,y));g.add(hipRoof(w,w,i===2?.42:.24,RF,y+h));y+=h+(i===2?.42:.24);});
@@ -9220,7 +9244,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=207;
+const GVER=208;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
