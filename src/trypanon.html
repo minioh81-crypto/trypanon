@@ -805,7 +805,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v208 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v209 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -7139,6 +7139,10 @@ const LM3={
   l3Add(G,new T.BoxGeometry(1.5,.12,1.5),L3M('#fff',{map:L3W(L3TX.stone(),2,.4)}),0,.06,0);l3Add(G,new T.BoxGeometry(1.25,.12,1.25),L3M('#cfc4a8'),0,.18,0);
   const pr=[[.58,0],[.6,.4],[.56,.9],[.48,1.4],[.4,1.8],[.36,2.05],[.35,2.2]],lg=l3Lathe(pr,32);
   l3Add(G,lg,L3M('#fff',{map:L3W(L3TX.courses(),3,2.5)}),0,.24,0);l3Add(G,new T.BoxGeometry(.24,.24,.14),L3M('#1a1410'),0,.24+1.1,.53);
+  {const ip=pr.map(([x,y])=>[x-.07,y]);l3Add(G,l3Lathe(ip,32),L3M('#6a5c48',{side:T.BackSide,map:L3W(L3TX.courses(),3,2.5)}),0,.24,0);
+   const rim=new T.RingGeometry(.28,.36,32);const rm=l3Add(G,rim,L3M('#d8ccae',{side:T.DoubleSide}),0,.24+2.2,0);rm.rotation.x=-Math.PI/2;
+   const fl=l3Add(G,new T.CircleGeometry(.5,32),L3M('#4a3e2c'),0,.24+1.0,0);fl.rotation.x=-Math.PI/2;
+   const sl=l3Add(G,new T.CircleGeometry(.3,24,0,Math.PI),L3M('#bfb293',{side:T.DoubleSide}),0,.24+2.21,0);sl.rotation.x=-Math.PI/2;}
   const tm=L3M('#c8b48a');for(const s of[-1,1]){l3Add(G,new T.BoxGeometry(.86,.1,.1),tm,0,2.5,s*.33);l3Add(G,new T.BoxGeometry(.1,.1,.86),tm,s*.33,2.6,0);}
   G.userData.cam={dist:6.5,y:1.3};G.userData.bg='#1a2a4a';return G;},
  seokgul(){const T=THREE,G=new T.Group(),gr=L3M('#efe8da',{shininess:25});l3Add(G,new T.CylinderGeometry(3,3,.1,40),L3M('#6a5e52'),0,-.05,0);
@@ -9225,7 +9229,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=208;
+const GVER=209;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
