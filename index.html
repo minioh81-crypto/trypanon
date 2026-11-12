@@ -824,7 +824,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v214 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v215 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2827,7 +2827,7 @@ const wxOf=rid=>wxAt(Date.now(),rid);
 const wxY=w=>w.y>0?w.y*(S.mode==='hard'?.6:1):w.y*(S.mode==='hard'?1.4:1)*(w.id==='hot'?1-Math.min(1,L('heat')/MAXLV):1);
 const wxG=w=>w.g*(S.mode==='hard'?1.4:1)*(w.id==='hot'?1-Math.min(1,L('heat')/MAXLV):1);
 // rare map-wide rainbow: boosts every expedition regardless of local weather
-const rbAt=t=>hsh(Math.floor(t/WX_MS),4242)<(S.mode==='hard'?.08:.1),rbOn=()=>rbAt(Date.now()),RBY=()=>S.mode==='hard'?20:30,RBG=()=>S.mode==='hard'?12:20;
+const rbAt=t=>hsh(Math.floor(t/WX_MS),4242)<(S.mode==='hard'?.08:.1),rbOn=()=>rbAt(Date.now())&&!(isJP&&S.dz&&S.dz.k==='typhoon'&&S.dz.until>Date.now()),RBY=()=>S.mode==='hard'?20:30,RBG=()=>S.mode==='hard'?12:20;
 const rbFx=()=>`모든 원정 재료 +${RBY()}% · 굴착 +${RBG()}%`;
 const wxDig=rid=>rid?(rbOn()?1+RBG()/100:1+wxG(wxOf(rid))/100):1; // a rainbow replaces the local weather effect
 function wxAmt(amt,rid){const p=rbOn()?RBY()/100:wxY(wxOf(rid))/100;if(!p)return amt;const d=Math.max(1,Math.round(Math.abs(p)*amt));return Math.max(1,amt+(p>0?d:-d));}
@@ -2863,7 +2863,7 @@ function wxIcon(id){const A=(t,v,d,b=0)=>`<animateTransform attributeName="trans
 const WXB={jiri:[2,13],mai:[-10,-9]};
 function wxIcons(){const hw=homeWx(),hp=isJP?JPP(...HOME):[PX(HOME[0]),PY(HOME[1])],bx=hp[0]+(isJP?-12:10),by=hp[1]+(isJP?10:-10);return `<g class="wxi" data-w="${hw.id}" data-r="yanggu" transform="translate(${bx.toFixed(1)},${by.toFixed(1)})"><circle r="7.4" fill="rgba(12,18,22,.85)" stroke="rgba(255,215,106,.8)" stroke-width=".8"/><g transform="scale(.6)">${wxIcon(hw.id)}</g></g>`+REG.map(r=>{const x=mapX(r),y=mapY(r),w=wxOf(r.id);return `<g class="wxi" data-w="${w.id}" data-r="${r.id}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})${isJP?' scale(.8)':''}"><circle r="8.6" fill="rgba(12,18,22,.85)" stroke="rgba(255,255,255,.55)" stroke-width=".8"/><g transform="scale(.72)">${wxIcon(w.id)}</g></g>`;}).join('');}
 function rainbowSVG(){// diagonal rainbow: rises out of the west sea and comes down between Seoraksan and Taebaeksan
-  const A=isJP?JPP(132.4,33.2):[PX(125.35),PY(35.15)],B=isJP?JPP(141.4,39.6):[PX(128.72),PY(37.62)],dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy);let nx=-dy/L,ny=dx/L;if(ny>0){nx=-nx;ny=-ny;}
+  const A=isJP?JPP(133.6,36.4):[PX(125.35),PY(35.15)],B=isJP?JPP(141.4,39.6):[PX(128.72),PY(37.62)],dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy);let nx=-dy/L,ny=dx/L;if(ny>0){nx=-nx;ny=-ny;}
   const M=[(A[0]+B[0])/2,(A[1]+B[1])/2],H=L*.42,cols=['#ff4d4d','#ff9a3a','#ffe14a','#5fd06a','#4aa8ff','#4a62e0','#a64aff'],q=(o,k=1)=>{const a=[A[0]+nx*o,A[1]+ny*o],b=[B[0]+nx*o,B[1]+ny*o],c=[M[0]+nx*(H+o*k),M[1]+ny*(H+o*k)];return [a,b,c];};
   let g=`<g opacity=".42"><animate attributeName="opacity" values=".32;.52;.32" dur="3s" repeatCount="indefinite"/>`;
   cols.forEach((c,i)=>{const [a,b,cc]=q((3-i)*3.6,1.5);g+=`<path d="M${a[0].toFixed(1)},${a[1].toFixed(1)} Q${cc[0].toFixed(1)},${cc[1].toFixed(1)} ${b[0].toFixed(1)},${b[1].toFixed(1)}" fill="none" stroke="${c}" stroke-width="3.8" stroke-linecap="round"/>`;});
@@ -2876,7 +2876,7 @@ function wxSet(f){const slot=Math.floor(Date.now()/WX_MS);if(!f&&slot===wxSlot)r
   const mw=$('#mWash');const mi=$('#mWxI');if(mi)mi.innerHTML=wxIcons();
   const a=S.ex.active;if(a){const w=wxOf(a);if(!f&&wxSeen[a]&&wxSeen[a]!==w.id&&S.story)toast(`${w.ic} ${regById(a).n} 날씨가 ${w.n}(으)로 바뀌었어요 — ${wxFx(w)}`);}
   for(const r of REG)wxSeen[r.id]=wxOf(r.id).id;mapInfoKey='';if(!f){if(!$('#rpop').hidden)renderCard();if(exp){const r=exp.r;$('#eArt').innerHTML=regionArt(r.id,{withChar:true,rx:0,label:r.n+' 풍경',cx:r.t==='sea'?44:64,cy:168,ch:r.t==='sea'?70:84});}}}
-setInterval(()=>wxSet(false),5000);
+let rbShown=null;setInterval(()=>{wxSet(false);const on=rbOn();if(on!==rbShown){rbShown=on;const mr=$('#mRb');if(mr)mr.innerHTML=on?rainbowSVG():'';}},5000);
 // ---------------- sound: generated BGM + effects (Web Audio, no files) and the admiral's voice (speech synthesis) ----------------
 const SND={ctx:null,master:null,bgmG:null,sfxG:null,on:false,timer:null,step:0,next:0,last:{},song:'field'};
 const sndPref=()=>Object.assign({bgm:1,sfx:1,voice:1},S.snd||{},{vol:.8});
@@ -9491,7 +9491,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=214;
+const GVER=215;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
