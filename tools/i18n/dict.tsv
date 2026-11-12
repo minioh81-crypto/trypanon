@@ -1325,3 +1325,145 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 🏯 아즈치성을 옷장에서 사면 「내 땅」에 지을 수 있어요.	🏯 Buy Azuchi Castle here to build it on My Land.	🏯 ここで安土城を買うと「マイランド」に建てられます。
 아즈치성 3D · 끌어서 돌려 보기	Azuchi Castle 3D · drag to rotate	安土城の3D・ドラッグで回転
 화승총 3D · 끌어서 돌려 보기	Matchlock 3D · drag to rotate	火縄銃の3D・ドラッグで回転
+원정 굴착력 +{}%	Expedition drill power +{}%	遠征の掘削力 +{}%
+본공 굴착 보상 +{}%	Main bore dig reward +{}%	本坑の掘削報酬 +{}%
+본공 굴착력 +{}%	Main bore drill power +{}%	本坑の掘削力 +{}%
+보물 상자 등장 +{}%	Treasure chest spawns +{}%	宝箱の出現 +{}%
+원정 자원 추가 획득 확률 +{}%p	Extra expedition material chance +{}%p	遠征資源の追加獲得率 +{}%p
+유물 감정가 +{}%	Relic appraisal value +{}%	遺物の鑑定額 +{}%
+랜드마크 조각	Landmark Pieces	ランドマークのかけら
+{} 원정 · {}/5	{} expedition · {}/5	{}遠征 · {}/5
+{} {}/5	{} {}/5	{} {}/5
+{} ✓	{} ✓	{} ✓
+이 지형에서 나오는 유물·화석·랜드마크	Relics, fossils & landmarks found here	この地形で出る遺物・化石・ランドマーク
+랜드마크 조각 · 깊이 상관없이 · {}	Landmark piece · any depth · {}	ランドマークのかけら · 深さ不問 · {}
+{}의 명소 {}곳. 정해진 원정 지형에서 깊이와 상관없이 블록을 깰 때 가끔 조각이 나와요({} 블록당 {}%). 조각 5개를 모으면 완성되고 효과가 생겨요. 완성 {}/{} · 전부 모으면 본공 굴착력·보상 +2% 추가	{} famous sights: {}. Pieces sometimes drop when you break blocks at the set expedition site, at any depth ({}: {}% per block). Collect 5 pieces to complete one and gain its bonus. Completed {}/{} · Complete all for +2% main bore drill power & reward	{}の名所{}か所。決まった遠征地形で深さに関係なくブロックを壊すと、ときどきかけらが出ます({}・ブロックごとに{}%)。かけらを5個集めると完成して効果がつきます。完成 {}/{} · 全部集めると本坑の掘削力・報酬 +2%
+{}의 명소 {}곳. 정해진 원정 지형에서 깊이와 상관없이 블록을 깰 때 가끔 조각이 나와요({} 블록당 {}%). 조각 5개를 모으면 완성되고 효과가 생겨요. 완성 {}/{} · 🏆 전부 완성: 본공 굴착력·보상 +2%	{} famous sights: {}. Pieces sometimes drop when you break blocks at the set expedition site, at any depth ({}: {}% per block). Collect 5 pieces to complete one and gain its bonus. Completed {}/{} · 🏆 All complete: +2% main bore drill power & reward	{}の名所{}か所。決まった遠征地形で深さに関係なくブロックを壊すと、ときどきかけらが出ます({}・ブロックごとに{}%)。かけらを5個集めると完成して効果がつきます。完成 {}/{} · 🏆 全部完成: 本坑の掘削力・報酬 +2%
+랜드마크 조각 · {}의 {}	Landmark piece · {}: {}	ランドマークのかけら · {}の{}
+랜드마크 완성! {}	Landmark complete! {}	ランドマーク完成! {}
+랜드마크 전부 완성! {}의 명소 {}곳	All landmarks complete! {} sights of {}	ランドマーク全部完成! {}の名所{}か所
+{}에서 찾았어요 · 조각 {}/5 · 완성하면 {}	Found at {} · piece {}/5 · when complete: {}	{}で見つけました · かけら {}/5 · 完成すると {}
+마지막 조각: {} · 효과 발동: {}	Last piece: {} · bonus active: {}	最後のかけら: {} · 効果発動: {}
+효과 발동: 본공 굴착력·굴착 보상 +2% (추가)	Bonus active: +2% main bore drill power & dig reward (extra)	効果発動: 本坑の掘削力・掘削報酬 +2% (追加)
+{} 조각	{} piece	{}のかけら
+🏯 랜드마크 · {}	🏯 Landmark · {}	🏯 ランドマーク · {}
+🏆 랜드마크 {}곳 완성	🏆 {} landmarks complete	🏆 ランドマーク{}か所完成
+본공 굴착력 +2% · 본공 굴착 보상 +2%	Main bore drill power +2% · main bore dig reward +2%	本坑の掘削力 +2% · 本坑の掘削報酬 +2%
+광화문 이순신 장군 동상	Statue of Admiral Yi Sun-sin, Gwanghwamun	光化門の李舜臣将軍像
+세종대왕 동상	Statue of King Sejong the Great	世宗大王像
+남산서울타워	N Seoul Tower	Nソウルタワー
+경복궁 근정전	Geunjeongjeon Hall, Gyeongbokgung	景福宮 勤政殿
+광화문	Gwanghwamun Gate	光化門
+숭례문	Sungnyemun Gate	崇礼門
+수원 화성 팔달문	Paldalmun, Suwon Hwaseong	水原華城 八達門
+불국사 다보탑	Dabotap Pagoda, Bulguksa	仏国寺 多宝塔
+첨성대	Cheomseongdae Observatory	瞻星台
+석굴암 본존불	Seokguram Grotto Buddha	石窟庵 本尊仏
+도쿄 타워	Tokyo Tower	東京タワー
+금각사	Kinkaku-ji	金閣寺
+오사카성	Osaka Castle	大阪城
+후시미 이나리 센본도리이	Fushimi Inari Senbon Torii	伏見稲荷 千本鳥居
+히메지성	Himeji Castle	姫路城
+이쓰쿠시마 신사 도리이	Itsukushima Shrine Torii	厳島神社の大鳥居
+구마모토성	Kumamoto Castle	熊本城
+슈리성	Shuri Castle	首里城
+삿포로 시계탑	Sapporo Clock Tower	札幌時計台
+주손지 금색당	Chuson-ji Konjikido	中尊寺金色堂
+서울 광화문 광장 · 갑옷에 장검을 짚고 선 충무공	Gwanghwamun Square, Seoul · the admiral standing in armor with his long sword	ソウル光化門広場 · 鎧姿で長剣を携えて立つ忠武公
+서울 광화문 광장 · 책을 펼쳐 든 채 앉은 세종대왕	Gwanghwamun Square, Seoul · King Sejong seated with an open book	ソウル光化門広場 · 本を広げて座る世宗大王
+서울 남산 꼭대기 · 서울을 내려다보는 전망 타워	Top of Namsan, Seoul · the tower overlooking the city	ソウル南山の頂上 · 街を見下ろす展望タワー
+조선 왕궁의 으뜸 전각 · 계룡산은 한때 새 도읍 후보지였어요	Main hall of the Joseon royal palace · Gyeryongsan was once a candidate for the new capital	朝鮮王宮の正殿 · 鶏龍山はかつて新しい都の候補地でした
+경복궁의 정문 · 세 개의 홍예문 위 2층 문루	Main gate of Gyeongbokgung · a two-story pavilion over three arches	景福宮の正門 · 3つのアーチの上に2層の楼閣
+국보 1호였던 서울 남대문 · 복원에 강원도 금강송을 썼어요	Seoul's Great South Gate, once National Treasure No. 1 · restored with Gangwon pine	かつて国宝1号だったソウル南大門 · 修復に江原道の金剛松を使いました
+정조가 쌓은 성곽 · 서해와 가까운 수원의 남문	Fortress built by King Jeongjo · Suwon's south gate near the West Sea	正祖が築いた城郭 · 西海に近い水原の南門
+경주 불국사 · 10원 동전 속 그 탑	Bulguksa, Gyeongju · the pagoda on the 10-won coin	慶州 仏国寺 · 10ウォン硬貨のあの塔
+경주 · 신라 선덕여왕 때 별을 살피던 천문대	Gyeongju · Silla observatory from Queen Seondeok's reign	慶州 · 新羅の善徳女王の時代の天文台
+경주 토함산 · 동해 해돋이를 바라보는 부처님	Tohamsan, Gyeongju · the Buddha facing the East Sea sunrise	慶州 吐含山 · 東海の日の出を見つめる仏様
+도쿄 미나토구 · 빨강·흰색 철탑	Minato, Tokyo · the red-and-white steel tower	東京都港区 · 赤と白の鉄塔
+교토 · 금박을 입힌 누각 (금박은 이시카와 가나자와 특산)	Kyoto · the gold-leaf pavilion (gold leaf is a Kanazawa, Ishikawa specialty)	京都 · 金箔の楼閣 (金箔は石川・金沢の特産)
+오사카 · 도요토미 히데요시가 쌓은 성	Osaka · the castle built by Toyotomi Hideyoshi	大阪 · 豊臣秀吉が築いた城
+교토 · 붉은 도리이 수천 개가 이어진 길	Kyoto · a path of thousands of red torii	京都 · 数千の赤い鳥居が続く道
+효고 · 흰 백로처럼 보이는 성	Hyogo · the castle that looks like a white heron	兵庫 · 白鷺のように見える城
+히로시마 · 바다 위에 선 붉은 도리이	Hiroshima · the red torii standing in the sea	広島 · 海に立つ赤い鳥居
+구마모토 · 휘어 오르는 무샤가에시 돌담	Kumamoto · the curving musha-gaeshi stone walls	熊本 · 反り上がる武者返しの石垣
+오키나와 · 류큐 왕국의 붉은 궁전	Okinawa · the red palace of the Ryukyu Kingdom	沖縄 · 琉球王国の赤い宮殿
+홋카이도 삿포로 · 140년 넘게 울리는 시계	Sapporo, Hokkaido · a clock ringing for over 140 years	北海道札幌 · 140年以上鳴り続ける時計
+이와테 히라이즈미 · 온통 금으로 덮은 불당	Hiraizumi, Iwate · a hall covered entirely in gold	岩手 平泉 · 全体を金で覆った御堂
+받침돌	pedestal	台座
+갑옷 자락	armor skirt	鎧の裾
+갑옷 몸통	armored torso	鎧の胴
+장검 쥔 손	hand on the sword	長剣を握る手
+투구 쓴 얼굴	helmeted face	兜をかぶった顔
+용포 자락	royal robe hem	竜袍の裾
+무릎 위 책	book on the lap	膝の上の本
+용포 가슴	royal robe chest	竜袍の胸
+익선관 쓴 얼굴	face with royal cap	翼善冠をかぶった顔
+남산 숲	Namsan forest	南山の森
+타워 기둥 아래	lower tower shaft	塔の柱の下
+타워 기둥 위	upper tower shaft	塔の柱の上
+전망대	observation deck	展望台
+안테나	antenna	アンテナ
+2단 월대	two-tier terrace	2段の月台
+기단·돌계단	base & stone steps	基壇・石段
+붉은 기둥	red pillars	赤い柱
+아래층 지붕	lower roof	下層の屋根
+위층 팔작지붕	upper hip-and-gable roof	上層の入母屋屋根
+홍예문	arched gates	虹霓門
+석축 위	top of the stone wall	石積みの上
+아래층 누각	lower pavilion	下層の楼閣
+위층 지붕	upper roof	上層の屋根
+홍예 석축	arched stone base	虹霓の石積み
+누각 기둥	pavilion pillars	楼閣の柱
+성벽 아래	lower wall	城壁の下
+성벽 위·여장	wall top & battlements	城壁の上・女墻
+문루 기둥	gate-tower pillars	門楼の柱
+사각 난간	square railing	四角い欄干
+팔각 난간	octagonal railing	八角の欄干
+연꽃 받침	lotus base	蓮華の台
+상륜부	finial	相輪
+기단	base	基壇
+아래 몸통	lower body	下の胴
+네모난 창	square window	四角い窓
+위 몸통	upper body	上の胴
+#자 정자석	#-shaped capstone	井の字の頂石
+연꽃 대좌	lotus pedestal	蓮華座
+무릎·손	knees & hands	膝・手
+가사 몸통	robed torso	袈裟の胴
+어깨	shoulders	肩
+얼굴·나발	face & curls	顔・螺髪
+네 다리	four legs	4本の脚
+아래 철골	lower steel frame	下の鉄骨
+메인 전망대	main deck	メインデッキ
+위 철골	upper steel frame	上の鉄骨
+1층	1st floor	1層
+2층	2nd floor	2層
+3층 금박	gold-leaf 3rd floor	金箔の3層
+봉황	phoenix	鳳凰
+돌담	stone wall	石垣
+아래층	lower floor	下層
+중간층	middle floor	中層
+위층	upper floor	上層
+금 샤치호코 지붕	roof with golden shachihoko	金のシャチホコの屋根
+돌길	stone path	石の道
+기둥 아래	lower pillars	柱の下
+기둥 위	upper pillars	柱の上
+누키(가로대)	nuki (tie beam)	貫
+가사기(위 가로대)	kasagi (top beam)	笠木
+2·3층	2nd–3rd floors	2・3層
+4층	4th floor	4層
+꼭대기 지붕	top roof	最上部の屋根
+바다	sea	海
+가로대	crossbeam	貫
+지붕 가로대	top crossbeam	笠木
+무샤가에시 돌담	musha-gaeshi stone wall	武者返しの石垣
+지붕	roof	屋根
+돌계단	stone steps	石段
+붉은 정전	red main hall	赤い正殿
+아래 지붕	lower roof	下の屋根
+용마루 용	dragon on the ridge	棟の龍
+잔디	lawn	芝生
+시계	clock	時計
+종탑	bell tower	鐘楼
+금 기둥	golden pillars	金の柱
+금 벽	golden walls	金の壁
+꼭대기 보주	top jewel	頂の宝珠
