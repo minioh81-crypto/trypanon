@@ -814,7 +814,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v190 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v191 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2882,12 +2882,24 @@ setInterval(()=>{const c=SND.ctx;if(!c||document.hidden||SND.speaking)return;if(
 // 'field' = bright pentatonic march for the surface; 'deep' = slower, darker loop while drilling
 const SONGS={
  field:{bpm:96,root:60,prog:[[0,4,7],[9,12,16],[5,9,12],[7,11,14]],mel:[12,14,16,19,16,14,12,9, 12,14,16,19,21,19,16,14, 9,12,14,16,14,12,9,7, 7,9,12,14,12,null,12,null],lead:'triangle'},
+ // 일본편: 요나누키(요 음계) 축제풍 행진 · 깊은 곳은 미야코부시(인 음계) 「사쿠라 사쿠라」풍 샤쿠하치 + 고토 + 다이코
+ jfield:{bpm:100,root:62,prog:[[0,7,12],[5,9,14],[2,9,14],[7,12,19]],mel:[12,14,17,19,21,19,17,14, 12,null,14,17,19,null,17,null, 21,24,21,19,17,19,17,14, 12,14,12,9,7,null,null,null]},
+ jdeep:{bpm:64,root:57,flute:1,prog:[[7,12,19],[8,15,20],[5,12,17],[7,14,19]],mel:[12,12,14,null,12,12,14,null, 12,14,15,14,12,null,8,null, 7,3,7,8,7,7,3,2, 2,null,null,null,null,null,null,null]},
  deep:{bpm:76,root:57,prog:[[0,3,7],[8,12,15],[5,8,12],[7,10,14]],mel:[12,null,15,14,12,null,10,null, 12,null,15,17,15,null,14,null, 8,null,12,10,8,null,7,null, 7,10,12,null,10,null,null,null],lead:'sine'}};
 function bgmStart(){if(SND.timer||!SND.ctx)return;SND.next=SND.ctx.currentTime+.1;SND.step=0;SND.timer=setInterval(bgmSched,90);}
 function bgmStop(){if(SND.timer){clearInterval(SND.timer);SND.timer=null;}}
-function bgmSched(){const c=SND.ctx;if(!c||c.state!=='running')return;const want=(view==='bore'||(typeof exp!=='undefined'&&exp))?'deep':'field';if(want!==SND.song&&SND.step%32===0)SND.song=want;
+function bgmSched(){const c=SND.ctx;if(!c||c.state!=='running')return;const want=(isJP?'j':'')+((view==='bore'||(typeof exp!=='undefined'&&exp))?'deep':'field');if(want!==SND.song&&SND.step%32===0)SND.song=want;
   const sg=SONGS[SND.song],spb=60/sg.bpm/2;
   while(SND.next<c.currentTime+.35){const st=SND.step%32,bar=Math.floor(st/8),ch=sg.prog[bar],t=SND.next,B=SND.bgmG;
+    if(SND.song[0]==='j'){const AR=[0,1,2,1,0,2,1,2],n=ch[AR[st%8]];
+      if(!sg.flute||st%2===0){tone({f:NOTE(sg.root+n),t,d:spb*2.6,type:'triangle',v:.05,a:.003,lp:2600,bus:B,rev:1});tone({f:NOTE(sg.root+n+12),t,d:spb*1.1,type:'sine',v:.014,a:.002,bus:B});}
+      if(st%8===0)tone({f:NOTE(sg.root+ch[0]-12),t,d:spb*8,type:'sine',v:.05,a:.4,bus:B});
+      const m=sg.mel[st];if(m!=null){const f=NOTE(sg.root+m);if(sg.flute){tone({f:f*.97,f2:f,glide:.14,t,d:spb*2.8,type:'sine',v:.08,a:.07,bus:B,rev:1});tone({f:f*2,t,d:spb*2.2,type:'sine',v:.01,a:.1,bus:B});noise({f:f*2,q:5,t,d:spb*1.4,v:.014,bus:B});}
+        else{tone({f,t,d:spb*1.3,type:'sawtooth',v:.03,a:.002,lp:1800,bus:B,rev:1});tone({f,t,d:spb*1.6,type:'triangle',v:.055,a:.002,bus:B});}}
+      const don=(v)=>{tone({f:96,f2:48,t,d:.4,v,bus:B});noise({f:180,q:.7,t,d:.09,v:v*.25,bus:B});};
+      if(!sg.flute){if(st%8===0)don(.24);if(st%8===3||st%8===6)don(.12);if(st%16===14)noise({f:3200,q:6,t,d:.04,v:.05,bus:B});if(st%8===4)noise({f:2300,q:12,t,d:.05,v:.06,bus:B});}
+      else{if(st%16===0)don(.18);if(st%16===10)don(.08);}
+      SND.next+=spb;SND.step++;continue;}
     if(st%8===0){ch.forEach((n,i)=>{tone({f:NOTE(sg.root+n),t,d:spb*8.2,type:'triangle',v:.05,a:.25,lp:1200,bus:B,rev:1,det:i*4});tone({f:NOTE(sg.root+n),t,d:spb*8.2,type:'sine',v:.04,a:.3,bus:B,det:-6});});tone({f:NOTE(sg.root+ch[0]-24),t,d:spb*3.6,type:'sine',v:.16,bus:B});}
     if(st%8===4)tone({f:NOTE(sg.root+ch[0]-24),t,d:spb*3.4,type:'sine',v:.12,bus:B});
     const m=sg.mel[st];if(m!=null)tone({f:NOTE(sg.root+m),t,d:spb*1.8,type:sg.lead,v:.07,a:.01,lp:2600,bus:B,rev:1});
@@ -8319,10 +8331,10 @@ $('#tP2').addEventListener('click',()=>{if(!p2Can())return;startP2Again();});
 $('#tModes').addEventListener('click',e=>{const b=e.target.closest('[data-mode]');if(!b||b.disabled)return;startRun(b.dataset.mode);});
 // ---------------- 일본 천재지변: 지진 → (쓰나미) → (정전) ----------------
 // 열도 침강 경보 1~5단계: 중심까지 깊이 들어갈수록 올라가 지진이 잦아짐 · 안정 장치 설치(2부) 뒤에는 2단계로 내려감
-// 지진 45초: 본공 −20%, 진행 중인 원정은 진원에서 가까울수록 크게(최대 −60%, 먼 곳 약 −5%) · 앞바다 지진이면 55%로 쓰나미
+// 지진 30초: 본공 −20%, 진행 중인 원정은 진원에서 가까울수록 크게(최대 −60%, 먼 곳 약 −5%) · 앞바다 지진이면 55%로 쓰나미
 // 쓰나미 40초: 해상 원정 −60%, 육상 원정 −15% · 50%로 정전 · 정전 30초: 본공·원정 모두 멈춤(보급 끊김)
 const DZP=[['홋카이도 동쪽 앞바다',144.6,42.4,1],['산리쿠 앞바다',142.9,38.6,1],['후쿠시마 앞바다',141.6,37.3,1],['도쿄만 북부',139.9,35.7,0],['노토 반도',137.1,37.3,0],['나가노 북부',138.2,36.7,0],['스루가만',138.5,34.8,1],['기이 반도 앞바다',136.3,33.3,1],['효고 남부',135.1,34.6,0],['시코쿠 앞바다',133.6,32.7,1],['휴가나다',132.2,32.1,1],['구마모토',130.8,32.8,0],['아키타 앞바다',139.5,39.9,1]];
-const DZD={quake:45,tsunami:40,outage:30,typhoon:90};
+const DZD={quake:30,tsunami:40,outage:30,typhoon:90};
 const dzLv=()=>!isJP?0:S.part===2?2:1+Math.min(4,Math.floor(S.depth/CORE*5));
 const dzOn=k=>isJP&&!!S.dz&&S.dz.k===k&&S.dz.until>Date.now();
 const dzKm=(a,b)=>{const R=6371,t=Math.PI/180,dl=(b[0]-a[0])*t*Math.cos((a[1]+b[1])/2*t),dp=(b[1]-a[1])*t;return R*Math.hypot(dl,dp);};
@@ -8336,7 +8348,7 @@ let dzT=40;
 function dzStart(k,o={}){const now=Date.now();S.dz=Object.assign({k,until:now+DZD[k]*1000,t0:now},o);save();sfx('event');
   const ex=S.ex.active?regById(S.ex.active):null,ep=ex?dzExpPct(ex.id):0;
   if(k==='quake'){document.body.classList.add('dzshake');setTimeout(()=>document.body.classList.remove('dzshake'),2600);
-    pushAlert({kind:'dz',icon:dzIcon('quake'),title:`지진 발생 · M${S.dz.m.toFixed(1)} ${S.dz.n}`,text:`열도 침강 경보 ${dzLv()}단계 · 45초 동안 본공 −20%`+(ex?` · ${ex.n} 원정 ${ep}% (진원에서 ${Math.round(dzKm([S.dz.lon,S.dz.lat],[ex.lon,ex.lat]))}km)`:''),ttl:6});}
+    pushAlert({kind:'dz',icon:dzIcon('quake'),title:`지진 발생 · M${S.dz.m.toFixed(1)} ${S.dz.n}`,text:`열도 침강 경보 ${dzLv()}단계 · ${DZD.quake}초 동안 본공 −20%`+(ex?` · ${ex.n} 원정 ${ep}% (진원에서 ${Math.round(dzKm([S.dz.lon,S.dz.lat],[ex.lon,ex.lat]))}km)`:''),ttl:6});}
   if(k==='tsunami'){dzWave();pushAlert({kind:'dz',icon:dzIcon('tsunami'),title:'쓰나미 경보! 큰 파도가 밀려와요',text:`40초 동안 해상 원정 −60%, 육상 원정 −15%`+(ex?` · 지금 ${ex.n} ${ep}%`:''),ttl:6});}
   if(k==='typhoon')pushAlert({kind:'dz',icon:dzIcon('typhoon'),title:'🌀 태풍 접근',text:'90초 동안 해상 원정 −30%, 육상 원정 −5%',ttl:6});
   if(k==='outage')pushAlert({kind:'dz',icon:dzIcon('outage'),title:'정전 · 보급 끊김',text:'30초 동안 본공 시추와 모든 원정이 멈춰요',ttl:6});
@@ -8684,7 +8696,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=190;
+const GVER=191;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
