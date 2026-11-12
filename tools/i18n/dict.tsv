@@ -1483,3 +1483,21 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 니가타	Niigata	新潟
 호쿠리쿠	Hokuriku	北陸
 나루토 소용돌이	Naruto Whirlpools	鳴門の渦潮
+랜드마크관	Landmark Hall	ランドマーク館
+랜드마크관 열기	Open Landmark Hall	ランドマーク館を開く
+🔒 랜드마크관 열기	🔒 Open Landmark Hall	🔒 ランドマーク館を開く
+🔍 3D로 돌려 보기	🔍 Rotate in 3D	🔍 3Dで回して見る
+🏯 3D 보기	🏯 View 3D	🏯 3Dを見る
+🔒 3D 보기	🔒 View 3D	🔒 3Dを見る
+조각 {}/5 · 다 모으면 3D 모형이 열려요	Pieces {}/5 · complete it to unlock the 3D model	かけら {}/5 · 全部集めると3Dモデルが開きます
+{} · 3D 모형	{} · 3D model	{} · 3Dモデル
+{} · 끌어서 360° 돌려 보고, PC는 휠로 확대해요.	{} · Drag to rotate 360°; on PC, scroll to zoom.	{} · ドラッグで360°回転、PCはホイールで拡大。
+{}의 명소 {}곳. 조각 5개를 다 모은 랜드마크는 3D 모형으로 360° 돌려 볼 수 있어요. 완성 {}/{}	{} famous sights: {}. Completed landmarks can be viewed as 3D models you can rotate 360°. Completed {}/{}	{}の名所{}か所。かけらを5個集めたランドマークは3Dモデルで360°回して見られます。完成 {}/{}
+{}의 명소 {}곳. 다 모은 랜드마크는 {}의 랜드마크관에서 3D로 볼 수 있어요. 정해진 원정 지형에서 깊이와 상관없이 블록을 깰 때 가끔 조각이 나와요({} 블록당 {}%). 조각 5개를 모으면 완성되고 효과가 생겨요. 완성 {}/{} · 전부 모으면 본공 굴착력·보상 +2% 추가	{} famous sights: {}. Completed landmarks can be viewed in 3D at the Landmark Hall of your {}. Pieces sometimes drop when you break blocks at the set expedition site, at any depth ({}: {}% per block). Collect 5 pieces to complete one and gain its bonus. Completed {}/{} · Complete all for +2% main bore drill power & reward	{}の名所{}か所。完成したランドマークは{}のランドマーク館で3Dで見られます。決まった遠征地形で深さに関係なくブロックを壊すと、ときどきかけらが出ます({}・ブロックごとに{}%)。かけらを5個集めると完成して効果がつきます。完成 {}/{} · 全部集めると本坑の掘削力・報酬 +2%
+{}의 명소 {}곳. 다 모은 랜드마크는 {}의 랜드마크관에서 3D로 볼 수 있어요. 정해진 원정 지형에서 깊이와 상관없이 블록을 깰 때 가끔 조각이 나와요({} 블록당 {}%). 조각 5개를 모으면 완성되고 효과가 생겨요. 완성 {}/{} · 🏆 전부 완성: 본공 굴착력·보상 +2%	{} famous sights: {}. Completed landmarks can be viewed in 3D at the Landmark Hall of your {}. Pieces sometimes drop when you break blocks at the set expedition site, at any depth ({}: {}% per block). Collect 5 pieces to complete one and gain its bonus. Completed {}/{} · 🏆 All complete: +2% main bore drill power & reward	{}の名所{}か所。完成したランドマークは{}のランドマーク館で3Dで見られます。決まった遠征地形で深さに関係なくブロックを壊すと、ときどきかけらが出ます({}・ブロックごとに{}%)。かけらを5個集めると完成して効果がつきます。完成 {}/{} · 🏆 全部完成: 本坑の掘削力・報酬 +2%
+🦴 화석관	🦴 Fossils	🦴 化石館
+🏺 유물관	🏺 Relics	🏺 遺物館
+🏯 랜드마크관	🏯 Landmarks	🏯 ランドマーク館
+🔒 🦴 화석관	🔒 🦴 Fossils	🔒 🦴 化石館
+🔒 🏺 유물관	🔒 🏺 Relics	🔒 🏺 遺物館
+🔒 🏯 랜드마크관	🔒 🏯 Landmarks	🔒 🏯 ランドマーク館
