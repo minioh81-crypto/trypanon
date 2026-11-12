@@ -823,7 +823,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v219 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v220 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2077,7 +2077,10 @@ const lmCity=(y,c='#7a8aa0',o=.6,seed=1)=>`<g fill="${c}" opacity="${o}">${Array
 const jRoof=(u,cx,y,w,h,c='#3a4a52',o={})=>{const L=cx-w/2,R=cx+w/2;return `<path d="M${L-2},${y+h} Q${L+w*.12},${y+h*.8} ${L+w*.2},${y} H${R-w*.2} Q${R-w*.12},${y+h*.8} ${R+2},${y+h} Q${cx},${y+h*1.18} ${L-2},${y+h}Z" fill="${c}"/><path d="M${L-2},${y+h} Q${cx},${y+h*1.18} ${R+2},${y+h}" stroke="${o.edge||'#f4f2ec'}" stroke-width=".7" fill="none"/>${o.gable?`<path d="M${cx-o.gable},${y+h*.85} L${cx},${y+h*.85-o.gable*.9} L${cx+o.gable},${y+h*.85}Z" fill="${c}" stroke="${o.edge||'#f4f2ec'}" stroke-width=".6"/>`:''}`;};
 const lmSea=(u,y,a='#3f8fc0',b='#1d5a8a')=>`<defs>${LG_(u+'sea',[a,b])}</defs><rect x="0" y="${y}" width="120" height="${100-y}" fill="url(#${u}sea)"/>${Array.from({length:5},(_,i)=>`<path d="M${(i*9)%20-10},${y+3+i*3.4} ${Array.from({length:8},()=>'q4,-1.2 8,0 t8,0').join(' ')}" stroke="#bfe6ff" stroke-width=".5" fill="none" opacity="${.6-i*.08}"/>`).join('')}`;
 const LMART={
- yisunsin:u=>`${lmSky(u,'#7fc0f0','#d8eefa','#f6f2e6')}${lmCloud(22,16,1.1)}${lmCloud(98,12,.8)}
+ yisunsin:u=>{const im=yiShot(),sp=yiShipShot();return im?`${lmSky(u,'#7fc0f0','#d8eefa','#f6f2e6')}${lmCloud(22,14,1)}${lmCloud(98,10,.8)}<path d="M0,66 Q30,40 62,52 Q92,38 120,56 V100 H0Z" fill="#9db8a6"/><path d="M0,72 Q40,62 80,68 Q100,64 120,68 V100 H0Z" fill="#b8ceb8"/><rect x="0" y="80" width="120" height="20" fill="#d8d4c8"/><path d="M0,80 H120" stroke="#fff" stroke-width=".8" opacity=".7"/>
+  <path d="M36,100 L39,86 H81 L84,100Z" fill="#e6e0d2"/><rect x="37" y="84" width="46" height="3" fill="#d4ccbc"/><rect x="44" y="89" width="32" height="9" rx="1" fill="#2a2a24" stroke="#c8a040" stroke-width=".7"/><text x="60" y="95.6" font-size="5.2" text-anchor="middle" fill="#f6d77a" font-weight="900">충무공 이순신</text>
+  <image href="${im}" x="19" y="-3.5" width="82" height="90.6" preserveAspectRatio="xMidYMax meet"/>${sp?`<image href="${sp}" x="84" y="76" width="35" height="22.75"/>`:''}`:LMART.yisunsinV(u);},
+ yisunsinV:u=>`${lmSky(u,'#7fc0f0','#d8eefa','#f6f2e6')}${lmCloud(22,16,1.1)}${lmCloud(98,12,.8)}
   ${lmMt('0,58 Q14,40 30,46 Q44,30 60,38 Q74,28 92,40 Q106,36 120,46 V70 H0Z','#7a9a8a',.55)}${lmMt('0,66 Q20,56 40,62 Q70,52 120,62 V72 H0Z','#9ab0a0',.5)}
   <defs>${LG_(u+'br',['#5f8a7c','#2f4c44','#1e322c'],1,0)}${LG_(u+'pd',['#ece6d8','#b8b0a0'])}</defs>
   <rect x="0" y="90" width="120" height="10" fill="#c9c5bb"/><path d="M0,90 H120" stroke="#aaa69c" stroke-width=".6"/>${[8,24,96,112].map(x=>`<path d="M${x},90 q-2,-7 0,-10 q2,3 0,10" fill="#bfe6ff" opacity=".7"/>`).join('')}
@@ -7133,88 +7136,126 @@ function l3Torii(G,x,z,s,col='#e8401e',ry=0){const T=THREE,g=new T.Group(),m=L3M
   l3Add(g,new T.BoxGeometry(1.2,.07,.08),m,0,1.18,0);l3Add(g,new T.BoxGeometry(1.4,.07,.12),m,0,1.38,0);const kas=l3Add(g,new T.BoxGeometry(1.56,.06,.14),k,0,1.45,0);kas.scale.x=1;l3Add(g,new T.BoxGeometry(.08,.2,.06),m,0,1.28,0);G.add(g);return g;}
 // ---- SDF 조각(서피스 네츠): 매끈한 동상 모양을 거리 함수로 깎아 만든다 ----
 const SDF={
- ell(p,c,r){const x=(p[0]-c[0])/r[0],y=(p[1]-c[1])/r[1],z=(p[2]-c[2])/r[2],k0=Math.hypot(x,y,z),k1=Math.hypot(x/r[0],y/r[1],z/r[2]);return k1?k0*(k0-1)/k1:-Math.min(...r);},
- cap(p,a,b,r1,r2=r1){const pa=[p[0]-a[0],p[1]-a[1],p[2]-a[2]],ba=[b[0]-a[0],b[1]-a[1],b[2]-a[2]],h=Math.max(0,Math.min(1,(pa[0]*ba[0]+pa[1]*ba[1]+pa[2]*ba[2])/(ba[0]*ba[0]+ba[1]*ba[1]+ba[2]*ba[2])));return Math.hypot(pa[0]-ba[0]*h,pa[1]-ba[1]*h,pa[2]-ba[2]*h)-(r1+(r2-r1)*h);},
- box(p,c,b,r=0){const q=[Math.abs(p[0]-c[0])-b[0]+r,Math.abs(p[1]-c[1])-b[1]+r,Math.abs(p[2]-c[2])-b[2]+r];return Math.hypot(Math.max(q[0],0),Math.max(q[1],0),Math.max(q[2],0))+Math.min(Math.max(q[0],q[1],q[2]),0)-r;},
- smin(a,b,k){const h=Math.max(0,Math.min(1,.5+.5*(b-a)/k));return b+(a-b)*h-k*h*(1-h);},
- smax(a,b,k){return -SDF.smin(-a,-b,k);}};
-function sdfMesh(f,mn,mx,st){const T=THREE,nx=Math.ceil((mx[0]-mn[0])/st)+1,ny=Math.ceil((mx[1]-mn[1])/st)+1,nz=Math.ceil((mx[2]-mn[2])/st)+1,V=new Float32Array(nx*ny*nz),id=(i,j,k)=>i+nx*(j+ny*k);
-  for(let k=0;k<nz;k++)for(let j=0;j<ny;j++)for(let i=0;i<nx;i++)V[id(i,j,k)]=f([mn[0]+i*st,mn[1]+j*st,mn[2]+k*st]);
+ ell(p,c,r){const x=(p[0]-c[0])/r[0],y=(p[1]-c[1])/r[1],z=(p[2]-c[2])/r[2],k0=Math.sqrt(x*x+y*y+z*z),x2=x/r[0],y2=y/r[1],z2=z/r[2],k1=Math.sqrt(x2*x2+y2*y2+z2*z2);return k1?k0*(k0-1)/k1:-Math.min(r[0],r[1],r[2]);},
+ cap(p,a,b,r1,r2){const ax=p[0]-a[0],ay=p[1]-a[1],az=p[2]-a[2],bx=b[0]-a[0],by=b[1]-a[1],bz=b[2]-a[2];let h=(ax*bx+ay*by+az*bz)/(bx*bx+by*by+bz*bz);h=h<0?0:h>1?1:h;const dx=ax-bx*h,dy=ay-by*h,dz=az-bz*h;return Math.sqrt(dx*dx+dy*dy+dz*dz)-(r1+(r2-r1)*h);},
+ box(p,c,b,r){const qx=Math.abs(p[0]-c[0])-b[0]+r,qy=Math.abs(p[1]-c[1])-b[1]+r,qz=Math.abs(p[2]-c[2])-b[2]+r,mx=qx>0?qx:0,my=qy>0?qy:0,mz=qz>0?qz:0,m=Math.max(qx,qy,qz);return Math.sqrt(mx*mx+my*my+mz*mz)+(m<0?m:0)-r;},
+ smin(a,b,k){let h=.5+.5*(b-a)/k;h=h<0?0:h>1?1:h;return b+(a-b)*h-k*h*(1-h);},
+ smax(a,b,k){let h=.5+.5*(a-b)/k;h=h<0?0:h>1?1:h;return b+(a-b)*h+k*h*(1-h);},
+ // 프림 목록: k>0 부드럽게 붙임 · k=0 그냥 붙임 · k<0 부드럽게 깎음
+ E:(c,r,k=0)=>({t:0,a:c,b:r,k}),C:(a,b,r1,r2,k=0)=>({t:1,a,b,r1,r2:r2??r1,k}),B:(c,b,r,k=0)=>({t:2,a:c,b,r1:r,k}),
+ list(L){return p=>{let d=1e9;for(let i=0;i<L.length;i++){const q=L[i],v=q.t===0?SDF.ell(p,q.a,q.b):q.t===1?SDF.cap(p,q.a,q.b,q.r1,q.r2):SDF.box(p,q.a,q.b,q.r1),k=q.k;d=k===0?(v<d?v:d):k>0?SDF.smin(d,v,k):SDF.smax(d,-v,-k);}return d;};}};
+// 거친 덩어리(4×4×4)로 먼저 훑어 표면 근처만 촘촘히 계산한다
+function sdfMesh(f,mn,mx,st){const T=THREE,nx=Math.ceil((mx[0]-mn[0])/st)+1,ny=Math.ceil((mx[1]-mn[1])/st)+1,nz=Math.ceil((mx[2]-mn[2])/st)+1,V=new Float32Array(nx*ny*nz),id=(i,j,k)=>i+nx*(j+ny*k),B=4,rad=st*4.2+.014,q=[0,0,0];
+  for(let k0=0;k0<nz;k0+=B)for(let j0=0;j0<ny;j0+=B)for(let i0=0;i0<nx;i0+=B){q[0]=mn[0]+(i0+1.5)*st;q[1]=mn[1]+(j0+1.5)*st;q[2]=mn[2]+(k0+1.5)*st;const c=f(q),far=Math.abs(c)>rad,ke=Math.min(nz,k0+B),je=Math.min(ny,j0+B),ie=Math.min(nx,i0+B);
+    for(let k=k0;k<ke;k++)for(let j=j0;j<je;j++)for(let i=i0;i<ie;i++){if(far)V[id(i,j,k)]=c;else{q[0]=mn[0]+i*st;q[1]=mn[1]+j*st;q[2]=mn[2]+k*st;V[id(i,j,k)]=f(q);}}}
   const cx=nx-1,cy=ny-1,cid=(i,j,k)=>i+cx*(j+cy*k),CI=new Int32Array(cx*cy*(nz-1)).fill(-1),P=[];
-  const E=[[0,1],[2,3],[4,5],[6,7],[0,2],[1,3],[4,6],[5,7],[0,4],[1,5],[2,6],[3,7]];
-  for(let k=0;k<nz-1;k++)for(let j=0;j<cy;j++)for(let i=0;i<cx;i++){const c=[];let m=0;for(let n=0;n<8;n++){const v=V[id(i+(n&1),j+(n>>1&1),k+(n>>2&1))];c.push(v);if(v<0)m|=1<<n;}
-    if(m===0||m===255)continue;let sx=0,sy=0,sz=0,cnt=0;for(const [a,b] of E){if((c[a]<0)===(c[b]<0))continue;const t=c[a]/(c[a]-c[b]);sx+=(a&1)+((b&1)-(a&1))*t;sy+=(a>>1&1)+((b>>1&1)-(a>>1&1))*t;sz+=(a>>2&1)+((b>>2&1)-(a>>2&1))*t;cnt++;}
+  const EA=[0,2,4,6,0,1,4,5,0,1,2,3],EB=[1,3,5,7,2,3,6,7,4,5,6,7],c=new Float32Array(8);
+  for(let k=0;k<nz-1;k++)for(let j=0;j<cy;j++)for(let i=0;i<cx;i++){let m=0;for(let n=0;n<8;n++){const v=V[id(i+(n&1),j+(n>>1&1),k+(n>>2&1))];c[n]=v;if(v<0)m|=1<<n;}
+    if(m===0||m===255)continue;let sx=0,sy=0,sz=0,cnt=0;for(let e=0;e<12;e++){const a=EA[e],b=EB[e];if((c[a]<0)===(c[b]<0))continue;const t=c[a]/(c[a]-c[b]);sx+=(a&1)+((b&1)-(a&1))*t;sy+=(a>>1&1)+((b>>1&1)-(a>>1&1))*t;sz+=(a>>2&1)+((b>>2&1)-(a>>2&1))*t;cnt++;}
     CI[cid(i,j,k)]=P.length/3;P.push(mn[0]+(i+sx/cnt)*st,mn[1]+(j+sy/cnt)*st,mn[2]+(k+sz/cnt)*st);}
-  const I=[];const quad=(a,b,c,d,flip)=>{if(a<0||b<0||c<0||d<0)return;flip?I.push(a,c,b,a,d,c):I.push(a,b,c,a,c,d);};
+  const I=[];const quad=(a,b,c2,d)=>{if(a<0||b<0||c2<0||d<0)return;I.push(a,b,c2,a,c2,d);};
   for(let k=1;k<nz-1;k++)for(let j=1;j<ny-1;j++)for(let i=1;i<nx-1;i++){const v0=V[id(i,j,k)]<0;
-    if(i<nx-1&&v0!==(V[id(i+1,j,k)]<0))quad(CI[cid(i,j-1,k-1)],CI[cid(i,j,k-1)],CI[cid(i,j,k)],CI[cid(i,j-1,k)],!v0);
-    if(j<ny-1&&v0!==(V[id(i,j+1,k)]<0))quad(CI[cid(i-1,j,k-1)],CI[cid(i-1,j,k)],CI[cid(i,j,k)],CI[cid(i,j,k-1)],!v0);
-    if(k<nz-1&&v0!==(V[id(i,j,k+1)]<0))quad(CI[cid(i-1,j-1,k)],CI[cid(i,j-1,k)],CI[cid(i,j,k)],CI[cid(i-1,j,k)],!v0);}
-  const N=new Float32Array(P.length),e=st*.5;for(let n=0;n<P.length;n+=3){const p=[P[n],P[n+1],P[n+2]];let gx=f([p[0]+e,p[1],p[2]])-f([p[0]-e,p[1],p[2]]),gy=f([p[0],p[1]+e,p[2]])-f([p[0],p[1]-e,p[2]]),gz=f([p[0],p[1],p[2]+e])-f([p[0],p[1],p[2]-e]);const l=Math.hypot(gx,gy,gz)||1;N[n]=gx/l;N[n+1]=gy/l;N[n+2]=gz/l;}
-  // 감김 방향을 기울기(바깥 방향)에 맞춤
-  for(let t=0;t<I.length;t+=3){const a=I[t]*3,b=I[t+1]*3,c=I[t+2]*3,ux=P[b]-P[a],uy=P[b+1]-P[a+1],uz=P[b+2]-P[a+2],vx=P[c]-P[a],vy=P[c+1]-P[a+1],vz=P[c+2]-P[a+2],fx=uy*vz-uz*vy,fy=uz*vx-ux*vz,fz=ux*vy-uy*vx;if(fx*N[a]+fy*N[a+1]+fz*N[a+2]<0){const s=I[t+1];I[t+1]=I[t+2];I[t+2]=s;}}
-  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(P,3));g.setAttribute('normal',new T.Float32BufferAttribute(N,3));g.setIndex(I);return g;}
-// 세종대왕 좌상(SDF 조각) — 몸·머리·익선관 세 덩어리를 한 번만 깎아 두고 다시 쓴다
-let SJGEO=null;
-function sjGeo(){if(SJGEO)return SJGEO;const D=SDF,ell=D.ell,cap=D.cap,sm=D.smin;
-  const body0=p=>{const[x,y,z]=p;let d=D.box(p,[0,.42,.46],[.4,.32,.1],.08);
-    for(const s of[-1,1])d=sm(d,cap(p,[s*.19,.8,-.15],[s*.22,.8,.38],.18),.1);
-    d=sm(d,ell(p,[0,.17,.5],[.47,.07,.17]),.08);
-    for(const s of[-1,1])d=sm(d,ell(p,[s*.17,.15,.66],[.075,.05,.11]),.03);
-    d=sm(d,ell(p,[0,1.05,-.1],[.3,.4,.22]),.12);d=sm(d,ell(p,[0,1.26,-.09],[.33,.17,.2]),.1);
-    d=sm(d,cap(p,[-.28,1.36,-.1],[.28,1.36,-.1],.095),.14);d=sm(d,cap(p,[0,1.4,-.07],[0,1.52,-.06],.075),.05);
-    // 오른팔(들어 올린 손) · 넓은 소매
-    d=sm(d,cap(p,[-.33,1.32,-.08],[-.48,1.07,.1],.085,.08),.06);d=sm(d,cap(p,[-.48,1.07,.1],[-.44,1.34,.3],.065,.05),.03);
-    d=sm(d,cap(p,[-.5,1.12,.1],[-.55,.86,.2],.09,.14),.06);
-    // 왼팔(책을 잡은 손) · 넓은 소매
-    d=sm(d,cap(p,[.33,1.32,-.08],[.45,1.07,.06],.085,.08),.06);d=sm(d,cap(p,[.45,1.07,.06],[.3,.94,.36],.065,.05),.03);
-    d=sm(d,cap(p,[.48,1.1,.06],[.52,.84,.18],.09,.14),.06);
-    return d;};
-  const sz=(x,y)=>{let z=.9;while(z>-.4&&body0([x,y,z])>0)z-=.005;return z;};
-  const cv=[[-.11,1.43],[0,1.2],[.11,1.43]].map(([x,y])=>[x,y,sz(x,y)+.005]);
-  const body=p=>{const[x,y,z]=p;let d=body0(p);
-    d=sm(d,cap(p,cv[0],cv[1],.02),.012);d=sm(d,cap(p,cv[2],cv[1],.02),.012);
-    {const q=Math.hypot(x/.355,(z+.08)/.255)-1;d=sm(d,Math.hypot(q*.3,y-.96)-.022,.012);}
-    // 손: 오른손 펴서 들기 · 왼손
-    d=sm(d,ell(p,[-.43,1.43,.32],[.045,.06,.018]),.015);for(let i=0;i<4;i++)d=sm(d,cap(p,[-.462+i*.021,1.47,.322],[-.475+i*.027,1.555-Math.abs(i-1.5)*.014,.318],.0105,.009),.004);
-    d=sm(d,cap(p,[-.395,1.43,.33],[-.37,1.49,.345],.014,.012),.008);d=sm(d,ell(p,[.27,.9,.41],[.06,.04,.07]),.02);
-    // 옷자락 주름
-    if(y<.66&&y>.22&&z>.3)d+=.007*Math.sin(x*40)*Math.min(1,(.66-y)*6,(y-.22)*12);if(Math.abs(x)>.42&&y<1.0)d+=.006*Math.sin(x*70+z*30)*Math.min(1,(1-y)*5);return d;};
-  const head=p=>{const[x,y,z]=p;let d=ell(p,[0,1.66,-.05],[.135,.165,.15]);d=sm(d,ell(p,[0,1.585,-.01],[.11,.1,.12]),.05);
-    for(const s of[-1,1]){d=sm(d,ell(p,[s*.06,1.6,.055],[.05,.04,.045]),.03);d=sm(d,ell(p,[s*.135,1.65,-.05],[.026,.05,.035]),.012);
-      d=sm(d,cap(p,[s*.024,1.704,.1],[s*.08,1.708,.078],.008,.006),.006);
-      d=D.smax(d,-ell(p,[s*.05,1.674,.088],[.032,.014,.03]),.008);d=sm(d,ell(p,[s*.05,1.67,.083],[.029,.008,.02]),.006);
-      d=sm(d,cap(p,[s*.006,1.6,.118],[s*.055,1.575,.096],.011,.005),.006);}
-    d=sm(d,cap(p,[0,1.672,.094],[0,1.632,.122],.011,.02),.012);d=D.smax(d,-cap(p,[-.03,1.592,.104],[0,1.584,.108],.0045),.003);d=D.smax(d,-cap(p,[0,1.584,.108],[.03,1.592,.104],.0045),.003);
-    d=sm(d,cap(p,[0,1.56,.104],[0,1.47,.122],.03,.008),.014);d=sm(d,cap(p,[0,1.45,-.06],[0,1.58,-.05],.07),.04);return d;};
-  const hat=p=>{const[x,y,z]=p;const r=Math.hypot(x/.152,(z+.05)/.163);let d=Math.max((r-1)*.155,Math.abs(y-1.775)-.05);
-    d=Math.min(d,ell(p,[0,1.8,-.05],[.15,.065,.162]));d=sm(d,D.box(p,[0,1.85,-.125],[.13,.085,.055],.03),.02);
-    for(const s of[-1,1])d=sm(d,ell(p,[s*.07,1.955,-.13],[.05,.058,.022]),.015);
-    d=Math.min(d,Math.max(Math.abs(r-1.02)*.155-.008,Math.abs(y-1.73)-.012));return d;};
-  SJGEO={body:sdfMesh(body,[-.72,.06,-.42],[.72,1.62,.82],.025),head:sdfMesh(head,[-.18,1.42,-.24],[.18,1.86,.2],.0075),hat:sdfMesh(hat,[-.19,1.66,-.24],[.19,2.04,.15],.008),chest:[0,1.17,sz(0,1.17)]};return SJGEO;}
-// 도감 그림용: 3D 세종대왕 동상을 한 번 찍어 그림 안에 넣는다(WebGL이 없으면 손그림)
-let SJSHOT;function sjShot(){if(SJSHOT!==undefined)return SJSHOT;SJSHOT=null;if(typeof THREE==='undefined')return null;try{const T=THREE,W=456,H=504,r=new T.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r.setSize(W,H);r.setPixelRatio(1);r.setClearColor(0,0);
-  const sc=new T.Scene(),M=LM3.sejong();M.children[0].visible=false;sc.add(M);sc.add(new T.HemisphereLight('#fff8ec','#6a5a40',.6));const d=new T.DirectionalLight('#fff2d6',.8);d.position.set(-3,6,7);sc.add(d);const d2=new T.DirectionalLight('#ffe0b0',.35);d2.position.set(4,3,-2);sc.add(d2);
-  const cam=new T.PerspectiveCamera(22,W/H,.1,100);cam.position.set(0,2.7,7.2);cam.lookAt(0,2.02,0);r.render(sc,cam);SJSHOT=r.domElement.toDataURL('image/png');sc.traverse(o=>{if(o.geometry&&!Object.values(SJGEO||{}).includes(o.geometry))o.geometry.dispose();});r.dispose();if(r.forceContextLoss)r.forceContextLoss();}catch(e){SJSHOT=null;}return SJSHOT;}
+    if(v0!==(V[id(i+1,j,k)]<0))quad(CI[cid(i,j-1,k-1)],CI[cid(i,j,k-1)],CI[cid(i,j,k)],CI[cid(i,j-1,k)]);
+    if(v0!==(V[id(i,j+1,k)]<0))quad(CI[cid(i-1,j,k-1)],CI[cid(i-1,j,k)],CI[cid(i,j,k)],CI[cid(i,j,k-1)]);
+    if(v0!==(V[id(i,j,k+1)]<0))quad(CI[cid(i-1,j-1,k)],CI[cid(i,j-1,k)],CI[cid(i,j,k)],CI[cid(i-1,j,k)]);}
+  // 법선: 앞쪽 차분 3번(표면 위 값은 0으로 본다)
+  const N=new Float32Array(P.length),e=st*.6;for(let n=0;n<P.length;n+=3){const x=P[n],y=P[n+1],z=P[n+2];q[0]=x;q[1]=y;q[2]=z;const f0=f(q);q[0]=x+e;const gx=f(q)-f0;q[0]=x;q[1]=y+e;const gy=f(q)-f0;q[1]=y;q[2]=z+e;const gz=f(q)-f0,l=Math.sqrt(gx*gx+gy*gy+gz*gz)||1;N[n]=gx/l;N[n+1]=gy/l;N[n+2]=gz/l;}
+  for(let t=0;t<I.length;t+=3){const a=I[t]*3,b=I[t+1]*3,c3=I[t+2]*3,ux=P[b]-P[a],uy=P[b+1]-P[a+1],uz=P[b+2]-P[a+2],vx=P[c3]-P[a],vy=P[c3+1]-P[a+1],vz=P[c3+2]-P[a+2],fx=uy*vz-uz*vy,fy=uz*vx-ux*vz,fz=ux*vy-uy*vx;if(fx*N[a]+fy*N[a+1]+fz*N[a+2]<0){const s=I[t+1];I[t+1]=I[t+2];I[t+2]=s;}}
+  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(P,3));g.setAttribute('normal',new T.Float32BufferAttribute(N,3));g.setIndex(I);g.userData.keep=1;return g;}
+// 조각 정의(부분별 [함수, 최소, 최대, 간격]) — 한 번 깎아 두고 다시 쓴다. 급하지 않으면 부분마다 쉬어 가며 깎는다
+const SCULPT={},SCDEF={
+ sj(){const D=SDF,E=D.E,C=D.C,B=D.B,L0=[B([0,.42,.46],[.4,.32,.1],.08)];
+  for(const s of[-1,1])L0.push(C([s*.19,.8,-.15],[s*.22,.8,.38],.18,.18,.1),E([s*.23,.86,.38],[.14,.1,.13],.05));
+  L0.push(E([0,.17,.5],[.47,.07,.17],.08));for(const s of[-1,1])L0.push(E([s*.17,.15,.67],[.072,.046,.1],.03),E([s*.17,.185,.765],[.04,.03,.032],.02));
+  L0.push(E([0,1.05,-.1],[.3,.4,.22],.12),E([0,1.26,-.09],[.33,.17,.2],.1),C([-.28,1.36,-.1],[.28,1.36,-.1],.095,.095,.14),C([0,1.4,-.07],[0,1.52,-.06],.075,.075,.05),
+   C([-.33,1.32,-.08],[-.48,1.07,.1],.085,.08,.06),C([-.48,1.07,.1],[-.44,1.34,.3],.065,.05,.03),C([-.5,1.12,.1],[-.55,.86,.2],.09,.14,.06),
+   C([.33,1.32,-.08],[.45,1.07,.06],.085,.08,.06),C([.45,1.07,.06],[.3,.94,.36],.065,.05,.03),C([.48,1.1,.06],[.52,.84,.18],.09,.14,.06));
+  const body0=D.list(L0),sz=(x,y)=>{let z=.9;while(z>-.4&&body0([x,y,z])>0)z-=.004;return z;};
+  const cv=[[-.12,1.44],[0,1.2],[.12,1.44]].map(([x,y])=>[x,y,sz(x,y)+.004]),ch=[0,1.1,sz(0,1.1)],L1=[C(cv[0],cv[1],.024,.024,.012),C(cv[2],cv[1],.024,.024,.012),
+   C([cv[0][0]+.016,cv[0][1],cv[0][2]+.02],[0,cv[1][1]+.03,cv[1][2]+.02],.006,.006,-.004),C([cv[2][0]-.016,cv[2][1],cv[2][2]+.02],[0,cv[1][1]+.03,cv[1][2]+.02],.006,.006,-.004),E(ch,[.125,.125,.016],.006)];
+  for(const i of[-2,-1,0,1,2])L1.push(B([i*.085,.96,sz(i*.085,.96)+.012],[.03,.024,.012],.006,.004));const det=D.list(L1);
+  const body=p=>{const x=p[0],y=p[1],z=p[2],ax=Math.abs(x);let d=D.smin(body0(p),det(p),.008);
+    {const q=Math.hypot(x/.355,(z+.08)/.255)-1;d=D.smin(d,Math.hypot(q*.3,y-.96)-.024,.01);}
+    if(y<.66&&y>.2&&z>.3)d+=.008*Math.sin(x*38+Math.sin(y*9)*1.2)*Math.min(1,(.66-y)*6,(y-.2)*12);
+    if(ax>.4&&y<1.02&&y>.7)d+=.007*Math.sin(z*60+x*26)*Math.min(1,(1.02-y)*6,(ax-.4)*14,(y-.7)*8);
+    if(y>1.0&&y<1.3&&ax<.26&&z>0)d+=.003*Math.sin((y+ax*.8)*70)*Math.min(1,(.26-ax)*10);return d;};
+  const LH=[E([0,1.66,-.05],[.135,.165,.15]),E([0,1.585,-.01],[.108,.1,.118],.05)];
+  for(const s of[-1,1])LH.push(E([s*.058,1.602,.058],[.05,.04,.044],.03),E([s*.137,1.65,-.05],[.024,.052,.034],.012),E([s*.15,1.655,-.04],[.012,.03,.018],-.006),E([s*.138,1.61,-.045],[.016,.022,.02],.008),
+   C([s*.024,1.706,.1],[s*.082,1.71,.076],.008,.0055,.006),E([s*.05,1.675,.09],[.033,.014,.03],-.008),E([s*.05,1.672,.083],[.03,.0095,.021],.005),C([s*.024,1.667,.104],[s*.078,1.668,.092],.0028,.0028,-.0025),
+   E([s*.014,1.632,.117],[.012,.009,.012],.006),C([s*.005,1.603,.119],[s*.058,1.574,.094],.0115,.0045,.006),C([s*.03,1.592,.1],[s*.045,1.6,.092],.006,.004,.006));
+  LH.push(C([0,1.674,.094],[0,1.634,.123],.011,.019,.012),E([0,1.593,.107],[.03,.0075,.013],.005),E([0,1.578,.105],[.024,.0085,.013],.005),C([-.03,1.5885,.11],[.03,1.5885,.11],.0035,.0035,-.003),
+   C([0,1.558,.104],[0,1.455,.128],.032,.009,.014),C([0,1.45,-.06],[0,1.58,-.05],.07,.07,.04));const hd=D.list(LH);
+  const head=p=>{let d=hd(p);if(p[1]<1.565&&p[2]>.06&&Math.abs(p[0])<.05)d+=.0025*Math.sin(p[0]*330);return d;};
+  const HT=D.list([E([0,1.8,-.05],[.15,.065,.162]),B([0,1.85,-.125],[.128,.085,.055],.03,.02),E([-.068,1.96,-.135],[.048,.062,.02],.015),E([.068,1.96,-.135],[.048,.062,.02],.015)]),HS=[0,1.86,-.068],HSb=[.004,.07,.006];
+  const hat=p=>{const y=p[1],r=Math.hypot(p[0]/.152,(p[2]+.05)/.163);let d=Math.min(Math.max((r-1)*.155,Math.abs(y-1.775)-.05),HT(p));
+    d=Math.min(d,Math.max(Math.abs(r-1.02)*.155-.008,Math.abs(y-1.732)-.013));return D.smax(d,-D.box(p,HS,HSb,0),.003);};
+  const RH=[E([-.43,1.43,.32],[.046,.058,.02]),C([-.44,1.36,.305],[-.435,1.4,.315],.036,.04,.02),C([-.392,1.42,.33],[-.36,1.475,.35],.0135,.011,.006)];
+  for(let i=0;i<4;i++)RH.push(C([-.463+i*.022,1.47,.322],[-.478+i*.03,1.56-Math.abs(i-1.4)*.016,.33+(i-1.5)*.004],.0115,.0095,.005));
+  const LHd=[E([.27,.915,.4],[.055,.03,.06]),C([.3,.93,.36],[.24,.945,.38],.014,.011,.006),C([.3,.94,.36],[.285,.925,.39],.04,.034,.02)];for(let i=0;i<4;i++)LHd.push(C([.245+i*.02,.925,.44],[.235+i*.024,.905,.5],.011,.009,.005));
+  return {parts:{body:[body,[-.72,.06,-.42],[.72,1.62,.84],.018],head:[head,[-.18,1.4,-.24],[.18,1.86,.2],.006],hat:[hat,[-.19,1.66,-.24],[.19,2.06,.15],.0075],rh:[D.list(RH),[-.52,1.33,.27],[-.33,1.6,.39],.005],lh:[D.list(LHd),[.19,.86,.31],[.36,.99,.53],.005]},extra:{chest:[ch[0],ch[1],ch[2]+.017]}};},
+ yi(){const D=SDF,E=D.E,C=D.C,B=D.B,LB=[B([0,.42,.3],[.012,.24,.12],.008,-.008)],LA=[];
+  for(const s of[-1,1])LA.push(E([s*.105,.06,.05],[.07,.06,.14],.02));
+  LA.push(E([0,1.22,0],[.2,.27,.15],.06),E([0,1.32,.03],[.17,.13,.14],.05),B([0,1.01,.172],[.04,.032,.012],.008,.005),C([-.17,1.41,0],[.17,1.41,0],.085,.085,.08),C([0,1.46,0],[0,1.58,0],.062,.062,.04));
+  for(const s of[-1,1])LA.push(E([s*.255,1.43,0],[.095,.052,.105],.03),E([s*.3,1.35,0],[.06,.09,.09],.03));
+  LA.push(C([-.26,1.37,0],[-.35,1.13,.08],.068,.062,.04),C([-.35,1.13,.08],[-.31,1.1,.25],.06,.05,.03),E([-.3,1.105,.275],[.05,.055,.05],.015),
+   C([.26,1.37,0],[.36,1.13,.02],.068,.062,.04),C([.36,1.13,.02],[.27,1.0,.13],.06,.05,.03),E([.235,.985,.15],[.05,.048,.05],.015),C([-.1,1.5,.09],[0,1.34,.155],.018,.018,.01),C([.1,1.5,.09],[0,1.34,.155],.018,.018,.01));
+  const up=D.list(LA);
+  const body=p=>{const x=p[0],y=p[1],z=p[2],er=Math.hypot(x/1.1,z/.9),R=.2+(1.02-Math.min(1.02,Math.max(.22,y)))*.1375;
+    let d=D.smax(Math.max((er-R)*.9,y-1.03),.22-y,.02);d=D.smax(d,-D.box(p,LB[0].a,LB[0].b,.008),.008);
+    d=D.smin(d,Math.hypot(er-R,y-.24)*.95-.014,.008);d=D.smin(d,Math.hypot(er-(R-.004),y-.62)*.95-.008,.006);
+    d=Math.min(d,Math.max(Math.hypot(x/1.05,z/.86)-.25,y-.3,.05-y));d=D.smin(d,up(p),.03);
+    {const q=Math.hypot(x/.218,z/.168)-1;d=D.smin(d,Math.hypot(q*.19,y-1.01)-.024,.008);}
+    for(const s of[-1,1])d=D.smin(d,Math.hypot(Math.hypot(x-s*.255,z/1.08)-.093,y-1.42)-.007,.005);
+    
+    if(y>.26&&y<1.36&&Math.abs(x)<.36&&(y<.98||Math.abs(x)<.2)){const k=Math.max(0,Math.sin(Math.atan2(z,x)*26))*Math.max(0,Math.sin(y*74));d-=.0045*k*k;}return d;};
+  const LF=[E([0,1.7,0],[.1,.125,.11]),E([0,1.645,.028],[.084,.08,.09],.04)];
+  for(const s of[-1,1])LF.push(E([s*.046,1.662,.066],[.036,.03,.032],.02),C([s*.016,1.727,.1],[s*.07,1.744,.078],.0085,.006,.006),E([s*.04,1.713,.09],[.025,.012,.022],-.006),E([s*.04,1.711,.083],[.02,.0085,.014],.004),
+   C([s*.02,1.72,.097],[s*.062,1.72,.085],.004,.004,.004),E([s*.012,1.672,.117],[.011,.008,.011],.005),C([s*.004,1.652,.117],[s*.052,1.628,.094],.0105,.0045,.005),E([s*.058,1.615,.05],[.03,.05,.045],.02));
+  LF.push(C([0,1.716,.097],[0,1.676,.124],.0095,.0175,.01),C([-.022,1.638,.11],[.022,1.638,.11],.0035,.0035,-.003),C([0,1.612,.1],[0,1.52,.118],.04,.012,.016),C([0,1.5,0],[0,1.6,0],.06,.06,.03));
+  const face=D.list(LF),HB=[0,1.775,-.005],HR=[.122,.112,.128],HR2=[.126,.116,.132];
+  const LH=[E([0,1.895,0],[.032,.02,.032],.01),C([0,1.9,0],[0,2.09,0],.011,.008,.006),E([0,1.985,0],[.03,.036,.03],.008),C([-.03,2.09,0],[.03,2.09,0],.006,.006,.004),B([0,1.81,.118],[.03,.035,.008],.006,.006),
+   B([-.118,1.655,-.015],[.012,.095,.08],.012,.01),B([.118,1.655,-.015],[.012,.095,.08],.012,.01),B([0,1.645,-.118],[.105,.105,.012],.012,.01)];for(const s of[-1,0,1])LH.push(C([s*.022,2.09,0],[s*.03,2.15,0],.006,.003,.004));
+  const helm=D.list(LH),RB=[];for(let i=0;i<6;i++){const a=i/6*Math.PI+.26;RB.push([Math.cos(a),Math.sin(a)]);}
+  const head=p=>{const x=p[0],y=p[1],z=p[2];let d=face(p);if(y<1.63&&z>.03)d+=.0028*Math.sin(x*300);
+    let h=Math.max(D.ell(p,HB,HR),1.752-y);h=Math.min(h,Math.max(Math.hypot(x,z*.95)-.17,Math.abs(y-1.756-z*.06)-.008));h=D.smin(h,Math.hypot(Math.hypot(x,z)-.118,y-1.77)-.008,.004);
+    if(y>1.74&&y<1.9){const e2=D.ell(p,HB,HR2);for(let i=0;i<6;i++)h=D.smin(h,Math.max(Math.abs(x*RB[i][1]-z*RB[i][0])-.004,e2,1.76-y),.003);}
+    h=D.smin(h,helm(p),.008);if(y<1.75&&(Math.abs(x)>.1||z<-.1))h-=.003*Math.max(0,Math.sin(y*90))*Math.max(0,Math.sin((x+z)*90));return Math.min(d,h);};
+  return {parts:{body:[body,[-.5,0,-.36],[.5,1.62,.42],.015],head:[head,[-.2,1.48,-.2],[.2,2.18,.2],.0065]},extra:{}};}};
+function sculptOf(key){return SCULPT[key]||(SCULPT[key]={def:SCDEF[key](),geo:{},q:null});}
+function sculptReady(key){const S=SCULPT[key];return !!S&&Object.keys(S.def.parts).every(n=>S.geo[n]);}
+function sculptSync(key){const S=sculptOf(key);for(const n in S.def.parts)if(!S.geo[n])S.geo[n]=sdfMesh(...S.def.parts[n]);return Object.assign({},S.geo,S.def.extra);}
+function sculptAsync(key,cb){if(sculptReady(key)){cb&&cb();return;}const S=sculptOf(key);if(S.q){S.q.push(cb);return;}S.q=[cb];
+  const step=()=>{const n=Object.keys(S.def.parts).find(k=>!S.geo[k]);if(!n){const q=S.q;S.q=null;q.forEach(f=>{try{f&&f();}catch(_){}});return;}try{S.geo[n]=sdfMesh(...S.def.parts[n]);}catch(e){S.q=null;return;}setTimeout(step,40);};setTimeout(step,250);}
+const sjGeo=()=>sculptSync('sj'),yiGeo=()=>sculptSync('yi');
+// 도감 그림용: 3D 동상을 한 번 찍어 그림 안에 넣는다. 조각이 아직 없으면 뒤에서 깎고, 그동안은 손그림을 보여 준다
+const LMSHOT={};function lmShot(key,make,pos,look,W=456,H=504,fov=22){if(key in LMSHOT)return LMSHOT[key];LMSHOT[key]=null;if(typeof THREE==='undefined')return null;try{const T=THREE,r=new T.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r.setSize(W,H);r.setPixelRatio(1);r.setClearColor(0,0);
+  const sc=new T.Scene(),M=make();sc.add(M);sc.add(new T.HemisphereLight('#fff8ec','#6a5a40',.6));const d=new T.DirectionalLight('#fff2d6',.8);d.position.set(-3,6,7);sc.add(d);const d2=new T.DirectionalLight('#ffe0b0',.35);d2.position.set(4,3,-2);sc.add(d2);
+  const cam=new T.PerspectiveCamera(fov,W/H,.1,100);cam.position.set(...pos);cam.lookAt(...look);r.render(sc,cam);LMSHOT[key]=r.domElement.toDataURL('image/png');sc.traverse(o=>{if(o.geometry&&!o.geometry.userData.keep)o.geometry.dispose();});r.dispose();if(r.forceContextLoss)r.forceContextLoss();}catch(e){LMSHOT[key]=null;}return LMSHOT[key];}
+function lmShotLater(sk,id){if(typeof THREE==='undefined'||sculptReady(sk))return sculptReady(sk);sculptAsync(sk,()=>{for(const k in LMIMG)if(k.startsWith(id+':'))delete LMIMG[k];try{if(typeof galTab!=='undefined'&&galTab==='lm'&&typeof renderGal==='function'&&$('#gal')&&!$('#gal').hidden)renderGal();}catch(_){}});return false;}
+const sjShot=()=>lmShotLater('sj','sejong')?lmShot('sj',()=>{const M=LM3.sejong();M.children[0].visible=false;return M;},[0,2.7,7.2],[0,2.02,0]):null;
+const yiShot=()=>lmShotLater('yi','yisunsin')?lmShot('yi',()=>lmYiFigure(),[0,1.45,6.1],[0,1.12,0]):null,yiShipShot=()=>lmShot('yiship',()=>{const g=new THREE.Group();g.add(lmBronzeShip());l3Add(g,new THREE.BoxGeometry(7,2.6,3.6),L3M('#e6e0d2'),-.2,-1.1,0);return g;},[-3,3.2,11],[-.2,.5,0],400,260,26);
+// 이순신 입상(몸·머리 SDF + 장검) · 청동 거북선 모형
+function lmYiFigure(){const T=THREE,F=new T.Group(),YG=yiGeo(),bz=L3M('#4a5e54',{shininess:85,specular:'#b8d8c8'}),bd=L3M('#33443c',{shininess:70,specular:'#9ab8a8'});
+  l3Add(F,YG.body,bz);l3Add(F,YG.head,bz);
+  const sw=new T.Group();sw.position.set(-.3,0,.275);F.add(sw);l3Add(sw,new T.CylinderGeometry(.022,.017,.98,12),bd,0,.51,0);for(const y of[.06,.3,.62,.94])l3Add(sw,new T.CylinderGeometry(.027,.027,.04,12),bz,0,y,0);
+  l3Add(sw,new T.SphereGeometry(.024,10,8),bz,0,.02,0);const gd=l3Add(sw,new T.CylinderGeometry(.062,.062,.016,20),bz,0,1.0,0);l3Add(sw,new T.CylinderGeometry(.017,.019,.3,10),bd,0,1.16,0);
+  for(let i=0;i<7;i++){const t=l3Add(sw,new T.TorusGeometry(.019,.004,4,12),bz,0,1.04+i*.035,0);t.rotation.x=Math.PI/2;}l3Add(sw,new T.SphereGeometry(.028,10,8),bz,0,1.33,0);return F;}
+function lmBronzeShip(){const T=THREE,sh=s3Ship();if(sh.userData.fire)sh.userData.fire.visible=false;const C=new T.Color(),cache={};
+  sh.traverse(o=>{if(o.isSprite||o.isPoints||o.isLine){o.visible=false;return;}if(!o.isMesh)return;const ms=Array.isArray(o.material)?o.material:[o.material];const out=ms.map(m=>{if(m.transparent&&m.opacity<.6){o.visible=false;return m;}C.copy(m.color||new T.Color('#888'));const l=Math.round((C.r*.3+C.g*.59+C.b*.11)*6);return cache[l]||(cache[l]=new T.MeshPhongMaterial({color:new T.Color('#2c3a34').lerp(new T.Color('#7a9a8a'),l/6),shininess:80,specular:'#b8d8c8',side:m.side}));});o.material=Array.isArray(o.material)?out:out[0];});return sh;}
 // ---- 20곳 모델 ----
 const LM3={
- yisunsin(){const T=THREE,G=new T.Group(),br=L3M('#3e6a5c',{shininess:70,specular:'#9ac4b4'}),dk=L3M('#24403a',{shininess:60,specular:'#7aa898'});l3Ground(G,3.2,L3TX.plaza(),'#c6c4be',8);
-  for(const x of[-2.2,2.2])for(let i=0;i<5;i++){const j=l3Add(G,new T.CylinderGeometry(.02,.05,.5+Math.random()*.4,6),L3M('#bfe6ff',{transparent:true,opacity:.6}),x+(i-2)*.2,.3,1.6);}
-  l3Add(G,new T.BoxGeometry(1.5,.24,1.5),L3M('#fff',{map:L3W(L3TX.stone(),2,1)}),0,.12,0);l3Add(G,new T.BoxGeometry(1.1,1.1,1.1),L3M('#e8e2d4'),0,.79,0);l3Add(G,new T.BoxGeometry(1.2,.12,1.2),L3M('#d8d0c0'),0,1.4,0);
-  const plate=s3Tex('l3ysp',256,128,(g,w,h)=>{g.fillStyle='#2a2a24';g.fillRect(0,0,w,h);g.strokeStyle='#c8a040';g.lineWidth=6;g.strokeRect(4,4,w-8,h-8);g.fillStyle='#f6d77a';g.font='900 44px sans-serif';g.textAlign='center';g.fillText('충무공',w/2,54);g.fillText('이순신',w/2,104);});
-  l3Add(G,new T.PlaneGeometry(.62,.31),L3M('#fff',{map:plate}),0,.85,.556);
-  const F=new T.Group();F.position.y=1.46;G.add(F);
-  l3Add(F,l3Lathe([[0,0],[.3,0],[.28,.5],[.2,.95],[0,.95]]),dk,0,0,0);
-  for(let i=0;i<4;i++)l3Add(F,new T.TorusGeometry(.29-i*.02,.012,4,24),L3M('#6a9a8a'),0,.12+i*.2,0).rotation.x=Math.PI/2;
-  l3Add(F,l3Lathe([[0,0],[.22,0],[.27,.35],[.26,.6],[.16,.7],[0,.7]]),br,0,.9,0);
-  for(let i=0;i<4;i++){const s=l3Add(F,new T.BoxGeometry(.5,.025,.02),L3M('#7aa898'),0,1.0+i*.11,.24-i*.008);}
-  for(const s of[-1,1]){const sh=l3Add(F,new T.SphereGeometry(.13,12,8),br,s*.25,1.5,0);sh.scale.set(1.1,.8,1);const a=l3Add(F,new T.CylinderGeometry(.065,.06,.5,10),br,s*.24,1.25,.12);a.rotation.x=-.5;a.rotation.z=s*.2;l3Add(F,new T.SphereGeometry(.065,10,8),br,s*.1,1.05,.3);}
-  const sw=new T.Group();sw.position.set(0,.55,.33);F.add(sw);l3Add(sw,new T.BoxGeometry(.05,1.1,.02),L3M('#9ac4b4',{shininess:120}),0,0,0);l3Add(sw,new T.BoxGeometry(.24,.04,.06),dk,0,.52,0);l3Add(sw,new T.CylinderGeometry(.025,.025,.24,8),dk,0,.66,0);
-  l3Add(F,new T.CylinderGeometry(.07,.08,.12,10),br,0,1.66,0);const hd=l3Add(F,new T.SphereGeometry(.19,16,12),L3M('#5a8a7a',{shininess:60}),0,1.84,0);hd.scale.set(.95,1.1,1);
-  l3Add(F,new T.ConeGeometry(.22,.28,16),dk,0,2.08,0);const brim=l3Add(F,new T.CylinderGeometry(.32,.32,.035,24),dk,0,1.95,0);l3Add(F,new T.CylinderGeometry(.01,.01,.22,6),dk,0,2.24,0);l3Add(F,new T.ConeGeometry(.05,.16,8),br,0,2.36,0);
-  for(const s of[-1,1])l3Add(F,new T.BoxGeometry(.05,.22,.18),dk,s*.17,1.78,-.02);
-  const ts=new T.Group();ts.position.set(0,0,2.2);G.add(ts);l3Add(ts,new T.BoxGeometry(.9,.12,.4),L3M('#6a5232'),0,.14,0);const sh=l3Add(ts,new T.SphereGeometry(.4,16,8,0,Math.PI*2,0,Math.PI/2),L3M('#3a5a4e'),0,.2,0);sh.scale.set(1.1,.45,.5);l3Add(ts,new T.CylinderGeometry(.06,.08,.24,8),L3M('#c8a040'),-.5,.32,0).rotation.z=.9;
-  G.userData.cam={dist:9.5,y:1.9};return G;},
+ yisunsin(){const T=THREE,G=new T.Group(),bz=L3M('#4a5e54',{shininess:85,specular:'#b8d8c8'}),gr=L3M('#fff',{map:L3W(L3TX.stone(),2,2),color:'#e6e0d2'});l3Ground(G,3.2,L3TX.plaza(),'#c6c4be',8);
+  for(const x of[-2.2,2.2])for(let i=0;i<5;i++)l3Add(G,new T.CylinderGeometry(.02,.05,.5+(i%3)*.18,6),L3M('#bfe6ff',{transparent:true,opacity:.6}),x+(i-2)*.2,.3,1.6);
+  // 높은 화강암 기단 + 세로 이름판
+  l3Add(G,new T.BoxGeometry(2.3,.16,2.3),gr,0,.08,0);l3Add(G,new T.BoxGeometry(1.9,.16,1.9),gr,0,.24,0);l3Add(G,new T.BoxGeometry(1.25,1.9,1.25),L3M('#ece6d8'),0,1.27,0);l3Add(G,new T.BoxGeometry(1.45,.12,1.45),L3M('#dcd4c4'),0,2.28,0);l3Add(G,new T.BoxGeometry(1.3,.1,1.3),L3M('#e6e0d2'),0,2.39,0);
+  const plate=s3Tex('l3ysp2',96,384,(g,w,h)=>{g.fillStyle='#e4decf';g.fillRect(0,0,w,h);g.fillStyle='#2a2a24';g.font='900 38px serif';g.textAlign='center';[...'충무공이순신장군상'].forEach((c,i)=>g.fillText(c,w/2,44+i*40));});
+  l3Add(G,new T.PlaneGeometry(.3,1.2),L3M('#fff',{map:plate}),0,1.4,.628);
+  const F=lmYiFigure();F.scale.setScalar(1.18);F.position.y=2.44;G.add(F);
+  // 기단 앞 청동 거북선 · 양옆 북
+  l3Add(G,new T.BoxGeometry(1.5,.34,.62),L3M('#e6e0d2'),0,.33,1.1);const ts=lmBronzeShip();ts.scale.setScalar(.2);ts.position.set(.06,.52,1.1);G.add(ts);
+  for(const s of[-1,1]){const dr=new T.Group();dr.position.set(s*1.02,.32,.62);G.add(dr);const b=l3Add(dr,new T.CylinderGeometry(.2,.2,.26,20),bz,0,.26,0);b.rotation.x=Math.PI/2;for(const k of[-1,1]){const rm=l3Add(dr,new T.TorusGeometry(.2,.018,6,24),L3M('#33443c'),0,.26,k*.13);l3Add(dr,new T.CircleGeometry(.19,20),L3M('#7a9a8a',{side:T.DoubleSide}),0,.26,k*.132);}
+    for(const k of[-1,1])l3Add(dr,new T.BoxGeometry(.05,.1,.3),L3M('#33443c'),k*.13,.05,0);}
+  G.userData.cam={dist:11,y:2.5};return G;},
  sejong(){const T=THREE,G=new T.Group(),au=L3M('#d4a240',{shininess:110,specular:'#fff0b0'}),ad=L3M('#a8761e',{shininess:80,specular:'#f0d080'}),dk=L3M('#7a5214',{shininess:60}),sk=L3M('#dcae52',{shininess:70,specular:'#fff0c0'});l3Ground(G,3.2,L3TX.plaza(),'#c6c4be',8);
   // 기단: 넓은 돌 받침 2단 + 이름판
   l3Add(G,new T.BoxGeometry(2.5,.28,2.0),L3M('#fff',{map:L3W(L3TX.stone(),3,.6)}),0,.14,0);l3Add(G,new T.BoxGeometry(2.1,.72,1.6),L3M('#ece6d8'),0,.64,0);l3Add(G,new T.BoxGeometry(2.2,.08,1.7),L3M('#dcd4c4'),0,1.04,0);
@@ -7232,13 +7273,15 @@ const LM3={
   l3Add(F,new T.ExtrudeGeometry(tp,{depth:.18,bevelEnabled:true,bevelSize:.02,bevelThickness:.02,bevelSegments:2}),ad,0,2.0,-.67);
   for(const s of[-1,1]){l3Add(F,new T.CylinderGeometry(.07,.07,1.5,12),ad,s*.82,1.3,-.58);const sc=l3Add(F,new T.TorusGeometry(.09,.04,8,16,Math.PI*1.4),ad,s*.86,2.12,-.58);sc.rotation.z=s>0?0:Math.PI;
     l3Add(F,new T.BoxGeometry(.14,.45,.95),cvM,s*.86,.86,-.12);l3Add(F,new T.BoxGeometry(.2,.06,1.0),ad,s*.86,1.1,-.1);const sr=l3Add(F,new T.TorusGeometry(.08,.035,8,14,Math.PI*1.3),ad,s*.86,1.06,.42);sr.rotation.y=Math.PI/2;}
-  // 동상: SDF로 깎은 몸·머리·익선관(한 번 만들어 재사용)
-  const SG=sjGeo(),gm=L3M('#c9963a',{shininess:95,specular:'#ffe8b0'});l3Add(F,SG.body,gm);{const HG=new T.Group(),k=1.14;HG.position.set(0,1.5*(1-k),-.06*(1-k));HG.scale.setScalar(k);F.add(HG);l3Add(HG,SG.head,L3M('#d4a448',{shininess:100,specular:'#fff0c0'}));l3Add(HG,SG.hat,L3M('#8a5e18',{shininess:80,specular:'#e8c878'}));}
+  for(const [w2,h2] of[[1.36,1.2],[1.2,1.04]]){for(const s2 of[-1,1]){l3Add(F,new T.BoxGeometry(.03,h2,.02),au,s2*w2/2,1.3,-.5);l3Add(F,new T.BoxGeometry(w2,.03,.02),au,0,1.3+s2*h2/2,-.5);}}
+  // 동상: SDF로 깎은 몸·머리·익선관·두 손(한 번 만들어 재사용)
+  const SG=sjGeo(),gm=L3M('#c9963a',{shininess:95,specular:'#ffe8b0'}),sk2=L3M('#d4a448',{shininess:100,specular:'#fff0c0'});l3Add(F,SG.body,gm);l3Add(F,SG.rh,sk2);l3Add(F,SG.lh,sk2);
+  {const HG=new T.Group(),k=1.14;HG.position.set(0,1.5*(1-k),-.06*(1-k));HG.scale.setScalar(k);F.add(HG);l3Add(HG,SG.head,sk2);l3Add(HG,SG.hat,L3M('#8a5e18',{shininess:80,specular:'#e8c878'}));}
   const yb=s3Tex('l3sjy',128,128,(g,w,h)=>{g.fillStyle='#e8c060';g.beginPath();g.arc(64,64,62,0,7);g.fill();g.strokeStyle='#8a5a14';g.lineWidth=5;g.beginPath();g.arc(64,64,56,0,7);g.stroke();g.lineWidth=4;
     g.beginPath();g.moveTo(30,80);g.bezierCurveTo(40,30,70,100,86,50);g.bezierCurveTo(92,34,100,40,98,52);g.stroke();for(let i=0;i<6;i++){g.beginPath();g.arc(36+i*11,74-i*5,4,0,7);g.stroke();}g.beginPath();g.arc(96,46,7,0,7);g.stroke();});
-  {const c=SG.chest;l3Add(F,new T.CircleGeometry(.12,28),L3M('#fff',{map:yb,shininess:120,specular:'#fff0b0'}),c[0],c[1],c[2]+.004);}
+  {const c=SG.chest;l3Add(F,new T.CircleGeometry(.112,28),L3M('#fff',{map:yb,shininess:120,specular:'#fff0b0'}),c[0],c[1],c[2]);}
   // 무릎 위 훈민정음 책(왼손)
-  const bkG=new T.Group();bkG.position.set(.2,1.04,.4);bkG.rotation.set(-.85,-.15,.06);F.add(bkG);const pg=s3Tex('l3sjb',128,96,(g,w,h)=>{g.fillStyle='#f0d890';g.fillRect(0,0,w,h);g.fillStyle='#8a5a14';for(let c=0;c<6;c++)for(let r=0;r<5;r++)g.fillRect(10+c*19,12+r*15,9,9);g.fillRect(62,0,4,h);});
+  const bkG=new T.Group();bkG.position.set(.13,.955,.455);bkG.rotation.set(-.6,-.12,.05);F.add(bkG);const pg=s3Tex('l3sjb',128,96,(g,w,h)=>{g.fillStyle='#f0d890';g.fillRect(0,0,w,h);g.fillStyle='#8a5a14';for(let c=0;c<6;c++)for(let r=0;r<5;r++)g.fillRect(10+c*19,12+r*15,9,9);g.fillRect(62,0,4,h);});
   for(const s of[-1,1]){const pp=l3Add(bkG,new T.BoxGeometry(.2,.012,.27),L3M('#fff',{map:pg,shininess:80}),s*.088,0,0);pp.rotation.z=s*-.12;}l3Add(bkG,new T.BoxGeometry(.42,.014,.28),gm,0,-.016,0);
   G.userData.cam={dist:7,y:2.0};return G;},
  namsan(){const T=THREE,G=new T.Group();const mt=l3Add(G,new T.SphereGeometry(2.6,32,16,0,Math.PI*2,0,Math.PI/2),L3M('#2f6a3a'),0,0,0);mt.scale.set(1,.42,1);
@@ -9589,7 +9632,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=219;
+const GVER=220;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
