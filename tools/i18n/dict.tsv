@@ -1538,3 +1538,5 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 {}분	{} min	{}分
 {}분 동안 안 만지면 화면을 어둡게 하고 절전해요 — 만지면 바로 돌아와요 (진행 속도는 그대로)	After {} min without touching, the screen dims to save power — touch to return (progress continues)	{}分触らないと画面を暗くして節電します — 触るとすぐ戻ります(進行速度はそのまま)
 자금이 부족해요 · {}	Not enough money · {}	資金が足りません · {}
+일본으로 가기	Go to Japan	日本へ行く
+한국으로 돌아가기	Back to Korea	韓国へ戻る
