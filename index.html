@@ -824,7 +824,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v211 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v212 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2137,7 +2137,7 @@ const LMART={
  hwaseong:u=>`${lmSky(u,'#ffb47a','#ffe0b0','#f8f0dc')}${lmSun(22,30,6,'#fff0c0')}
   ${lmMt('0,58 Q30,44 60,50 Q90,40 120,52 V70 H0Z','#8aa070',.6)}<path d="M0,64 Q20,58 40,62" stroke="#c8b898" stroke-width="5" fill="none"/><path d="M80,62 Q100,56 120,60" stroke="#c8b898" stroke-width="5" fill="none"/>${Array.from({length:10},(_,i)=>`<rect x="${i*4.4}" y="${57.5+Math.sin(i/2)*1.4}" width="2.6" height="2.6" fill="#b8a888"/><rect x="${80+i*4.4}" y="${55.5+Math.cos(i/2)*1.4}" width="2.6" height="2.6" fill="#b8a888"/>`).join('')}
   <rect x="0" y="90" width="120" height="10" fill="#b8b0a0"/><path d="M14,92 Q14,66 60,66 Q106,66 106,92Z" fill="#cfc2a6"/>${lmStone(14,72,92,20,'#cfc2a6',4).replace(/<rect x="14" y="72" width="92" height="20" fill="#cfc2a6"\/>/,'')}<path d="M14,72 Q14,66 60,66 Q106,66 106,72" stroke="#b8aa8c" stroke-width="2" fill="none"/>${Array.from({length:15},(_,i)=>{const a=Math.PI*(i/14),x=60-Math.cos(a)*46,y=72-Math.sin(a)*6;return `<rect x="${(x-1.6).toFixed(1)}" y="${(y-3).toFixed(1)}" width="3.2" height="3.2" fill="#a89a7c"/>`;}).join('')}
-  ${lmArch(31,58,14,34,'#2a2420')}<path d="M44,66 H76 V92 H44Z" fill="#d6caae"/>${lmStone(44,62,32,30,'#d8ccb0',4)}${lmArch(52,70,16,22)}
+  <path d="M44,66 H76 V92 H44Z" fill="#d6caae"/>${lmStone(44,62,32,30,'#d8ccb0',4)}${lmArch(51,68,18,24)}
   <rect x="36" y="48" width="48" height="10" fill="#efe4cc"/>${kCols(37,83,48,10,7)}${kDan(35,45.6,50,2.4)}${kRoof(u,60,36,68,10,{rw:.32,lift:.55})}
   <rect x="42" y="28" width="36" height="8" fill="#efe4cc"/>${kCols(43,77,28,8,5)}${kDan(41,25.8,38,2.2)}${kRoof(u,60,14,58,12,{rw:.28,lift:.55})}
   ${[[16,62],[104,62]].map(([x,y])=>`<path d="M${x},${y} V${y-14}" stroke="#5a3a24" stroke-width=".7"/><path d="M${x},${y-14} l7,2.4 l-7,2.4Z" fill="${x<60?'#e8c040':'#3a6ac0'}"/>`).join('')}`,
@@ -9444,7 +9444,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=211;
+const GVER=212;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
