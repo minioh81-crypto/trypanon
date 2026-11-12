@@ -802,7 +802,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v196 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v197 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -6128,7 +6128,7 @@ function s3Ship(){const T=THREE,G=new T.Group(),anims=[];
       if(f.fl.visible){f.fl.position.set(f.m.p.x+(Math.random()-.5)*.05,f.m.p.y+f.k*.02,f.m.p.z+f.m.s*(.1+t*(.9+f.k*.35)));const sc=.35+(1-t)*.5+f.k*.08;f.fl.scale.set(sc,sc,sc);f.fl.material.opacity=Math.max(0,1-t*1.8);f.fl.material.color.setRGB(1,.75-t*.5,.3);}
       if(on){f.sm.position.set(f.m.p.x+t*.2,f.m.p.y+t*.35+f.k*.05,f.m.p.z+f.m.s*d);const s2=.3+t*1.1+f.k*.15;f.sm.scale.set(s2,s2,s2);f.sm.material.opacity=Math.max(0,.7-t*.7);}}};
   G.userData={anims,fireTick:dt=>{fireTick(dt);broadTick(dt);},fire:fireG};return G;}
-// ---- 철갑선 (구키 수군, 참고 그림 기준): 뱃머리 -X · 금 용머리 · 철판 리벳 선체 · 붉은 난간 · 옆면 대포 6문씩(옆으로 일제 사격) · 물속으로 내려가 젓는 노 · 망루·천수각 · 옆을 향한 큰 돛(검은 문장) ----
+// ---- 철갑선 (구키 수군, 참고 그림 기준): 뱃머리 -X · 철판 리벳 선체 · 붉은 난간 · 옆면 대포 6문씩(옆으로 일제 사격) · 물속으로 내려가 젓는 노 · 망루·천수각 · 옆을 향한 큰 돛(검은 문장) ----
 function s3Tekko(){const T=THREE,G=new T.Group(),anims=[];
   const ph=(c,o={})=>new T.MeshPhongMaterial(Object.assign({color:c,shininess:30,specular:'#222'},o));
   const M=(g,m,x=0,y=0,z=0,p=G)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};
@@ -6153,26 +6153,8 @@ function s3Tekko(){const T=THREE,G=new T.Group(),anims=[];
   for(const z of[B-.02,-B+.02]){M(new T.BoxGeometry(2*L-1.2,.05,.05),RED,0,HW+.36,z);for(let i=0;i<=16;i++)M(new T.BoxGeometry(.04,.32,.04),RED,-L+.6+i*(2*L-1.2)/16,HW+.2,z);}
   // 옆면 포문 6개씩 + 검은 대포(옆으로 길게)
   const MZ=[];for(const s of[1,-1])for(let i=0;i<6;i++){const x=-2.1+i*.82,y=HW*.55;M(new T.BoxGeometry(.26,.24,.04),BLACK,x,y,s*(B+.07));const c=M(new T.CylinderGeometry(.065,.085,.62,12),BLACK,x,y,s*(B+.3));c.rotation.x=Math.PI/2;M(new T.TorusGeometry(.085,.022,6,12),GOLD,x,y,s*(B+.6));MZ.push({p:new T.Vector3(x,y,s*(B+.64)),s,ph:i*.14+(s<0?.5:0)});}
-  // 금 용머리 (뱃머리): 짧고 굵은 목(비늘 고리) · 눈썹 뼈·불타는 눈 · 갈래 뿔 · 벌린 입(이빨·송곳니·혀) · 콧구멍·긴 수염 · 붉은 갈기·턱수염
-  {const D=new T.Group();D.position.set(-L-.3,HW+.3,0);G.add(D);const GD=ph('#b8862a',{shininess:90,specular:'#ffe6a0',emissive:'#2a1800'}),WH=ph('#fff8e8',{shininess:80}),RD=ph('#c8201a',{shininess:30}),DK=ph('#3a1a08');
-    const sc=s3Tex('tkscale',128,64,(g,w,h)=>{g.fillStyle='#e8b23a';g.fillRect(0,0,w,h);for(let y=0;y<h;y+=10)for(let x=-(y/10%2)*8;x<w;x+=16){const r=g.createRadialGradient(x+8,y+3,1,x+8,y+5,9);r.addColorStop(0,'#fff0b0');r.addColorStop(.6,'#e8b23a');r.addColorStop(1,'#8a5a12');g.fillStyle=r;g.beginPath();g.arc(x+8,y+4,8,0,Math.PI);g.fill();}});sc.wrapS=sc.wrapT=T.RepeatWrapping;sc.repeat.set(3,2);
-    const SC=ph('#ffffff',{map:sc,shininess:90,specular:'#fff1b0',emissive:'#2a1800'});
-    const neck=new T.Mesh(new T.CylinderGeometry(.17,.24,.46,16),SC);neck.position.set(-.1,.16,0);neck.rotation.z=.85;D.add(neck);
-    for(let i=0;i<3;i++){const r=new T.Mesh(new T.TorusGeometry(.2-i*.02,.025,6,16),GD);r.position.set(-.02-i*.09,.08+i*.08,0);r.rotation.y=Math.PI/2;r.rotation.x=.85;D.add(r);}
-    const H=new T.Group();H.position.set(-.36,.42,0);D.add(H);const HM=(g,m,x,y,z)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);H.add(o);return o;};
-    const sk=HM(new T.SphereGeometry(.24,20,14),SC,0,0,0);sk.scale.set(1.25,.85,.9);
-    const up=HM(new T.BoxGeometry(.42,.12,.28),GOLD,-.3,.0,0);up.rotation.z=-.08;const nose=HM(new T.SphereGeometry(.12,14,10),GOLD,-.5,.02,0);nose.scale.set(.9,.7,1.25);
-    for(const z of[.07,-.07])HM(new T.SphereGeometry(.03,8,6),DK,-.6,.05,z);
-    const jaw=new T.Group();jaw.position.set(-.08,-.1,0);H.add(jaw);const lj=new T.Mesh(new T.BoxGeometry(.42,.07,.24),GOLD);lj.position.set(-.22,-.04,0);jaw.add(lj);
-    const mouth=HM(new T.BoxGeometry(.36,.1,.2),RD,-.3,-.09,0);const tongue=new T.Mesh(new T.BoxGeometry(.3,.02,.06),ph('#ff6a7a'));tongue.position.set(-.3,-.02,0);jaw.add(tongue);
-    for(let k=0;k<5;k++)for(const z of[.1,-.1]){HM(new T.ConeGeometry(.018,.06,6),WH,-.16-k*.07,-.07,z).rotation.x=Math.PI;const t2=new T.Mesh(new T.ConeGeometry(.016,.05,6),WH);t2.position.set(-.14-k*.07,0,z);jaw.add(t2);}
-    for(const z of[.1,-.1]){HM(new T.ConeGeometry(.026,.12,6),WH,-.46,-.1,z).rotation.x=Math.PI;}
-    for(const z of[.12,-.12]){const br=HM(new T.BoxGeometry(.18,.05,.06),GD,-.1,.13,z);br.rotation.z=-.3;const ey=HM(new T.SphereGeometry(.055,12,10),WH,-.12,.07,z*1.1);const pu=HM(new T.SphereGeometry(.035,10,8),ph('#e8201a',{emissive:'#a00'}),-.15,.07,z*1.32);
-      const h1=new T.Mesh(new T.CylinderGeometry(.018,.035,.42,8),GD);h1.position.set(.12,.3,z*1.2);h1.rotation.set(z>0?-.25:.25,0,-.7);H.add(h1);const h2=new T.Mesh(new T.CylinderGeometry(.012,.02,.16,6),GD);h2.position.set(.08,.38,z*1.4);h2.rotation.set(z>0?-.6:.6,0,.2);H.add(h2);
-      const wk=new T.Mesh(new T.TorusGeometry(.22,.009,5,16,Math.PI*1.1),GD);wk.position.set(-.5,-.08,z*1.5);wk.rotation.set(Math.PI/2,0,z>0?.4:-.4);H.add(wk);}
-    for(let k=0;k<9;k++){const a=-1.0+k*.26,f=HM(new T.ConeGeometry(.05,.3,6),k%2?RD:ph('#f08a1c'),.2+Math.cos(a)*.18,.06+Math.sin(a)*.2,(k%3-1)*.08);f.rotation.z=-Math.PI/2+a;}
-    for(let k=0;k<4;k++){const b=new T.Mesh(new T.ConeGeometry(.03,.16,6),RD);b.position.set(-.18-k*.07,-.12,(k%2-.5)*.06);b.rotation.z=Math.PI;jaw.add(b);}
-    anims.push(t=>{H.position.y=.42+Math.sin(t*1.6)*.015;jaw.rotation.z=-.12-Math.max(0,Math.sin(t*1.2))*.18;H.rotation.z=Math.sin(t*.9)*.04;});}
+  // 뱃머리: 용머리 없이 금 테를 두른 높은 뱃머리 판
+  M(new T.BoxGeometry(.16,.5,2*B-.2),IRON,-L+.05,HW+.2,0);M(new T.BoxGeometry(.18,.05,2*B-.1),GOLD,-L+.05,HW+.47,0);
   // 고물 쪽 높은 판
   M(new T.BoxGeometry(.18,.6,2*B-.1),IRON,L-.15,HW+.25,0);
   // 1층 망루(흰 벽 + 검은 기둥) + 붉은 난간
@@ -9047,7 +9029,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=196;
+const GVER=197;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
