@@ -821,7 +821,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v200 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v201 · 2026-11-12</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -8834,13 +8834,17 @@ function pkCat(c,cx,cy,r,t){// 마네키네코(참고 사진): 하얀 도자기 
   const sak=(x,y,s,col=RD)=>{c.save();c.translate(x,y);c.fillStyle=col;for(let k=0;k<5;k++){c.rotate(Math.PI*2/5);c.beginPath();c.ellipse(0,-s*.55,s*.36,s*.5,0,0,7);c.fill();}c.fillStyle=GD;c.beginPath();c.arc(0,0,s*.22,0,7);c.fill();c.strokeStyle=GD;c.lineWidth=.7;for(let k=0;k<5;k++){c.rotate(Math.PI*2/5);c.beginPath();c.ellipse(0,-s*.55,s*.36,s*.5,0,0,7);c.stroke();}c.restore();};
   const toes=(x,y,s,rot=0)=>{c.save();c.translate(x,y);c.rotate(rot);c.strokeStyle=RD;c.lineWidth=1.3;[-1,0,1].forEach(k=>{c.beginPath();c.moveTo(k*s*.32,-s*.35);c.lineTo(k*s*.32,s*.05);c.stroke();});c.restore();};
   // 방석 + 금 술
-  {const g=c.createLinearGradient(0,r*.52,0,r*.82);g.addColorStop(0,'#e83030');g.addColorStop(1,'#8a0e10');c.fillStyle=g;c.beginPath();c.roundRect(-r*.78,r*.56,r*1.56,r*.24,r*.12);c.fill();c.strokeStyle=GD;c.lineWidth=1.4;c.stroke();
-    c.strokeStyle='rgba(255,210,90,.55)';c.lineWidth=.8;c.beginPath();c.moveTo(-r*.7,r*.64);c.quadraticCurveTo(0,r*.6,r*.7,r*.64);c.stroke();for(let k=-3;k<=3;k++){c.fillStyle='rgba(255,215,110,.7)';c.beginPath();c.arc(k*r*.2,r*.7,r*.025,0,7);c.fill();}
-    [-1,1].forEach(sx=>{c.fillStyle=GD;c.beginPath();c.arc(sx*r*.78,r*.6,r*.05,0,7);c.fill();c.beginPath();c.moveTo(sx*r*.78-r*.04,r*.63);c.lineTo(sx*r*.82,r*.82);c.lineTo(sx*r*.74,r*.82);c.closePath();c.fill();});}
+  {const g=c.createLinearGradient(0,r*.5,0,r*.74);g.addColorStop(0,'#f04040');g.addColorStop(1,'#7a0a0c');c.fillStyle=g;c.beginPath();c.roundRect(-r*.6,r*.52,r*1.2,r*.2,r*.1);c.fill();c.strokeStyle=GD;c.lineWidth=1.4;c.stroke();
+    c.strokeStyle='rgba(255,210,90,.55)';c.lineWidth=.8;c.beginPath();c.moveTo(-r*.52,r*.6);c.quadraticCurveTo(0,r*.56,r*.52,r*.6);c.stroke();for(let k=-2;k<=2;k++){c.fillStyle='rgba(255,215,110,.75)';c.beginPath();c.arc(k*r*.2,r*.66,r*.022,0,7);c.fill();}
+    [-1,1].forEach(sx=>{c.fillStyle=GD;c.beginPath();c.arc(sx*r*.58,r*.55,r*.04,0,7);c.fill();c.beginPath();c.moveTo(sx*r*.58-r*.03,r*.57);c.lineTo(sx*r*.61,r*.72);c.lineTo(sx*r*.55,r*.72);c.closePath();c.fill();});}
+  // 꼬리: 엉덩이 뒤로 말린 둥근 꼬리 — 금빛 주황 바탕에 검은 줄무늬(삼색)
+  {const x=-r*.62,y=r*.44,R0=r*.14;const g=c.createRadialGradient(x-R0*.4,y-R0*.4,R0*.1,x,y,R0);g.addColorStop(0,'#fff0b8');g.addColorStop(.5,'#f0a838');g.addColorStop(1,'#a8600a');c.fillStyle=g;c.beginPath();c.arc(x,y,R0,0,7);c.fill();
+    c.save();c.beginPath();c.arc(x,y,R0,0,7);c.clip();c.fillStyle='#2a2222';c.beginPath();c.ellipse(x+R0*.15,y-R0*.1,R0*.42,R0*1.2,.5,0,7);c.fill();c.fillStyle='rgba(255,255,255,.55)';c.beginPath();c.ellipse(x-R0*.45,y-R0*.45,R0*.25,R0*.14,-.6,0,7);c.fill();c.restore();
+    c.strokeStyle='#8a5a12';c.lineWidth=1;c.beginPath();c.arc(x,y,R0,0,7);c.stroke();c.strokeStyle='rgba(138,90,18,.6)';c.lineWidth=.8;c.beginPath();c.arc(x,y,R0*.55,Math.PI*.9,Math.PI*2.2);c.stroke();}
   // 몸통 + 뒷발
   c.fillStyle=por(0,r*.3,r*.56,r*.4);c.strokeStyle=OL;c.lineWidth=1.2;c.beginPath();c.ellipse(0,r*.3,r*.56,r*.38,0,0,7);c.fill();c.stroke();
-  sak(-r*.42,r*.38,r*.12);c.fillStyle='#2a2626';c.beginPath();c.ellipse(-r*.58,r*.36,r*.07,r*.12,.3,0,7);c.fill();
-  [-1,1].forEach(sx=>{c.fillStyle=por(sx*r*.24,r*.6,r*.14,r*.09);c.beginPath();c.ellipse(sx*r*.24,r*.6,r*.15,r*.09,0,0,7);c.fill();c.strokeStyle=OL;c.stroke();toes(sx*r*.24,r*.62,r*.12);});
+  sak(-r*.36,r*.38,r*.11);
+  [-1,1].forEach(sx=>{c.fillStyle=por(sx*r*.22,r*.58,r*.14,r*.09);c.beginPath();c.ellipse(sx*r*.22,r*.57,r*.14,r*.08,0,0,7);c.fill();c.strokeStyle=OL;c.stroke();toes(sx*r*.22,r*.59,r*.11);});
   // 붉은 턱받이(금꽃 무늬)
   c.fillStyle=RD;c.beginPath();c.moveTo(-r*.36,r*.02);c.quadraticCurveTo(0,r*.1,r*.36,r*.02);c.lineTo(r*.3,r*.24);c.quadraticCurveTo(0,r*.42,-r*.3,r*.24);c.closePath();c.fill();c.strokeStyle=GD;c.lineWidth=1.3;c.stroke();
   sak(-r*.12,r*.2,r*.08,'#ffe6a0');sak(r*.06,r*.3,r*.06,'#ffe6a0');sak(-r*.24,r*.12,r*.05,'#ffe6a0');
@@ -8868,10 +8872,16 @@ function pkCat(c,cx,cy,r,t){// 마네키네코(참고 사진): 하얀 도자기 
   c.strokeStyle='#c8141a';c.lineWidth=r*.09;c.beginPath();c.moveTo(-r*.42,-r*.02);c.quadraticCurveTo(0,r*.1,r*.42,-r*.02);c.stroke();c.strokeStyle='rgba(255,140,120,.7)';c.lineWidth=1;c.setLineDash([2,2]);c.stroke();c.setLineDash([]);
   c.fillStyle='#c8141a';c.beginPath();c.arc(-r*.26,r*.07,r*.05,0,7);c.fill();c.fillStyle=GD;c.beginPath();c.moveTo(-r*.3,r*.1);c.lineTo(-r*.22,r*.1);c.lineTo(-r*.2,r*.26);c.lineTo(-r*.32,r*.26);c.closePath();c.fill();c.strokeStyle='#a8700a';c.lineWidth=.6;for(let k=0;k<4;k++){c.beginPath();c.moveTo(-r*.3+k*r*.03,r*.12);c.lineTo(-r*.31+k*r*.035,r*.25);c.stroke();}
   pkSuzu(c,0,r*.12,r*.13);
-  // 손짓하는 왼발(보는 쪽 왼쪽): 어깨에서 위로 든 팔 + 손목이 앞뒤로 까딱
-  {const sx=-r*.4,sy=r*.12,ex=-r*.6,ey=-r*.5;c.fillStyle=por(ex,(sy+ey)/2,r*.18,r*.36);c.strokeStyle=OL;c.lineWidth=1.3;c.beginPath();c.moveTo(sx+r*.14,sy+r*.04);c.quadraticCurveTo(ex+r*.2,ey+r*.3,ex+r*.15,ey);c.lineTo(ex-r*.15,ey);c.quadraticCurveTo(ex-r*.2,ey+r*.36,sx-r*.12,sy+r*.02);c.closePath();c.fill();c.stroke();
-    sak(ex+r*.02,(sy+ey)/2+r*.06,r*.1);
-    c.save();c.translate(ex,ey);c.scale(1,1-bend*.5);c.fillStyle=por(0,-r*.12,r*.17,r*.16);c.beginPath();c.ellipse(0,-r*.12,r*.17,r*.16,0,0,7);c.fill();c.strokeStyle=OL;c.stroke();toes(0,-r*.1,r*.15);c.restore();}
+  // 손짓하는 왼발(보는 쪽 왼쪽): 어깨에서 이어진 통통한 팔을 위로 들고, 둥근 손(빨간 발가락 줄 3개)이 손목에서 앞뒤로 까딱
+  {const sx=-r*.38,sy=r*.14,wx=-r*.56,wy=-r*.46,ang=Math.sin(t*4)*.32;
+    c.fillStyle=por(wx,(sy+wy)/2,r*.2,r*.36);c.strokeStyle=OL;c.lineWidth=1.3;c.beginPath();c.moveTo(sx+r*.16,sy);c.bezierCurveTo(sx+r*.12,sy-r*.3,wx+r*.16,wy+r*.22,wx+r*.14,wy);c.lineTo(wx-r*.14,wy);c.bezierCurveTo(wx-r*.18,wy+r*.3,sx-r*.18,sy-r*.08,sx-r*.12,sy+r*.06);c.closePath();c.fill();c.stroke();
+    c.fillStyle='rgba(255,255,255,.75)';c.beginPath();c.ellipse(wx-r*.06,wy+r*.2,r*.04,r*.14,.15,0,7);c.fill();sak(wx+r*.03,wy+r*.36,r*.09);
+    c.save();c.translate(wx,wy);c.rotate(ang);c.scale(1,1-Math.max(0,Math.sin(t*4))*.25);
+    const P=new Path2D();P.moveTo(-r*.15,0);P.lineTo(-r*.16,-r*.14);P.bezierCurveTo(-r*.16,-r*.32,r*.16,-r*.32,r*.16,-r*.14);P.lineTo(r*.15,0);P.closePath();
+    c.fillStyle=por(0,-r*.14,r*.17,r*.18);c.fill(P);c.strokeStyle=OL;c.lineWidth=1.3;c.stroke(P);
+    c.strokeStyle=OL;c.lineWidth=.8;[-1,1].forEach(q=>{c.beginPath();c.moveTo(q*r*.055,-r*.25);c.quadraticCurveTo(q*r*.06,-r*.2,q*r*.05,-r*.17);c.stroke();});
+    c.strokeStyle=RD;c.lineWidth=1.6;[-1,0,1].forEach(q=>{c.beginPath();c.moveTo(q*r*.08,-r*.25+Math.abs(q)*r*.02);c.lineTo(q*r*.08,-r*.13);c.stroke();});
+    c.fillStyle='rgba(255,255,255,.85)';c.beginPath();c.ellipse(-r*.07,-r*.22,r*.035,r*.05,-.4,0,7);c.fill();c.restore();}
   c.restore();}
 function pkDraw(){const cv=$('#pkCv');if(!cv)return;const c=cv.getContext('2d');c.setTransform(2,0,0,2,0,0);const t=pk.t,J=pk.jack>0;
   c.save();c.beginPath();c.roundRect(0,0,PKW,PKH,18);c.clip();
@@ -9079,7 +9089,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=200;
+const GVER=201;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
