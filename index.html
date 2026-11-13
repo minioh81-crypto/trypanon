@@ -823,7 +823,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v221 · 2026-11-13</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v222 · 2026-11-13</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1631,8 +1631,8 @@ function drawRobot(c,cx,tipY,k,P,o){k*=.74;
   for(let i=0;i<D.rg;i++){const y=ringY+i*6*k,w=D.cw*(1.06-i*.05);c.fillStyle=GD;c.fillRect(cx-w/2,y,w,5*k);c.fillStyle='rgba(0,0,0,.22)';for(let x=((spin*30)%10);x<w;x+=10)c.fillRect(cx-w/2+x,y,2,5*k);}
   if(D.rg)R.bearing={x:cx-D.cw/2-4,y:ringY-2,w:D.cw+8,h:D.rh+4};
   // skirt plates (kusazuri) hanging over the drill top — shock = more plates and springs
-  {const n=3+Math.min(3,Math.ceil(P.shock/3)),sw=tw*1.02/n,sy=hipY-6*k,sh=(14+P.shock*.9)*k;for(let i=0;i<n;i++){const x=cx-tw*.51+i*sw,sk=Math.sin(t*6+i)*.6*k;
-      c.fillStyle=skin==='oni'||skin==='tiger'?(i%2?(skin==='tiger'?'#f29a2a':'#f2c14e'):'#1a1a1a'):i%2?AR:DK;c.beginPath();c.roundRect(x+1,sy+sk,sw-2,sh,2*k);c.fill();c.fillStyle=GD;c.fillRect(x+1,sy+sk+sh-2.4*k,sw-2,2.4*k);
+  {const n=3+Math.min(3,Math.ceil(P.shock/3)),sw=tw*1.02/n,sy=hipY-6*k,sh=(14+P.shock*.9)*k;c.fillStyle=shade(DK,-.3);c.fillRect(cx-tw*.51,sy,tw*1.02,sh*.8);for(let i=0;i<n;i++){const mi=Math.min(i,n-1-i),x=cx-tw*.51+i*sw,sk=Math.sin(t*6+mi)*.5*k;
+      c.fillStyle=skin==='oni'||skin==='tiger'?(mi%2?'#1a1a1a':(skin==='tiger'?'#f29a2a':'#f2c14e')):shade(AR,mi%2?-.16:0);c.beginPath();c.roundRect(x+.5,sy+sk,sw-1,sh,2*k);c.fill();c.fillStyle=GD;c.fillRect(x+1,sy+sk+sh-2.4*k,sw-2,2.4*k);
       c.strokeStyle='rgba(0,0,0,.25)';c.lineWidth=1;for(let r=1;r<3;r++){c.beginPath();c.moveTo(x+1,sy+sk+sh*r/3);c.lineTo(x+sw-1,sy+sk+sh*r/3);c.stroke();}}
     R.shock={x:cx-tw*.55,y:sy-2,w:tw*1.1,h:sh+6};}
   // torso (housing) with sakura pattern and chest crest
@@ -7448,7 +7448,7 @@ Object.assign(LM3,{
   for(const s of[-1,1]){LjCastle(G,{x:s*1.95,z:1.0,s:.55,base:{rb:1.7,rt:1.4,h:.9,mush:1.8},rc,ridgeC:'#e6e4dc',face:'#f8f6f0',shs:.9,fl:[[1.9,1.6,.42,{gf:.3,gs:.26}],[1.55,1.3,.38,{kara:.24}],[1.2,1,.36,{gs:.2}]]});
     LjWalk(G,[s*.95,-.05],[s*1.65,.62],.5,.36,.32,rc);LjWalk(G,[s*.6,1.25],[s*1.5,1.25],.35,.3,.3,rc);}
   // 흰 담(도베이)
-  for(let i=0;i<7;i++)l3Add(G,new T.BoxGeometry(.6,.05+i*.12,.14),L3M('#fff',{map:L3W(L3TX.stone(),1,.4)}),0,(.05+i*.12)/2,2.75-i*.13);
+  {const sm=L3M('#fff',{map:L3W(L3TX.stone(),1,.4)});for(let i=0;i<8;i++){const h=.95-i*.117;l3Add(G,new T.BoxGeometry(.72,h,.19),sm,0,h/2,.44+i*.17);}for(const s of[-1,1])for(let i=0;i<8;i++){const h=.95-i*.117+.1;l3Add(G,new T.BoxGeometry(.09,h,.19),L3M('#f8f6f0'),s*.405,h/2,.44+i*.17);}}
   G.userData.cam={dist:10,y:1.6};return G;},
  kumamoto(){const T=THREE,G=new T.Group();lmCastleYard2(G);const rc='#3a3d44';
   LjCastle(G,{z:-.3,base:{rb:2.9,rt:1.95,h:1.35,mush:2.6,tex:L3TX.dark()},rc,wall:'b',face:'#202024',ridgeC:'#5a5e66',trim:'#f2f0ea',shs:1.1,
@@ -7517,7 +7517,7 @@ Object.assign(LM3,{
   for(const s of[-1,1]){const dp=new T.Group();dp.position.set(s*.75,0,.85);G.add(dp);l3Add(dp,new T.CylinderGeometry(.06,.07,.9,10),L3M('#d8d0c0'),0,.45,0);for(let i=0;i<4;i++){const t=l3Add(dp,new T.TorusGeometry(.085,.025,5,14),L3M('#c8c0b0'),0,.25+i*.18,0);t.rotation.x=Math.PI/2;t.rotation.y=i;}l3Add(dp,new T.SphereGeometry(.09,8,6),L3M('#d8d0c0'),0,.95,.04);
     const sh=new T.Group();sh.position.set(s*1.25,0,1.3);G.add(sh);l3Add(sh,new T.BoxGeometry(.24,.12,.24),L3M('#a89a84'),0,.06,0);l3Add(sh,new T.SphereGeometry(.12,10,8),L3M('#c8743a'),0,.24,0);l3Add(sh,new T.SphereGeometry(.1,10,8),L3M('#c8743a'),0,.4,.04);l3Add(sh,new T.SphereGeometry(.03,6,5),L3M('#1a1a1a'),-.04,.44,.13);l3Add(sh,new T.SphereGeometry(.03,6,5),L3M('#1a1a1a'),.04,.44,.13);}
   // 북전·남전
-  for(const s of[-1,1]){const H=new T.Group();H.position.set(s*2.55,0,.4);H.rotation.y=-s*Math.PI/2;G.add(H);l3Add(H,new T.BoxGeometry(2.0,.2,.9),L3M('#e8dcc0'),0,.1,0);l3Add(H,new T.BoxGeometry(1.8,.55,.75),s<0?[wl2,wl2,red,red,wl,wl]:L3M('#fff',{map:L3W(LjWallTex('w'),4,1)}),0,.475,0);const r=LjRoof(2.3,1.2,.4,s<0?rc:'#5a5a60',{ridge:.6,joint:s<0?jt:null});r.position.y=.75;H.add(r);}
+  for(const s of[-1,1]){const H=new T.Group();H.position.set(s*2.55,0,.4);H.rotation.y=-s*Math.PI/2;G.add(H);l3Add(H,new T.BoxGeometry(2.0,.2,.9),L3M('#e8dcc0'),0,.1,0);l3Add(H,new T.BoxGeometry(1.8,.55,.75),[wl2,wl2,red,red,wl,wl],0,.475,0);const r=LjRoof(2.3,1.2,.4,rc,{ridge:.6,joint:jt});r.position.y=.75;H.add(r);}
   G.userData.cam={dist:9.5,y:1.2};return G;},
  clock(){const T=THREE,G=new T.Group();l3Ground(G,4.2,L3TX.lawn(),'#ffffff',9);const pz=l3Add(G,new T.CircleGeometry(2.4,40),L3M('#fff',{map:L3W(L3TX.plaza(),5,5)}),0,.005,.3);pz.rotation.x=-Math.PI/2;
   const wt=s3Tex('l3cw',128,128,(g,w,h)=>{g.fillStyle='#fbfaf4';g.fillRect(0,0,w,h);for(let y=0;y<h;y+=6){g.fillStyle='#dcdad0';g.fillRect(0,y+4.6,w,1.4);}for(const yy of[16,80])for(let x=12;x<w;x+=42){g.fillStyle='#e8e6de';g.fillRect(x-3,yy-3,26,40);g.fillStyle='#3a4a4a';g.fillRect(x,yy,20,34);g.fillStyle='#fbfaf4';g.fillRect(x+9,yy,2,34);g.fillRect(x,yy+16,20,2);g.fillStyle='#4a6a5a';g.fillRect(x-7,yy,4,34);g.fillRect(x+23,yy,4,34);}});
@@ -7530,7 +7530,7 @@ Object.assign(LM3,{
   const po=new T.Group();po.position.set(0,0,.8);G.add(po);for(const s of[-1,1])l3Add(po,new T.BoxGeometry(.06,.75,.06),wh,s*.35,.5,.35);l3Add(po,new T.BoxGeometry(.9,.06,.5),wh,0,.88,.2);for(let i=0;i<9;i++)l3Add(po,new T.BoxGeometry(.02,.16,.02),wh,-.4+i*.1,.99,.43);l3Add(po,new T.BoxGeometry(.9,.03,.03),wh,0,1.07,.43);
   l3Add(po,new T.BoxGeometry(.4,.6,.02),L3M('#5a3a2a'),0,.42,.01);l3Add(po,new T.BoxGeometry(.8,.1,.4),L3M('#a8a294'),0,.05,.3);
   // 시계탑: 몸통 · 4면 시계 · 종루 · 첨탑 · 풍향계
-  const tw=new T.Group();tw.position.set(0,1.62,.45);G.add(tw);l3Add(tw,new T.BoxGeometry(.7,1.0,.7),wh,0,.5,0);for(let y=0;y<10;y++)l3Add(tw,new T.BoxGeometry(.712,.012,.712),L3M('#dcdad0'),0,.08+y*.09,0);
+  const tw=new T.Group();tw.position.set(0,2.02,0);G.add(tw);l3Add(tw,new T.BoxGeometry(.7,1.0,.7),wh,0,.5,0);for(let y=0;y<10;y++)l3Add(tw,new T.BoxGeometry(.712,.012,.712),L3M('#dcdad0'),0,.08+y*.09,0);
   const face=s3Tex('l3clk2',128,128,(g,w,h)=>{g.fillStyle='#fffdf4';g.beginPath();g.arc(64,64,60,0,7);g.fill();g.strokeStyle='#1e2a3a';g.lineWidth=6;g.stroke();g.fillStyle='#1e2a3a';g.font='bold 15px serif';g.textAlign='center';g.textBaseline='middle';['XII','III','VI','IX'].forEach((t,i)=>{const a=i/4*Math.PI*2-Math.PI/2;g.fillText(t,64+Math.cos(a)*44,64+Math.sin(a)*44);});for(let i=0;i<12;i++){if(i%3==0)continue;const a=i/12*Math.PI*2;g.beginPath();g.arc(64+Math.cos(a)*46,64+Math.sin(a)*46,2.5,0,7);g.fill();}g.lineWidth=5;g.strokeStyle='#1e2a3a';g.beginPath();g.moveTo(64,64);g.lineTo(64,28);g.moveTo(64,64);g.lineTo(88,74);g.stroke();});
   for(let k=0;k<4;k++){const a=k*Math.PI/2,f=l3Add(tw,new T.CircleGeometry(.27,28),L3M('#fff',{map:face}),Math.sin(a)*.356,.55,Math.cos(a)*.356);f.rotation.y=a;const rg2=l3Add(tw,new T.TorusGeometry(.27,.02,5,28),L3M('#1e2a3a'),Math.sin(a)*.357,.55,Math.cos(a)*.357);rg2.rotation.y=a;}
   const cn=new T.Mesh(new T.ConeGeometry(.56,.22,4,1,true),rr);cn.rotation.y=Math.PI/4;cn.position.y=1.1;tw.add(cn);
@@ -9661,7 +9661,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=221;
+const GVER=222;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
