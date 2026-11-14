@@ -1670,3 +1670,22 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 — 아래 '자동 출항' 주기마다 저절로 지도 남해~동해를 항해해요. 주인공은 그대로예요.	— it sails the map's south-to-east sea on its own each 'auto-sail' cycle below. Your hero stays the same.	— 下の「自動出航」周期ごとにマップの南海〜東海を自動で航海します。主人公はそのまま。
 특수 영웅·소장품은 사서 갖고만 있어도 보유 효과가 적용돼요(착용·장착 필요 없음). 출현 이벤트만 그 영웅을 착용해야 해요.	Special heroes and collectibles apply their owned bonus just by owning them (no need to equip). Only appearance events need that hero equipped.	特殊英雄・所蔵品は買って持つだけで所持効果が適用されます(着用・装備不要)。出現イベントだけはその英雄を着用する必要があります。
 💡 특수 영웅·소장품은 사서 갖고만 있어도 보유 효과가 적용돼요(착용·장착 필요 없음). 출현 이벤트만 그 영웅을 착용해야 해요.	💡 Special heroes and collectibles apply their owned bonus just by owning them (no need to equip). Only appearance events need that hero equipped.	💡 特殊英雄・所蔵品は買って持つだけで所持効果が適用されます(着用・装備不要)。出現イベントだけはその英雄を着用する必要があります。
+출석 보상 받기	Claim the attendance reward	出席報酬を受け取る
+미니 게임 {}판 하기	Play {} mini games	ミニゲームを{}回プレイ
+캡슐 뽑기 {}번	Capsule draw ×{}	カプセルガチャ{}回
+드릴 타이밍으로 지층 {}개 뚫기	Drill {} layers in Drill Timing	ドリルタイミングで地層を{}つ掘る
+원정 블록 {}개 깨기	Break {} expedition blocks	遠征ブロックを{}個壊す
+부품 {}번 강화하기	Upgrade parts {} time(s)	部品を{}回強化
+본공 {} 더 파기	Dig {} deeper in the main bore	本坑をさらに{}掘る
+📋 오늘의 미션	📋 Today's missions	📋 今日のミッション
+자정에 새 미션 · 하나당 금화·재료	New missions at midnight · coins & materials each	深夜0時に新ミッション · 1つごとに金貨・素材
+✓ 받음	✓ Claimed	✓ 受取済み
+받기	Claim	受け取る
+🎁 주간 상자	🎁 Weekly chest	🎁 週間ボックス
+이번 주 미션 3개를 다 깬 날 {}/{}일 · {}일 뒤 초기화	Days this week with all 3 missions done {}/{} · resets in {} days	今週ミッション3つを全部達成した日 {}/{}日 · {}日後にリセット
+이번 주 상자는 받았어요 · 월요일에 새 상자	This week's chest claimed · new chest on Monday	今週のボックスは受取済み · 月曜に新しいボックス
+🎁 주간 상자 열기	🎁 Open the weekly chest	🎁 週間ボックスを開ける
+{}일 더 깨면 열려요 (금화 큰 묶음 + 재료 3종)	Opens after {} more days (big coin pile + 3 materials)	あと{}日達成で開きます(金貨の大束 + 素材3種)
+🎉 주간 상자를 열었어요!	🎉 You opened the weekly chest!	🎉 週間ボックスを開けました！
+🎉 미션 보상을 받았어요!	🎉 Mission reward claimed!	🎉 ミッション報酬を受け取りました！
+
