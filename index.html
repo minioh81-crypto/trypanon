@@ -841,7 +841,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v241 · 2026-11-14</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v242 · 2026-11-14</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -9492,7 +9492,36 @@ function dzExp(rid){if(!isJP||!S.dz||!rid)return 1;const r=regById(rid);if(!r)re
   if(dzOn('tsunami')){const d=dzKm([S.dz.lon,S.dz.lat],[r.lon,r.lat]);return r.t==='sea'?1-.7*Math.max(.05,1-d/800)*dzRes():1-.25*Math.max(0,1-d/350)*dzRes();}if(dzOn('typhoon')){const d=dzKm(tyEye(),[r.lon,r.lat]);return r.t==='sea'?1-.55*Math.max(0,1-d/550)*dzRes():1-.35*Math.max(0,1-d/380)*dzRes();}return 1;}
 function dzExpPct(rid){return Math.round((dzExp(rid)-1)*100);}
 let dzT=40;
-function dzStart(k,o={}){const now=Date.now();S.dz=Object.assign({k,until:now+DZD[k]*1000,t0:now},o);save();sfx('event');
+// ---- 천재지변 효과음(일본): 경보음 + 지진 땅울림·균열 / 쓰나미 파도 / 태풍 바람·번개·천둥 ----
+const DZB=()=>{if(!SND.dzG){SND.dzG=SND.ctx.createGain();SND.dzG.gain.value=.42;SND.dzG.connect(SND.sfxG);}return SND.dzG;};
+function dzWash(t,d,o){const c=SND.ctx,s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=SND.noise;s.loop=true;f.type=o.ft||'lowpass';f.Q.value=o.q||.7;
+  f.frequency.setValueAtTime(o.f,t);(o.fk||[]).forEach(([k,v])=>f.frequency.linearRampToValueAtTime(v,t+k*d));
+  g.gain.setValueAtTime(.0001,t);(o.gk||[[.15,o.v],[.8,o.v],[1,.0001]]).forEach(([k,v])=>g.gain.linearRampToValueAtTime(Math.max(.0001,v),t+k*d));
+  s.connect(f);f.connect(g);g.connect(DZB());s.start(t,Math.random()*.8);s.stop(t+d+.05);}
+function dzAlarm(t,k){if(k==='quake'){// 긴급 지진 속보 차임: 올라가는 화음 두 번
+    for(let r=0;r<2;r++)[[659,0],[880,.13],[1109,.26],[880,.39]].forEach(([f,dt])=>{tone({bus:DZB(),t:t+r*.62+dt,f,d:.32,v:.13,type:'triangle'});tone({bus:DZB(),t:t+r*.62+dt,f:f*2,d:.2,v:.03,type:'sine'});});return 1.3;}
+  if(k==='tsunami'){// 사이렌: 낮게 올라갔다 내려오는 긴 소리 두 번
+    for(let r=0;r<2;r++){tone({bus:DZB(),t:t+r*1.25,f:420,f2:960,glide:.7,d:1.15,a:.12,v:.11,type:'sawtooth',lp:1800});tone({bus:DZB(),t:t+r*1.25,f:423,f2:964,glide:.7,d:1.15,a:.12,v:.08,type:'square',lp:1400});}return 2.5;}
+  // 태풍: 경보 삐삐 (두 음 번갈아)
+  for(let i=0;i<6;i++)tone({bus:DZB(),t:t+i*.2,f:i%2?740:988,d:.17,a:.01,v:.1,type:'square',lp:2600});return 1.25;}
+function dzThunder(t,big){noise({bus:DZB(),t,f:3200,q:.6,d:.12,v:.5*(big?1:.7)});noise({bus:DZB(),t:t+.02,f:1400,q:.5,d:.35,v:.3});
+  dzWash(t+.05,big?3.2:2.4,{f:420,fk:[[.4,160],[1,70]],v:big?.55:.4,gk:[[.04,big?.55:.4],[.25,.32],[.5,.38],[1,.0001]]});tone({bus:DZB(),t:t+.04,f:70,f2:34,d:1.6,a:.02,v:.3,type:'sine'});}
+function dzSnd(k){const c=slOK();if(!c||document.hidden)return;let t=c.currentTime+.05;t+=dzAlarm(t,k)+.15;
+  if(k==='quake'){// 땅울림(낮게 흔들리며 커졌다 작아짐) + 쿵 + 바위가 갈라지는 딱딱 소리
+    dzWash(t,5.2,{f:150,fk:[[.3,220],[1,90]],v:.6,gk:[[.08,.35],[.18,.65],[.3,.45],[.42,.7],[.6,.5],[.8,.3],[1,.0001]]});
+    for(let i=0;i<4;i++)tone({bus:DZB(),t:t+.2+i*.9+Math.random()*.3,f:62,f2:36,d:.7,a:.01,v:.32,type:'sine'});
+    for(let i=0;i<14;i++){const tt=t+.4+Math.random()*3.8;noise({bus:DZB(),t:tt,f:900+Math.random()*1800,q:2.5,d:.05+Math.random()*.08,v:.18+Math.random()*.14});if(i%3===0)tone({bus:DZB(),t:tt,f:180,f2:90,d:.12,v:.1,type:'triangle'});}
+    dzWash(t+1.2,1.6,{ft:'bandpass',f:2400,q:1.4,fk:[[1,900]],v:.12});}
+  else if(k==='tsunami'){// 바다가 빠졌다가 큰 파도 세 번: 밀려오는 우르릉 + 부서지는 쏴아
+    for(let w=0;w<3;w++){const tw=t+w*2.3,big=w===1?1.25:1;dzWash(tw,2.6,{f:300,fk:[[.55,900],[1,250]],v:.42*big,gk:[[.45,.42*big],[.6,.5*big],[1,.0001]]});
+      dzWash(tw+1.2,1.6,{ft:'highpass',f:1800,fk:[[1,800]],v:.22*big,gk:[[.06,.22*big],[.35,.16*big],[1,.0001]]});tone({bus:DZB(),t:tw+1.15,f:55,f2:38,d:.9,a:.03,v:.25*big,type:'sine'});}}
+  else if(k==='typhoon'){// 휘몰아치는 바람(높낮이가 휙휙 변함) + 번개·천둥
+    dzWash(t,7,{ft:'bandpass',q:1.6,f:380,fk:[[.15,900],[.3,520],[.45,1250],[.6,640],[.78,1100],[1,420]],v:.34,gk:[[.1,.25],[.3,.38],[.5,.26],[.7,.4],[.9,.2],[1,.0001]]});
+    dzWash(t,7,{f:240,v:.22});dzThunder(t+1.6,1);dzThunder(t+5,0);}}
+function dzAmb(dt){// 태풍이 지나가는 동안: 가끔 돌풍·천둥 (지도·본공 화면에서만, 소리 켜져 있을 때)
+  if(!dzOn('typhoon'))return;dzAmb.t=(dzAmb.t??8)-dt;if(dzAmb.t>0)return;dzAmb.t=14+Math.random()*12;const c=slOK();if(!c||document.hidden)return;const t=c.currentTime+.05;
+  dzWash(t,3.5,{ft:'bandpass',q:1.5,f:420,fk:[[.4,1100],[1,380]],v:.22});if(Math.random()<.6)dzThunder(t+.6+Math.random(),Math.random()<.4);}
+function dzStart(k,o={}){const now=Date.now();S.dz=Object.assign({k,until:now+DZD[k]*1000,t0:now},o);save();if(k==='outage')sfx('event');else dzSnd(k);
   const ex=S.ex.active?regById(S.ex.active):null,ep=ex?dzExpPct(ex.id):0;
   if(k==='quake'){document.body.classList.add('dzshake');setTimeout(()=>document.body.classList.remove('dzshake'),2600);
     pushAlert({kind:'dz',icon:dzIcon('quake'),title:`지진 발생 · M${S.dz.m.toFixed(1)} ${S.dz.n}`,text:`열도 침강 경보 ${dzLv()}단계 · ${DZD.quake}초 동안 본공 −20%`+(ex?` · ${ex.n} 원정 ${ep}% (진원에서 ${Math.round(dzKm([S.dz.lon,S.dz.lat],[ex.lon,ex.lat]))}km)`:''),ttl:6});}
@@ -9508,7 +9537,7 @@ function dzTick(dt){if(!isJP)return;const b=$('#dzBar');
     else if(o.k==='tsunami'&&Math.random()<.35)dzStart('outage',{n:o.n});
     else{dzMap();dzFxSync();save();}}
   if(S.dz)dzFxSync();
-  if(dzOn('typhoon'))tyTick(dt);
+  if(dzOn('typhoon')){tyTick(dt);dzAmb(dt);}
   if(S.dz){const left=Math.max(0,Math.ceil((S.dz.until-Date.now())/1000)),z=S.dz,ex=S.ex.active,ep=ex?dzExpPct(ex):0;
     const t=z.k==='quake'?`🌏 지진 M${z.m.toFixed(1)} · ${z.n} · 본공 −20%${ex?` · 원정 ${ep}%`:''} · <b>0:${String(left).padStart(2,'0')}</b>`:z.k==='tsunami'?`🌊 쓰나미 · ${z.n}${ex?` · 원정 ${ep}%`:''} · <b>0:${String(left).padStart(2,'0')}</b>`:z.k==='typhoon'?`🌀 태풍 ${z.no||1}호 · ${tyWhere(tyEye(z))}${ex?` · 원정 ${ep}%`:''} · <b>${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}</b>`:`⚡ 정전 · 보급 끊김 · 시추 멈춤 · <b>0:${String(left).padStart(2,'0')}</b>`;
     b.hidden=titleOn;b.className='dzbar'+(z.k==='tsunami'||z.k==='typhoon'?' ts':z.k==='outage'?' out':'');if(b.dataset.t!==t){b.dataset.t=t;b.innerHTML=t;}
@@ -10030,7 +10059,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=241;
+const GVER=242;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
