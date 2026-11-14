@@ -822,7 +822,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v239 · 2026-11-14</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v240 · 2026-11-14</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2974,7 +2974,7 @@ var RIPC=null;function RIPPLES(){if(RIPC)return RIPC;let a='',b='';for(let y=-26
     <text x="${x+lx}" y="${y+ly}" text-anchor="${la}">${label}</text>${res&&cls!=='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9.5}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}${res&&cls==='sea'?`<text class="rlab" x="${x+lx}" y="${y+ly+9}" text-anchor="${la}" style="fill:${RES[res]}">${res}</text>`:''}</g>`;
   if(isJP)g+=`<g style="pointer-events:none">${REG.map(r=>{const q=jpPos()[r.id];if(Math.hypot(q.x-q.x0,q.y-q.y0)<6)return '';return `<path d="M${q.x0.toFixed(1)},${q.y0.toFixed(1)} L${q.x.toFixed(1)},${q.y.toFixed(1)}" stroke="#fff" stroke-width=".7" stroke-dasharray="1.6 1.4" opacity=".75"/><circle cx="${q.x0.toFixed(1)}" cy="${q.y0.toFixed(1)}" r="1.8" fill="#fff" stroke="#2b211c" stroke-width=".5"/>`;}).join('')}</g>`;
   for(const r of REG){const x=+mapX(r).toFixed(1),y=+mapY(r).toFixed(1);g+=r.t==='sea'||isJP?node(r.id,r.t==='sea'?'sea':'land',x,y,r.n,0,'middle',isJP?15:19,r.res):(o=>o?node(r.id,'land',+(x+o[0]).toFixed(1),+(y+o[1]).toFixed(1),r.n,-11,'end',4,r.res):node(r.id,'land',x,y,r.n,r.lx??10,r.la||'start',4,r.res))(!isJP&&WXO[r.id]);}
-  g+=node('yanggu','base',+(isJP?JPP(...HOME)[0]:PX(HOME[0])).toFixed(1),+(isJP?JPP(...HOME)[1]:PY(HOME[1])).toFixed(1),isJP?'후지 본공':'양구 본공',isJP?11:-11,isJP?'start':'end',4);
+  g+=node('yanggu','base',+(isJP?JPP(...HOME)[0]:PX(HOME[0])-7).toFixed(1),+(isJP?JPP(...HOME)[1]:PY(HOME[1])).toFixed(1),isJP?'후지 본공':'양구 본공',isJP?11:-11,isJP?'start':'end',4);
   if(isJP){ODAP=ODAR.map(([lo,la])=>JPP(lo,la));g+=`<g id="mOda" style="pointer-events:none;display:none"><g id="mOdaPos"><g id="mOdaDir">${marchSVG()}</g></g></g>`;}
   g+='<g id="mWxI" style="pointer-events:none"></g><g id="mDz" style="pointer-events:none"></g>';
   setTimeout(dzMap,0);$('#map').innerHTML=sea+`<svg id="mapSvg" class="${isJP?'jpmap':''}" viewBox="${VB}" role="img" aria-label="${isJP?'일본 시추 지도':'대한민국 시추 지도'}">${g}</svg>`;wxSet(true);setTimeout(mapLonFit,40);}
@@ -3034,7 +3034,7 @@ function wxIcon(id){const A=(t,v,d,b=0)=>`<animateTransform attributeName="trans
 const WXB={jiri:[2,13],mai:[-10,-9]};
 // 날씨 아이콘 자리 조정(지역 이름·본공과 겹치지 않게)
 const WXO={jiri:[49,2]};
-function wxIcons(){const hw=homeWx(),hp=isJP?JPP(...HOME):[PX(HOME[0]),PY(HOME[1])],bx=hp[0]+(isJP?12:0),by=hp[1]+(isJP?12:-19);return `<g class="wxi" data-w="${hw.id}" data-r="yanggu" transform="translate(${bx.toFixed(1)},${by.toFixed(1)})"><circle r="7.4" fill="rgba(12,18,22,.85)" stroke="rgba(255,215,106,.8)" stroke-width=".8"/><g transform="scale(.6)">${wxIcon(hw.id)}</g></g>`+REG.map(r=>{const o=WXO[r.id]||[0,0],x=mapX(r)+o[0],y=mapY(r)+o[1],w=wxOf(r.id);return `<g class="wxi" data-w="${w.id}" data-r="${r.id}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})${isJP?' scale(.8)':''}"><circle r="8.6" fill="rgba(12,18,22,.85)" stroke="rgba(255,255,255,.55)" stroke-width=".8"/><g transform="scale(.72)">${wxIcon(w.id)}</g></g>`;}).join('');}
+function wxIcons(){const hw=homeWx(),hp=isJP?JPP(...HOME):[PX(HOME[0])-7,PY(HOME[1])],bx=hp[0]+(isJP?12:0),by=hp[1]+(isJP?12:-19);return `<g class="wxi" data-w="${hw.id}" data-r="yanggu" transform="translate(${bx.toFixed(1)},${by.toFixed(1)})"><circle r="7.4" fill="rgba(12,18,22,.85)" stroke="rgba(255,215,106,.8)" stroke-width=".8"/><g transform="scale(.6)">${wxIcon(hw.id)}</g></g>`+REG.map(r=>{const o=WXO[r.id]||[0,0],x=mapX(r)+o[0],y=mapY(r)+o[1],w=wxOf(r.id);return `<g class="wxi" data-w="${w.id}" data-r="${r.id}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})${isJP?' scale(.8)':''}"><circle r="8.6" fill="rgba(12,18,22,.85)" stroke="rgba(255,255,255,.55)" stroke-width=".8"/><g transform="scale(.72)">${wxIcon(w.id)}</g></g>`;}).join('');}
 function rainbowSVG(){// diagonal rainbow: rises out of the west sea and comes down between Seoraksan and Taebaeksan
   const A=isJP?JPP(133.6,36.4):[PX(125.35),PY(35.15)],B=isJP?JPP(141.4,39.6):[PX(128.72),PY(37.62)],dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy);let nx=-dy/L,ny=dx/L;if(ny>0){nx=-nx;ny=-ny;}
   const M=[(A[0]+B[0])/2,(A[1]+B[1])/2],H=L*.42,cols=['#ff4d4d','#ff9a3a','#ffe14a','#5fd06a','#4aa8ff','#4a62e0','#a64aff'],q=(o,k=1)=>{const a=[A[0]+nx*o,A[1]+ny*o],b=[B[0]+nx*o,B[1]+ny*o],c=[M[0]+nx*(H+o*k),M[1]+ny*(H+o*k)];return [a,b,c];};
@@ -10011,7 +10011,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=239;
+const GVER=240;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
