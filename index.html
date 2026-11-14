@@ -841,7 +841,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v233 · 2026-11-14</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v234 · 2026-11-14</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -908,7 +908,7 @@ const PARTS=[
  {id:'cable',n:'강화 케이블',res:'현무암 섬유',look:'샤프트가 굵은 꼬임 케이블로 바뀜',eff:l=>'굴착력 ×'+(1+.25*l).toFixed(2)},
 ];
 const BOOSTCAP=120; // seconds: boosters stack up to 2 minutes
-let FUEL=[{res:'원유',need:20,m:2,s:6,mc:.01},{res:'천연가스',need:20,m:3,s:10,mc:.02},{res:'가스 하이드레이트',need:12,m:5,s:15,mc:.04}];
+let FUEL=[{res:'원유',need:20,m:1.5,s:6,mc:.01},{res:'천연가스',need:20,m:2,s:10,mc:.02},{res:'가스 하이드레이트',need:12,m:2.5,s:15,mc:.04}]; // 부스터 배수(v234: 2·3·5 → 1.5·2·2.5)
 const fuelNeed=f=>Math.round(f.need*(1+(S.dl-1)/10)),fuelSec=f=>Math.round(f.s*(1+.1*L('cool')+PK('energy',.2))),fuelCost=f=>Math.max(50,Math.round(dlCost(Math.min(DLOPEN,S.dl+1))*f.mc));
 const TIERS=[{n:'견습 쇠송곳',lv:0,cost:0,mul:1},{n:'트리파논 Mk.I',lv:2,cost:1000,mul:2},{n:'트리파논 Mk.II',lv:4,cost:15000,mul:4},
  {n:'트리파논 Mk.III',lv:6,cost:200000,mul:10},{n:'트리파논 Mk.IV',lv:8,cost:1000000,mul:30},{n:'아다마스',lv:10,cost:4000000,mul:100}];
@@ -993,7 +993,7 @@ REG_JP.forEach(r=>Object.assign(r,JPLAB[r.id]?{jp:JPLAB[r.id]}:{}));
 const PARTS_JP={bit:['처트','망간 단괴',5],housing:['현무암'],bearing:['안산암'],shock:['셰일'],sensor:['화강암','열수 광물',0],heat:['화산재'],press:['유황'],insul:['흑요석'],cool:['비취','메탄 하이드레이트',0],cable:['용암석','희토류 진흙',10]};
 if(isJP){LAY.splice(0,LAY.length,...LAY_JP);REG.splice(0,REG.length,...REG_JP);
   PARTS.forEach(p=>{const [r,sb,from]=PARTS_JP[p.id];p.res=r;if(sb){p.sub=sb;p.subFrom=from;}else{delete p.sub;delete p.subFrom;}});
-  FUEL=[{res:'메탄 하이드레이트',need:20,m:2,s:6,mc:.01},{res:'열수 광물',need:20,m:3,s:10,mc:.02},{res:'망간 단괴',need:12,m:5,s:15,mc:.04}];}
+  FUEL=[{res:'메탄 하이드레이트',need:20,m:1.5,s:6,mc:.01},{res:'열수 광물',need:20,m:2,s:10,mc:.02},{res:'망간 단괴',need:12,m:2.5,s:15,mc:.04}];}
 const CORE=6371000;LAY.forEach(l=>LAY0.push({H:l.H,v:l.v}));
 function applyMode(){const m=MD(),p2=S.part===2;MAXLV=p2?m.MAXLV2:m.MAXLV;DLOPEN=p2?m.DLOPEN2:m.DLOPEN;RESC=m.RESC;MONC=m.MONC;
   const n1=LAY.filter(l=>!l.p2).length;LAY.forEach((l,i)=>{if(!l.p2){l.H=LAY0[i].H*(i>=2?m.Hmul:1)*(m.Hm?m.Hm[i]:1);l.v=LAY0[i].v*m.vmul[i];l.req=m.LREQ[i];}else{const j=i-n1;l.H=LAY0[i].H*m.Hmul*m.Hm2[j];l.v=LAY0[i].v*m.vmul2[j];l.req=m.LREQ2[j];}});
@@ -10016,7 +10016,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=233;
+const GVER=234;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
