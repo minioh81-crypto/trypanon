@@ -822,7 +822,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v242 · 2026-11-14</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v243 · 2026-11-14</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -7326,7 +7326,7 @@ const SCULPT={},SCDEF={
   L.push(B([0,1.1,-.1],[.31,.3,.15],.15),E([0,1.27,-.05],[.4,.2,.25],.06),C([-.34,1.42,-.09],[.34,1.42,-.09],.14,.14,.08),E([0,1.0,0],[.38,.2,.28],.08),C([0,1.46,-.07],[0,1.57,-.06],.1,.095,.04));
   // 무릎 위 옷자락 · 허벅지 · 무릎 · 아래로 떨어지는 자락 · 넓게 퍼진 밑단 · 신
   L.push(B([0,.84,.16],[.4,.1,.3],.1,.05),B([0,.5,.5],[.4,.36,.1],.1,.05),E([0,.17,.5],[.54,.1,.21],.06));
-  for(const s of[-1,1])L.push(C([s*.2,.83,-.1],[s*.25,.85,.4],.168,.162,.04),E([s*.265,.87,.46],[.155,.125,.135],.03),C([s*.27,.8,.5],[s*.3,.3,.56],.1,.13,.05),E([s*.2,.14,.72],[.09,.058,.13],.02));
+  for(const s of[-1,1])L.push(C([s*.2,.83,-.1],[s*.25,.85,.4],.168,.162,.04),E([s*.265,.87,.46],[.155,.125,.135],.03),C([s*.265,.8,.5],[s*.215,.22,.62],.1,.12,.05),E([s*.21,.13,.72],[.095,.06,.13],.03));
   // 오른팔(든 손): 위팔 · 아래팔 · 넓은 소맷부리 · 아래로 늘어진 큰 소매
   L.push(C([-.41,1.38,-.07],[-.57,1.1,.1],.122,.108,.04),C([-.57,1.1,.1],[-.45,1.33,.29],.098,.078,.03),C([-.52,1.17,.17],[-.458,1.3,.272],.12,.135,.02),B([-.635,.92,.15],[.085,.31,.23],.04,.03));
   // 왼팔(책): 위팔 · 아래팔 · 소맷부리 · 늘어진 소매
@@ -7574,7 +7574,7 @@ const LM3={
   const bk=l3Add(F,new T.BoxGeometry(1.6,1.45,.14),cvM,0,1.3,-.58);
   const tp=new T.Shape();tp.moveTo(-.9,0);tp.quadraticCurveTo(-.85,.3,-.55,.28);tp.quadraticCurveTo(0,.42,.55,.28);tp.quadraticCurveTo(.85,.3,.9,0);tp.lineTo(-.9,0);
   l3Add(F,new T.ExtrudeGeometry(tp,{depth:.18,bevelEnabled:true,bevelSize:.02,bevelThickness:.02,bevelSegments:2}),ad,0,2.0,-.67);
-  for(const s of[-1,1]){l3Add(F,new T.CylinderGeometry(.07,.07,1.5,12),ad,s*.82,1.3,-.58);const sc=l3Add(F,new T.TorusGeometry(.09,.04,8,16,Math.PI*1.4),ad,s*.86,2.12,-.58);sc.rotation.z=s>0?0:Math.PI;
+  for(const s of[-1,1]){l3Add(F,new T.CylinderGeometry(.07,.07,1.5,12),ad,s*.82,1.3,-.58);l3Add(F,new T.SphereGeometry(.085,14,10),ad,s*.82,2.07,-.58).scale.set(1,.7,1);
     l3Add(F,new T.BoxGeometry(.14,.45,.95),cvM,s*.86,.86,-.12);l3Add(F,new T.BoxGeometry(.2,.06,1.0),ad,s*.86,1.1,-.1);const sr=l3Add(F,new T.TorusGeometry(.08,.035,8,14,Math.PI*1.3),ad,s*.86,1.06,.42);sr.rotation.y=Math.PI/2;}
   for(const [w2,h2] of[[1.36,1.2],[1.2,1.04]]){for(const s2 of[-1,1]){l3Add(F,new T.BoxGeometry(.03,h2,.02),au,s2*w2/2,1.3,-.5);l3Add(F,new T.BoxGeometry(w2,.03,.02),au,0,1.3+s2*h2/2,-.5);}}
   for(const s of[-1,1]){const dg=l3Add(F,lmDragonGeo(),L3M('#a8884a',{shininess:50,specular:'#a88c58',vertexColors:true}),s*.86,1.2,.5);dg.rotation.y=Math.PI/2;dg.scale.setScalar(.42);}
@@ -10040,7 +10040,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=242;
+const GVER=243;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
