@@ -566,7 +566,7 @@
 지도 위 육지를 쉬지 않고 달려요.	Gallops across the land nonstop.	マップの陸地を休まず駆けます。
 달리지 않아요. 보유 효과는 그대로 적용돼요.	Doesn't run. Owned bonus still applies.	走りません。所持効果はそのまま適用されます。
 한 번 달리기({}초)를 마치면 {} 쉬었다가 다시 달려요.	After one run ({}s) it rests {} then runs again.	1回の走行({}秒)を終えると{}休んで再び走ります。
-— 사서 갖고 있으면 보유 효과가 적용되고, 아래 '달리기 주기'마다 지도 위 육지를 달려요. 주인공은 그대로예요.	— owning it applies its bonus, and it gallops across the land on the map each 'run cycle' below. Your hero stays the same.	— 買って持てば所持効果が適用され、下の「走行周期」ごとにマップの陸地を駆けます。主人公はそのまま。
+— 아래 '달리기 주기'마다 지도 위 육지를 달려요. 주인공은 그대로예요.	— it gallops across the land on the map each 'run cycle' below. Your hero stays the same.	— 下の「走行周期」ごとにマップの陸地を駆けます。主人公はそのまま。
 · 보유: 육상 원정 재료 +{}%, 본공·원정 굴착력 +{}%	· Owned: land expedition materials +{}%, bore & expedition power +{}%	· 所持:陸上遠征の素材 +{}%、本坑·遠征掘削力 +{}%
 김유신 장군 + 신라 군마 세트	General Kim Yu-sin + Silla Warhorse set	金庾信将軍 + 新羅の軍馬セット
 : 육상 원정 재료 +{}% 추가	: land expedition materials +{}% more	:陸上遠征の素材 +{}% 追加
@@ -1667,3 +1667,6 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 ⏰ 자격루 발동 중	⏰ Water clock active	⏰ 自撃漏 発動中
 🧭 측량 발동 중	🧭 Survey active	🧭 測量 発動中
 📐 상한의 (보유)	📐 Quadrant (owned)	📐 象限儀（保有）
+— 아래 '자동 출항' 주기마다 저절로 지도 남해~동해를 항해해요. 주인공은 그대로예요.	— it sails the map's south-to-east sea on its own each 'auto-sail' cycle below. Your hero stays the same.	— 下の「自動出航」周期ごとにマップの南海〜東海を自動で航海します。主人公はそのまま。
+특수 영웅·소장품은 사서 갖고만 있어도 보유 효과가 적용돼요(착용·장착 필요 없음). 출현 이벤트만 그 영웅을 착용해야 해요.	Special heroes and collectibles apply their owned bonus just by owning them (no need to equip). Only appearance events need that hero equipped.	特殊英雄・所蔵品は買って持つだけで所持効果が適用されます(着用・装備不要)。出現イベントだけはその英雄を着用する必要があります。
+💡 특수 영웅·소장품은 사서 갖고만 있어도 보유 효과가 적용돼요(착용·장착 필요 없음). 출현 이벤트만 그 영웅을 착용해야 해요.	💡 Special heroes and collectibles apply their owned bonus just by owning them (no need to equip). Only appearance events need that hero equipped.	💡 特殊英雄・所蔵品は買って持つだけで所持効果が適用されます(着用・装備不要)。出現イベントだけはその英雄を着用する必要があります。
