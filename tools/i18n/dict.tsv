@@ -1631,3 +1631,23 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 재료는 날마다 다르게 섞여 나와요	Materials change from day to day	素材は日ごとに変わります
 각 {}개	{} each	各{}個
 {} 새로 발견 · {}	{} New find · {}	{} 新発見 · {}
+드릴 타이밍	Drill Timing	ドリルタイミング
+바늘을 초록 칸에 멈춰 5층 뚫기 · {}분마다 1판	Stop the needle in the green to drill 5 layers · 1 play every {} min	針を緑で止めて5層掘る · {}分ごとに1回
+멈춰!	Stop!	止めて！
+다시 하기	Play again	もう一度
+시작하기 · 무료	Start · Free	スタート · 無料
+{} 뒤에 다시	Again in {}	{}後にまた
+{}층 {}	Layer {}: {}	{}層 {}
+바늘이 초록 칸에 오면 멈춰요 (금색 = 완벽, 2배)	Stop when the needle is in the green (gold = perfect, ×2)	針が緑に来たら止めて（金 = パーフェクト、2倍）
+완주 보너스까지!	Full clear bonus!	完走ボーナスまで！
+{}층 뚫음	Drilled {} layers	{}層掘った
+아쉬워요	So close	惜しい
+첫 층에서 막혔어요	Stuck on the first layer	最初の層で止まりました
+바늘이 왔다 갔다 해요. 초록 칸에서 멈추면 한 층씩 내려가요 · 5층 다 뚫으면 보너스	The needle swings back and forth. Stop it in the green to go down a layer · clear all 5 for a bonus	針が行ったり来たり。緑で止めると1層ずつ掘り進む · 5層全部でボーナス
+흙	Soil	土
+암석	Rock	岩石
+맨틀	Mantle	マントル
+핵	Core	核
+★ 완벽	★ Perfect	★ パーフェクト
+탁! 막혔어요	Clunk! Stuck	ガツン！止まった
+핵까지 뚫었다!	Drilled to the core!	核まで掘った！
