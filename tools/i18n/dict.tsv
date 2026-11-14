@@ -1627,3 +1627,6 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 (미보유)	(not owned)	(未所持)
 {}를 착용해야 발동	Wear {} to trigger	{}を着ると発動
 사서 갖고만 있어도 적용돼요(착용·장착 필요 없음). 출현 이벤트만 착용해야 해요.	Works just by owning it (no need to wear or equip). Only the appearance event needs wearing.	持っているだけで適用（着用・装備不要）。出現イベントだけ着用が必要です。
+· 재료는 7일마다 섞여요	· materials reshuffle every 7 days	· 素材は7日ごとに入れ替わります
+재료는 날마다 다르게 섞여 나와요	Materials change from day to day	素材は日ごとに変わります
+각 {}개	{} each	各{}個
