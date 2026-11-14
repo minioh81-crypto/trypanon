@@ -305,7 +305,7 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .art{border-radius:12px;overflow:hidden;line-height:0;border:1px solid var(--line)}
 .art svg{width:100%;height:auto;display:block}
 .art.locked svg{filter:grayscale(.75) brightness(.6)}
-.tright{display:flex;align-items:center;gap:clamp(6px,2vw,10px);flex:none}
+.tright{display:flex;align-items:center;gap:clamp(4px,1.6vw,10px);flex:none}@media(max-width:360px){.tright .menubtn{width:34px;height:34px}.money{font-size:13px}}@media(max-width:340px){.brand b{letter-spacing:.03em}.tright{gap:3px}}
 .avwrap{position:relative;display:inline-flex;flex:none}
 .avbadge{position:absolute;right:-5px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:#ffd34a;font-size:10px;line-height:1;display:grid;place-items:center;box-shadow:0 0 0 2px #101418;pointer-events:none}
 .avhint{position:absolute;top:calc(100% + 9px);right:-8px;white-space:nowrap;background:#ffd34a;color:#2a1f0a;font-size:11px;font-weight:800;padding:5px 9px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.35);animation:avPulse 1.3s ease-in-out infinite;pointer-events:none;z-index:40}
@@ -822,7 +822,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v228 · 2026-11-14</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v229 · 2026-11-14</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -985,6 +985,8 @@ const TICK=.25;
 
 // ---------------- helpers ----------------
 const won=n=>'₩'+Math.floor(n).toLocaleString('ko-KR');
+// 위쪽 바 금액: 최대 6~7글자로 줄인다(₩99.9만 · ₩9,999만 · ₩12.34억 · ₩9,999억 · ₩1.23조 · ₩999조 · ₩1.2경)
+const topWon=n=>{const f=(v,u)=>'₩'+(v>=1000?Math.floor(v).toLocaleString('ko-KR'):v>=100?Math.floor(v):v>=10?+v.toFixed(1):+v.toFixed(2))+u;return n>=1e16?f(n/1e16,'경'):n>=1e12?f(n/1e12,'조'):n>=1e8?f(n/1e8,'억'):n>=1e6?f(n/1e4,'만'):won(n);};
 const fmtN=n=>n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e4?(n/1e3).toFixed(1)+'k':n<10&&n%1?n.toFixed(1):Math.round(n).toLocaleString('ko-KR');
 function fmtD(m){if(m<1000)return Math.floor(m).toLocaleString('ko-KR')+'m';const k=m/1000;return k.toLocaleString('ko-KR',{maximumFractionDigits:k<100?2:k<1000?1:0})+'km';}
 function hsh(a,k){let h=(Math.imul(a|0,374761393)+Math.imul(k|0,668265263))|0;h=Math.imul(h^(h>>>13),1274126177);h^=h>>>16;return (h>>>0)/4294967296;}
@@ -2087,6 +2089,90 @@ const RG_=(id,c,cx=.5,cy=.5,r=.6)=>`<radialGradient id="${id}" cx="${cx}" cy="${
 const lmSky=(u,a,b,c)=>LG_(u+'sk',c?[a,b,c]:[a,b])+`<rect width="120" height="100" fill="url(#${u}sk)"/>`;
 const lmSun=(x,y,r,c='#fff4c8')=>`<circle cx="${x}" cy="${y}" r="${r*2.2}" fill="${c}" opacity=".25"/><circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>`;
 const lmCloud=(x,y,s=1,o=.85)=>`<g opacity="${o}" fill="#fff"><ellipse cx="${x}" cy="${y}" rx="${9*s}" ry="${3*s}"/><ellipse cx="${x-4*s}" cy="${y-2*s}" rx="${5*s}" ry="${3.4*s}"/><ellipse cx="${x+3*s}" cy="${y-3*s}" rx="${5.4*s}" ry="${3.8*s}"/></g>`;
+// ===== 동상 도감 그림(손그림 SVG) =====
+const lmScale=(u,id,c1,c2,w=3,h=2.4)=>`<pattern id="${u}${id}" width="${w}" height="${h}" patternUnits="userSpaceOnUse"><rect width="${w}" height="${h}" fill="${c1}"/><path d="M0,${h} A${w/2},${h*.85} 0 0 1 ${w},${h}" fill="none" stroke="${c2}" stroke-width=".32"/><path d="M${-w/2},${h/2} A${w/2},${h*.85} 0 0 1 ${w/2},${h/2} M${w/2},${h/2} A${w/2},${h*.85} 0 0 1 ${w*1.5},${h/2}" fill="none" stroke="${c2}" stroke-width=".32"/></pattern>`;
+function yiArt(u){const B=`url(#${u}bz)`,D='#23211c',L='#9c9684';
+ return `<defs>${LG_(u+'sk',['#9ec8ea','#d9ecf8','#f2efe6'])}${LG_(u+'bz',['#6e6a5c','#4a473e','#2c2a25'],1,.4)}${LG_(u+'bzv',['#7a7564','#3e3b33'],0,1)}${LG_(u+'cp',['#3a3832','#24221e'],1,0)}${LG_(u+'st',['#e8e4d8','#cfc9ba','#b8b2a2'],1,0)}${LG_(u+'st2',['#d6d1c4','#a8a292'],0,1)}
+ ${lmScale(u,'sc','#4a473e','#77725f',2.6,2)}${lmScale(u,'sc2','#44413a','#6e695a',2.2,1.7)}${RG_(u+'hl',[[0,'#fff',.55],[1,'#fff',0]])}</defs>
+ <rect width="120" height="100" fill="url(#${u}sk)"/>${lmCloud(18,14,1)}${lmCloud(100,9,.8)}
+ <path d="M0,72 L10,58 L18,62 L28,48 L36,54 L44,46 L52,56 L60,52 V100 H0Z" fill="#8fa596"/><path d="M68,58 L78,46 L86,52 L96,40 L104,48 L112,44 L120,50 V100 H66Z" fill="#8fa596"/><path d="M0,78 Q30,66 60,72 Q90,66 120,74 V100 H0Z" fill="#a9bfae"/>
+ <rect x="0" y="88" width="120" height="12" fill="#d6d2c6"/><path d="M0,88 H120" stroke="#fff" stroke-width=".6" opacity=".7"/>
+ <!-- 기단 -->
+ <path d="M47,60 H73 L77,95 H43Z" fill="url(#${u}st)"/><path d="M45,57.5 H75 V61 H45Z" fill="url(#${u}st2)"/><path d="M43,95 H77 V99 H43Z" fill="#b4ae9f"/>${[66,72,78,84,90].map(y=>`<path d="M${44.6+(y-60)*.11},${y} H${75.4-(y-60)*.11}" stroke="#a49e8f" stroke-width=".3"/>`).join('')}
+ ${[...'忠武公李舜臣將軍像'].map((c,i)=>`<text x="60" y="${65.4+i*3.2}" text-anchor="middle" font-size="2.9" font-weight="900" fill="#c8963a" font-family="serif">${c}</text>`).join('')}
+ <!-- 거북선(작게) -->
+ <g transform="translate(18,89)"><path d="M-12,0 Q-12,4 -8,4 H8 Q12,4 12,0Z" fill="#3a372f"/><path d="M-11,0 Q-9,-6 0,-6.5 Q9,-6 11,0Z" fill="#4e4a40"/>${[-8,-5,-2,1,4,7].map(x=>`<path d="M${x},${-4.6-Math.abs(x)*-.05} l.5,-1.4 l.5,1.4" fill="#2a2822"/>`).join('')}<path d="M-11,-1 Q-15,-3 -15,-7 Q-14,-9 -12,-8 Q-12,-5 -10,-3Z" fill="#4e4a40"/><circle cx="-13.4" cy="-7.4" r=".5" fill="#c8963a"/><path d="M11,-1 q3,-1 3,-4" stroke="#4e4a40" stroke-width="1" fill="none"/></g>
+ <!-- 동상: 망토 -->
+ <path d="M50,20 Q42,32 41,46 Q40,54 38,59 L49,58 L50,40Z" fill="url(#${u}cp)"/><path d="M70,20 Q79,30 81,44 Q83,54 85,59 L72,58 L70,40Z" fill="url(#${u}cp)"/>
+ <path d="M41,46 Q40,54 38,59" stroke="#56524a" stroke-width=".4" fill="none"/><path d="M81,44 Q83,54 85,59" stroke="#56524a" stroke-width=".4" fill="none"/>
+ <!-- 다리 · 장화 -->
+ <path d="M53.5,48 L52,56 L50.5,57.5 L56,57.5 L56.5,48Z" fill="${B}"/><path d="M63.5,48 L64,57.5 L69.5,57.5 L68,56 L66.5,48Z" fill="${B}"/><path d="M50,57.5 Q50,55.6 52,55.6 H56.4 V58.2 H50Z" fill="#2a2822"/><path d="M63.6,55.6 H68 Q70,55.6 70,57.5 V58.2 H63.6Z" fill="#2a2822"/>
+ <!-- 속옷 자락 -->
+ <path d="M54,44 L52.5,54 Q60,55.5 67.5,54 L66,44Z" fill="#3e3b34"/>${[55,57.5,60,62.5,65].map(x=>`<path d="M${x},45 L${x-(60-x)*.12},54" stroke="#2a2822" stroke-width=".3"/>`).join('')}
+ <!-- 비늘 치마(앞이 갈라짐) -->
+ <path d="M51,36 L47.6,52 Q53,53.6 59,52.6 L59.4,37Z" fill="url(#${u}sc)" stroke="${D}" stroke-width=".4"/><path d="M69,36 L72.4,52 Q67,53.6 61,52.6 L60.6,37Z" fill="url(#${u}sc)" stroke="${D}" stroke-width=".4"/>
+ <path d="M47.6,52 Q53,53.6 59,52.6 M61,52.6 Q67,53.6 72.4,52" stroke="#8a8470" stroke-width=".6" fill="none"/><path d="M51,36 L47.6,52" stroke="#77725f" stroke-width=".4"/><path d="M50.2,38 L49.4,50" stroke="rgba(255,255,255,.12)" stroke-width="1.6"/>
+ <!-- 배 가리개 -->
+ <path d="M53,33.6 Q60,31.8 67,33.6 L66,38.8 Q60,40.4 54,38.8Z" fill="url(#${u}bzv)" stroke="${D}" stroke-width=".4"/><path d="M55.5,35.4 Q60,34.2 64.5,35.4" stroke="${L}" stroke-width=".35" fill="none"/>
+ <!-- 몸통 · 가슴 비늘 · 허리띠 -->
+ <path d="M52,19.5 Q60,17.6 68,19.5 L69,33 Q60,34.6 51,33Z" fill="url(#${u}sc2)" stroke="${D}" stroke-width=".45"/><path d="M53,21 L52.4,32" stroke="rgba(255,255,255,.14)" stroke-width="1.8"/>
+ <circle cx="60" cy="25" r="2.5" fill="url(#${u}bzv)" stroke="${D}" stroke-width=".4"/><circle cx="60" cy="25" r="1.4" fill="none" stroke="${L}" stroke-width=".35"/><circle cx="60" cy="25" r=".5" fill="${L}"/>
+ <path d="M51,32.6 Q60,34.4 69,32.6 V34.6 Q60,36.4 51,34.6Z" fill="#2c2a25" stroke="#6a6556" stroke-width=".3"/><rect x="58.4" y="32.8" width="3.2" height="2.6" rx=".5" fill="#8a8470"/>
+ <!-- 견갑(3겹) -->
+ ${[2,1,0].map(l=>{const y=19.6+l*2.4,w=6.4-l*.3;return `<path d="M52,${y} Q${52-w*.9},${y-1.2} ${52-w-.6},${y+3} Q${52-w*.5},${y+4.6} 52.4,${y+3.6}Z" fill="url(#${u}sc)" stroke="${D}" stroke-width=".4"/><path d="M68,${y} Q${68+w*.9},${y-1.2} ${68+w+.6},${y+3} Q${68+w*.5},${y+4.6} 67.6,${y+3.6}Z" fill="url(#${u}sc)" stroke="${D}" stroke-width=".4"/><path d="M${52-w-.4},${y+3} Q${52-w*.5},${y+4.4} 52.4,${y+3.5} M${68+w+.4},${y+3} Q${68+w*.5},${y+4.4} 67.6,${y+3.5}" stroke="#8a8470" stroke-width=".35" fill="none"/>`;}).join('')}
+ <!-- 왼팔(그림 오른쪽): 허리에 올린 주먹 -->
+ <path d="M73,25 Q77.6,28 77,32.4 Q74,34.6 70,34.4 L69.6,32.4 Q73,32 74,30.6 Q72.6,28.6 71,27.6Z" fill="${B}" stroke="${D}" stroke-width=".4"/><ellipse cx="69.6" cy="33.6" rx="1.8" ry="1.6" fill="url(#${u}bzv)" stroke="${D}" stroke-width=".35"/>
+ <!-- 오른팔(그림 왼쪽): 칼자루 잡은 손 -->
+ <path d="M47,25 Q44,28 44.6,31 Q46,32.6 48.6,32 L49,30 Q47.4,29.6 47.4,28.4 Q48.6,27 49.6,26.6Z" fill="${B}" stroke="${D}" stroke-width=".4"/>
+ <!-- 칼 -->
+ <rect x="44.6" y="34" width="2.6" height="23.6" rx="1" fill="#24221d" stroke="#5e5a4e" stroke-width=".3"/>${[37,43,49,55].map(y=>`<rect x="44.3" y="${y}" width="3.2" height="1" rx=".3" fill="#6a6556"/>`).join('')}
+ <ellipse cx="45.9" cy="33.6" rx="3" ry=".9" fill="#5e5a4e" stroke="${D}" stroke-width=".3"/><rect x="44.9" y="14" width="2" height="19.4" rx=".8" fill="#2c2a25"/>${Array.from({length:12},(_,i)=>`<path d="M44.9,${15+i*1.5} l2,.8" stroke="#77725f" stroke-width=".45"/>`).join('')}<ellipse cx="45.9" cy="13.4" rx="1.4" ry="1" fill="#6a6556"/>
+ <ellipse cx="46.6" cy="31" rx="2.2" ry="2" fill="url(#${u}bzv)" stroke="${D}" stroke-width=".35"/>
+ <!-- 머리: 투구 드림 · 얼굴 · 수염 · 투구 -->
+ <g transform="translate(60,19) scale(.84) translate(-60,-19)">
+ <path d="M54,13 Q52.6,17 52.4,21 L56,21.6 L56.6,15Z" fill="url(#${u}sc2)" stroke="${D}" stroke-width=".35"/><path d="M66,13 Q67.4,17 67.6,21 L64,21.6 L63.4,15Z" fill="url(#${u}sc2)" stroke="${D}" stroke-width=".35"/>
+ <path d="M56.2,11 Q56,16.6 60,17.4 Q64,16.6 63.8,11Z" fill="#5c584c"/><path d="M57,12.2 Q58.2,11.8 59.2,12.4 M60.8,12.4 Q61.8,11.8 63,12.2" stroke="#1c1a16" stroke-width=".5" fill="none"/><circle cx="58.2" cy="13" r=".35" fill="#1c1a16"/><circle cx="61.8" cy="13" r=".35" fill="#1c1a16"/><path d="M60,12.6 L59.5,14.6 H60.5" stroke="#2c2a25" stroke-width=".35" fill="none"/>
+ <path d="M57.4,15 Q60,14.2 62.6,15 Q61.6,15.8 60,15.6 Q58.4,15.8 57.4,15Z" fill="#2c2a25"/><path d="M57.4,15.4 Q57.4,19.6 60,21.4 Q62.6,19.6 62.6,15.4 Q60,16.8 57.4,15.4Z" fill="#3a3832"/>${[58.4,59.4,60.4,61.4].map(x=>`<path d="M${x},16.4 L${x+(x-60)*.2},${20.2-Math.abs(x-60)*.6}" stroke="#55514a" stroke-width=".25"/>`).join('')}
+ <path d="M55.6,11.2 Q55.6,5.4 60,5 Q64.4,5.4 64.4,11.2Z" fill="${B}" stroke="${D}" stroke-width=".4"/>${[57.4,59,61,62.6].map(x=>`<path d="M${x},${5.8+Math.abs(x-60)*.18} L${x+(x-60)*.18},11" stroke="#77725f" stroke-width=".3"/>`).join('')}<path d="M54.4,11.4 Q60,10 65.6,11.4 Q60,12.6 54.4,11.4Z" fill="#5c584c" stroke="${D}" stroke-width=".35"/><rect x="59.2" y="9.8" width="1.6" height="1.6" fill="#6e6a5c" stroke="${D}" stroke-width=".25"/>
+ <circle cx="60" cy="4.6" r=".8" fill="#5c584c"/><path d="M60,4.2 V1.4 M58.8,1.6 Q58.8,2.8 60,2.8 Q61.2,2.8 61.2,1.6 M60,1.4 V.6" stroke="#4a473e" stroke-width=".5" fill="none"/>
+ </g>
+ <ellipse cx="54" cy="26" rx="7" ry="11" fill="url(#${u}hl)" opacity=".18"/>`;}
+function sejongArt(u){const G=`url(#${u}au)`,D='#5a3c10',H='#fff3c0';
+ return `<defs>${LG_(u+'sk',['#8ec0ec','#d8ecfa','#f4f0e6'])}${LG_(u+'au',['#f2cf72','#cf9c3a','#8a5e18'],1,.5)}${LG_(u+'auv',['#f6dc8c','#c8923a','#7a5212'],0,1)}${LG_(u+'th',['#d8aa4c','#a8782a','#6e4a14'],1,0)}${LG_(u+'st',['#ece6d8','#cfc8b8'],0,1)}
+ ${RG_(u+'hl',[[0,'#fff8d8',.75],[1,'#fff8d8',0]])}${RG_(u+'rd',[[0,'#f6d886'],[1,'#b8862e']])}</defs>
+ <rect width="120" height="100" fill="url(#${u}sk)"/>${lmCloud(100,10,.9)}${lmCloud(14,16,.7)}
+ <path d="M0,62 L10,46 L16,50 L24,36 L30,42 L36,34 L44,46 L52,42 L60,52 V70 H0Z" fill="#7f9686"/><path d="M60,52 L72,40 L80,46 L90,34 L98,42 L108,38 L120,46 V70 H60Z" fill="#7f9686"/><path d="M0,60 Q30,54 60,58 Q90,54 120,58 V100 H0Z" fill="#4c7a4c"/>${Array.from({length:14},(_,i)=>`<circle cx="${i*9+3}" cy="${60+(i%3)}" r="${4+(i%2)}" fill="${i%2?'#3a6a3e':'#4f8a4a'}"/>`).join('')}
+ <rect x="0" y="88" width="120" height="12" fill="#cfc9bb"/>
+ <!-- 기단 -->
+ <path d="M24,74 H96 L100,94 H20Z" fill="url(#${u}st)"/><path d="M20,94 H100 V98 H20Z" fill="#b8b2a2"/><rect x="40" y="78" width="40" height="13" fill="#d8d2c4" stroke="#9a9484" stroke-width=".5"/><text x="60" y="84.6" text-anchor="middle" font-size="5" font-weight="900" fill="#2a2620" letter-spacing="1.4">세종대왕</text>${Array.from({length:9},(_,i)=>`<path d="M${44+i*4},87 V90" stroke="#5a5448" stroke-width=".7"/>`).join('')}
+ <!-- 어좌 -->
+ <path d="M30,73 H90 V76 H30Z" fill="url(#${u}th)"/><path d="M33,64 H87 V73 H33Z" fill="url(#${u}th)" stroke="${D}" stroke-width=".4"/>${[0,1,2,3,4].map(i=>`<rect x="${35+i*10.4}" y="65.6" width="8.6" height="5.8" fill="none" stroke="${D}" stroke-width=".4"/><circle cx="${39.3+i*10.4}" cy="68.5" r="1.6" fill="none" stroke="#f0cc78" stroke-width=".35"/>`).join('')}
+ <path d="M36,18 Q36,10 44,10 H76 Q84,10 84,18 V60 H36Z" fill="url(#${u}th)" stroke="${D}" stroke-width=".5"/><path d="M40,20 Q40,14 46,14 H74 Q80,14 80,20 V56 H40Z" fill="none" stroke="#f0cc78" stroke-width=".5"/><path d="M34,12 Q60,4 86,12 Q86,8 82,6 Q60,0 38,6 Q34,8 34,12Z" fill="url(#${u}auv)" stroke="${D}" stroke-width=".4"/>
+ ${[[48,30],[72,30],[48,46],[72,46]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4" fill="none" stroke="#f0cc78" stroke-width=".4"/><path d="M${x-2.4},${y} q1.2,-2.4 2.4,0 t2.4,0" stroke="#f0cc78" stroke-width=".35" fill="none"/>`).join('')}
+ ${[-1,1].map(s=>`<path d="M${60+s*27},40 V64 H${60+s*22} V40Z" fill="url(#${u}th)" stroke="${D}" stroke-width=".4"/><path d="M${60+s*28},40 H${60+s*21} V38 H${60+s*28}Z" fill="url(#${u}auv)"/><path d="M${60+s*28},38 q${s*3},-1 ${s*4},-4 q${s*-.4},-2.4 ${s*-2},-1.6 q${s*.6},-2.6 ${s*-1.6},-2 q${s*-1.2},2 ${s*-1.6},5.6" fill="url(#${u}au)" stroke="${D}" stroke-width=".35"/><circle cx="${60+s*30.4}" cy="34.4" r=".45" fill="${D}"/>`).join('')}
+ <!-- 곤룡포: 무릎 아래 자락 · 신 -->
+ <path d="M42,46 Q40,58 38,66 Q60,69 82,66 Q80,58 78,46Z" fill="${G}" stroke="${D}" stroke-width=".45"/>${[44,49,54,59,64,69,74].map(x=>`<path d="M${x+(x-60)*.05},48 Q${x+(x-60)*.1+.8},57 ${x+(x-60)*.18},66" stroke="rgba(90,60,16,.42)" stroke-width=".5" fill="none"/><path d="M${x+(x-60)*.05+1.2},48 Q${x+(x-60)*.1+2},57 ${x+(x-60)*.18+1.2},66" stroke="rgba(255,240,190,.32)" stroke-width=".5" fill="none"/>`).join('')}
+ <ellipse cx="52" cy="66.6" rx="3.6" ry="1.4" fill="#8a5e18"/><ellipse cx="68" cy="66.6" rx="3.6" ry="1.4" fill="#8a5e18"/>
+ <!-- 무릎 · 허벅지 -->
+ <path d="M40,40 Q40,36 46,36 H74 Q80,36 80,40 L80,48 Q60,51 40,48Z" fill="url(#${u}auv)" stroke="${D}" stroke-width=".45"/><path d="M46,42 Q53,40.4 59,42.6 M61,42.6 Q67,40.4 74,42" stroke="rgba(90,60,16,.4)" stroke-width=".5" fill="none"/>
+ <!-- 늘어진 소매 -->
+ <path d="M42,26 Q37,30 36.6,40 Q37,46 41,47 L45,45 L46,30Z" fill="${G}" stroke="${D}" stroke-width=".45"/><path d="M78,26 Q83,30 83.4,40 Q83,46 79,47 L75,45 L74,30Z" fill="${G}" stroke="${D}" stroke-width=".45"/>${[39,41,43].map(x=>`<path d="M${x},33 Q${x-.6},40 ${x},46" stroke="rgba(90,60,16,.4)" stroke-width=".45" fill="none"/><path d="M${120-x},33 Q${120-x+.6},40 ${120-x},46" stroke="rgba(90,60,16,.4)" stroke-width=".45" fill="none"/>`).join('')}
+ <!-- 몸통 · 깃 · 흉배 · 허리띠 -->
+ <path d="M47,22 Q60,18.6 73,22 L75,37 Q60,39 45,37Z" fill="${G}" stroke="${D}" stroke-width=".45"/><path d="M55,20 Q60,25.6 65,20" stroke="#8a5e18" stroke-width="1.2" fill="none"/><path d="M55,20 Q60,25.6 65,20" stroke="#f6dc8c" stroke-width=".4" fill="none"/>
+ <circle cx="60" cy="29.4" r="4.4" fill="url(#${u}rd)" stroke="${D}" stroke-width=".45"/><path d="M57,31 q1.4,-3.6 3,-1.6 q1.6,2 3,-1.6" stroke="#7a5212" stroke-width=".5" fill="none"/><circle cx="62.6" cy="27.2" r=".55" fill="#7a5212"/><circle cx="60" cy="29.4" r="3.6" fill="none" stroke="#7a5212" stroke-width=".3"/>
+ <path d="M45.4,35.4 Q60,37.4 74.6,35.4 V37.6 Q60,39.6 45.4,37.6Z" fill="#a8762a" stroke="${D}" stroke-width=".3"/>${[50,55,60,65,70].map(x=>`<rect x="${x-1.2}" y="${35.9+Math.abs(x-60)*.01}" width="2.4" height="1.7" rx=".3" fill="#f2cf72"/>`).join('')}
+ <!-- 왼손 · 책(그림 오른쪽 무릎) -->
+ <path d="M64,41 L76,38.4 L78.6,42.6 L66.6,45.2Z" fill="#f6e2a6" stroke="${D}" stroke-width=".45"/><path d="M71.3,39.8 L72.6,43.9" stroke="${D}" stroke-width=".4"/>${[0,1,2].map(i=>`<path d="M${65.4+i*.6},${42.2+i*.8} L${70.6+i*.5},${41.1+i*.8} M${73+i*.5},${40.6+i*.8} L${76.6+i*.5},${39.8+i*.8}" stroke="#a8782a" stroke-width=".3"/>`).join('')}<ellipse cx="74.6" cy="44.2" rx="2.4" ry="1.5" fill="url(#${u}auv)" stroke="${D}" stroke-width=".35"/>
+ <!-- 오른팔 · 펼친 손(그림 왼쪽) -->
+ <path d="M46,24 Q41,27 39.6,31 Q40.4,33 43,32 Q44,28.6 47.4,27Z" fill="${G}" stroke="${D}" stroke-width=".45"/><path d="M38.6,30.6 Q38,32.6 40.2,33.4 L42.4,32.4 Q42.4,30.4 40.6,29.6Z" fill="url(#${u}auv)" stroke="${D}" stroke-width=".35"/>
+ <path d="M39,30.4 Q36.8,28.6 36.6,25 Q37,23.4 38.4,24.6 Q39.4,27 40.6,28.4Z" fill="url(#${u}auv)" stroke="${D}" stroke-width=".35"/>${[[36.8,24.8,36,21.8],[37.9,24.4,37.5,21.2],[39,24.6,39,21.4],[40.1,25.2,40.5,22.4],[40.8,27.6,42.6,26]].map(([a,b,c,d])=>`<path d="M${a},${b} L${c},${d}" stroke="#c8923a" stroke-width="1.25" stroke-linecap="round"/><path d="M${a},${b} L${c},${d}" stroke="#f6dc8c" stroke-width=".4" stroke-linecap="round"/>`).join('')}
+ <!-- 얼굴 · 수염 · 익선관 -->
+ <path d="M55.4,13.6 Q55.2,20.6 60,21.6 Q64.8,20.6 64.6,13.6Z" fill="url(#${u}auv)" stroke="${D}" stroke-width=".35"/><ellipse cx="55.3" cy="15.6" rx=".8" ry="1.6" fill="#c8923a"/><ellipse cx="64.7" cy="15.6" rx=".8" ry="1.6" fill="#c8923a"/>
+ <path d="M56.6,15.2 Q57.8,14.4 59,15.2 M61,15.2 Q62.2,14.4 63.4,15.2" stroke="#6a4a14" stroke-width=".45" fill="none"/><path d="M56.4,14 Q57.8,13.2 59.2,13.8 M60.8,13.8 Q62.2,13.2 63.6,14" stroke="#8a5e18" stroke-width=".4" fill="none"/><path d="M60,15.2 L59.4,17.6 H60.6" stroke="#8a5e18" stroke-width=".35" fill="none"/><ellipse cx="57.6" cy="17.4" rx="1.3" ry=".8" fill="#fff0b0" opacity=".45"/><ellipse cx="62.4" cy="17.4" rx="1.3" ry=".8" fill="#fff0b0" opacity=".45"/>
+ <path d="M57.6,18.6 Q60,17.8 62.4,18.6 Q63.4,19.4 63,20.4 M57.6,18.6 Q56.6,19.4 57,20.4" stroke="#7a5212" stroke-width=".55" fill="none"/><path d="M58.8,19.4 Q60,20 61.2,19.4" stroke="#7a5212" stroke-width=".35" fill="none"/><path d="M58.6,20.6 Q60,26.4 60,26.6 Q60,26.4 61.4,20.6 Q60,21.4 58.6,20.6Z" fill="#a8762a" stroke="${D}" stroke-width=".3"/>${[59.4,60,60.6].map(x=>`<path d="M${x},21 L${60+(x-60)*.4},25.4" stroke="#f2cf72" stroke-width=".22"/>`).join('')}
+ <path d="M55,13.8 Q54.8,8.4 60,8 Q65.2,8.4 65,13.8 Q60,12.8 55,13.8Z" fill="url(#${u}au)" stroke="${D}" stroke-width=".4"/><path d="M54.6,13.6 Q60,12.4 65.4,13.6 V14.6 Q60,13.4 54.6,14.6Z" fill="#8a5e18"/>
+ <path d="M57,8.6 Q56.4,5 57.4,2.6 Q58.8,1.6 59,4.4 V8.2Z" fill="url(#${u}au)" stroke="${D}" stroke-width=".35"/><path d="M63,8.6 Q63.6,5 62.6,2.6 Q61.2,1.6 61,4.4 V8.2Z" fill="url(#${u}au)" stroke="${D}" stroke-width=".35"/><path d="M60,8.2 V5.4" stroke="#7a5212" stroke-width=".5"/>
+ <ellipse cx="54" cy="28" rx="10" ry="16" fill="url(#${u}hl)" opacity=".3"/>`;}
 const lmMt=(pts,c,o=1)=>`<path d="M${pts}" fill="${c}" opacity="${o}"/>`;
 // 한옥 기와지붕: 용마루 y, 처마 y+h, 처마 끝이 들림 · 기와골 · 흰 용마루 · 막새 줄
 const kRoof=(u,cx,y,w,h,o={})=>{const id=u+'r'+Math.round(cx*7+y*13+w);const rw=o.rw??.3,lift=o.lift??.5,L=cx-w/2,R=cx+w/2;
@@ -2106,9 +2192,7 @@ const lmCity=(y,c='#7a8aa0',o=.6,seed=1)=>`<g fill="${c}" opacity="${o}">${Array
 const jRoof=(u,cx,y,w,h,c='#3a4a52',o={})=>{const L=cx-w/2,R=cx+w/2;return `<path d="M${L-2},${y+h} Q${L+w*.12},${y+h*.8} ${L+w*.2},${y} H${R-w*.2} Q${R-w*.12},${y+h*.8} ${R+2},${y+h} Q${cx},${y+h*1.18} ${L-2},${y+h}Z" fill="${c}"/><path d="M${L-2},${y+h} Q${cx},${y+h*1.18} ${R+2},${y+h}" stroke="${o.edge||'#f4f2ec'}" stroke-width=".7" fill="none"/>${o.gable?`<path d="M${cx-o.gable},${y+h*.85} L${cx},${y+h*.85-o.gable*.9} L${cx+o.gable},${y+h*.85}Z" fill="${c}" stroke="${o.edge||'#f4f2ec'}" stroke-width=".6"/>`:''}`;};
 const lmSea=(u,y,a='#3f8fc0',b='#1d5a8a')=>`<defs>${LG_(u+'sea',[a,b])}</defs><rect x="0" y="${y}" width="120" height="${100-y}" fill="url(#${u}sea)"/>${Array.from({length:5},(_,i)=>`<path d="M${(i*9)%20-10},${y+3+i*3.4} ${Array.from({length:8},()=>'q4,-1.2 8,0 t8,0').join(' ')}" stroke="#bfe6ff" stroke-width=".5" fill="none" opacity="${.6-i*.08}"/>`).join('')}`;
 const LMART={
- yisunsin:u=>{const im=yiShot(),sp=yiShipShot();return im?`${lmSky(u,'#7fc0f0','#d8eefa','#f6f2e6')}${lmCloud(22,14,1)}${lmCloud(98,10,.8)}<path d="M0,66 Q30,40 62,52 Q92,38 120,56 V100 H0Z" fill="#9db8a6"/><path d="M0,72 Q40,62 80,68 Q100,64 120,68 V100 H0Z" fill="#b8ceb8"/><rect x="0" y="80" width="120" height="20" fill="#d8d4c8"/><path d="M0,80 H120" stroke="#fff" stroke-width=".8" opacity=".7"/>
-  <path d="M36,100 L39,86 H81 L84,100Z" fill="#e6e0d2"/><rect x="37" y="84" width="46" height="3" fill="#d4ccbc"/><rect x="44" y="89" width="32" height="9" rx="1" fill="#2a2a24" stroke="#c8a040" stroke-width=".7"/><text x="60" y="95.6" font-size="5.2" text-anchor="middle" fill="#f6d77a" font-weight="900">충무공 이순신</text>
-  <image href="${im}" x="19" y="-3.5" width="82" height="90.6" preserveAspectRatio="xMidYMax meet"/>${sp?`<image href="${sp}" x="84" y="76" width="35" height="22.75"/>`:''}`:LMART.yisunsinV(u);},
+ yisunsin:u=>yiArt(u),
  yisunsinV:u=>`${lmSky(u,'#7fc0f0','#d8eefa','#f6f2e6')}${lmCloud(22,16,1.1)}${lmCloud(98,12,.8)}
   ${lmMt('0,58 Q14,40 30,46 Q44,30 60,38 Q74,28 92,40 Q106,36 120,46 V70 H0Z','#7a9a8a',.55)}${lmMt('0,66 Q20,56 40,62 Q70,52 120,62 V72 H0Z','#9ab0a0',.5)}
   <defs>${LG_(u+'br',['#5f8a7c','#2f4c44','#1e322c'],1,0)}${LG_(u+'pd',['#ece6d8','#b8b0a0'])}</defs>
@@ -2121,7 +2205,7 @@ const LMART={
    <path d="M-4.6,22 Q-4.6,14.6 0,14.4 Q4.6,14.6 4.6,22Z" fill="url(#${u}br)"/><path d="M-6.8,22.2 Q0,20.6 6.8,22.2" stroke="#1e322c" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M-4.4,22 L-5.4,28 M4.4,22 L5.4,28" stroke="#2f4c44" stroke-width="1.6"/><path d="M0,14.4 V10" stroke="#2f4c44" stroke-width="1"/><path d="M0,11 q-2,-2 0,-5 q2,3 0,5" fill="#3a5c52"/>
    <path d="M-8,58 L-10,62 H10 L8,58Z" fill="#2f4c44"/></g>
   <g transform="translate(26,86)"><path d="M-12,0 Q-14,-3 -12,-4 H10 Q13,-3 11,0 Z" fill="#5a4a32"/><ellipse cx="-1" cy="-5.4" rx="9.6" ry="3" fill="#3e5a4e"/>${[-6,-3,0,3,6].map(x=>`<path d="M${x-1},-6 l1,-1.4 l1,1.4" stroke="#9ab0a2" stroke-width=".4" fill="none"/>`).join('')}<path d="M-11,-5 q-3,-2 -2,-5 q2,1 1,4" fill="#c8a040"/><path d="M-9,-1.6 H9" stroke="#2a2016" stroke-width=".4" stroke-dasharray="1 1"/></g>`,
- sejong:u=>{const im=sjShot();return im?`${lmSky(u,'#7ab8ea','#d6ecfa','#f4f0e6')}${lmCloud(100,10,.9)}<path d="M0,62 L8,50 L13,54 L20,40 L25,44 L30,36 L36,46 L44,42 L52,52 L120,52 V70 H0Z" fill="#8a9a8a"/><path d="M78,52 Q92,40 104,46 Q112,42 120,48 V70 H70Z" fill="#6a8a6a" opacity=".9"/><path d="M0,60 Q30,54 60,58 Q90,54 120,58 V100 H0Z" fill="#4a7a4a"/>${Array.from({length:14},(_,i)=>`<circle cx="${i*9+3}" cy="${60+(i%3)}" r="${4+(i%2)}" fill="${i%2?'#3a6a3e':'#4f8a4a'}"/>`).join('')}<rect x="0" y="86" width="120" height="14" fill="#cfc9bb"/><image href="${im}" x="14.5" y="0" width="91" height="100.5" preserveAspectRatio="xMidYMax meet"/><rect x="38" y="90.6" width="44" height="8.4" rx="1" fill="#ece6d8" opacity=".92"/><text x="60" y="97.2" font-size="6.2" text-anchor="middle" fill="#2a2620" font-weight="900" font-family="serif" letter-spacing="1">세 종 대 왕</text>`:sjVec(u);},
+ sejong:u=>sejongArt(u),
  sejongV:u=>`${lmSky(u,'#7ab8ea','#d6ecfa','#f4f0e6')}${lmCloud(100,10,.9)}
   <path d="M0,62 L8,50 L13,54 L20,40 L25,44 L30,36 L36,46 L44,42 L52,52 L120,52 V70 H0Z" fill="#8a9a8a"/><path d="M20,40 L24,48 L22,56 M30,36 L33,46" stroke="#c8ccc4" stroke-width="1" fill="none"/><path d="M78,52 Q92,40 104,46 Q112,42 120,48 V70 H70Z" fill="#6a8a6a" opacity=".9"/>
   <path d="M0,60 Q30,54 60,58 Q90,54 120,58 V74 H0Z" fill="#4a7a4a"/>${Array.from({length:14},(_,i)=>`<circle cx="${i*9+3}" cy="${60+(i%3)}" r="${4+(i%2)}" fill="${i%2?'#3a6a3e':'#4f8a4a'}"/>`).join('')}
@@ -7217,68 +7301,104 @@ function sdfMesh(f,mn,mx,st){const T=THREE,nx=Math.ceil((mx[0]-mn[0])/st)+1,ny=M
   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(P,3));g.setAttribute('normal',new T.Float32BufferAttribute(N,3));g.setIndex(I);g.userData.keep=1;return g;}
 // 조각 정의(부분별 [함수, 최소, 최대, 간격]) — 한 번 깎아 두고 다시 쓴다. 급하지 않으면 부분마다 쉬어 가며 깎는다
 const SCULPT={},SCDEF={
- sj(){const D=SDF,E=D.E,C=D.C,B=D.B,L0=[B([0,.42,.46],[.4,.32,.1],.08)];
-  for(const s of[-1,1])L0.push(C([s*.19,.8,-.15],[s*.22,.8,.38],.15,.15,.05),E([s*.23,.86,.4],[.125,.085,.115],.03),C([s*.24,.78,.45],[s*.25,.3,.5],.095,.115,.04));L0.push(B([0,.84,.12],[.36,.085,.3],.07,.05),E([0,.8,.43],[.24,.13,.13],.06));
-  L0.push(E([0,.17,.5],[.47,.07,.17],.08));for(const s of[-1,1])L0.push(E([s*.17,.15,.67],[.072,.046,.1],.03),E([s*.17,.185,.765],[.04,.03,.032],.02));
-  L0.push(E([0,1.05,-.1],[.3,.4,.22],.06),E([0,1.26,-.09],[.33,.17,.2],.05),C([-.28,1.36,-.1],[.28,1.36,-.1],.095,.095,.07),B([0,1.12,-.08],[.25,.26,.13],.09,.05),C([0,1.4,-.07],[0,1.52,-.06],.075,.075,.05),
-   C([-.33,1.32,-.08],[-.48,1.07,.1],.085,.08,.06),C([-.48,1.07,.1],[-.44,1.34,.3],.065,.05,.03),C([-.5,1.12,.1],[-.56,.82,.2],.085,.11,.035),B([-.56,.86,.16],[.07,.2,.19],.05,.03),
-   C([.33,1.32,-.08],[.45,1.07,.06],.085,.08,.06),C([.45,1.07,.06],[.3,.94,.36],.065,.05,.03),C([.48,1.1,.06],[.53,.8,.18],.085,.11,.035),B([.54,.84,.14],[.07,.2,.19],.05,.03));
-  const body0=D.list(L0),sz=(x,y)=>{let z=.9;while(z>-.4&&body0([x,y,z])>0)z-=.004;return z;};
-  const cv=[[-.12,1.44],[0,1.2],[.12,1.44]].map(([x,y])=>[x,y,sz(x,y)+.004]),ch=[0,1.1,sz(0,1.1)],L1=[C(cv[0],cv[1],.024,.024,.012),C(cv[2],cv[1],.024,.024,.012),
-   C([cv[0][0]+.016,cv[0][1],cv[0][2]+.02],[0,cv[1][1]+.03,cv[1][2]+.02],.006,.006,-.004),C([cv[2][0]-.016,cv[2][1],cv[2][2]+.02],[0,cv[1][1]+.03,cv[1][2]+.02],.006,.006,-.004),E(ch,[.125,.125,.016],.006)];
-  for(const i of[-2,-1,0,1,2])L1.push(B([i*.085,.96,sz(i*.085,.96)+.012],[.03,.024,.012],.006,.004));const det=D.list(L1);
+ sj(){const D=SDF,E=D.E,C=D.C,B=D.B,L=[];
+  // 몸통(곤룡포): 넓은 어깨 · 두툼한 가슴 · 배
+  L.push(B([0,1.1,-.1],[.31,.3,.15],.15),E([0,1.27,-.05],[.4,.2,.25],.06),C([-.34,1.42,-.09],[.34,1.42,-.09],.14,.14,.08),E([0,1.0,0],[.38,.2,.28],.08),C([0,1.46,-.07],[0,1.57,-.06],.1,.095,.04));
+  // 무릎 위 옷자락 · 허벅지 · 무릎 · 아래로 떨어지는 자락 · 넓게 퍼진 밑단 · 신
+  L.push(B([0,.84,.16],[.4,.1,.3],.1,.05),B([0,.5,.5],[.4,.36,.1],.1,.05),E([0,.17,.5],[.54,.1,.21],.06));
+  for(const s of[-1,1])L.push(C([s*.2,.83,-.1],[s*.25,.85,.4],.168,.162,.04),E([s*.265,.87,.46],[.155,.125,.135],.03),C([s*.27,.8,.5],[s*.3,.3,.56],.1,.13,.05),E([s*.2,.14,.72],[.09,.058,.13],.02));
+  // 오른팔(든 손): 위팔 · 아래팔 · 넓은 소맷부리 · 아래로 늘어진 큰 소매
+  L.push(C([-.41,1.38,-.07],[-.57,1.1,.1],.122,.108,.04),C([-.57,1.1,.1],[-.45,1.33,.29],.098,.078,.03),C([-.52,1.17,.17],[-.458,1.3,.272],.12,.135,.02),B([-.635,.92,.15],[.085,.31,.23],.04,.03));
+  // 왼팔(책): 위팔 · 아래팔 · 소맷부리 · 늘어진 소매
+  L.push(C([.41,1.38,-.07],[.57,1.08,.08],.122,.108,.04),C([.57,1.08,.08],[.32,.96,.36],.098,.08,.03),C([.47,1.02,.21],[.345,.968,.34],.12,.128,.02),B([.635,.86,.13],[.085,.31,.23],.04,.03));
+  const body0=D.list(L),sz=(x,y)=>{let z=.9;while(z>-.4&&body0([x,y,z])>0)z-=.004;return z;};
+  // 깃(둥근 깃 + 여밈 선) · 가슴 흉배 · 허리띠 장식
+  const cv=[[-.13,1.47],[0,1.24],[.13,1.47]].map(([x,y])=>[x,y,sz(x,y)+.004]),ch=[0,1.12,sz(0,1.12)],L1=[C(cv[0],cv[1],.026,.026,.012),C(cv[2],cv[1],.026,.026,.012),E(ch,[.135,.135,.017],.006)];
+  for(const i of[-2,-1,0,1,2])L1.push(B([i*.09,.985,sz(i*.09,.985)+.014],[.032,.026,.012],.006,.004));const det=D.list(L1);
   const body=p=>{const x=p[0],y=p[1],z=p[2],ax=Math.abs(x);let d=D.smin(body0(p),det(p),.008);
-    {const q=Math.hypot(x/.355,(z+.08)/.255)-1;d=D.smin(d,Math.hypot(Math.max(q,0)*.3+Math.min(q,0)*.05,y-.96)-.028,.006);}
-    if(y<.66&&y>.2&&z>.3)d+=.014*Math.sin(x*30+Math.sin(y*9)*1.2)*Math.min(1,(.66-y)*6,(y-.2)*12);
-    if(ax>.4&&y<1.02&&y>.7)d+=.012*Math.sin(z*46+x*20)*Math.min(1,(1.02-y)*6,(ax-.4)*14,(y-.7)*8);
-    if(y>1.0&&y<1.3&&ax<.26&&z>0)d+=.005*Math.sin((y+ax*.8)*56)*Math.min(1,(.26-ax)*10);return d;};
-  const LH=[E([0,1.66,-.05],[.135,.165,.15]),E([0,1.585,-.01],[.108,.1,.118],.05)];
-  for(const s of[-1,1])LH.push(E([s*.058,1.602,.058],[.05,.04,.044],.03),E([s*.137,1.65,-.05],[.024,.052,.034],.012),E([s*.15,1.655,-.04],[.012,.03,.018],-.006),E([s*.138,1.61,-.045],[.016,.022,.02],.008),
-   C([s*.024,1.706,.1],[s*.082,1.71,.076],.008,.0055,.006),E([s*.05,1.675,.09],[.033,.014,.03],-.008),E([s*.05,1.672,.083],[.03,.0095,.021],.005),C([s*.024,1.667,.104],[s*.078,1.668,.092],.0028,.0028,-.0025),
-   E([s*.014,1.632,.117],[.012,.009,.012],.006),C([s*.005,1.603,.119],[s*.058,1.574,.094],.0115,.0045,.006),C([s*.03,1.592,.1],[s*.045,1.6,.092],.006,.004,.006));
-  LH.push(C([0,1.674,.094],[0,1.634,.123],.011,.019,.012),E([0,1.593,.107],[.03,.0075,.013],.005),E([0,1.578,.105],[.024,.0085,.013],.005),C([-.03,1.5885,.11],[.03,1.5885,.11],.0035,.0035,-.003),
-   C([0,1.558,.104],[0,1.455,.128],.032,.009,.014),C([0,1.45,-.06],[0,1.58,-.05],.07,.07,.04));const hd=D.list(LH);
-  const head=p=>{let d=hd(p);if(p[1]<1.565&&p[2]>.06&&Math.abs(p[0])<.05)d+=.0025*Math.sin(p[0]*330);return d;};
-  const HT=D.list([E([0,1.8,-.05],[.15,.065,.162]),B([0,1.85,-.125],[.128,.085,.055],.03,.02),E([-.068,1.96,-.135],[.048,.062,.02],.015),E([.068,1.96,-.135],[.048,.062,.02],.015)]),HS=[0,1.86,-.068],HSb=[.004,.07,.006];
-  const hat=p=>{const y=p[1],r=Math.hypot(p[0]/.152,(p[2]+.05)/.163);let d=Math.min(Math.max((r-1)*.155,Math.abs(y-1.775)-.05),HT(p));
-    d=Math.min(d,Math.max(Math.abs(r-1.02)*.155-.008,Math.abs(y-1.732)-.013));return D.smax(d,-D.box(p,HS,HSb,0),.003);};
-  const RH=[E([-.43,1.43,.32],[.046,.058,.02]),C([-.44,1.36,.305],[-.435,1.4,.315],.036,.04,.02),C([-.392,1.42,.33],[-.36,1.475,.35],.0135,.011,.006)];
-  for(let i=0;i<4;i++)RH.push(C([-.463+i*.022,1.47,.322],[-.478+i*.03,1.56-Math.abs(i-1.4)*.016,.33+(i-1.5)*.004],.0115,.0095,.005));
-  const LHd=[E([.27,.915,.4],[.055,.03,.06]),C([.3,.93,.36],[.24,.945,.38],.014,.011,.006),C([.3,.94,.36],[.285,.925,.39],.04,.034,.02)];for(let i=0;i<4;i++)LHd.push(C([.245+i*.02,.925,.44],[.235+i*.024,.905,.5],.011,.009,.005));
-  return {parts:{body:[body,[-.74,.06,-.42],[.74,1.62,.84],.0168],head:[head,[-.18,1.4,-.24],[.18,1.86,.2],.006],hat:[hat,[-.19,1.66,-.24],[.19,2.06,.15],.0075],rh:[D.list(RH),[-.52,1.33,.27],[-.33,1.6,.39],.005],lh:[D.list(LHd),[.19,.86,.31],[.36,.99,.53],.005]},extra:{chest:[ch[0],ch[1],ch[2]+.017]}};},
- yi(){const D=SDF,E=D.E,C=D.C,B=D.B,LB=[B([0,.42,.3],[.012,.24,.12],.008,-.008)],LA=[];
-  for(const s of[-1,1])LA.push(E([s*.105,.06,.05],[.07,.06,.14],.02));
-  LA.push(E([0,1.22,0],[.21,.27,.155],.04),E([0,1.33,.035],[.185,.13,.15],.035),B([0,1.01,.172],[.04,.032,.012],.008,.005),C([-.17,1.41,0],[.17,1.41,0],.085,.085,.08),C([0,1.46,0],[0,1.58,0],.062,.062,.04));
-  for(const s of[-1,1])LA.push(E([s*.255,1.44,0],[.105,.05,.115],.015),E([s*.29,1.38,0],[.1,.045,.115],.012),E([s*.315,1.32,0],[.085,.045,.105],.012),C([s*.345,1.2,.05],[s*.34,1.12,.12],.078,.074,.012),C([s*.2,1.52,.02],[s*.1,1.5,.05],.03,.03,.02));
-  LA.push(C([-.26,1.37,0],[-.35,1.13,.08],.08,.07,.03),C([-.35,1.13,.08],[-.31,1.1,.25],.068,.056,.025),E([-.3,1.105,.28],[.058,.062,.056],.012),
-   C([.26,1.37,0],[.36,1.13,.02],.08,.07,.03),C([.36,1.13,.02],[.27,1.0,.13],.068,.056,.025),E([.235,.985,.155],[.058,.054,.056],.012),C([-.1,1.5,.09],[0,1.34,.155],.018,.018,.01),C([.1,1.5,.09],[0,1.34,.155],.018,.018,.01));
-  const up=D.list(LA);
-  const body=p=>{const x=p[0],y=p[1],z=p[2],er=Math.hypot(x/1.1,z/.9),R=.2+(1.02-Math.min(1.02,Math.max(.22,y)))*.1375;
-    let d=D.smax(Math.max((er-R)*.9,y-1.03),.22-y,.02);d=D.smax(d,-D.box(p,LB[0].a,LB[0].b,.008),.008);
-    d=D.smin(d,Math.hypot(er-R,y-.24)*.95-.014,.008);d=D.smin(d,Math.hypot(er-(R-.004),y-.62)*.95-.008,.006);
-    d=Math.min(d,Math.max(Math.hypot(x/1.05,z/.86)-.25,y-.3,.05-y));d=D.smin(d,up(p),.03);
-    {const q=Math.hypot(x/.218,z/.168)-1;d=D.smin(d,Math.hypot(q*.19,y-1.01)-.032,.005);d=D.smin(d,Math.hypot(q*.19,y-1.01)*1.0-.02+Math.abs(y-1.01)*.2,.004);}
-    for(const s of[-1,1])d=D.smin(d,Math.hypot(Math.hypot(x-s*.255,z/1.08)-.093,y-1.42)-.007,.005);
-    
-    if(y>.26&&y<1.36&&Math.abs(x)<.36&&(y<.98||Math.abs(x)<.2)){const k=Math.max(0,Math.sin(Math.atan2(z,x)*26))*Math.max(0,Math.sin(y*74));d-=.0075*k*k;}return d;};
-  const LF=[E([0,1.7,0],[.1,.125,.11]),E([0,1.645,.028],[.084,.08,.09],.04)];
-  for(const s of[-1,1])LF.push(E([s*.046,1.662,.066],[.036,.03,.032],.02),C([s*.016,1.727,.1],[s*.07,1.744,.078],.0085,.006,.006),E([s*.04,1.713,.09],[.025,.012,.022],-.006),E([s*.04,1.711,.083],[.02,.0085,.014],.004),
-   C([s*.02,1.72,.097],[s*.062,1.72,.085],.004,.004,.004),E([s*.012,1.672,.117],[.011,.008,.011],.005),C([s*.004,1.652,.117],[s*.052,1.628,.094],.0105,.0045,.005),E([s*.058,1.615,.05],[.03,.05,.045],.02));
-  LF.push(C([0,1.716,.097],[0,1.676,.124],.0095,.0175,.01),C([-.022,1.638,.11],[.022,1.638,.11],.0035,.0035,-.003),C([0,1.612,.1],[0,1.52,.118],.04,.012,.016),C([0,1.5,0],[0,1.6,0],.06,.06,.03));
-  const face=D.list(LF),HB=[0,1.775,-.005],HR=[.122,.112,.128],HR2=[.126,.116,.132];
-  const LH=[E([0,1.895,0],[.032,.02,.032],.01),C([0,1.9,0],[0,2.09,0],.011,.008,.006),E([0,1.985,0],[.03,.036,.03],.008),C([-.03,2.09,0],[.03,2.09,0],.006,.006,.004),B([0,1.81,.118],[.03,.035,.008],.006,.006),
-   B([-.118,1.655,-.015],[.012,.095,.08],.012,.01),B([.118,1.655,-.015],[.012,.095,.08],.012,.01),B([0,1.645,-.118],[.105,.105,.012],.012,.01)];for(const s of[-1,0,1])LH.push(C([s*.022,2.09,0],[s*.03,2.15,0],.006,.003,.004));
+    {const q=Math.hypot(x/.395,(z+.02)/.29)-1;d=D.smin(d,Math.hypot(Math.max(q,0)*.3+Math.min(q,0)*.05,y-.985)-.03,.006);}
+    {const q=(Math.hypot(x/.135,(z+.045)/.125)-1)*.125;d=D.smin(d,Math.hypot(q,y-1.5)-.024,.008);}
+    if(y<.74&&y>.14&&z>.34)d+=.02*Math.sin(x*24+Math.sin(y*8)*1.3)*Math.min(1,(.74-y)*6,(y-.14)*10);                        // 아래 자락 세로 주름
+    if(ax>.52&&y<1.16&&y>.56)d+=.018*Math.sin(z*30+y*6)*Math.min(1,(1.16-y)*7,(ax-.52)*14,(y-.56)*8);                          // 늘어진 소매 주름
+    if(y>=.76&&y<.98&&z>.16&&ax<.38)d+=.009*Math.sin(x*20+z*12)*Math.min(1,(.98-y)*8,(y-.76)*10,(z-.16)*10);                 // 무릎 위 주름
+    if(y>1.04&&y<1.36&&ax<.3&&z>0)d+=.005*Math.sin((y+ax*.9)*46)*Math.min(1,(.3-ax)*10);                                      // 가슴 주름
+    return d;};
+  // 얼굴: 살집 있는 둥근 얼굴 · 부드러운 눈 · 수염
+  const LH=[E([0,1.69,-.04],[.158,.18,.165]),E([0,1.615,0],[.148,.125,.142],.05),E([0,1.56,.035],[.1,.068,.09],.04),C([0,1.46,-.06],[0,1.58,-.05],.09,.09,.04),E([0,1.742,.1],[.115,.03,.042],.03)];
+  for(const s of[-1,1])LH.push(E([s*.082,1.632,.088],[.07,.062,.056],.04),                                        // 통통한 볼
+    C([s*.03,1.7,.137],[s*.06,1.706,.14],.007,.006,.005),C([s*.06,1.706,.14],[s*.092,1.698,.128],.007,.005,.005), // 웃는 눈(위로 굽은 초승달)
+    C([s*.022,1.742,.134],[s*.104,1.75,.105],.012,.007,.008),                                                         // 눈썹
+    E([s*.158,1.68,-.04],[.026,.058,.036],.012),E([s*.156,1.625,-.03],[.02,.034,.024],.01),                           // 귀
+    E([s*.026,1.648,.147],[.019,.014,.016],.008),                                                                      // 콧방울
+    C([s*.006,1.628,.15],[s*.06,1.615,.13],.014,.008,.006),C([s*.06,1.615,.13],[s*.078,1.585,.112],.008,.005,.005),  // 아래로 흐르는 콧수염
+    C([s*.035,1.596,.137],[s*.055,1.604,.131],.006,.004,.005));                                                       // 웃는 입꼬리
+  LH.push(C([0,1.716,.128],[0,1.656,.163],.018,.03,.015),E([0,1.6,.138],[.036,.009,.016],.006),E([0,1.586,.133],[.03,.011,.015],.006),
+    C([0,1.575,.12],[0,1.42,.16],.05,.008,.02));const hd=D.list(LH);
+  const head=p=>{let d=hd(p);if(p[1]<1.58&&p[2]>.07&&Math.abs(p[0])<.06)d+=.004*Math.sin(p[0]*260+p[1]*40);if(p[1]>1.6&&p[1]<1.635&&p[2]>.11&&Math.abs(p[0])>.01&&Math.abs(p[0])<.08)d+=.0025*Math.sin(p[0]*300);return d;};
+  // 익선관: 둥근 모체 · 테 · 뒤 높은 턱 · 위로 솟은 날개 두 개
+  const HW=[E([-.06,2.06,-.145],[.04,.06,.01]),E([.06,2.06,-.145],[.04,.06,.01])];const hw=D.list(HW);
+  const hat=p=>{const x=p[0],y=p[1],z=p[2],r=Math.hypot(x/.17,(z+.04)/.178);let d=Math.max(D.ell(p,[0,1.83,-.04],[.17,.105,.178]),1.79-y);
+    d=Math.min(d,Math.max(Math.abs(r-1.01)*.17-.009,Math.abs(y-1.8)-.014));d=D.smin(d,D.box(p,[0,1.945,-.115],[.125,.085,.055],.04),.02);d=D.smin(d,hw(p),.012);return d;};
+  const RH=[E([-.43,1.43,.32],[.05,.062,.022]),C([-.44,1.36,.305],[-.435,1.4,.315],.04,.044,.02),C([-.39,1.42,.33],[-.355,1.478,.352],.0145,.012,.006)];
+  for(let i=0;i<4;i++)RH.push(C([-.466+i*.024,1.475,.322],[-.482+i*.032,1.568-Math.abs(i-1.4)*.016,.332+(i-1.5)*.004],.0125,.0105,.005));
+  const LHd=[E([.27,.915,.4],[.06,.033,.064]),C([.3,.93,.36],[.24,.945,.38],.015,.012,.006),C([.3,.94,.36],[.285,.925,.39],.044,.038,.02)];for(let i=0;i<4;i++)LHd.push(C([.243+i*.022,.925,.44],[.232+i*.026,.905,.505],.012,.01,.005));
+  return {parts:{body:[body,[-.78,.04,-.44],[.78,1.62,.9],.0165],head:[head,[-.21,1.38,-.25],[.21,1.9,.21],.0058,.012],hat:[hat,[-.2,1.76,-.26],[.2,2.17,.16],.0078,.014],rh:[D.list(RH),[-.53,1.33,.27],[-.32,1.61,.39],.005,.01],lh:[D.list(LHd),[.19,.86,.31],[.37,.99,.54],.005,.01]},extra:{chest:[ch[0],ch[1],ch[2]+.018]}};},
+ yi(){const D=SDF,E=D.E,C=D.C,B=D.B,L=[];
+  // 굵은 다리 · 장화(벌려 선 자세)
+  for(const s of[-1,1])L.push(C([s*.17,.68,0],[s*.24,.2,.03],.128,.108,.02),E([s*.245,.078,.09],[.115,.08,.21],.03),C([s*.24,.3,.03],[s*.235,.38,.03],.126,.126,.01));
+  // 두툼한 가슴 · 배 · 넓은 어깨 · 목
+  L.push(E([0,1.34,.02],[.35,.27,.24],.05),E([0,1.1,.03],[.32,.2,.228],.06),C([-.35,1.5,0],[.35,1.5,0],.14,.14,.08),C([0,1.56,0],[0,1.7,.01],.108,.1,.04));
+  // 어깨 갑옷 세 겹
+  
+  // 오른팔: 칼자루를 쥔 주먹(가슴 앞) · 왼팔: 허리에 올린 주먹
+  L.push(C([-.49,1.44,0],[-.59,1.16,.1],.12,.105,.03),C([-.59,1.16,.1],[-.455,1.2,.34],.105,.092,.03),C([-.545,1.17,.19],[-.48,1.19,.3],.112,.112,.01),E([-.43,1.215,.385],[.084,.09,.084],.015),
+    C([.49,1.44,0],[.69,1.17,-.03],.12,.105,.03),C([.69,1.17,-.03],[.43,1.035,.13],.105,.092,.03),C([.62,1.125,.01],[.51,1.075,.08],.112,.112,.01),E([.39,1.02,.158],[.09,.082,.084],.015),B([0,1.035,.262],[.062,.048,.02],.012,.008));
+  const up=D.list(L);
+  // 가슴 원형 장식 · 배 가리개 판 · 허리띠 고리
+  const sz=(x,y)=>{let z=.6;while(z>-.3&&up([x,y,z])>0)z-=.004;return z;},em=[0,1.31,sz(0,1.31)],bp=[0,1.12,sz(0,1.12)],LD=[E(em,[.085,.085,.016],.004),E(bp,[.23,.085,.018],.008)];const det=D.list(LD);
+  const body=p=>{const x=p[0],y=p[1],z=p[2],ax=Math.abs(x),ang=Math.atan2(z,x);let d=D.smin(up(p),det(p),.006);
+    {const r=Math.hypot(x-em[0],y-em[1]);if(r<.085&&z>em[2]-.02)d+=.004*Math.max(0,Math.sin(r*150));}                                                                                  // 장식 동심원
+    {const yy=Math.min(1.0,Math.max(.36,y)),rx=.33+(1.0-yy)*.2,rz=.235+(1.0-yy)*.13,e=(Math.hypot(x/rx,z/rz)-1)*rz;d=D.smin(d,Math.max(e+.008*Math.sin(ang*13+y*3),y-1.0,.36-y),.014);}   // 속옷 자락
+    {const yy=Math.min(1.03,Math.max(.44,y)),rx=.37+(1.03-yy)*.24,rz=.27+(1.03-yy)*.17;let t=(Math.hypot(x/rx,z/rz)-1)*rz;                                                              // 비늘 갑옷 치마(앞이 갈라짐)
+      const seam=Math.abs(Math.sin(ang*2+Math.PI/2*0));t+=.016*Math.max(0,1-Math.abs(Math.sin(ang*2))*9);
+      if(z>0&&ax<.07)t=Math.max(t,.07-ax-.035);
+      {const k=Math.max(0,Math.sin(ang*34+(Math.floor(y*30)%2)*1.57))*Math.max(0,Math.sin(y*94));t-=.008*k;}t=Math.max(t,y-1.03,.44-y+.012*Math.sin(ang*17));d=D.smin(d,t,.01);
+      d=D.smin(d,Math.max(Math.hypot((Math.hypot(x/rx,z/rz)-1)*rz,y-.455)-.013,-(z>0?.07-ax:-1)),.004);}
+    {const eb=(Math.hypot(x/.355,z/.26)-1)*.26;d=D.smin(d,Math.hypot(eb,y-1.03)-.04,.006);}                                                                                              // 허리띠
+    if(y>1.18&&y<1.52&&ax<.34&&z>0){const k=Math.max(0,Math.sin(x*70+(Math.floor(y*34)%2)*1.57))*Math.max(0,Math.sin(y*107));d-=.008*k;}                                                    // 가슴 비늘
+    for(const s of[-1,1])for(let l=0;l<3;l++){const c=[s*(.42+l*.045),1.5-l*.075,0],sh=Math.max(Math.abs(D.ell(p,c,[.19-l*.012,.085,.2-l*.01]))-.012,c[1]-.04-y,-(s*x)+.26);if(sh<.04){const k=Math.max(0,Math.sin(Math.atan2(z,s*(x-c[0]))*13+l));d=D.smin(d,sh-.004*k,.012);}else d=Math.min(d,sh);}   // 비늘 견갑
+    {const cy=Math.min(1.58,Math.max(.12,y)),W=.54+(1.58-cy)*.24,zc=-.22-(1.58-cy)*.13+.04*Math.sin(x*12+y*2),zf=zc+Math.pow(Math.max(0,ax-(W-.26)),2)*4.0;                                 // 망토(땅까지)
+      let ck=Math.max(Math.hypot(Math.max(ax-W,0),z-zf)-.03,y-1.6,.12-y+.04*Math.sin(x*12)+(x>0?-.06:.08));d=D.smin(d,ck,.022);}
+    return d;};
+  // 얼굴: 굵은 턱 · 살 붙은 볼 · 부리부리한 눈 · 콧수염과 턱수염
+  const LF=[E([0,1.87,0],[.152,.178,.162]),E([0,1.8,.03],[.146,.132,.142],.05),E([0,1.735,.06],[.108,.075,.095],.04),E([0,1.925,.11],[.115,.03,.045],.03)];
+  for(const s of[-1,1])LF.push(E([s*.08,1.805,.094],[.066,.06,.052],.04),E([s*.062,1.873,.132],[.036,.021,.023],.01),E([s*.062,1.871,.153],[.014,.013,.009],.003),C([s*.03,1.855,.145],[s*.095,1.857,.125],.006,.005,.005),C([s*.018,1.915,.152],[s*.108,1.925,.112],.016,.011,.012),
+    C([s*.012,1.797,.166],[s*.092,1.772,.124],.019,.008,.01),E([s*.03,1.817,.168],[.021,.015,.017],.01));
+  LF.push(C([0,1.9,.15],[0,1.826,.192],.021,.034,.02),E([0,1.772,.152],[.04,.012,.02],.008),C([0,1.75,.13],[0,1.53,.2],.09,.035,.03),E([0,1.69,.1],[.12,.11,.08],.04));for(const s of[-1,1])LF.push(C([s*.01,1.79,.168],[s*.1,1.73,.13],.022,.012,.012),C([s*.1,1.73,.13],[s*.11,1.66,.11],.012,.008,.01));const face=D.list(LF);
+  // 투구: 둥근 모체 · 챙 · 세로 골 · 꼭지와 삼지창 · 양옆과 뒤 드림
+  const HB=[0,1.965,-.01],HR=[.186,.19,.192],HR2=[.191,.195,.197];
+  const LH=[E([0,2.155,0],[.05,.032,.05],.01),C([0,2.16,0],[0,2.36,0],.016,.011,.006),E([0,2.25,0],[.04,.046,.04],.008),C([-.04,2.36,0],[.04,2.36,0],.008,.008,.004),B([0,2.02,.182],[.04,.045,.01],.008,.006),
+    ];for(const s of[-1,0,1])LH.push(C([s*.03,2.36,0],[s*.04,2.44,0],.008,.004,.004));
   const helm=D.list(LH),RB=[];for(let i=0;i<6;i++){const a=i/6*Math.PI+.26;RB.push([Math.cos(a),Math.sin(a)]);}
-  const head=p=>{const x=p[0],y=p[1],z=p[2];let d=face(p);if(y<1.63&&z>.03)d+=.0028*Math.sin(x*300);
-    let h=Math.max(D.ell(p,HB,HR),1.752-y);h=Math.min(h,Math.max(Math.hypot(x,z*.95)-.17,Math.abs(y-1.756-z*.06)-.008));h=D.smin(h,Math.hypot(Math.hypot(x,z)-.118,y-1.77)-.008,.004);
-    if(y>1.74&&y<1.9){const e2=D.ell(p,HB,HR2);for(let i=0;i<6;i++)h=D.smin(h,Math.max(Math.abs(x*RB[i][1]-z*RB[i][0])-.004,e2,1.76-y),.003);}
-    h=D.smin(h,helm(p),.008);if(y<1.75&&(Math.abs(x)>.1||z<-.1))h-=.003*Math.max(0,Math.sin(y*90))*Math.max(0,Math.sin((x+z)*90));return Math.min(d,h);};
-  return {parts:{body:[body,[-.52,0,-.36],[.52,1.62,.42],.0138],head:[head,[-.2,1.48,-.2],[.2,2.18,.2],.0065]},extra:{}};}};
+  const head=p=>{const x=p[0],y=p[1],z=p[2];let d=face(p);if(y<1.775&&z>.04)d+=.0045*Math.sin(x*220+y*30);
+    let h=Math.max(D.ell(p,HB,HR),1.965-y);h=Math.min(h,Math.max(Math.hypot(x,z*.96)-.228,Math.abs(y-1.97-z*.1)-.01));h=D.smin(h,Math.hypot(Math.hypot(x,z)-.186,y-1.985)-.012,.004);
+    if(y>1.965&&y<2.17){const e2=D.ell(p,HB,HR2);for(let i=0;i<6;i++)h=D.smin(h,Math.max(Math.abs(x*RB[i][1]-z*RB[i][0])-.006,e2,1.975-y),.004);}
+    h=D.smin(h,helm(p),.008);
+    {const Rr=.195+(1.97-Math.min(1.97,Math.max(1.7,y)))*.3,r=Math.hypot(x,z+.03);let g=Math.max(Math.abs(r-Rr)-.012,y-1.97,1.7-y);if(z>-.05&&Math.abs(x)<.2+(1.97-y)*.3)g=Math.max(g,.03);
+     if(g<.03){const a=Math.atan2(z,x),k=Math.max(0,Math.sin(a*26+(Math.floor(y*28)%2)*1.57))*Math.max(0,Math.sin(y*88));g-=.006*k;}h=Math.min(h,g);}
+    return Math.min(d,h);};
+  return {parts:{body:[body,[-1.0,0,-.72],[1.0,1.74,.6],.016],head:[head,[-.38,1.48,-.4],[.38,2.46,.3],.0075,.014]},extra:{}};}};
+
+// 조각 음영: 겉면에서 조금 떨어진 곳의 거리로 오목함을 재서 꼭짓점 색에 굽는다(틈·주름은 어둡게, 도드라진 곳은 밝게)
+function sdfAO(g,f,h=.035){const P=g.attributes.position,N=g.attributes.normal,n=P.count,C=new Float32Array(n*3),q=[0,0,0];for(let i=0;i<n;i++){const x=P.getX(i),y=P.getY(i),z=P.getZ(i),a=N.getX(i),b=N.getY(i),c=N.getZ(i);
+    q[0]=x+a*h;q[1]=y+b*h;q[2]=z+c*h;const d1=f(q)/h;q[0]=x+a*h*3.2;q[1]=y+b*h*3.2;q[2]=z+c*h*3.2;const d2=f(q)/(h*3.2);q[0]=x-a*h*.8;q[1]=y-b*h*.8;q[2]=z-c*h*.8;const d3=-f(q)/(h*.8);
+    let v=.3+.7*Math.min(1,Math.max(0,d1*.55+d2*.45));v*=.82+.3*Math.min(1,Math.max(0,1.25-d3))+(b>0?b*.1:b*.16);v=Math.min(1.25,Math.max(.2,v));C[i*3]=C[i*3+1]=C[i*3+2]=v;}
+  g.setAttribute('color',new THREE.BufferAttribute(C,3));return g;}
 function sculptOf(key){return SCULPT[key]||(SCULPT[key]={def:SCDEF[key](),geo:{},q:null});}
 function sculptReady(key){const S=SCULPT[key];return !!S&&Object.keys(S.def.parts).every(n=>S.geo[n]);}
-function sculptSync(key){const S=sculptOf(key);for(const n in S.def.parts)if(!S.geo[n])S.geo[n]=sdfMesh(...S.def.parts[n]);return Object.assign({},S.geo,S.def.extra);}
+function sculptSync(key){const S=sculptOf(key);for(const n in S.def.parts)if(!S.geo[n])S.geo[n]=sdfAO(sdfMesh(...S.def.parts[n].slice(0,4)),S.def.parts[n][0],S.def.parts[n][4]);return Object.assign({},S.geo,S.def.extra);}
 function sculptAsync(key,cb){if(sculptReady(key)){cb&&cb();return;}const S=sculptOf(key);if(S.q){S.q.push(cb);return;}S.q=[cb];
-  const step=()=>{const n=Object.keys(S.def.parts).find(k=>!S.geo[k]);if(!n){const q=S.q;S.q=null;q.forEach(f=>{try{f&&f();}catch(_){}});return;}try{S.geo[n]=sdfMesh(...S.def.parts[n]);}catch(e){S.q=null;return;}setTimeout(step,40);};setTimeout(step,250);}
+  const step=()=>{const n=Object.keys(S.def.parts).find(k=>!S.geo[k]);if(!n){const q=S.q;S.q=null;q.forEach(f=>{try{f&&f();}catch(_){}});return;}try{S.geo[n]=sdfAO(sdfMesh(...S.def.parts[n].slice(0,4)),S.def.parts[n][0],S.def.parts[n][4]);}catch(e){S.q=null;return;}setTimeout(step,40);};setTimeout(step,250);}
 const sjGeo=()=>sculptSync('sj'),yiGeo=()=>sculptSync('yi');
 // 도감 그림용: 3D 동상을 한 번 찍어 그림 안에 넣는다. 조각이 아직 없으면 뒤에서 깎고, 그동안은 손그림을 보여 준다
 const LMSHOT={};function lmShot(key,make,pos,look,W=456,H=504,fov=22){if(key in LMSHOT)return LMSHOT[key];LMSHOT[key]=null;if(typeof THREE==='undefined')return null;try{const T=THREE,r=new T.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r.setSize(W,H);r.setPixelRatio(1);r.setClearColor(0,0);
@@ -7364,36 +7484,70 @@ function lmSeokgulR(only){const T=THREE,G=new T.Group(),PI=Math.PI;
     M(G,new T.BoxGeometry(.3,2.0,1.9),WAL,s*2.75,1.0,pz+1.2);M(G,new T.BoxGeometry(.4,.12,2.0),STD,s*2.75,2.06,pz+1.2);
     for(let k=0;k<2;k++){const P=new T.Group();P.position.set(s*2.59,.1,pz+.75+k*.9);P.rotation.y=-s*PI/2;P.scale.set(1.0,1.05,1.3);G.add(P);M(P,rReliefGeo(2),REL);}}
   G.userData={cam:{dist:12,y:2.6,lim:.5},bg:'#241c16'};return G;}
-function lmYiFigure(){const T=THREE,F=new T.Group(),YG=yiGeo(),bz=L3M('#4f665a',{shininess:42,specular:'#7fa090'}),bd=L3M('#33443c',{shininess:70,specular:'#9ab8a8'});
-  l3Add(F,YG.body,bz);l3Add(F,YG.head,bz);
-  const sw=new T.Group();sw.position.set(-.3,0,.275);F.add(sw);l3Add(sw,new T.CylinderGeometry(.022,.017,.98,12),bd,0,.51,0);for(const y of[.06,.3,.62,.94])l3Add(sw,new T.CylinderGeometry(.027,.027,.04,12),bz,0,y,0);
-  l3Add(sw,new T.SphereGeometry(.024,10,8),bz,0,.02,0);const gd=l3Add(sw,new T.CylinderGeometry(.062,.062,.016,20),bz,0,1.0,0);l3Add(sw,new T.CylinderGeometry(.017,.019,.3,10),bd,0,1.16,0);
-  for(let i=0;i<7;i++){const t=l3Add(sw,new T.TorusGeometry(.019,.004,4,12),bz,0,1.04+i*.035,0);t.rotation.x=Math.PI/2;}l3Add(sw,new T.SphereGeometry(.028,10,8),bz,0,1.33,0);return F;}
+function lmYiFigure(){const T=THREE,F=new T.Group(),YG=yiGeo(),bz=L3M('#5a4a3a',{shininess:55,specular:'#9a8a70'}),bd=L3M('#2e261e',{shininess:60,specular:'#7a6a58'}),bv=L3M('#5a4a3a',{shininess:42,specular:'#8a7c68',vertexColors:true});
+  const BY=1.18;l3Add(F,YG.body,bv).scale.y=BY;{const HG=new T.Group(),k=1.1;HG.position.set(0,1.62*(BY-k),0);HG.scale.setScalar(k);F.add(HG);l3Add(HG,YG.head,bv);}
+  const sw=new T.Group();sw.position.set(-.46,0,.4);sw.rotation.z=-.05;sw.scale.y=1.18;F.add(sw);const sc=l3Add(sw,new T.CylinderGeometry(.05,.04,1.08,16),bd,0,.56,0);sc.scale.z=.62;for(const y of[.06,.3,.56,.82,1.04])l3Add(sw,new T.CylinderGeometry(.058,.058,.045,16),bz,0,y,0).scale.z=.7;
+  l3Add(sw,new T.SphereGeometry(.045,12,8),bz,0,.02,0);l3Add(sw,new T.CylinderGeometry(.11,.11,.03,24),bz,0,1.115,0);l3Add(sw,new T.TorusGeometry(.11,.013,6,24),bd,0,1.115,0).rotation.x=Math.PI/2;l3Add(sw,new T.CylinderGeometry(.034,.038,.62,12),bd,0,1.44,0);
+  for(let i=0;i<14;i++){const t=l3Add(sw,new T.TorusGeometry(.037,.008,4,12),bz,0,1.15+i*.04,0);t.rotation.x=Math.PI/2;t.rotation.y=(i%2?.3:-.3);}l3Add(sw,new T.CylinderGeometry(.045,.045,.05,12),bz,0,1.76,0);l3Add(sw,new T.SphereGeometry(.05,12,10),bz,0,1.8,0).scale.y=.7;return F;}
 function lmBronzeShip(){const T=THREE,sh=s3Ship();if(sh.userData.fire)sh.userData.fire.visible=false;const C=new T.Color(),cache={};
   sh.traverse(o=>{if(o.isSprite||o.isPoints||o.isLine){o.visible=false;return;}if(!o.isMesh)return;const ms=Array.isArray(o.material)?o.material:[o.material];const out=ms.map(m=>{if(m.transparent&&m.opacity<.6){o.visible=false;return m;}C.copy(m.color||new T.Color('#888'));const l=Math.round((C.r*.3+C.g*.59+C.b*.11)*6);return cache[l]||(cache[l]=new T.MeshPhongMaterial({color:new T.Color('#2c3a34').lerp(new T.Color('#7a9a8a'),l/6),shininess:80,specular:'#b8d8c8',side:m.side}));});o.material=Array.isArray(o.material)?out:out[0];});return sh;}
+// 청동 거북선(동상용): 판자 선체 · 방패판과 포문 · 못 박힌 등딱지 · 조각 용머리 · 노
+function lmDragonGeo(){if(RGEO.drag)return RGEO.drag;const D=SDF,E=D.E,C=D.C,B=D.B,L=[C([.3,-.5,0],[.16,-.16,0],.13,.115),C([.16,-.16,0],[-.05,.02,0],.115,.1,.05),E([-.16,.06,0],[.2,.13,.125],.05),E([-.36,.03,0],[.14,.075,.1],.04),E([-.33,-.085,0],[.13,.035,.085],.02),B([-.4,-.035,0],[.12,.012,.12],0,-.012),E([-.16,.17,0],[.1,.05,.11],.03)];
+  for(const s of[-1,1])L.push(E([-.47,.075,s*.045],[.03,.028,.03],.015),E([-.485,.075,s*.05],[.014,.012,.014],-.01),E([-.2,.13,s*.095],[.045,.04,.03],.02),E([-.215,.13,s*.118],[.022,.02,.012],-.008),C([-.06,.2,s*.07],[.12,.36,s*.13],.03,.012,.02),C([.04,.29,s*.1],[.02,.4,s*.18],.016,.006,.01),E([-.02,.06,s*.13],[.07,.05,.02],.02),C([-.3,-.02,s*.105],[-.36,-.1,s*.2],.012,.004,.01));
+  for(let i=0;i<6;i++){const u=i/5;L.push(C([.05+u*.22,.1-u*.5,0],[.13+u*.22,.2-u*.5,0],.03,.006,.015));}for(let i=0;i<5;i++)for(const s of[-1,1])L.push(C([-.46+i*.045,-.025,s*.07],[-.46+i*.045,-.055,s*.07],.011,.003,0));
+  const f=D.list(L),g=p=>{let d=f(p);if(p[0]>-.02&&p[1]<.0)d-=.006*Math.max(0,Math.sin((p[0]*.8+p[1])*70))*Math.max(0,Math.sin(Math.atan2(p[2],.1)*5+p[1]*40));return d;};return RGEO.drag=sdfAO(sdfMesh(g,[-.56,-.66,-.26],[.46,.46,.26],.0125),g,.025);}
+function lmBronzeShip2(){const T=THREE,G=new T.Group(),PI=Math.PI,bz=(o={})=>L3M('#b89878',Object.assign({shininess:50,specular:'#a88456'},o)),sol=L3M('#5e4226',{shininess:60,specular:'#b08a58'}),drk=L3M('#3a2816',{shininess:50,specular:'#8a6840'});
+  const hullT=s3Tex('lbsh',512,128,(g,w,h)=>{g.fillStyle='#7a5630';g.fillRect(0,0,w,h);for(let r=0;r<5;r++){g.fillStyle='rgba(30,16,6,.6)';g.fillRect(0,r*h/5,w,3);g.fillStyle='rgba(255,220,160,.14)';g.fillRect(0,r*h/5+3,w,2);for(let x=(r*41)%70;x<w;x+=74){g.fillStyle='rgba(30,16,6,.5)';g.fillRect(x,r*h/5,2,h/5);g.fillStyle='#c89858';g.beginPath();g.arc(x+8,r*h/5+13,2,0,7);g.fill();}}});
+  const wallT=s3Tex('lbsw',1024,128,(g,w,h)=>{g.fillStyle='#86603a';g.fillRect(0,0,w,h);g.fillStyle='#5a3c1e';g.fillRect(0,0,w,12);g.fillRect(0,h-14,w,14);g.fillStyle='#b88a52';g.fillRect(0,12,w,3);g.fillRect(0,h-17,w,3);
+    for(let i=0;i<32;i++){const x=i*32;g.fillStyle='rgba(30,16,6,.55)';g.fillRect(x,14,3,h-30);g.fillStyle='#caa068';for(const y of[24,h-28]){g.beginPath();g.arc(x+9,y,2.2,0,7);g.fill();g.beginPath();g.arc(x+25,y,2.2,0,7);g.fill();}
+      if(i%2){g.fillStyle='#a47a48';g.fillRect(x+3,36,29,46);g.fillStyle='#1c1008';g.fillRect(x+8,42,19,34);g.strokeStyle='#d0a870';g.lineWidth=2;g.strokeRect(x+8,42,19,34);}}});
+  const roofT=s3Tex('lbsr',512,256,(g,w,h)=>{g.fillStyle='#6a4a28';g.fillRect(0,0,w,h);const R=22;for(let j=-1;j<9;j++)for(let i=-1;i<15;i++){const x=i*R*1.74+(j%2)*R*.87,y=j*R*1.5;g.beginPath();for(let k=0;k<6;k++){const a=k/6*6.283+.5236;g.lineTo(x+Math.cos(a)*R*.94,y+Math.sin(a)*R*.94);}g.closePath();const gr=g.createRadialGradient(x-5,y-6,2,x,y,R);gr.addColorStop(0,'#a8804c');gr.addColorStop(1,'#70502c');g.fillStyle=gr;g.fill();g.strokeStyle='#2e1c0c';g.lineWidth=3;g.stroke();}});
+  for(const t of[hullT,wallT,roofT])t.wrapS=t.wrapT=T.RepeatWrapping;
+  const LX=1.0,LZ=.4;
+  l3Add(G,new T.SphereGeometry(1,40,14,0,2*PI,PI/2,PI/2),bz({map:hullT}),0,.3,0).scale.set(LX*1.02,.3,LZ*1.04);
+  l3Add(G,new T.CylinderGeometry(1,1,.24,56,1,true),bz({map:wallT,side:T.DoubleSide}),0,.42,0).scale.set(LX,1,LZ);
+  for(const y of[.3,.54]){const r=l3Add(G,new T.TorusGeometry(1,.022,8,64),sol,0,y,0);r.rotation.x=PI/2;r.scale.set(LX*1.01,LZ*1.03,1.2);}
+  l3Add(G,new T.SphereGeometry(1,44,16,0,2*PI,0,PI/2),bz({map:roofT,shininess:18,specular:'#4a3a28'}),0,.54,0).scale.set(LX*.97,.27,LZ*.95);
+  {const cg=new T.ConeGeometry(.014,.07,6),n=96,im=new T.InstancedMesh(cg,sol,n),m=new T.Matrix4(),q=new T.Quaternion(),up=new T.Vector3(0,1,0),v=new T.Vector3(),sc=new T.Vector3(1,1,1);let k=0;
+    for(let i=0;i<12;i++)for(let j=0;j<8;j++){const u=(i+.5+(j%2)*.5)/12*2-1,a=(j+.5)/8*PI,x=u*.9,rr=Math.sqrt(Math.max(.02,1-x*x)),y=Math.sin(a)*rr,z=Math.cos(a)*rr;v.set(x/(LX*.97)*1,y/.27,z/(LZ*.95)).normalize();q.setFromUnitVectors(up,v);m.compose(new T.Vector3(x*LX*.97,.54+y*.27+v.y*.03,z*LZ*.95),q,sc);im.setMatrixAt(k++,m);}im.count=k;G.add(im);}
+  l3Add(G,new T.BoxGeometry(1.5,.02,.07),sol,0,.82,0);
+  // 용머리(조각) · 꼬리 · 키 · 노
+  const dh=l3Add(G,lmDragonGeo(),L3M('#6c4c2c',{shininess:50,specular:'#a88456',vertexColors:true}),-1.12,.92,0);dh.scale.setScalar(.92);
+  {const pts=[];for(let i=0;i<=24;i++){const u=i/24,a=u*4.6,r=.16*(1-u*.7);pts.push(new T.Vector3(.98+Math.sin(a)*r+u*.1,.62+.16-Math.cos(a)*r,0));}l3Add(G,new T.TubeGeometry(new T.CatmullRomCurve3(pts),30,.035,8),sol);l3Add(G,new T.BoxGeometry(.03,.3,.12),drk,1.0,.22,0);}
+  for(const s of[-1,1])for(let i=0;i<7;i++){const x=-.66+i*.22,o=l3Add(G,new T.CylinderGeometry(.013,.013,.5,6),drk,x+.06,.14,s*(LZ+.2));o.rotation.x=s*-.95;o.rotation.z=.25;const bl=l3Add(G,new T.BoxGeometry(.05,.15,.012),sol,x+.11,-.02,s*(LZ+.36));bl.rotation.x=s*-.95;bl.rotation.z=.25;}
+  return G;}
 // ---- 20곳 모델 ----
 const LM3={
- yisunsin(){const T=THREE,G=new T.Group(),bz=L3M('#4a5e54',{shininess:85,specular:'#b8d8c8'}),gr=L3M('#fff',{map:L3W(L3TX.stone(),2,2),color:'#e6e0d2'});l3Ground(G,3.2,L3TX.plaza(),'#c6c4be',8);
-  for(const x of[-2.2,2.2])for(let i=0;i<5;i++)l3Add(G,new T.CylinderGeometry(.02,.05,.5+(i%3)*.18,6),L3M('#bfe6ff',{transparent:true,opacity:.6}),x+(i-2)*.2,.3,1.6);
-  // 높은 화강암 기단 + 세로 이름판
-  l3Add(G,new T.BoxGeometry(2.3,.16,2.3),gr,0,.08,0);l3Add(G,new T.BoxGeometry(1.9,.16,1.9),gr,0,.24,0);l3Add(G,new T.BoxGeometry(1.25,1.9,1.25),L3M('#ece6d8'),0,1.27,0);l3Add(G,new T.BoxGeometry(1.45,.12,1.45),L3M('#dcd4c4'),0,2.28,0);l3Add(G,new T.BoxGeometry(1.3,.1,1.3),L3M('#e6e0d2'),0,2.39,0);
-  const plate=s3Tex('l3ysp2',96,384,(g,w,h)=>{g.fillStyle='#e4decf';g.fillRect(0,0,w,h);g.fillStyle='#2a2a24';g.font='900 38px serif';g.textAlign='center';[...'충무공이순신장군상'].forEach((c,i)=>g.fillText(c,w/2,44+i*40));});
-  l3Add(G,new T.PlaneGeometry(.3,1.2),L3M('#fff',{map:plate}),0,1.4,.628);
-  const F=lmYiFigure();F.scale.setScalar(1.18);F.position.y=2.44;G.add(F);
-  // 기단 앞 청동 거북선 · 양옆 북
-  l3Add(G,new T.BoxGeometry(1.5,.34,.62),L3M('#e6e0d2'),0,.33,1.1);const ts=lmBronzeShip();ts.scale.setScalar(.2);ts.position.set(.06,.52,1.1);G.add(ts);
-  for(const s of[-1,1]){const dr=new T.Group();dr.position.set(s*1.02,.32,.62);G.add(dr);const b=l3Add(dr,new T.CylinderGeometry(.2,.2,.26,20),bz,0,.26,0);b.rotation.x=Math.PI/2;for(const k of[-1,1]){const rm=l3Add(dr,new T.TorusGeometry(.2,.018,6,24),L3M('#33443c'),0,.26,k*.13);l3Add(dr,new T.CircleGeometry(.19,20),L3M('#7a9a8a',{side:T.DoubleSide}),0,.26,k*.132);}
-    for(const k of[-1,1])l3Add(dr,new T.BoxGeometry(.05,.1,.3),L3M('#33443c'),k*.13,.05,0);}
-  G.userData.cam={dist:11,y:2.5};return G;},
- sejong(){const T=THREE,G=new T.Group(),au=L3M('#c39a44',{shininess:34,specular:'#a88a48'}),ad=L3M('#a8761e',{shininess:80,specular:'#f0d080'}),dk=L3M('#7a5214',{shininess:60}),sk=L3M('#d8a84c',{shininess:40,specular:'#c8a868'});l3Ground(G,3.2,L3TX.plaza(),'#c6c4be',8);
-  // 기단: 넓은 돌 받침 2단 + 이름판
-  l3Add(G,new T.BoxGeometry(2.5,.28,2.0),L3M('#fff',{map:L3W(L3TX.stone(),3,.6)}),0,.14,0);l3Add(G,new T.BoxGeometry(2.1,.72,1.6),L3M('#ece6d8'),0,.64,0);l3Add(G,new T.BoxGeometry(2.2,.08,1.7),L3M('#dcd4c4'),0,1.04,0);
-  const plate=s3Tex('l3sjp',256,96,(g,w,h)=>{g.fillStyle='#ece6d8';g.fillRect(0,0,w,h);g.fillStyle='#2a2a24';g.font='900 64px serif';g.textAlign='center';g.fillText('세종대왕',w/2,72);});
-  l3Add(G,new T.PlaneGeometry(1.2,.45),L3M('#fff',{map:plate}),0,.64,.805);
+ yisunsin(){const T=THREE,G=new T.Group(),PI=Math.PI;l3Ground(G,3.4,L3TX.plaza(),'#c6c4be',8);
+  const grT=s3Tex('l3grn',256,256,(g,w,h)=>{g.fillStyle='#b9b2a4';g.fillRect(0,0,w,h);for(let i=0;i<2600;i++){g.fillStyle=i%2?'rgba(70,60,50,.16)':'rgba(255,250,240,.2)';g.fillRect((i*89)%w,(i*53+((i*i)%17))%h,2,2);}g.fillStyle='rgba(60,50,40,.5)';for(let r=0;r<4;r++){g.fillRect(0,r*64,w,2);for(let x=(r%2)*64;x<w;x+=128)g.fillRect(x,r*64,2,64);}});grT.wrapS=grT.wrapT=T.RepeatWrapping;
+  const gr=L3M('#fff',{map:grT,shininess:12}),gp=L3M('#b4ad9f',{shininess:10}),grS=L3M('#fff',{map:L3W(grT,4,2),shininess:12});
+  l3Add(G,new T.BoxGeometry(2.7,.14,2.7),gr,0,.07,0);l3Add(G,new T.BoxGeometry(2.35,.14,2.35),gr,0,.21,0);
+  const sh=l3Add(G,new T.CylinderGeometry(.8,1.08,2.2,4),[grS,gp,gp],0,1.38,0);sh.rotation.y=PI/4;l3Add(G,new T.BoxGeometry(1.26,.1,1.26),gp,0,2.53,0);l3Add(G,new T.BoxGeometry(1.12,.08,1.12),gr,0,2.62,0);
+  const plate=s3Tex('l3ysp3',96,512,(g,w,h)=>{g.clearRect(0,0,w,h);g.fillStyle='#2a2620';g.font='900 54px serif';g.textAlign='center';[...'충무공이순신장군'].forEach((c,i)=>g.fillText(c,w/2,60+i*60));});
+  const pl=l3Add(G,new T.PlaneGeometry(.26,1.4),L3M('#fff',{map:plate,transparent:true}),0,1.42,.672);pl.rotation.x=-.09;
+  const F=lmYiFigure();F.scale.setScalar(1.06);F.position.y=2.66;G.add(F);
+  // 앞쪽 청동 거북선: 돌 받침 2단 + 이름판
+  const SB=new T.Group();SB.position.set(-.2,0,1.75);G.add(SB);l3Add(SB,new T.BoxGeometry(2.7,.14,1.3),gr,0,.07,0);l3Add(SB,new T.BoxGeometry(2.4,.2,1.05),gr,0,.24,0);
+  const np=s3Tex('l3ysn',192,64,(g,w,h)=>{g.fillStyle='#3a2a18';g.fillRect(0,0,w,h);g.strokeStyle='#c8a060';g.lineWidth=5;g.strokeRect(4,4,w-8,h-8);g.fillStyle='#e8c070';g.font='900 40px serif';g.textAlign='center';g.fillText('거북선',w/2,46);});
+  l3Add(SB,new T.PlaneGeometry(.5,.16),L3M('#fff',{map:np,shininess:80}),0,.24,.527);const ts=lmBronzeShip2();ts.scale.setScalar(1.05);ts.position.set(.1,.36,0);ts.rotation.y=PI;SB.add(ts);
+  // 꽃 화단
+  for(const [x,z] of[[1.7,1.5],[2.2,.5],[-2.3,.4]]){const pb=new T.Group();pb.position.set(x,0,z);G.add(pb);l3Add(pb,new T.BoxGeometry(.5,.2,.3),L3M('#8a8478'),0,.1,0);for(let i=0;i<9;i++)l3Add(pb,new T.SphereGeometry(.07,8,6),L3M(['#ff8ab0','#ffffff','#ffd24a','#ff6a8a'][i%4]),-.18+(i%5)*.09,.23+(i%2)*.03,(i%3-1)*.08);l3Add(pb,new T.BoxGeometry(.46,.06,.26),L3M('#3a7a3a'),0,.2,0);}
+  G.userData.cam={dist:12.5,y:2.9};return G;},
+ sejong(){const T=THREE,G=new T.Group(),au=L3M('#a8884a',{shininess:34,specular:'#8a7444'}),ad=L3M('#86662e',{shininess:50,specular:'#b89858'}),dk=L3M('#6a4c1c',{shininess:50}),sk=L3M('#b8964e',{shininess:40,specular:'#a88c58'});l3Ground(G,3.2,L3TX.plaza(),'#c6c4be',8);
+  // 기단: 아래가 넓은 화강암 받침 + 큰 이름판 + 새김글 + 발밑 조명
+  const grT=s3Tex('l3grn',256,256,(g,w,h)=>{g.fillStyle='#b9b2a4';g.fillRect(0,0,w,h);for(let i=0;i<2600;i++){g.fillStyle=i%2?'rgba(70,60,50,.16)':'rgba(255,250,240,.2)';g.fillRect((i*89)%w,(i*53+((i*i)%17))%h,2,2);}g.fillStyle='rgba(60,50,40,.5)';for(let r=0;r<4;r++){g.fillRect(0,r*64,w,2);for(let x=(r%2)*64;x<w;x+=128)g.fillRect(x,r*64,2,64);}});grT.wrapS=grT.wrapT=T.RepeatWrapping;
+  const gr=L3M('#fff',{map:grT,shininess:12}),gp=L3M('#b4ad9f',{shininess:10});
+  l3Add(G,new T.BoxGeometry(3.3,.12,2.6),gr,0,.06,0);l3Add(G,new T.BoxGeometry(3.0,.12,2.3),gr,0,.18,0);
+  {const q=new T.Shape();q.moveTo(-1.38,0);q.lineTo(1.38,0);q.lineTo(1.16,.84);q.lineTo(-1.16,.84);q.lineTo(-1.38,0);const pg=new T.ExtrudeGeometry(q,{depth:1.9,bevelEnabled:false});pg.translate(0,.24,-.95);l3Add(G,pg,[gp,L3M('#fff',{map:L3W(grT,.9,.9),shininess:12})]);}
+  l3Add(G,new T.BoxGeometry(2.42,.1,2.0),gp,0,1.03,0);
+  const plate=s3Tex('l3sjp2',512,256,(g,w,h)=>{g.fillStyle='#c4bdaf';g.fillRect(0,0,w,h);g.strokeStyle='#8a8478';g.lineWidth=5;g.strokeRect(6,6,w-12,98);g.fillStyle='#262420';g.font='900 78px serif';g.textAlign='center';g.fillText('세 종 대 왕',w/2,84);
+    g.strokeRect(6,116,w-12,h-122);g.fillStyle='#3a362e';for(let c=0;c<12;c++)for(let r=0;r<7;r++)if((c*7+r*3)%11)g.fillRect(34+c*38,130+r*16,10,11);});
+  l3Add(G,new T.PlaneGeometry(1.9,.76),L3M('#fff',{map:plate,shininess:10}),0,.66,.957);
+  for(const x of[-1.25,1.25]){l3Add(G,new T.BoxGeometry(.2,.1,.14),L3M('#3a3a3e'),x,.29,1.12);const lg=l3Add(G,new T.PlaneGeometry(.16,.08),L3M('#fff2c0',{emissive:'#ffd880'}),x,.3,1.192);}
   // 어좌 조각 무늬(용·구름·연꽃 판)
-  const cv=s3Tex('l3sjc',128,128,(g,w,h)=>{g.fillStyle='#c8963a';g.fillRect(0,0,w,h);g.strokeStyle='#7a5214';g.lineWidth=5;g.strokeRect(6,6,w-12,h-12);g.lineWidth=2.5;g.strokeRect(16,16,w-32,h-32);
-    g.beginPath();for(let i=0;i<=40;i++){const a=i/40*Math.PI*4,r=8+i*.9;const x=64+Math.cos(a)*r,y=64+Math.sin(a)*r*.8;i?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();g.fillStyle='#f0c868';for(let i=0;i<8;i++){const a=i/8*Math.PI*2;g.beginPath();g.ellipse(64+Math.cos(a)*36,64+Math.sin(a)*30,6,3,a,0,7);g.fill();}});
-  const cvM=L3M('#fff',{map:cv,shininess:90,specular:'#ffe6a0'});
+  const cv=s3Tex('l3sjc',128,128,(g,w,h)=>{g.fillStyle='#a8854a';g.fillRect(0,0,w,h);g.strokeStyle='#5e4418';g.lineWidth=5;g.strokeRect(6,6,w-12,h-12);g.lineWidth=2.5;g.strokeRect(16,16,w-32,h-32);
+    g.beginPath();for(let i=0;i<=40;i++){const a=i/40*Math.PI*4,r=8+i*.9;const x=64+Math.cos(a)*r,y=64+Math.sin(a)*r*.8;i?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();g.fillStyle='#d0b070';for(let i=0;i<8;i++){const a=i/8*Math.PI*2;g.beginPath();g.ellipse(64+Math.cos(a)*36,64+Math.sin(a)*30,6,3,a,0,7);g.fill();}});
+  const cvM=L3M('#fff',{map:cv,shininess:40,specular:'#8a7444'});
   const F=new T.Group();F.position.y=1.08;G.add(F);
   // 어좌: 발판 · 앉는 자리 · 높은 등받이(위 곡선 테두리) · 팔걸이(끝 말림)
   l3Add(F,new T.BoxGeometry(1.5,.12,.4),cvM,0,.06,.55);l3Add(F,new T.BoxGeometry(1.7,.6,1.05),cvM,0,.3,-.1);l3Add(F,new T.BoxGeometry(1.78,.06,1.12),ad,0,.62,-.1);
@@ -7403,15 +7557,16 @@ const LM3={
   for(const s of[-1,1]){l3Add(F,new T.CylinderGeometry(.07,.07,1.5,12),ad,s*.82,1.3,-.58);const sc=l3Add(F,new T.TorusGeometry(.09,.04,8,16,Math.PI*1.4),ad,s*.86,2.12,-.58);sc.rotation.z=s>0?0:Math.PI;
     l3Add(F,new T.BoxGeometry(.14,.45,.95),cvM,s*.86,.86,-.12);l3Add(F,new T.BoxGeometry(.2,.06,1.0),ad,s*.86,1.1,-.1);const sr=l3Add(F,new T.TorusGeometry(.08,.035,8,14,Math.PI*1.3),ad,s*.86,1.06,.42);sr.rotation.y=Math.PI/2;}
   for(const [w2,h2] of[[1.36,1.2],[1.2,1.04]]){for(const s2 of[-1,1]){l3Add(F,new T.BoxGeometry(.03,h2,.02),au,s2*w2/2,1.3,-.5);l3Add(F,new T.BoxGeometry(w2,.03,.02),au,0,1.3+s2*h2/2,-.5);}}
+  for(const s of[-1,1]){const dg=l3Add(F,lmDragonGeo(),L3M('#a8884a',{shininess:50,specular:'#a88c58',vertexColors:true}),s*.86,1.2,.5);dg.rotation.y=Math.PI/2;dg.scale.setScalar(.42);}
   // 동상: SDF로 깎은 몸·머리·익선관·두 손(한 번 만들어 재사용)
-  const SG=sjGeo(),gm=L3M('#c9963a',{shininess:95,specular:'#ffe8b0'}),sk2=L3M('#d4a448',{shininess:100,specular:'#fff0c0'});l3Add(F,SG.body,gm);l3Add(F,SG.rh,sk2);l3Add(F,SG.lh,sk2);
-  {const HG=new T.Group(),k=1.14;HG.position.set(0,1.5*(1-k),-.06*(1-k));HG.scale.setScalar(k);F.add(HG);l3Add(HG,SG.head,sk2);l3Add(HG,SG.hat,L3M('#8a5e18',{shininess:80,specular:'#e8c878'}));}
+  const SG=sjGeo(),gm=L3M('#b89250',{shininess:40,specular:'#8a7648',vertexColors:true}),sk2=L3M('#c09a58',{shininess:44,specular:'#9a8658',vertexColors:true});l3Add(F,SG.body,gm);l3Add(F,SG.rh,sk2);l3Add(F,SG.lh,sk2);
+  {const HG=new T.Group(),k=1.08;HG.position.set(0,1.5*(1-k),-.06*(1-k));HG.scale.setScalar(k);F.add(HG);l3Add(HG,SG.head,sk2);l3Add(HG,SG.hat,L3M('#a87a30',{shininess:60,specular:'#d8b060',vertexColors:true}));}
   const yb=s3Tex('l3sjy',128,128,(g,w,h)=>{g.fillStyle='#e8c060';g.beginPath();g.arc(64,64,62,0,7);g.fill();g.strokeStyle='#8a5a14';g.lineWidth=5;g.beginPath();g.arc(64,64,56,0,7);g.stroke();g.lineWidth=4;
     g.beginPath();g.moveTo(30,80);g.bezierCurveTo(40,30,70,100,86,50);g.bezierCurveTo(92,34,100,40,98,52);g.stroke();for(let i=0;i<6;i++){g.beginPath();g.arc(36+i*11,74-i*5,4,0,7);g.stroke();}g.beginPath();g.arc(96,46,7,0,7);g.stroke();});
   {const c=SG.chest;l3Add(F,new T.CircleGeometry(.112,28),L3M('#fff',{map:yb,shininess:120,specular:'#fff0b0'}),c[0],c[1],c[2]);}
   // 무릎 위 훈민정음 책(왼손)
   const bkG=new T.Group();bkG.position.set(.13,.955,.455);bkG.rotation.set(-.6,-.12,.05);F.add(bkG);const pg=s3Tex('l3sjb',128,96,(g,w,h)=>{g.fillStyle='#f0d890';g.fillRect(0,0,w,h);g.fillStyle='#8a5a14';for(let c=0;c<6;c++)for(let r=0;r<5;r++)g.fillRect(10+c*19,12+r*15,9,9);g.fillRect(62,0,4,h);});
-  for(const s of[-1,1]){const pp=l3Add(bkG,new T.BoxGeometry(.2,.012,.27),L3M('#fff',{map:pg,shininess:80}),s*.088,0,0);pp.rotation.z=s*-.12;}l3Add(bkG,new T.BoxGeometry(.42,.014,.28),gm,0,-.016,0);
+  for(const s of[-1,1]){const pp=l3Add(bkG,new T.BoxGeometry(.2,.012,.27),L3M('#fff',{map:pg,shininess:80}),s*.088,0,0);pp.rotation.z=s*-.12;}l3Add(bkG,new T.BoxGeometry(.42,.014,.28),ad,0,-.016,0);
   G.userData.cam={dist:7,y:2.0};return G;},
  namsan(){const T=THREE,G=new T.Group();const mt=l3Add(G,new T.SphereGeometry(2.6,32,16,0,Math.PI*2,0,Math.PI/2),L3M('#2f6a3a'),0,0,0);mt.scale.set(1,.42,1);
   for(let i=0;i<46;i++){const a=i*2.39,r=.6+((i*37)%100)/100*1.8,y=1.09*Math.sqrt(Math.max(0,1-(r/2.6)**2));l3Tree(G,Math.cos(a)*r,Math.sin(a)*r,.9,['#2f6a38','#4a8a40','#3a7a3a'][i%3]);G.children[G.children.length-1].position.y+=y-.25;G.children[G.children.length-2].position.y+=y-.25;}
@@ -9838,7 +9993,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=228;
+const GVER=229;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
@@ -9902,7 +10057,7 @@ function landAfford(){document.querySelectorAll('#landView .lp[data-it]').forEac
 function hud(){
   if(isJP&&S.part===2&&!S.jstab&&!titleOn&&$('#ending').hidden&&!S.done)playStab();
   {const rb=$('#runB'),t=`${isJP?'일본':MD().n+' '+(S.part===2?2:1)+'부'} · ${curNg()}회차 · ${S.runStart?Math.floor(runDays())+1:1}일째`;if(rb&&rb.textContent!==t){rb.textContent=t;rb.className='runb'+(S.mode==='hard'?' hard':'');}}
-  {const m=$('#money'),full=won(S.money),t=S.money>=1e8?'₩'+(S.money>=1e10?Math.floor(S.money/1e8).toLocaleString('ko-KR'):String(+(S.money/1e8).toFixed(2)))+'억':S.money>=1e7?'₩'+Math.floor(S.money/1e4).toLocaleString('ko-KR')+'만':full;if(m.textContent!==t){m.textContent=t;m.title=full;}}
+  {const m=$('#money'),full=won(S.money),t=topWon(S.money);if(m.textContent!==t){m.textContent=t;m.title=full;}}
   $('#expBadge').hidden=!S.ex.active;
   if(view==='map'){const ex_=S.ex.active?regById(S.ex.active):null;
     const k=`<span class="mchip"><b>본공</b> ${fmtD(S.depth)} · ${tierName()}${lvGap()?` · <em>숙련 부족 ×${lvK().toFixed(2)}</em>`:''}</span>`+(ex_?(()=>{const w=wxOf(ex_.id),y=Math.round(wxY(w));return `<span class="mchip cool" title="원정지 날씨: ${wxFx(w)}"><b>● ${ex_.n}</b> ${altText(ex_,digOf(ex_.id).i)}${rbOn()?`<span class="wxs good">🌈 무지개 +${RBY()}%</span>`:`<span class="wxs ${y>0?'good':y<0?'bad':''}">${w.ic} ${w.n}${y?` ${y>0?'+':''}${y}%`:''}</span>`}</span>`;})():'<span class="mchip dim">진행 중인 원정 없음</span>')+(rbOn()?`<span class="mchip rbc"><b>🌈 무지개</b> ${rbFx()}</span>`:'')+(isJP?`<span class="mchip bdz">🗾 열도 침강 경보 ${dzLv()}단계 <i>${[1,2,3,4,5].map(i=>`<s class="${i<=dzLv()?'on':''}"></s>`).join('')}</i>${S.part===2?' · 안정 장치 작동':''}</span>`:'');
