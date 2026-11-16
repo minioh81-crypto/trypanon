@@ -1707,3 +1707,7 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 손익	Net	損益
 무료	Free	無料
 📜 획득 내역 · 최근 {}번	📜 Rewards log · last {}	📜 獲得履歴 · 直近{}回
+📜 이번 판 획득 내역	📜 This round's rewards	📜 今回の獲得履歴
+📜 이번 판 획득 내역 · {}/{}번	📜 This round's rewards · {}/{}	📜 今回の獲得履歴 · {}/{}回
+📜 지난 판 획득 내역 · {}/{}번	📜 Last round's rewards · {}/{}	📜 前回の獲得履歴 · {}/{}回
+이번 판에서 아직 뽑은 캡슐이 없어요 · 10분마다 새 판(무료 1번 + 유료 {}번)	No capsules drawn this round yet · new round every 10 min (1 free + {} paid)	この回はまだカプセルを引いていません · 10分ごとに新しい回(無料1回 + 有料{}回)
