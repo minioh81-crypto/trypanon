@@ -871,7 +871,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v256 · 2026-11-16</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v257 · 2026-11-16</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -7146,7 +7146,119 @@ function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongM
     return grp;};
   const teeth=(mat,pts,n,len,up=false)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p)));for(let i=0;i<n;i++){const p=c.getPointAt((i+.5)/n),l=len*(.7+.3*Math.sin(i*2.1)**2);const t=add(new T.Mesh(new T.ConeGeometry(l*.3,l,8),mat),p.x,p.y+(up?l*.45:-l*.45),p.z);t.rotation.z=up?0:Math.PI;}};
   const lineT=(mat,pts,r)=>{const c=new T.CatmullRomCurve3(pts.map(p=>V(...p)));add(new T.Mesh(new T.TubeGeometry(c,30,r,6,false),mat));};
-  switch(id){
+  const kam=isJP&&id==='kano';// 일본 「카무이사우루스」는 오리주둥이 공룡 → 야마토사우루스 몸에 다른 색·볏
+  switch(kam?'yamato':id){
+   case 'fraptor':{// Fukuiraptor: slender allosauroid hunter — long low skull with toothy jaws, big three-fingered hands with sickle-like claws, rust-orange hide with dark tiger bands, cream belly, long counterbalancing tail
+     const top=C('#5a2a12'),mid=C('#a8562a'),bel=C('#e8d4b0'),dk=C('#2a140a'),hd=C('#8a3a1a');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,4,.22);if(ny>-.1&&x<1.4&&Math.sin(x*8+Math.sin(y*6)*.9)>.5)tc.lerp(dk,.55);if(x>1.5&&ny>-.2)tc.lerp(hd,.35);};
+     const M=skin('scale',22,7,.035);
+     const B=body({mat:M,col,pts:[[-3.9,1.62,0],[-2.8,1.66,0],[-1.6,1.72,0],[-.5,1.78,0],[.35,1.76,0],[.85,1.9,0],[1.15,2.12,0],[1.4,2.26,0],[1.75,2.24,0],[2.15,2.1,0],[2.45,2.0,0]],
+       r:[[-3.9,.012],[-2.8,.12],[-1.6,.3],[-.6,.48],[.25,.46],[.8,.27],[1.15,.22],[1.4,.25],[1.75,.22],[2.1,.15],[2.45,.08]],
+       sy:[[-1,1.08],[.3,1.15],[1.0,1.0],[1.5,1.25],[2.2,1.05]],sz:[[-1,.72],[.3,.8],[1.1,.8],[1.5,.66],[2.1,.55],[2.45,.5]],
+       dy:(x,ly)=>x>1.5&&ly<0?ly*.3*Math.min(1,(x-1.5)/.25):0});
+     const JC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,5,.2);};
+     body({mat:M,col:JC,pts:[[1.5,2.06,0],[1.85,1.98,0],[2.2,1.9,0],[2.42,1.86,0]],r:[[1.5,.14],[1.85,.11],[2.2,.08],[2.42,.05]],sy:[[1.5,.7],[2.4,.6]],sz:[[1.5,.95],[2.4,.85]]});
+     {const m=add(new T.Mesh(new T.BoxGeometry(.7,.04,.12),ph('#5a1a1a',{shininess:30})),2.0,1.98,0);m.rotation.z=-.16;}
+     const TT=ph('#f2ead2',{shininess:90,specular:'#aaa'});for(const s of[1,-1]){teeth(TT,[[1.66,2.06,s*.11],[2.0,2.01,s*.09],[2.4,1.95,s*.06]],10,.05);teeth(TT,[[1.78,1.95,s*.09],[2.05,1.92,s*.08],[2.36,1.88,s*.05]],8,.04,true);
+       const e=at(B,1.62,.42,.99);eye(e[0],e[1],s*e[2],.062,'#f0c020',hd.getStyle(),{brow:'#4a1e0c',slit:true,ry:.3});const bb=at(B,1.55,.8,.97);ball(M,col,bb[0],bb[1],s*bb[2],.07,.035,.04);
+       const n=at(B,2.38,.5,.95);add(new T.Mesh(new T.SphereGeometry(.016,8,6),ph('#120806')),n[0],n[1],s*n[2]);}
+     // crest ridge of low bumps along the snout
+     for(let i=0;i<7;i++){const p=at(B,1.7+i*.1,Math.PI/2,.98);ball(M,col,p[0],p[1]+.01,0,.035,.025,.025);}
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,5,.22);if(ny>-.1&&Math.sin(y*9)>.6)tc.lerp(dk,.35);if(y<.4)tc.lerp(C('#4a2a18'),.35);};
+     leg(M,LC,[[-.3,1.66,.3],[.12,1.0,.33],[-.2,.46,.32],[-.02,.1,.32]],[.22,.13,.085,.065],{thigh:.38,flat:.55,toes:3,tr:.055,tl:.24,spread:.4});
+     leg(M,LC,[[-.3,1.66,-.3],[-.1,1.0,-.33],[-.6,.5,-.32],[-.48,.1,-.32]],[.22,.13,.085,.065],{thigh:.38,flat:.55,toes:3,tr:.055,tl:.24,spread:.4});
+     // long arms with three big hooked claws, held ready
+     const BC=ph('#1a1410',{shininess:90,specular:'#999'});
+     for(const [s,f] of[[1,0],[-1,.08]]){leg(M,LC,[[.72,1.72,s*.24],[.92,1.42,s*.3],[1.16,1.3,s*.3],[1.3,1.24,s*.3]],[.08,.06,.045,.036],{thigh:.11,flat:.8,toes:3,tr:.024,tl:.1,spread:.5,hang:1,clawM:BC});}
+     G.scale.setScalar(.92);break;}
+   case 'fsaur':{// Fukuisaurus: chunky iguanodontian grazing on all fours — deep body, toothless beak, conical thumb spike on the hand, olive-green hide with yellow stripes and a cream belly
+     const top=C('#2e3a1c'),mid=C('#5a6a30'),bel=C('#e2d8a8'),st=C('#a8a050'),hd=C('#4a5626');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,3.5,.2);if(ny>-.25&&x>-2.4&&x<1.0&&Math.sin(x*5.5+Math.sin(z*4)*.4)>.72)tc.lerp(st,.3);if(x>1.5)tc.lerp(hd,.4);};
+     const M=skin('tuber',18,7,.04);
+     const B=body({mat:M,col,pts:[[-3.6,1.2,0],[-2.6,1.42,0],[-1.6,1.66,0],[-.6,1.8,0],[.3,1.74,0],[.9,1.56,0],[1.25,1.36,0],[1.55,1.2,0],[1.85,1.1,0],[2.15,1.02,0],[2.35,.96,0]],
+       r:[[-3.6,.015],[-2.6,.14],[-1.6,.38],[-.7,.62],[.2,.6],[.8,.38],[1.2,.24],[1.5,.22],[1.8,.24],[2.1,.18],[2.35,.1]],
+       sy:[[-1,1.08],[0,1.15],[1.0,1.0],[1.7,1.2],[2.3,1.05]],sz:[[-1,.82],[0,.86],[1.0,.85],[1.7,.62],[2.3,.5]]});
+     const K=ph('#2a2216',{shininess:60});{const b=add(new T.Mesh(s3Taper(new T.CatmullRomCurve3([V(2.2,1.0),V(2.36,.95),V(2.44,.9)]),14,12,t=>.07*(1-t*.6)),K));b.scale.z=.65;}
+     for(const s of[1,-1]){const e=at(B,1.82,.42,.98);eye(e[0],e[1],s*e[2],.045,'#b88a20',hd.getStyle(),{brow:'#3a4418',ry:.35});const n=at(B,2.2,.45,.92);add(new T.Mesh(new T.SphereGeometry(.018,8,6),ph('#141008')),n[0],n[1],s*n[2]);
+       lineT(ph('#2a2a14'),[[2.3,.95,s*.05],[2.1,.98,s*.12],[1.9,1.02,s*.16]],.007);}
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,4,.2);if(y<.4)tc.lerp(C('#3a3a22'),.35);};
+     for(const s of[1,-1]){leg(M,LC,[[-1.1,1.7,s*.42],[-.62,1.0,s*.48],[-1.0,.46,s*.48],[-.9,.12,s*.48]],[.34,.22,.14,.11],{thigh:.5,flat:.62,toes:3,tr:.07,tl:.2,spread:.35});
+       leg(M,LC,[[.65,1.5,s*.38],[.75,.95,s*.44],[.85,.42,s*.45],[.9,.11,s*.45]],[.17,.13,.1,.085],{thigh:.18,flat:.75,toes:3,tr:.05,tl:.12,spread:.3,claw:false});
+       const sp=add(new T.Mesh(new T.ConeGeometry(.03,.12,12),ph('#c8b890',{shininess:50})),.98,.2,s*.5);sp.rotation.set(s*-.5,0,-.6);}
+     break;}
+   case 'yamato':{// Yamatosaurus: early hadrosaur grazing on all fours — broad flat duck bill, smooth domed head, tall tail, brown hide with pale spots and dark saddle bands
+     const top=C(kam?'#24361e':'#3a2a1a'),mid=C(kam?'#56703a':'#7a5a3a'),bel=C(kam?'#e4dcb4':'#e0d0b0'),dk=C(kam?'#18240f':'#2a1c10'),sp=C(kam?'#c8c070':'#d8c49a'),bill=C('#3a2e22');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,3.5,.2);if(ny>.0&&x>-3&&x<.9&&Math.sin(x*3.6)>.55)tc.lerp(dk,.5);if(ny>.1&&x<1.2&&spots(x,y,z,.13,.045))tc.lerp(sp,.7);if(x>2.15)tc.lerp(bill,Math.min(1,(x-2.15)/.1)*.8);};
+     const M=skin('wrinkle',22,7,.035);
+     const B=body({mat:M,col,pts:[[-3.8,1.7,0],[-2.8,1.66,0],[-1.7,1.7,0],[-.7,1.82,0],[.25,1.72,0],[.85,1.52,0],[1.25,1.32,0],[1.6,1.18,0],[1.95,1.12,0],[2.25,1.08,0],[2.5,1.02,0]],
+       r:[[-3.8,.015],[-2.8,.13],[-1.7,.36],[-.8,.6],[.15,.58],[.75,.36],[1.2,.22],[1.6,.2],[1.95,.21],[2.25,.17],[2.5,.15]],
+       sy:[[-1,1.18],[0,1.12],[1.0,1.0],[1.9,1.12],[2.5,.55]],sz:[[-2,.62],[0,.85],[1.0,.85],[1.9,.72],[2.3,.85],[2.5,1.05]]});
+     for(const s of[1,-1]){const e=at(B,1.98,.45,.98);eye(e[0],e[1],s*e[2],.042,'#8a5a1a',mid.getStyle(),{brow:'#4a3420',ry:.35});const n=at(B,2.3,.45,.92);add(new T.Mesh(new T.SphereGeometry(.02,8,6),ph('#120a06')),n[0],n[1],s*n[2]).scale.set(1.8,1,1);
+       lineT(ph('#1a120a'),[[2.52,.98,s*.12],[2.35,1.0,s*.16],[2.15,1.04,s*.18]],.008);}
+     if(kam){const cr=at(B,1.88,Math.PI/2,.96);blob(M,col,[cr[0]-.08,cr[1]-.02,0],[cr[0]+.12,cr[1]+.16,0],.07,.5,1.05);}
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,4,.2);if(y<.4)tc.lerp(C('#3a2a1c'),.35);};
+     for(const s of[1,-1]){leg(M,LC,[[-.9,1.72,s*.4],[-.45,1.0,s*.46],[-.82,.46,s*.46],[-.72,.12,s*.46]],[.32,.21,.14,.11],{thigh:.48,flat:.6,toes:3,tr:.07,tl:.18,spread:.32,claw:false,pad:0});
+       leg(M,LC,[[.62,1.45,s*.36],[.7,.92,s*.42],[.8,.4,s*.42],[.84,.11,s*.42]],[.15,.11,.08,.075],{thigh:.16,flat:.75,toes:3,tr:.045,tl:.1,spread:.25,claw:false});}
+     break;}
+   case 'futaba':{// Futabasaurus: elasmosaur gliding in the sea — very long snake-like neck, small head with needle teeth, broad flat body, four long wing-like flippers, short tail; dark slate back, pale belly, countershaded spots
+     const top=C('#1e2c38'),mid=C('#3e5868'),bel=C('#e4e8e4'),sp=C('#7a96a4');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,3,.12);if(ny>.15&&spots(x,y,z,.12,.04))tc.lerp(sp,.55);};
+     const M=ph('#ffffff',{vertexColors:true,shininess:40,specular:'#3a4a52'}),Y=1.55;
+     const B=body({mat:M,col,seg:240,rad:40,pts:[[-2.4,Y-.05,0],[-1.8,Y,0],[-1.0,Y+.06,0],[-.2,Y+.08,0],[.6,Y+.08,0],[1.2,Y+.14,0],[1.8,Y+.3,0],[2.4,Y+.55,0],[2.95,Y+.8,0],[3.45,Y+.92,0],[3.85,Y+.88,0],[4.15,Y+.8,0]],
+       r:[[-2.4,.02],[-1.8,.18],[-1.0,.44],[-.2,.56],[.6,.5],[1.1,.26],[1.6,.15],[2.4,.12],[3.2,.1],[3.6,.095],[3.8,.12],[4.0,.1],[4.15,.05]],
+       sy:[[-1,.7],[0,.66],[1,.85],[2,1],[3.8,1.05]],sz:[[-1.5,.9],[0,1.05],[1,1.0],[3.8,.85]]});
+     const TT=ph('#f4eedc',{shininess:90});for(const s of[1,-1]){teeth(TT,[[3.82,Y+.85,s*.07],[3.98,Y+.82,s*.06],[4.14,Y+.78,s*.03]],6,.035);teeth(TT,[[3.85,Y+.76,s*.06],[4.0,Y+.75,s*.05],[4.12,Y+.74,s*.03]],5,.03,true);
+       const e=at(B,3.82,.5,.98);eye(e[0],e[1],s*e[2],.03,'#1a1a1a',mid.getStyle(),{ry:.3});}
+     {const m=add(new T.Mesh(new T.BoxGeometry(.32,.025,.08),ph('#4a2026')),3.98,Y+.79,0);m.rotation.z=-.12;}
+     // four flippers: flattened tapering bodies swept back
+     const FC=(tc,x,y,z,ny)=>{tc.copy(ny>0?mid:bel);mott(tc,x,y,z,4,.1);if(ny>0&&spots(x,y,z,.1,.03))tc.lerp(sp,.5);};
+     for(const s of[1,-1]){body({mat:M,col:FC,pts:[[.65,Y-.05,s*.42],[.35,Y-.18,s*.9],[-.1,Y-.3,s*1.35],[-.55,Y-.36,s*1.7]],r:[[-.55,.03],[-.1,.12],[.35,.18],[.65,.2]],sy:[[0,.22]],seg:50,rad:20});
+       body({mat:M,col:FC,pts:[[-1.05,Y-.05,s*.36],[-1.3,Y-.16,s*.75],[-1.65,Y-.24,s*1.1],[-2.0,Y-.28,s*1.38]],r:[[-2.0,.025],[-1.65,.1],[-1.3,.15],[-1.05,.17]],sy:[[0,.22]],seg:50,rad:20});}
+     // display stand + bubbles
+     for(const x of[-.8,.8])add(new T.Mesh(new T.CylinderGeometry(.035,.035,Y-.45,8),ph('#55595e')),x,(Y-.45)/2,0);
+     const BU=ph('#cfe8f4',{transparent:true,opacity:.55,shininess:120,specular:'#fff'});for(let i=0;i<14;i++)add(new T.Mesh(new T.SphereGeometry(.025+hsh(i,2,3)*.03,10,8),BU),4.0+hsh(i,1,1)*.3,Y+1.0+i*.09,(hsh(i,4,4)-.5)*.3);
+     G.scale.setScalar(.82);break;}
+   case 'desmo':{// Desmostylus: hippo-like marine mammal — barrel body on sturdy splayed legs, long low skull with forward-pointing tusks in both jaws, small ears, sparse bristly brown-grey hide
+     const top=C('#3a3028'),mid=C('#6a5a4a'),bel=C('#a8968a'),pink=C('#b88a80');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,3,.2);if(x>1.55&&ny<.2)tc.lerp(pink,.3);};
+     const M=skin('wrinkle',18,7,.04,{shininess:12});
+     const B=body({mat:M,col,pts:[[-1.85,1.0,0],[-1.5,1.08,0],[-.8,1.18,0],[0,1.22,0],[.7,1.2,0],[1.15,1.18,0],[1.45,1.12,0],[1.75,1.0,0],[1.98,.92,0]],
+       r:[[-1.85,.08],[-1.6,.36],[-1.0,.58],[-.2,.66],[.6,.6],[1.1,.46],[1.4,.38],[1.7,.3],[1.88,.24],[1.98,.16]],
+       sy:[[-1.5,.95],[0,1.0],[1.2,.95],[2.0,.7]],sz:[[-1.5,.95],[0,1.05],[1.2,.95],[2.0,.82]],noCap:[0,0]});
+     const TK=ph('#efe4c8',{shininess:80,specular:'#bbb'});
+     for(const s of[1,-1]){tube(TK,(tc)=>tc.set('#efe4c8'),[[1.84,.98,s*.12],[2.08,.9,s*.15],[2.24,.82,s*.16]],[.05,.045,.03],14,10);tube(TK,(tc)=>tc.set('#efe4c8'),[[1.82,.84,s*.1],[2.05,.76,s*.12],[2.18,.68,s*.13]],[.045,.04,.026],14,10);
+       const e=at(B,1.42,.5,.98);eye(e[0],e[1],s*e[2],.04,'#2a1a10',mid.getStyle(),{brow:'#3a3028',ry:.35});
+       const ear=ball(M,col,1.18,1.48,s*.3,.05,.07,.03,0,s*.3,0);const n=at(B,1.94,.45,.93);add(new T.Mesh(new T.SphereGeometry(.02,8,6),ph('#120a06')),n[0],n[1],s*n[2]);}
+     // whisker bristles on the snout
+     const WB=ph('#2a2420');for(let i=0;i<24;i++){const s=i%2?1:-1,x=1.72+hsh(i,1,2)*.22,p=at(B,x,(hsh(i,3,1)-.5)*.6,1.0);const w=add(new T.Mesh(new T.CylinderGeometry(.003,.002,.08,4),WB),p[0],p[1],s*p[2]);w.rotation.x=s*1.2;}
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,4,.2);if(y<.3)tc.lerp(C('#2a221c'),.4);};
+     for(const s of[1,-1]){leg(M,LC,[[.85,1.0,s*.46],[1.0,.6,s*.62],[.95,.28,s*.66],[1.02,.1,s*.66]],[.2,.16,.13,.12],{thigh:.2,flat:.75,toes:4,tr:.04,tl:.1,spread:.35,claw:false});
+       leg(M,LC,[[-1.1,1.0,s*.44],[-1.05,.6,s*.58],[-1.15,.28,s*.6],[-1.08,.1,s*.6]],[.22,.17,.13,.12],{thigh:.24,flat:.7,toes:4,tr:.04,tl:.1,spread:.35,claw:false});}
+     {const tl=add(new T.Mesh(new T.ConeGeometry(.06,.25,10),M),-1.95,.92,0);tl.rotation.z=1.2;paint(tl,col);}
+     break;}
+   case 'naumann':{// Naumann's elephant: tall Ice-Age elephant — high domed head, long upward-curving twisted tusks, trunk curled at the tip, moderate ears, sloping back, sparse grey-brown hair on a wrinkled hide
+     const top=C('#4a4038'),mid=C('#7a6c60'),bel=C('#5e544a'),hr=C('#3a2c22');
+     const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,2.5,.16);const f=fbm(x*8,y*8,z*8);if(ny>.3&&f>.62)tc.lerp(hr,(f-.62)*1.8);};
+     const M=skin('wrinkle',24,10,.055,{shininess:8});
+     const B=body({mat:M,col,pts:[[-1.65,2.0,0],[-1.3,2.12,0],[-.6,2.28,0],[.2,2.42,0],[.8,2.46,0],[1.15,2.4,0]],
+       r:[[-1.65,.08],[-1.4,.55],[-.8,.8],[0,.9],[.7,.86],[1.15,.62]],sy:[[-1.4,.95],[0,1.05],[1.0,1.08]],sz:[[-1.4,.75],[0,.8],[1.0,.82]],noCap:[0,0]});
+     // head: high dome with a forehead ridge, mouth area, small eyes
+     const HC=(tc,x,y,z,ny)=>{col(tc,x,y,z,ny);};
+     ball(M,HC,1.45,2.66,0,.62,.68,.56);ball(M,HC,1.6,3.18,0,.42,.3,.44);blob(M,HC,[1.62,2.45,0],[1.94,2.15,0],.32,.95,1.1);
+     // trunk curling forward at the tip
+     tube(M,HC,[[1.94,2.22,0],[2.06,1.8,0],[2.06,1.2,0],[2.0,.7,0],[2.1,.42,0],[2.3,.38,0],[2.36,.5,0]],[.17,.14,.11,.085,.065,.05,.04],70,20);
+     for(let i=0;i<14;i++){const y=2.15-i*.12;const r=add(new T.Mesh(new T.TorusGeometry(.13-i*.005,.008,6,24),ph('#4a4038',{shininess:4})),2.03+(i>9?.02:0),y,0);r.rotation.x=Math.PI/2;}
+     // ears
+     for(const s of[1,-1]){const e=new T.Shape();e.moveTo(0,0);e.bezierCurveTo(.2,.35,-.2,.6,-.45,.45);e.bezierCurveTo(-.65,.2,-.55,-.4,-.25,-.55);e.bezierCurveTo(-.05,-.5,.05,-.25,0,0);
+       const em=add(new T.Mesh(new T.ExtrudeGeometry(e,{depth:.03,bevelEnabled:true,bevelSize:.02,bevelThickness:.02,bevelSegments:2}),M),1.22,2.78,s*.5);em.scale.setScalar(1.4);em.rotation.y=s*-.35;paint(em,col);
+       eye(1.8,2.74,s*.42,.04,'#2a1a10',mid.getStyle(),{brow:'#3a3028',ry:.6});}
+     // long tusks curving out, up and slightly inward
+     const TK=ph('#f0e6cc',{shininess:70,specular:'#ccc'});for(const s of[1,-1])tube(TK,tc=>tc.set('#f0e6cc'),[[1.86,2.3,s*.24],[2.15,1.95,s*.38],[2.55,1.75,s*.46],[2.95,1.85,s*.4],[3.2,2.15,s*.26]],[.09,.085,.072,.055,.03],50,14);
+     const LC=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,3,.16);if(y<.35)tc.lerp(C('#3a322a'),.35);};
+     for(const s of[1,-1]){leg(M,LC,[[.75,2.2,s*.45],[.8,1.25,s*.5],[.78,.5,s*.5],[.78,.2,s*.5]],[.36,.27,.23,.23],{pad:.25,nails:4});
+       leg(M,LC,[[-1.0,2.1,s*.42],[-.92,1.2,s*.48],[-1.0,.5,s*.48],[-.98,.2,s*.48]],[.38,.27,.22,.22],{pad:.24,nails:3});}
+     lineT(M,[[-1.7,2.0,0],[-1.82,1.6,0],[-1.86,1.3,0]],.025);{const tf=add(new T.Mesh(new T.ConeGeometry(.05,.16,8),ph('#2a2018')),-1.86,1.22,0);tf.rotation.z=Math.PI;}
+     G.scale.setScalar(.82);break;}
    case 'kcera':{// Koreaceratops, reworked to read as a real (and a little scary) dinosaur: heavy body on powerful hind legs, big deep skull with a hooked open beak,
      // spiked cheek horns and a spiked frill, angry brow, tall tail with a row of spines; dark olive-brown hide with a pale belly, faint bands and a red display face
      const top=C('#2a2616'),mid=C('#5a4c26'),bel=C('#cdb886'),dk=C('#1e1a0e'),red=C('#9a2a16'),org=C('#c8642a'),spk=C('#b89a56');
@@ -10396,7 +10508,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=256;
+const GVER=257;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
