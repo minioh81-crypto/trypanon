@@ -871,7 +871,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v264 · 2026-11-17</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v265 · 2026-11-17</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -7113,6 +7113,10 @@ function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongM
   const cone=(mat,x,y,z,r,h,rz=0,ry=0,rx=0)=>{const m=add(new T.Mesh(new T.ConeGeometry(r,h,12),mat),x,y,z);m.rotation.set(rx,ry,rz);return m;};
   const RT=tab=>x=>{if(x<=tab[0][0])return tab[0][1];for(let i=1;i<tab.length;i++)if(x<=tab[i][0]){const [x0,r0]=tab[i-1],[x1,r1]=tab[i],k=(1-Math.cos(Math.PI*(x-x0)/(x1-x0)))/2;return r0+(r1-r0)*k;}return tab[tab.length-1][1];};
   const tabf=tab=>tab?RT(tab):(()=>1);
+  // 매끈한 보간(단조 3차, PCHIP): 키 사이에서 기울기가 이어져 RT의 마디(울퉁불퉁)가 생기지 않음 · 고래·돌고래처럼 매끈한 몸에 사용
+  const RTS=tab=>{const n=tab.length,X=tab.map(a=>a[0]),Y=tab.map(a=>a[1]);if(n<3)return RT(tab);const h=[],d=[];for(let i=0;i<n-1;i++){h.push(X[i+1]-X[i]);d.push((Y[i+1]-Y[i])/h[i]);}
+    const m=[d[0]];for(let i=1;i<n-1;i++){if(d[i-1]*d[i]<=0)m.push(0);else{const w1=2*h[i]+h[i-1],w2=h[i]+2*h[i-1];m.push((w1+w2)/(w1/d[i-1]+w2/d[i]));}}m.push(d[n-2]);
+    return x=>{if(x<=X[0])return Y[0];if(x>=X[n-1])return Y[n-1];let i=0;while(x>X[i+1])i++;const t=(x-X[i])/h[i],t2=t*t,t3=t2*t;return (2*t3-3*t2+1)*Y[i]+(t3-2*t2+t)*h[i]*m[i]+(-2*t3+3*t2)*Y[i+1]+(t3-t2)*h[i]*m[i+1];};};
   const hsh=(a,b,c)=>{const v=Math.sin(a*127.1+b*311.7+c*74.7)*43758.5453;return v-Math.floor(v);};
   // smooth 3D value noise (0..1) for mottling and shaggy displacement
   const vn=(x,y,z)=>{const X=Math.floor(x),Y=Math.floor(y),Z=Math.floor(z),fx=x-X,fy=y-Y,fz=z-Z,s=t=>t*t*(3-2*t),u=s(fx),v=s(fy),w=s(fz);const L=(a,b,t)=>a+(b-a)*t;
@@ -7138,7 +7142,7 @@ function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongM
   const paint=(m,col)=>{m.updateMatrixWorld(true);const g=m.geometry,p=g.attributes.position,n=g.attributes.normal,v=new T.Vector3(),nv=new T.Vector3(),nm=new T.Matrix3().getNormalMatrix(m.matrixWorld),c=[],tc=new T.Color();
     for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i).applyMatrix4(m.matrixWorld);nv.fromBufferAttribute(n,i).applyMatrix3(nm).normalize();col(tc,v.x,v.y,v.z,nv.y,nv.z,nv.x);c.push(tc.r,tc.g,tc.b);}g.setAttribute('color',new T.Float32BufferAttribute(c,3));return m;};
   // one continuous surface along a spine: per-x radius, vertical/side squash, vertical offset dy(x,ly,lz), normal noise dn(x,y,z)
-  const body=o=>{const c=new T.CatmullRomCurve3(o.pts.map(p=>V(...p))),rx=RT(o.r),sy=tabf(o.sy),sz=tabf(o.sz),SEG=o.seg||160,RAD=o.rad||40;
+  const body=o=>{const c=new T.CatmullRomCurve3(o.pts.map(p=>V(...p)),false,o.sm?'centripetal':undefined),I=o.sm?RTS:RT,rx=I(o.r),sy=o.sy?I(o.sy):()=>1,sz=o.sz?I(o.sz):()=>1,SEG=o.seg||160,RAD=o.rad||40;
     const g=s3Taper(c,SEG,RAD,t=>rx(c.getPointAt(Math.min(1,t)).x)),p=g.attributes.position;
     for(let i=0;i<p.count;i++){const t=Math.min(1,Math.floor(i/(RAD+1))/SEG),q=c.getPointAt(t),ly=p.getY(i)-q.y,lz=p.getZ(i)-q.z;let y=q.y+ly*sy(q.x)+(o.dy?o.dy(q.x,ly,lz):0),z=q.z+lz*sz(q.x);
       if(o.dn){const d=o.dn(p.getX(i),y,z),L=Math.hypot(y-q.y,z-q.z)||1;y+=(y-q.y)/L*d;z+=(z-q.z)/L*d;}p.setY(i,y);p.setZ(i,z);}
@@ -7549,7 +7553,7 @@ function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongM
      const top=C('#18233a'),mid=C('#2c3f5a'),bel=C('#e8ecf0'),pl=C('#8c98a8');
      const col=(tc,x,y,z,ny,nz)=>{shade3(tc,ny,top,mid,bel);mott(tc,x,y,z,1.2,.06);if(ny<-.2&&x>.4&&x<2.9){const g=Math.sin(z*34+Math.sin(x*2)*1.5);if(g>.55)tc.lerp(pl,.45);}};
      const M=ph('#ffffff',{vertexColors:true,shininess:45,specular:'#3a4250'});
-     const B=body({mat:M,col,seg:220,rad:56,pts:[[-3.2,1.78,0],[-2.75,1.6,0],[-2.0,1.45,0],[-1.0,1.44,0],[0,1.46,0],[1.0,1.44,0],[1.9,1.38,0],[2.6,1.3,0],[3.1,1.23,0],[3.42,1.17,0]],
+     const B=body({sm:1,mat:M,col,seg:220,rad:64,pts:[[-3.2,1.78,0],[-2.6,1.56,0],[-1.6,1.46,0],[0,1.45,0],[1.6,1.4,0],[2.6,1.3,0],[3.42,1.17,0]],
        r:[[-3.2,.1],[-2.75,.19],[-2.0,.4],[-1.0,.76],[0,.92],[1.0,.92],[1.9,.8],[2.6,.64],[3.1,.46],[3.35,.3],[3.48,.16]],sy:[[-2.8,1.4],[-2,1.08],[0,1.1],[1.8,.95],[2.8,.7],[3.4,.62]],sz:[[-2.8,.62],[-2,.86],[0,.92],[2.4,.96],[3.0,1.0],[3.45,.92]],
        dy:(x,ly)=>ly<0&&x>.6&&x<3.2?ly*.22*Math.sin((x-.6)/2.6*Math.PI):0});
      // tubercles on the head and lower jaw
@@ -7561,7 +7565,7 @@ function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongM
         const e=at(B,1.72,.12,1.0);eye(e[0],e[1],s*e[2],.045,'#141414',top.getStyle(),{ry:.2});}}
      // long white pectoral fins (flattened tapered bodies) with knobbed leading edge
      const FC=(tc,x,y,z,ny)=>{tc.copy(bel);if(ny>.1)tc.lerp(mid,.75);mott(tc,x,y,z,4,.1);};
-     for(const s of[1,-1]){const F=body({mat:M,col:FC,pts:[[1.75,1.0,s*.62],[1.3,.82,s*1.0],[.8,.6,s*1.45],[.25,.42,s*1.9],[-.1,.32,s*2.15]],r:[[-.1,.06],[.25,.2],[.8,.28],[1.3,.3],[1.75,.24]],sy:[[0,.2]],seg:60,rad:20});
+     for(const s of[1,-1]){const F=body({sm:1,mat:M,col:FC,pts:[[1.75,1.0,s*.62],[1.3,.82,s*1.0],[.8,.6,s*1.45],[.25,.42,s*1.9],[-.1,.32,s*2.15]],r:[[-.1,.06],[.25,.2],[.8,.28],[1.3,.3],[1.75,.24]],sy:[[0,.2]],seg:60,rad:20});
        for(let i=0;i<8;i++){const p=F.c.getPointAt(.08+i*.11);add(new T.Mesh(new T.SphereGeometry(.05*(1-i*.07),8,6),ph('#e8ecf0',{shininess:30})),p.x+.12,p.y+.01,p.z);}}
      // flukes with a serrated trailing edge
      {const fl=new T.Shape();fl.moveTo(0,0);fl.bezierCurveTo(-.25,.45,-.55,.85,-.85,1.15);for(let i=0;i<=8;i++){const t=i/8;fl.lineTo(-.85+t*.5+(i%2?.06:0),1.15-t*1.15);}for(let i=0;i<=8;i++){const t=i/8;fl.lineTo(-.35-t*.5+(i%2?.06:0),-t*1.15);}fl.bezierCurveTo(-.55,-.85,-.25,-.45,0,0);
@@ -7607,13 +7611,13 @@ function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongM
      const top=C('#2e3844'),mid=C('#66707c'),bel=C('#d2d6da');
      const col=(tc,x,y,z,ny)=>{shade3(tc,ny,top,mid,bel);if(ny>.45&&x>-1.4&&x<1.6)tc.lerp(C('#222a34'),.5);mott(tc,x,y,z,1.0,.03);if(x>2.0)tc.lerp(C('#3a4450'),.4);};
      const M=ph('#ffffff',{vertexColors:true,shininess:36,specular:'#3a4048'});
-     const B=body({mat:M,col,seg:200,rad:56,pts:[[-2.15,1.24,0],[-1.45,1.3,0],[-.45,1.38,0],[.5,1.4,0],[1.3,1.36,0],[1.72,1.3,0],[1.98,1.2,0],[2.2,1.17,0],[2.36,1.16,0]],
+     const B=body({sm:1,mat:M,col,seg:220,rad:64,pts:[[-2.15,1.24,0],[-1.2,1.32,0],[.2,1.4,0],[1.3,1.36,0],[1.9,1.23,0],[2.36,1.16,0]],
        r:[[-2.15,.08],[-1.6,.22],[-.6,.5],[.3,.58],[1.1,.48],[1.55,.34],[1.82,.2],[1.96,.11],[2.18,.085],[2.32,.055]],sy:[[-2,1.2],[-1.2,1.05],[0,1.02],[1.9,.95]],sz:[[-2,.62],[-1.2,.86],[0,.9],[2.0,.86]],
        dy:(x,ly)=>ly>0&&x>1.45&&x<2.0?Math.sin((x-1.45)/.55*Math.PI)*.04*(ly/.2):0});
      for(const s of[1,-1]){const e=at(B,1.8,.0,1.0);eye(e[0],e[1],s*e[2],.024,'#141414','#2e3844',{ry:.25});lineT(ph('#202830'),[[2.34,1.15,s*.015],[2.15,1.135,s*.05],[1.98,1.15,s*.09]],.005);}
      {const df=new T.Shape();df.moveTo(.18,0);df.bezierCurveTo(.12,.28,-.05,.5,-.32,.64);df.quadraticCurveTo(-.26,.3,-.48,0);df.lineTo(.18,0);const m=add(new T.Mesh(new T.ExtrudeGeometry(df,{depth:.035,bevelEnabled:true,bevelSize:.02,bevelThickness:.02,bevelSegments:3}),ph('#2a333e',{shininess:60})),.12,1.86,-.03);m.scale.setScalar(1.15);}
      const FC=(tc,x,y,z,ny)=>{tc.copy(C('#3a444e'));mott(tc,x,y,z,6,.1);};
-     for(const s of[1,-1])body({mat:M,col:FC,pts:[[1.15,1.12,s*.38],[.95,.96,s*.56],[.7,.84,s*.7]],r:[[.7,.035],[.95,.1],[1.15,.13]],sy:[[1,.3]],seg:30,rad:16});
+     for(const s of[1,-1])body({sm:1,mat:M,col:FC,pts:[[1.15,1.12,s*.38],[.95,.96,s*.56],[.7,.84,s*.7]],r:[[.7,.035],[.95,.1],[1.15,.13]],sy:[[1,.3]],seg:30,rad:16});
      {const fl=new T.Shape();fl.moveTo(0,0);fl.quadraticCurveTo(-.2,.3,-.5,.48);fl.quadraticCurveTo(-.36,.2,-.32,0);fl.quadraticCurveTo(-.36,-.2,-.5,-.48);fl.quadraticCurveTo(-.2,-.3,0,0);const m=add(new T.Mesh(new T.ExtrudeGeometry(fl,{depth:.03,bevelEnabled:true,bevelSize:.02,bevelThickness:.02,bevelSegments:3}),ph('#2a333e',{shininess:60})),-2.06,1.26,0);m.rotation.x=Math.PI/2;m.scale.set(1.2,1.3,1);}
      if(isJP){const BM=ph('#5a6470',{shininess:40}),BL=ph('#c8ccd0',{shininess:30});tube(BM,tc=>tc.set('#5a6470'),[[2.2,1.19,0],[2.5,1.18,0],[2.82,1.16,0]],[.06,.045,.022],24,12);tube(BL,tc=>tc.set('#c8ccd0'),[[2.15,1.1,0],[2.45,1.07,0],[2.74,1.05,0]],[.05,.036,.018],24,12);
        add(new T.Mesh(new T.BoxGeometry(.55,.04,.05),ph('#7a2a30')),2.48,1.12,0);const TT=ph('#f4eedc',{shininess:90});for(const s of[1,-1]){teeth(TT,[[2.25,1.15,s*.035],[2.5,1.14,s*.028],[2.78,1.13,s*.014]],10,.035);teeth(TT,[[2.25,1.1,s*.03],[2.5,1.09,s*.024],[2.72,1.07,s*.012]],9,.03,true);}}
@@ -10609,7 +10613,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=264;
+const GVER=265;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
