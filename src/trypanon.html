@@ -852,7 +852,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v268 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v269 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1181,15 +1181,15 @@ const monKuki=(x,y,s,f,st)=>`<g transform="translate(${x},${y}) scale(${s})"><ci
 // chibi general (same frame as 이순신·김유신: face ~ (50,90), body 100–168)
 function jpGenSVG(c,o={}){const u='jg'+(++UID),ex=o.expr||'',up=o.pose==='raise',an=!!o.anim,ku=isKuki(c.sex),GR=c.sex==='kuki2'||c.sex==='oda2';
   // 구키: 햇볕에 그을린 넓은 얼굴·굵은 눈썹·짙은 수염(바다 사나이) / 오다: 하얗고 갸름한 얼굴·가늘고 날카로운 눈·가는 팔자수염
-  const AR='#1c1a20',ARL='#3a3644',G='#e8b030',GL='#fff0b0',GD='#8a5a12',CP=ku?'#5a2a86':'#b0201e',CPD=ku?'#2a0e48':'#5a0a0a',CORD='#c8242a',
+  const X=!!o.t3,AR=X&&!ku?'#7a808c':'#1c1a20',ARL=X&&!ku?'#c8ced8':X?'#2a3a6a':'#3a3644',G=X?'#ffd040':'#e8b030',GL='#fff0b0',GD='#8a5a12',CP=ku?(X?'#0e6a8a':'#5a2a86'):(X?'#d81a1a':'#b0201e'),CPD=ku?(X?'#06283a':'#2a0e48'):(X?'#600808':'#5a0a0a'),CORD='#c8242a',
     sk=ku?'#e2b088':'#f8dcc4',skL=ku?'#f4cca8':'#fff0e2',skE=ku?'#b8805a':'#e0b494',skD=ku?'#8a5a3a':'#b88a6a',HR='#16121a';
   const mon=(x,y,s)=>ku?monKuki(x,y,s,`url(#${u}g)`,GD):monOda(x,y,s,`url(#${u}g)`,GD);
   let g=`<defs><radialGradient id="${u}s" cx=".42" cy=".34" r=".8"><stop offset="0" stop-color="${skL}"/><stop offset=".6" stop-color="${sk}"/><stop offset="1" stop-color="${skE}"/></radialGradient>
    <linearGradient id="${u}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${GL}"/><stop offset=".5" stop-color="${G}"/><stop offset="1" stop-color="${GD}"/></linearGradient>
    <linearGradient id="${u}a" x1="0" x2="1"><stop offset="0" stop-color="${ARL}"/><stop offset=".5" stop-color="${AR}"/><stop offset="1" stop-color="#08070a"/></linearGradient>
-   <linearGradient id="${u}k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a4656"/><stop offset=".45" stop-color="#1c1a22"/><stop offset="1" stop-color="#060508"/></linearGradient>
+   <linearGradient id="${u}k" x1="0" y1="0" x2="0" y2="1">${(X?(ku?["#6a8ac0","#1e3a6a","#060c1e"]:["#f0f2f6","#8a909c","#30343c"]):["#4a4656","#1c1a22","#060508"]).map((c,i)=>`<stop offset="${[0,.45,1][i]}" stop-color="${c}"/>`).join("")}</linearGradient>
    <linearGradient id="${u}c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${CP}"/><stop offset="1" stop-color="${CPD}"/></linearGradient>
-   <linearGradient id="${u}f" x1="0" x2="1"><stop offset="0" stop-color="#2a2236"/><stop offset=".5" stop-color="#4a3a5e"/><stop offset="1" stop-color="#1a1424"/></linearGradient></defs>`;
+   <linearGradient id="${u}f" x1="0" x2="1">${(X&&ku?["#0a2a36","#1a6a7e","#06161e"]:["#2a2236","#4a3a5e","#1a1424"]).map((c,i)=>`<stop offset="${[0,.5,1][i]}" stop-color="${c}"/>`).join("")}</linearGradient></defs>`;
   const GF=`url(#${u}g)`,AF=`url(#${u}a)`,KF=`url(#${u}k)`;
   // ★★: banner on a pole behind the shoulder
   if(GR){const fA='M92,-8 L118,-8 L118,40 L92,40Z',fB='M92,-8 L119,-6 L117,41 L92,40Z';g+=`<path d="M91,-14 V160" stroke="#2a1a12" stroke-width="2.6"/><path d="${fA}" fill="${ku?'#2a1a4a':'#141016'}" stroke="${G}" stroke-width="1.4">${an?`<animate attributeName="d" values="${fA};${fB};${fA}" dur="1.4s" repeatCount="indefinite"/>`:''}</path>`+mon(105,16,1.25);}
@@ -4333,17 +4333,17 @@ function yiHalo(gold){const u='hl'+(++UID),c1=gold?'#fff2b0':'#ffffff',c2=gold?'
     <circle cx="50" cy="60" r="92" fill="url(#${u}g)"><animate attributeName="opacity" values=".75;1;.75" dur="3.2s" repeatCount="indefinite"/></circle>
     <g fill="url(#${u}r)" opacity=".75">${rays}<animateTransform attributeName="transform" type="rotate" from="0 50 52" to="360 50 52" dur="40s" repeatCount="indefinite"/></g>
     <circle cx="50" cy="38" r="33" fill="none" stroke="${c2}" stroke-width="3" opacity=".9"/><circle cx="50" cy="38" r="33" fill="none" stroke="${c1}" stroke-width="1.2"/><circle cx="50" cy="38" r="38" fill="none" stroke="${c3}" stroke-width=".8" opacity=".6"/>`;}
-function yiSVG(c,o={}){const u='yi'+(++UID),ex=o.expr||'',up=o.pose==='raise',an=!!o.anim,GR=c.sex==='yi2';
-  const R='#b8242a',RD='#5e0e12',RL='#e0504a',G='#f2c14e',GL='#ffe9a0',GD='#94621a',BK='#141016',BL='#2a2630',sk='#f3cfae',skD='#b07a56';
+function yiSVG(c,o={}){const u='yi'+(++UID),ex=o.expr||'',up=o.pose==='raise',an=!!o.anim,GR=c.sex==='yi2',X=!!o.t3;
+  const R=X?'#e02a30':'#b8242a',RD=X?'#7a0c12':'#5e0e12',RL=X?'#ff6a5a':'#e0504a',G=X?'#ffd24a':'#f2c14e',GL=X?'#fff4c0':'#ffe9a0',GD=X?'#a8700e':'#94621a',BK=X?'#4a0c14':'#141016',BL=X?'#7a1a24':'#2a2630',sk='#f3cfae',skD='#b07a56';
   const st=(id,path,c1,c2,step=5.2,r=1.15)=>{let d='';const nm=path.match(/-?[\d.]+/g).map(Number),xs=nm.filter((_,i)=>i%2===0),ys=nm.filter((_,i)=>i%2);for(let y=Math.min(...ys);y<Math.max(...ys)+step;y+=step)for(let x=Math.min(...xs)-step;x<Math.max(...xs)+step;x+=step)d+=`M${(x+(Math.round(y/step)%2?step/2:0)).toFixed(1)},${y.toFixed(1)}m-${r},0a${r},${r} 0 1,0 ${2*r},0a${r},${r} 0 1,0 -${2*r},0`;
     return `<clipPath id="${u}${id}"><path d="${path}"/></clipPath><g clip-path="url(#${u}${id})"><path d="${d}" fill="${c1}" stroke="${c2}" stroke-width=".45"/></g>`;};
   let g=`<defs><radialGradient id="${u}s" cx=".4" cy=".32" r=".8"><stop offset="0" stop-color="#ffe6cf"/><stop offset=".6" stop-color="${sk}"/><stop offset="1" stop-color="#dba57e"/></radialGradient>
     <linearGradient id="${u}r" x1="0" x2="1"><stop offset="0" stop-color="${RL}"/><stop offset=".4" stop-color="${R}"/><stop offset="1" stop-color="#6e1218"/></linearGradient>
     <linearGradient id="${u}rv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d23a3a"/><stop offset="1" stop-color="#7a1418"/></linearGradient>
-    <radialGradient id="${u}h" cx=".32" cy=".22" r=".95"><stop offset="0" stop-color="#7a7a8a"/><stop offset=".22" stop-color="#34323c"/><stop offset=".7" stop-color="#16141a"/><stop offset="1" stop-color="#050406"/></radialGradient>
+    <radialGradient id="${u}h" cx=".32" cy=".22" r=".95">${(X?["#fff6c8","#f0c040","#a86a10","#4a2a04"]:["#7a7a8a","#34323c","#16141a","#050406"]).map((c,i)=>`<stop offset="${[0,.22,.7,1][i]}" stop-color="${c}"/>`).join("")}</radialGradient>
     <linearGradient id="${u}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${GL}"/><stop offset=".5" stop-color="${G}"/><stop offset="1" stop-color="${GD}"/></linearGradient>
     <linearGradient id="${u}b" x1="0" x2="1"><stop offset="0" stop-color="#7a868e"/><stop offset=".45" stop-color="#ffffff"/><stop offset=".6" stop-color="#d8e2e8"/><stop offset="1" stop-color="#6a767e"/></linearGradient>
-    <linearGradient id="${u}k" x1="0" x2="1"><stop offset="0" stop-color="#3a3640"/><stop offset="1" stop-color="${BK}"/></linearGradient>
+    <linearGradient id="${u}k" x1="0" x2="1"><stop offset="0" stop-color="${X?'#c8343a':'#3a3640'}"/><stop offset="1" stop-color="${BK}"/></linearGradient>
     <linearGradient id="${u}p" x1="0" y1="1" x2=".3" y2="0"><stop offset="0" stop-color="#7a0a10"/><stop offset=".5" stop-color="#d8242a"/><stop offset="1" stop-color="#ff6a4a"/></linearGradient></defs>`;
   const GF=`url(#${u}g)`;
   // 충무공 extras: black lamellar scales with gold rivets, fur trim, gold dragon embroidery
@@ -4432,8 +4432,8 @@ function yiSVG(c,o={}){const u='yi'+(++UID),ex=o.expr||'',up=o.pose==='raise',an
 // chibi Silla general: navy lamellar armour with gold trim, gold headband crown, long black ponytail, navy cape, red sash, long sword.
 // ★ 김유신 장군 = silver halo in the wardrobe; ★★ 명장 김유신 = gold halo, taller gold crown, gold-scaled armour and a Silla war banner
 function sillaMark(x,y,k,fill,stroke){let p='';for(let i=0;i<6;i++){const a=i*60;p+=`<ellipse cx="0" cy="-4.2" rx="2.6" ry="4" transform="rotate(${a})"/>`;}return `<g transform="translate(${x},${y}) scale(${k})" fill="${fill}" stroke="${stroke}" stroke-width=".6">${p}<circle r="2.4" fill="#fff3c0"/><circle r="1.1" fill="${stroke}" stroke="none"/></g>`;}
-function kimSVG(c,o={}){const u='km'+(++UID),ex=o.expr||'',up=o.pose==='raise',an=!!o.anim,GR=c.sex==='kim2',ride=!!o.ride;
-  const N='#22337a',ND='#0c143e',NL='#3e5cb8',G='#f2c14e',GL='#ffefb0',GD='#94621a',R='#c8242a',RD='#6e0e12',BK='#141016',sk='#f5d2b0',skD='#b07a56',HR='#16121a',HRL='#3a3446';
+function kimSVG(c,o={}){const u='km'+(++UID),ex=o.expr||'',up=o.pose==='raise',an=!!o.anim,GR=c.sex==='kim2',ride=!!o.ride,X=!!o.t3;
+  const N=X?'#6a2a8a':'#22337a',ND=X?'#2a0a40':'#0c143e',NL=X?'#a860d8':'#3e5cb8',G='#f2c14e',GL='#ffefb0',GD='#94621a',R='#c8242a',RD='#6e0e12',BK='#141016',sk='#f5d2b0',skD='#b07a56',HR='#16121a',HRL='#3a3446';
   let g=`<defs><radialGradient id="${u}s" cx=".4" cy=".32" r=".8"><stop offset="0" stop-color="#ffe8d2"/><stop offset=".6" stop-color="${sk}"/><stop offset="1" stop-color="#dca880"/></radialGradient>
     <linearGradient id="${u}n" x1="0" x2="1"><stop offset="0" stop-color="${NL}"/><stop offset=".45" stop-color="${N}"/><stop offset="1" stop-color="${ND}"/></linearGradient>
     <linearGradient id="${u}nv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34509e"/><stop offset="1" stop-color="#101a4a"/></linearGradient>
@@ -4522,7 +4522,7 @@ function hvBanner(x,txt,c1,c2){return `<line x1="${x}" y1="-6" x2="${x}" y2="160
 function hvU(p){return p+(typeof UID!=='undefined'?++UID:Math.random().toString(36).slice(2,7));}
 // ---- 장영실: ★ 청록 단령 / ★★ 대호군: 붉은 단령 · 쌍학 흉배 · 금 서대 · 「自擊漏」 깃발 ----
 function jysSVG(c={},o={}){const up=c.sex==='jys2',u=hvU('jy'),sk='#f3cfae',skD='#b07a56',G='#f2c14e',GL='#ffe9a0',GD='#94621a',BK='#17141a';
-  const R=up?{a:'#b8242a',d:'#5e0e12',l:'#e0504a'}:{a:'#2a8a7a',d:'#0e4a42',l:'#5ac0a8'};
+  const R=o.t3?{a:'#2a3a8a',d:'#10184a',l:'#5a72d0'}:up?{a:'#b8242a',d:'#5e0e12',l:'#e0504a'}:{a:'#2a8a7a',d:'#0e4a42',l:'#5ac0a8'};
   const armil=(x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})"><path d="M-4 22 L0 12 L4 22Z" fill="${GD}"/><rect x="-9" y="21" width="18" height="4" rx="1.5" fill="${G}" stroke="${GD}" stroke-width="1"/>
     <circle r="15" fill="rgba(255,240,170,.14)" stroke="url(#${u}g)" stroke-width="2.8"/><ellipse rx="15" ry="5" fill="none" stroke="url(#${u}g)" stroke-width="2.2"/><ellipse rx="5.5" ry="15" fill="none" stroke="url(#${u}g)" stroke-width="2.2" transform="rotate(28)"/><ellipse rx="15" ry="6.5" fill="none" stroke="${GL}" stroke-width="1.5" transform="rotate(-32)"/>
     <circle r="4.6" fill="url(#${u}e)" stroke="#1a4a8a" stroke-width="1"/><circle cx="-1.4" cy="-1.5" r="1.4" fill="#fff"/>${up?`<circle r="19" fill="none" stroke="${GL}" stroke-width="1" opacity=".7" stroke-dasharray="2 4"/>`:''}</g>`;
@@ -4551,7 +4551,7 @@ function jysSVG(c={},o={}){const up=c.sex==='jys2',u=hvU('jy'),sk='#f3cfae',skD=
    <path d="M32,60 L33,28 Q50,19 67,28 L68,60Z" fill="url(#${u}s)" stroke="#000" stroke-width="1.2"/><path d="M14,72 C14,44 86,44 86,72 Q50,63 14,72Z" fill="url(#${u}s)" stroke="#000" stroke-width="1.3"/><path d="M24,57 Q40,49 56,49" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none" stroke-linecap="round"/>${up?`<path d="M16,68 Q50,60 84,68" stroke="${G}" stroke-width="1.3" fill="none"/>`:''}</g>`;}
 // ---- 이노 다다타카: ★ 남색 하오리 · 나침반 지팡이 · 상한의 / ★★ 가미시모(어깨 날개) · 금 문장 · 펼친 일본 지도 · 「測量」 깃발 ----
 function inoSVG(c={},o={}){const up=c.sex==='ino2',u=hvU('in'),sk='#f0c8a4',skD='#a8704e',G='#e8b84a',GL='#fff0b0',GD='#8a5a12',GY='#c4c4cc',GYD='#7a7a86';
-  const N=up?{a:'#1a2c6a',d:'#0a1436',l:'#3a5ab0'}:{a:'#24345e',d:'#121a36',l:'#40528a'},HK=up?'#5a5a66':'#8a8a92',HKD=up?'#2e2e36':'#4e4e56';
+  const N=o.t3?{a:'#ece6d6',d:'#a89e88',l:'#ffffff'}:up?{a:'#1a2c6a',d:'#0a1436',l:'#3a5ab0'}:{a:'#24345e',d:'#121a36',l:'#40528a'},HK=o.t3?'#2a3a7a':up?'#5a5a66':'#8a8a92',HKD=o.t3?'#121a40':up?'#2e2e36':'#4e4e56';
   const mon=(x,y,r)=>`<g transform="translate(${x},${y})"><circle r="${r}" fill="${up?G:'#f4f0e8'}" stroke="${up?GD:N.l}" stroke-width=".8"/>${[0,1,2,3].map(i=>`<ellipse cx="0" cy="${-r*.5}" rx="${r*.28}" ry="${r*.42}" fill="${up?N.d:N.a}" transform="rotate(${i*90})"/>`).join('')}<circle r="${r*.2}" fill="${up?N.d:N.a}"/></g>`;
   const quad=`<g transform="translate(90,124)"><path d="M0 0 L0 -21 A21 21 0 0 1 21 0Z" fill="rgba(232,184,74,.28)" stroke="url(#${u}g)" stroke-width="2.4" stroke-linejoin="round"/>${[1,2,3,4,5].map(i=>{const a=i*Math.PI/12;return `<path d="M${(Math.sin(a)*16.5).toFixed(1)} ${(-Math.cos(a)*16.5).toFixed(1)} L${(Math.sin(a)*21).toFixed(1)} ${(-Math.cos(a)*21).toFixed(1)}" stroke="${GD}" stroke-width="1.1"/>`}).join('')}<path d="M0 -21 L0 -27 M-2 -27 h4" stroke="url(#${u}g)" stroke-width="2"/><path d="M0 0 L9 15" stroke="#3a2a1a" stroke-width="1"/><path d="M9 15 l-2 4 h4z" fill="#3a2a1a"/></g>`;
   const map=`<g transform="translate(68,106) rotate(-8)"><rect x="0" y="0" width="42" height="30" rx="1.5" fill="#f4ead0" stroke="#8a6a30" stroke-width="1.3"/><path d="M8 25 Q12 19 16 20 Q20 15 24 14 Q27 10 31 9 Q34 6 37 3 M31 23 Q34 21 36 22 M9 27 q3 -2 5 0" stroke="#c8302a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 5 h10 M4 8 h7" stroke="#5a4a2a" stroke-width=".8"/><rect x="-3" y="-2" width="4" height="34" rx="2" fill="#7a2a1a"/><rect x="41" y="-2" width="4" height="34" rx="2" fill="#7a2a1a"/></g>`;
@@ -4584,7 +4584,9 @@ const T3COL={yi:['#ffd86a','#e8402a'],kim:['#ffe08a','#3a5ad8'],jys:['#fff0a0','
 function t3Back(sx){const k=sx.replace(/3$/,''),[a,b]=T3COL[k]||['#ffe08a','#e8a02a'],u='t3'+(++UID);let r='';for(let i=0;i<16;i++){const an=i/16*Math.PI*2,x1=50+Math.cos(an)*34,y1=92+Math.sin(an)*34,x2=50+Math.cos(an)*78,y2=92+Math.sin(an)*78,w=i%2?4:7;r+=`<path d="M${x1.toFixed(1)},${y1.toFixed(1)} L${(x2+Math.cos(an+Math.PI/2)*w).toFixed(1)},${(y2+Math.sin(an+Math.PI/2)*w).toFixed(1)} L${(x2-Math.cos(an+Math.PI/2)*w).toFixed(1)},${(y2-Math.sin(an+Math.PI/2)*w).toFixed(1)}Z" fill="url(#${u}r)"/>`;}
   return `<defs><radialGradient id="${u}g"><stop offset="0" stop-color="${a}" stop-opacity=".75"/><stop offset=".55" stop-color="${b}" stop-opacity=".32"/><stop offset="1" stop-color="${b}" stop-opacity="0"/></radialGradient><linearGradient id="${u}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}" stop-opacity=".55"/><stop offset="1" stop-color="${b}" stop-opacity=".05"/></linearGradient></defs><g opacity=".95">${r}<animateTransform attributeName="transform" type="rotate" values="0 50 92;360 50 92" dur="24s" repeatCount="indefinite"/></g><circle cx="50" cy="92" r="72" fill="url(#${u}g)"/><circle cx="50" cy="92" r="58" fill="none" stroke="${a}" stroke-width="1.6" stroke-dasharray="3 4" opacity=".8"/>`;}
 function t3Front(sx){const [a,b]=T3COL[sx.replace(/3$/,'')]||['#ffe08a','#e8a02a'],st=(x,y,k)=>`<path transform="translate(${x},${y}) scale(${k})" d="M0,-6 L1.8,-1.9 L6.2,-1.9 L2.7,.9 L4,5.2 L0,2.6 L-4,5.2 L-2.7,.9 L-6.2,-1.9 L-1.8,-1.9Z" fill="${a}" stroke="${b}" stroke-width=".9"><animate attributeName="opacity" values="1;.55;1" dur="1.6s" begin="${(x/60).toFixed(2)}s" repeatCount="indefinite"/></path>`;const n=/3$/.test(sx)?3:/2$/.test(sx)?2:1;return n===3?st(32,6,1)+st(50,0,1.25)+st(68,6,1):n===2?st(42,3,1.1)+st(58,3,1.1):st(50,1,1.2);}
-const t3W=f=>(c={},o={})=>c&&/3$/.test(c.sex||'')?t3Back(c.sex)+f(Object.assign({},c,{sex:c.sex.slice(0,-1)+'2'}),o)+(o.noStars?'':t3Front(c.sex)):f(c,o)+(o.noStars||!c||!c.sex?'':t3Front(c.sex));
+// ★★★ 망토(몸 뒤): 이순신 붉은 비단 · 김유신 왕의 자주 망토
+const t3Cape=sx=>{const k=sx.replace(/3$/,''),C={yi:['#d8282e','#7a0c12','#ffd24a'],kim:['#7a1a6a','#3a0a34','#ffd24a']}[k];if(!C)return '';return `<path d="M30,104 Q14,140 8,172 Q50,180 92,172 Q86,140 70,104Z" fill="${C[0]}" stroke="${C[1]}" stroke-width="1.6"/><path d="M14,160 Q50,170 86,160" stroke="${C[2]}" stroke-width="2" fill="none"/><path d="M24,124 Q20,150 16,168 M76,124 Q80,150 84,168" stroke="${C[1]}" stroke-width="1" fill="none" opacity=".6"/>`;};
+const t3W=f=>(c={},o={})=>c&&/3$/.test(c.sex||'')?t3Back(c.sex)+t3Cape(c.sex)+f(Object.assign({},c,{sex:c.sex.slice(0,-1)+'2'}),Object.assign({},o,{t3:true}))+(o.noStars?'':t3Front(c.sex)):f(c,o)+(o.noStars||!c||!c.sex?'':t3Front(c.sex));
 yiSVG=t3W(yiSVG);kimSVG=t3W(kimSVG);jysSVG=t3W(jysSVG);inoSVG=t3W(inoSVG);jpGenSVG=t3W(jpGenSVG);
 function supItemSVG(v,id='s'){const u='si'+id+(++UID),G='#f2c14e',GL='#fff3b8',GD='#8a5a12',W='#6a3e1c',WD='#3a200c';
   const defs=`<defs><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${GL}"/><stop offset=".4" stop-color="${G}"/><stop offset=".7" stop-color="#c88a20"/><stop offset="1" stop-color="${GD}"/></linearGradient>
@@ -10610,7 +10612,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=268;
+const GVER=269;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
