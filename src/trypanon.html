@@ -852,7 +852,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v265 · 2026-11-17</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v266 · 2026-11-17</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2180,7 +2180,7 @@ function yiArt(u){const B=`url(#${u}bz)`,D='#23211c',L='#9c9684';
  <ellipse cx="45.9" cy="33.6" rx="3" ry=".9" fill="#5e5a4e" stroke="${D}" stroke-width=".3"/><rect x="44.9" y="14" width="2" height="19.4" rx=".8" fill="#2c2a25"/>${Array.from({length:12},(_,i)=>`<path d="M44.9,${15+i*1.5} l2,.8" stroke="#77725f" stroke-width=".45"/>`).join('')}<ellipse cx="45.9" cy="13.4" rx="1.4" ry="1" fill="#6a6556"/>
  <ellipse cx="46.6" cy="31" rx="2.2" ry="2" fill="url(#${u}bzv)" stroke="${D}" stroke-width=".35"/>
  <!-- 머리: 투구 드림 · 얼굴 · 수염 · 투구 -->
- <g transform="translate(60,19) scale(.84) translate(-60,-19)">
+ <g transform="translate(60,19.4) scale(.95) translate(-60,-19)">
  <path d="M54,13 Q52.6,17 52.4,21 L56,21.6 L56.6,15Z" fill="url(#${u}sc2)" stroke="${D}" stroke-width=".35"/><path d="M66,13 Q67.4,17 67.6,21 L64,21.6 L63.4,15Z" fill="url(#${u}sc2)" stroke="${D}" stroke-width=".35"/>
  <path d="M56.2,11 Q56,16.6 60,17.4 Q64,16.6 63.8,11Z" fill="#5c584c"/><path d="M57,12.2 Q58.2,11.8 59.2,12.4 M60.8,12.4 Q61.8,11.8 63,12.2" stroke="#1c1a16" stroke-width=".5" fill="none"/><circle cx="58.2" cy="13" r=".35" fill="#1c1a16"/><circle cx="61.8" cy="13" r=".35" fill="#1c1a16"/><path d="M60,12.6 L59.5,14.6 H60.5" stroke="#2c2a25" stroke-width=".35" fill="none"/>
  <path d="M57.4,15 Q60,14.2 62.6,15 Q61.6,15.8 60,15.6 Q58.4,15.8 57.4,15Z" fill="#2c2a25"/><path d="M57.4,15.4 Q57.4,19.6 60,21.4 Q62.6,19.6 62.6,15.4 Q60,16.8 57.4,15.4Z" fill="#3a3832"/>${[58.4,59.4,60.4,61.4].map(x=>`<path d="M${x},16.4 L${x+(x-60)*.2},${20.2-Math.abs(x-60)*.6}" stroke="#55514a" stroke-width=".25"/>`).join('')}
@@ -2216,13 +2216,13 @@ function sejongArt(u){const G=`url(#${u}au)`,D='#5a3c10',H='#fff3c0';
  <path d="M64,41 L76,38.4 L78.6,42.6 L66.6,45.2Z" fill="#f6e2a6" stroke="${D}" stroke-width=".45"/><path d="M71.3,39.8 L72.6,43.9" stroke="${D}" stroke-width=".4"/>${[0,1,2].map(i=>`<path d="M${65.4+i*.6},${42.2+i*.8} L${70.6+i*.5},${41.1+i*.8} M${73+i*.5},${40.6+i*.8} L${76.6+i*.5},${39.8+i*.8}" stroke="#a8782a" stroke-width=".3"/>`).join('')}<ellipse cx="74.6" cy="44.2" rx="2.4" ry="1.5" fill="url(#${u}auv)" stroke="${D}" stroke-width=".35"/>
  <!-- 오른팔 · 펼친 손(그림 왼쪽) -->
  <path d="M46,24 Q41,27 39.6,31 Q40.4,33 43,32 Q44,28.6 47.4,27Z" fill="${G}" stroke="${D}" stroke-width=".45"/><path d="M38.6,30.6 Q38,32.6 40.2,33.4 L42.4,32.4 Q42.4,30.4 40.6,29.6Z" fill="url(#${u}auv)" stroke="${D}" stroke-width=".35"/>
- <path d="M39,30.4 Q36.8,28.6 36.6,25 Q37,23.4 38.4,24.6 Q39.4,27 40.6,28.4Z" fill="url(#${u}auv)" stroke="${D}" stroke-width=".35"/>${[[36.8,24.8,36,21.8],[37.9,24.4,37.5,21.2],[39,24.6,39,21.4],[40.1,25.2,40.5,22.4],[40.8,27.6,42.6,26]].map(([a,b,c,d])=>`<path d="M${a},${b} L${c},${d}" stroke="#c8923a" stroke-width="1.25" stroke-linecap="round"/><path d="M${a},${b} L${c},${d}" stroke="#f6dc8c" stroke-width=".4" stroke-linecap="round"/>`).join('')}
+ <path d="M38.4,30.8 Q36.6,28.6 36.4,25.6 Q36.2,23.2 37.2,21.6 Q37.9,20.9 38.3,21.8 L38.5,24.2 L38.7,21 Q39.3,20.2 39.9,21 L39.9,24 L40.3,21.4 Q41,20.8 41.4,21.7 L41.2,24.6 Q41.9,23.5 42.6,24 Q43,24.6 42.3,25.8 Q41.4,27.6 41.2,29.4 Q40.6,31.2 38.4,30.8Z" fill="url(#${u}auv)" stroke="${D}" stroke-width=".35"/><path d="M38.5,24.2 V26.4 M39.9,24 V26.4 M41.2,24.6 L41,26.4" stroke="#8a5e18" stroke-width=".3" fill="none"/><path d="M37.4,26 Q38.6,28 40.8,27.6" stroke="#fff3c0" stroke-width=".35" fill="none" opacity=".6"/>
  <!-- 얼굴 · 수염 · 익선관 -->
  <path d="M55.4,13.6 Q55.2,20.6 60,21.6 Q64.8,20.6 64.6,13.6Z" fill="url(#${u}auv)" stroke="${D}" stroke-width=".35"/><ellipse cx="55.3" cy="15.6" rx=".8" ry="1.6" fill="#c8923a"/><ellipse cx="64.7" cy="15.6" rx=".8" ry="1.6" fill="#c8923a"/>
  <path d="M56.6,15.2 Q57.8,14.4 59,15.2 M61,15.2 Q62.2,14.4 63.4,15.2" stroke="#6a4a14" stroke-width=".45" fill="none"/><path d="M56.4,14 Q57.8,13.2 59.2,13.8 M60.8,13.8 Q62.2,13.2 63.6,14" stroke="#8a5e18" stroke-width=".4" fill="none"/><path d="M60,15.2 L59.4,17.6 H60.6" stroke="#8a5e18" stroke-width=".35" fill="none"/><ellipse cx="57.6" cy="17.4" rx="1.3" ry=".8" fill="#fff0b0" opacity=".45"/><ellipse cx="62.4" cy="17.4" rx="1.3" ry=".8" fill="#fff0b0" opacity=".45"/>
  <path d="M57.6,18.6 Q60,17.8 62.4,18.6 Q63.4,19.4 63,20.4 M57.6,18.6 Q56.6,19.4 57,20.4" stroke="#7a5212" stroke-width=".55" fill="none"/><path d="M58.8,19.4 Q60,20 61.2,19.4" stroke="#7a5212" stroke-width=".35" fill="none"/><path d="M58.6,20.6 Q60,26.4 60,26.6 Q60,26.4 61.4,20.6 Q60,21.4 58.6,20.6Z" fill="#a8762a" stroke="${D}" stroke-width=".3"/>${[59.4,60,60.6].map(x=>`<path d="M${x},21 L${60+(x-60)*.4},25.4" stroke="#f2cf72" stroke-width=".22"/>`).join('')}
  <path d="M55,13.8 Q54.8,8.4 60,8 Q65.2,8.4 65,13.8 Q60,12.8 55,13.8Z" fill="url(#${u}au)" stroke="${D}" stroke-width=".4"/><path d="M54.6,13.6 Q60,12.4 65.4,13.6 V14.6 Q60,13.4 54.6,14.6Z" fill="#8a5e18"/>
- <path d="M57,8.6 Q56.4,5 57.4,2.6 Q58.8,1.6 59,4.4 V8.2Z" fill="url(#${u}au)" stroke="${D}" stroke-width=".35"/><path d="M63,8.6 Q63.6,5 62.6,2.6 Q61.2,1.6 61,4.4 V8.2Z" fill="url(#${u}au)" stroke="${D}" stroke-width=".35"/><path d="M60,8.2 V5.4" stroke="#7a5212" stroke-width=".5"/>
+ <path d="M56.8,8.8 Q56,6.2 56.8,4.2 Q58.2,3.4 58.8,5.4 V8.4Z" fill="url(#${u}au)" stroke="${D}" stroke-width=".35"/><path d="M63.2,8.8 Q64,6.2 63.2,4.2 Q61.8,3.4 61.2,5.4 V8.4Z" fill="url(#${u}au)" stroke="${D}" stroke-width=".35"/><path d="M60,8.2 V5.4" stroke="#7a5212" stroke-width=".5"/>
  <ellipse cx="54" cy="28" rx="10" ry="16" fill="url(#${u}hl)" opacity=".3"/>`;}
 const lmMt=(pts,c,o=1)=>`<path d="M${pts}" fill="${c}" opacity="${o}"/>`;
 // 한옥 기와지붕: 용마루 y, 처마 y+h, 처마 끝이 들림 · 기와골 · 흰 용마루 · 막새 줄
@@ -7452,10 +7452,10 @@ function f3Model(id){const T=THREE,G=new T.Group(),ph=(c,o={})=>new T.MeshPhongM
      for(const s of[1,-1]){const sh=[.14,1.26,s*.22],el=[.36,.8,s*.42],wr=[.56,.26,s*.46],hip=[-.48,1.12,s*.17];
        leg(M,LC,[sh,el,wr,[.62,.07,s*.47]],[.1,.075,.05,.04],{thigh:.12,flat:.8,toes:3,tr:.022,tl:.08,spread:.45});
        // folded wing finger rising up and back from the wrist
-       const fc=new T.CatmullRomCurve3([V(...wr),V(.42,.85,s*.5),V(.08,1.55,s*.46),V(-.3,2.18,s*.4),V(-.52,2.5,s*.36)]);add(new T.Mesh(s3Taper(fc,40,10,t=>.05*(1-t)+.01),ph('#2e241c',{shininess:20})));
+       const fc=new T.CatmullRomCurve3([V(...wr),V(.47,.8,s*.5),V(.32,1.38,s*.45),V(.08,1.84,s*.38),V(-.2,2.06,s*.33)]);add(new T.Mesh(s3Taper(fc,40,10,t=>.05*(1-t)+.01),ph('#2e241c',{shininess:20})));
        // membrane between the finger and the arm/body
-       const tc=new T.CatmullRomCurve3([V(...wr),V(...el),V(.18,1.25,s*.3),V(-.15,1.25,s*.24),V(-.38,1.3,s*.22)]);const P=[],N=24;for(let i=0;i<N;i++){const a0=fc.getPointAt(i/N),a1=fc.getPointAt((i+1)/N),b0=tc.getPointAt(i/N),b1=tc.getPointAt((i+1)/N);
-         const m0=a0.clone().lerp(b0,.55).add(V(-.06,0,s*.04)),m1=a1.clone().lerp(b1,.55).add(V(-.06,0,s*.04));for(const [p,q,r,w] of[[a0,a1,m0,m1],[m0,m1,b0,b1]])P.push(p.x,p.y,p.z,q.x,q.y,q.z,r.x,r.y,r.z,q.x,q.y,q.z,w.x,w.y,w.z,r.x,r.y,r.z);}
+       const tc=new T.CatmullRomCurve3([V(...wr),V(...el),V(.2,1.24,s*.3),V(-.02,1.34,s*.26),V(-.16,1.5,s*.24)]);const P=[],N=24;for(let i=0;i<N;i++){const a0=fc.getPointAt(i/N),a1=fc.getPointAt((i+1)/N),b0=tc.getPointAt(i/N),b1=tc.getPointAt((i+1)/N);
+         const m0=a0.clone().lerp(b0,.3).add(V(-.03,0,-s*.03)),m1=a1.clone().lerp(b1,.3).add(V(-.03,0,-s*.03));for(const [p,q,r,w] of[[a0,a1,m0,m1]])P.push(p.x,p.y,p.z,q.x,q.y,q.z,r.x,r.y,r.z,q.x,q.y,q.z,w.x,w.y,w.z,r.x,r.y,r.z);}
        const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(P,3));geo.computeVertexNormals();add(new T.Mesh(geo,WM));
        leg(M,LC,[hip,[-.36,.72,s*.24],[-.6,.28,s*.24],[-.52,.07,s*.24]],[.1,.065,.045,.035],{thigh:.17,flat:.65,toes:4,tr:.022,tl:.1,spread:.35});}
      break;}
@@ -7775,7 +7775,7 @@ const SCULPT={},SCDEF={
   L.push(B([0,1.1,-.1],[.31,.3,.15],.15),E([0,1.27,-.05],[.4,.2,.25],.06),C([-.34,1.42,-.09],[.34,1.42,-.09],.14,.14,.08),E([0,1.0,0],[.38,.2,.28],.08),C([0,1.46,-.07],[0,1.57,-.06],.1,.095,.04));
   // 무릎 위 옷자락 · 허벅지 · 무릎 · 아래로 떨어지는 자락 · 넓게 퍼진 밑단 · 신
   L.push(B([0,.84,.16],[.4,.1,.3],.1,.05),B([0,.5,.5],[.4,.36,.1],.1,.05),E([0,.17,.5],[.54,.1,.21],.06));
-  for(const s of[-1,1])L.push(C([s*.2,.83,-.1],[s*.25,.85,.4],.168,.162,.04),E([s*.265,.87,.46],[.155,.125,.135],.03),C([s*.265,.8,.5],[s*.215,.22,.62],.1,.12,.05),E([s*.21,.13,.72],[.095,.06,.13],.03));
+  for(const s of[-1,1])L.push(C([s*.2,.83,-.1],[s*.25,.85,.4],.168,.162,.04),E([s*.265,.87,.46],[.155,.125,.135],.03),C([s*.262,.8,.5],[s*.245,.22,.62],.1,.12,.05),E([s*.24,.13,.72],[.095,.06,.13],.03));
   // 오른팔(든 손): 위팔 · 아래팔 · 넓은 소맷부리 · 아래로 늘어진 큰 소매
   L.push(C([-.41,1.38,-.07],[-.57,1.1,.1],.122,.108,.04),C([-.57,1.1,.1],[-.45,1.33,.29],.098,.078,.03),C([-.52,1.17,.17],[-.458,1.3,.272],.12,.135,.02),B([-.635,.92,.15],[.085,.31,.23],.04,.03));
   // 왼팔(책): 위팔 · 아래팔 · 소맷부리 · 늘어진 소매
@@ -7787,9 +7787,9 @@ const SCULPT={},SCDEF={
   const body=p=>{const x=p[0],y=p[1],z=p[2],ax=Math.abs(x);let d=D.smin(body0(p),det(p),.008);
     {const q=Math.hypot(x/.395,(z+.02)/.29)-1;d=D.smin(d,Math.hypot(Math.max(q,0)*.3+Math.min(q,0)*.05,y-.985)-.03,.006);}
     {const q=(Math.hypot(x/.135,(z+.045)/.125)-1)*.125;d=D.smin(d,Math.hypot(q,y-1.5)-.024,.008);}
-    if(y<.74&&y>.14&&z>.34)d+=.02*Math.sin(x*24+Math.sin(y*8)*1.3)*Math.min(1,(.74-y)*6,(y-.14)*10);                        // 아래 자락 세로 주름
+    if(y<.74&&y>.14&&z>.34)d+=.02*Math.sin(ax*24+Math.sin(y*8)*1.3)*Math.min(1,(.74-y)*6,(y-.14)*10);                        // 아래 자락 세로 주름
     if(ax>.52&&y<1.16&&y>.56)d+=.018*Math.sin(z*30+y*6)*Math.min(1,(1.16-y)*7,(ax-.52)*14,(y-.56)*8);                          // 늘어진 소매 주름
-    if(y>=.76&&y<.98&&z>.16&&ax<.38)d+=.009*Math.sin(x*20+z*12)*Math.min(1,(.98-y)*8,(y-.76)*10,(z-.16)*10);                 // 무릎 위 주름
+    if(y>=.76&&y<.98&&z>.16&&ax<.38)d+=.009*Math.sin(ax*20+z*12)*Math.min(1,(.98-y)*8,(y-.76)*10,(z-.16)*10);                 // 무릎 위 주름
     if(y>1.04&&y<1.36&&ax<.3&&z>0)d+=.005*Math.sin((y+ax*.9)*46)*Math.min(1,(.3-ax)*10);                                      // 가슴 주름
     return d;};
   // 얼굴: 살집 있는 둥근 얼굴 · 부드러운 눈 · 수염
@@ -10594,7 +10594,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=265;
+const GVER=266;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');}catch(e){}toast(on?'🗾 일본 테스트 켜짐 · 타이틀 세계 투어에서 일본을 누르세요':'일본 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
