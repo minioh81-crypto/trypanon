@@ -1776,3 +1776,78 @@ TRYPANON JP · 로봇 드릴	TRYPANON JP · Robot Drill	TRYPANON JP・ロボッ�
 보유 효과: 원정 굴착력 +15%, 원정 재료 +7%, 천재지변 피해 −11%	owned: expedition drill power +15%, expedition materials +7%, disaster damage −11%	所持効果:遠征掘削力 +15%、遠征素材 +7%、天災被害 −11%
 출현 이벤트 원정 재료 +200%, 시간 ×1.8	appearance event: expedition materials +200%, duration ×1.8	出現イベント 遠征素材 +200%、時間 ×1.8
 세 단계 모두 보유하면 계승 2배(+6%)	own all three tiers for double legacy (+6%)	3段階すべて所持で継承2倍(+6%)
+진시황	Qin Shi Huang	秦の始皇帝
+시황제	The First Emperor	始皇帝
+천하통일 시황제	The First Emperor, Unifier of All	天下統一の始皇帝
+제갈량	Zhuge Liang	諸葛亮
+와룡 제갈량	Sleeping Dragon Zhuge Liang	臥龍 諸葛亮
+승상 제갈공명	Chancellor Zhuge Kongming	丞相 諸葛孔明
+정화	Zheng He	鄭和
+대항해 제독 정화	Grand Voyage Admiral Zheng He	大航海提督 鄭和
+보선 함대 총병 정화	Zheng He, Commander of the Treasure Fleet	宝船艦隊総兵 鄭和
+장형	Zhang Heng	張衡
+태사령 장형	Grand Historian Zhang Heng	太史令 張衡
+지동의의 장형	Zhang Heng of the Seismoscope	地動儀の張衡
+★ 진시황	★ Qin Shi Huang	★ 秦の始皇帝
+★★ 시황제	★★ The First Emperor	★★ 始皇帝
+★★★ 천하통일 시황제	★★★ The First Emperor, Unifier of All	★★★ 天下統一の始皇帝
+★ 제갈량	★ Zhuge Liang	★ 諸葛亮
+★★ 와룡 제갈량	★★ Sleeping Dragon Zhuge Liang	★★ 臥龍 諸葛亮
+★★★ 승상 제갈공명	★★★ Chancellor Zhuge Kongming	★★★ 丞相 諸葛孔明
+★ 정화	★ Zheng He	★ 鄭和
+★★ 대항해 제독 정화	★★ Grand Voyage Admiral Zheng He	★★ 大航海提督 鄭和
+★★★ 보선 함대 총병 정화	★★★ Zheng He, Commander of the Treasure Fleet	★★★ 宝船艦隊総兵 鄭和
+★ 장형	★ Zhang Heng	★ 張衡
+★★ 태사령 장형	★★ Grand Historian Zhang Heng	★★ 太史令 張衡
+★★★ 지동의의 장형	★★★ Zhang Heng of the Seismoscope	★★★ 地動儀の張衡
+★ 청동 마차	★ Bronze Chariot	★ 銅車馬
+★ 연노	★ Repeating Crossbow	★ 連弩
+★ 정화 보선	★ Zheng He's Treasure Ship	★ 鄭和の宝船
+★ 나침반	★ Compass	★ 羅針盤
+★ 지동의	★ Seismoscope	★ 地動儀
+진시황 · 청동 마차	Qin Shi Huang · Bronze Chariot	始皇帝 · 銅車馬
+제갈량 · 연노	Zhuge Liang · Repeating Crossbow	諸葛亮 · 連弩
+정화 · 보선 · 나침반	Zheng He · Treasure Ship · Compass	鄭和 · 宝船 · 羅針盤
+장형 · 지동의	Zhang Heng · Seismoscope	張衡 · 地動儀
+중국 무대 전용 특수 영웅이에요. 한국 영웅은 보유 효과 30%만 함께 와요.	Special heroes for the China stage. Korean heroes bring 30% of their owned bonuses.	中国ステージ専用の特殊英雄です。韓国の英雄は所持効果30%のみ一緒に来ます。
+병마용 군단 출격!	The Terracotta Army marches!	兵馬俑軍団、出撃!
+진시황 세트: 청동 마차가 앞장서요!	Qin set: the bronze chariot leads the way!	始皇帝セット:銅車馬が先頭に!
+적벽의 동남풍!	The southeast wind of Red Cliffs!	赤壁の東南の風!
+연노 일제 사격!	Repeating crossbow volley!	連弩の一斉射撃!
+보선 함대 출항!	The treasure fleet sets sail!	宝船艦隊、出航!
+보선 함대가 지도를 가로질러요!	The treasure fleet sails across the map!	宝船艦隊が地図を横切る!
+지동의가 울린다!	The seismoscope rings!	地動儀が鳴る!
+지동의의 여덟 용이 구슬을 떨어뜨려요!	The eight dragons of the seismoscope drop their balls!	地動儀の八匹の龍が玉を落とす!
+본공·원정 굴착량	main bore & expedition drilling	本坑・遠征の掘削量
+해상 원정 굴착량	sea expedition drilling	海上遠征の掘削量
+원정 재료	expedition materials	遠征素材
+착용해야 발동	triggers only when worn	着用時のみ発動
+세트 효과	set bonus	セット効果
+계승(두 단계 이상 보유): {} +{}%	legacy (own two or more tiers): {} +{}%	継承(2段階以上所持):{} +{}%
+· 세 단계 모두 보유하면 계승 효과 2배	· own all three tiers to double the legacy bonus	· 3段階すべて所持で継承効果2倍
+특수 소장품 · 진시황릉 병마용 갱에서 나온 청동 마차	special collectible · the bronze chariot from the Terracotta Army pits	特殊コレクション · 兵馬俑坑から出た銅車馬
+특수 소장품 · 제갈량이 고쳤다는 화살 여러 발을 잇달아 쏘는 쇠뇌	special collectible · the repeating crossbow said to be improved by Zhuge Liang	特殊コレクション · 諸葛亮が改良したという連発の弩
+특수 소장품 · 돛대 여러 개를 단 정화 함대의 큰 배	special collectible · the many-masted great ship of Zheng He's fleet	特殊コレクション · 帆柱をいくつも持つ鄭和艦隊の大船
+특수 소장품 · 중국의 4대 발명품	special collectible · one of China's Four Great Inventions	特殊コレクション · 中国の四大発明
+특수 소장품 · 용 입에서 구슬이 떨어져 지진이 온 쪽을 알리는 장형의 지진계	special collectible · Zhang Heng's seismometer: a ball drops from a dragon's mouth toward the quake	特殊コレクション · 龍の口から玉が落ちて地震の方角を知らせる張衡の地震計
+보유 효과: 본공 굴착력 +6%, 본공 수입 +6%	owned: main bore drill power +6%, main bore income +6%	所持効果:本坑掘削力 +6%、本坑収入 +6%
+보유 효과: 원정 굴착력 +6%	owned: expedition drill power +6%	所持効果:遠征掘削力 +6%
+보유 효과: 해상 원정 +12%, 본공·원정 굴착력 +5%	owned: sea expeditions +12%, main bore & expedition drill power +5%	所持効果:海上遠征 +12%、本坑・遠征掘削力 +5%
+보유 효과: 원정 재료(육상·해상) +3%	owned: expedition materials (land & sea) +3%	所持効果:遠征素材(陸上・海上) +3%
+보유 효과: 원정 굴착력 +5%, 천재지변 피해 −5%	owned: expedition drill power +5%, disaster damage −5%	所持効果:遠征掘削力 +5%、天災被害 −5%
+진시황과 함께 보유하면 세트 효과	set bonus with Qin Shi Huang	始皇帝と一緒に所持でセット効果
+제갈량과 함께 보유하면 세트 효과	set bonus with Zhuge Liang	諸葛亮と一緒に所持でセット効果
+정화와 함께 보유하면 세트 효과	set bonus with Zheng He	鄭和と一緒に所持でセット効果
+장형과 함께 보유하면 세트 효과	set bonus with Zhang Heng	張衡と一緒に所持でセット効果
+진나라 왕 영정, 중국을 처음 하나로 묶은 황제	Ying Zheng, king of Qin, the first emperor to unite China	秦王・嬴政、中国を初めて一つにした皇帝
+만리장성·병마용	Great Wall & Terracotta Army	万里の長城・兵馬俑
+삼국 촉한의 승상, 깃털 부채의 책략가	chancellor of Shu Han in the Three Kingdoms, the strategist with the feather fan	三国・蜀漢の丞相、羽扇の策士
+명나라 환관 제독, 거대한 보선 함대로 일곱 번 대항해를 한 인물	Ming eunuch admiral who led seven great voyages with a giant treasure fleet	明の宦官提督、巨大な宝船艦隊で七度の大航海をした人物
+후한의 과학자, 세계 첫 지진계 「지동의」와 혼천의를 만든 인물	Eastern Han scientist who built the world's first seismoscope and an armillary sphere	後漢の科学者、世界初の地震計「地動儀」と渾天儀を作った人物
+시황제 · 면류관과 검은 곤룡포	First Emperor · crown with bead strings and black dragon robe	始皇帝 · 冕冠と黒い竜袍
+천하를 통일한 첫 황제	the first emperor who unified the realm	天下を統一した最初の皇帝
+와룡 · 윤건과 학창의	Sleeping Dragon · scholar's cap and crane robe	臥龍 · 綸巾と鶴氅衣
+촉한의 승상 공명	Kongming, chancellor of Shu Han	蜀漢の丞相 孔明
+대항해 제독 · 금 용 관복	Grand Voyage Admiral · gold dragon court robe	大航海提督 · 金龍の官服
+보선 함대 총병 · 푸른 망토	Commander of the Treasure Fleet · blue cape	宝船艦隊総兵 · 青いマント
+태사령 · 하늘을 재는 벼슬	Grand Historian · the office that measures the heavens	太史令 · 天を測る官職
