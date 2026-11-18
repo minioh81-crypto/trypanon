@@ -861,7 +861,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v284 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v285 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -3742,7 +3742,7 @@ function tierCard(){const dl=S.dl,g=dlGrade(dl),nx=dl+1;
   const req=dlPartReq(nx),cost=dlCost(nx),ok=PARTS.filter(p=>L(p.id)>=req).length,all=ok===PARTS.length,money=S.money>=cost,promo=dlStep(nx)===1,un=LAY.find(l=>l.req===nx);
   return `<div class="tier ${all&&money?'ready':''}">${head}
    <div class="tnext">${promo?'승급':'강화'} → <b>Lv.${nx} ${dlName(nx)}</b> · 본공 ×${fmtN(dlMul(nx))}${un?` · <b>${un.n}</b> 진입`:''}</div>
-   ${(()=>{const cans=PARTS.filter(canCraftP);if(!(req>0)&&!cans.length)return '';return `<div class="treq">${PARTS.map(p=>{const cn=canCraftP(p);return `<button type="button" data-jump="${p.id}" class="${req>0&&L(p.id)>=req?'ok':''} ${cn?'can':''}" title="${p.n} 제작으로 이동">${cn?'<i class="hm">🔨</i>':''}${p.n} ${req>0?Math.min(L(p.id),req)+'/'+req:'Lv'+L(p.id)}${req>0&&L(p.id)>=req&&!cn?' ✓':' ›'}</button>`;}).join('')}</div><p class="treqhint">${cans.length?`🔨 표시 = 지금 제작할 수 있는 부품 ${cans.length}개 · `:''}부품을 누르면 아래 제작으로 바로 이동해요</p>`;})()}
+   ${(()=>{const cans=PARTS.filter(canCraftP);if(!(req>0)&&!cans.length)return '';return `<div class="treq">${PARTS.map(p=>{const cn=canCraftP(p);return `<button type="button" data-jump="${p.id}" class="${req>0&&L(p.id)>=req?'ok':''} ${cn?'can':''}" title="${p.n} 제작으로 이동">${cn?'<i class="hm">🔨</i>':''}${p.n} ${req>0?L(p.id)+'/'+req:'Lv'+L(p.id)}${req>0&&L(p.id)>=req&&!cn?' ✓':' ›'}</button>`;}).join('')}</div><p class="treqhint">${cans.length?`🔨 표시 = 지금 제작할 수 있는 부품 ${cans.length}개 · `:''}부품을 누르면 아래 제작으로 바로 이동해요</p>`;})()}
    <div class="tfoot"><span>${req>0?`부품 ${ok}/10 · `:''}${won(cost)}</span><button class="primary" id="tierUp" type="button" ${all&&money?'':'disabled'}>${all?(money?(promo?'승급':'강화'):'자금 부족'):'부품 레벨 부족'}</button></div></div>`;}
 function updatePreviewInfo(){const P=levels(),p=selPart&&PARTS.find(x=>x.id===selPart),next=p&&L(p.id)<MAXLV;
   const Q=next?Object.assign({},P,{[p.id]:P[p.id]+1}):P;
@@ -11880,7 +11880,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=284;
+const GVER=285;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉 일본·중국 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
