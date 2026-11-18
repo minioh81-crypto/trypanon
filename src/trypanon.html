@@ -864,7 +864,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v309 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v310 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -11230,8 +11230,8 @@ function infSave(){try{SI.t=Date.now();localStorage.setItem(INF_KEY,JSON.stringi
 const infF=d=>Math.floor(d/INF_FH),infGate=f=>(f+1)%10===0;
 const infBio=f=>{const i=Math.floor(f/10),b=INF_BIO[i%INF_BIO.length],t=Math.floor(i/INF_BIO.length);return {n:b[0]+(t?' '+['','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ','Ⅷ','Ⅸ','Ⅹ'][Math.min(9,t)]+(t>9?'+':''):''),c:b[1]};};
 // 난이도: 층마다 ×1.11 + 25층마다 한 번 더 ×1.3(깊어질수록 가팔라짐) · 관문(보스) 층은 ×3
-const infH=f=>Math.pow(1.11,f)*Math.pow(1.3,Math.floor(f/25))*(infGate(f)?3/Math.pow(1.04,SI.p.cool):1);
-const infDiff=f=>Math.pow(1.11,f)*Math.pow(1.3,Math.floor(f/25));
+const infH=f=>Math.pow(1.115,f)*Math.pow(1.3,Math.floor(f/25))*(infGate(f)?3.5/Math.pow(1.04,SI.p.cool):1);
+const infDiff=f=>Math.pow(1.115,f)*Math.pow(1.3,Math.floor(f/25));
 // 칭호: 최고 층에 닿으면 생기고, 무한의 땅 안에서 효과가 겹쳐 적용(v 굴착 · g 돈 · r 원정 재료)
 // v309 칭호: 10층마다 하나씩(효과는 작게 +3%) · 50층마다 ★큰 칭호 · 200층 뒤로는 20층마다 '무한의 n단'(+3%)이 끝없이
 const INF_TTL=(()=>{const N=['첫 보스 격파자','지하 탐험가','원정대장','동굴 개척자','★ 심연의 드릴러','화강암 파괴자','용암 사냥꾼','수정 채굴꾼','광맥 추적자','★ 무한 드릴러','맨틀 항해사','마그마 기수','운석 수집가','고대의 발굴자','★ 지구의 심장','빛의 광부','암흑의 개척자','시간의 탐험가','차원의 드릴러','★ 시간을 뚫은 자'],K=['v','g','r'];
@@ -11247,7 +11247,15 @@ const infPow=()=>INF_PART.slice(0,3).reduce((a,p)=>a*Math.pow(p.mul,SI.p[p.k]),1
 const infV=f=>2*infPow()/infH(f);// m/s
 const infVs=v=>v<10?v.toFixed(v<1?2:1)+'m':fmtD(v);
 const infG=f=>5*Math.pow(1.1,f)*Math.pow(1.3,Math.floor(f/25))*.85*Math.pow(1.13,SI.p.coll)*infE('g');// ₩/m
-const infCost=(p,lv)=>({money:Math.round(p.c*Math.pow(1.5,lv)),mat:INF_MAT[Math.min(7,p.m+Math.floor(lv/8))].k,n:Math.ceil(5*Math.pow(1.32,lv))});
+// v310 강화 비용: 돈은 더 가파르게(×1.62/레벨) · 재료는 지금 단계 재료 + 그 앞 두 단계 재료를 함께(앞 재료일수록 많이) → 옛 재료도 끝까지 쓰임
+const infCost=(p,lv)=>{const ti=Math.min(7,p.m+Math.floor(lv/8)),n=Math.ceil(5*Math.pow(1.32,lv)),mats=[];for(let j=ti;j>=Math.max(0,ti-2);j--)mats.push({k:INF_MAT[j].k,n:Math.ceil(n*[1,1.8,3][ti-j])});return {money:Math.round(p.c*2*Math.pow(1.62,lv)),mats};};
+const infCanPay=c=>SI.money>=c.money&&c.mats.every(m=>(SI.res[m.k]||0)>=m.n);
+// 재료 교환소(돈 → 재료): 쌓인 돈을 쓰는 곳 · 값은 지금 층 수입에 맞춰 오르고, 깊은 재료일수록 비쌈
+const infXP=k=>{const ti=INF_MAT.findIndex(m=>m.k===k),f=infF(SI.depth);return Math.max(10,Math.round(INF_FH*infG(f)*.012*Math.pow(1.9,ti)));};
+function infBuy(k,q){const c=infXP(k)*q;if(SI.money<c)return;SI.money-=c;SI.res[k]=(SI.res[k]||0)+q;infSave();try{sfx('coin');}catch(e){}infMsg(`🔁 ${k} ${q}개를 ${won(c)}에 샀어요`);infRender();}
+// 급행 탐사: 돈을 내고 탐사대를 바로 불러옴(남은 시간만큼 값)
+const infRushC=id=>{const x=SI.ex[id];if(!x)return 0;const left=Math.max(0,x.s+x.m*60000-Date.now())/60000,f=infF(SI.depth);return Math.max(100,Math.round(left*INF_FH*infG(f)*.06));};
+function infRush(id){const x=SI.ex[id],c=infRushC(id);if(!x||SI.money<c)return;SI.money-=c;x.s=Date.now()-x.m*60000;infSave();infCollect(id);}
 const infRate=id=>{const r=INF_REG.find(x=>x.id===id);return (1+r.m*.15)/(1+r.m*.6)*Math.pow(1.25,SI.r[id]||0)*(1+infF(SI.best)/25)*infE('r');};// 분당
 const infRCost=id=>{const lv=SI.r[id]||0,r=INF_REG.find(x=>x.id===id);return {money:Math.round(1500*Math.pow(2,lv)*(1+r.m)),n:Math.ceil(20*Math.pow(1.6,lv))};};
 const infUn=r=>infF(SI.best)>=r.un;
@@ -11296,14 +11304,15 @@ function infBuild(){if($('#infWin'))return;document.head.insertAdjacentHTML('bef
     const r=e.target.closest('[data-ir]');if(r){infSel=r.dataset.ir;infRender();return;}
     const g=e.target.closest('[data-ig]');if(g&&!g.disabled){infGo(+g.dataset.ig);return;}
     const c=e.target.closest('[data-ic]');if(c){infCollect(c.dataset.ic);return;}
-    const ru=e.target.closest('[data-iru]');if(ru&&!ru.disabled){infRUp(ru.dataset.iru);return;}});}
+    const ru=e.target.closest('[data-iru]');if(ru&&!ru.disabled){infRUp(ru.dataset.iru);return;}
+    const bb=e.target.closest('[data-ib]');if(bb&&!bb.disabled){const [k,q]=bb.dataset.ib.split('|');infBuy(k,+q);return;}const rr=e.target.closest('[data-irush]');if(rr&&!rr.disabled){infRush(rr.dataset.irush);return;}});}
 function infFlash(c){const w=$('#infWin');if(!w)return;const f=document.createElement('div');f.style.cssText=`position:absolute;inset:0;background:${c};opacity:.55;pointer-events:none;z-index:5;transition:opacity .7s`;w.appendChild(f);requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.opacity=0));setTimeout(()=>f.remove(),800);}
 const infEtxt=e=>[e.v?'굴착 +'+Math.round(e.v*100)+'%':'',e.g?'돈 +'+Math.round(e.g*100)+'%':'',e.r?'원정 재료 +'+Math.round(e.r*100)+'%':''].filter(Boolean).join(' · ');
 function infTreasure(){if(!SI.tr)return;SI.tr=null;const f=infF(SI.depth),m=Math.round(infV(f)*infG(f)*90),un=INF_REG.filter(infUn),r=un[Math.floor(Math.random()*un.length)],k=INF_MAT[r.m].k,n=Math.ceil(infRate(r.id)*8);SI.money+=m;SI.res[k]=(SI.res[k]||0)+n;try{sfx('coin');}catch(e){}infMsg(`🎁 보물 주머니! 💰 ${won(m)} · ${k} ${n}개`);}
 function infTap(e,sh){if(e.target.closest&&e.target.closest('[data-itr]')){infTreasure();return;}const now=performance.now();if(now-infTapT<120)return;infTapT=now;const f=infF(SI.depth),k=infGate(f)?1.5:.6,add=infV(f)*k;SI.taps++;infRun(k);
   const r=sh.getBoundingClientRect(),p=document.createElement('span');p.className='ifpop';p.textContent='+'+infVs(add);p.style.left=((e.clientX||r.left+r.width/2)-r.left-12)+'px';p.style.top=((e.clientY||r.top+r.height/2)-r.top-10)+'px';sh.appendChild(p);setTimeout(()=>p.remove(),900);
   try{sfx('dig');}catch(_){}if(navigator.vibrate)navigator.vibrate(8);}
-function infUp(k){const p=INF_PART.find(x=>x.k===k),lv=SI.p[k],c=infCost(p,lv);if(SI.money<c.money||(SI.res[c.mat]||0)<c.n)return;SI.money-=c.money;SI.res[c.mat]-=c.n;SI.p[k]++;infSave();try{sfx('levelup');}catch(e){}infMsg(`${p.ic} ${p.n} Lv.${SI.p[k]} · ${p.d} ×${p.mul}`);infRender();}
+function infUp(k){const p=INF_PART.find(x=>x.k===k),lv=SI.p[k],c=infCost(p,lv);if(!infCanPay(c))return;SI.money-=c.money;for(const m of c.mats)SI.res[m.k]-=m.n;SI.p[k]++;infSave();try{sfx('levelup');}catch(e){}infMsg(`${p.ic} ${p.n} Lv.${SI.p[k]} · ${p.d} ×${p.mul}`);infRender();}
 // 탐사대는 동시에 2팀(최고 B51층부터 3팀) — 어디로 보낼지 고르는 재미
 const infSlots=()=>infF(SI.best)>=50?3:2,infBusy=()=>Object.keys(SI.ex||{}).length;
 function infGo(min){const id=infSel,r=INF_REG.find(x=>x.id===id);if(!infUn(r)||SI.ex[id])return;if(infBusy()>=infSlots()){infMsg(`🧭 탐사대가 모두 나가 있어요 (${infBusy()}/${infSlots()}) · 돌아온 팀을 먼저 받으세요`);return;}SI.ex[id]={s:Date.now(),m:min};infSave();try{sfx('coin');}catch(e){}infMsg(`🧭 ${r.n}으로 탐사대 출발 · ${INF_DUR.find(d=>d[0]===min)[1]} 뒤 돌아와요`);infRender();}
@@ -11356,7 +11365,8 @@ function infRender(){if(!SI||$('#infWin').hidden&&!infT)return;$('#infMoney').te
     <div class="ifstat"><div>지금 깊이<b id="ifD">${fmtD(SI.depth)}</b></div><div>굴착 속도<b id="ifV">${infVs(infV(f))}/초</b></div><div>초당 수입<b id="ifG">${topWon(infV(f)*infG(f))}</b></div></div>
     <div style="font-size:12px;color:#c8c0e0;display:flex;justify-content:space-between"><span id="ifFl">B${f+1}층 · ${infBio(f).n} · 경도 ×${fmtN(infDiff(f))}</span><span>최고 B${infF(SI.best)+1}층 · 보스 격파 ${SI.gates}</span></div><div class="ifbar" style="margin:5px 0 8px"><i id="ifP" style="width:${((SI.depth%INF_FH)/INF_FH*100).toFixed(1)}%"></i></div>
     <p style="font-size:12px;color:#a8a0c0;line-height:1.55;margin:4px 0">♾️ 끝이 없는 땅이에요. 한 층은 ${INF_FH}m, 내려갈수록 땅이 단단해지고(25층마다 한 번 더 가팔라져요) 10층마다 <b style="color:#ff8a7a">👹 보스 암반</b>이 버텨요. 보스 층에서는 톡톡이 2.5배 세요.<br>강화 레벨 합 10마다 드릴이 <b style="color:#ffe9a8">진화</b>해 몸집이 커지고, 비트는 10레벨마다 재질이 바뀌어요.<br>🔧 강화에서 드릴을 키우고, 🗺️ 원정에서 강화 재료를 모으세요. 더 깊이 내려갈수록 새 원정지가 열려요.<br>창을 닫아도 최대 8시간까지 계속 파요.</p>`;}
-  else if(infTab==='up'){B.innerHTML=infResHTML()+INF_PART.map(p=>{const lv=SI.p[p.k],c=infCost(p,lv),ok=SI.money>=c.money&&(SI.res[c.mat]||0)>=c.n;return `<div class="ifcard"><span class="ic">${p.ic}</span><div><b>${p.n} <span style="color:#ffd257">Lv.${lv}</span></b><small>${p.d} ×${Math.pow(p.mul,lv).toFixed(2)} → ×${Math.pow(p.mul,lv+1).toFixed(2)}</small><small>필요: ${won(c.money)} · ${infIc(c.mat,13)} ${c.mat} ${c.n.toLocaleString('ko-KR')}개 <span style="color:${(SI.res[c.mat]||0)>=c.n?'#9fe0b0':'#ff9a8a'}">(보유 ${Math.floor(SI.res[c.mat]||0).toLocaleString('ko-KR')})</span></small></div><button class="ifbtn" type="button" data-iu="${p.k}" ${ok?'':'disabled'}>강화<em>Lv.${lv+1}</em></button></div>`;}).join('')+`<p style="font-size:11.5px;color:#a8a0c0">레벨 8마다 더 깊은 곳의 재료가 필요해져요.</p>`;}
+  else if(infTab==='up'){const have=k=>Math.floor(SI.res[k]||0);B.innerHTML=infResHTML()+INF_PART.map(p=>{const lv=SI.p[p.k],c=infCost(p,lv),ok=infCanPay(c);return `<div class="ifcard"><span class="ic">${p.ic}</span><div><b>${p.n} <span style="color:#ffd257">Lv.${lv}</span></b><small>${p.d} ×${Math.pow(p.mul,lv).toFixed(2)} → ×${Math.pow(p.mul,lv+1).toFixed(2)}</small><small>필요: <span style="color:${SI.money>=c.money?'#9fe0b0':'#ff9a8a'}">${won(c.money)}</span> · ${c.mats.map(m=>`${infIc(m.k,13)} ${m.k} <span style="color:${have(m.k)>=m.n?'#9fe0b0':'#ff9a8a'}">${have(m.k).toLocaleString('ko-KR')}/${m.n.toLocaleString('ko-KR')}</span>`).join(' · ')}</small></div><button class="ifbtn" type="button" data-iu="${p.k}" ${ok?'':'disabled'}>강화<em>Lv.${lv+1}</em></button></div>`;}).join('')
+    +`<p style="font-size:11.5px;color:#a8a0c0">레벨 8마다 더 깊은 재료가 필요해지고, 앞 단계 재료도 함께 들어가요.</p><div class="ifcard" style="display:block"><b>🔁 재료 교환소</b><small>남는 돈으로 재료를 사요. 값은 깊이 내려갈수록, 깊은 재료일수록 비싸요.</small>${INF_MAT.filter(m=>INF_REG.some(r=>INF_MAT[r.m].k===m.k&&infUn(r))).map(m=>{const u=infXP(m.k);return `<div style="display:flex;align-items:center;gap:6px;margin-top:7px"><span style="flex:1;font-size:12.5px">${infIc(m.k,14)} ${m.k} <small style="display:inline;color:#b8b0d0">개당 ${won(u)} · 보유 ${have(m.k).toLocaleString('ko-KR')}</small></span>${[10,100].map(q=>`<button class="ifbtn" type="button" data-ib="${m.k}|${q}" style="min-width:64px;padding:6px 6px" ${SI.money>=u*q?'':'disabled'}>+${q}<em>${won(u*q)}</em></button>`).join('')}</div>`;}).join('')}</div>`;}
   else if(infTab==='ttl'){const fb=infF(SI.best),E=k=>Math.round((infE(k)-1)*100);B.innerHTML=`<div class="ifcard" style="display:block"><b>🏆 칭호 효과 (모두 겹쳐 적용)</b><small>굴착 +${E('v')}% · 돈 +${E('g')}% · 원정 재료 +${E('r')}% · 최고 B${fb+1}층</small></div>`+INF_TTL.filter((t,i)=>fb>=t.f||(i>0&&fb>=INF_TTL[i-1].f)||i<3||INF_TTL.slice(0,i).filter(x=>fb<x.f).length<4).map(t=>{const ok=fb>=t.f;return `<div class="ifcard" style="${ok?'':'opacity:.55'}"><span class="ic">${ok?'🏆':'🔒'}</span><div><b>${t.n}</b><small>B${t.f+1}층 도달 · ${infEtxt(t.e)}</small></div><span style="font-size:12px;font-weight:900;color:${ok?'#9fe0b0':'#a8a0c0'}">${ok?'획득':`${t.f-fb}층 남음`}</span></div>`;}).join('')+`<p style="font-size:11.5px;color:#a8a0c0">10층마다 작은 칭호(+3%), 50층마다 ★ 큰 칭호, 200층부터는 20층마다 '무한의 n단'이 끝없이 생겨요. 효과는 모두 겹치고 무한의 땅 안에서만 적용돼요.</p>`;}
   else if(infTab==='map'){const r=INF_REG.find(x=>x.id===infSel)||INF_REG[0],st=B.scrollTop;B.innerHTML=`<div class="ifstick">${infResHTML()}<div class="ifmap">${infMapSVG()}</div></div>${infRegHTML(r)}`;B.scrollTop=st;}}
 function infTick(){if(!SI)return;const f=infF(SI.depth);$('#infMoney').textContent=topWon(SI.money);
@@ -11380,7 +11390,7 @@ function infRegHTML(r){const u=infUn(r),x=SI.ex[r.id],k=INF_MAT[r.m].k,lv=SI.r[r
   if(!u)return `<div class="ifcard ifreg" style="display:block">${scn}<b style="display:block;margin-top:8px">🔒 ${r.n}</b><small>본공(무한 시추탑)이 <b>B${r.un+1}층</b>에 닿으면 안개가 걷혀요 · 캐는 재료: ${infIc(k,13)} ${k}</small></div>`;
   const dn=x&&Date.now()-x.s>=x.m*60000;
   return `<div class="ifcard ifreg" style="display:block">${scn}<b style="display:block;margin-top:8px">${r.n} <span style="color:#ffd257">캠프 Lv.${lv}</span></b><small>${r.d}</small><small>캐는 재료 ${infIc(k,13)} <b>${k}</b> · 분당 약 ${rate.toFixed(1)}개 (최고 층이 깊을수록 ↑ · 2시간 이상은 +15%)</small>
-   ${x?(dn?`<button class="ifbtn" type="button" data-ic="${r.id}" style="width:100%;margin-top:8px">🎒 탐사 완료 · ${k} ${Math.max(1,Math.round(rate*x.m*(x.m>=120?1.15:1))).toLocaleString('ko-KR')}개 받기</button>`:`<div style="margin-top:8px;font-size:13px;font-weight:800;color:#9fdcff">🧭 탐사 중 · ${infLeft(x)} 남음</div>`)
+   ${x?(dn?`<button class="ifbtn" type="button" data-ic="${r.id}" style="width:100%;margin-top:8px">🎒 탐사 완료 · ${k} ${Math.max(1,Math.round(rate*x.m*(x.m>=120?1.15:1))).toLocaleString('ko-KR')}개 받기</button>`:`<div style="margin-top:8px;font-size:13px;font-weight:800;color:#9fdcff">🧭 탐사 중 · ${infLeft(x)} 남음</div><button class="ifbtn" type="button" data-irush="${r.id}" style="width:100%;margin-top:6px" ${SI.money>=infRushC(r.id)?'':'disabled'}>⚡ 급행으로 바로 불러오기<em>${won(infRushC(r.id))}</em></button>`)
      :`<div style="margin-top:8px;font-size:12px;color:#c8c0e0">🧭 탐사대 ${infBusy()}/${infSlots()}팀 출동 중${infSlots()<3?' · 최고 B51층에서 3팀으로 늘어요':''}</div><div class="ifdur">${INF_DUR.map(([m,t])=>`<button class="ifbtn" type="button" data-ig="${m}" style="min-width:0" ${infBusy()>=infSlots()?'disabled':''}>${t}<em>${k} ${Math.max(1,Math.round(rate*m*(m>=120?1.15:1))).toLocaleString('ko-KR')}</em></button>`).join('')}</div>`}
    <button class="ifbtn" type="button" data-iru="${r.id}" style="width:100%;margin-top:8px;background:linear-gradient(#8a5ae8,#5a32b0);color:#fff" ${SI.money>=rc.money&&(SI.res[k]||0)>=rc.n?'':'disabled'}>🏕️ 캠프 강화 Lv.${lv+1} (캐는 양 +25%)<em>${won(rc.money)} · ${k} ${rc.n.toLocaleString('ko-KR')}개</em></button></div>`;}
 function tourHTML(){const fire=(S.ends||[]).includes('fire');
@@ -12228,7 +12238,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=309;
+const GVER=310;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
