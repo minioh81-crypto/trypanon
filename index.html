@@ -883,7 +883,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v312 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v313 · 2026-11-19</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -11205,9 +11205,11 @@ const TOURART={
 // 일본 무대: 한국 하드 굴착 엔딩(「불의 고리」 fire)을 보면 열림 · 테스트 켜기(버전 7번 누르기 / ?jptest=1)는 그대로 둠
 const krFire=()=>{try{return ((isJP?krSave():S).ends||[]).includes('fire');}catch(e){return false;}},jpOpen=()=>isJP||JPTEST||krFire();
 const jpSave=()=>{try{return JSON.parse(localStorage.getItem(STAGES.jp.key)||'null')||{};}catch(e){return {};}},jpFire=()=>{try{return ((isJPo?S:jpSave()).ends||[]).some(k=>ENDS[k]&&ENDS[k].part==='jp');}catch(e){return false;}}/* 일본편 엔딩을 하나라도 보면 중국편이 열림 */,cnOpen=()=>isCN||CNTEST||jpFire();
-function switchStage(k){if(k===STAGE||!STAGES[k])return;save();saveLock=true;try{localStorage.setItem('tp-stage',k);sessionStorage.setItem('tp-auto','1');}catch(e){}location.reload();}// 나라를 바꾸면 다시 시작 화면을 거치지 않고 바로 게임으로
+function switchStage(k){if(k===STAGE||!STAGES[k])return;save();saveLock=true;try{localStorage.setItem('tp-stage',k);localStorage.setItem('tp-auto',String(Date.now()));}catch(e){}try{sessionStorage.setItem('tp-auto','1');}catch(e){}location.reload();}// 나라를 바꾸면 다시 시작 화면을 거치지 않고 바로 게임으로
 // v306: 타이틀이 다 뜰 때까지(최대 8초) 기다렸다가 START를 대신 눌러 줌 — 전에는 0.4초에 한 번만 봐서 타이틀이 늦게 뜨면 놓쳤음
-try{if(sessionStorage.getItem('tp-auto')){sessionStorage.removeItem('tp-auto');let n=0;const tk=setInterval(()=>{n++;const b=$('#tStart');if(b&&!b.hidden&&b.offsetParent!==null&&titleOn){clearInterval(tk);b.click();}else if(n>80)clearInterval(tk);},100);}}catch(e){}
+// v313: 나라 바꾸기 뒤 START 자동 통과 — 앱(아티팩트)에서는 sessionStorage가 막힐 때가 있어 localStorage(1분 유효)도 함께 봄 · 화면 표시 여부와 상관없이 타이틀이 켜져 있으면 바로 START
+{let a=false;try{const t=+localStorage.getItem('tp-auto')||0;if(t&&Date.now()-t<60000)a=true;localStorage.removeItem('tp-auto');}catch(e){}try{if(sessionStorage.getItem('tp-auto'))a=true;sessionStorage.removeItem('tp-auto');}catch(e){}
+  if(a){let n=0;const go=()=>{n++;const b=$('#tStart');if(titleOn&&b&&!S.needMode){b.click();return;}if(titleOn&&S.needMode)return;/* 모드를 아직 안 고른 나라는 모드 선택 화면이 필요 */if(n<120)setTimeout(go,100);};setTimeout(go,30);}}
 // 국기(SVG) — 윈도우는 국기 이모지를 'KR/JP/CN' 글자로 보여 줘서 직접 그림
 function FLAG(k,h=14){const st=(x,y,r,a=0)=>`<path d="${[0,1,2,3,4,5,6,7,8,9].map(i=>{const t=(i*36-90+a)*Math.PI/180,q=i%2?r*.38:r;return (i?'L':'M')+(x+Math.cos(t)*q).toFixed(2)+','+(y+Math.sin(t)*q).toFixed(2);}).join('')}Z" fill="#ffde00"/>`;
   const body=k==='kr'?`<rect width="30" height="20" fill="#fff"/><g transform="translate(15,10) rotate(33.7)"><path d="M-5,0 A5,5 0 0 1 5,0 A2.5,2.5 0 0 0 0,0 A2.5,2.5 0 0 1 -5,0Z" fill="#cd2e3a"/><path d="M-5,0 A5,5 0 0 0 5,0 A2.5,2.5 0 0 0 0,0 A2.5,2.5 0 0 1 -5,0Z" fill="#0047a0"/></g>${[[-1,-1,'111'],[1,1,'000'],[1,-1,'010'],[-1,1,'101']].map(([sx,sy,b])=>`<g transform="translate(${15+sx*9},${10+sy*6}) rotate(${sx*sy>0?-56.3:56.3})">${[0,1,2].map(i=>b[i]==='1'?`<rect x="-2.4" y="${-1.9+i*1.3}" width="4.8" height=".8" fill="#000"/>`:`<rect x="-2.4" y="${-1.9+i*1.3}" width="2.1" height=".8" fill="#000"/><rect x=".3" y="${-1.9+i*1.3}" width="2.1" height=".8" fill="#000"/>`).join('')}</g>`).join('')}`
@@ -12270,7 +12272,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=312;
+const GVER=313;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
