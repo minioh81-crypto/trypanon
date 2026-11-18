@@ -883,7 +883,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v304 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v305 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -3439,7 +3439,7 @@ function sndInit(){if(SND.ctx)return SND.ctx;const AC=window.AudioContext||windo
   const len=c.sampleRate*1.6,ir=c.createBuffer(2,len,c.sampleRate);for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);}
   SND.rev=c.createConvolver();SND.rev.buffer=ir;SND.revG=c.createGain();SND.revG.gain.value=.22;SND.rev.connect(SND.revG);SND.revG.connect(SND.bgmG);
   const nb=c.createBuffer(1,c.sampleRate,c.sampleRate),nd=nb.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;SND.noise=nb;sndApply();return c;}
-function sndApply(){if(!SND.ctx)return;const p=sndPref(),t=SND.ctx.currentTime;SND.master.gain.setTargetAtTime(p.vol,t,.05);SND.bgmG.gain.setTargetAtTime(p.bgm&&!(typeof ENDMUS!=='undefined'&&ENDMUS.on)&&!(view==='bore'||(typeof exp!=='undefined'&&exp))?.75:0,t,.3);SND.sfxG.gain.setTargetAtTime(p.sfx?1.3:0,t,.05);if(SND.blastMix)SND.blastMix.gain.setTargetAtTime(p.sfx?Math.min(1,p.vol*1.25):0,t,.05);
+function sndApply(){if(!SND.ctx)return;const p=sndPref(),t=SND.ctx.currentTime;SND.master.gain.setTargetAtTime(p.vol,t,.05);SND.bgmG.gain.setTargetAtTime(p.bgm&&!(typeof ENDMUS!=='undefined'&&ENDMUS.on)&&(window.__infOn||!(view==='bore'||(typeof exp!=='undefined'&&exp)))?.75:0,t,.3);SND.sfxG.gain.setTargetAtTime(p.sfx?1.3:0,t,.05);if(SND.blastMix)SND.blastMix.gain.setTargetAtTime(p.sfx?Math.min(1,p.vol*1.25):0,t,.05);
   if(p.bgm)bgmStart();else bgmStop();}
 // unlock on the first user gesture (browser autoplay rules)
 try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
@@ -3597,13 +3597,13 @@ function bgmSched(){const c=SND.ctx;if(!c||c.state!=='running')return;const want
   while(SND.next<c.currentTime+.35){const st=SND.step%32,bar=Math.floor(st/8),ch=sg.prog[bar],t=SND.next,B=SND.bgmG;
     if(SND.song==='inf'){const B=SND.bgmG,r=sg.root;
       // 드론: 아주 낮은 사인 + 거친 톱니(저역 필터)
-      if(st%8===0){tone({f:NOTE(r+ch[0]-12),t,d:spb*8.4,type:'sine',v:.075,a:.7,bus:B});tone({f:NOTE(r+ch[0]-12),t,d:spb*8.2,type:'sawtooth',v:.022,a:.9,lp:260,bus:B});
+      if(st%8===0){tone({f:NOTE(r+ch[0]-12),t,d:spb*8.4,type:'sine',v:.075,a:.7,bus:B});tone({f:NOTE(r+ch[0]),t,d:spb*8.2,type:'sawtooth',v:.03,a:.9,lp:520,bus:B});tone({f:NOTE(r+ch[0]+7),t,d:spb*8.2,type:'triangle',v:.02,a:1,bus:B});
         // 어두운 합창 패드: 화음 세 음을 두 겹으로 살짝 어긋나게
-        ch.forEach((q,i)=>{tone({f:NOTE(r+q+12),t:t+i*.05,d:spb*8,type:'sawtooth',v:.011,a:1.1,lp:820,bus:B,rev:1});tone({f:NOTE(r+q+12)*1.006,t:t+i*.05,d:spb*8,type:'sawtooth',v:.009,a:1.3,lp:700,bus:B,det:9,rev:1});});}
+        ch.forEach((q,i)=>{tone({f:NOTE(r+q+12),t:t+i*.05,d:spb*8,type:'sawtooth',v:.02,a:1.1,lp:1100,bus:B,rev:1});tone({f:NOTE(r+q+12)*1.006,t:t+i*.05,d:spb*8,type:'sawtooth',v:.016,a:1.3,lp:700,bus:B,det:9,rev:1});});}
       // 금관 선율(낮고 길게)
-      const m=sg.mel[st];if(m!=null){const f=NOTE(r+m);tone({f:f*.98,f2:f,glide:.2,t,d:spb*3.8,type:'sawtooth',v:.036,a:.18,lp:760,bus:B,rev:1});tone({f,t,d:spb*3.6,type:'triangle',v:.04,a:.15,bus:B});tone({f:f/2,t,d:spb*3.2,type:'sine',v:.03,a:.2,bus:B});}
+      const m=sg.mel[st];if(m!=null){const f=NOTE(r+m+12);tone({f:f*.98,f2:f,glide:.2,t,d:spb*3.8,type:'sawtooth',v:.05,a:.18,lp:1300,bus:B,rev:1});tone({f,t,d:spb*3.6,type:'triangle',v:.055,a:.15,bus:B});tone({f:f/2,t,d:spb*3.2,type:'sine',v:.03,a:.2,bus:B});}
       // 큰북(팀파니·타이코) · 심장 박동 · 모루 · 종
-      const boom=v=>{tone({f:72,f2:36,t,d:1.1,v,bus:B,rev:1});noise({f:140,q:.6,t,d:.18,v:v*.35,bus:B});};
+      const boom=v=>{tone({f:72,f2:36,t,d:1.1,v,bus:B,rev:1});tone({f:180,f2:90,t,d:.45,v:v*.6,bus:B});noise({f:320,q:.7,t,d:.22,v:v*.6,bus:B});};
       if(st===0||st===16)boom(.34);if(st===6||st===22)boom(.2);if(st===29||st===30)boom(.14);
       if(st%4===2)tone({f:55,f2:40,t,d:.22,v:.07,bus:B});
       if(st===12||st===28){tone({f:1760,t,d:.35,type:'square',v:.014,a:.001,lp:4200,bus:B,rev:1});tone({f:2640,t,d:.25,type:'sine',v:.012,a:.001,bus:B});noise({f:5200,q:3,t,d:.05,v:.04,bus:B});}
@@ -11273,9 +11273,9 @@ function infRun(dt){let g=0;while(dt>1e-6){const f=infF(SI.depth),v=infV(f),end=
 function infOpenWin(){if(!infOpen()){toast('🔒 일본편 엔딩을 하나 보면 ♾️ 무한의 땅이 열려요');return;}
   infLoad();infBuild();const off=Math.min(INF_OFF,Math.max(0,(Date.now()-(SI.t||Date.now()))/1000));
   const g0=SI.money,d0=SI.depth;if(off>30){infRun(off);infFx=infFx.filter(x=>x.t!=='gate');}
-  $('#infWin').hidden=false;window.__infOn=1;try{SND.step=0;}catch(e){}infRender();if(off>30)infMsg(`⏳ 자리를 비운 ${Math.round(off/60)}분 동안 ${fmtD(SI.depth-d0)} 더 파고 ${won(SI.money-g0)}을 벌었어요`,4200);
+  $('#infWin').hidden=false;window.__infOn=1;try{sndInit();SND.ctx&&SND.ctx.resume&&SND.ctx.resume();SND.step=0;sndApply();}catch(e){}infRender();if(off>30)infMsg(`⏳ 자리를 비운 ${Math.round(off/60)}분 동안 ${fmtD(SI.depth-d0)} 더 파고 ${won(SI.money-g0)}을 벌었어요`,4200);
   let last=performance.now();clearInterval(infT);infT=setInterval(()=>{const now=performance.now(),dt=Math.min(1,(now-last)/1000);last=now;infRun(dt);infTick();},50);try{sfx('coin');}catch(e){}}
-function infClose(){window.__infOn=0;try{SND.step=0;}catch(e){}clearInterval(infT);infT=null;if(SI)infSave();$('#infWin').hidden=true;}
+function infClose(){window.__infOn=0;try{SND.step=0;sndApply();}catch(e){}clearInterval(infT);infT=null;if(SI)infSave();$('#infWin').hidden=true;}
 function infMsg(t,ms=2400){const e=$('#infMsg');if(!e)return;e.textContent=t;e.hidden=false;clearTimeout(infMsg.h);infMsg.h=setTimeout(()=>e.hidden=true,ms);}
 const infIc=(k,s=16)=>{const m=INF_MAT.find(x=>x.k===k)||INF_MAT[0];return `<svg viewBox="0 0 20 20" width="${s}" height="${s}" style="vertical-align:-3px"><path d="M10 1.5 L16.5 7 L13.5 18 H6.5 L3.5 7Z" fill="${m.c}" stroke="rgba(0,0,0,.55)" stroke-width="1"/><path d="M10 1.5 L13 7 L10 18 L7 7Z" fill="#fff" opacity=".28"/><path d="M3.5 7 H16.5" stroke="rgba(0,0,0,.35)" stroke-width=".8"/></svg>`;};
 function infBuild(){if($('#infWin'))return;document.head.insertAdjacentHTML('beforeend',`<style>
@@ -11304,8 +11304,9 @@ function infBuild(){if($('#infWin'))return;document.head.insertAdjacentHTML('bef
   document.body.insertAdjacentHTML('beforeend',`<section id="infWin" hidden><div class="ifhd"><button type="button" id="infX">← 나가기</button><span style="font-size:18px">♾️</span><h2>무한의 땅</h2><span class="ifm" id="infMoney"></span></div>
   <div class="iftabs"><button type="button" data-it="bore">⛏️ 시추</button><button type="button" data-it="up">🔧 강화</button><button type="button" data-it="map">🗺️ 원정</button><button type="button" data-it="ttl">🏆 칭호</button></div><div id="infBody"></div><div id="infMsg" hidden></div></section>`);
   $('#infX').onclick=infClose;
+  // 시추 화면은 0.05초마다 다시 그려져 click(누름→뗌)이 엇갈림 → 누르는 순간(pointerdown)에 바로 처리(보물 줍기·톡톡)
+  $('#infWin').addEventListener('pointerdown',e=>{const sh=e.target.closest('.ifshaft');if(sh)infTap(e,sh);});
   $('#infWin').addEventListener('click',e=>{const t=e.target.closest('[data-it]');if(t){infTab=t.dataset.it;infRender();return;}
-    const sh=e.target.closest('.ifshaft');if(sh){infTap(e,sh);return;}
     const u=e.target.closest('[data-iu]');if(u&&!u.disabled){infUp(u.dataset.iu);return;}
     const r=e.target.closest('[data-ir]');if(r){infSel=r.dataset.ir;infRender();return;}
     const g=e.target.closest('[data-ig]');if(g&&!g.disabled){infGo(+g.dataset.ig);return;}
@@ -11347,7 +11348,7 @@ function infShaft(){let lb='';const W=320,H=250,K=.9,y0=168,d=SI.depth,f0=infF(M
   let boss='';if(gate){const pr=(d-fg*INF_FH)/INF_FH,hp=1-pr,by=y0+18;boss=`<g transform="translate(${W/2},${by+34})"><path d="M-92 30 Q-100 -8 -66 -30 Q-30 -46 0 -40 Q40 -48 70 -28 Q102 -6 92 30 Q40 46 0 42 Q-50 46 -92 30Z" fill="#3a2a3a" stroke="#ff5a4a" stroke-width="2"/><path d="M-60 -18 Q-20 -30 10 -24 M20 -30 Q50 -24 70 -10" stroke="#fff" stroke-width="1.5" opacity=".18" fill="none"/>${Array.from({length:Math.ceil(pr*9)},(_,i)=>{const a=hsh(fg,i)*Math.PI-Math.PI/2,l=20+hsh(fg,i+20)*40;return `<path d="M0 -36 L${(Math.cos(a)*l*.5).toFixed(0)} ${(-36+Math.abs(Math.sin(a))*l*.4).toFixed(0)} L${(Math.cos(a)*l).toFixed(0)} ${(-36+Math.abs(Math.sin(a))*l).toFixed(0)}" stroke="#ffb84a" stroke-width="${1.5+pr*1.5}" fill="none"/>`;}).join('')}<circle cx="-30" cy="0" r="5" fill="#ff5a4a" opacity="${.4+.4*Math.sin(T*4)}"/><circle cx="30" cy="0" r="5" fill="#ff5a4a" opacity="${.4+.4*Math.sin(T*4)}"/></g>
     <g transform="translate(${W/2-90},${H-34})"><rect width="180" height="22" rx="8" fill="rgba(0,0,0,.65)"/><text x="90" y="9" text-anchor="middle" font-size="8.5" font-weight="900" fill="#ffb8a8">👹 B${fg+1} 보스 · ${infBoss(fg)}</text><rect x="8" y="12" width="164" height="6" rx="3" fill="#3a2020"/><rect x="8" y="12" width="${(164*hp).toFixed(1)}" height="6" rx="3" fill="#ff4a3a"/></g>`;}
   // 보물 주머니(가끔 나타남 · 눌러서 줍기)
-  let tre='';if(SI.tr){const ty=y0+(SI.tr.d-d)*K;if(ty<-20||ty>H+20){if(ty<-20)SI.tr=null;}else tre=`<g data-itr="1" transform="translate(${SI.tr.x},${ty.toFixed(0)})" style="cursor:pointer"><circle r="${16+2*Math.sin(T*5)}" fill="#ffd84a" opacity=".25"/><rect x="-10" y="-7" width="20" height="14" rx="3" fill="#a8641e" stroke="#4a2a08" stroke-width="1.4"/><rect x="-10" y="-7" width="20" height="5" rx="2" fill="#c8842a"/><rect x="-2" y="-3" width="4" height="5" fill="#ffd84a"/><text y="-14" text-anchor="middle" font-size="9" font-weight="900" fill="#ffe98a" stroke="#000" stroke-width="2" paint-order="stroke">보물! 톡</text></g>`;}
+  let tre='';if(SI.tr){const ty=y0+(SI.tr.d-d)*K;if(ty<-20||ty>H+20){if(ty<-20)SI.tr=null;}else tre=`<g data-itr="1" transform="translate(${SI.tr.x},${ty.toFixed(0)})" style="cursor:pointer"><circle r="28" fill="#000" opacity="0"/><circle r="${16+2*Math.sin(T*5)}" fill="#ffd84a" opacity=".25"/><rect x="-10" y="-7" width="20" height="14" rx="3" fill="#a8641e" stroke="#4a2a08" stroke-width="1.4"/><rect x="-10" y="-7" width="20" height="5" rx="2" fill="#c8842a"/><rect x="-2" y="-3" width="4" height="5" fill="#ffd84a"/><text y="-14" text-anchor="middle" font-size="9" font-weight="900" fill="#ffe98a" stroke="#000" stroke-width="2" paint-order="stroke">보물! 톡</text></g>`;}
   // 드릴 진화 파츠: 냉각기 서리 고리 · 모터 배기구/불꽃 · 수집기 집게팔/자석 빛 · Mk 오라 · 비트 재질 빛
   const cx=W/2,cy=y0-rh*.55,aura=mk>=3?`<ellipse cx="${cx}" cy="${cy}" rx="${rw*.9}" ry="${rh*.62}" fill="${mk>=8?'#ffd84a':mk>=5?'#b07af0':'#5ad0ff'}" opacity="${.16+.08*Math.sin(T*3)}"/>`:'';
   const motor=P.motor>=5?[-1,1].map(m=>`<g transform="translate(${cx+m*rw*.46},${cy-rh*.1})"><rect x="-3" y="-10" width="6" height="14" rx="2" fill="#5a5a66" stroke="#222" stroke-width=".8"/>${P.motor>=15?`<path d="M0 -10 Q${m*3} -${18+4*Math.sin(T*20)} 0 -${24+5*Math.sin(T*17)} Q${-m*3} -16 0 -10Z" fill="#ff8a2a" opacity=".9"/>`:''}<circle cy="${-16-((T*30)%14)}" r="${2+((T*30)%14)/5}" fill="#aaa" opacity="${.5-((T*30)%14)/30}"/></g>`).join('')+(P.motor>=30?[-1,1].map(m=>`<rect x="${cx+m*rw*.38-2}" y="${cy+rh*.05+3*Math.sin(T*25+m)}" width="4" height="10" fill="#c8ccd4" stroke="#333" stroke-width=".6"/>`).join(''):''):'';
@@ -12240,7 +12241,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=304;
+const GVER=305;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
