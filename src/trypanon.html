@@ -864,7 +864,7 @@ nav.tabs button{font-size:12px}
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v301 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v302 · 2026-11-18</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -11110,7 +11110,7 @@ function renderStats(){const c=ME(),l=layerAt(Math.min(S.depth,GOAL()-1)),pc=v=>
     if(jo('sword:fan'))perks.push(row('🪭 지휘 부채 (보유)','본공 굴착력·수입 +6%'));
     if(odOwn())perks.push(row(T3S(odT())+' '+TN.oda[odT()]+' (보유)',`육상 원정 재료 +${pcF(JH.oda.mat[odT()])}% · 굴착력 +${pcF(JH.oda.all[odT()])}% · 출현 시 육상 재료 +${Math.round((odInfo().m-1)*100)}%`+(odOn()?' · 출현 이벤트 가능':' · 이벤트는 착용 시')));
     if(jo('sword:teppo'))perks.push(row('🔫 화승총 (보유)','원정 굴착력 +6%'+(odSet()?' · 오다 세트: 3단 사격':'')));if(jo('sword:katana'))perks.push(row('🗡 장검 (보유)','원정 재료 +3%'));
-    const T=Object.values(landOf().tiles||{});if(T.includes('hwaseong'))perks.push(row('🏯 내 땅 · 수원 화성','원정 굴착력 +5% · 금화(본공 수입) +5%'));if(T.includes('jinja'))perks.push(row('⛩ 내 땅 · 신사','천재지변 피해 −30% · 화석 발견 +'+MUSEUMP()+'%'));if(T.includes('azuchi'))perks.push(row('🏯 내 땅 · 아즈치성','육상 원정 재료 +5%'));if(T.includes('greatwall'))perks.push(row('🧱 내 땅 · 만리장성','육상 원정 재료 +5%'));if(T.includes('miao'))perks.push(row('🛕 내 땅 · 불탑 사원','천재지변 피해 −30% · 화석 발견 +'+MUSEUMP()+'%'));if(T.includes('miao'))perks.push(row('🛕 내 땅 · 불탑 사원','천재지변 피해 −30% · 화석 발견 +'+MUSEUMP()+'%'));
+    const T=Object.values(landOf().tiles||{});if(T.includes('hwaseong'))perks.push(row('🏯 내 땅 · 수원 화성','원정 굴착력 +5% · 금화(본공 수입) +5%'));if(T.includes('jinja'))perks.push(row('⛩ 내 땅 · 신사','천재지변 피해 −30% · 화석 발견 +'+MUSEUMP()+'%'));if(T.includes('azuchi'))perks.push(row('🏯 내 땅 · 아즈치성','육상 원정 재료 +5%'));if(T.includes('greatwall'))perks.push(row('🧱 내 땅 · 만리장성','육상 원정 재료 +5%'));if(T.includes('miao'))perks.push(row('🛕 내 땅 · 불탑 사원','천재지변 피해 −30% · 화석 발견 +'+MUSEUMP()+'%'));
     {// v301: 실제로 적용 중인 것만 하나씩(✓) · 아직 없는 것은 회색으로 '얻는 법'
      const T2=Object.values(landOf().tiles||{}),pc=v=>'−'+pcF(v)+'%',src=isCN?[['🛕 불탑 사원(내 땅)',T2.includes('miao')?.3:0,.3],['🧑‍🔬 장형 보유',cOwn('zhh')?CH.zhh.dz[cT('zhh')]:0,CH.zhh.dz[0]],['🐉 지동의 보유',co('sword:didong')?CH.it.didong.dz:0,CH.it.didong.dz],['🗾 구키 보유(일본 영웅 30%)',kuOwn()?.05*jk():0,.05*jk()],['🗾 오다 보유(일본 영웅 30%)',odOwn()?.05*jk():0,.05*jk()]]
        :[['⛩ 신사(내 땅)',T2.includes('jinja')?.3:0,.3],['⛵ 구키 보유',kuOwn()?.05:0,.05],['🏯 오다 보유',odOwn()?.05:0,.05],['🧭 이노 보유',inoOwn()?INO.dz[inoU()]:0,INO.dz[0]],['📐 상한의 보유',shkOwn()?SHK.dz:0,SHK.dz]];
@@ -12218,7 +12218,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=301;
+const GVER=302;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
