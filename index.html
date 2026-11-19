@@ -884,7 +884,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v322 · 2026-11-19</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v323 · 2026-11-19</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1765,7 +1765,18 @@ function heroBack(c,skin,cx,k,t,tw,torsoTop,hipY,hr,hy,PAL){const [AR,DK,GD]=PAL
   if(skin==='oda'){const sw=Math.sin(t*2)*5*k,g=c.createLinearGradient(0,torsoTop,0,hipY+30*k);g.addColorStop(0,'#d8242a');g.addColorStop(1,'#5a0a10');c.fillStyle=g;c.beginPath();c.moveTo(cx-tw*.5,torsoTop+2*k);c.quadraticCurveTo(cx-tw*1.05+sw,hipY,cx-tw*.95+sw,hipY+30*k);c.quadraticCurveTo(cx,hipY+22*k,cx+tw*.95+sw,hipY+30*k);c.quadraticCurveTo(cx+tw*1.05+sw,hipY,cx+tw*.5,torsoTop+2*k);c.closePath();c.fill();c.strokeStyle=GD;c.lineWidth=1.6*k;c.stroke();
     c.save();c.translate(cx-tw*.7,hipY+4*k);c.rotate(-.75);c.fillStyle='#5a3418';c.fillRect(-3*k,-6*k,6*k,22*k);c.fillStyle='#2a2a34';c.fillRect(-1.8*k,-46*k,3.6*k,42*k);c.fillStyle=GD;for(const y of[-40,-26,-12])c.fillRect(-2.4*k,y*k,4.8*k,2*k);c.globalAlpha=.5;c.fillStyle='#ddd';c.beginPath();c.arc(0,(-50-(t*14)%12)*k,(3+(t*14)%12*.3)*k,0,7);c.fill();c.restore();}
   if(skin==='yi'){const g=c.createLinearGradient(0,hy,0,torsoTop+10*k);g.addColorStop(0,'#c8302a');g.addColorStop(1,'#6a0e12');c.fillStyle=g;c.beginPath();c.moveTo(cx-hr*1.1,hy-hr*.2);c.quadraticCurveTo(cx-hr*1.4,hy+hr*.8,cx-hr*1.75,torsoTop+8*k);c.quadraticCurveTo(cx,torsoTop+16*k,cx+hr*1.75,torsoTop+8*k);c.quadraticCurveTo(cx+hr*1.4,hy+hr*.8,cx+hr*1.1,hy-hr*.2);c.closePath();c.fill();c.strokeStyle='#000';c.lineWidth=1.2*k;c.stroke();c.strokeStyle='#f2c14e';c.lineWidth=1.6*k;c.beginPath();c.moveTo(cx-hr*1.72,torsoTop+7*k);c.quadraticCurveTo(cx,torsoTop+14*k,cx+hr*1.72,torsoTop+7*k);c.stroke();c.fillStyle='#f2c14e';for(let r=0;r<2;r++)for(let j=-3;j<=3;j++){c.beginPath();c.arc(cx+j*hr*(.4+r*.08),hy+hr*(.5+r*.45)+Math.abs(j)*hr*.06,1.2*k,0,7);c.fill();}}
-  if(skin==='yi'){for(const s2 of[-1,1]){c.save();c.translate(cx+s2*tw*.26,torsoTop+16*k);c.rotate(s2*.62);const L=64*k,g=c.createLinearGradient(-3*k,0,3*k,0);g.addColorStop(0,'#f4f8ff');g.addColorStop(.6,'#a8b4c4');g.addColorStop(1,'#4a5464');c.fillStyle=g;c.beginPath();c.moveTo(-2.6*k,0);c.lineTo(-2.6*k,-L);c.quadraticCurveTo(0,-L-6*k,2.6*k,-L+2*k);c.lineTo(2.6*k,0);c.closePath();c.fill();c.fillStyle=GD;c.fillRect(-6*k,-1*k,12*k,3*k);c.fillStyle='#3a1a10';c.fillRect(-2*k,2*k,4*k,12*k);c.fillStyle='#c8242a';c.beginPath();c.arc(0,16*k,2.4*k,0,7);c.fill();c.restore();}}
+  // v323 쌍 장검: 등에 X자로 메고 손잡이가 어깨 위로 · 금 구름 코등이 · 붉은 끈 마름모 감기 · 금 용머리 칼끝(병두) · 흔들리는 붉은 술
+  if(skin==='yi'){for(const s2 of[-1,1]){c.save();c.translate(cx+s2*tw*.46,torsoTop-2*k);c.rotate(s2*.7);c.scale(1.25,1.25);
+    const gg=c.createLinearGradient(-8*k,0,8*k,0);gg.addColorStop(0,'#94621a');gg.addColorStop(.45,'#fff4c0');gg.addColorStop(1,'#a8700e');
+    const L=58*k,bg=c.createLinearGradient(-3*k,0,3*k,0);bg.addColorStop(0,'#f4f8ff');bg.addColorStop(.55,'#a8b4c4');bg.addColorStop(1,'#4a5464');c.fillStyle=bg;c.beginPath();c.moveTo(-3*k,0);c.lineTo(-3*k,L);c.quadraticCurveTo(0,L+7*k,3*k,L-1*k);c.lineTo(3*k,0);c.closePath();c.fill();c.strokeStyle='rgba(30,40,60,.6)';c.lineWidth=.7*k;c.stroke();
+    c.fillStyle='#16121a';c.fillRect(-3.8*k,-1*k,7.6*k,14*k);c.fillStyle='#f2c14e';c.fillRect(-3.8*k,11*k,7.6*k,2*k);
+    c.fillStyle=gg;c.beginPath();c.moveTo(-9*k,0);c.quadraticCurveTo(-10*k,-3.5*k,-6*k,-3.6*k);c.quadraticCurveTo(-5*k,-6*k,-2*k,-4.4*k);c.lineTo(2*k,-4.4*k);c.quadraticCurveTo(5*k,-6*k,6*k,-3.6*k);c.quadraticCurveTo(10*k,-3.5*k,9*k,0);c.quadraticCurveTo(5*k,2.4*k,0,1.8*k);c.quadraticCurveTo(-5*k,2.4*k,-9*k,0);c.closePath();c.fill();c.strokeStyle='#6a4008';c.lineWidth=.8*k;c.stroke();c.fillStyle='#c8242a';c.beginPath();c.arc(0,-1.2*k,1.6*k,0,7);c.fill();
+    const gt=-4.4*k,gb=-25*k;c.fillStyle='#2a1410';c.beginPath();c.roundRect(-2.6*k,gb,5.2*k,gt-gb,1.2*k);c.fill();c.strokeStyle='#d8242a';c.lineWidth=1.3*k;for(let y=gt;y>gb+1*k;y-=3.4*k){c.beginPath();c.moveTo(-2.6*k,y);c.lineTo(2.6*k,y-1.7*k);c.moveTo(2.6*k,y);c.lineTo(-2.6*k,y-1.7*k);c.stroke();}
+    c.fillStyle='#f2c14e';c.fillRect(-3*k,gt-1.4*k,6*k,1.4*k);c.fillRect(-3*k,gb,6*k,1.4*k);
+    c.fillStyle=gg;c.beginPath();c.moveTo(-3.4*k,gb);c.quadraticCurveTo(-5*k,gb-4*k,-1.6*k,gb-6.6*k);c.quadraticCurveTo(0,gb-8*k,2.4*k,gb-6.4*k);c.quadraticCurveTo(5.2*k,gb-4.4*k,3.4*k,gb);c.closePath();c.fill();c.strokeStyle='#6a4008';c.lineWidth=.8*k;c.stroke();c.fillStyle='#c8242a';c.beginPath();c.arc(.6*k,gb-4.4*k,1*k,0,7);c.fill();
+    c.strokeStyle='#f2c14e';c.lineWidth=1.1*k;c.beginPath();c.arc(0,gb-8.6*k,1.8*k,0,7);c.stroke();
+    const sw=Math.sin(t*3+s2)*.25;c.save();c.translate(0,gb-10.2*k);c.rotate(sw-s2*.7);for(let q=0;q<7;q++){c.strokeStyle=q%2?'#e8302a':'#a81a20';c.lineWidth=1.3*k;c.beginPath();c.moveTo(0,0);c.quadraticCurveTo((q-3)*.8*k,5*k,(q-3)*1.2*k,11*k+Math.abs(q-3)*-.6*k);c.stroke();}c.fillStyle='#f2c14e';c.beginPath();c.arc(0,1.4*k,1.6*k,0,7);c.fill();c.restore();
+    c.restore();}}
   c.restore();}
 // 중국 스킨 뒤쪽: 무기·부채·망토
 function cnBack(c,skin,cx,k,t,gr,tw,torsoTop,hipY,hr,hy,PAL){const [AR,DK,GD]=PAL;c.save();c.lineCap='round';c.lineJoin='round';
@@ -12362,7 +12373,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=322;
+const GVER=323;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
