@@ -886,7 +886,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v334 · 2026-11-19</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v335 · 2026-11-19</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1229,7 +1229,7 @@ const TN={yi:['이순신 장군','충무공 이순신','성웅 이순신'],kim:[
 const yiT=()=>TIER(krHas,'sex:yi'),yiN=()=>TCNT(krHas,'sex:yi'),yiAny=()=>yiN()>0;
 // 김유신 (Silla general): small drill-power passive, big LAND-expedition material bonus; 신라 군마 adds more, and owning both is a set
 const isJys=sx=>/^jys[23]?$/.test(sx),isIno=sx=>/^ino[23]?$/.test(sx);
-const isKim=sx=>/^kim[23]?$/.test(sx),isGen=sx=>/^(qin|zhuge|zheng|zhh)[23]?$/.test(sx)||/^(liubei|guanyu|zhangfei|zhaoyun)$/.test(sx)||isYi(sx)||isKim(sx)||/^(kuki|oda)[23]?$/.test(sx)||isJys(sx)||isIno(sx),kimOwn=()=>krHas('sex:kim'),kim2Own=()=>krHas('sex:kim2'),kim3Own=()=>krHas('sex:kim3'),kimT=()=>TIER(krHas,'sex:kim'),kimN=()=>TCNT(krHas,'sex:kim');
+const isKim=sx=>/^kim[23]?$/.test(sx),isGen=sx=>/^(qin|zhuge|zheng|zhh)[23]?$/.test(sx)||/^(liubei|guanyu|zhangfei|zhaoyun|lubu)$/.test(sx)||isYi(sx)||isKim(sx)||/^(kuki|oda)[23]?$/.test(sx)||isJys(sx)||isIno(sx),kimOwn=()=>krHas('sex:kim'),kim2Own=()=>krHas('sex:kim2'),kim3Own=()=>krHas('sex:kim3'),kimT=()=>TIER(krHas,'sex:kim'),kimN=()=>TCNT(krHas,'sex:kim');
 const KIM={pas:{normal:[2,3,5],hard:[1,2,3]},mat:{normal:[.08,.13,.2],hard:[.05,.08,.12]}},HRS={mat:{normal:.04,hard:.02},all:{normal:.02,hard:.01}},KIMSET={normal:.025,hard:.015};
 // 전용 무기: 이순신 쌍 장검(본공 굴착력·본공 수입) / 김유신 환두대도(원정 굴착력·원정 재료)
 const SWORD={yi:{bore:{normal:.1,hard:.06},inc:{normal:.1,hard:.06}},kim:{exp:{normal:.1,hard:.06},mat:{normal:.05,hard:.03}}},swYi=()=>krHas('sword:yi'),swKim=()=>krHas('sword:kim'),swBore=()=>swYi()?1+KRK()*SWORD.yi.bore[md_()]:1,swInc=()=>swYi()?1+KRK()*SWORD.yi.inc[md_()]:1,swExp=()=>swKim()?1+KRK()*SWORD.kim.exp[md_()]:1,matAll=()=>swKim()?1+KRK()*SWORD.kim.mat[md_()]:1;
@@ -1770,7 +1770,7 @@ function robotAura(c,cx,cy,k,skin,t,bw,top,hip,gr){const R=bw*1.05,n=gr>=12?1:.6
 // v321 무한 전용 영웅 뒤쪽: 오다 = 붉은 망토 + 화승총 · 이순신 = 등에 멘 장검 두 자루
 function heroBack(c,skin,cx,k,t,tw,torsoTop,hipY,hr,hy,PAL){const [AR,DK,GD]=PAL;c.save();c.lineCap='round';
   if(skin==='oda'){const sw=Math.sin(t*2)*5*k,g=c.createLinearGradient(0,torsoTop,0,hipY+30*k);g.addColorStop(0,'#d8242a');g.addColorStop(1,'#5a0a10');c.fillStyle=g;c.beginPath();c.moveTo(cx-tw*.5,torsoTop+2*k);c.quadraticCurveTo(cx-tw*1.05+sw,hipY,cx-tw*.95+sw,hipY+30*k);c.quadraticCurveTo(cx,hipY+22*k,cx+tw*.95+sw,hipY+30*k);c.quadraticCurveTo(cx+tw*1.05+sw,hipY,cx+tw*.5,torsoTop+2*k);c.closePath();c.fill();c.strokeStyle=GD;c.lineWidth=1.6*k;c.stroke();
-    c.save();c.translate(cx-tw*.7,hipY+4*k);c.rotate(-.75);c.fillStyle='#5a3418';c.fillRect(-3*k,-6*k,6*k,22*k);c.fillStyle='#2a2a34';c.fillRect(-1.8*k,-46*k,3.6*k,42*k);c.fillStyle=GD;for(const y of[-40,-26,-12])c.fillRect(-2.4*k,y*k,4.8*k,2*k);c.globalAlpha=.5;c.fillStyle='#ddd';c.beginPath();c.arc(0,(-50-(t*14)%12)*k,(3+(t*14)%12*.3)*k,0,7);c.fill();c.restore();}
+    c.save();c.translate(cx-tw*.7,hipY+4*k);c.rotate(-.75);c.fillStyle='#5a3418';c.fillRect(-3*k,-6*k,6*k,22*k);c.fillStyle='#2a2a34';c.fillRect(-1.8*k,-46*k,3.6*k,42*k);c.fillStyle=GD;for(const y of[-40,-26,-12])c.fillRect(-2.4*k,y*k,4.8*k,2*k);c.restore();}
   if(skin==='yi'){const g=c.createLinearGradient(0,hy,0,torsoTop+10*k);g.addColorStop(0,'#c8302a');g.addColorStop(1,'#6a0e12');c.fillStyle=g;c.beginPath();c.moveTo(cx-hr*1.1,hy-hr*.2);c.quadraticCurveTo(cx-hr*1.4,hy+hr*.8,cx-hr*1.75,torsoTop+8*k);c.quadraticCurveTo(cx,torsoTop+16*k,cx+hr*1.75,torsoTop+8*k);c.quadraticCurveTo(cx+hr*1.4,hy+hr*.8,cx+hr*1.1,hy-hr*.2);c.closePath();c.fill();c.strokeStyle='#000';c.lineWidth=1.2*k;c.stroke();c.strokeStyle='#f2c14e';c.lineWidth=1.6*k;c.beginPath();c.moveTo(cx-hr*1.72,torsoTop+7*k);c.quadraticCurveTo(cx,torsoTop+14*k,cx+hr*1.72,torsoTop+7*k);c.stroke();c.fillStyle='#f2c14e';for(let r=0;r<2;r++)for(let j=-3;j<=3;j++){c.beginPath();c.arc(cx+j*hr*(.4+r*.08),hy+hr*(.5+r*.45)+Math.abs(j)*hr*.06,1.2*k,0,7);c.fill();}}
   // v323 쌍 장검: 등에 X자로 메고 손잡이가 어깨 위로 · 금 구름 코등이 · 붉은 끈 마름모 감기 · 금 용머리 칼끝(병두) · 흔들리는 붉은 술
   if(skin==='yi'){for(const s2 of[-1,1]){c.save();c.translate(cx+s2*tw*.46,torsoTop-2*k);c.rotate(s2*.7);c.scale(1.25,1.25);
@@ -4206,6 +4206,8 @@ else if(isJPo){OPT.sex.push({v:'ino',n:'★ 이노 다다타카',p:200000,d:`에
   {v:'ino2',n:'★★ 측량가 이노',req:'sex:ino',p:5000000,d:`이노 승급 · 가미시모와 펼친 일본 지도 · 보유 효과: 원정 굴착력 +10%, 원정 재료 +4%, 천재지변 피해 −8% · 둘 다 보유하면 계승 +3%`},
   {v:'ino3',n:'★★★ 대일본연해여지전도의 이노',req:'sex:ino2',p:15000000,d:`측량가 이노 승급 · 17년 동안 걸어서 측량해 만든 일본 전도 · 보유 효과: 원정 굴착력 +15%, 원정 재료 +7%, 천재지변 피해 −11% · 출현 이벤트 원정 재료 +200%, 시간 ×1.8 · 세 단계 모두 보유하면 계승 2배(+6%)`});
   OPT.sword.push({v:'shoko',n:'★ 상한의',p:600000,d:'특수 소장품 · 별의 높이를 재어 위도를 알아내던 놋쇠 측량 기구 · 보유 효과: 원정 굴착력 +5%, 천재지변 피해 −5% · 이노와 함께 보유하면 출현 때 상한의가 함께 나와요(세트 효과)'});}
+// v335 테스트 모드(게임 버전 7번): 특수 영웅·소장품(무기·배·말 포함) 값 ₩1,000
+if(JPTEST){for(const o of OPT.sex)if(o.v!=='m'&&o.v!=='f'&&(isGen(o.v)||/^★/.test(o.n||'')))Object.defineProperty(o,'p',{value:1000,configurable:true});for(const g of ['sword','ship','horse'])for(const o of (OPT[g]||[]))if(o.p>0)Object.defineProperty(o,'p',{value:1000,configurable:true});}
 const DEFCHAR={sex:'m',skin:0,hair:'short',hcol:0,eyes:'round',body:'normal',hat:'none',outfit:'track',item:'none',ship:'none'};
 const OFC={
  track:{top:'#24366e',slv:'#24366e',pan:'#24366e',shoe:'#eeece6',legStripe:'#eeece6',slvStripe:'#eeece6',
@@ -12554,7 +12556,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=334;
+const GVER=335;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
