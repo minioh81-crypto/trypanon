@@ -886,7 +886,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v333 · 2026-11-19</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v334 · 2026-11-19</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1719,7 +1719,7 @@ const skM=k=>{let m=(k==='exp'||k==='inc')&&!isJP&&typeof landOf==='function'&&O
 const KRSK=new Set([...KRSKIN.map(x=>x.id),'yi']);
 // v324 무한의 땅에서 완성한 영웅 드릴은 본편에서도 「모습만」 골라 쓸 수 있음(살 수는 없음 · 효과는 무한의 땅에서만)
 const HEROL=[{id:'yi',n:'이순신 장군',ik:'kr'},{id:'oda',n:'오다 노부나가',ik:'jp'},{id:'sk_qin',n:'진시황',ik:'cn'}];
-const heroOwn=id=>{const t=Date.now();if(!heroOwn.c||t-heroOwn.t>3000){heroOwn.t=t;try{const d=JSON.parse(localStorage.getItem('trypanon-save-inf')||'null');heroOwn.c=(d&&d.sk)||[];}catch(e){heroOwn.c=[];}}const h=HEROL.find(x=>x.id===id);return !!h&&heroOwn.c.includes(h.ik);};
+const heroOwn=id=>{if(JPTEST&&HEROL.some(x=>x.id===id))return true;const t=Date.now();if(!heroOwn.c||t-heroOwn.t>3000){heroOwn.t=t;try{const d=JSON.parse(localStorage.getItem('trypanon-save-inf')||'null');heroOwn.c=(d&&d.sk)||[];}catch(e){heroOwn.c=[];}}const h=HEROL.find(x=>x.id===id);return !!h&&heroOwn.c.includes(h.ik);};
 const SKLIST=()=>[{id:'base',n:'기본'},...(isCN?CNSKIN:isJP?JPSKIN:KRSKIN),...HEROL.map(x=>({id:x.id,n:x.n,hero:1}))];
 const jpSkin=()=>{const d=dskDef(),v=(isJP?S.jpSkin:S.krSkin)||d;return SKLIST().some(x=>x.id===v)&&dskOwn(v)?v:d;};
 // 태극기: 가운데 태극 + 네 모서리 건·곤·감·리 4괘
@@ -11407,7 +11407,8 @@ const INF_SKN=100,INF_SK=[{k:'kr',sk:'yi',n:'이순신 장군 드릴',d:'성웅 
 // v326 무한의 땅 드릴 모습: 영웅 드릴(완성·착용) > 무한의 땅에서 고른 기본 스킨(원래 드릴·호랑이·사무라이·정화)
 const INF_BS=[{id:'base',n:'원래 드릴'},{id:'tiger',n:'호랑이',f:'kr'},{id:'samurai',n:'사무라이',f:'jp'},{id:'sk_zheng',n:'정화',f:'cn'}];
 const infSkin=()=>{const x=SI&&SI.ws&&infSkHas(SI.ws)?INF_SK.find(y=>y.k===SI.ws):null;return x?x.sk:(SI&&INF_BS.some(b=>b.id===SI.bs)?SI.bs:'tiger');};
-const infSkHas=k=>(SI.sk||[]).includes(k),infSkE=k=>SI?INF_SK.reduce((a,x)=>a+(infSkHas(x.k)?(x.e[k]||0):0),0):0;
+const infSkHas=k=>JPTEST||(SI.sk||[]).includes(k),// v334 테스트 모드(게임 버전 7번)면 영웅 스킨·드론 모두 열림(저장은 안 바뀜)
+infSkE=k=>SI?INF_SK.reduce((a,x)=>a+(infSkHas(x.k)?(x.e[k]||0):0),0):0;
 // 조각 뽑기: 확률 p로 아직 완성 안 된 나라 하나에 n개 · 알림 글자를 돌려줌('' = 꽝)
 function infShard(p,n=1){if(Math.random()>=p)return '';const left=INF_SK.filter(x=>!infSkHas(x.k));if(!left.length)return '';const x=left[Math.floor(Math.random()*left.length)];SI.sh=SI.sh||{};SI.sh[x.k]=Math.min(INF_SKN,(SI.sh[x.k]||0)+n);
   if(SI.sh[x.k]>=INF_SKN){SI.sk=(SI.sk||[]).concat(x.k);SI.ws=x.k;infShard.done=x.k;return `🎉 ${x.n} 완성! 바로 착용했어요`;}return `🧩 ${x.n} 조각 +${n} (${SI.sh[x.k]}/${INF_SKN})`;}
@@ -11568,14 +11569,14 @@ function infDrArmil(t=0,view='f',u='ida'){const sx=view==='s'?.55:1,cx=120,cy=96
   </g>`;}
 
 const INF_DR=[{k:'mine',n:'공중 채굴 드론',d:'쌍 프로펠러 · 붉은 등롱 · 금 집게의 자수정에서 보라 레이저 (8초 쏘고 2초 쉼) · 보물 주머니 자동 줍기',e:{r:.1,v:.05},p:2e8,svg:()=>infDrMine(.1,'f','idmS')},{k:'armil',n:'천문 의장 드론',d:'금빛 혼천의 고리 7겹 · 푸른 보주에서 불꽃처럼 타는 파란 레이저 (6초 쏘고 4초 쉼)',e:{v:.1,r:.1},p:5e8,svg:()=>infDrArmil(.1,'f','idaS')}];
-const infDrHas=k=>!!(SI&&SI.dr&&SI.dr[k]),infDrE=k=>SI?INF_DR.reduce((a,x)=>a+(infDrHas(x.k)?(x.e[k]||0):0),0):0;
+const infDrHas=k=>JPTEST||!!(SI&&SI.dr&&SI.dr[k]),infDrE=k=>SI?INF_DR.reduce((a,x)=>a+(infDrHas(x.k)?(x.e[k]||0):0),0):0;
 function infDrBuy(k){const x=INF_DR.find(y=>y.k===k);if(!x||infDrHas(k))return;if(SI.money<x.p){infMsg(`💰 ${won(x.p)}이 필요해요`);return;}SI.money-=x.p;SI.dr=SI.dr||{};SI.dr[k]=1;infSave();try{sfx('levelup');}catch(e){}infFlash('#bfe8ff');infMsg(`🛸 ${x.n} 출동! 시추 화면에서 함께 일해요`,3600);infRender();}
 // 시추 화면: 왼쪽 위 채굴 드론 · 오른쪽 위 혼천의 드론 (둥실둥실) + 레이저
-function infDrShaft(T,mx,y0,bw,BT){if(!SI.dr)return '';let o='';const now=Date.now()/1000;
-  if(SI.dr.mine){const s=bw*.62/200,dx=mx-bw*1.25+Math.sin(T*1.3)*4,dy=Math.max(14,BT-bw*.72)+Math.sin(T*2.1)*3,ex=dx+100*s,ey=dy+152*s,on=now%10<8,gx=mx-bw*.42,gy=y0+5,fl=1+.2*Math.sin(T*37);
+function infDrShaft(T,mx,y0,bw,BT){if(!infDrHas('mine')&&!infDrHas('armil'))return '';let o='';const now=Date.now()/1000;
+  if(infDrHas('mine')){const s=bw*.62/200,dx=mx-bw*1.25+Math.sin(T*1.3)*4,dy=Math.max(14,BT-bw*.72)+Math.sin(T*2.1)*3,ex=dx+100*s,ey=dy+152*s,on=now%10<8,gx=mx-bw*.42,gy=y0+5,fl=1+.2*Math.sin(T*37);
     if(on){const L=`M${ex.toFixed(1)} ${ey.toFixed(1)} L${gx.toFixed(1)} ${gy}`;o+=`<path d="${L}" stroke="#e0a8ff" stroke-width="${(8*fl).toFixed(1)}" opacity=".35" stroke-linecap="round"/><path d="${L}" stroke="#b04aff" stroke-width="${(4.4*fl).toFixed(1)}" stroke-linecap="round"/><path d="${L}" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="${gx.toFixed(1)}" cy="${gy+1}" rx="13" ry="4.4" fill="#2a0a3a" opacity=".7"/><ellipse cx="${gx.toFixed(1)}" cy="${gy}" rx="${(9*fl).toFixed(1)}" ry="3.2" fill="#c06aff"/><ellipse cx="${gx.toFixed(1)}" cy="${gy}" rx="4" ry="1.6" fill="#fff"/>`+Array.from({length:7},(_,i)=>{const k=Math.floor(T*12)+i*5,a=-Math.PI*(.15+hsh(k,3)*.7),l=5+hsh(k,5)*14;return `<path d="M${gx.toFixed(1)} ${gy-1} l${(Math.cos(a)*l).toFixed(1)} ${(Math.sin(a)*l).toFixed(1)}" stroke="${i%2?'#f0c8ff':'#fff'}" stroke-width="1.3" stroke-linecap="round"/>`;}).join('')+[0,1,2].map(i=>{const t=((T*1.5+i/3)%1),x=gx+(i-1)*9*t,y=gy-14*t+t*t*16;return `<path d="M${x.toFixed(1)} ${y.toFixed(1)} l2 -4 l3 3 l-2 3Z" fill="#a04ae8" stroke="#fff" stroke-width=".4" opacity="${(1-t).toFixed(2)}"/>`;}).join('');}
     o+=`<g transform="translate(${dx.toFixed(1)},${dy.toFixed(1)}) scale(${s.toFixed(4)})">${infDrMine(T,'f','idm')}</g>`;}
-  if(SI.dr.armil){const s=bw*.78/240,dx=mx+bw*.6+Math.sin(T*1.1+1)*4,dy=Math.max(20,BT-bw*.8)+Math.sin(T*1.7+1)*3,ex=dx+120*s,ey=dy+96*s,on=now%10>=4,gx=mx+bw*.46,gy=y0+5,fl=1+.18*Math.sin(T*31);
+  if(infDrHas('armil')){const s=bw*.78/240,dx=mx+bw*.6+Math.sin(T*1.1+1)*4,dy=Math.max(20,BT-bw*.8)+Math.sin(T*1.7+1)*3,ex=dx+120*s,ey=dy+96*s,on=now%10>=4,gx=mx+bw*.46,gy=y0+5,fl=1+.18*Math.sin(T*31);
     if(on){const L=`M${ex.toFixed(1)} ${ey.toFixed(1)} L${gx.toFixed(1)} ${gy}`;o+=`<path d="M${(ex-4).toFixed(1)} ${ey.toFixed(1)} L${(gx-10).toFixed(1)} ${gy} L${(gx+10).toFixed(1)} ${gy} L${(ex+4).toFixed(1)} ${ey.toFixed(1)}Z" fill="#1a3aff" opacity=".25"/><path d="${L}" stroke="#1a4aff" stroke-width="${(14*fl).toFixed(1)}" opacity=".35" stroke-linecap="round"/><path d="${L}" stroke="#2a7aff" stroke-width="${(8.4*fl).toFixed(1)}" opacity=".8" stroke-linecap="round"/><path d="${L}" stroke="#5ad8ff" stroke-width="${(4.6*fl).toFixed(1)}" stroke-linecap="round"/><path d="${L}" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>`
       +[0,1,2,3,4].map(i=>{const t=(i+.5+((T*2)%1))/5.5,x=ex+(gx-ex)*t,y=ey+(gy-ey)*t,w=4+2*Math.sin(T*9+i);return `<path d="M${(x-w).toFixed(1)} ${y.toFixed(1)} q-4 -3 -3 -8 q3 3 6 3Z M${(x+w).toFixed(1)} ${(y+2).toFixed(1)} q4 -3 3 -8 q-3 3 -6 3Z" fill="#7ae0ff" opacity=".6"/>`;}).join('')
       +`<ellipse cx="${gx.toFixed(1)}" cy="${gy+2}" rx="18" ry="5.6" fill="#0a1a3a" opacity=".7"/><ellipse cx="${gx.toFixed(1)}" cy="${gy}" rx="${(13*fl).toFixed(1)}" ry="4.4" fill="#2a6aff"/><ellipse cx="${gx.toFixed(1)}" cy="${gy}" rx="6" ry="2" fill="#e8faff"/>`+Array.from({length:6},(_,i)=>{const a=-Math.PI*(.15+i*.14),h=10+6*Math.sin(T*8+i);return `<path d="M${gx.toFixed(1)} ${gy-1} q${(Math.cos(a)*7).toFixed(1)} ${(Math.sin(a)*h*.5-5).toFixed(1)} ${(Math.cos(a)*11).toFixed(1)} ${(Math.sin(a)*h).toFixed(1)}" stroke="${i%2?'#7ae0ff':'#2a7aff'}" stroke-width="${i%2?1.6:2.4}" fill="none" stroke-linecap="round"/>`;}).join('');}
@@ -12553,7 +12554,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=333;
+const GVER=334;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
