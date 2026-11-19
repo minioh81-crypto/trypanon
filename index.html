@@ -884,7 +884,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v317 · 2026-11-19</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v318 · 2026-11-19</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -3320,7 +3320,6 @@ var RIPC=null;function RIPPLES(){if(RIPC)return RIPC;let a='',b='';for(let y=-26
       // v317: 실제 비율 지도에 맞춰 장식 위치 다시 잡음 · 정화 보선 장식은 뺌(내 땅 소품으로 산 보선이 지도에서 움직이니 겹치지 않게)
       const c0=J(76,50.6),c1=J(96,49.2);
       g+=`<g style="pointer-events:none">${land(KR,'#7aa070')}${JPN.map(p=>land(p,'#9a86b8')).join('')}${tag(127.6,42.8,'🇰🇷 1막 ✓',6,-6)}${tag(141.5,40.5,'🇯🇵 2막 ✓',0,-18)}
-        ${rose(40,112,22)}${scroll(160,124)}
         <g opacity=".95"><path d="M${c0[0]-14},${c0[1]+2} Q${(c0[0]+c1[0])/2},${c0[1]-10} ${c1[0]+14},${c1[1]} Q${c1[0]+10},${c1[1]-16} ${(c0[0]+c1[0])/2},${c0[1]-18} Q${c0[0]},${c0[1]-16} ${c0[0]-14},${c0[1]+2}Z" fill="#c8a06a" opacity=".45"/><path d="M${c0[0]-10},${c0[1]-3} L${c1[0]+8},${c1[1]-4}" stroke="#fff4d8" stroke-width="1" stroke-dasharray="1 2.4" opacity=".9"/>${[0,1,2,3].map(k=>camel(c1[0]-k*14,c0[1]-4+k*.3,k)).join('')}<text x="${(c0[0]+c1[0])/2}" y="${c0[1]-20}" text-anchor="middle" font-size="6.4" font-weight="800" fill="#fff4d8" stroke="rgba(60,40,10,.5)" stroke-width="1.6" paint-order="stroke">실크로드 · 서역으로</text></g></g>`;}
     const HH=[[96.0,34.5],[100.5,35.9],[103.8,36.1],[105.9,37.5],[106.8,39.2],[107.5,40.6],[110.5,40.3],[111.2,39.5],[110.5,37.5],[110.4,35.6],[111.0,34.7],[113.6,34.9],[115.5,35.6],[117.0,36.7],[118.9,37.7]];
     const CJ=[[91.5,33.5],[95.5,33.0],[98.5,31.0],[99.5,28.5],[100.5,26.9],[102.5,26.2],[104.6,28.8],[106.6,29.6],[108.5,30.8],[111.3,30.7],[113.0,29.8],[114.3,30.6],[116.0,29.8],[117.5,30.7],[119.0,32.2],[121.8,31.4]];
@@ -12302,7 +12301,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=317;
+const GVER=318;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
