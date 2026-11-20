@@ -869,7 +869,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v347 · 2026-11-20</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v348 · 2026-11-20</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -11676,7 +11676,7 @@ function infSave(){try{SI.t=Date.now();localStorage.setItem(INF_KEY,JSON.stringi
 const infF=d=>Math.floor(d/INF_FH),infGate=f=>(f+1)%10===0;
 const infBio=f=>{const i=Math.floor(f/10),b=INF_BIO[i%INF_BIO.length],t=Math.floor(i/INF_BIO.length);return {n:b[0]+(t?' '+['','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ','Ⅷ','Ⅸ','Ⅹ'][Math.min(9,t)]+(t>9?'+':''):''),c:b[1]};};
 // v316 난이도 곡선: 1~10층은 아주 쉽게(층마다 +3%) → 11층부터 점점 가팔라짐(로그 곡선이 위로 휨) · 10층마다 암반층(처음 2배, 11층부터 3.5배)
-const infK=f=>f<=10?.03*f:.3+.115*(f-10)+.0006*(f-10)*(f-10);
+const infK=f=>f<=10?.03*f:.3+.09*(f-10)+.0003*(f-10)*(f-10);// v348 완화(.115→.09 · .0006→.0003)
 const infH=f=>Math.exp(infK(f))*(infGate(f)?(f<10?2:3.5)/Math.pow(1.04,SI.p.cool):1);
 const infDiff=f=>Math.exp(infK(f));
 // 칭호: 최고 층에 닿으면 생기고, 무한의 땅 안에서 효과가 겹쳐 적용(v 굴착 · g 돈 · r 원정 재료)
@@ -11708,7 +11708,7 @@ const infV=f=>2*infPow()/infH(f)*(infOD()?2:1);// m/s · ⚡폭주 중 2배
 const infVs=v=>v<10?v.toFixed(v<1?2:1)+'m':fmtD(v);
 const infG=f=>3.75*Math.exp(infK(f)*.82)*(f<10?2.5:1)*Math.pow(1.13,SI.p.coll)*infE('g');// ₩/m · 처음 10층은 2.5배
 // v310 강화 비용: 돈은 더 가파르게(×1.62/레벨) · 재료는 지금 단계 재료 + 그 앞 두 단계 재료를 함께(앞 재료일수록 많이) → 옛 재료도 끝까지 쓰임
-const infCost=(p,lv)=>{const ti=Math.min(7,p.m+Math.floor(lv/8)),n=Math.ceil(5*Math.pow(1.32,lv)),mats=[];for(let j=ti;j>=Math.max(0,ti-2);j--)mats.push({k:INF_MAT[j].k,n:Math.ceil(n*[1,1.8,3][ti-j])});return {money:Math.round(p.c*2*Math.pow(1.62,lv)),mats};};
+const infCost=(p,lv)=>{const ti=Math.min(7,p.m+Math.floor(lv/8)),n=Math.ceil(5*Math.pow(1.25,lv)),mats=[];for(let j=ti;j>=Math.max(0,ti-2);j--)mats.push({k:INF_MAT[j].k,n:Math.ceil(n*[1,1.8,3][ti-j])});return {money:Math.round(p.c*2*Math.pow(1.62,lv)),mats};};
 const infCanPay=c=>SI.money>=c.money&&c.mats.every(m=>(SI.res[m.k]||0)>=m.n);
 // 재료 교환소(돈 → 재료): 쌓인 돈을 쓰는 곳 · 값은 지금 층 수입에 맞춰 오르고, 깊은 재료일수록 비쌈
 const infXP=k=>{const ti=INF_MAT.findIndex(m=>m.k===k),f=infF(SI.depth);return Math.max(50,Math.round(INF_FH*infG(f)*.06*Math.pow(1.9,ti)));};
@@ -12838,7 +12838,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=347;
+const GVER=348;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
