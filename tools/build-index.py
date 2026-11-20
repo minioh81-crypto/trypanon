@@ -8,7 +8,7 @@ head='''<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<title>코어 버스터 · 지구를 뚫어라</title>
+<title>트리파논: 코어 버스터 · 지구를 뚫어라</title>
 <meta name="description" content="한반도 한가운데 양구에서 지구 반대편까지 — 방치형 시추 게임">
 <meta name="theme-color" content="#0e1315"><meta name="color-scheme" content="dark only">
 <meta name="apple-mobile-web-app-capable" content="yes">
