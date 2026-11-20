@@ -1,4 +1,4 @@
-# TRYPANON (트리파논) — 작업 안내
+# CORE BUSTER (코어 버스터 · 옛 이름 트리파논 TRYPANON) — 작업 안내
 
 모바일 방치형 시추 게임. 한 파일짜리 HTML 게임이고, GitHub Pages(gh-pages 브랜치)로 배포한다.
 대화는 한국어로, 짧고 쉽게. 결과 화면은 스크린샷으로 보여 준다.

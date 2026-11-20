@@ -8,13 +8,13 @@ head='''<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<title>트리파논 · 지구를 뚫어라</title>
+<title>코어 버스터 · 지구를 뚫어라</title>
 <meta name="description" content="한반도 한가운데 양구에서 지구 반대편까지 — 방치형 시추 게임">
 <meta name="theme-color" content="#0e1315"><meta name="color-scheme" content="dark only">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="트리파논">
+<meta name="apple-mobile-web-app-title" content="코어 버스터">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
