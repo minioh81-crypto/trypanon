@@ -2418,3 +2418,9 @@ H빔	H-beam	H形鋼
 굴진 속도 +8%	Dig speed +8%	掘進速度 +8%
 굴진 속도 +5%	Dig speed +5%	掘進速度 +5%
 수입 +10%	Income +10%	収入 +10%
+{}m/분	{}m/min	{}m/分
+0m/분	0m/min	0m/分
+3D 화면을 톡톡 누르면 조금씩 더 파요 · 50번 채우면 90초 폭주(굴진 ×2.2) · 끌어서 돌려 보기	Tap the 3D view to dig a little more · 50 taps = 90 s overdrive (dig ×2.2) · drag to rotate	3D画面をタップで少しずつ掘る · 50回で90秒暴走(掘進×2.2) · ドラッグで回転
+90초 동안 굴진 ×2.2	Dig ×2.2 for 90 s	90秒間 掘進×2.2
+콘크리트 {}/분	Concrete {}/min	コンクリート {}/分
+(분당 {})	({} per min)	(毎分 {})
