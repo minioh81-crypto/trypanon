@@ -888,7 +888,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v377 · 2026-11-24</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v378 · 2026-11-24</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -13250,9 +13250,9 @@ $('#ghBody').addEventListener('click',e=>{const t=e.target;if(performance.now()-
   const g=t.closest('[data-g]');if(!g)return;if(g.dataset.g==='gacha'){gh.v='gacha';gh.last=null;ghRender();}else if(g.dataset.g==='drill'){gh.v='drill';gh.dt=null;ghRender();}else if(mgReady()){gh=null;$('#ghub').hidden=true;isCN?mjOpen():isJP?pkOpen():mgOpen();}else toast(`${mgLeft()} 뒤에 다시 열려요`);});
 // ================= 중국편 미니게임: 마작 짝맞추기 =================
 // v377 사천성(四川省) 규칙: 6×6 마작패 36장(18쌍) · 같은 그림 두 장을 빈 칸으로 이은 길이 꺾임 2번 이하(직선 3개 이하)면 지워짐 · 판 바깥 테두리도 길로 쓸 수 있음
-// 판은 「거꾸로 쌓기」로 만들어 언제나 다 지울 수 있음 · 75초 · 中 짝 = 큰돈 · 發 짝 = 재료 · 梅 짝 = 시간 +8초 · 다 지우면 보너스
+// 60초 · 中 짝 = 큰돈 · 發 짝 = 재료 · 梅 짝 = 시간 +8초 · 다 지우면 보너스
 // 칩이 뜨면 무료 1판 · 그 뒤로 ₩ 내고 3판까지
-let mj=null;const MJC=6,MJR=6,MJT=40;
+let mj=null;const MJC=6,MJR=6,MJT=60;
 const MJK=['m1','m2','m3','p1','p2','p3','s1','s2','s3','we','ws','ww','wn','dz','df','db','fm'];
 function mjTile(k,o={}){const N=['一','二','三'],w=40,h=54,ink=o.dim?'#9a9a8a':null;let g='';
   const t=k[0],n=+k[1]||0;
@@ -13314,14 +13314,14 @@ function mjTap(i){if(!mj||!mj.run||!mj.t[i])return;if(!mjFree(i)){mjSnd('no');co
   const path=mjPath(mj.sel,i);if(mj.t[mj.sel]===mj.t[i]&&!path){mjSnd('no');mj.sel=i;mjRender();toast('길이 막혔어요 · 꺾임 2번 이하로 이어져야 해요');return;}
   if(mj.t[mj.sel]!==mj.t[i]){mjSnd('miss');mj.combo=0;mj.sel=i;mjRender();const el=document.querySelector(`.mjt[data-i="${i}"]`);if(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');}return;}
   if(mj.hl){mj.hl=null;clearTimeout(mj.hlT);}const k=mj.t[i],a=mj.sel;mjDraw(path,'hit');mj.t[a]=mj.t[i]=null;mj.sel=-1;mj.pairs++;const now=mj.left;mj.combo=(mj.lastT&&mj.lastT-now<4)?mj.combo+1:0;mj.lastT=now;
-  const base=25+Math.floor(S.dl/2),R=mj.round;let m=Math.round(mj.U*.35*(1+mj.combo*.25)),res={},msg='';
-  if(k==='dz'){m=mj.U*8;msg='🀄 中 짝! 큰돈';mjSnd('big');}else if(k==='df'){const r=mj.mats[(Math.random()*mj.mats.length)|0];res[r]=base;msg=`🀅 發 짝! ${r} +${base}`;mjSnd('mat');}
+  /* v378 보상 상향 */const base=Math.round((25+Math.floor(S.dl/2))*2.5),R=mj.round;let m=Math.round(mj.U*1.2*(1+mj.combo*.3)),res={},msg='';
+  if(k==='dz'){m=mj.U*25;msg='🀄 中 짝! 큰돈';mjSnd('big');}else if(k==='df'){const r=mj.mats[(Math.random()*mj.mats.length)|0];res[r]=base;msg=`🀅 發 짝! ${r} +${base}`;mjSnd('mat');}
   else if(k==='fm'){mj.left=Math.min(MJT,mj.left+8);msg='🌸 梅 짝! 시간 +8초';mjSnd('time');}else mjSnd('match',mj.combo);
   S.money+=m;R.money+=m;mj.total.money+=m;for(const r in res){S.res[r]=(S.res[r]||0)+res[r];R.res[r]=(R.res[r]||0)+res[r];mj.total.res[r]=(mj.total.res[r]||0)+res[r];}
   if(msg)toast(msg+(mj.combo?` · 연속 ×${mj.combo+1}`:''));
   if(mj.pairs>=18){mjEnd(true);return;}if(!mjPairs().length)mjShuffle(1);else mjRender();}
-function mjEnd(clear){mj.run=0;clearInterval(mj.iv);const R=mj.round,base=25+Math.floor(S.dl/2);
-  if(clear){const bonus=Math.round(mj.U*(12+mj.left*.3));S.money+=bonus;R.money+=bonus;mj.total.money+=bonus;for(const r of mj.mats){S.res[r]=(S.res[r]||0)+base*2;R.res[r]=(R.res[r]||0)+base*2;mj.total.res[r]=(mj.total.res[r]||0)+base*2;}
+function mjEnd(clear){mj.run=0;clearInterval(mj.iv);const R=mj.round,base=Math.round((25+Math.floor(S.dl/2))*2.5);
+  if(clear){const bonus=Math.round(mj.U*(45+mj.left*1.2));S.money+=bonus;R.money+=bonus;mj.total.money+=bonus;for(const r of mj.mats){S.res[r]=(S.res[r]||0)+base*2;R.res[r]=(R.res[r]||0)+base*2;mj.total.res[r]=(mj.total.res[r]||0)+base*2;}
     mj.msg=`🎉 판을 다 비웠어요! 보너스 ${won(bonus)} + 재료 ×${base*2} (남은 시간 ${Math.ceil(mj.left)}초)`;mjSnd('clear');if(navigator.vibrate)navigator.vibrate([60,40,160]);}
   else{mj.msg=`⏰ 시간 끝! ${mj.pairs}쌍을 지웠어요.`;mjSnd('end');}
   mj.res={n:mj.games,free:mj.games===1,clear,pairs:mj.pairs,money:R.money,res:Object.assign({},R.res)};mj.log.push({n:mj.games,c:mj.games===1?0:mj.cost,m:R.money,r:Object.assign({},R.res),clear,pairs:mj.pairs,at:Date.now()});save();mjRender();}
@@ -13672,7 +13672,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=377;
+const GVER=378;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
