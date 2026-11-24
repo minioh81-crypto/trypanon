@@ -2427,3 +2427,7 @@ H빔	H-beam	H形鋼
 🔧 함체 안 공사 중 · 이음부 용접·포장·조명	🔧 Inside work · joint welding, paving, lights	🔧 函体内工事中 · 継手溶接・舗装・照明
 🌊 함체 밖 보기	🌊 View outside	🌊 函体の外を見る
 🔧 함체 안 보기	🔧 View inside	🔧 函体の中を見る
+사천성 마작	Shisen-Sho Mahjong	四川省麻雀
+🀄 사천성 마작	🀄 Shisen-Sho Mahjong	🀄 四川省麻雀
+길이 막혔어요 · 꺾임 2번 이하로 이어져야 해요	Path blocked · it must connect with 2 turns or fewer	道がふさがっています · 曲がり2回以内でつなげてください
+남은 짝 {} · 같은 패를 꺾임 2번 이하의 빈 길로 이으면 지워져요 (사천성)	{} pairs left · connect matching tiles with an empty path of 2 turns or fewer (Shisen-Sho)	残り{}組 · 同じ牌を曲がり2回以内の空いた道でつなぐと消えます(四川省)
