@@ -869,7 +869,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v375 · 2026-11-24</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v376 · 2026-11-24</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -12396,32 +12396,73 @@ function tuSfx(k){const c=slOK();if(!c||!window.__tuOn||!tu3||tu3.mode!=='dig')r
   else if(k==='tap'){noise({t,f:1400,q:1.2,d:.07,v:.12});tone({t,f:180,f2:90,d:.1,v:.1});}}
 function tuSoft(){return tuTex('soft',64,64,(g,w,h)=>{const r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(.4,'rgba(255,255,255,.55)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,64,64);});}
 // v365 현장 장비: 덤프트럭 · 굴착기(포크레인) · 세그먼트 운반차(기재차) · 용접공(불똥)
-function tuDump(){const T=THREE,G=new T.Group(),S=(c,m=.4,r=.5)=>new T.MeshStandardMaterial({color:c,metalness:m,roughness:r}),Y=S('#f2b51e',.35,.42),K=S('#1c1c20',.2,.8),M=S('#8a8e96',.85,.35),gl=new T.MeshStandardMaterial({color:'#24384e',metalness:.9,roughness:.1}),lit=c=>new T.MeshBasicMaterial({color:c,toneMapped:false});
+// v376 장비 질감: 둥근 모서리 상자 · 때 묻은 도장 텍스처 · 타이어 무늬 · 경고 줄무늬
+const tuRB=(w,h,d,r=.025)=>{tuRB.c=tuRB.c||{};const k=[w,h,d,r].join();if(tuRB.c[k])return tuRB.c[k];const T=THREE,x=w/2-r,y=h/2-r,s=new T.Shape();s.moveTo(-x,-h/2);s.lineTo(x,-h/2);s.quadraticCurveTo(w/2,-h/2,w/2,-y);s.lineTo(w/2,y);s.quadraticCurveTo(w/2,h/2,x,h/2);s.lineTo(-x,h/2);s.quadraticCurveTo(-w/2,h/2,-w/2,y);s.lineTo(-w/2,-y);s.quadraticCurveTo(-w/2,-h/2,-x,-h/2);
+  const g=new T.ExtrudeGeometry(s,{depth:Math.max(.001,d-2*r),bevelEnabled:true,bevelThickness:r,bevelSize:r*.9,bevelSegments:2,curveSegments:4});g.translate(0,0,-(d-2*r)/2);return tuRB.c[k]=g;};
+function tuPaint(hex,metal=.35,rough=.5){tuPaint.c=tuPaint.c||{};const k=hex+metal+rough;if(tuPaint.c[k])return tuPaint.c[k];
+  const map=tuTex('pt'+hex,128,128,(g,w,h)=>{g.fillStyle=hex;g.fillRect(0,0,w,h);const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'rgba(255,255,255,.10)');gr.addColorStop(.55,'rgba(0,0,0,0)');gr.addColorStop(1,'rgba(60,40,20,.38)');g.fillStyle=gr;g.fillRect(0,0,w,h);
+    for(let i=0;i<260;i++){g.fillStyle=`rgba(${Math.random()<.5?40:90},${Math.random()<.5?30:70},20,${Math.random()*.14})`;g.fillRect(Math.random()*w,h*.4+Math.random()*h*.6,2+Math.random()*3,1+Math.random()*2);}
+    g.strokeStyle='rgba(255,255,255,.12)';g.lineWidth=.6;for(let i=0;i<14;i++){g.beginPath();const x=Math.random()*w,y=Math.random()*h;g.moveTo(x,y);g.lineTo(x+Math.random()*16-8,y+Math.random()*6);g.stroke();}});
+  map.wrapS=map.wrapT=THREE.RepeatWrapping;return tuPaint.c[k]=new THREE.MeshStandardMaterial({map,metalness:metal,roughness:rough});}
+const tuTire=()=>tuPaint.tire||(tuPaint.tire=new THREE.MeshStandardMaterial({map:(()=>{const t=tuTex('tire',128,32,(g,w,h)=>{g.fillStyle='#16161a';g.fillRect(0,0,w,h);g.fillStyle='#2a2a30';for(let x=0;x<w;x+=8){g.beginPath();g.moveTo(x,0);g.lineTo(x+5,h/2);g.lineTo(x,h);g.lineTo(x+3,h);g.lineTo(x+8,h/2);g.lineTo(x+3,0);g.fill();}});t.wrapS=THREE.RepeatWrapping;return t;})(),roughness:.95}));
+const tuHaz=()=>tuPaint.haz||(tuPaint.haz=new THREE.MeshStandardMaterial({map:tuTex('haz',64,16,(g,w,h)=>{g.fillStyle='#f2c11e';g.fillRect(0,0,w,h);g.fillStyle='#141414';for(let x=-16;x<w;x+=16){g.beginPath();g.moveTo(x,h);g.lineTo(x+8,h);g.lineTo(x+16,0);g.lineTo(x+8,0);g.fill();}}),roughness:.5}));
+const tuGlass=()=>tuPaint.gl||(tuPaint.gl=new THREE.MeshStandardMaterial({color:'#1a2a3c',metalness:.95,roughness:.06,transparent:true,opacity:.92}));
+const tuChrome=()=>tuPaint.ch||(tuPaint.ch=new THREE.MeshStandardMaterial({color:'#e8ecf2',metalness:1,roughness:.18}));
+// 바퀴: 무늬 타이어 + 림(볼트) · dual=복륜
+function tuWheel(r,w,dual){const T=THREE,g=new T.Group(),K=tuTire(),rim=tuPaint('#c8ccd2',.9,.3);const one=(z)=>{const t=new T.Mesh(new T.CylinderGeometry(r,r,w,24,1,false),K);t.rotation.x=Math.PI/2;t.position.z=z;g.add(t);const sw=new T.Mesh(new T.TorusGeometry(r*.92,w*.18,8,24),tuPaint('#1c1c20',.1,.9));sw.position.z=z;g.add(sw);
+    for(const s of [1,-1]){const rm=new T.Mesh(new T.CylinderGeometry(r*.56,r*.56,.006,18),rim);rm.rotation.x=Math.PI/2;rm.position.z=z+s*w/2;g.add(rm);const hb=new T.Mesh(new T.CylinderGeometry(r*.2,r*.2,.012,10),tuPaint('#8a8e96',.9,.35));hb.rotation.x=Math.PI/2;hb.position.z=z+s*(w/2+.004);g.add(hb);
+      for(let i=0;i<6;i++){const a=i/6*Math.PI*2,b=new T.Mesh(new T.CylinderGeometry(r*.05,r*.05,.012,6),tuChrome());b.rotation.x=Math.PI/2;b.position.set(Math.cos(a)*r*.36,Math.sin(a)*r*.36,z+s*(w/2+.005));g.add(b);}}};
+  one(0);if(dual)one(-w*1.05);return g;}
+function tuDump(){const T=THREE,G=new T.Group(),Y=tuPaint('#f2b51e',.35,.45),K=tuPaint('#1c1c20',.4,.6),M=tuPaint('#8a8e96',.85,.35),gl=tuGlass(),lit=c=>new T.MeshBasicMaterial({color:c,toneMapped:false});
   const add=(g,m,x,y,z,p=G)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};const W=[];
-  add(new T.BoxGeometry(1.5,.12,.5),K,0,.26,0);add(new T.BoxGeometry(.42,.42,.62),Y,.58,.56,0);add(new T.BoxGeometry(.3,.2,.6),gl,.66,.66,0).scale.set(1,1,1.02);add(new T.BoxGeometry(.2,.22,.6),Y,.82,.42,0);
-  add(new T.BoxGeometry(.08,.08,.62),M,.93,.36,0);for(const z of [.22,-.22])add(new T.CircleGeometry(.04,12),lit('#fff6c8'),.925,.42,z).rotation.y=Math.PI/2;add(new T.CylinderGeometry(.025,.025,.36,8),M,.42,.82,.25);
-  const bc=new T.Mesh(new T.CylinderGeometry(.04,.05,.06,10),lit('#ff8a1a'));bc.position.set(.58,.8,0);G.add(bc);
-  const bed=new T.Group();bed.position.set(-.72,.34,0);G.add(bed);const B=(w,h,d,x,y,z)=>add(new T.BoxGeometry(w,h,d),Y,x,y,z,bed);B(1.0,.06,.62,.5,.03,0);B(1.0,.34,.05,.5,.2,.3);B(1.0,.34,.05,.5,.2,-.3);B(.05,.4,.62,.02,.22,0);B(.06,.46,.64,.98,.25,0);B(.95,.05,.05,.5,.38,.31);B(.95,.05,.05,.5,.38,-.31);
-  for(let i=0;i<4;i++)add(new T.BoxGeometry(.04,.32,.04),S('#c8901a'),.18+i*.22,.2,.315,bed);
-  const mk=add(new T.SphereGeometry(.42,14,8,0,Math.PI*2,0,Math.PI/2),new T.MeshStandardMaterial({color:'#6a5440',roughness:1}),.5,.28,0,bed);mk.scale.set(1.15,.55,.68);G.userData.muck=mk;G.userData.bed=bed;
-  for(const [x,z] of [[.62,.27],[.62,-.27],[-.28,.27],[-.28,-.27],[-.6,.27],[-.6,-.27]]){const w=new T.Group();w.position.set(x,.16,z);G.add(w);add(new T.CylinderGeometry(.16,.16,.12,20),K,0,0,0,w).rotation.x=Math.PI/2;add(new T.CylinderGeometry(.08,.08,.13,12),M,0,0,0,w).rotation.x=Math.PI/2;W.push(w);}
-  G.userData.wheels=W;G.userData.beacon=bc;return G;}
-function tuExc(){const T=THREE,G=new T.Group(),S=(c,m=.4,r=.5)=>new T.MeshStandardMaterial({color:c,metalness:m,roughness:r}),Y=S('#f2b51e',.35,.42),K=S('#1e1e22',.3,.8),M=S('#7a7e86',.85,.35),gl=new T.MeshStandardMaterial({color:'#24384e',metalness:.9,roughness:.1});
+  for(const z of [.17,-.17])add(new T.BoxGeometry(1.55,.08,.07),K,0,.26,z);add(new T.BoxGeometry(1.4,.04,.4),K,-.05,.22,0);
+  // 캡: 둥근 모서리 · 앞유리 · 옆창 · 그릴 · 범퍼 · 전조등 · 사이드미러 · 발판 · 배기통 · 경광등 2
+  add(tuRB(.42,.44,.64,.05),Y,.6,.58,0);add(tuRB(.3,.2,.66,.02),gl,.66,.68,0);add(new T.BoxGeometry(.012,.2,.5),gl,.812,.66,0);
+  add(tuRB(.16,.22,.62,.03),Y,.86,.42,0);add(new T.BoxGeometry(.01,.16,.42),K,.942,.43,0);for(let i=0;i<5;i++)add(new T.BoxGeometry(.012,.012,.4),M,.948,.37+i*.032,0);
+  add(tuRB(.08,.1,.66,.03),K,.95,.29,0);for(const z of [.24,-.24]){add(new T.BoxGeometry(.02,.05,.1),M,.946,.44,z);add(new T.CircleGeometry(.024,14),lit('#fff6c8'),.957,.44,z).rotation.y=Math.PI/2;add(new T.BoxGeometry(.012,.02,.05),lit('#ffb020'),.955,.4,z);}
+  for(const z of [.34,-.34]){add(new T.BoxGeometry(.03,.012,.08),K,.74,.72,z+.04*Math.sign(z));add(tuRB(.02,.11,.06,.008),K,.74,.69,z+.09*Math.sign(z));add(new T.BoxGeometry(.012,.09,.045),gl,.75,.69,z+.09*Math.sign(z));add(new T.BoxGeometry(.1,.02,.06),M,.55,.3,z);}
+  add(new T.CylinderGeometry(.022,.022,.5,10),tuChrome(),.36,.72,.24);add(new T.CylinderGeometry(.026,.022,.05,10),K,.36,.98,.24);add(new T.CylinderGeometry(.07,.07,.24,16),tuChrome(),.42,.34,-.3).rotation.z=Math.PI/2;
+  const bc=new T.Mesh(new T.CylinderGeometry(.03,.035,.05,10),lit('#ff8a1a'));bc.position.set(.6,.83,.15);G.add(bc);const bc2=new T.Mesh(new T.CylinderGeometry(.03,.035,.05,10),lit('#ff8a1a'));bc2.position.set(.6,.83,-.15);G.add(bc2);
+  // 적재함: 옆판 보강 리브 · 앞 캐노피(캡 위로) · 뒷문 · 유압 실린더
+  const bed=new T.Group();bed.position.set(-.72,.34,0);G.add(bed);const B=(w,h,d,x,y,z,m=Y)=>add(tuRB(w,h,d,.012),m,x,y,z,bed);B(1.0,.06,.64,.5,.03,0);B(1.0,.36,.05,.5,.21,.31);B(1.0,.36,.05,.5,.21,-.31);B(.05,.42,.64,.02,.22,0);B(.06,.48,.66,.98,.25,0);B(.34,.04,.66,1.14,.48,0);
+  for(let i=0;i<5;i++)for(const z of [.338,-.338])add(new T.BoxGeometry(.035,.34,.02),tuPaint('#c8901a',.4,.5),.1+i*.2,.2,z,bed);for(const z of [.338,-.338])add(new T.BoxGeometry(.96,.03,.025),tuPaint('#c8901a',.4,.5),.5,.39,z,bed);
+  add(new T.BoxGeometry(.012,.1,.6),tuHaz(),-.005,.1,0,bed);
+  const mk=add(new T.SphereGeometry(.42,18,10,0,Math.PI*2,0,Math.PI/2),new T.MeshStandardMaterial({map:tuRockTex(0),color:'#a08a70',roughness:1}),.5,.28,0,bed);mk.scale.set(1.15,.55,.68);G.userData.muck=mk;G.userData.bed=bed;
+  add(new T.CylinderGeometry(.03,.03,.28,10),tuChrome(),.18,.27,0).rotation.z=-.3;add(new T.CylinderGeometry(.045,.045,.16,10),K,.22,.22,0).rotation.z=-.3;
+  for(const [x,z,dual] of [[.62,.27,0],[-.28,.25,1],[-.6,.25,1]])for(const s of [1,-1]){const w=new T.Group();w.position.set(x,.16,s*z);G.add(w);const wh=tuWheel(.16,.11,dual);if(s<0)wh.rotation.y=Math.PI;w.add(wh);W.push(w);}
+  for(const z of [.34,-.34])add(new T.BoxGeometry(.04,.12,.1),K,-.78,.16,z);
+  G.userData.wheels=W;G.userData.beacon=bc;bc.material=bc2.material;return G;}
+function tuExc(){const T=THREE,G=new T.Group(),Y=tuPaint('#f2b51e',.35,.45),K=tuPaint('#1e1e22',.4,.7),M=tuPaint('#7a7e86',.85,.35),gl=tuGlass();
   const add=(g,m,x,y,z,p=G)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};
-  for(const z of [.25,-.25]){add(new T.BoxGeometry(.9,.18,.16),K,0,.11,z);for(const x of [-.45,.45])add(new T.CylinderGeometry(.09,.09,.16,14),K,x,.11,z).rotation.x=Math.PI/2;for(let i=0;i<4;i++)add(new T.CylinderGeometry(.04,.04,.17,8),M,-.3+i*.2,.11,z).rotation.x=Math.PI/2;}
-  add(new T.CylinderGeometry(.18,.2,.08,16),M,0,.24,0);const up=new T.Group();up.position.y=.3;G.add(up);G.userData.up=up;
-  add(new T.BoxGeometry(.75,.24,.52),Y,-.05,.1,0,up);add(new T.BoxGeometry(.3,.3,.24),Y,.12,.34,.12,up);add(new T.BoxGeometry(.26,.22,.25),gl,.13,.36,.12,up);add(new T.BoxGeometry(.22,.26,.5),S('#3a3c42',.6,.4),-.38,.16,0,up);
-  const bm=new T.Group();bm.position.set(.22,.22,-.08);up.add(bm);G.userData.boom=bm;add(new T.BoxGeometry(.9,.12,.1),Y,.45,0,0,bm);add(new T.CylinderGeometry(.03,.03,.5,8),M,.25,-.08,0,bm).rotation.z=Math.PI/2.4;
-  const sk=new T.Group();sk.position.set(.88,0,0);bm.add(sk);G.userData.stick=sk;add(new T.BoxGeometry(.1,.62,.09),Y,0,-.3,0,sk);
-  const bk=new T.Group();bk.position.set(0,-.6,0);sk.add(bk);G.userData.bucket=bk;const bs=new T.Shape();bs.moveTo(0,0);bs.lineTo(.2,-.02);bs.quadraticCurveTo(.24,-.2,.08,-.24);bs.lineTo(-.02,-.06);bs.lineTo(0,0);
-  const bg=new T.ExtrudeGeometry(bs,{depth:.22,bevelEnabled:false});bg.translate(0,0,-.11);add(bg,M,0,0,0,bk);for(let i=0;i<4;i++)add(new T.ConeGeometry(.018,.06,5),M,.08,-.26,-.08+i*.055,bk).rotation.z=Math.PI*.8;
-  const mk=add(new T.SphereGeometry(.09,8,6),new T.MeshStandardMaterial({color:'#6a5440',roughness:1}),.1,-.12,0,bk);G.userData.load=mk;return G;}
-function tuCarrier(){const T=THREE,G=new T.Group(),S=(c,m=.4,r=.5)=>new T.MeshStandardMaterial({color:c,metalness:m,roughness:r}),add=(g,m,x,y,z,p=G)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};
-  const B=S('#2a6ac8',.5,.4),K=S('#1c1c20',.2,.8),M=S('#8a8e96',.85,.35);add(new T.BoxGeometry(1.3,.1,.44),K,0,.2,0);add(new T.BoxGeometry(.98,.04,.46),B,-.18,.27,0);for(const z of [.22,-.22])add(new T.BoxGeometry(.98,.08,.03),B,-.18,.31,z);
-  add(new T.BoxGeometry(.32,.36,.44),B,.6,.42,0);add(new T.BoxGeometry(.24,.18,.45),new T.MeshStandardMaterial({color:'#24384e',metalness:.9,roughness:.1}),.64,.48,0);add(new T.BoxGeometry(.06,.06,.46),M,.77,.28,0);
-  for(const z of [.13,-.13])add(new T.CircleGeometry(.03,10),new T.MeshBasicMaterial({color:'#fff6c8',toneMapped:false}),.771,.32,z).rotation.y=Math.PI/2;
-  const W=[];for(const x of [.5,0,-.5])for(const z of [.2,-.2]){const w=new T.Group();w.position.set(x,.1,z);G.add(w);add(new T.CylinderGeometry(.1,.1,.08,16),K,0,0,0,w).rotation.x=Math.PI/2;add(new T.CylinderGeometry(.05,.05,.085,10),M,0,0,0,w).rotation.x=Math.PI/2;W.push(w);}
-  const bc=add(new T.CylinderGeometry(.035,.04,.05,10),new T.MeshBasicMaterial({color:'#ffb020',toneMapped:false}),.6,.63,0);G.userData={beacon:bc,wheels:W};return G;}
+  // 하부: 무한궤도(링크 무늬) · 구동륜 · 유동륜 · 하부 롤러
+  const trk=new T.MeshStandardMaterial({map:(()=>{const t=tuTex('trk',128,16,(g,w,h)=>{g.fillStyle='#202024';g.fillRect(0,0,w,h);g.fillStyle='#3a3a40';for(let x=0;x<w;x+=8)g.fillRect(x,0,5,h);g.fillStyle='#101012';for(let x=0;x<w;x+=8)g.fillRect(x+5,0,1,h);});t.wrapS=THREE.RepeatWrapping;t.repeat.set(4,1);return t;})(),roughness:.9,metalness:.4});
+  for(const z of [.25,-.25]){add(tuRB(1.02,.2,.16,.09),trk,0,.11,z);add(tuRB(.8,.1,.12,.03),K,0,.13,z);for(const x of [-.43,.43]){add(new T.CylinderGeometry(.075,.075,.17,16),M,x,.11,z).rotation.x=Math.PI/2;}for(let i=0;i<4;i++)add(new T.CylinderGeometry(.035,.035,.17,10),M,-.27+i*.18,.05,z).rotation.x=Math.PI/2;}
+  add(new T.CylinderGeometry(.18,.2,.08,20),M,0,.24,0);const up=new T.Group();up.position.y=.3;G.add(up);G.userData.up=up;
+  // 상부: 둥근 차체 · 엔진 덮개 통풍구 · 카운터웨이트(경고 줄무늬) · 캡(유리+기둥) · 난간 · 배기관 · 경광등
+  add(tuRB(.78,.24,.54,.05),Y,-.05,.1,0,up);add(tuRB(.26,.28,.56,.08),tuPaint('#3a3c42',.6,.45),-.4,.14,0,up);add(new T.BoxGeometry(.012,.05,.5),tuHaz(),-.535,.12,0,up);
+  for(let i=0;i<5;i++)add(new T.BoxGeometry(.05,.012,.2),K,-.24+i*.06,.225,-.12,up);
+  const cab=new T.Group();cab.position.set(.13,.36,.13);up.add(cab);add(tuRB(.3,.32,.25,.03),Y,0,0,0,cab);add(new T.BoxGeometry(.24,.24,.255),gl,.01,.02,0,cab);add(new T.BoxGeometry(.26,.012,.26),Y,.0,.13,0,cab);
+  for(const [x,z] of [[.12,.12],[.12,-.12],[-.12,.12],[-.12,-.12]])add(new T.BoxGeometry(.025,.3,.025),Y,x,0,z,cab);add(new T.BoxGeometry(.03,.02,.24),K,.02,.17,0,cab);
+  add(new T.CylinderGeometry(.018,.018,.16,8),tuChrome(),-.25,.32,-.18,up);add(new T.CylinderGeometry(.025,.03,.05,10),new T.MeshBasicMaterial({color:'#ff8a1a',toneMapped:false}),.13,.55,.13,up);
+  for(const x of [-.3,0])add(new T.CylinderGeometry(.008,.008,.12,6),Y,x,.28,-.25,up);add(new T.CylinderGeometry(.008,.008,.32,6),Y,-.15,.34,-.25,up).rotation.z=Math.PI/2;
+  // 붐·암: 옆모습 윤곽을 뽑아낸 테이퍼 강판 + 유압 실린더(노랑 통 + 크롬 막대)
+  const prof=(pts,d)=>{const sh=new T.Shape();pts.forEach(([x,y],i)=>i?sh.lineTo(x,y):sh.moveTo(x,y));sh.closePath();const g=new T.ExtrudeGeometry(sh,{depth:d,bevelEnabled:true,bevelThickness:.012,bevelSize:.012,bevelSegments:2});g.translate(0,0,-d/2);return g;};
+  const cyl=(len,par,x,y,rz)=>{const g=new T.Group();g.position.set(x,y,0);g.rotation.z=rz;par.add(g);add(new T.CylinderGeometry(.028,.028,len*.6,10),Y,0,len*.3,0,g);add(new T.CylinderGeometry(.016,.016,len*.5,10),tuChrome(),0,len*.75,0,g);return g;};
+  const bm=new T.Group();bm.position.set(.22,.22,-.08);up.add(bm);G.userData.boom=bm;add(prof([[0,-.06],[.5,.0],[.92,-.04],[.92,.05],[.45,.1],[0,.06]],.1),Y,0,0,0,bm);cyl(.42,bm,.08,-.08,-1.2);cyl(.4,bm,.42,.1,-1.75);
+  add(new T.CylinderGeometry(.03,.03,.12,10),M,0,0,0,bm).rotation.x=Math.PI/2;
+  const sk=new T.Group();sk.position.set(.88,0,0);bm.add(sk);G.userData.stick=sk;add(prof([[-.05,.04],[.05,.04],[.04,-.62],[-.03,-.62]],.09),Y,0,0,0,sk);cyl(.36,sk,.06,-.05,Math.PI*.98);add(new T.CylinderGeometry(.03,.03,.11,10),M,0,0,0,sk).rotation.x=Math.PI/2;
+  const bk=new T.Group();bk.position.set(0,-.6,0);sk.add(bk);G.userData.bucket=bk;const bs=new T.Shape();bs.moveTo(0,0);bs.lineTo(.2,-.02);bs.quadraticCurveTo(.25,-.2,.08,-.25);bs.lineTo(-.02,-.06);bs.lineTo(0,0);
+  const bg=new T.ExtrudeGeometry(bs,{depth:.22,bevelEnabled:true,bevelThickness:.01,bevelSize:.01,bevelSegments:1});bg.translate(0,0,-.11);add(bg,tuPaint('#5a5e66',.8,.5),0,0,0,bk);for(const z of [.118,-.118])add(new T.BoxGeometry(.2,.2,.012),Y,.09,-.12,z,bk);
+  for(let i=0;i<5;i++)add(new T.ConeGeometry(.016,.06,5),tuChrome(),.08,-.27,-.09+i*.045,bk).rotation.z=Math.PI*.8;
+  const mk=add(new T.SphereGeometry(.09,10,8),new T.MeshStandardMaterial({map:tuRockTex(0),color:'#a08a70',roughness:1}),.1,-.12,0,bk);G.userData.load=mk;return G;}
+function tuCarrier(){const T=THREE,G=new T.Group(),B=tuPaint('#2a6ac8',.45,.4),K=tuPaint('#1c1c20',.4,.6),M=tuPaint('#8a8e96',.85,.35),add=(g,m,x,y,z,p=G)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};
+  for(const z of [.15,-.15])add(new T.BoxGeometry(1.32,.07,.06),K,0,.2,z);add(tuRB(1.0,.05,.48,.012),tuPaint('#5a5e66',.7,.5),-.18,.26,0);for(const z of [.235,-.235]){add(new T.BoxGeometry(1.0,.08,.025),B,-.18,.3,z);add(new T.BoxGeometry(1.0,.03,.026),tuHaz(),-.18,.24,z);}
+  for(let i=0;i<4;i++)for(const z of [.24,-.24])add(new T.BoxGeometry(.025,.16,.025),M,-.6+i*.28,.36,z);
+  add(tuRB(.34,.38,.48,.05),B,.6,.43,0);add(tuRB(.24,.18,.49,.02),tuGlass(),.65,.5,0);add(new T.BoxGeometry(.01,.16,.36),tuGlass(),.772,.49,0);add(tuRB(.06,.08,.5,.025),K,.79,.28,0);
+  for(const z of [.13,-.13]){add(new T.CircleGeometry(.025,12),new T.MeshBasicMaterial({color:'#fff6c8',toneMapped:false}),.821,.32,z).rotation.y=Math.PI/2;}for(const z of [.28,-.28]){add(tuRB(.02,.09,.05,.008),K,.7,.55,z);}
+  add(new T.CylinderGeometry(.018,.018,.36,8),tuChrome(),.4,.55,.2);
+  const W=[];for(const x of [.5,0,-.5])for(const s of [1,-1]){const w=new T.Group();w.position.set(x,.1,s*.22);G.add(w);const wh=tuWheel(.1,.08,x<0);if(s<0)wh.rotation.y=Math.PI;w.add(wh);W.push(w);}
+  const bc=add(new T.CylinderGeometry(.035,.04,.05,10),new T.MeshBasicMaterial({color:'#ffb020',toneMapped:false}),.6,.65,0);G.userData={beacon:bc,wheels:W};return G;}
 // 강철 자재 한 짐: H빔 묶음 + 강철 코일
 function tuCargo(){const T=THREE,G=new T.Group(),hb=new T.MeshStandardMaterial({color:'#c8501e',metalness:.7,roughness:.4}),st=new T.MeshStandardMaterial({color:'#a8b0b8',metalness:.95,roughness:.25});
   const I=()=>{const sh=new T.Shape();sh.moveTo(-.05,-.04);sh.lineTo(.05,-.04);sh.lineTo(.05,-.03);sh.lineTo(.012,-.03);sh.lineTo(.012,.03);sh.lineTo(.05,.03);sh.lineTo(.05,.04);sh.lineTo(-.05,.04);sh.lineTo(-.05,.03);sh.lineTo(-.012,.03);sh.lineTo(-.012,-.03);sh.lineTo(-.05,-.03);sh.closePath();const g=new T.ExtrudeGeometry(sh,{depth:.78,bevelEnabled:false});g.translate(0,0,-.39);g.rotateY(Math.PI/2);return g;};
@@ -12429,7 +12470,7 @@ function tuCargo(){const T=THREE,G=new T.Group(),hb=new T.MeshStandardMaterial({
   const strap=new T.MeshStandardMaterial({color:'#ffd21a',roughness:.6});for(const x of [-.3,.14]){const s=new T.Mesh(new T.BoxGeometry(.03,.2,.36),strap);s.position.set(x,.1,0);G.add(s);}
   const co=new T.Mesh(new T.TorusGeometry(.12,.07,12,24),st);co.position.set(.36,.15,0);G.add(co);const co2=new T.Mesh(new T.CylinderGeometry(.19,.19,.12,24,1,true),st);co2.rotation.x=Math.PI/2;co2.position.set(.36,.15,0);G.add(co2);return G;}
 // 인부(용접공): 안전모 · 용접 마스크 · 반사띠 조끼 · 장갑 · 토치와 호스 / pose: kneel 무릎 꿇기 · stand 서기 · reach 위로 뻗기
-function tuWorker(pose='stand'){const T=THREE,G=new T.Group(),S=(c,m=.1,r=.7)=>new T.MeshStandardMaterial({color:c,metalness:m,roughness:r}),add=(g,m,x,y,z,p=G)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};
+function tuWorker(pose='stand',o={}){const T=THREE,G=new T.Group(),S=(c,m=.1,r=.7)=>new T.MeshStandardMaterial({color:c,metalness:m,roughness:r}),add=(g,m,x,y,z,p=G)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};
   const pants=S('#24324e'),vest=S('#ff7a1a'),refl=new T.MeshStandardMaterial({color:'#e8f0ff',metalness:.4,roughness:.25,emissive:'#404850'}),skin=S('#e8b890'),glove=S('#7a5030'),hat=S('#ffd21a',.2,.35),mask=S('#2a3030',.3,.5),boot=S('#2a2018');
   const kneel=pose==='kneel',hip=kneel?.2:.38;
   if(kneel){add(new T.BoxGeometry(.07,.07,.2),pants,-.045,.2,.05);add(new T.BoxGeometry(.07,.2,.07),pants,-.045,.1,.15);add(new T.BoxGeometry(.07,.07,.2),pants,.045,.06,-.04);add(new T.BoxGeometry(.08,.06,.12),boot,-.045,.03,.19);add(new T.BoxGeometry(.08,.05,.1),boot,.045,.03,-.15);}
@@ -12442,7 +12483,8 @@ function tuWorker(pose='stand'){const T=THREE,G=new T.Group(),S=(c,m=.1,r=.7)=>n
   const tip=new T.Object3D();tip.position.set(0,0,.2);torch.add(tip);
   const sh2=new T.Group();sh2.position.set(-.1,hip+.22,0);G.add(sh2);add(new T.BoxGeometry(.06,.06,.14),vest,0,-.04,.05,sh2);add(new T.BoxGeometry(.06,.06,.06),glove,0,-.06,.13,sh2);
   if(pose==='reach'){sh.rotation.x=-1.0;sh2.rotation.x=-.6;}else if(kneel){sh.rotation.x=.15;sh2.rotation.x=.3;}else{sh.rotation.x=-.25;sh2.rotation.x=.2;}
-  G.userData={tip,arm:sh,pose};return G;}
+  if(o.harness){/* 안전대: 가슴·어깨 X자 끈 + 등 고리 */const hm=S('#e8402f',.1,.6);for(const r of [.5,-.5]){const st=add(new T.BoxGeometry(.025,.28,.012),hm,0,hip+.14,.057);st.rotation.z=r;const sb=add(new T.BoxGeometry(.025,.28,.012),hm,0,hip+.14,-.057);sb.rotation.z=r;}add(new T.BoxGeometry(.19,.025,.12),hm,0,hip+.02,0);add(new T.TorusGeometry(.018,.005,6,12),S('#c8ccd2',.9,.3),0,hip+.22,-.065);}
+  const back=new T.Object3D();back.position.set(0,hip+.22,-.07);G.add(back);G.userData={tip,arm:sh,pose,back};return G;}
 // 차량: 승용 · 소형 · SUV · 스포츠 · 전기차 · 트럭 · 버스
 function tuCar(type,col){const T=THREE,G=new T.Group(),paint=new T.MeshStandardMaterial({color:col,metalness:.3,roughness:.32}),glass=new T.MeshStandardMaterial({color:'#18263a',metalness:.9,roughness:.08}),K=new T.MeshStandardMaterial({color:'#141416',roughness:.85}),rim=new T.MeshStandardMaterial({color:'#c8ccd2',metalness:1,roughness:.25}),
   hl=new T.MeshBasicMaterial({color:'#fff8e0',toneMapped:false}),tl=new T.MeshBasicMaterial({color:'#ff2a2a',toneMapped:false});
@@ -12521,8 +12563,9 @@ function tuScene(env){const t=tuCur();if(TU.done.includes(t.k))return tuOpenScen
   gan.position.x=AX0+.05;
   // 용접공 3명: 바닥(무릎) · 중간 발판 · 위 발판(손 뻗기) — 모두 벽 쪽 아치를 용접
   const W1=tuWorker('kneel');W1.position.set(AX0+.22,0,-.62);W1.rotation.y=Math.PI;sc.add(W1);
-  const W2=tuWorker('stand');W2.position.set(AX0+.2,1.53,-1.35);W2.rotation.y=Math.PI;sc.add(W2);
-  const W3=tuWorker('reach');W3.position.set(AX0+.18,2.73,-.58);W3.rotation.y=Math.PI;sc.add(W3);const WK=[W1,W2,W3];
+  const W2=tuWorker('stand',{harness:1});W2.position.set(AX0+.2,1.53,-1.35);W2.rotation.y=Math.PI;sc.add(W2);
+  const W3=tuWorker('reach',{harness:1});W3.position.set(AX0+.18,2.73,-.58);W3.rotation.y=Math.PI;sc.add(W3);
+  /* 높은 곳 인부는 안전대 줄을 난간에 걸어 둠 */const lany=(w,ax,ay,az)=>{w.updateMatrixWorld(true);const p=w.userData.back.getWorldPosition(new T.Vector3());const a=new T.Vector3(ax,ay,az),m=p.clone().lerp(a,.5);m.y-=.12;sc.add(new T.Mesh(new T.TubeGeometry(new T.QuadraticBezierCurve3(p,m,a),12,.008,5,false),new T.MeshStandardMaterial({color:'#ffd21a',roughness:.6})));};lany(W2,AX0+.05+.34,1.82,-1.1);lany(W3,AX0+.05+.34,3.02,-.4);const WK=[W1,W2,W3];
   const WL=WK.map(()=>{const l=new T.PointLight('#bfe0ff',0,2.4);sc.add(l);return l;});
   // 강철 자재: 운반차가 싣고 와서 내려놓으면, 아치를 세울수록 줄어듦
   const cr=tuCarrier();cr.position.set(-12,0,.5);sc.add(cr);const cargo=tuCargo();sc.add(cargo);const PILE=new T.Vector3(AX0+.5,.02,.08);
@@ -12626,18 +12669,25 @@ function tuImmInside(env){const T=THREE,sc=new T.Scene();if(env)sc.environment=e
   for(let i=0;i<14;i++){const x=-14+i*2.1;add(new T.BoxGeometry(.08,3.3,.06),S('#141414',.1,.6),x,1.4,-2.28);add(new T.BoxGeometry(.08,.06,2.5),S('#141414',.1,.6),x,2.76,-1.1);add(new T.BoxGeometry(.2,.02,2.5),S('#8a9098',.9,.3),x,.01,-1.1);}
   // 포장 안 된 바닥(콘크리트) → 포장된 아스팔트(뒤쪽) · 포장기 · 롤러
   const asp=add(new T.BoxGeometry(1,.04,2.3),S('#2a2a2e',0,.9),0,.02,-1.15);const lineM=new T.MeshBasicMaterial({color:'#f2f2f2'});
-  const pav=new T.Group();sc.add(pav);{const Y=S('#f2b51e',.4,.4),K=S('#1c1c20',.3,.8);add(new T.BoxGeometry(1.1,.4,1.6),Y,0,.38,0,pav);add(new T.BoxGeometry(.5,.35,1.7),S('#3a3a40',.5,.5),.75,.4,0,pav);add(new T.BoxGeometry(.4,.4,.6),Y,-.2,.78,.3,pav);add(new T.BoxGeometry(.3,.3,.5),new T.MeshStandardMaterial({color:'#24384e',metalness:.9,roughness:.1}),-.2,.82,.3,pav);
+  const pav=new T.Group();sc.add(pav);{const Y=tuPaint('#f2b51e',.35,.45),K=S('#1c1c20',.3,.8);add(tuRB(1.1,.4,1.6,.05),Y,0,.38,0,pav);add(new T.BoxGeometry(.5,.35,1.7),S('#3a3a40',.5,.5),.75,.4,0,pav);add(new T.BoxGeometry(.4,.4,.6),Y,-.2,.78,.3,pav);add(new T.BoxGeometry(.3,.3,.5),new T.MeshStandardMaterial({color:'#24384e',metalness:.9,roughness:.1}),-.2,.82,.3,pav);
     for(const z of [.6,-.6])add(new T.BoxGeometry(1.0,.22,.24),K,0,.12,z,pav);add(new T.BoxGeometry(.2,.12,2.3),S('#5a5a60',.6,.4),-.65,.08,0,pav);const bc=add(new T.CylinderGeometry(.05,.05,.06,10),new T.MeshBasicMaterial({color:'#ff9a20',toneMapped:false}),-.2,1.02,.3,pav);pav.userData.bc=bc;}
   pav.position.set(-1.5,0,-1.15);
-  const rol=new T.Group();sc.add(rol);{const Y=S('#f2b51e',.4,.4),D=S('#a8acb2',.9,.3);add(new T.BoxGeometry(.8,.35,.8),Y,0,.45,0,rol);add(new T.BoxGeometry(.3,.35,.4),new T.MeshStandardMaterial({color:'#24384e',metalness:.9,roughness:.1}),-.1,.82,0,rol);for(const x of [.45,-.45]){const r=add(new T.CylinderGeometry(.24,.24,.9,20),D,x,.24,0,rol);r.rotation.x=Math.PI/2;}}
+  const rol=new T.Group();sc.add(rol);{const Y=tuPaint('#f2b51e',.35,.45),D=S('#a8acb2',.9,.3);add(tuRB(.8,.35,.8,.05),Y,0,.45,0,rol);add(new T.BoxGeometry(.3,.35,.4),new T.MeshStandardMaterial({color:'#24384e',metalness:.9,roughness:.1}),-.1,.82,0,rol);for(const x of [.45,-.45]){const r=add(new T.CylinderGeometry(.24,.24,.9,20),D,x,.24,0,rol);r.rotation.x=Math.PI/2;}}
   rol.position.set(-5,0,-1.15);
   // 조명 달기: 고소 작업차 + 인부 · 천장 조명(설치될수록 켜짐)
   const lamps=[];for(let i=0;i<12;i++){const l=add(new T.BoxGeometry(.3,.05,.12),new T.MeshBasicMaterial({color:'#3a3a32',toneMapped:false}),-13+i*2.1+1.05,2.74,-1.9);lamps.push(l);}
-  const lift=new T.Group();sc.add(lift);{const Sm=S('#e8402f',.5,.4);add(new T.BoxGeometry(.6,.14,.5),Sm,0,.12,0,lift);for(let i=0;i<4;i++){const x1=add(new T.BoxGeometry(.6,.03,.03),S('#8a8e96',.8,.3),0,.35+i*.4,.2,lift);x1.rotation.z=i%2?.5:-.5;}add(new T.BoxGeometry(.65,.06,.5),Sm,0,1.95,0,lift);const w=tuWorker('reach');w.position.set(0,1.98,-.1);w.rotation.y=Math.PI;lift.add(w);lift.userData.w=w;}
+  const lift=new T.Group();sc.add(lift);{const Sm=S('#e8402f',.5,.4);add(new T.BoxGeometry(.6,.14,.5),Sm,0,.12,0,lift);for(let i=0;i<4;i++){const x1=add(new T.BoxGeometry(.6,.03,.03),S('#8a8e96',.8,.3),0,.35+i*.4,.2,lift);x1.rotation.z=i%2?.5:-.5;}add(new T.BoxGeometry(.65,.06,.5),Sm,0,1.95,0,lift);const w=tuWorker('reach',{harness:1});w.position.set(0,1.98,-.1);w.rotation.y=Math.PI;lift.add(w);lift.userData.w=w;for(const z of [.25,-.25])add(new T.CylinderGeometry(.012,.012,.65,6),Sm,0,2.45,z,lift).rotation.z=Math.PI/2;for(const x of [.31,-.31]){add(new T.CylinderGeometry(.012,.012,.5,6),Sm,x,2.45,0,lift).rotation.x=Math.PI/2;add(new T.CylinderGeometry(.012,.012,.5,6),Sm,x,2.2,0,lift);}}
   lift.position.set(2.2,0,-1.55);
   // 이음부 용접: 바닥 무릎 · 벽 서서 · 사다리 위
   const J=-14+8*2.1;const W1=tuWorker('kneel');W1.position.set(J+.15,0,-1.95);W1.rotation.y=Math.PI;sc.add(W1);const W2=tuWorker('stand');W2.position.set(J-.15,0,-1.95);W2.rotation.y=Math.PI;sc.add(W2);
-  const lad=new T.Group();sc.add(lad);lad.position.set(J+.05,0,-1.6);{const Y=S('#d8d8d8',.8,.3);for(const z of [-.12,.12])add(new T.BoxGeometry(.04,1.6,.04),Y,0,.8,z,lad);for(let i=0;i<6;i++)add(new T.BoxGeometry(.03,.03,.26),Y,0,.15+i*.27,0,lad);}const W3=tuWorker('reach');W3.position.set(J+.05,1.45,-1.55);W3.rotation.y=Math.PI;sc.add(W3);
+  /* v376 사다리 대신 이동식 비계(바퀴 잠금·사방 난간·발끝막이·안쪽 사다리) 위에서 안전대를 걸고 작업 */const sca=new T.Group();sc.add(sca);sca.position.set(J+.05,0,-1.62);{const P=S('#c8ccd2',.85,.3),Rd=S('#e8402f',.4,.5),Wd=S('#b8864a',0,.8);const W_=.7,D_=.62,H_=1.4;
+    for(const x of [-W_/2,W_/2])for(const z of [-D_/2,D_/2]){add(new T.CylinderGeometry(.018,.018,H_+.62,8),P,x,(H_+.62)/2+.08,z,sca);const wh=add(new T.CylinderGeometry(.05,.05,.04,12),S('#1c1c20',.2,.8),x,.05,z,sca);wh.rotation.x=Math.PI/2;add(new T.BoxGeometry(.03,.03,.06),Rd,x+.04,.05,z,sca);}
+    for(const y of [.12,.6,1.0,H_])for(const z of [-D_/2,D_/2])add(new T.CylinderGeometry(.012,.012,W_,6),P,0,y,z,sca).rotation.z=Math.PI/2;for(const y of [.12,.6,1.0,H_])for(const x of [-W_/2,W_/2])add(new T.CylinderGeometry(.012,.012,D_,6),P,x,y,0,sca).rotation.x=Math.PI/2;
+    for(const z of [-D_/2,D_/2]){const br=add(new T.CylinderGeometry(.01,.01,Math.hypot(W_,.88),6),P,0,.56,z,sca);br.rotation.z=Math.atan2(W_,.88);}
+    add(new T.BoxGeometry(W_,.035,D_),Wd,0,H_+.02,0,sca);for(const y of [H_+.28,H_+.55])for(const z of [-D_/2,D_/2])add(new T.CylinderGeometry(.014,.014,W_,6),Rd,0,y,z,sca).rotation.z=Math.PI/2;for(const y of [H_+.28,H_+.55])for(const x of [-W_/2,W_/2])add(new T.CylinderGeometry(.014,.014,D_,6),Rd,x,y,0,sca).rotation.x=Math.PI/2;
+    for(const z of [-D_/2,D_/2])add(new T.BoxGeometry(W_,.1,.012),tuHaz(),0,H_+.09,z,sca);for(const x of [-W_/2,W_/2])add(new T.BoxGeometry(.012,.1,D_),tuHaz(),x,H_+.09,0,sca);
+    for(let i=0;i<5;i++)add(new T.BoxGeometry(.012,.012,.22),P,-W_/2+.06,.3+i*.25,0,sca);}
+  const W3=tuWorker('reach',{harness:1});W3.position.set(J+.05,1.43,-1.7);W3.rotation.y=Math.PI;sc.add(W3);{W3.updateMatrixWorld(true);const p=W3.userData.back.getWorldPosition(new T.Vector3()),a=new T.Vector3(J+.05+.35,1.95,-1.62+.31),m=p.clone().lerp(a,.5);m.y-=.12;sc.add(new T.Mesh(new T.TubeGeometry(new T.QuadraticBezierCurve3(p,m,a),12,.008,5,false),S('#ffd21a',0,.6)));}
   const WK=[W1,W2,W3],WL=WK.map(()=>{const l=new T.PointLight('#bfe0ff',0,2.4);sc.add(l);return l;});
   const NS=60,g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(new Float32Array(NS*3),3));const WSp=new T.Points(g,new T.PointsMaterial({color:'#fff2c0',size:.07,map:tuSoft(),transparent:true,depthWrite:false,blending:T.AdditiveBlending,toneMapped:false}));sc.add(WSp);const sv=Array.from({length:NS},()=>[0,0,0,2]);
   const label=(()=>{const c=document.createElement('canvas');c.width=256;c.height=64;const x=c.getContext('2d');x.fillStyle='#1a5ac0';x.fillRect(0,0,256,64);x.fillStyle='#fff';x.font='bold 30px sans-serif';x.textAlign='center';x.fillText('가덕해저터널',128,42);const t=new T.CanvasTexture(c);t.encoding=T.sRGBEncoding;return t;})();
@@ -13586,7 +13636,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=375;
+const GVER=376;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
