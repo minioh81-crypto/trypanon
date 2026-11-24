@@ -888,7 +888,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v373 · 2026-11-24</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v374 · 2026-11-24</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -12629,7 +12629,7 @@ function tuOpenScene(env){const T=THREE,t=tuCur(),sc=new T.Scene();if(env)sc.env
   sc.userData={tbm:null,shake:{x:0,y:0},burst:()=>{},tick:(tt,dt)=>{cars.forEach(c=>{const u=c.userData;c.position.x+=u.dir*u.v*dt;if(c.position.x>15)c.position.x=-15;if(c.position.x<-15)c.position.x=15;(u.W||[]).forEach(w=>{w.rotation.z=-c.position.x*4*u.dir;});});fans.forEach(f=>{f.rotation.x=tt*14;});if(seaTick)seaTick(tt,dt);}};
   return sc;}
 // v371 침매터널은 구간(1km)마다 두 단계: 앞 60% 함체 거치(바닷속) → 뒤 40% 함체 안 공사(이음부 용접·방수·포장·조명)
-const tuImmPh=()=>{const t=tuCur();if(!t.imm)return '';const s=tuSec(),L=Math.min(1000,tuLen(t)-s*1000),f=(tuPr()-s*1000)/Math.max(1,L);return f<.6&&TU.st!=='wait'?'place':'inside';};
+/* v374 진행이 느려도 두 장면을 다 보이게: 45초마다 함체 거치 ↔ 함체 안 공사 번갈아 (자재 대기 중엔 함체 안 공사) */const tuImmPh=()=>{const t=tuCur();if(!t.imm)return '';if(TU.st==='wait')return 'inside';return Math.floor(Date.now()/45000)%2?'inside':'place';};
 function tuImmInside(env){const T=THREE,sc=new T.Scene();if(env)sc.environment=env;sc.fog=new T.Fog('#0e1a24',10,24);sc.background=new T.Color('#0a1622');
   sc.add(new T.HemisphereLight('#fff4e0','#202830',.5));const d=new T.DirectionalLight('#fff0d8',.6);d.position.set(2,6,8);sc.add(d);const amb=new T.PointLight('#ffe0b0',.9,14);amb.position.set(-2,2.2,-.4);sc.add(amb);
   const add=(g,m,x,y,z,p=sc)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;};const S=(c,m=.2,r=.8)=>new T.MeshStandardMaterial({color:c,metalness:m,roughness:r});
@@ -12660,7 +12660,7 @@ function tuImmInside(env){const T=THREE,sc=new T.Scene();if(env)sc.environment=e
   const NS=60,g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(new Float32Array(NS*3),3));const WSp=new T.Points(g,new T.PointsMaterial({color:'#fff2c0',size:.07,map:tuSoft(),transparent:true,depthWrite:false,blending:T.AdditiveBlending,toneMapped:false}));sc.add(WSp);const sv=Array.from({length:NS},()=>[0,0,0,2]);
   const label=(()=>{const c=document.createElement('canvas');c.width=256;c.height=64;const x=c.getContext('2d');x.fillStyle='#1a5ac0';x.fillRect(0,0,256,64);x.fillStyle='#fff';x.font='bold 30px sans-serif';x.textAlign='center';x.fillText('가덕해저터널',128,42);const t=new T.CanvasTexture(c);t.encoding=T.sRGBEncoding;return t;})();
   add(new T.PlaneGeometry(1.2,.3),new T.MeshBasicMaterial({map:label,toneMapped:false}),-6,2.4,-2.28);
-  sc.userData={tbm:null,shake:{x:0,y:0},burst:()=>{},tick:(tt,dt)=>{const s=tuSec(),t=tuCur(),L=Math.min(1000,tuLen(t)-s*1000),f=Math.max(0,Math.min(1,((tuPr()-s*1000)/Math.max(1,L)-.6)/.4)),dig=TU.st==='dig';
+  sc.userData={tbm:null,shake:{x:0,y:0},burst:()=>{},tick:(tt,dt)=>{const s=tuSec(),t=tuCur(),L=Math.min(1000,tuLen(t)-s*1000),f=Math.max(0,Math.min(1,(tuPr()-s*1000)/Math.max(1,L))),dig=TU.st==='dig';
       // 진행만큼: 아스팔트가 앞(+x)으로 깔리고 · 조명이 차례로 켜짐 · 포장기가 앞으로
       const front=-13+f*16;asp.scale.x=Math.max(.01,front+13);asp.position.x=-13+(front+13)/2;pav.position.x=front+.6+Math.sin(tt*.3)*.05;pav.userData.bc.material.color.setHSL(.08,1,.45+.25*Math.sin(tt*12));
       rol.position.x=Math.max(-12.5,front-2.2)+Math.sin(tt*.6)*.9;rol.children.forEach(c=>{if(c.geometry.type==='CylinderGeometry')c.rotation.y=0;});
@@ -13604,7 +13604,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=373;
+const GVER=374;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
