@@ -888,7 +888,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v380 · 2026-11-24</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v381 · 2026-11-24</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -12257,7 +12257,7 @@ function tuRender(){const B=$('#tuBody');if(!B)return;if(tuTab!=='dig'){try{tuHu
     return `<div class="ifcard"><span class="ic">${x.ic}</span><div><b>${x.n}</b><small>${x.d} · ${x.km.toLocaleString('ko-KR')}km${x.sea?' · 해저':''}</small><small style="color:${dn?'#7ae08a':'#8ac8ff'}">${dn?'✓ 완공 · 개통':pr?`${fmtD(pr)} 뚫음 (${Math.floor(pr/tuLen(x)*100)}%)`:un?'착공 가능':'🔒 앞 터널을 완공하면 열려요'}</small></div><button class="ifbtn" type="button" data-tug="${x.k}" ${un&&!cur?'':'disabled'}>${cur?'공사 중':dn?'다시 보기':'현장으로'}</button></div>`;}).join('')}
     <div style="font-size:11px;color:#8a98b0;text-align:center;margin-top:6px">터널 길이는 실제 길이 · 해저 터널은 수압 때문에 방수시트·급결제가 더 필요해요</div>`;}}
 // v365 톡톡: 누를 때마다 조금 더 파고(불꽃·+m) 50번이면 15초 폭주(굴진 ×2.5)
-function tuTap(e,el,st){const t=tuCur(),p=tuPr(),end=Math.min(tuLen(t),(tuSec()+1)*1000),add=Math.min(Math.max(0,end-p),tuV()*10);TU.prog[t.k]=p+add;TU.money+=add*tuGain();TU.taps++;
+function tuTap(e,el,st){const t=tuCur(),p=tuPr(),end=Math.min(tuLen(t),(tuSec()+1)*1000),add=Math.min(Math.max(0,end-p),tuV()*2);/* v381 톡 1번 = 2초어치(기본 1분 1m면 약 3cm) */TU.prog[t.k]=p+add;TU.money+=add*tuGain();TU.taps++;
   const r=el.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;tuSfx('tap');if(navigator.vibrate)navigator.vibrate(8);try{st.sc.userData.burst(6);}catch(_){}
   const d=document.createElement('div');d.className='ifpop';d.style.left=x+'px';d.style.top=y+'px';d.textContent=TU.boost>0?`🔥 +${add<10?add.toFixed(1):Math.round(add)}m`:`+${add<10?add.toFixed(1):Math.round(add)}m`;el.appendChild(d);setTimeout(()=>d.remove(),900);
   const rp=document.createElement('i');rp.className='turip';rp.style.left=x+'px';rp.style.top=y+'px';el.appendChild(rp);setTimeout(()=>rp.remove(),500);
@@ -13681,7 +13681,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=380;
+const GVER=381;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
