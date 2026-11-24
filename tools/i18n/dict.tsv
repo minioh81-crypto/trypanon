@@ -2322,3 +2322,63 @@ H빔	H-beam	H形鋼
 건설	Build	建設
 증설	Expand	増設
 강화	Upgrade	強化
+통영 해저터널	Tongyeong Undersea Tunnel	統営海底トンネル
+죽령터널	Jungnyeong Tunnel	竹嶺トンネル
+가덕해저터널	Gadeok Undersea Tunnel	加徳海底トンネル
+솔안터널	Solan Tunnel	ソラントンネル
+금정터널	Geumjeong Tunnel	金井トンネル
+대관령터널	Daegwallyeong Tunnel	大関嶺トンネル
+1970년 개통 · 서울 도심 남산을 관통 · 첫 연습 현장	Opened 1970 · Through Namsan in central Seoul · First practice site	1970年開通 · ソウル都心の南山を貫通 · 最初の練習現場
+1932년 개통 · 동양 최초의 해저터널 · 통영~미륵도	Opened 1932 · The first undersea tunnel in Asia · Tongyeong–Mireukdo	1932年開通 · 東洋初の海底トンネル · 統営~弥勒島
+2001년 개통 · 소백산 아래 중앙고속도로 · 개통 당시 국내 최장 도로터널	Opened 2001 · Jungang Expressway under Sobaeksan · Korea's longest road tunnel at the time	2001年開通 · 小白山の下の中央高速道路 · 開通当時国内最長の道路トンネル
+2010년 개통 · 거가대교 · 수심 48m 침매터널	Opened 2010 · Geoga Bridge · Immersed tube 48 m deep	2010年開通 · 巨加大橋 · 水深48mの沈埋トンネル
+2021년 개통 · 국내 최장 해저터널 · 대천항~원산도	Opened 2021 · Korea's longest undersea tunnel · Daecheon Port–Wonsando	2021年開通 · 国内最長の海底トンネル · 大川港~元山島
+2017년 개통 · 국내 최장 도로터널 · 강원 인제~양양	Opened 2017 · Korea's longest road tunnel · Inje–Yangyang, Gangwon	2017年開通 · 国内最長の道路トンネル · 江原 麟蹄~襄陽
+2012년 개통 · 영동선 · 산속에서 한 바퀴 도는 나선형 철도터널	Opened 2012 · Yeongdong Line · Spiral rail tunnel that loops inside the mountain	2012年開通 · 嶺東線 · 山の中で一周するループ式鉄道トンネル
+2010년 개통 · KTX 경부고속선 · 부산 금정산 아래	Opened 2010 · KTX Gyeongbu HSR · Under Geumjeongsan, Busan	2010年開通 · KTX京釜高速線 · 釜山 金井山の下
+2017년 개통 · KTX 강릉선 · 국내 최장 산악 철도터널	Opened 2017 · KTX Gangneung Line · Korea's longest mountain rail tunnel	2017年開通 · KTX江陵線 · 国内最長の山岳鉄道トンネル
+2016년 개통 · 국내 최장 철도터널 · SRT 수서~동탄	Opened 2016 · Korea's longest rail tunnel · SRT Suseo–Dongtan	2016年開通 · 国内最長の鉄道トンネル · SRT 水西~東灘
+시멘트를 만들어요	Makes cement	セメントを作ります
+모래·자갈을 캐요	Digs sand & gravel	砂・砂利を採ります
+시멘트+모래+자갈 → 콘크리트 자동 배합	Cement+sand+gravel → concrete, auto-mixed	セメント+砂+砂利 → コンクリート自動配合
+철근·H빔을 만들어요	Makes rebar & H-beams	鉄筋・H形鋼を作ります
+록볼트를 만들어요	Makes rock bolts	ロックボルトを作ります
+해저용 방수시트·급결제	Undersea waterproof sheets & accelerator	海底用の防水シート・急結剤
+굴진 속도 +10%	Dig speed +10%	掘進速度 +10%
+굴진 속도 +7%	Dig speed +7%	掘進速度 +7%
+수입 +13%	Income +13%	収入 +13%
+해저 굴진 +10%	Undersea digging +10%	海底掘進 +10%
+ · 해저 현장에서 효과	 · works at undersea sites	 · 海底現場で効果
+구간 {} / {}	Section {} / {}	区間 {} / {}
+다음 완공까지 {}	{} to next section	次の完成まで {}
+🏗 구간 {} 완공!	🏗 Section {} done!	🏗 区間 {} 完成!
+🧱 구간 {} 완공 자재	🧱 Materials for section {}	🧱 区間 {} の完成資材
+자동 배합 · 다 모이면 자동 완공	Auto-mix · auto-completes when all are in	自動配合 · 揃えば自動完成
+3D 화면을 톡 누르면 10초 동안 굴진 ×2 · 끌어서 돌려 보기	Tap the 3D view for 10 s of ×2 digging · drag to rotate	3D画面をタップで10秒間掘進×2 · ドラッグで回転
+끌어서 돌려 보기 · 톡 = 굴진 ×2	Drag to rotate · tap = dig ×2	ドラッグで回転 · タップ = 掘進×2
+⏳ 자재 대기 · 구간 끝	⏳ Waiting for materials · end of section	⏳ 資材待ち · 区間の終わり
+🔥 굴진 ×2 · {}초	🔥 Dig ×2 · {}s	🔥 掘進×2 · {}秒
+🎉 개통 완료	🎉 Opened	🎉 開通完了
+🎉 개통	🎉 Opened	🎉 開通
+완공!	Done!	完成!
+✓ 완공 · 개통	✓ Completed · Opened	✓ 完成 · 開通
+{} 뚫음 ({}%)	{} dug ({}%)	{} 掘削 ({}%)
+🔒 앞 터널을 완공하면 열려요	🔒 Opens after finishing the previous tunnel	🔒 前のトンネルを完成すると開きます
+다시 보기	View again	もう一度見る
+(미건설)	(not built)	(未建設)
+짓기 전	Not built yet	建設前
+부품 레벨 합계 {}	Total part level {}	パーツレベル合計 {}
+ · 다음 진화 Lv합 {}	 · next evolution at total Lv {}	 · 次の進化 Lv合計 {}
+ · 최종 진화 완료	 · final evolution reached	 · 最終進化完了
+진화할 때마다 랜턴·연료탱크 → 장갑·군기 → 드론·에너지 윙 → 황금 용·코어가 붙어요	Each evolution adds lanterns & fuel tank → armor & banner → drones & energy wings → golden dragon & core	進化するたびにランタン・燃料タンク → 装甲・軍旗 → ドローン・エナジーウイング → 黄金の竜・コアが付きます
+터널 길이는 실제 길이 · 해저 터널은 수압 때문에 방수시트·급결제가 더 필요해요	Tunnel lengths are real · undersea tunnels need waterproof sheets & accelerator for water pressure	トンネルの長さは実際の長さ · 海底トンネルは水圧のため防水シート・急結剤が必要
+기본	Basic	基本
+고급	Advanced	高級
+희귀	Rare	レア
+영웅	Hero	英雄
+전설	Legend	伝説
+✨ TBM {}단계 「{}」로 진화! 외형이 바뀌었어요	✨ TBM evolved to stage {} "{}"! New look	✨ TBMが{}段階「{}」に進化!外見が変わりました
+🚇 {} 현장으로 이동!	🚇 Moving to {}!	🚇 {}の現場へ移動!
+🔒 일본편 엔딩을 하나 보면 🚇 터널 브레이커가 열려요	🔒 See a Japan ending to unlock 🚇 Tunnel Breaker	🔒 日本編のエンディングを1つ見ると🚇トンネルブレイカーが開きます
+⏳ 구간 끝! 자재가 모이면 자동으로 완공돼요 · 🏭 자재 탭에서 공장을 증설해요	⏳ End of section! It completes when materials are in · expand factories in 🏭 Materials	⏳ 区間の終わり!資材が揃うと自動で完成 · 🏭資材タブで工場を増設
+3D를 불러오는 중이에요 (인터넷 연결 필요)	Loading 3D (internet needed)	3Dを読み込み中(インターネット接続が必要)
