@@ -327,6 +327,14 @@ nav.tabs button[aria-current="page"]::before{content:"";position:absolute;top:0;
 .wtitle{font-family:var(--f-kr);font-size:22px}
 .wstage{flex:none;height:min(34vh,280px);display:flex;justify-content:center;background:radial-gradient(ellipse at 50% 85%,#25343a,#0e1315 70%);border-block:1px solid var(--line)}
 .wstage svg{height:100%;width:auto;max-width:100%;display:block}
+.hero-halo-rays{transform-box:fill-box;transform-origin:center;animation:heroHaloTurn 12s linear infinite}
+.hero-halo-rays.gold{animation-duration:9s;animation-direction:reverse}
+.hero-halo-rays.tier3{animation-duration:7s}
+.hero-halo-glow{animation:heroHaloGlow 2.8s ease-in-out infinite}
+.frozen .hero-halo-rays,.frozen .hero-halo-glow{animation-play-state:paused}
+@keyframes heroHaloTurn{to{transform:rotate(360deg)}}
+@keyframes heroHaloGlow{0%,100%{opacity:.56}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.hero-halo-rays,.hero-halo-glow{animation:none}}
 .wbody{flex:1;min-height:0;overflow-y:auto;display:grid;gap:12px;align-content:start;padding-block:12px calc(env(safe-area-inset-bottom,0px) + 16px);
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wtabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}.wtabs.drag{cursor:grabbing}.wtabs.drag .wtab{pointer-events:none}
@@ -4973,8 +4981,8 @@ function yiHalo(gold){const u='hl'+(++UID),c1=gold?'#fff2b0':'#ffffff',c2=gold?'
   for(let i=0;i<24;i++){const a=i/24*Math.PI*2,w=i%2?.06:.1,r1=26,r2=i%2?78:92;rays+=`<path d="M${(50+Math.cos(a-w)*r1).toFixed(1)},${(52+Math.sin(a-w)*r1).toFixed(1)} L${(50+Math.cos(a)*r2).toFixed(1)},${(52+Math.sin(a)*r2).toFixed(1)} L${(50+Math.cos(a+w)*r1).toFixed(1)},${(52+Math.sin(a+w)*r1).toFixed(1)}Z"/>`;}
   return `<defs><radialGradient id="${u}g"><stop offset="0" stop-color="${c1}" stop-opacity=".95"/><stop offset=".35" stop-color="${c2}" stop-opacity=".55"/><stop offset="1" stop-color="${c2}" stop-opacity="0"/></radialGradient>
     <radialGradient id="${u}r"><stop offset="0" stop-color="${c1}" stop-opacity=".9"/><stop offset="1" stop-color="${c2}" stop-opacity="0"/></radialGradient></defs>
-    <circle cx="50" cy="60" r="92" fill="url(#${u}g)"><animate attributeName="opacity" values=".75;1;.75" dur="3.2s" repeatCount="indefinite"/></circle>
-    <g fill="url(#${u}r)" opacity=".75">${rays}<animateTransform attributeName="transform" type="rotate" from="0 50 52" to="360 50 52" dur="40s" repeatCount="indefinite"/></g>
+    <circle class="hero-halo-glow" cx="50" cy="60" r="92" fill="url(#${u}g)"/>
+    <g class="hero-halo-rays${gold?' gold':''}" fill="url(#${u}r)" opacity=".87">${rays}</g>
     <circle cx="50" cy="38" r="33" fill="none" stroke="${c2}" stroke-width="3" opacity=".9"/><circle cx="50" cy="38" r="33" fill="none" stroke="${c1}" stroke-width="1.2"/><circle cx="50" cy="38" r="38" fill="none" stroke="${c3}" stroke-width=".8" opacity=".6"/>`;}
 function yiSVG(c,o={}){const u='yi'+(++UID),ex=o.expr||'',up=o.pose==='raise',an=!!o.anim,GR=c.sex==='yi2',X=!!o.t3;
   const R=X?'#e02a30':'#b8242a',RD=X?'#7a0c12':'#5e0e12',RL=X?'#ff6a5a':'#e0504a',G=X?'#ffd24a':'#f2c14e',GL=X?'#fff4c0':'#ffe9a0',GD=X?'#a8700e':'#94621a',BK=X?'#4a0c14':'#141016',BL=X?'#7a1a24':'#2a2630',sk='#f3cfae',skD='#b07a56';
@@ -5229,7 +5237,9 @@ function inoSVG(c={},o={}){const up=c.sex==='ino2',u=hvU('in'),sk='#f0c8a4',skD=
 // ★★★ 단계 그림: ★★ 그림 + 뒤에 빛나는 후광(영웅마다 색) + 머리 위 별 셋. sex가 …3이면 …2 그림을 쓰고 감싼다
 const T3COL={qin:['#ffd86a','#b8242a'],zhuge:['#f4f8ff','#3a6ad0'],zheng:['#fff0b0','#2a8ad0'],zhh:['#fff0a0','#7a4ab0'],yi:['#ffd86a','#e8402a'],kim:['#ffe08a','#3a5ad8'],jys:['#fff0a0','#2aa8a0'],kuki:['#ffe08a','#2a4a8a'],oda:['#ffcf5a','#b0182a'],ino:['#fff2a8','#3a9a5a']};
 function t3Back(sx){const k=sx.replace(/3$/,''),[a,b]=T3COL[k]||['#ffe08a','#e8a02a'],u='t3'+(++UID);let r='';for(let i=0;i<16;i++){const an=i/16*Math.PI*2,x1=50+Math.cos(an)*34,y1=92+Math.sin(an)*34,x2=50+Math.cos(an)*78,y2=92+Math.sin(an)*78,w=i%2?4:7;r+=`<path d="M${x1.toFixed(1)},${y1.toFixed(1)} L${(x2+Math.cos(an+Math.PI/2)*w).toFixed(1)},${(y2+Math.sin(an+Math.PI/2)*w).toFixed(1)} L${(x2-Math.cos(an+Math.PI/2)*w).toFixed(1)},${(y2-Math.sin(an+Math.PI/2)*w).toFixed(1)}Z" fill="url(#${u}r)"/>`;}
-  return `<defs><radialGradient id="${u}g"><stop offset="0" stop-color="${a}" stop-opacity=".75"/><stop offset=".55" stop-color="${b}" stop-opacity=".32"/><stop offset="1" stop-color="${b}" stop-opacity="0"/></radialGradient><linearGradient id="${u}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}" stop-opacity=".55"/><stop offset="1" stop-color="${b}" stop-opacity=".05"/></linearGradient></defs><g opacity=".95">${r}<animateTransform attributeName="transform" type="rotate" values="0 50 92;360 50 92" dur="24s" repeatCount="indefinite"/></g><circle cx="50" cy="92" r="72" fill="url(#${u}g)"/><circle cx="50" cy="92" r="58" fill="none" stroke="${a}" stroke-width="1.6" stroke-dasharray="3 4" opacity=".8"/>`;}
+  return `<defs><radialGradient id="${u}g"><stop offset="0" stop-color="${a}" stop-opacity=".75"/><stop offset=".55" stop-color="${b}" stop-opacity=".32"/><stop offset="1" stop-color="${b}" stop-opacity="0"/></radialGradient><linearGradient id="${u}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}" stop-opacity=".66"/><stop offset="1" stop-color="${b}" stop-opacity=".14"/></linearGradient></defs>
+    <circle class="hero-halo-glow" cx="50" cy="92" r="72" fill="url(#${u}g)"/>
+    <g class="hero-halo-rays tier3" opacity=".95">${r}<circle cx="50" cy="92" r="58" fill="none" stroke="${a}" stroke-width="1.6" stroke-dasharray="3 4" opacity=".8"/></g>`;}
 function t3Front(sx){const [a,b]=T3COL[sx.replace(/3$/,'')]||['#ffe08a','#e8a02a'],st=(x,y,k)=>`<path transform="translate(${x},${y}) scale(${k})" d="M0,-6 L1.8,-1.9 L6.2,-1.9 L2.7,.9 L4,5.2 L0,2.6 L-4,5.2 L-2.7,.9 L-6.2,-1.9 L-1.8,-1.9Z" fill="${a}" stroke="${b}" stroke-width=".9"><animate attributeName="opacity" values="1;.55;1" dur="1.6s" begin="${(x/60).toFixed(2)}s" repeatCount="indefinite"/></path>`;const n=/3$/.test(sx)?3:/2$/.test(sx)?2:1;return n===3?st(32,6,1)+st(50,0,1.25)+st(68,6,1):n===2?st(42,3,1.1)+st(58,3,1.1):st(50,1,1.2);}
 // ★★★ 망토(몸 뒤): 이순신 붉은 비단 · 김유신 왕의 자주 망토
 const t3Cape=sx=>{const k=sx.replace(/3$/,''),C={yi:['#d8282e','#7a0c12','#ffd24a'],kim:['#7a1a6a','#3a0a34','#ffd24a']}[k];if(!C)return '';return `<path d="M30,104 Q14,140 8,172 Q50,180 92,172 Q86,140 70,104Z" fill="${C[0]}" stroke="${C[1]}" stroke-width="1.6"/><path d="M14,160 Q50,170 86,160" stroke="${C[2]}" stroke-width="2" fill="none"/><path d="M24,124 Q20,150 16,168 M76,124 Q80,150 84,168" stroke="${C[1]}" stroke-width="1" fill="none" opacity=".6"/>`;};
@@ -6564,6 +6574,7 @@ function swordSVG(kind,id='s',anim=true){
   ${anim?`<g clip-path="url(#${u('cl')})"><rect x="0" y="${y-30}" width="26" height="60" fill="url(#${u('sh')})"><animate attributeName="x" values="-30;400;400" keyTimes="0;.5;1" dur="4.6s" repeatCount="indefinite"/></rect></g>`:''}
  </g>`;}
 let wSw=null;
+const wardHeroHalo=sex=>isGen(sex)&&!sex.endsWith('3')?yiHalo(sex.endsWith('2')):'';
 function renderWard(){if(!WT.some(t=>t.k===wTab))wTab='outfit';
   const c=wardChar();
   if(wTab==='dskin'){renderDsk();return;}
@@ -6581,14 +6592,14 @@ function renderWard(){if(!WT.some(t=>t.k===wTab))wTab='outfit';
   else if(showHrs&&L3OK){if(!wst.querySelector('.hrs3')){wst.innerHTML='<div class="s3wrap" aria-label="신라 군마 3D 미리보기 · 끌어서 돌려 보기"></div><span class="s3hint">끌어서 돌리기 · 두 손가락으로 확대·이동</span>';hrsLive(wst.querySelector('.s3wrap'));}}
   else if(showShip&&L3OK){const st=$('#wStage');if(!st.querySelector('.ship3')){st.innerHTML='<div class="s3wrap" aria-label="'+(isJP?'철갑선':'거북선')+' 3D 미리보기 · 끌어서 돌려 보기"></div><span class="s3hint">끌어서 돌리기 · 두 손가락으로 확대·이동</span>';shipLive(st.querySelector('.s3wrap'));}}
   else if(showHrs)$('#wStage').innerHTML='<p class="wnote">🐎 신라 군마</p>';
-  else $('#wStage').innerHTML=showShip?`<svg viewBox="-70 -16 380 216" role="img" aria-label="${isJP?'철갑선':'거북선'} 미리보기" style="width:100%;max-width:440px">${isJP?tekkoSVG({id:'w',fire:true}):turtleSVG({id:'w'})}</svg>`:`<svg viewBox="-30 -14 160 192" role="img" aria-label="주인공 미리보기">${isGen(c.sex)?yiHalo(/[23]$/.test(c.sex)):''}<ellipse cx="50" cy="168" rx="40" ry="6" fill="rgba(0,0,0,.35)"/>${charG(c)}</svg>`;
+  else $('#wStage').innerHTML=showShip?`<svg viewBox="-70 -16 380 216" role="img" aria-label="${isJP?'철갑선':'거북선'} 미리보기" style="width:100%;max-width:440px">${isJP?tekkoSVG({id:'w',fire:true}):turtleSVG({id:'w'})}</svg>`:`<svg viewBox="-30 -14 160 192" role="img" aria-label="주인공 미리보기">${wardHeroHalo(c.sex)}<ellipse cx="50" cy="168" rx="40" ry="6" fill="rgba(0,0,0,.35)"/>${charG(c)}</svg>`;
   const wb=document.querySelector('#ward .wbody'),keepY=wb?wb.scrollTop:0;setTimeout(()=>{if(wb)wb.scrollTop=keepY;const a=document.querySelector('#wTabs [aria-selected="true"]'),ts=$('#wTabs');if(a&&ts){const l=a.offsetLeft,r=l+a.offsetWidth;if(l<ts.scrollLeft)ts.scrollLeft=l-12;else if(r>ts.scrollLeft+ts.clientWidth)ts.scrollLeft=r-ts.clientWidth+12;}},0);
   $('#wTabs').innerHTML=WT.map(t=>`<button class="wtab" type="button" role="tab" data-t="${t.k}" aria-selected="${t.k===wTab}">${t.n}</button>`).join('');
   const head=['hair','hcol','eyes','skin','hat'].includes(wTab);
   const K=wKey(),HT=wTab==='hero',SXT=wTab==='sex'||HT;
   const card=o=>{const cur=(S.char[K]??(K==='ahair'?'none':undefined))===o.v,tr=wTry&&wTry.k===K&&wTry.v===o.v,own=owns(K,o);
     const pv=Object.assign({},S.char,{[K]:o.v},!SXT&&isGen(S.char.sex)?{sex:S.char.lastSex||'m'}:{},wTab==='sex'&&(o.v==='m'||o.v==='f')&&o.v!==S.char.sex&&!S.char.hair?{hair:o.v==='f'?'tail':'short'}:{});
-    const pic=wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charGC(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${charGC(pv)}</svg>`;
+    const pic=wTab==='hcol'?`<div class="wsw" style="background:${o.c}"></div>`:wTab==='item'&&ITEMSVG[o.v]?`<span class="witem"><svg viewBox="0 0 60 60" aria-hidden="true">${ITEMSVG[o.v]}</svg><svg class="wmini" viewBox="${BODYVB}" aria-hidden="true">${charGC(pv)}</svg></span>`:`<svg viewBox="${head?headVB(pv):BODYVB}" aria-hidden="true">${HT?wardHeroHalo(pv.sex):''}${charGC(pv)}</svg>`;
     return `<button class="wopt ${cur?'on':''} ${tr?'try':''}" type="button" data-v="${o.v}">${pic}<span class="wn">${o.n}</span><span class="wp ${cur?'own':own?'own':S.money<o.p?'no':''}">${cur?'착용 중':own?'보유':won(o.p)}</span></button>`;};
   if(HT&&isCN){const chip=(on,t)=>`<span class="wfx ${on?'on':''}">${on?'✓ ':''}${t}</span>`,dets=(id,det)=>`<details class="wdet" data-det="${id}" ${wDet[id]?'open':''}><summary>ⓘ 보유 효과 자세히 보기</summary>${det}</details>`,
       ok=b=>b?'<b style="color:#7bd88f">(적용 중)</b>':'<span style="color:#ff9a7a">(미보유)</span>';
