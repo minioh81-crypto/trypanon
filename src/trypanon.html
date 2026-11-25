@@ -10484,12 +10484,126 @@ function lmYard(G,o){const r0=o.r,r1=o.r+(o.w||1.5);lmRing(G,r0-.16,r1,o.tex||L3
   if(o.ppl)lmPeople(G,o.pn||9,{r:r0+.62},o.ppl,o.seed||1);
   if(o.path){const pv=l3Add(G,new THREE.BoxGeometry(o.pw||.9,.012,r1-r0+.05),L3M('#fff',{map:L3W(L3TX.plaza(),1,2)}),0,.004,(r0+r1)/2);}}
 function lmCandles(G,n,r,y=0,a0=.2,a1=Math.PI-.2){for(let i=0;i<n;i++){const a=a0+(a1-a0)*i/(n-1),x=Math.cos(a)*r,z=Math.sin(a)*r;l3Add(G,new THREE.CylinderGeometry(.025,.025,.1,8),L3M('#f6efe0'),x,y+.05,z);lampFx(G,x,y+.13,z,{c:'#ffb040',pool:.3,h:.25,r:.018,py:y+.012});}}
+/* 원형 먼 배경은 모형을 돌려도 동상이나 전시관 입구를 가리지 않는다. */
+function lmGwanghwaSky(G){
+  const T=THREE;
+  const draw=(g,w,h,night)=>{
+    const sky=g.createLinearGradient(0,0,0,h*.81);
+    (night?['#0b1430','#182b51','#4d516d']:['#a8d4f0','#b9d9e6','#e5dfc8']).forEach((color,i)=>sky.addColorStop(i/2,color));
+    g.fillStyle=sky;g.fillRect(0,0,w,h);
+    if(night){
+      g.fillStyle='#c9dcf7';for(let i=0;i<31;i++){const x=(i*173+71)%w,y=(i*i*7+37)%(h*.43);g.globalAlpha=.18+i%5*.12;g.fillRect(x,y,1.35,1.35);}g.globalAlpha=1;
+    }else{
+      g.fillStyle='rgba(255,253,236,.43)';for(const [x,y] of [[136,68],[400,112],[761,43],[1090,75],[1398,107],[1811,91]]){
+        g.beginPath();g.ellipse(x,y,72,6,-.04,0,7);g.ellipse(x+12,y-3,35,7,0,0,7);g.fill();}
+    }
+    for(let row=0;row<2;row++){
+      g.fillStyle=night?['#25365a','#303e57'][row]:['#90b6b7','#94adaa'][row];
+      g.beginPath();g.moveTo(0,h*.74);
+      for(let x=0;x<=w;x+=16){const u=x/w*Math.PI*2,y=h*(.685+row*.032-.047*Math.sin(u*2+row)-.032*Math.cos(u*5+row)+.010*Math.sin(u*19));g.lineTo(x,y);}
+      g.lineTo(w,h*.79);g.lineTo(0,h*.79);g.fill();
+    }
+    const street=h*.795,colors=night?['#202b43','#26354e','#303a4c','#353c4d']:['#788c99','#8ca0a7','#abaeaa','#8b9297'];
+    const blocks=[[.028,76,100],[.065,77,112],[.166,66,78],[.202,74,136],[.246,98,92],[.34,85,137],[.39,66,98],[.43,67,110],
+      [.536,76,124],[.586,83,159],[.626,52,102],[.708,76,123],[.762,104,152],[.813,55,107],[.916,64,126],[.951,64,113]];
+    for(const [i,[u,bw,bh]] of blocks.entries()){
+      const x=Math.round(u*w),y=street-bh,side=bw*.19;
+      g.fillStyle=colors[i%4];g.fillRect(x,y,bw-side,bh);
+      g.fillStyle=night?'#171f31':'#667e8b';g.beginPath();g.moveTo(x+bw-side,y);g.lineTo(x+bw,y+8);g.lineTo(x+bw,street);g.lineTo(x+bw-side,street);g.fill();
+      g.fillStyle=night?'#485170':'#aab7bd';g.fillRect(x,y,bw-side,2.5);
+      for(let col=0;col<5;col++)for(let row=0;row<Math.floor((bh-10)/10);row++){
+        const code=(i*7+col*3+row*11)%19;
+        g.fillStyle=night?(code<7?'#b99768':code<10?'#586887':'#233047'):(code<8?'#b7ced6':'#647f91');
+        g.fillRect(x+5+col*(bw-side-6)/5,y+8+row*10,(bw-side-6)/5*.66,4.1);
+      }
+    }
+    g.fillStyle=night?'#2c3442':'#a8a9a0';g.fillRect(0,street,w,h-street);
+  };
+  const day=s3Tex('gwanghwaPlazaDay',2048,512,(g,w,h)=>draw(g,w,h,false));
+  const night=s3Tex('gwanghwaPlazaNight',2048,512,(g,w,h)=>draw(g,w,h,true));
+  const wall=(r,map,transparent)=>l3Add(G,new T.CylinderGeometry(r,r,20,88,1,true),new T.MeshBasicMaterial({
+    map,side:T.BackSide,fog:false,transparent,depthWrite:!transparent
+  }),0,5.9,0);
+  wall(29,day,false);
+  const dusk=wall(28.94,night,true);dusk.renderOrder=-2;
+  L3.anims.push(()=>{const n=L3.night||0;dusk.visible=n>.002;dusk.material.opacity=n;});
+}
+function lmStatueFloodlight(G,x,z,aim,intensity,color){
+  const T=THREE,origin=new T.Vector3(x,.118,z),target=new T.Vector3(...aim);
+  const axis=target.clone().sub(origin).normalize();
+  const fixture=new T.Group();fixture.position.copy(origin);fixture.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),axis);G.add(fixture);
+  const housing=L3M('#303c43',{shininess:19}),metal=L3M('#8d9390',{shininess:25});
+  l3Add(G,new T.BoxGeometry(.263,.032,.181),housing,x,.016,z);
+  l3Add(fixture,new T.CylinderGeometry(.084,.091,.111,12),housing);
+  l3Add(fixture,new T.CylinderGeometry(.085,.085,.014,16),metal,0,.059,0);
+  const lamp=new T.MeshBasicMaterial({color:'#909489'});
+  l3Add(fixture,new T.CylinderGeometry(.071,.071,.006,16),lamp,0,.068,0);
+  const spot=new T.SpotLight(color,0,10,.30,.73,1);
+  spot.position.copy(origin).addScaledVector(axis,.082);
+  spot.target.position.copy(target);G.add(spot,spot.target);
+  const pool=l3Add(G,new T.PlaneGeometry(.64,.47),new T.MeshBasicMaterial({map:glowTex(),color,transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending}),x,.009,z);
+  pool.rotation.x=-Math.PI/2;pool.renderOrder=2;
+  const off=new T.Color('#909489'),on=new T.Color('#fff3cc');
+  L3.anims.push(()=>{const n=L3.night||0;spot.intensity=intensity*n;lamp.color.copy(off).lerp(on,n);pool.visible=n>.002;pool.material.opacity=.49*n;});
+}
+function lmGwanghwaPlaza(G,id){
+  const T=THREE,yi=id==='yisunsin';
+  lmGwanghwaSky(G);
+  const stone=L3M('#9a9d94'),kerb=L3M('#b8b5a8'),earth=L3M('#424b3a'),seat=L3M('#756856'),leaf=L3M('#536d43'),reed=L3M('#6f8151');
+  const slab=(w,h,d,mat,x,y,z)=>l3Add(G,new T.BoxGeometry(w,h,d),mat,x,y,z);
+  for(const s of [-1,1]){
+    for(const z of [-2.1,3.7]){
+      const x=s*(z>0?3.34:3.08);
+      slab(.86,.077,1.60,kerb,x,.038,z);
+      slab(.75,.021,1.49,earth,x,.079,z);
+      for(let i=0;i<8;i++){
+        const b=l3Add(G,new T.IcosahedronGeometry(.137+i%2*.04,1),i%3?leaf:reed,x+((i*7)%5-2)*.133,.151,z+(i-3.5)*.174);
+        b.scale.set(1,.52,.80);
+      }
+      l3Tree(G,x,z-.33,z<0?1.45:1.19,s<0?'#496a47':'#5e7950',{pine:z<0});
+    }
+    const bx=s*2.91,bz=.32;
+    for(const z of [bz-.24,bz+.24])slab(.21,.12,.078,stone,bx,.071,z);
+    slab(.27,.055,.67,seat,bx,.159,bz);
+    lmLamp(G,s*3.64,-.90,'st',1.03);
+    lmLamp(G,s*3.63,2.57,'st',1.03);
+    const tx=s*2.44,tz=yi?3.54:2.9;
+    slab(.29,.049,.17,stone,tx,.025,tz);
+    const note=slab(.294,.025,.195,L3M('#5d6d6d'),tx,.141,tz);
+    note.rotation.x=-.26;
+    slab(.053,.13,.057,stone,tx,.087,tz);
+  }
+  lmPeople(G,5,{z:yi?4.98:3.45,x0:-2.65,x1:2.65,dz:.56},'city',yi?7:11);
+  lmPeople(G,3,{z:-2.69,x0:-2.73,x1:2.73,dz:.3},'city',4);
+  const aim=yi?[0,3.61,.15]:[0,2.47,.21],lampZ=yi?2.34:1.82;
+  lmStatueFloodlight(G,-1.36,lampZ,[0,yi?4.06:2.74,.14],1.83,'#ffd89d');
+  lmStatueFloodlight(G,1.38,lampZ-.18,aim,1.28,'#fff0c4');
+  lmStatueFloodlight(G,-1.10,yi?-1.52:-1.86,[0,aim[1],-.22],.94,'#b6d7ff');
+  if(yi){
+    const jets=[],water=new T.MeshBasicMaterial({color:'#abcfe3',transparent:true,opacity:.55,depthWrite:false});
+    const nozzle=L3M('#626c70');
+    slab(3.08,.023,2.37,L3M('#969e9e',{shininess:42,specular:'#a1afac'}),0,.013,3.80);
+    for(const s of [-1,1])for(let i=0;i<6;i++){
+      const x=s*(.35+(i%3)*.44),z=3.12+Math.floor(i/3)*.62+(i%3)*.16;
+      l3Add(G,new T.CylinderGeometry(.051,.051,.015,10),nozzle,x,.03,z);
+      const jet=l3Add(G,new T.CylinderGeometry(.010,.023,1,8),water,x,.20,z);jet.renderOrder=3;jets.push(jet);
+    }
+    const day=new T.Color('#9dd1e1'),night=new T.Color('#61d4ef');
+    L3.anims.push(t=>{const n=L3.night||0;water.color.copy(day).lerp(night,n);water.opacity=.54+.29*n;
+      jets.forEach((jet,i)=>{const h=.23+.49*(.5+.5*Math.sin(t*2.4-i*.68));jet.scale.y=h;jet.position.y=.039+h/2;});});
+  }else{
+    const bronze=L3M('#927650',{shininess:16});
+    for(const s of [-1,1])for(let i=0;i<3;i++){
+      const x=s*(1.14+i*.48),z=-2.66;
+      l3Add(G,new T.CylinderGeometry(.102,.118,.72,16),kerb,x,.36,z);
+      l3Add(G,new T.CylinderGeometry(.104,.109,.218,16),bronze,x,.498,z);
+      for(const y of [.387,.608])l3Add(G,new T.TorusGeometry(.102,.010,5,16),bronze,x,y,z).rotation.x=Math.PI/2;
+    }
+  }
+}
 function lmDress(G,id){const T=THREE,TX=L3TX;
   switch(id){
-  case 'yisunsin':lmYard(G,{r:3.24,w:1.5,tex:TX.plaza(),col:'#b0b3b0',lamp:'st',ln:6,ls:.8});lmPeople(G,5,{z:2.9,x0:-2.8,x1:2.8,dz:.55},'city',7);break;
-  case 'sejong':
-    for(const x of [-3.55,3.55])for(const z of [-2.4,2.8])lmLamp(G,x,z,'st',.79);
-    lmPeople(G,5,{z:2.96,x0:-2.6,x1:2.6,dz:.62},'city',11);break;
+  case 'yisunsin':case 'sejong':lmGwanghwaPlaza(G,id);break;
   case 'namsan':{lmRing(G,2.5,4.8,TX.plaza(),'#9a9a9a',14);const W=[];for(let i=0;i<34;i++){const a=i*.185+.1;if(Math.abs(Math.atan2(Math.sin(a-Math.PI/2),Math.cos(a-Math.PI/2)))<.3)continue;const r=3.1+(i%3)*.5,h=.35+((i*13)%9)*.12,b=l3Add(G,new T.BoxGeometry(.32,h,.32),L3M(['#8a9ab0','#a8b4c4','#7a8aa0','#c4c0b8'][i%4]),Math.cos(a)*r,h/2,Math.sin(a)*r);b.rotation.y=-a;
       const wm=new T.MeshBasicMaterial({color:'#2a3040'});for(let k=0;k<Math.floor(h/.14);k++){const w2=l3Add(G,new T.PlaneGeometry(.22,.05),wm,Math.cos(a)*(r-.161),.1+k*.14,Math.sin(a)*(r-.161));w2.rotation.y=-a-Math.PI/2;}W.push(wm);}
     const day=new T.Color('#2a3040'),nt=new T.Color('#ffd27a');L3.anims.push(()=>{for(const m of W)m.color.copy(day).lerp(nt,L3.night||0);});
