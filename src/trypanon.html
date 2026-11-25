@@ -2589,6 +2589,90 @@ function lmGwanghwaUplights(u,yi){
     <path d="M-1.05,-.58 l2.05,-.10" stroke="#ffecba" stroke-width=".5"/>
   </g>`).join('');
 }
+function yiTurtleShipArt(u){
+  return `<defs>
+    <linearGradient id="${u}gbhull" x2=".2" y2="1"><stop stop-color="#b18351"/><stop offset=".42" stop-color="#795334"/><stop offset="1" stop-color="#342722"/></linearGradient>
+    <linearGradient id="${u}gbbow" x2="1" y2=".6"><stop stop-color="#b28b58"/><stop offset=".62" stop-color="#765033"/><stop offset="1" stop-color="#5a3d29"/></linearGradient>
+    <linearGradient id="${u}gbroof" x2=".2" y2="1"><stop stop-color="#a1a4a0"/><stop offset=".47" stop-color="#68777b"/><stop offset="1" stop-color="#37484f"/></linearGradient>
+    <linearGradient id="${u}gbsail" x2=".88" y2=".3"><stop stop-color="#ad9e78"/><stop offset=".2" stop-color="#eee4c6"/><stop offset=".6" stop-color="#ddd1ae"/><stop offset=".91" stop-color="#ac9a74"/><stop offset="1" stop-color="#c6b493"/></linearGradient>
+    <linearGradient id="${u}gbfarSail" x2=".8" y2=".6"><stop stop-color="#9b9479"/><stop offset=".34" stop-color="#c4bea0"/><stop offset=".73" stop-color="#ddd4b7"/><stop offset="1" stop-color="#908269"/></linearGradient>
+    <linearGradient id="${u}gbfigure" x2=".7" y2="1"><stop stop-color="#a2ae89"/><stop offset=".38" stop-color="#647f71"/><stop offset="1" stop-color="#2f4f4b"/></linearGradient>
+    <pattern id="${u}gbiron" width="27" height="16" patternUnits="userSpaceOnUse" patternTransform="skewX(-22) rotate(-9)">
+      <path d="M0 8 7 0h13l7 8-7 8H7Z" fill="none" stroke="#30444a" stroke-width="1.9"/>
+      <path d="M2 8 8 2h10" fill="none" stroke="#a4aaa2" stroke-opacity=".46" stroke-width=".85"/>
+      <circle cx="13.5" cy="8" r="1" fill="#d1d1b6" opacity=".66"/>
+    </pattern>
+    <pattern id="${u}gbwood" width="42" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(-10)">
+      <path d="M0 1H42m-42 7H42M5 4h20m3 1h12M0 10h8m24 0h10" fill="none" stroke="#332321" stroke-opacity=".51" stroke-width="1"/>
+      <path d="M0 2H42m-42 7H42" fill="none" stroke="#e5ac71" stroke-opacity=".36" stroke-width=".6"/>
+    </pattern>
+    <pattern id="${u}gbcanvas" width="24" height="17" patternUnits="userSpaceOnUse" patternTransform="rotate(-4)">
+      <path d="M0 4h24M3 13h11m3 0h5m-12-13v17" stroke="#745b44" stroke-opacity=".12" stroke-width=".45"/>
+    </pattern>
+    <clipPath id="${u}gbroofClip"><path d="M172 406Q307 351 454 331Q583 312 653 349Q622 399 560 419L273 475Q211 462 172 406Z"/></clipPath>
+    <path id="${u}gbmainCloth" d="M295 104Q382 81 468 79Q456 178 476 305Q385 312 288 324Q302 217 295 104Z"/>
+    <path id="${u}gbrearCloth" d="M500 141Q563 120 620 115Q612 202 629 315Q573 314 506 326Q514 237 500 141Z"/>
+    <path id="${u}gbbroadsides" d="M267 476Q418 446 570 416Q630 402 663 366L652 431Q627 488 581 512Q450 559 290 590Q275 547 267 476Z"/>
+    <g id="${u}gbport"><circle r="6" fill="#312824"/><circle cy=".3" r="3.7" fill="#171d20"/><path d="M-4 3Q0 6 4 2" stroke="#bd8b57" stroke-width="1.1" fill="none"/></g>
+    <g id="${u}gbspike"><path d="M-3 2Q0 3 3 1L.7-16Z" fill="#29373d"/><path d="M.7-15-1.1 1" stroke="#a9ada3" stroke-width=".7"/></g>
+    <g id="${u}gboar"><path d="M0 0Q10 12 27 43l9 19" fill="none" stroke="#34291f" stroke-width="5.4" stroke-linecap="round"/><path d="M0 0Q10 12 27 43l8 18" fill="none" stroke="#b18a59" stroke-width="3.4" stroke-linecap="round"/><path d="M29 56l5-2 10 20-6 3Z" fill="#ae8453" stroke="#5e4531" stroke-width="1.4"/><path d="m33 56 9 18" stroke="#d0a66a" stroke-width="1.1"/></g>
+  </defs><g transform="translate(50 63.4) scale(.036)">
+  <path d="m176 434 21-21 114 82-13 77-54 10-59-73Z" fill="#3f3026"/>
+  <path d="M176 421Q225 416 276 464L294 564 283 596Q229 582 181 520Q165 481 176 421Z" fill="url(#${u}gbbow)" stroke="#2a2727" stroke-width="3"/>
+  <path d="M178 492Q202 514 240 532l46 5m-100-25q40 34 100 40m-81-19q31 28 78 36M198 440q-7 44 10 70m17-60q-8 41 15 79m19-70q-4 37 14 78" stroke="#503624" stroke-width="2" fill="none"/>
+  <use href="#${u}gbbroadsides" fill="url(#${u}gbhull)" stroke="#292526" stroke-width="3.2"/>
+  <use href="#${u}gbbroadsides" fill="url(#${u}gbwood)"/>
+  <path d="M274 524Q418 501 569 465Q622 449 649 425M280 553Q446 524 591 479Q620 466 637 450M287 576Q445 547 592 501" fill="none" stroke="#392a25" stroke-width="4"/>
+  <path d="M274 527Q431 501 573 466Q618 451 646 429M281 556Q447 528 589 483" fill="none" stroke="#bd905d" stroke-opacity=".55" stroke-width="2"/>
+  <path d="M270 477Q425 445 571 414Q624 399 664 365L657 409Q628 441 572 456L277 519Z" fill="#8d653e" stroke="#392e28" stroke-width="2.8"/>
+  <path d="M270 477Q425 445 571 414Q624 399 664 365L657 409Q628 441 572 456L277 519Z" fill="url(#${u}gbwood)"/>
+  <path d="M277 511Q428 480 572 449Q628 434 658 403M267 476Q420 445 573 411Q629 396 665 360" stroke="#c29967" stroke-width="5" fill="none" stroke-linejoin="round"/>
+  <path d="m300 470 6 44m27-51 6 43m28-50 6 43m28-50 6 42m28-49 5 41m29-48 4 40m30-47 4 40m29-47 3 39m28-47 3 37m25-47 2 37m21-49 1 35" stroke="#c08d56" stroke-width="4"/>
+  <g>
+    <use href="#${u}gbport" x="289" y="493"/><use href="#${u}gbport" x="321" y="486"/><use href="#${u}gbport" x="355" y="479"/><use href="#${u}gbport" x="389" y="472"/>
+    <use href="#${u}gbport" x="422" y="465"/><use href="#${u}gbport" x="456" y="458"/><use href="#${u}gbport" x="490" y="450"/>
+    <use href="#${u}gbport" x="524" y="444"/><use href="#${u}gbport" x="557" y="434"/><use href="#${u}gbport" x="587" y="426"/><use href="#${u}gbport" x="614" y="413"/><use href="#${u}gbport" x="638" y="398"/>
+  </g>
+  <path d="M172 406Q307 351 454 331Q583 312 653 349Q622 399 560 419L273 475Q211 462 172 406Z" fill="url(#${u}gbroof)" stroke="#362d25" stroke-width="3"/>
+  <g clip-path="url(#${u}gbroofClip)">
+    <path d="M162 343H671V486H162Z" fill="url(#${u}gbiron)"/>
+    <path d="M175 409Q319 366 488 348Q601 334 652 348M228 445Q361 421 521 382Q607 363 646 350" stroke="#b8b3a1" stroke-opacity=".35" stroke-width="3" fill="none"/>
+  </g>
+  <path d="M170 406Q197 398 221 401Q249 411 273 475M171 405Q310 350 457 330Q595 309 655 349M273 475Q429 443 565 416Q625 403 663 360" stroke="#c09c6a" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M174 404Q307 351 455 332Q578 313 647 348M271 474Q427 440 566 414Q625 399 662 360" stroke="#e0bd86" stroke-width="1.7" fill="none"/>
+  <g>
+    <use href="#${u}gbspike" x="207" y="401"/><use href="#${u}gbspike" x="238" y="387"/><use href="#${u}gbspike" x="270" y="377"/><use href="#${u}gbspike" x="306" y="368"/><use href="#${u}gbspike" x="345" y="355"/><use href="#${u}gbspike" x="386" y="346"/><use href="#${u}gbspike" x="429" y="340"/><use href="#${u}gbspike" x="474" y="332"/>
+    <use href="#${u}gbspike" x="223" y="428"/><use href="#${u}gbspike" x="257" y="430"/><use href="#${u}gbspike" x="291" y="419"/><use href="#${u}gbspike" x="326" y="410"/><use href="#${u}gbspike" x="361" y="402"/><use href="#${u}gbspike" x="402" y="396"/><use href="#${u}gbspike" x="444" y="382"/><use href="#${u}gbspike" x="486" y="369"/><use href="#${u}gbspike" x="532" y="362"/><use href="#${u}gbspike" x="579" y="354"/><use href="#${u}gbspike" x="623" y="352"/>
+    <use href="#${u}gbspike" x="272" y="453"/><use href="#${u}gbspike" x="306" y="444"/><use href="#${u}gbspike" x="342" y="436"/><use href="#${u}gbspike" x="378" y="429"/><use href="#${u}gbspike" x="415" y="422"/><use href="#${u}gbspike" x="453" y="412"/><use href="#${u}gbspike" x="489" y="403"/><use href="#${u}gbspike" x="527" y="395"/><use href="#${u}gbspike" x="565" y="385"/><use href="#${u}gbspike" x="601" y="376"/><use href="#${u}gbspike" x="638" y="367"/>
+  </g>
+  <g>
+    <use href="#${u}gboar" x="303" y="535"/><use href="#${u}gboar" x="338" y="529"/><use href="#${u}gboar" x="371" y="522"/><use href="#${u}gboar" x="405" y="514"/><use href="#${u}gboar" x="440" y="506"/><use href="#${u}gboar" x="475" y="497"/><use href="#${u}gboar" x="511" y="488"/><use href="#${u}gboar" x="544" y="477"/><use href="#${u}gboar" x="579" y="467"/><use href="#${u}gboar" x="612" y="448"/>
+  </g>
+  <g fill="none" stroke-linecap="round">
+    <path d="m371 363 0-314m183 291-3-234" stroke="#503a2b" stroke-width="9"/>
+    <path d="m369 363 0-314m180 291-1-234" stroke="#c69e6b" stroke-width="3"/>
+    <path d="M295 104 470 79m-181 245 189-19m22-164 121-26m-116 211 125-11" stroke="#795438" stroke-width="4"/>
+    <path d="M372 48 177 404m195-356 98 31m79 29 72 7m-70-9 106 248m-286-306-76 56" stroke="#d7c4a2" stroke-width="1.05" opacity=".82"/>
+  </g>
+  <use href="#${u}gbrearCloth" fill="url(#${u}gbfarSail)" stroke="#544b3c" stroke-width="1.35"/>
+  <use href="#${u}gbrearCloth" fill="url(#${u}gbcanvas)"/>
+  <path d="M504 163Q559 147 617 141m-110 48q55-15 110-22m-108 50q51-14 110-22m-109 50q57-15 112-22m-111 49q53-12 112-20m-112 41q54-10 114-16M548 131Q548 216 557 321m26-195q-3 85 13 190" fill="none" stroke="#6c6452" stroke-width="1.2" opacity=".65"/>
+  <use href="#${u}gbmainCloth" fill="url(#${u}gbsail)" stroke="#5d5240" stroke-width="1.55"/>
+  <use href="#${u}gbmainCloth" fill="url(#${u}gbcanvas)"/>
+  <path d="M297 131Q375 110 465 106m-168 51q77-20 169-25m-171 53q85-20 170-25m-167 52q75-16 169-25m-174 52q86-15 175-24m-176 50q87-14 180-23m-184 50q84-13 186-23M337 94Q338 218 333 319m51-230q2 122-3 224m47-230q-7 95 5 225" fill="none" stroke="#72664e" stroke-width="1.5" opacity=".59"/>
+  <path d="M298 134Q380 113 466 109m-168 51q87-23 166-25m-168 52q77-18 170-25m-170 53q85-20 171-25m-174 51q84-16 175-24m-177 51q86-15 180-23m-183 51q90-16 187-24" fill="none" stroke="#faf2d5" stroke-width="1.1" opacity=".56"/>
+  <path d="M333 60q38-5 78-15m111 70 70-13" stroke="#815d3b" stroke-width="7" stroke-linecap="round"/><path d="M333 58q38-5 78-15m111 70 70-13" stroke="#c6a173" stroke-width="2.1"/>
+  <path d="M292 323 227 403m248-98 67 37m86-29 28 43m-150-31 60 21" stroke="#d6c09a" stroke-width="1.45" fill="none"/>
+  <g transform="translate(177 438)" stroke-linejoin="round">
+    <path d="M-44 0-47-9l22-12 18-4 13-19 8 5-1 17 16-17 9 4-8 22 6 15-13 19-16 13-29-1-24-13-10-8Z" fill="url(#${u}gbfigure)" stroke="#23383a" stroke-width="2.7"/>
+    <path d="M-41 9q21 2 36-12Q7-8 20-1Q11 14-7 18q-18 3-34-9Z" fill="#223f3f"/>
+    <path d="m-39 10 5 6 4-5 5 6 3-6 5 5 2-6 6 3 3-6 6 3 4-5" fill="#ded0a6" stroke="#ad9d7a" stroke-width="1.1"/>
+    <path d="M-31-10q14-7 25-8L6-24l15 9L4-11q-12 6-19 3Z" fill="#a8ae86"/><path d="M-4-14 5-17 8-11 1-8Z" fill="#243d3d"/>
+    <circle cx="2" cy="-13.2" r="2.4" fill="#ecbb69"/><ellipse cx="-37" cy="-6" rx="4.5" ry="1.9" fill="#233b3b"/>
+    <path d="M23-9q-2 13-15 22m19-12Q19 18 4 24m-32-8q17 10 32 1m-48-22q-16-3-21 5m18 3q-18 1-25 9" fill="none" stroke="#9cab88" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  </g>`;
+}
 function yiArt(u){
   const fill=id=>`url(#${u}${id})`,edge='#1b2425',light='#9d9a81';
   const bronze=fill('bronze'),cloth=fill('cloth'),armour=fill('scales');
@@ -2623,13 +2707,7 @@ function yiArt(u){
   ${[...'忠武公李舜臣將軍像'].map((c,i)=>`<text x="57.9" y="${49.9+i*3.48}" text-anchor="middle" font-size="2.65" font-weight="bold" fill="#6c5835" stroke="#fff0c9" stroke-width=".09" paint-order="stroke" font-family="serif">${c}</text>`).join('')}
   <path d="M48.8,85.3 L53,83.8 H69 L73.5,85.5 V91.9 L69,94 H53 L48.8,92Z" fill="${fill('granite')}" stroke="#9e9582" stroke-width=".32"/>
   <path d="M48.8,85.3 L53,86.6 H69 L73.5,85.5 M53,86.6 V94 M69,86.6 V94 M49,89.7 L53,91 H69 L73.5,89.7" fill="none" stroke="#9c9383" stroke-width=".3"/>
-  <g transform="translate(61 83.2)" stroke="${edge}" stroke-width=".25">
-    <path d="M-9,-1 Q-9,2 -5.5,2.6 L5,2.1 Q8.4,.5 9,-2.7 L4.6,-4.5Z" fill="${bronze}"/>
-    <path d="M-8.7,-1 Q-8.9,-4.8 -4.6,-5.6 L6,-7 Q8.9,-6 9,-2.7 L4.4,-1Z" fill="${fill('drumTop')}"/>
-    <path d="M-8.4,.1 L5.4,-1.1 M-7,1.4 L6,-.1 M-7,-3.4 L7,-5.3 M-5,-4.5 L7.8,-6" fill="none" stroke="#a29d82" stroke-width=".25"/>
-    <path d="M-8.6,-2.6 Q-10.1,-5.8 -10.4,-7.8 L-9.5,-9.1 -8,-8.6 -8.5,-7.9 Q-8.3,-5.7 -7.1,-4.4Z" fill="${bronze}"/>
-    <circle cx="-9.4" cy="-8.2" r=".27" fill="#c6ad82" stroke="none"/>
-  </g>
+  ${yiTurtleShipArt(u)}
   ${drum(42.5,91.5)}${drum(80,91)}
   <path d="M3,99 L19,91 L31,91 L26,99Z M94,99 L89,91 L102,91 L118,99Z" fill="#698d96" opacity=".65"/>
   <path d="M13,96 Q15,92 15,88 Q16.8,92 18,96 M22,98 Q24,92 24,87 Q26.5,93 28,98 M96,98 Q97,92 97,87 Q99,91 101,98 M105,96 Q106,92 107,87 Q109,93 111,96" stroke="#d2f4f0" stroke-opacity=".81" stroke-width=".65" fill="none"/>
@@ -9832,25 +9910,196 @@ function lmDragonGeo(){if(RGEO.drag)return RGEO.drag;const D=SDF,E=D.E,C=D.C,B=D
   for(const s of[-1,1])L.push(E([-.47,.075,s*.045],[.03,.028,.03],.015),E([-.485,.075,s*.05],[.014,.012,.014],-.01),E([-.2,.13,s*.095],[.045,.04,.03],.02),E([-.215,.13,s*.118],[.022,.02,.012],-.008),C([-.06,.2,s*.07],[.12,.36,s*.13],.03,.012,.02),C([.04,.29,s*.1],[.02,.4,s*.18],.016,.006,.01),E([-.02,.06,s*.13],[.07,.05,.02],.02),C([-.3,-.02,s*.105],[-.36,-.1,s*.2],.012,.004,.01));
   for(let i=0;i<6;i++){const u=i/5;L.push(C([.05+u*.22,.1-u*.5,0],[.13+u*.22,.2-u*.5,0],.03,.006,.015));}for(let i=0;i<5;i++)for(const s of[-1,1])L.push(C([-.46+i*.045,-.025,s*.07],[-.46+i*.045,-.055,s*.07],.011,.003,0));
   const f=D.list(L),g=p=>{let d=f(p);if(p[0]>-.02&&p[1]<.0)d-=.006*Math.max(0,Math.sin((p[0]*.8+p[1])*70))*Math.max(0,Math.sin(Math.atan2(p[2],.1)*5+p[1]*40));return d;};return RGEO.drag=sdfAO(sdfMesh(g,[-.56,-.66,-.26],[.46,.46,.26],.0125),g,.025);}
-function lmBronzeShip2(){const T=THREE,G=new T.Group(),PI=Math.PI,bz=(o={})=>L3M('#90958d',Object.assign({shininess:24,specular:'#645c4f'},o)),sol=L3M('#4b5047',{shininess:24,specular:'#696558'}),drk=L3M('#323b35',{shininess:15});
-  const hullT=s3Tex('lbsh',512,128,(g,w,h)=>{g.fillStyle='#7a5630';g.fillRect(0,0,w,h);for(let r=0;r<5;r++){g.fillStyle='rgba(30,16,6,.6)';g.fillRect(0,r*h/5,w,3);g.fillStyle='rgba(255,220,160,.14)';g.fillRect(0,r*h/5+3,w,2);for(let x=(r*41)%70;x<w;x+=74){g.fillStyle='rgba(30,16,6,.5)';g.fillRect(x,r*h/5,2,h/5);g.fillStyle='#c89858';g.beginPath();g.arc(x+8,r*h/5+13,2,0,7);g.fill();}}});
-  const wallT=s3Tex('lbsw',1024,128,(g,w,h)=>{g.fillStyle='#86603a';g.fillRect(0,0,w,h);g.fillStyle='#5a3c1e';g.fillRect(0,0,w,12);g.fillRect(0,h-14,w,14);g.fillStyle='#b88a52';g.fillRect(0,12,w,3);g.fillRect(0,h-17,w,3);
-    for(let i=0;i<32;i++){const x=i*32;g.fillStyle='rgba(30,16,6,.55)';g.fillRect(x,14,3,h-30);g.fillStyle='#caa068';for(const y of[24,h-28]){g.beginPath();g.arc(x+9,y,2.2,0,7);g.fill();g.beginPath();g.arc(x+25,y,2.2,0,7);g.fill();}
-      if(i%2){g.fillStyle='#a47a48';g.fillRect(x+3,36,29,46);g.fillStyle='#1c1008';g.fillRect(x+8,42,19,34);g.strokeStyle='#d0a870';g.lineWidth=2;g.strokeRect(x+8,42,19,34);}}});
-  const roofT=s3Tex('lbsr',512,256,(g,w,h)=>{g.fillStyle='#6a4a28';g.fillRect(0,0,w,h);const R=22;for(let j=-1;j<9;j++)for(let i=-1;i<15;i++){const x=i*R*1.74+(j%2)*R*.87,y=j*R*1.5;g.beginPath();for(let k=0;k<6;k++){const a=k/6*6.283+.5236;g.lineTo(x+Math.cos(a)*R*.94,y+Math.sin(a)*R*.94);}g.closePath();const gr=g.createRadialGradient(x-5,y-6,2,x,y,R);gr.addColorStop(0,'#a8804c');gr.addColorStop(1,'#70502c');g.fillStyle=gr;g.fill();g.strokeStyle='#2e1c0c';g.lineWidth=3;g.stroke();}});
-  for(const t of[hullT,wallT,roofT])t.wrapS=t.wrapT=T.RepeatWrapping;
-  const LX=1.0,LZ=.4;
-  l3Add(G,new T.SphereGeometry(1,40,14,0,2*PI,PI/2,PI/2),bz({map:hullT}),0,.3,0).scale.set(LX*1.02,.3,LZ*1.04);
-  l3Add(G,new T.CylinderGeometry(1,1,.24,56,1,true),bz({map:wallT,side:T.DoubleSide}),0,.42,0).scale.set(LX,1,LZ);
-  for(const y of[.3,.54]){const r=l3Add(G,new T.TorusGeometry(1,.022,8,64),sol,0,y,0);r.rotation.x=PI/2;r.scale.set(LX*1.01,LZ*1.03,1.2);}
-  l3Add(G,new T.SphereGeometry(1,44,16,0,2*PI,0,PI/2),bz({map:roofT,shininess:18,specular:'#4a3a28'}),0,.54,0).scale.set(LX*.97,.27,LZ*.95);
-  {const cg=new T.ConeGeometry(.014,.07,6),n=96,im=new T.InstancedMesh(cg,sol,n),m=new T.Matrix4(),q=new T.Quaternion(),up=new T.Vector3(0,1,0),v=new T.Vector3(),sc=new T.Vector3(1,1,1);let k=0;
-    for(let i=0;i<12;i++)for(let j=0;j<8;j++){const u=(i+.5+(j%2)*.5)/12*2-1,a=(j+.5)/8*PI,x=u*.9,rr=Math.sqrt(Math.max(.02,1-x*x)),y=Math.sin(a)*rr,z=Math.cos(a)*rr;v.set(x/(LX*.97)*1,y/.27,z/(LZ*.95)).normalize();q.setFromUnitVectors(up,v);m.compose(new T.Vector3(x*LX*.97,.54+y*.27+v.y*.03,z*LZ*.95),q,sc);im.setMatrixAt(k++,m);}im.count=k;G.add(im);}
-  l3Add(G,new T.BoxGeometry(1.5,.02,.07),sol,0,.82,0);
-  /* 용머리와 꼬리 장식. */
-  const dh=l3Add(G,lmDragonGeo(),L3M('#62665c',{shininess:23,specular:'#756d5b',vertexColors:true}),-1.12,.88,0);dh.scale.setScalar(.72);
-  {const pts=[];for(let i=0;i<=24;i++){const u=i/24,a=u*4.6,r=.16*(1-u*.7);pts.push(new T.Vector3(.98+Math.sin(a)*r+u*.1,.62+.16-Math.cos(a)*r,0));}l3Add(G,new T.TubeGeometry(new T.CatmullRomCurve3(pts),30,.035,8),sol);l3Add(G,new T.BoxGeometry(.03,.3,.12),drk,1.0,.22,0);}
-  return G;}
+function lmBronzeShip2(){
+  const T=THREE,ship=new T.Group();ship.name='geobukseon';
+  const random = i => (Math.sin(i*127.1+3.7)*43758.5453%1+1)%1;
+  function texture(key,w,h,draw){
+    const map=s3Tex(key,w,h,(g,w,h)=>{
+      draw(g,w,h);
+      const image=g.getImageData(0,0,w,h),pixels=image.data;
+      for(let i=0;i<pixels.length;i+=4){
+        const value=.2126*pixels[i]+.7152*pixels[i+1]+.0722*pixels[i+2];
+        pixels[i]=pixels[i+1]=pixels[i+2]=value;
+      }
+      g.putImageData(image,0,0);
+    });
+    map.encoding=T.sRGBEncoding;
+    return map;
+  }
+  const grain=texture('lmTurtleWood',768,256,(g,w,h)=>{
+    for(let r=0;r<12;r++){
+      const y=r*h/12, tone=39+random(r+11)*16;
+      g.fillStyle=`hsl(31,34%,${tone}%)`;g.fillRect(0,y,w,h/12);
+      g.fillStyle='#3d2e29';g.fillRect(0,y,w,1.8);
+      g.fillStyle='#a58965';g.fillRect(0,y+2,w,.8);
+      for(let x=(r%3)*72;x<w;x+=232){g.fillStyle='#513728';g.fillRect(x,y+2,1,h/12-2);}
+    }
+    for(let i=0;i<2130;i++){
+      const x=random(i)*w,y=random(i+2411)*h;
+      g.fillStyle=i%3?'rgba(44,29,23,.13)':'rgba(224,194,142,.18)';
+      g.fillRect(x,y,4+random(i+89)*24,.5+random(i+22)*.8);
+    }
+  });
+  const iron=texture('lmTurtleRoof',440,224,(g,w,h)=>{
+    g.fillStyle='#66757a';g.fillRect(0,0,w,h);
+    for(let row=-1;row<10;row++)for(let col=-1;col<16;col++){
+      const x=col*33+(row%2)*16.5,y=row*26,j=(row+2)*32+col;
+      g.beginPath();g.moveTo(x-16,y);g.lineTo(x-9,y-12);g.lineTo(x+9,y-12);g.lineTo(x+16,y);g.lineTo(x+9,y+12);g.lineTo(x-9,y+12);g.closePath();
+      g.fillStyle=`hsl(195,${10+random(j)*6}%,${36+random(j+57)*8}%)`;g.fill();
+      g.strokeStyle='#374952';g.lineWidth=1.7;g.stroke();
+      g.fillStyle='#a3a9a1';g.fillRect(x-2,y-4,2.2,2.2);
+    }
+  });
+  const textile=texture('lmTurtleSail',256,512,(g,w,h)=>{
+    g.fillStyle='#ded2af';g.fillRect(0,0,w,h);
+    for(let y=0;y<h;y+=h/9){
+      const v=g.createLinearGradient(0,y,0,y+h/9);
+      v.addColorStop(0,'#b6a57c');v.addColorStop(.23,'#e9dfc0');v.addColorStop(.69,'#dcd0ab');v.addColorStop(1,'#b9a67f');
+      g.fillStyle=v;g.fillRect(0,y,w,h/9);
+      g.fillStyle='#917a56';g.fillRect(0,y,w,1.25);
+    }
+    for(let x=23;x<w;x+=54){g.fillStyle='rgba(103,85,62,.26)';g.fillRect(x,0,.9,h);}
+    for(let i=0;i<1350;i++){g.fillStyle=i%2?'rgba(108,94,65,.08)':'rgba(255,247,222,.17)';g.fillRect(random(i)*w,random(i+1800)*h,3+random(i+52)*5,.8);}
+  });
+  function surface(color,map=null,shininess=20,side=T.FrontSide){
+    return L3M(new T.Color(color).multiplyScalar(map ? .67 : .55),{map,shininess,specular:'#6d6251',side});
+  }
+  const timber=surface('#706d57',grain,12,T.DoubleSide);
+  const rail=surface('#827c5d',null,17);
+  const deep=surface('#494e42',null,13);
+  const deck=surface('#657265',iron,28,T.DoubleSide);
+  const metal=surface('#516659',null,36);
+  const rope=surface('#696652',null,8);
+  const cloth=surface('#8e8668',textile,12,T.DoubleSide);
+  const jade=surface('#66786b',null,24);
+  const ridge=surface('#89917a',null,29);
+  const dark=surface('#3b4b43',null,15);
+  const tooth=surface('#aca17a',null,24);
+  const amber=surface('#ae9264',null,35);
+  function add(p, geo, material, x=0, y=0, z=0) {
+    const o=new T.Mesh(geo,material);o.position.set(x,y,z);p.add(o);return o;
+  }
+  function orb(p,mat,x,y,z,a,b,c) {
+    const o=add(p,new T.SphereGeometry(1,20,14),mat,x,y,z);o.scale.set(a,b,c);return o;
+  }
+  function strut(p,mat,start,end,r1,r2=r1,count=8) {
+    const from=new T.Vector3(...start),to=new T.Vector3(...end),d=to.clone().sub(from),mid=from.clone().addScaledVector(d,.5);
+    const o=add(p,new T.CylinderGeometry(r2,r1,d.length(),count),mat,mid.x,mid.y,mid.z);
+    o.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.normalize());
+    return o;
+  }
+  function cable(p,mat,points,r=.014) {
+    return add(p,new T.TubeGeometry(new T.CatmullRomCurve3(points.map(v=>new T.Vector3(...v))),Math.max(9,points.length*5),r,5,false),mat);
+  }
+  const length=6.1;
+  const width=u=>1.28*(.38+.62*Math.pow(Math.max(0,Math.sin(Math.PI*u)),.52))*(1-.19*(u-.5));
+  const rim=u=>1.08+.24*Math.pow(Math.abs(u-.51)*1.95,2.6)+.12*(1-u);
+  const roofY=(u,v)=>rim(u)+.075+.46*Math.max(0,1-v*v);
+  const fx=u=>length*(u-.5);
+  function sheet(p,mat,n,m,formula) {
+    const positions=[],uv=[],indices=[];
+    for(let i=0;i<=n;i++)for(let j=0;j<=m;j++){
+      const a=i/n,b=j/m;positions.push(...formula(a,b));uv.push(a,b);
+      if(i<n&&j<m){const k=i*(m+1)+j;indices.push(k,k+1,k+m+1,k+1,k+m+2,k+m+1);}
+    }
+    const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setIndex(indices);geo.computeVertexNormals();
+    return add(p,geo,mat);
+  }
+  for(const s of [-1,1]){
+    sheet(ship,timber,54,18,(u,v)=>{
+      const beam=width(u),foot=-.62+.48*Math.pow(Math.abs(u-.5)*2,2.2);
+      return [fx(u)+(1-v)*.13*Math.sign(.5-u),foot+(rim(u)-foot)*v,s*(beam*(.30+.70*Math.pow(v,.58)))];
+    });
+    for(const v of [.34,.57,.76,.945,1.012]){
+      const points=Array.from({length:34},(_,i)=>{
+        const u=i/33,foot=-.62+.48*Math.pow(Math.abs(u-.5)*2,2.2);
+        return [fx(u)+(1-v)*.13*Math.sign(.5-u),foot+(rim(u)-foot)*v,s*(width(u)*(.30+.70*Math.pow(v,.58))+.013)];
+      });
+      cable(ship,v>.9?rail:deep,points,v>.9?.042:.028);
+    }
+    for(let i=0;i<15;i++){
+      const u=.06+i*.063,x=fx(u),z=width(u)*s;
+      strut(ship,rail,[x-.025,rim(u)-.39,z*.98],[x,rim(u)+.039,z*1.006],.032,.03);
+      if(i===14)continue;
+      const p=u+.030,xp=fx(p),zp=width(p)*s*.984, y=rim(p)-.219;
+      const opening=add(ship,new T.CylinderGeometry(.071,.075,.021,14),deep,xp,y,zp);
+      opening.rotation.x=Math.PI/2;
+      orb(ship,dark,xp,y,zp+s*.018,.049,.045,.014);
+    }
+    for(let i=0;i<10;i++){
+      const u=.13+i*.078,x=fx(u),z=width(u)*s*.77;
+      const end=[x+.55,-.77,z+s*1.09];
+      strut(ship,rail,[x-.11,.26,z],end,.025,.018);
+      const blade=add(ship,new T.BoxGeometry(.084,.33,.043),rail,end[0]+.038,end[1]-.076,end[2]+s*.064);
+      blade.rotation.set(-s*.84,.09,.24);
+    }
+  }
+  for(const [u,s] of [[0,-1],[1,1]]){
+    sheet(ship,timber,9,12,(a,v)=>[fx(u)+s*(.012-.095*(1-v)), -.14+(rim(u)+.14)*v, (a*2-1)*width(u)*(.58+.42*v)]);
+    for(const z of [-.44,0,.44])strut(ship,rail,[fx(u)+s*.02,.12,z*.72],[fx(u)+s*.021,rim(u)+.11,z],.038);
+  }
+  sheet(ship,deck,48,24,(a,b)=>{
+    const u=.044+a*.918,v=b*2-1;
+    const min=.87+.13*Math.sin(Math.PI*a);
+    return [fx(u),roofY(u,v),width(u)*v*min];
+  });
+  for(const s of [-1,1]){
+    cable(ship,rail,Array.from({length:27},(_,i)=>{const u=.044+i/26*.918;return [fx(u),roofY(u,1)+.018,s*width(u)*(.87+.13*Math.sin(i/26*Math.PI))];}),.044);
+  }
+  const thorn=new T.ConeGeometry(.028,.22,6),spikes=new T.InstancedMesh(thorn,metal,100),point=new T.Object3D();
+  let n=0;
+  for(let row=0;row<5;row++)for(let col=0;col<20;col++){
+    const u=.075+col*.044+(row%2)*.011,v=(row-2)*.41;
+    if(Math.abs(fx(u)+.96)<.14||Math.abs(fx(u)-1.24)<.13)continue;
+    point.position.set(fx(u),roofY(u,v)+.097,width(u)*v);
+    point.rotation.set(v*.39,0,-.07);point.updateMatrix();spikes.setMatrixAt(n++,point.matrix);
+  }
+  spikes.count=n;ship.add(spikes);
+  const head=new T.Group();head.position.set(-3.14,1.37,0);ship.add(head);
+  orb(head,jade,-.045,.02,0,.45,.285,.30);
+  const nose=orb(head,jade,-.48,.055,0,.36,.15,.237);nose.rotation.z=-.11;
+  orb(head,dark,-.49,-.071,0,.293,.072,.211);
+  const jaw=orb(head,jade,-.44,-.15,.01,.321,.092,.208);jaw.rotation.z=.12;
+  for(const s of [-1,1]){
+    orb(head,ridge,-.165,.137,s*.19,.231,.095,.12).rotation.z=-.20;
+    orb(head,dark,-.29,.092,s*.264,.067,.046,.022);
+    orb(head,amber,-.31,.1,s*.278,.032,.026,.012);
+    orb(head,dark,-.322,.103,s*.286,.012,.019,.008);
+    orb(head,dark,-.661,.12,s*.116,.037,.019,.036);
+    cable(head,ridge,[[-.12,.23,s*.18],[.12,.34,s*.22],[.27,.52,s*.21],[.24,.58,s*.209]],.043);
+    cable(head,jade,[[-.21,-.085,s*.24],[-.09,-.02,s*.30],[.14,.15,s*.30],[.28,.15,s*.21]],.04);
+    cable(head,ridge,[[-.65,-.016,s*.16],[-.82,.035,s*.25],[-.95,.038,s*.37],[-1.03,.104,s*.40]],.018);
+    for(let i=0;i<5;i++)strut(head,tooth,[-.66+i*.068,-.049,s*.163],[-.644+i*.068,-.105,s*.164],.024,.002,7);
+  }
+  function sail(x,w,bottom,top,angle) {
+    const mast=new T.Group();mast.position.x=x;mast.rotation.y=angle;ship.add(mast);
+    const y=roofY((x/length)+.5,0);
+    strut(mast,rail,[0,y,0],[0,top+.48,0],.065,.031,10);
+    for(const v of [bottom,top])strut(mast,rail,[-.089,v,-w*.53],[-.089,v,w*.53],.034,.031);
+    strut(mast,deep,[0,top+.25,-w*.23],[0,top+.25,w*.23],.025);
+    sheet(mast,cloth,30,42,(a,b)=>{
+      const z=(a-.5)*w, height=bottom+b*(top-bottom)+.034*Math.sin(a*Math.PI);
+      const bulge=(.036+.235*Math.sin(a*Math.PI)*Math.sin(b*Math.PI)+.026*Math.abs(Math.sin(b*9*Math.PI))*Math.sin(Math.PI*a));
+      return [-bulge,height,z];
+    });
+    for(const s of [-1,1]){
+      cable(mast,rope,[[0,top+.42,0],[-.10,top+.18,s*w*.23],[-.084,top,s*w*.52]],.012);
+      cable(mast,rope,[[-.088,top,s*w*.498],[-.11,(top+bottom)/2,s*w*.506],[-.09,bottom,s*w*.51]],.010);
+      strut(mast,rope,[-.09,bottom,s*w*.51],[.29,y-.12,s*.84],.011);
+    }
+    for(let i=0;i<=14;i++){
+      const z=(i/14-.5)*w;
+      strut(mast,rope,[-.08,top+.04,z],[-.087,top-.056,z],.012);
+    }
+    return [x,top+.44,0];
+  }
+  const fore=sail(-.93,2.33,2.18,5.53,.145);
+  const aft=sail(1.26,1.84,2.02,4.89,.105);
+  cable(ship,rope,[fore,[-2.12,3.2,-.06],[-2.97,1.38,-.14]],.014);
+  cable(ship,rope,[aft,[2.09,3.02,.27],[2.96,1.39,.53]],.014);
+  cable(ship,rope,[fore,[.20,5.08,0],aft],.012);
+  return ship;
+}
 function sejongRelief(g,w,h,pair){
   g.clearRect(0,0,w,h);g.save();g.scale(w/240,h/180);
   const line=(color,width)=>{g.strokeStyle=color;g.lineWidth=width;g.lineCap='round';g.lineJoin='round';};
@@ -10079,7 +10328,7 @@ const LM3={
   l3Add(G,new T.BoxGeometry(.36,.036,.81),stone,0,.78,.88);
   const shipSupport=L3M('#53574f',{shininess:12});
   for(const z of [.71,1.04])l3Add(G,new T.BoxGeometry(.31,.054,.082),shipSupport,0,.808,z);
-  const ship=lmBronzeShip2();ship.scale.setScalar(.36);ship.position.set(0,.804,.87);ship.rotation.y=P*.46;G.add(ship);
+  const ship=lmBronzeShip2();ship.scale.setScalar(.135);ship.position.set(0,.905,.89);ship.rotation.y=P*.32;G.add(ship);
   /* 두 큰 청동 북은 부풀어 나온 옆면, 못, 고리 달린 원형 장식을 갖는다. */
   const drumBody=L3M('#5a5a51',{shininess:25,specular:'#736955'});
   const drumRim=L3M('#747264',{shininess:15,specular:'#716655'});
