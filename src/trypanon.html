@@ -3912,7 +3912,7 @@ function kimNeigh(){const c=SND.ctx;if(!c||c.state!=='running'||!sndPref().sfx)r
   for(let i=0;i<6;i++)noise({t:t+1.1+i*.13,f:600,q:1.4,d:.07,v:.16});}
 
 // ---- 김유신 장군 음성: 「나라의 일이라면 비록 죽는다고 한들 피하지 않겠습니다」 — 진군 북 세 번 뒤, 이순신보다 낮고 느리고 묵직하게 ----
-const KIMLINES=[['나라의 일이라면,',.42,0,.9],['비록 죽는다고 한들,',.4,0,.86],['피하지 않겠습니다!',.36,0,.84]];
+const KIMLINES=[['나라의 일이라면,',.86,.68,1.03],['비록 죽는다고 한들,',.82,.64,1.08],['피하지 않겠습니다!',.91,.73,1.12]];
 function kimDrums(){const c=SND.ctx;if(!c||c.state!=='running')return;const t=c.currentTime+.05;
   [0,.42,.7].forEach((dt,i)=>{const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(120,t+dt);o.frequency.exponentialRampToValueAtTime(40,t+dt+.4);
     g.gain.setValueAtTime(0,t+dt);g.gain.linearRampToValueAtTime(i===2?1.1:.85,t+dt+.008);g.gain.exponentialRampToValueAtTime(.001,t+dt+.6);o.connect(g);g.connect(SND.master);o.start(t+dt);o.stop(t+dt+.65);
