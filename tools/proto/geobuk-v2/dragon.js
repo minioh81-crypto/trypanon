@@ -1,5 +1,5 @@
 /* 거북선 용머리(시안): SDF로 깎고 부위별로 칠한다. 앞(주둥이)은 +x, 위 +y. 길이 약 1.4 */
-function tsDragonHead(){
+function tsDragonHead(pal={}){
   const T=THREE,D=SDF,E=D.E,C=D.C;
   const skull=[
     E([0,0,0],[.30,.25,.25]),
@@ -38,17 +38,17 @@ function tsDragonHead(){
     d=Math.min(d,tooth(p),tongue(p),eye(p));d=D.smin(d,horn(p),.02);d=D.smin(d,mane(p),.02);d=D.smin(d,beard(p),.015);return d;};
   const g=sdfAO(sdfMesh(F,[-1.15,-.78,-.62],[1.1,.72,.62],.011),F,.03);
   /* 부위별 색: 몸(청록·금 비늘), 입안·혀(붉은), 이빨(상아), 눈(금빛+검은 눈동자), 뿔(금), 갈기(주홍) */
-  const P=g.attributes.position,Cc=g.attributes.color,col=new T.Color(),cBody=new T.Color('#1c5248'),cBody2=new T.Color('#3a8a68'),cRed=new T.Color('#b3261e'),cTongue=new T.Color('#e0504a'),
-    cTooth=new T.Color('#f3ead2'),cGold=new T.Color('#e3b341'),cBlack=new T.Color('#141414'),cMane=new T.Color('#d9572b'),cBeard=new T.Color('#e8c25a');
+  const P=g.attributes.position,Cc=g.attributes.color,col=new T.Color(),cBody=new T.Color(pal.body||'#1c5248'),cBody2=new T.Color(pal.body2||'#3a8a68'),cRed=new T.Color(pal.mouth||'#b3261e'),cTongue=new T.Color(pal.tongue||'#e0504a'),
+    cTooth=new T.Color(pal.tooth||'#f3ead2'),cGold=new T.Color(pal.gold||'#e3b341'),cBlack=new T.Color('#141414'),cMane=new T.Color(pal.mane||'#d9572b'),cBeard=new T.Color(pal.beard||'#e8c25a'),cHorn=new T.Color(pal.horn||pal.gold||'#e3b341');
   const q=[0,0,0];
   for(let i=0;i<P.count;i++){q[0]=P.getX(i);q[1]=P.getY(i);q[2]=P.getZ(i);
     const dd={tooth:tooth(q),tongue:tongue(q),eye:eye(q),horn:horn(q),mane:mane(q),beard:beard(q),cav:Math.abs(cavity(q))+.004};
     let k='body',m=.012;for(const n in dd)if(dd[n]<m){m=dd[n];k=n;}
     if(k==='tooth')col.copy(cTooth);else if(k==='tongue')col.copy(cTongue);else if(k==='cav')col.copy(cRed);
     else if(k==='eye'){const sg=q[2]<0?-1:1,e=eyeC(sg),v=[(q[0]-e[0])/.075,(q[1]-e[1])/.07,(q[2]-e[2])*sg/.07],dp=v[0]*.62+v[1]*.1+v[2]*.78;col.copy(dp>.72?cBlack:cGold);}
-    else if(k==='horn')col.copy(cGold);else if(k==='mane')col.copy(cMane);else if(k==='beard')col.copy(cBeard);
-    else{col.copy(cBody).lerp(cBody2,Math.max(0,Math.min(1,.5+q[1]*1.6)));if(scales(q)>.003)col.lerp(cGold,.45);}
+    else if(k==='horn')col.copy(cHorn);else if(k==='mane')col.copy(cMane);else if(k==='beard')col.copy(cBeard);
+    else{col.copy(cBody).lerp(cBody2,Math.max(0,Math.min(1,.5+q[1]*1.6)));if(scales(q)>.003)col.lerp(cGold,pal.scaleK??.45);}
     const a=Cc.getX(i);Cc.setXYZ(i,col.r*a,col.g*a,col.b*a);}
   Cc.needsUpdate=true;
-  return new T.Mesh(g,new T.MeshPhongMaterial({vertexColors:true,shininess:38,specular:'#555'}));
+  return new T.Mesh(g,new T.MeshPhongMaterial({vertexColors:true,shininess:pal.shin??38,specular:pal.spec||'#555'}));
 }
