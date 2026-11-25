@@ -40,6 +40,8 @@ release.py: 버전 올림 → 번역 → 스모크(보통·하드 오류 0) → 
 Claude 세션만: 이어서 아티팩트 https://claude.ai/artifact/BycMex7TzF2SLMuDvvPWBi 도 `tools/tests/out/artifact-index.html`로 다시 게시.
 
 ## Claude ↔ Codex 이어 달리기
+- **작업 표시판 `NOW.md`:** 시작하자마자 `git pull` → `NOW.md`에 「작업 중: Claude(또는 Codex) · 시작 시각 · 할 일 한 줄」을 적어 커밋·푸시. 끝나면 「비어 있음」으로 되돌리고 「마지막 작업」 줄을 갱신해 커밋·푸시. 다른 쪽 이름이 「작업 중」이면 그 일을 건드리지 말고 사용자에게 먼저 묻는다(사용자가 이미 끝났다고 하면 비워도 됨).
+- **커밋은 작게, 자주:** 한 가지 바뀜 = 한 커밋. 메시지 첫 줄은 `vNNN: 한국어 요약` 또는 `대기: 한국어 요약 (Codex)`. 끝나면 반드시 `main`까지 푸시(또는 PR)해서 다음 사람이 받을 수 있게 한다.
 - **Codex(ChatGPT)가 작업할 때:** 고치고 → 스모크·스크린샷 확인 → CHANGELOG 맨 끝에 `## 대기 — 제목 (Codex)` 섹션으로 바뀐 점 기록 → PR. 버전 번호와 배포는 하지 않는다(사용자가 급하다고 하면 release.py로 직접 해도 됨).
 - **Claude가 이어받을 때:** PR이 합쳐진 뒤 `git pull` → `대기` 섹션 읽기 → shots.py로 확인·다듬기 → 그 섹션을 새 버전 번호로 바꿔 release.py로 출시 + 아티팩트 게시.
 
