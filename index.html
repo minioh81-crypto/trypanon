@@ -911,7 +911,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v385 · 2026-11-25</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v386 · 2026-11-25</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -10327,7 +10327,7 @@ function lmSejong(){
     l3Add(G,new T.TorusGeometry(.207,.012,6,40),exhibit,1.04,.454,2.4).rotation.set(rx,ry,0);
   }
   l3Add(G,new T.SphereGeometry(.046,14,10),exhibit,1.04,.454,2.4);
-  G.userData.cam={dist:8.75,fitWidth:4.55,y:1.64,yaw:.08,pitch:-.072,minPitch:-.16};
+  G.userData.cam={dist:8.75,fitWidth:4.55,y:1.64,yaw:.08,pitch:-.072,minPitch:-.1,zmax:1.18,dmax:12.4};
   return G;
 }
 // ---- 20곳 모델 ----
@@ -10412,7 +10412,7 @@ const LM3={
     l3Add(drum,new T.TorusGeometry(.055,.008,7,24),drumRim,0,.149,.337);
     l3Add(drum,new T.TorusGeometry(.041,.009,7,24),drumRim,0,.078,.349).rotation.x=-.12;
   }
-  G.userData.cam={dist:9.3,y:2.26,yaw:.14,pitch:-.145,minPitch:-.22};
+  G.userData.cam={dist:9.3,y:2.26,yaw:.14,pitch:-.145,minPitch:-.12,zmax:1.18,dmax:12.4};
   return G;
  },
  sejong:lmSejong,
@@ -10432,10 +10432,10 @@ const LM3={
   for(const s of[-1,1])l3Add(G,new T.SphereGeometry(.08,8,6),L3M('#a8a090'),s*1.75,.72,1.35);
   G.userData.cam={dist:8.5,y:1.0};return G;},
  gwanghwa(){const T=THREE,G=new T.Group();l3Ground(G,3.8,L3TX.plaza(),'#c6c4be',9);
-  const mt=l3Add(G,new T.ConeGeometry(2.2,2.2,7),L3M('#4f7a5c'),0,1.1,-3.2);mt.scale.z=.5;
+  lmBugak(G);
   const w=l3ArchWall(3.6,.95,1.2,[[-1,.38,.62],[0,.48,.78],[1,.38,.62]]);G.add(w);
   for(let i=0;i<24;i++)l3Add(G,new T.BoxGeometry(.11,.1,.1),L3M('#d0c8b4'),-1.75+i*.152,1.0,.55);
-  for(const s of[-1,1]){const hc=new T.Group();hc.position.set(s*2.15,0,.9);G.add(hc);l3Add(hc,new T.BoxGeometry(.3,.2,.4),L3M('#d0c8b4'),0,.1,0);const b=l3Add(hc,new T.SphereGeometry(.15,12,8),L3M('#c8c0ac'),0,.32,0);b.scale.set(1,.9,1.3);l3Add(hc,new T.SphereGeometry(.1,10,8),L3M('#c8c0ac'),0,.48,.12);}
+  for(const s of[-1,1])lmHaetae(G,s*2.15,.9,s);
   const h1=l3Hall(2.4,.95,.42,{rh:.32,ew:1.3,ed:1.6,roof:{lift:.3}});h1.position.y=.97;G.add(h1);const h2=l3Hall(2.0,.7,.34,{rh:.5,ew:1.38,ed:1.9,roof:{lift:.32}});h2.position.y=.97+h1.userData.top+.06;G.add(h2);
   const sign=s3Tex('l3ghs',256,96,(g,w,h)=>{g.fillStyle='#141c3a';g.fillRect(0,0,w,h);g.strokeStyle='#c8a040';g.lineWidth=8;g.strokeRect(4,4,w-8,h-8);g.fillStyle='#f0d070';g.font='900 56px sans-serif';g.textAlign='center';g.fillText('광화문',w/2,68);});
   l3Add(G,new T.PlaneGeometry(.5,.18),L3M('#fff',{map:sign}),0,.97+h1.userData.top+.25,.39);
@@ -10682,9 +10682,9 @@ function lmPerson(p,col,k){const T=THREE,g=new T.Group(),sk=L3M('#f2d2b0'),hc=L3
   p.add(g);return g;}
 function lmPeople(G,n,path,k,seed=1){const P=LMPAL[k]||LMPAL.city,list=[];
   for(let i=0;i<n;i++){const g=lmPerson(G,P[(i*3+seed)%P.length],k);list.push({g,o:i/n,v:(.05+((i*7+seed)%5)*.012)*(i%2?1:-1)});}
-  L3.anims.push(t=>{for(const q of list){const u=q.o+t*q.v,b=Math.abs(Math.sin(t*9+q.o*20))*.012;
+  /* v386 사람 걸음: 너무 빠르다는 의견 → 직선 길은 1/4, 둘레 길은 1/2 속도 · 발걸음 흔들림도 느리게 */L3.anims.push(t=>{for(const q of list){const u=q.o+t*q.v*(path.r?.5:1),b=Math.abs(Math.sin(t*5+q.o*20))*.01;
     if(path.r){const a=u*Math.PI*2/Math.max(1,path.r*.6);q.g.position.set(Math.cos(a)*path.r,b+(path.y||0),Math.sin(a)*path.r);q.g.rotation.y=-a+(q.v>0?Math.PI:0);}
-    else{const L=path.x1-path.x0,f=((u*4%1)+1)%1;q.g.position.set(path.x0+f*L,b+(path.y||0),path.z+((q.o*13)%1-.5)*(path.dz||.3));q.g.rotation.y=q.v>0?Math.PI/2:-Math.PI/2;if(q.v<0)q.g.position.x=path.x1-f*L;}}});}
+    else{const L=path.x1-path.x0,f=((u%1)+1)%1;q.g.position.set(path.x0+f*L,b+(path.y||0),path.z+((q.o*13)%1-.5)*(path.dz||.3));q.g.rotation.y=q.v>0?Math.PI/2:-Math.PI/2;if(q.v<0)q.g.position.x=path.x1-f*L;}}});}
 function lmBirds(G,n,y,r,col='#2a2a30'){const T=THREE,m=L3M(col,{side:T.DoubleSide}),list=[];
   for(let i=0;i<n;i++){const g=new T.Group();const w=[];for(const s of[-1,1]){const p=new T.Mesh(new T.PlaneGeometry(.16,.05),m);p.position.x=s*.08;const h=new T.Group();h.add(p);g.add(h);w.push([h,s]);}l3Add(g,new T.SphereGeometry(.025,6,4),m);G.add(g);list.push({g,w,o:i/n*6.28,r:r*(.7+((i*37)%30)/100),y:y+((i*13)%7)*.12});}
   L3.anims.push(t=>{for(const q of list){const a=q.o+t*.25;q.g.position.set(Math.cos(a)*q.r,q.y+Math.sin(t+q.o)*.1,Math.sin(a)*q.r);q.g.rotation.y=-a;for(const [h,s] of q.w)h.rotation.z=s*Math.sin(t*10+q.o)*.6;}});}
@@ -10798,6 +10798,39 @@ function lmYard(G,o){const r0=o.r,r1=o.r+(o.w||1.5);lmRing(G,r0-.16,r1,o.tex||L3
   if(o.path){const pv=l3Add(G,new THREE.BoxGeometry(o.pw||.9,.012,r1-r0+.05),L3M('#fff',{map:L3W(L3TX.plaza(),1,2)}),0,.004,(r0+r1)/2);}}
 function lmCandles(G,n,r,y=0,a0=.2,a1=Math.PI-.2){for(let i=0;i<n;i++){const a=a0+(a1-a0)*i/(n-1),x=Math.cos(a)*r,z=Math.sin(a)*r;l3Add(G,new THREE.CylinderGeometry(.025,.025,.1,8),L3M('#f6efe0'),x,y+.05,z);lampFx(G,x,y+.13,z,{c:'#ffb040',pool:.3,h:.25,r:.018,py:y+.012});}}
 /* 원형 먼 배경은 모형을 돌려도 동상이나 전시관 입구를 가리지 않는다. */
+/* v386 광화문 뒤 북악산: 울퉁불퉁한 둥근 봉우리 여러 개(가운데가 가장 높음) + 바위 + 소나무 */
+function lmBugak(G){const T=THREE,R=(i)=>(Math.sin(i*91.7+3.1)*43758.5453%1+1)%1;
+  const lump=(x,z,rx,h,rz,col,k)=>{const g=new T.IcosahedronGeometry(1,4),p=g.attributes.position;
+    for(let i=0;i<p.count;i++){const X=p.getX(i),Y=p.getY(i),Z=p.getZ(i),n=1+.07*Math.sin(X*7+k)*Math.cos(Z*6+k*2)+.05*Math.sin(Y*9+X*4+k);p.setXYZ(i,X*n,Math.max(-.15,Y)*n,Z*n);}
+    g.computeVertexNormals();const m=l3Add(G,g,L3M(col,{shininess:3}),x,0,z);m.scale.set(rx,h,rz);return m;};
+  [[-3.7,-3.1,1.3,.95,.8,'#5b8064'],[3.8,-3.0,1.4,1.05,.8,'#56805f'],[-2.2,-3.35,1.6,1.5,.95,'#4e7658'],[2.3,-3.3,1.7,1.6,.95,'#527a5b'],[0,-3.6,1.9,2.25,1.05,'#476f53']]
+    .forEach(([x,z,rx,h,rz,c],k)=>lump(x,z,rx,h,rz,c,k));
+  /* 봉우리 꼭대기의 흰 화강암 바위 */
+  for(const [x,y,z,r] of [[0,1.98,-3.25,.26],[.4,1.8,-3.05,.16],[-2.1,1.28,-2.95,.17],[2.4,1.36,-2.9,.18]]){const b=l3Add(G,new T.DodecahedronGeometry(r,0),L3M('#b9b6ac',{shininess:4}),x,y,z);b.scale.set(1.3,.7,1);b.rotation.set(R(x)*2,R(z)*3,0);}
+  /* 산자락 소나무 */
+  for(let i=0;i<26;i++){const x=-4.2+R(i)*8.4,c=Math.abs(x)<1.2?0:Math.abs(x)<3?(x<0?-2.2:2.3):(x<0?-3.7:3.8),z=-2.55-R(i+40)*.35,h=.16+R(i+9)*.12;
+    l3Add(G,new T.ConeGeometry(.09,h*1.6,6),L3M(i%2?'#2f5a3a':'#3a6a42'),x,h*.8+.02,z+(Math.abs(x-c)<.4?-.05:0));}
+}
+/* v386 해태: 돌 받침 위에 앉은 상상의 동물(둥근 갈기 · 뿔 하나 · 앞다리 버팀 · 말린 꼬리) */
+function lmHaetae(G,x,z,s){const T=THREE,g=new T.Group();g.position.set(x,0,z);g.rotation.y=-s*.18;G.add(g);
+  const st=L3M('#cfc6b0',{shininess:6}),dk=L3M('#9a917c',{shininess:4}),E=(geo,m,px,py,pz,sx=1,sy=1,sz=1)=>{const o=l3Add(g,geo,m,px,py,pz);o.scale.set(sx,sy,sz);return o;};
+  E(new T.BoxGeometry(.36,.16,.46),dk,0,.08,0);E(new T.BoxGeometry(.32,.05,.42),st,0,.185,0);
+  const S=(r,px,py,pz,sx,sy,sz,m=st)=>E(new T.SphereGeometry(r,16,12),m,px,py,pz,sx,sy,sz);
+  S(.12,0,.3,-.07,1,.85,1.15);            /* 엉덩이·뒷다리 */
+  for(const k of[-1,1])S(.06,k*.1,.26,-.03,.8,1,1.3);
+  S(.1,0,.42,.04,.95,1.25,.9);            /* 세운 가슴 */
+  for(const k of[-1,1]){E(new T.CylinderGeometry(.03,.036,.17,8),st,k*.055,.28,.08);S(.038,k*.055,.205,.115,1,.6,1.3);}  /* 앞다리·발 */
+  const hd=new T.Group();hd.position.set(0,.6,.08);g.add(hd);
+  const H=(geo,m,px,py,pz,sx=1,sy=1,sz=1)=>{const o=l3Add(hd,geo,m,px,py,pz);o.scale.set(sx,sy,sz);return o;};
+  H(new T.SphereGeometry(.085,16,12),st,0,0,0,1,.95,1);
+  H(new T.BoxGeometry(.1,.07,.09),st,0,-.025,.08);                         /* 주둥이 */
+  H(new T.SphereGeometry(.03,10,8),dk,0,-.005,.13,1.4,.8,.7);             /* 코 */
+  for(const k of[-1,1]){H(new T.SphereGeometry(.016,10,8),dk,k*.034,.03,.078);H(new T.SphereGeometry(.026,10,8),st,k*.034,.048,.07,1.2,.5,.8);H(new T.SphereGeometry(.022,8,6),st,k*.072,.065,-.015,.6,1,.5);}  /* 눈·귀 */
+  H(new T.ConeGeometry(.018,.07,8),st,0,.1,.02).rotation.x=-.3;            /* 뿔 하나 */
+  for(let i=0;i<9;i++){const a=-.2+i/8*(Math.PI+.4);H(new T.SphereGeometry(.035,10,8),st,Math.cos(a)*.085,.0+Math.sin(a)*.075-.02,-.035);}  /* 둥근 갈기 */
+  for(let i=0;i<5;i++)E(new T.SphereGeometry(.028,10,8),st,(i-2)*.03,.5-Math.abs(i-2)*.02,.12);  /* 가슴 방울털 */
+  const tl=E(new T.TorusGeometry(.06,.022,8,14,Math.PI*1.4),st,0,.36,-.2);tl.rotation.y=Math.PI/2;  /* 말린 꼬리 */
+}
 function lmGwanghwaSky(G){
   const T=THREE;
   const draw=(g,w,h,night)=>{
@@ -10834,11 +10867,12 @@ function lmGwanghwaSky(G){
   };
   const day=s3Tex('gwanghwaPlazaDay',2048,512,(g,w,h)=>draw(g,w,h,false));
   const night=s3Tex('gwanghwaPlazaNight',2048,512,(g,w,h)=>draw(g,w,h,true));
-  const wall=(r,map,transparent)=>l3Add(G,new T.CylinderGeometry(r,r,20,88,1,true),new T.MeshBasicMaterial({
+  /* v386 배경 벽을 광장 바로 바깥(반지름 14)으로 당김 · 높이도 같은 비율로 줄여 거리 모습 크기는 그대로 · 길바닥 선이 땅 높이 */
+  const WR=14,WH=20*WR/29,wall=(r,map,transparent)=>l3Add(G,new T.CylinderGeometry(r,r,WH,88,1,true),new T.MeshBasicMaterial({
     map,side:T.BackSide,fog:false,transparent,depthWrite:!transparent
-  }),0,5.9,0);
-  wall(29,day,false);
-  const dusk=wall(28.94,night,true);dusk.renderOrder=-2;
+  }),0,WH*(.795-.5),0);
+  wall(WR,day,false);
+  const dusk=wall(WR-.03,night,true);dusk.renderOrder=-2;
   L3.anims.push(()=>{const n=L3.night||0;dusk.visible=n>.002;dusk.material.opacity=n;});
 }
 function lmStatueFloodlight(G,x,z,aim,intensity,color){
@@ -10991,11 +11025,11 @@ function lmLive(el,id,cls='fos3cv'){if(typeof THREE==='undefined'||!(LM3[id]||id
   const hr=new Date().getHours();let nTgt=(hr>=19||hr<6)?1:0,nv=nTgt;if(getComputedStyle(el).position==='static')el.style.position='relative';
   const nb=document.createElement('button');nb.type='button';nb.className='lmNt';nb.style.cssText='position:absolute;right:8px;top:8px;z-index:3;border:0;border-radius:999px;padding:6px 10px;font-size:16px;background:rgba(0,0,0,.45);color:#fff;cursor:pointer';
   const nbSet=()=>{nb.textContent=nTgt?'🌙':'☀️';nb.setAttribute('aria-label',nTgt?'밤':'낮');};nbSet();nb.addEventListener('click',e=>{e.stopPropagation();nTgt=1-nTgt;nbSet();});nb.addEventListener('pointerdown',e=>e.stopPropagation());el.appendChild(nb);
-  const cam=new T.PerspectiveCamera(32,w/h,.05,100);let yaw=C.yaw??.5,pitch=C.pitch??.3,dist=Math.max(C.dist||8,(C.fitWidth||0)/(2*cam.aspect*Math.tan(T.MathUtils.degToRad(cam.fov/2)))),auto=true,drag=null,last=performance.now();const D0=dist;
+  const cam=new T.PerspectiveCamera(32,w/h,.05,100);let yaw=C.yaw??.5,pitch=C.pitch??.3,dist=Math.max(C.dist||8,(C.fitWidth||0)/(2*cam.aspect*Math.tan(T.MathUtils.degToRad(cam.fov/2))));if(C.dmax)dist=Math.min(dist,C.dmax*.86);let auto=true,drag=null,last=performance.now();const D0=dist;
   const place=()=>{cam.position.set(Math.sin(yaw)*Math.cos(pitch)*dist,(C.y||1)+Math.sin(pitch)*dist,Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(0,C.y||1,0);};
   const cv=el;cv.style.touchAction='none';cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};auto=false;cv.setPointerCapture(e.pointerId);});
   cv.addEventListener('pointermove',e=>{if(!drag||cv._pz)return;yaw=drag.yaw-(e.clientX-drag.x)*.01;pitch=Math.max(C.minPitch??-.05,Math.min(1.2,drag.pitch+(e.clientY-drag.y)*.006));if(C.lim)yaw=Math.max(-C.lim,Math.min(C.lim,yaw));});cv.addEventListener('pointerup',()=>{drag=null;setTimeout(()=>auto=true,2500);});
-  cv.addEventListener('wheel',e=>{dist=Math.max(D0*.45,Math.min(D0*1.8,dist*(1+Math.sign(e.deltaY)*.08)));e.preventDefault();},{passive:false});pinchZoom(cv,()=>dist,v=>{dist=Math.max(D0*.3,Math.min(D0*1.8,v));auto=false;},vPan(cv,cam,w,h));
+  /* v386 C.zmax: 멀어질 수 있는 한도(배경 벽 안쪽에 머물게) */const ZM=Math.min(C.zmax||1.8,C.dmax?C.dmax/D0:99);cv.addEventListener('wheel',e=>{dist=Math.max(D0*.45,Math.min(D0*ZM,dist*(1+Math.sign(e.deltaY)*.08)));e.preventDefault();},{passive:false});pinchZoom(cv,()=>dist,v=>{dist=Math.max(D0*.3,Math.min(D0*ZM,v));auto=false;},vPan(cv,cam,w,h));
   const AN=M.userData.anims||[];let t=0;const step=()=>{const n0=L3.night;L3.night=nv;for(const f of AN)try{f(t);}catch(_){}L3.night=n0;hl.intensity=H0*(1-.62*nv);d.intensity=.85*(1-.8*nv);d2.intensity=.35*(1-.3*nv);sc.background.copy(bgD).lerp(bgN,nv);};
   const loop=now=>{if(!cv.isConnected||tok!==liveTok){sc.traverse(x=>{if(x.geometry)x.geometry.dispose();});return;}if(!cv.offsetParent||document.hidden){last=now;setTimeout(()=>requestAnimationFrame(loop),250);return;}if(now-last<(PWR.saving?120:31)){requestAnimationFrame(loop);return;}const dt=Math.min(.05,(now-last)/1000);last=now;t+=dt;nv+=(nTgt-nv)*Math.min(1,dt*3);
     if(auto){if(C.lim)yaw=Math.sin(t*.4)*C.lim*.8;else yaw+=dt*.3;}place();step();ren.render(sc,cam);requestAnimationFrame(loop);};requestAnimationFrame(loop);return true;}
@@ -14583,7 +14617,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=385;
+const GVER=386;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
