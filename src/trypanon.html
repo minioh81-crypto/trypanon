@@ -892,7 +892,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v383 · 2026-11-25</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v384 · 2026-11-25</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2589,6 +2589,22 @@ function lmGwanghwaUplights(u,yi){
     <path d="M-1.05,-.58 l2.05,-.10" stroke="#ffecba" stroke-width=".5"/>
   </g>`).join('');
 }
+/* v384 명량분수(2D): 젖은 바닥 돌판 + 가늘게 솟는 물줄기, 꼭대기에서 흩어지는 물방울, 바닥 물보라 */
+function yiFountain2D(u){
+  const jet=(x,y,h,w)=>`<path d="M${x-w},${y} Q${x-w*.55},${y-h*.55} ${x-.08},${y-h} L${x+.08},${y-h} Q${x+w*.55},${y-h*.55} ${x+w},${y}Z" fill="url(#${u}fjet)"/>
+    <path d="M${x-.05},${y-h+.2} q-1.3,-1.1 -2.2,1.9 M${x+.05},${y-h+.2} q1.3,-1.1 2.2,1.9 M${x},${y-h} q-.5,-1 -1.2,.2 M${x},${y-h} q.5,-1 1.2,.2" fill="none" stroke="#f2feff" stroke-opacity=".8" stroke-width=".22" stroke-linecap="round" stroke-dasharray=".25 .55"/>
+    <circle cx="${x}" cy="${y-h-.25}" r=".55" fill="#fff" opacity=".55"/>
+    <ellipse cx="${x}" cy="${y}" rx="${w*2.6}" ry="${w*.75}" fill="#f4ffff" opacity=".55"/><ellipse cx="${x}" cy="${y}" rx="${w*.9}" ry="${w*.3}" fill="#fff" opacity=".8"/>`;
+  const side=(m)=>{const X=x=>m?120-x:x;
+    let g=`<path d="M${X(2)},99.6 L${X(18)},90.6 L${X(32)},90.6 L${X(27)},99.6Z" fill="#53707a" opacity=".72"/>
+      <path d="M${X(5)},98 L${X(19)},91.6 M${X(10)},99 L${X(23)},91.6 M${X(17)},99.3 L${X(27)},91.6" stroke="#b9d6dc" stroke-opacity=".38" stroke-width=".35"/>
+      <path d="M${X(2)},99.6 L${X(18)},90.6 L${X(32)},90.6" fill="none" stroke="#c7cbc3" stroke-width=".45"/>`;
+    [[19.5,92.4,7.2],[24,92.4,9.5],[28.6,92.4,7.6],[14.5,95.4,9.8],[20.3,95.4,12.5],[26,95.4,10.4],[10,98.4,8.6],[16.4,98.4,11],[22.6,98.4,9.2]].forEach(([x,y,h])=>g+=jet(X(x),y,h,.46));
+    return g;};
+  return `<defs><linearGradient id="${u}fjet" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#fbffff" stop-opacity=".95"/><stop offset=".55" stop-color="#d6f2fa" stop-opacity=".72"/><stop offset="1" stop-color="#c3e8f5" stop-opacity=".3"/></linearGradient>
+    <radialGradient id="${u}fmist"><stop stop-color="#eefbff" stop-opacity=".5"/><stop offset="1" stop-color="#eefbff" stop-opacity="0"/></radialGradient></defs>
+    ${side(0)}${side(1)}<ellipse cx="20" cy="88" rx="13" ry="6" fill="url(#${u}fmist)"/><ellipse cx="100" cy="88" rx="13" ry="6" fill="url(#${u}fmist)"/>`;
+}
 function yiTurtleShipArt(u){
   return `<defs>
     <linearGradient id="${u}gbhull" x2=".2" y2="1"><stop stop-color="#b18351"/><stop offset=".42" stop-color="#795334"/><stop offset="1" stop-color="#342722"/></linearGradient>
@@ -2616,7 +2632,11 @@ function yiTurtleShipArt(u){
     <g id="${u}gbport"><circle r="6" fill="#312824"/><circle cy=".3" r="3.7" fill="#171d20"/><path d="M-4 3Q0 6 4 2" stroke="#bd8b57" stroke-width="1.1" fill="none"/></g>
     <g id="${u}gbspike"><path d="M-3 2Q0 3 3 1L.7-16Z" fill="#29373d"/><path d="M.7-15-1.1 1" stroke="#a9ada3" stroke-width=".7"/></g>
     <g id="${u}gboar"><path d="M0 0Q10 12 27 43l9 19" fill="none" stroke="#34291f" stroke-width="5.4" stroke-linecap="round"/><path d="M0 0Q10 12 27 43l8 18" fill="none" stroke="#b18a59" stroke-width="3.4" stroke-linecap="round"/><path d="M29 56l5-2 10 20-6 3Z" fill="#ae8453" stroke="#5e4531" stroke-width="1.4"/><path d="m33 56 9 18" stroke="#d0a66a" stroke-width="1.1"/></g>
-  </defs><g transform="translate(50 63.4) scale(.036)">
+    <filter id="${u}gbbr" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".2 .4 .08 0 .06  .2 .4 .07 0 .085  .17 .33 .06 0 .08  0 0 0 1 0"/><feComponentTransfer><feFuncR type="gamma" exponent=".85" amplitude="1.15"/><feFuncG type="gamma" exponent=".85" amplitude="1.15"/><feFuncB type="gamma" exponent=".85" amplitude="1.1"/></feComponentTransfer></filter>
+  </defs>
+  <!-- v384 청동 거북선은 기단 앞 팔각 돌받침 위에 얹힌다 -->
+  <ellipse cx="60.2" cy="87.4" rx="8.6" ry="1.3" fill="#3d4541" opacity=".42"/>
+  <g filter="url(#${u}gbbr)"><g transform="translate(47.4 70.9) scale(.0285)">
   <path d="m176 434 21-21 114 82-13 77-54 10-59-73Z" fill="#3f3026"/>
   <path d="M176 421Q225 416 276 464L294 564 283 596Q229 582 181 520Q165 481 176 421Z" fill="url(#${u}gbbow)" stroke="#2a2727" stroke-width="3"/>
   <path d="M178 492Q202 514 240 532l46 5m-100-25q40 34 100 40m-81-19q31 28 78 36M198 440q-7 44 10 70m17-60q-8 41 15 79m19-70q-4 37 14 78" stroke="#503624" stroke-width="2" fill="none"/>
@@ -2671,7 +2691,7 @@ function yiTurtleShipArt(u){
     <circle cx="2" cy="-13.2" r="2.4" fill="#ecbb69"/><ellipse cx="-37" cy="-6" rx="4.5" ry="1.9" fill="#233b3b"/>
     <path d="M23-9q-2 13-15 22m19-12Q19 18 4 24m-32-8q17 10 32 1m-48-22q-16-3-21 5m18 3q-18 1-25 9" fill="none" stroke="#9cab88" stroke-width="2" stroke-linecap="round"/>
   </g>
-  </g>`;
+  </g></g>`;
 }
 function yiArt(u){
   const fill=id=>`url(#${u}${id})`,edge='#1b2425',light='#9d9a81';
@@ -2709,8 +2729,7 @@ function yiArt(u){
   <path d="M48.8,85.3 L53,86.6 H69 L73.5,85.5 M53,86.6 V94 M69,86.6 V94 M49,89.7 L53,91 H69 L73.5,89.7" fill="none" stroke="#9c9383" stroke-width=".3"/>
   ${yiTurtleShipArt(u)}
   ${drum(42.5,91.5)}${drum(80,91)}
-  <path d="M3,99 L19,91 L31,91 L26,99Z M94,99 L89,91 L102,91 L118,99Z" fill="#698d96" opacity=".65"/>
-  <path d="M13,96 Q15,92 15,88 Q16.8,92 18,96 M22,98 Q24,92 24,87 Q26.5,93 28,98 M96,98 Q97,92 97,87 Q99,91 101,98 M105,96 Q106,92 107,87 Q109,93 111,96" stroke="#d2f4f0" stroke-opacity=".81" stroke-width=".65" fill="none"/>
+  ${yiFountain2D(u)}
   ${lmGwanghwaUplights(u,true)}
   <g transform="translate(58 3.2) scale(.415)">
     <path d="M-16,94 L-19,96 L21,96 L23,94 L19,92 L-15,92Z" fill="#323735"/>
@@ -9679,22 +9698,10 @@ const SCULPT={},SCDEF={
     E([.015,1.535,-.022],[.37,.26,.275],.047),
     C([-.25,1.61,-.02],[.39,1.64,-.044],.139,.15,.075),
     C([-.003,1.66,-.02],[-.026,1.93,-.022],.116,.092,.036),
-    /* 오른손은 칼날 위쪽이 아니라 칼막이 바로 아래를 감싼다. */
-    C([-.326,1.61,-.025],[-.452,1.13,.022],.126,.103,.036),
-    C([-.454,1.135,.043],[-.621,1.31,.263],.106,.074,.042),
-    E([-.641,1.31,.283],[.068,.073,.074],.019),
-    /* 왼쪽 어깨에서 팔꿈치로 뻗은 팔과 허리 사이에는 열린 공간이 남는다. */
-    C([.328,1.659,-.035],[.63,1.51,-.055],.141,.109,.034),
-    C([.613,1.525,-.045],[.691,1.43,-.024],.113,.117,.035),
-    C([.689,1.43,-.024],[.533,1.246,.16],.12,.092,.041),
-    C([.533,1.245,.16],[.437,1.203,.232],.09,.069,.035),
-    E([.403,1.2,.257],[.073,.051,.072],.02),
-    C([.451,1.226,.237],[.364,1.25,.262],.025,.018,.01)
+    /* v384 팔·손은 아래 armR/armL/handR/handL 조각으로 따로 촘촘히 깎는다. 몸통 안쪽 심만 남긴다. */
+    C([-.326,1.61,-.025],[-.452,1.13,.022],.112,.09,.03),
+    C([.328,1.659,-.035],[.63,1.51,-.055],.128,.096,.03)
   ];
-  for(let i=0;i<4;i++){
-    forms.push(C([-.656,1.271+i*.024,.312],[-.62,1.263+i*.023,.337],.014,.013,.007));
-    forms.push(C([.409,1.168+i*.018,.287],[.358-i*.001,1.164+i*.02,.286],.012,.011,.009));
-  }
   const torso=D.list(forms);
   const ridges=(a,y,n,f)=>Math.max(0,Math.sin(a*n+(Math.floor(y*f/Math.PI)%2)*1.57))*Math.max(0,Math.sin(y*f));
   const body=p=>{
@@ -9776,7 +9783,44 @@ const SCULPT={},SCDEF={
     if(y>1.709&&y<1.876&&z>.085)f+=.0034*Math.sin(hx*185+y*21)*Math.max(0,1-Math.abs(hx)*8);
     return Math.min(f,D.smin(dome,brow,.012),guard,capTop(p));
   };
-  return {parts:{body:[body,[-.83,-.025,-.49],[.85,1.96,.47],.0148],head:[head,[-.37,1.65,-.33],[.32,2.43,.23],.0067,.014]},extra:{}};
+  /* v384 팔: 윗팔은 비늘 갑옷 소매, 아래팔은 주름진 소매와 손목 테두리. 손: 손가락 마디·엄지가 있는 주먹(오른손은 칼집을 쥔다). */
+  const V=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],crs=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],nrm=a=>{const l=Math.hypot(...a);return [a[0]/l,a[1]/l,a[2]/l];},
+    ad=(c,v,k)=>[c[0]+v[0]*k,c[1]+v[1]*k,c[2]+v[2]*k];
+  const seg=(a,b,r1,r2,kind)=>{const d=V(b,a),L=Math.hypot(...d),u=nrm(d);let e1=crs(u,[0,0,1]);if(Math.hypot(...e1)<.2)e1=crs(u,[1,0,0]);e1=nrm(e1);return {a,b,r1,r2,u,L,e1,e2:crs(u,e1),kind};};
+  const armOf=S=>p=>{let d=1e9,best=null,bd=1e9;
+    for(const g of S){const q=V(p,g.a);let h=dot(q,g.u);const hc=h<0?0:h>g.L?g.L:h,rad=ad(q,g.u,-hc),rho=Math.hypot(...rad),r=g.r1+(g.r2-g.r1)*hc/g.L;
+      let v=rho-r;
+      if(g.kind==='fore'){const t=hc/g.L;v-=.006*Math.max(0,(t-.8)/.2)**2;}
+      const ang=Math.atan2(dot(rad,g.e2),dot(rad,g.e1));
+      g._h=hc;g._ang=ang;g._r=r;g._rho=rho;
+      d=D.smin(d,v,.035);if(v<bd){bd=v;best=g;}}
+    if(!best||bd>.05)return d;const g=best,h=g._h,ang=g._ang;
+    if(g.kind==='up'){const row=Math.floor(h/.036),ph=ang*7/Math.PI+(row%2)*.5,fr=ph-Math.floor(ph),fy=h/.036-row;
+      /* 비늘: 아래로 둥근 미늘 조각, 줄 사이 홈 */
+      const sc=Math.max(0,1-Math.hypot((fr-.5)*1.9,(fy-.62)*1.25));d-=.0085*Math.sqrt(sc);d+=.0035*Math.max(0,1-fy*7);}
+    else if(g.kind==='fore'){const t=h/g.L;d+=.0055*Math.sin(ang*6+t*4)*Math.min(1,t*3)+.0025*Math.sin(ang*13-t*7);
+      /* 손목 테두리 띠 두 줄 */
+      const cuff=Math.max(g._rho-g._r-.013,Math.abs(h-(g.L-.02))-.016);d=D.smin(d,cuff,.005);}
+    else if(g.kind==='elb'){d+=.006*Math.max(0,Math.sin(h*70))*Math.max(0,Math.cos(ang));}
+    return d;};
+  const armR=armOf([seg([-.326,1.61,-.025],[-.452,1.13,.022],.126,.103,'up'),seg([-.454,1.135,.043],[-.585,1.296,.168],.098,.07,'fore')]);
+  const armL=armOf([seg([.328,1.659,-.035],[.63,1.51,-.055],.141,.109,'up'),seg([.613,1.525,-.045],[.691,1.43,-.024],.113,.117,'elb'),seg([.689,1.43,-.024],[.533,1.246,.16],.12,.098,'fore'),seg([.533,1.245,.16],[.472,1.219,.204],.096,.074,'fore')]);
+  /* 주먹: c 손바닥 가운데, f 손가락 마디 쪽, u 엄지 쪽(검지→새끼가 -u), 손등은 s 쪽 */
+  const fist=(c,f,u,flip,Z=1.3)=>{f=nrm(f);u=nrm(u);let s=crs(f,u);if(flip)s=s.map(x=>-x);
+    const P=[],K=[];
+    const pt=(a,b,k)=>[c[0]+(f[0]*a+s[0]*b+u[0]*k)*Z,c[1]+(f[1]*a+s[1]*b+u[1]*k)*Z,c[2]+(f[2]*a+s[2]*b+u[2]*k)*Z],E=(q,r,k)=>D.E(q,r.map(x=>x*Z),k*Z),C=(a,b,r1,r2,k)=>D.C(a,b,r1*Z,r2*Z,k*Z);
+    P.push({t:2,a:c,b:[.03*Z,.03*Z,.03*Z],r1:.02*Z,k:0});
+    const W=(a,b,k,rx,ry,rz,bl)=>E(pt(a,b,k),[rx,ry,rz],bl);
+    [.039,.013,-.013,-.038].forEach((o,i)=>{const r=i===3?.0125:.0145,kn=pt(.046,.006,o*(1-i*.02)),m=pt(.058,-.026,o),tp=pt(.034,-.04,o*.96);
+      P.push(C(pt(-.01,.008,o*.9),kn,.018,r+.002,.014),C(kn,m,r+.001,r,.006),C(m,tp,r,r-.001,.006),E(ad(kn,s,.004),[.016,.016,.016],.006));});
+    P.push(C(pt(-.03,-.005,.03),pt(-.004,-.02,.058),.022,.019,.014),C(pt(-.004,-.02,.058),pt(.03,-.036,.05),.017,.015,.006),C(pt(.03,-.036,.05),pt(.052,-.046,.026),.015,.013,.005));
+    P.push(C(pt(-.035,.0,0),pt(-.1,.0,0),.036,.042,.02));
+    const L=D.list(P);return p=>{let d=L(p);const q=V(p,c),a=dot(q,s);if(a>.015)d+=.0018*Math.sin(dot(q,u)*150)*Math.max(0,Math.min(1,(.06-Math.abs(dot(q,f)))*40));return d;};};
+  const swU=[-.2237,.9745,-.0236],wR=[-.167,.175,.22],wRp=nrm(V(wR,ad([0,0,0],swU,dot(wR,swU))));
+  const handR=fist([-.652,1.304,.247],wRp,swU,false),handL=fist([.42,1.198,.25],[-.77,-.34,.58],[-.278,.938,.209],true);
+  return {parts:{body:[body,[-.83,-.025,-.49],[.85,1.96,.47],.0148],head:[head,[-.37,1.65,-.33],[.32,2.43,.23],.0067,.014],
+    armR:[armR,[-.78,.98,-.2],[-.18,1.78,.34],.0072,.014],armL:[armL,[.18,1.06,-.24],[.88,1.82,.33],.0072,.014],
+    handR:[handR,[-.79,1.16,.08],[-.5,1.45,.4],.0042,.01],handL:[handL,[.27,1.06,.1],[.56,1.34,.4],.0042,.01]},extra:{}};
  }
 };
 
@@ -9882,6 +9926,7 @@ function lmYiFigure(){
   const recess=L3M('#343b36',{shininess:16,specular:'#49473f'});
   l3Add(F,geo.body,bronze);
   l3Add(F,geo.head,bronze);
+  for(const k of ['armR','armL','handR','handL'])if(geo[k])l3Add(F,geo[k],bronze);
   /* 칼집 끝은 발 가까이에 있고, 칼자루는 장군의 오른쪽 바깥으로 기울어진다. */
   const sw=new T.Group();
   sw.position.set(-.352,.028,.306);
@@ -10028,7 +10073,7 @@ function lmBronzeShip2(){
     }
     for(let i=0;i<10;i++){
       const u=.13+i*.078,x=fx(u),z=width(u)*s*.77;
-      const end=[x+.55,-.77,z+s*1.09];
+      const end=[x+.5,-.58,z+s*1.05];/* v384 노깃이 받침돌을 뚫지 않게 */
       strut(ship,rail,[x-.11,.26,z],end,.025,.018);
       const blade=add(ship,new T.BoxGeometry(.084,.33,.043),rail,end[0]+.038,end[1]-.076,end[2]+s*.064);
       blade.rotation.set(-s*.84,.09,.24);
@@ -10328,7 +10373,7 @@ const LM3={
   l3Add(G,new T.BoxGeometry(.36,.036,.81),stone,0,.78,.88);
   const shipSupport=L3M('#53574f',{shininess:12});
   for(const z of [.71,1.04])l3Add(G,new T.BoxGeometry(.31,.054,.082),shipSupport,0,.808,z);
-  const ship=lmBronzeShip2();ship.scale.setScalar(.135);ship.position.set(0,.905,.89);ship.rotation.y=P*.32;G.add(ship);
+  const ship=lmBronzeShip2();ship.scale.setScalar(.135);ship.position.set(0,.892,.89);ship.rotation.y=P*.32;G.add(ship);
   /* 두 큰 청동 북은 부풀어 나온 옆면, 못, 고리 달린 원형 장식을 갖는다. */
   const drumBody=L3M('#5a5a51',{shininess:25,specular:'#736955'});
   const drumRim=L3M('#747264',{shininess:15,specular:'#716655'});
@@ -10829,17 +10874,36 @@ function lmGwanghwaPlaza(G,id){
   lmStatueFloodlight(G,1.38,lampZ-.18,aim,1.28,'#fff0c4');
   lmStatueFloodlight(G,-1.10,yi?-1.52:-1.86,[0,aim[1],-.22],.94,'#b6d7ff');
   if(yi){
-    const jets=[],water=new T.MeshBasicMaterial({color:'#abcfe3',transparent:true,opacity:.55,depthWrite:false});
-    const nozzle=L3M('#626c70');
-    slab(3.08,.023,2.37,L3M('#969e9e',{shininess:42,specular:'#a1afac'}),0,.013,3.80);
+    /* v384 명량분수: 바닥 노즐에서 솟는 반투명 물기둥(아래 진하고 위로 옅게) + 꼭대기 물방울 + 밤 조명(노즐 불빛·물기둥이 빛남) */
+    const jetTex=s3Tex('yiJetTex',16,128,(g,w,h)=>{const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'rgba(220,245,255,.06)');gr.addColorStop(.25,'rgba(225,247,255,.4)');gr.addColorStop(1,'rgba(250,255,255,.95)');g.fillStyle=gr;g.fillRect(0,0,w,h);
+      for(let i=0;i<40;i++){g.fillStyle='rgba(255,255,255,.35)';g.fillRect((i*7)%w,(i*37)%h,1,6+(i%5)*3);}});
+    const water=new T.MeshBasicMaterial({map:jetTex,color:'#d8eef6',transparent:true,depthWrite:false,side:T.DoubleSide});
+    const glowM=new T.MeshBasicMaterial({map:jetTex,color:'#5fd0ff',transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide});
+    const nozzle=L3M('#5d666a',{shininess:40}),ledOff=new T.Color('#3d4a50'),ledOn=new T.Color('#9fe8ff');
+    const led=new T.MeshBasicMaterial({color:'#3d4a50'});
+    slab(3.08,.023,2.37,L3M('#7d898b',{shininess:70,specular:'#cfdcdc'}),0,.013,3.80);
+    const jets=[],N=[],D=[],per=14;
     for(const s of [-1,1])for(let i=0;i<6;i++){
       const x=s*(.35+(i%3)*.44),z=3.12+Math.floor(i/3)*.62+(i%3)*.16;
-      l3Add(G,new T.CylinderGeometry(.051,.051,.015,10),nozzle,x,.03,z);
-      const jet=l3Add(G,new T.CylinderGeometry(.010,.023,1,8),water,x,.20,z);jet.renderOrder=3;jets.push(jet);
+      l3Add(G,new T.CylinderGeometry(.05,.054,.014,14),nozzle,x,.03,z);
+      l3Add(G,new T.CircleGeometry(.03,14),led,x,.0375,z).rotation.x=-Math.PI/2;
+      const core=l3Add(G,new T.CylinderGeometry(.006,.014,1,10,1,true),water,x,.2,z);core.renderOrder=3;
+      const halo=l3Add(G,new T.CylinderGeometry(.016,.034,1,10,1,true),glowM,x,.2,z);halo.renderOrder=4;
+      const pool=l3Add(G,new T.PlaneGeometry(.42,.42),new T.MeshBasicMaterial({map:glowTex(),color:'#7fdcff',transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending}),x,.028,z);pool.rotation.x=-Math.PI/2;pool.renderOrder=2;
+      const sp=l3Add(G,new T.CircleGeometry(.07,16),new T.MeshBasicMaterial({color:'#f2fbff',transparent:true,opacity:.45,depthWrite:false}),x,.026,z);sp.rotation.x=-Math.PI/2;sp.renderOrder=3;
+      jets.push({x,z,core,halo,pool,sp,ph:i*.68+(s>0?.3:0)});
+      for(let k=0;k<per;k++)D.push(k/per*Math.PI*2+i,.6+((k*37)%10)/10);
     }
-    const day=new T.Color('#9dd1e1'),night=new T.Color('#61d4ef');
-    L3.anims.push(t=>{const n=L3.night||0;water.color.copy(day).lerp(night,n);water.opacity=.54+.29*n;
-      jets.forEach((jet,i)=>{const h=.23+.49*(.5+.5*Math.sin(t*2.4-i*.68));jet.scale.y=h;jet.position.y=.039+h/2;});});
+    const pos=new Float32Array(jets.length*per*3),pg=new T.BufferGeometry();pg.setAttribute('position',new T.BufferAttribute(pos,3));
+    const drops=new T.Points(pg,new T.PointsMaterial({map:glowTex(),color:'#eefaff',size:.05,transparent:true,opacity:.8,depthWrite:false}));drops.renderOrder=5;drops.frustumCulled=false;G.add(drops);
+    const fl=new T.PointLight('#7fd6ff',0,3.2,2);fl.position.set(0,.5,3.6);G.add(fl);
+    const day=new T.Color('#d8eef6'),night=new T.Color('#bff0ff');
+    L3.anims.push(t=>{const n=L3.night||0;water.color.copy(day).lerp(night,n);water.opacity=.62+.25*n;glowM.opacity=.55*n;led.color.copy(ledOff).lerp(ledOn,n);fl.intensity=1.1*n;
+      jets.forEach((j,i)=>{const h=.25+.5*(.5+.5*Math.sin(t*2.4-j.ph));j.core.scale.y=j.halo.scale.y=h;j.core.position.y=j.halo.position.y=.038+h/2;j.top=h+.038;
+        j.pool.material.opacity=.7*n;j.sp.scale.setScalar(.8+.4*Math.sin(t*9+i));
+        for(let k=0;k<per;k++){const q=(i*per+k),a=D[q*2],sp=D[q*2+1],u=(t*1.3*sp+k*.071)%1,r=u*.11*sp,y=j.top+.05*sp-u*u*(.14+h*.25);
+          pos[q*3]=j.x+Math.cos(a)*r;pos[q*3+1]=Math.max(.03,y);pos[q*3+2]=j.z+Math.sin(a)*r;}});
+      pg.attributes.position.needsUpdate=true;drops.material.color.copy(day).lerp(ledOn,n*.6);});
   }else{
     const bronze=L3M('#927650',{shininess:16});
     for(const s of [-1,1])for(let i=0;i<3;i++){
@@ -14500,7 +14564,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=383;
+const GVER=384;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
