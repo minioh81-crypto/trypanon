@@ -2436,3 +2436,5 @@ H빔	H-beam	H形鋼
 10초 동안 굴진 ×2.2	Dig ×2.2 for 10 s	10秒間 掘進×2.2
 굴진 속도 +3%	Dig speed +3%	掘進速度 +3%
 수입 +8%	Income +8%	収入 +8%
+콘크리트 {}/분 (재료 1씩→2)	Concrete {}/min (1 of each → 2)	コンクリート {}/分 (材料各1→2)
+시멘트+모래+자갈 → 콘크리트 2배로 자동 배합	Cement+sand+gravel → double concrete, auto-mixed	セメント+砂+砂利 → コンクリート2倍で自動配合

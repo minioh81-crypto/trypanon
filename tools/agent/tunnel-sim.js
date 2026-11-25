@@ -10,8 +10,8 @@ for(let i=0;i<T.length;i++){const [km,sea,imm]=T[i],F=1+i,N=Math.ceil(km);let pr
  while(sec<N){const PL=st.p.cut+st.p.jack+st.p.conv+st.p.pump;let sm=1;for(const [l,m] of STG)if(PL>=l)sm=m;const g=G[(sec*7+i)%4];
   let v=(1/60)*(1+.05*st.p.cut)*(1+.03*st.p.jack)*sm/(g*(1+i*1.0));if(sea)v*=.6+Math.min(.9,.1*st.p.pump);
   const L=Math.min(1,km-sec);const need=imm?{concrete:160*F*L,rebar:67*F*L,sheet:42*F*L,acc:14*F*L}:Object.assign({concrete:126*F*L*(g==1.25?1.3:1),rebar:63*F*L,hbeam:25*F*L*(g>=1.25?1.5:1),bolt:105*F*L},sea?{sheet:45*F*L,acc:22*F*L}:{});
-  const dt=10;for(const k in OUT){const lv=st.f[k];if(!lv)continue;for(const m in OUT[k])st.m[m]+=OUT[k][m]*(1+.2*(lv-1))/60*dt;}
-  const mx=Math.min(.12*(1+.2*(st.f.mix-1))/60*dt,st.m.cement,st.m.sand,st.m.gravel);st.m.cement-=mx;st.m.sand-=mx;st.m.gravel-=mx;st.m.concrete+=mx;
+  const dt=10;for(const k in OUT){const lv=st.f[k];if(!lv)continue;for(const m in OUT[k])st.m[m]+=OUT[k][m]*(1+.25*(lv-1))/60*dt;}
+  const mx=Math.min(.15*(1+.25*(st.f.mix-1))/60*dt,st.m.cement,st.m.sand,st.m.gravel);st.m.cement-=mx;st.m.sand-=mx;st.m.gravel-=mx;st.m.concrete+=mx*2;
   const end=Math.min(km*1000,(sec+1)*1000);
   if(prog<end){const d=Math.min(end-prog,v*dt);prog+=d;st.money+=d*120*(1+.08*st.p.conv)*(1+i*.6);}
   else if(Object.keys(need).every(k=>st.m[k]>=need[k])){for(const k in need)st.m[k]-=need[k];sec++;st.money+=1000*120*.4;}else st.money+=.4*v*120*(1+.08*st.p.conv)*(1+i*.6)*dt;

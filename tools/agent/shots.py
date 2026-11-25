@@ -16,9 +16,10 @@ sys.path.insert(0,str(pathlib.Path(__file__).resolve().parents[1]/'tests'))
 from playwright.async_api import async_playwright
 from _common import page,prep,GL,OUT
 HOOK=r"""window.__A={
+ cer:k=>tuCeremony(k,0),cur:()=>TU.cur,
  tu:(c,o)=>{o=o||{};localStorage.setItem('tp-tunnel',JSON.stringify(Object.assign({money:5e4,cur:c,done:[],p:{cut:20,jack:0,conv:0,pump:0},prog:{[c]:300}},o)));tuTab='dig';tuOpenWin();},
  tab:k=>{tuTab=k;tuRender();},cam:(y,d,p,t)=>{tu3.yaw=y;tu3.dist=d;tu3.pitch=p;tu3.dbgT=t||null;},close:()=>tuClose(),cer:k=>tuCeremony(k,123456),
- inf:()=>{infOpenWin();SI.money=5e9;SI.p={bit:30,motor:30,cool:30,coll:30};SI.depth=61*300+120;SI.best=63*300;infTab='bore';infRender();},itab:k=>{infTab=k;infRender();},
+ inf:()=>{infOpenWin();SI.money=5e9;SI.p={bit:30,motor:30,cool:30,coll:30};SI.depth=61*300+120;SI.best=63*300;SI.sk=INF_SK.map(x=>x.k);SI.ws=INF_SK[0].k;SI.dr={mine:1,armil:1};infTab='bore';infRender();},itab:k=>{infTab=k;infRender();},
  mj:()=>{mjOpen();for(let k=0;k<5;k++){const P=mjPairs();if(!P.length)break;mjTap(P[0][0]);mjTap(P[0][1]);}document.getElementById('mjHint').click();}
 };"""
 async def shot(pg,name,box=None):
@@ -40,7 +41,7 @@ async def run(what):
             e=await pg.query_selector('#tTour');await e.screenshot(path=str(OUT/'shot_tour.png'));print('저장 shot_tour.png')
         if what in('inf','all'):
             await pg.evaluate("__A.inf()");await pg.wait_for_timeout(1500);await shot(pg,'inf_bore')
-            for t in ['up','dr','map']:
+            for t in ['up','dr','map','sk']:
                 await pg.evaluate(f"__A.itab('{t}')");await pg.wait_for_timeout(900);await shot(pg,'inf_'+t)
             await pg.goto(url);await pg.wait_for_timeout(1200)
         if what in('tunnel','all'):
@@ -56,7 +57,10 @@ async def run(what):
             for v in ['place','inside']:
                 await pg.evaluate(f"__A.tu('gadeok',{{done:['namsan','tongyeong','jukryeong'],immView:'{v}'}})");await pg.wait_for_timeout(3000);await shot(pg,'tu_imm_'+v);await pg.evaluate("__A.close()")
         if what in('tunnel-open','all'):
-            await pg.evaluate("__A.tu('namsan',{done:['namsan'],prog:{namsan:1530}})");await pg.wait_for_timeout(2500);await shot(pg,'tu_open');await pg.evaluate("__A.close()")
+            await pg.evaluate("__A.tu('namsan',{done:['namsan'],prog:{namsan:1530}})");await pg.wait_for_timeout(2500);await shot(pg,'tu_open')
+            await pg.evaluate("__A.cer('namsan')");await pg.wait_for_timeout(3500);await shot(pg,'tu_cer');await pg.evaluate("document.querySelector('[data-tucx]').click()")
+            r=await pg.evaluate("(()=>{document.querySelector('[data-tt=site]').click();document.querySelector('[data-tt=dig]').click();return __A.cur()})()");print('굴진 탭 뒤 현장:',r)
+            await pg.wait_for_timeout(1500);await shot(pg,'tu_back');await pg.evaluate("__A.close()")
         if what in('mj','all'):
             save={'money':9e5,'depth':2000,'dl':5,'story':True,'jstory':1,'mode':'normal','own':[],'leg':[]}
             await pg.evaluate("localStorage.setItem('tp-stage','cn');localStorage.setItem('trypanon-save-cn',%s)"%json.dumps(json.dumps(save)))
