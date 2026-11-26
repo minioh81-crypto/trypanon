@@ -913,7 +913,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v389 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v390 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -2914,8 +2914,7 @@ const jRoof=(u,cx,y,w,h,c='#3a4a52',o={})=>{const L=cx-w/2,R=cx+w/2;return `<pat
 const lmSea=(u,y,a='#3f8fc0',b='#1d5a8a')=>`<defs>${LG_(u+'sea',[a,b])}</defs><rect x="0" y="${y}" width="120" height="${100-y}" fill="url(#${u}sea)"/>${Array.from({length:5},(_,i)=>`<path d="M${(i*9)%20-10},${y+3+i*3.4} ${Array.from({length:8},()=>'q4,-1.2 8,0 t8,0').join(' ')}" stroke="#bfe6ff" stroke-width=".5" fill="none" opacity="${.6-i*.08}"/>`).join('')}`;
 /* 광안리 도감 그림: 백사장에서 바라본 광안대교, 해수욕장과 산책로. */
 function gwangalliArt(u){
-  const horizon='M0 44 Q14 38 25 41 Q39 28 56 39 Q72 30 90 38 Q106 27 120 34 V57 H0Z';
-  const sea='M0 49H120V66C91 65 76 69 59 72C33 77 21 79 0 80Z';
+  const sea='M0 41H120V66C91 65 76 69 59 72C33 77 21 79 0 80Z';
   const shore='M0 80C21 79 33 77 59 72C76 69 91 65 120 66';
   const deck='M-4 56.8 L123 45.1';
   const road=x=>56.5-x*.092;
@@ -2929,11 +2928,12 @@ function gwangalliArt(u){
     <path d="M-3 7H3 M-3 17H3.2 M-3 26H3.5 M-2.5 8L2.8 16 M2.7 8L-2.5 16 M-2.5 18L3.1 25 M3.1 18L-2.5 25" fill="none" stroke="#eaf5f3" stroke-width=".62"/>
     <path d="M-4.9 36 H5 L6.3 39.2 H-5.4Z" fill="#859ba4"/>
   </g>`;
-  const skyBuildings=Array.from({length:23},(_,i)=>{
-    const x=i*5.45-2,w=2.5+(i*7%9)*.31,h=2.4+(i*11%8)*.62,y=46-h-Math.max(0,x-70)*.075;
-    const color=['#8eafbd','#aac1c6','#749bad','#b0c1c3'][i%4];
-    return `<path d="M ${x} ${y} h${w} v${h}h-${w}Z" fill="${color}"/><path d="M ${x+.65} ${y+1} h${w-1.1} m-${w-1.1},1.15 h${w-1.1}" stroke="#d8e8e7" stroke-width=".28" opacity=".6"/>`;
-  }).join('');
+  /* v390 해변을 따라 선 건물(양쪽 끝) */
+  const bldg=(x,y,w,h,c,sh)=>{const r=Math.max(2,Math.floor(w/2.1)),n=Math.floor((h-3)/3.2);let wn='';
+    for(let iy=0;iy<n;iy++)for(let ix=0;ix<r;ix++)wn+=`<rect x="${(x+1+ix*(w-2)/r).toFixed(1)}" y="${(y+2.4+iy*3.2).toFixed(1)}" width="${((w-2)/r*.62).toFixed(2)}" height="1.5" fill="#dfeef2" opacity=".72"/>`;
+    return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/><rect x="${sh>0?x+w-sh:x}" y="${y}" width="${Math.abs(sh)}" height="${h}" fill="#000" opacity=".14"/><rect x="${x-.4}" y="${y-1}" width="${w+.8}" height="1.2" fill="#e6ecec"/>${wn}`;};
+  const beachRow=`${bldg(-2,58,9,42,'#a9bcc6',2)}${bldg(6,66,7,34,'#d8cdb8',1.6)}${bldg(12.5,74,5.5,26,'#8fa9b8',1.3)}
+    ${bldg(105.5,70,6,30,'#c6c9c0',-1.4)}${bldg(110,60,7.5,40,'#8fa9b8',-1.8)}${bldg(116,52,6,48,'#b4c2c9',-1.6)}`;
   const parasol=(x,y,s,color)=>`<g transform="translate(${x} ${y}) scale(${s})">
     <ellipse cx="2.2" cy="4.0" rx="5.2" ry="1.5" fill="#8b6e56" opacity=".3"/>
     <path d="M0 3.8 L.3 -5.6" stroke="#77604b" stroke-width=".46"/>
@@ -2965,10 +2965,10 @@ function gwangalliArt(u){
   </defs>
   <rect width="120" height="100" fill="url(#${u}gwSky)"/>
   ${lmCloud(15,14,.84,.65)}${lmCloud(89,14,1.3,.73)}${lmCloud(110,8,.54,.59)}
-  <path d="${horizon}" fill="#7babab"/><path d="M0 46Q19 37 37 44Q62 39 74 42Q98 33 120 39V56H0Z" fill="#91b3b2"/>${skyBuildings}
+  <!-- v390 다리 뒤는 수평선까지 바다 -->
   <path d="M0 54H120V100H0Z" fill="url(#${u}gwSand)"/><path d="${sea}" fill="url(#${u}gwSea)"/>
   <g clip-path="url(#${u}gwW)" fill="none" stroke-linecap="round">
-    ${Array.from({length:100},(_,i)=>{const x=(i*37.9)%123,y=49+(i*17.17)%32;return `<path d="M ${x} ${y} q1.3 -.18 ${1.4+i%8*.57} -.05" stroke="${i%5?'#c2eff0':'#faffee'}" stroke-width="${.12+i%3*.11}" opacity="${.26+i%5*.094}"/>`;}).join('')}
+    ${Array.from({length:100},(_,i)=>{const x=(i*37.9)%123,y=42+(i*17.17)%39;return `<path d="M ${x} ${y} q1.3 -.18 ${1.4+i%8*.57} -.05" stroke="${i%5?'#c2eff0':'#faffee'}" stroke-width="${.12+i%3*.11}" opacity="${.26+i%5*.094}"/>`;}).join('')}
   </g>
   <path d="${shore}" fill="none" stroke="#f9f6da" stroke-width="1.75" stroke-opacity=".68"/>
   <path d="M0 78.4C21 77.1 33 75.5 59 70.5C76 67.5 92 63.8 120 64.9" fill="none" stroke="#f0ffff" stroke-width=".38" opacity=".82"/>
@@ -2987,14 +2987,15 @@ function gwangalliArt(u){
   <path d="M47 78.3 L70.4 73.2 M47 79.3 L70.4 74.2 M47 80.35 L70.4 75.25 M47 81.4 L70.4 76.3" fill="none" stroke="#fff9e7" stroke-opacity=".84" stroke-width=".25"/>
   <circle cx="63.9" cy="71.2" r=".84" fill="#ffe15d" stroke="#b49146" stroke-width=".22"/>
   ${person(57.3,89.1,.89,'#db9d7a','#505f87',2)}${person(72.8,85.1,.85,'#dbac84','#8d638b',2)}
-  ${parasol(16.2,79,.73,'#dd9753')}${parasol(25.8,87,1.04,'#4d97c7')}${parasol(13,92,1.15,'#e57563')}
-  ${parasol(101,75,.76,'#d9915c')}${parasol(99.5,86.5,1.28,'#508dbd')}${parasol(113.2,78.6,.71,'#e57868')}
+  ${parasol(19.5,80,.73,'#dd9753')}${parasol(27,88,1.04,'#4d97c7')}${parasol(20,93.5,1.1,'#e57563')}
+  ${parasol(101,75,.76,'#d9915c')}${parasol(99.5,86.5,1.28,'#508dbd')}${parasol(106.5,76.8,.71,'#e57868')}
   ${person(33.6,86.2,.80,'#e2ab84','#f9ecce',0)}${person(37,85.8,.78,'#c89070','#507c91',0)}
-  ${person(95.2,92,.82,'#d9a27f','#ed8667',0)}${person(107.5,88.5,.82,'#b77660','#7a9c79',0)}
+  ${person(95.2,92,.82,'#d9a27f','#ed8667',0)}${person(104.5,90,.82,'#b77660','#7a9c79',0)}
   <path d="M0 96Q51 98 80 95Q104 93 120 90V100H0Z" fill="#ac9f98"/>
   <path d="M0 96Q51 98 80 95Q104 93 120 90" fill="none" stroke="#e3d4b8" stroke-width="1.05"/>
   <path d="M8 100l2-3.5m13 3.5 1.8-3.4m12 3.4 1.2-3.3m12 0 .5 3.3m14 0-.75-3.6m15 3.6-1.3-4.3m15 4.3-2.4-5.9m17 5.9-2.8-8.4" fill="none" stroke="#928781" stroke-width=".26"/>
-  ${[[8,97.2,.85],[42,97.5,.83],[80,95.7,.79],[111,92.2,.75]].map(([x,y,s])=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0V-11.5L2.5-12.3" fill="none" stroke="#495e6b" stroke-width=".53"/><path d="M1.4-11.9h3.1" stroke="#e8e2c9" stroke-width=".66"/></g>`).join('')}`;
+  ${[[8,97.2,.85],[42,97.5,.83],[80,95.7,.79],[111,92.2,.75]].map(([x,y,s])=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0V-11.5L2.5-12.3" fill="none" stroke="#495e6b" stroke-width=".53"/><path d="M1.4-11.9h3.1" stroke="#e8e2c9" stroke-width=".66"/></g>`).join('')}
+  ${beachRow}`;
 }
 const LMART={
  // ===== 중국 랜드마크 2D (120×100) =====
@@ -3590,7 +3591,7 @@ function shipAt(p){const W=SHIPR,L=[0];for(let i=1;i<W.length;i++)L.push(L[i-1]+
   return [cr(P0[0],P1[0],P2[0],P3[0]),cr(P0[1],P1[1],P2[1],P3[1])];}
 // 오다 보유 시 지도 행군: 화승총 아시가루 무리가 오와리(나고야)→아즈치→교토→오사카를 먼지를 일으키며 오감 (110초마다 70초)
 const ODAR=[[137.68,34.92],[137.55,34.92],[137.17,34.95],[136.9,35.17],[136.76,35.4],[136.42,35.28],[136.14,35.14],[135.78,35.02],[135.52,34.72],[135.18,34.69],[134.69,34.84],[134.25,34.75],[133.82,34.69]];let ODAP=null;
-function odaPhase(now=Date.now()){if(!isJP||!jo('sword:teppo'))return {vis:false};const s=(now/1000)%150;if(s>=120)return {vis:false};const q=s/120;return {vis:true,p:q<.5?q*2:2-q*2,dir:q<.5?1:-1};}
+function odaPhase(now=Date.now()){/* v390 중국 지도에는 행군 없음 */if(!isJPo||!jo('sword:teppo'))return {vis:false};const s=(now/1000)%150;if(s>=120)return {vis:false};const q=s/120;return {vis:true,p:q<.5?q*2:2-q*2,dir:q<.5?1:-1};}
 function polyAt(P,p){let L=0;const seg=[];for(let i=1;i<P.length;i++){const d=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);seg.push(d);L+=d;}let t=p*L;for(let i=0;i<seg.length;i++){if(t<=seg[i]){const k=seg[i]?t/seg[i]:0;return [P[i][0]+(P[i+1][0]-P[i][0])*k,P[i][1]+(P[i+1][1]-P[i][1])*k];}t-=seg[i];}return P[P.length-1];}
 function marchSVG(){// 화승총 부대(아시가루): 진가사 · 검은 옻칠 갑옷과 붉은 끈 · 등 깃발 · 어깨에 멘 화승총 · 걸음 · 뒤로 이는 먼지
   const sol=(x,y,d,fl)=>`<g transform="translate(${x},${y}) scale(1.22)"><g><animateTransform attributeName="transform" type="translate" values="0 0;0 -.8;0 0" dur=".44s" begin="${d}s" repeatCount="indefinite"/>
@@ -3892,7 +3893,7 @@ var RIPC=null;function RIPPLES(){if(RIPC)return RIPC;let a='',b='';for(let y=-26
   const CNLB=isCN?{bayan:[0,-11,'middle'],wutai:[-10,3,'end'],bohai:[13,3,'start'],loess:[10,9,'start'],zhangjiajie:[-10,3,'end'],danxia:[-10,3,'end'],taishan:[10,3,'start'],huangshan:[10,3,'start'],shenhu:[16,3,'start']}:{};if(isCN)document.documentElement.classList.add('cnst');
   for(const r of REG){const x=+mapX(r).toFixed(1),y=+mapY(r).toFixed(1),LB=CNLB[r.id];g+=LB?node(r.id,r.t==='sea'?'sea':'land',x,y,r.n,LB[0],LB[2],LB[1],r.res):r.t==='sea'||isJP?node(r.id,r.t==='sea'?'sea':'land',x,y,r.n,0,'middle',isJP?15:19,r.res):(o=>o?node(r.id,'land',+(x+o[0]).toFixed(1),+(y+o[1]).toFixed(1),r.n,-11,'end',4,r.res):node(r.id,'land',x,y,r.n,r.lx??10,r.la||'start',4,r.res))(!isJP&&WXO[r.id]);}
   g+=node('yanggu','base',+(isJP?JPP(...HOME)[0]:PX(HOME[0])-7).toFixed(1),+(isJP?JPP(...HOME)[1]:PY(HOME[1])).toFixed(1),SN('양구 본공','후지 본공','태산 본공'),isJP?11:-11,isJP?'start':'end',4);
-  if(isJP){ODAP=ODAR.map(([lo,la])=>JPP(lo,la));g+=`<g id="mOda" style="pointer-events:none;display:none"><g id="mOdaPos"><g id="mOdaDir">${marchSVG()}</g></g></g>`;}
+  ODAP=null;if(isJPo){ODAP=ODAR.map(([lo,la])=>JPP(lo,la));g+=`<g id="mOda" style="pointer-events:none;display:none"><g id="mOdaPos"><g id="mOdaDir">${marchSVG()}</g></g></g>`;}
   g+='<g id="mWxI" style="pointer-events:none"></g><g id="mDz" style="pointer-events:none"></g>';
   setTimeout(dzMap,0);$('#map').innerHTML=sea+`<svg id="mapSvg" class="${isJP?'jpmap':''}" viewBox="${VB}" role="img" aria-label="${SN('대한민국 시추 지도','일본 시추 지도','중국 시추 지도')}">${g}</svg>`;wxSet(true);setTimeout(mapLonFit,40);}
 // ---------------- weather: each expedition region has its own weather (changes every 3 minutes) ----------------
@@ -10470,7 +10471,7 @@ function lmGwangalli(){
   });sandMap.wrapS=sandMap.wrapT=T.RepeatWrapping;
   const sand=mat('#e1d0c5',{map:sandMap}),wet=mat('#c29c73'),paving=mat('#a6a1a4'),curb=mat('#e7d9c1');
   const water=new T.ShaderMaterial({
-    uniforms:{time:{value:0},night:{value:1},modelScale:{value:.42},modelOffsetZ:{value:.08}},
+    uniforms:{time:{value:0},night:{value:1},modelScale:{value:.42},modelOffsetZ:{value:-1.2}},
     vertexShader:'varying vec3 w;void main(){vec4 p=modelMatrix*vec4(position,1.);w=p.xyz;gl_Position=projectionMatrix*viewMatrix*p;}',
     fragmentShader:[
       'uniform float time,night,modelScale,modelOffsetZ;varying vec3 w;',
@@ -10572,7 +10573,8 @@ function lmGwangalli(){
     nightObjects.push(ball(x,yRoad+.125,.53,.041,.032,.031,goldLight,bridge));
     if(Math.abs(x)<14)nightObjects.push(box(x,yRoad-.26,.49,.46,.029,.025,pearl,bridge));
   }
-  const skyline=group(0,0,-23);
+  /* v390 건물은 다리 너머가 아니라 해변 산책로 뒤에 바다를 보고 섬. 다리 뒤는 수평선까지 바다 */
+  const skyline=group(0,0,12.2);skyline.rotation.y=Math.PI;
   const buildingMats=['#93aabb','#b1bfc9','#748ba4','#c3c5be','#9ab2ba'].map(c=>mat(c));
   const glazing=mat('#526d86'),windows=basic('#ffd285',{toneMapped:false,fog:false}),coolWindows=basic('#84acf1',{toneMapped:false,fog:false});
   const city=[];const lights=[];
@@ -10583,21 +10585,19 @@ function lmGwangalli(){
       const px=x+w*((ix+.5)/cols-.5),py=.24+iy*.35;
       const v=[px,py,z+d/2+.008,w/cols*.53,.117,.012];
       if(parent===skyline){
-        city.push(v);
-        if(random()>.54)lights.push([...v,random()>.27?0:1]);
+        const v2=[px,py,z-d/2-.008,w/cols*.53,.117,.012];city.push(v,v2);
+        if(random()>.54)lights.push([...v,random()>.27?0:1]);if(random()>.6)lights.push([...v2,random()>.27?0:1]);
       }
     }
   };
-  for(let i=0;i<32;i++){
-    const x=-30+i*1.89,h=.7+random()*3.8+Math.max(0,2-Math.abs(x+19)*.16);
-    block(x,-random()*2,1.08+random()*.55,h,.82+random()*.61,buildingMats[i%5],skyline);
+  for(let i=0;i<30;i++){
+    const x=-28+i*1.93;if(x>8.5&&x<20.5)continue;
+    const h=1.1+random()*1.3,d=1.0+random()*.5;
+    block(x,-d/2-random()*.4,1.5+random()*.3,h,d,buildingMats[i%5],skyline);
   }
-  const hills=mat('#466e73');const hillsBack=mat('#6b8e9b');
-  box(0,-.05,-25.5,68,.39,7.7,hills);
-  box(0,.035,-21.68,68,.14,.32,mat('#9da194'));
-  for(const [x,y,w,h] of [[-28,-.3,13,4],[-14,-.4,12,4.5],[3,-.3,10,3.4],[17,-.6,14,5],[30,-.8,13,5.4]]){
-    ball(x,y,-31,w,h,3.1,hillsBack);
-    ball(x+1.3,y,-28,w*.78,h*.81,2.2,hills);
+  for(let i=0;i<16;i++){
+    const x=-27+i*3.6,h=2.3+random()*2.2+Math.max(0,1.6-Math.abs(x-4)*.12),d=1.6+random()*.6;
+    block(x,-2.6-d/2-random()*.6,1.9+random()*.9,h,d,buildingMats[(i+2)%5],skyline);
   }
   const cafe=group(-19.8,0,10.65);
   const cafeWall=mat('#e2ceaf'), awning=mat('#be7a63');
@@ -10843,7 +10843,7 @@ function lmGwangalli(){
   world.position.z=water.uniforms.modelOffsetZ.value;
   world.scale.setScalar(water.uniforms.modelScale.value);
   G.userData.bg='#88c6f1';
-  G.userData.cam={dist:12,y:1.09,yaw:-.23,pitch:.31,lim:1.18,minPitch:.10,fitWidth:8.95,sway:.07,nightBg:'#253f78'};
+  G.userData.cam={dist:13.5,y:1.09,yaw:-.6,pitch:.52,lim:1.18,minPitch:.10,fitWidth:8.95,sway:.07,nightBg:'#253f78'};
   G.userData.anims=[time=>{
     const light=L3.night||0,night=light>.50,t=reduceMotion?1.89:time+1.30;
     water.uniforms.time.value=t;
@@ -15156,7 +15156,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=389;
+const GVER=390;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
