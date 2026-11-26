@@ -894,7 +894,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v392 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v393 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -1760,7 +1760,9 @@ const JPTIER=[ // [갑옷, 어두운 갑옷, 금장식, 장식 2, 눈빛, 무늬
  ['#7a4ac8','#3a1a6a','#ffd56a','#f0e6ff','#e0a8ff','#ffb8e8'],['#7a4ac8','#3a1a6a','#ffd56a','#f0e6ff','#e0a8ff','#ffb8e8'],
  ['#d8302a','#6a0e0e','#ffd56a','#1a1a1e','#ffe07a','#ffd0a0'],['#d8302a','#6a0e0e','#ffd56a','#1a1a1e','#ffe07a','#ffd0a0'],
  ['#e8b030','#8a2a12','#fff0b0','#c8323a','#ffffff','#ffb8c8'],['#1a1a2a','#0a0a12','#ffd56a','#c8323a','#ff9a4a','#ffd56a'],
- ['#f2f4ff','#6a5ac8','#b8f0ff','#c9a6ff','#ffffff','#c9e8ff'],['#ffffff','#2a1a4a','#ffd56a','#ff9fff','#ffffff','#ffffff']];
+ ['#f2f4ff','#6a5ac8','#b8f0ff','#c9a6ff','#ffffff','#c9e8ff'],['#ffffff','#2a1a4a','#ffd56a','#ff9fff','#ffffff','#ffffff'],
+ /* v393 태초(원초의 불·새벽 금빛) · 우주(밤하늘 남색·별빛 은) */
+ ['#fff1d0','#7a1e0e','#ffb830','#ff6a1a','#fff6c0','#ffd27a'],['#1a1f4a','#06081a','#cfe4ff','#7a5aff','#9ff4ff','#e8d8ff']];
 const JPGN=['일반','일반','고급','고급','희귀','희귀','영웅','영웅','전설','무한','초월','창세','태초','우주'],JPSTAR=[1,1,2,2,3,3,4,4,5,5,5,5,5,5];
 const JPSKIN=[{id:'samurai',n:'사무라이'},{id:'ninja',n:'닌자'},{id:'kitsune',n:'여우(키츠네)'},{id:'oni',n:'오니'},{id:'miko',n:'무녀'}];
 const SKINPAL={yi:['#a8202a','#16121a','#f2c14e','#1a3a7a','#7af0ff','#f2c14e'],oda:['#2a2430','#0c0a10','#f2c14e','#c8242a','#ff6a3a','#f2c14e'],sk_qin:['#2a1e24','#0e0a0e','#f2c14e','#c8242a','#ffb030','#e8302a'],sk_zhuge:['#f4f2ea','#2a4a8a','#f2c14e','#3a6ad0','#8af4ff','#bfe0ff'],sk_zhh:['#b8863a','#1e2a50','#ffe08a','#3a5aa0','#8ae0ff','#ffd56a'],sk_zheng:['#2a5aa8','#0e2a5a','#f2c14e','#f4ecd8','#7af0ff','#ffffff'],sk_guanyu:['#2a8a3a','#0e3a18','#f2c14e','#c8242a','#7aff9a','#c8f0a0'],sk_zhangfei:['#2a2630','#0a080e','#c8242a','#e8302a','#ff6a3a','#ff9a6a'],sk_zhaoyun:['#e8ecf4','#5a6474','#c8d4e8','#3a6ad0','#9ad4ff','#ffffff'],sk_caocao:['#4a2a6a','#1a0a2a','#f2c14e','#9a6ad0','#d8a0ff','#c8a0ff'],sk_lubu:['#c8242a','#4a0808','#ffd23a','#1a1a1e','#ffb030','#ffd0a0'],tiger:['#f29a2a','#2a1a10','#ffd23a','#fff6e6','#c8ff4a','#1a1410'],hwarang:['#2a4aa8','#141e48','#e8b030','#f4ecd8','#5ad8ff','#ff8ab0'],gumiho:['#fbf6f4','#d82a6a','#ffc8e0','#2a1a2a','#ff5ab0','#ffb0d8'],jeoseung:['#2a2238','#0c0a12','#b8b0d0','#e8e4f0','#6ac8ff','#5a4aa8'],dokkaebi:['#2a9a5a','#123020','#e8c040','#3a2a1a','#ffe04a','#5affb0'],phoenix:['#e8402a','#6a0e14','#ffd23a','#fff0c8','#ffe8a0','#ff9a3a'],ninja:['#2a3348','#141a28','#c9d1d5','#3a4a6a','#ff5a5a','#5a6a8a'],kitsune:['#fbf8f2','#c8323a','#e8b030','#2a2a30','#ffd04a','#ff8aa0'],oni:['#c8302a','#5a0e0a','#e8c030','#1a1a1a','#ffe04a','#f2c14e'],miko:['#fbfaf6','#d8283a','#e8b030','#d8283a','#ff8ab0','#f6a8c0'],mecha:['#c9d0d6','#3a4650','#f28a2a','#2a323a','#7af0b0','#f2c14e']};
@@ -2010,8 +2012,28 @@ function rbPolish(LY,C0,g){const c=LY.c,{cx,k,bw,tw,th,torsoTop,hipY,hr,hy,helmT
   C0.drawImage(L.cv,0,0,LY.W,LY.H,LY.X,LY.Y,LY.W,LY.H);C0.restore();
   // 느린 기기: 그리는 시간이 길면 단계를 내린다
   const dt=performance.now()-LY.t0;RBQ.ema=RBQ.n?RBQ.ema*.9+dt*.1:dt;if(++RBQ.n>30&&RBQ.ema>3.5){RBQ.lv--;RBQ.n=0;}}
+/* v393 태초·우주 등급 전용 배경(뒤, L=0)과 앞 효과(L=1).
+   태초: 뒤에서 도는 원초의 태양(빛살 16개 + 이중 고리 + 불씨). 우주: 나선 은하 + 성운 + 궤도를 도는 행성 3개(앞뒤로 지나감) + 반짝이는 별. */
+function robotCosmos(c,cx,cy,k,bw,t,gr,top,hip,L){c.save();const R=bw*1.55;
+  if(gr===13){
+    if(!L){const g=c.createRadialGradient(cx,cy,0,cx,cy,R*1.25);g.addColorStop(0,'rgba(255,250,220,.95)');g.addColorStop(.28,'rgba(255,200,90,.75)');g.addColorStop(.6,'rgba(255,110,30,.32)');g.addColorStop(1,'rgba(160,30,0,0)');c.fillStyle=g;c.beginPath();c.arc(cx,cy,R*1.25,0,7);c.fill();
+      c.translate(cx,cy);for(let i=0;i<16;i++){const a=t*.25+i*Math.PI/8,l=R*(i%2?1.05:1.45)*(1+.06*Math.sin(t*3+i));c.save();c.rotate(a);const rg=c.createLinearGradient(R*.4,0,l,0);rg.addColorStop(0,'rgba(255,236,170,.75)');rg.addColorStop(1,'rgba(255,120,40,0)');c.fillStyle=rg;c.beginPath();c.moveTo(R*.4,-5*k);c.lineTo(l,0);c.lineTo(R*.4,5*k);c.closePath();c.fill();c.restore();}
+      c.strokeStyle='#ffd27a';c.lineWidth=1.6*k;c.globalAlpha=.8;c.save();c.rotate(-t*.5);c.setLineDash([9*k,5*k]);c.beginPath();c.arc(0,0,R*.98,0,7);c.stroke();c.restore();
+      c.save();c.rotate(t*.35);c.globalAlpha=.9;for(let i=0;i<8;i++){c.rotate(Math.PI/4);c.fillStyle='#fff6c0';c.beginPath();c.moveTo(R*1.12,0);c.lineTo(R*1.04,-3*k);c.lineTo(R*.96,0);c.lineTo(R*1.04,3*k);c.closePath();c.fill();}c.restore();}
+    else{for(let i=0;i<14;i++){const p=(t*.45+i/14)%1,x=cx+Math.sin(i*2.7+t*.8)*bw*.95,y=hip+8*k-p*(hip-top+70*k),s=(3.4-p*2.4)*k;c.globalAlpha=(1-p)*.95;const g=c.createRadialGradient(x,y,0,x,y,s*2.2);g.addColorStop(0,'#fffbe0');g.addColorStop(.45,'#ffb830');g.addColorStop(1,'rgba(255,90,20,0)');c.fillStyle=g;c.beginPath();c.arc(x,y,s*2.2,0,7);c.fill();}}
+  }else{
+    const tilt=.42,orb=[[1.18,.9,'#7ad8ff','#2a5ab0',4.6,0],[1.5,-.55,'#ffb070','#a8401a',3.4,2.1],[1.85,.4,'#e8d8ff','#7a5aff',5.4,4.2]];
+    const planet=(rr,sp,c1,c2,sz,ph,front)=>{const a=t*sp+ph,x=cx+Math.cos(a)*R*rr,y=cy+Math.sin(a)*R*rr*tilt;if((Math.sin(a)>0)!==front)return;const s=sz*k*(1+.15*Math.sin(a)),g=c.createRadialGradient(x-s*.35,y-s*.35,s*.1,x,y,s);g.addColorStop(0,'#ffffff');g.addColorStop(.35,c1);g.addColorStop(1,c2);c.globalAlpha=1;c.fillStyle=g;c.beginPath();c.arc(x,y,s,0,7);c.fill();if(sz>5){c.strokeStyle='rgba(232,216,255,.8)';c.lineWidth=1*k;c.beginPath();c.ellipse(x,y,s*1.7,s*.45,-.3,0,7);c.stroke();}};
+    if(!L){const g=c.createRadialGradient(cx,cy,0,cx,cy,R*1.4);g.addColorStop(0,'rgba(220,230,255,.85)');g.addColorStop(.18,'rgba(150,120,255,.55)');g.addColorStop(.5,'rgba(60,40,160,.35)');g.addColorStop(.8,'rgba(20,60,120,.18)');g.addColorStop(1,'rgba(10,10,40,0)');c.fillStyle=g;c.beginPath();c.ellipse(cx,cy,R*1.4,R*1.1,0,0,7);c.fill();
+      c.save();c.translate(cx,cy);c.scale(1,.62);c.rotate(t*.18);for(let arm=0;arm<2;arm++)for(let i=0;i<46;i++){const u=i/46,a=arm*Math.PI+u*Math.PI*2.4,r=R*(.18+u*1.05),j=(hsh(i+arm*50,7)-.5)*9*k;c.globalAlpha=(1-u*.7)*.85;c.fillStyle=i%5?'#cfe4ff':'#ffd8f0';const sz=(1.9-u*1.1)*k;c.fillRect(Math.cos(a)*r+j-sz/2,Math.sin(a)*r+j-sz/2,sz,sz);}c.restore();
+      c.globalAlpha=.35;c.strokeStyle='#9fc8ff';c.lineWidth=.8*k;for(const [rr] of orb){c.beginPath();c.ellipse(cx,cy,R*rr,R*rr*tilt,0,0,7);c.stroke();}
+      for(const o of orb)planet(...o,false);}
+    else{for(const o of orb)planet(...o,true);
+      for(let i=0;i<10;i++){const x=cx+(hsh(i,11)-.5)*R*2.6,y=top-30*k+hsh(i,13)*(hip-top+60*k),tw=.5+.5*Math.sin(t*4+i*1.7),s=(1.5+tw*2.4)*k;c.globalAlpha=.5+.5*tw;c.strokeStyle='#ffffff';c.lineWidth=.9*k;c.beginPath();c.moveTo(x-s,y);c.lineTo(x+s,y);c.moveTo(x,y-s);c.lineTo(x,y+s);c.stroke();}}
+  }
+  c.restore();}
 function drawRobot(c,cx,tipY,k,P,o){k*=.74;
-  const D=drillDims(P,k),R={},t=o.t||0,spin=o.spin||0,dl=o.dl??S.dl,gr=Math.min(12,Math.max(1,dlGrade(dl))),skin=o.skin||jpSkin();
+  const D=drillDims(P,k),R={},t=o.t||0,spin=o.spin||0,dl=o.dl??S.dl,gr=Math.min(14,Math.max(1,dlGrade(dl))),skin=o.skin||jpSkin();
   const PAL=skin==='samurai'?JPTIER[gr-1]:SKINPAL[skin],[AR,DK,GD,T2,EY,PT]=PAL,stp=dlStep(dl),SC=ROBOFX[skin]||ROBOFX.samurai,FX=gr>=12?SC[0]:EY;
   const coneTop=tipY-D.cl,ringY=coneTop-D.rh,tw=D.bw*.74,th=D.bh*.9,hipY=ringY,torsoTop=hipY-th,hr=D.bw*.31,hy=torsoTop-hr*.72,helmTop=hy-hr*1.18,rodTop=o.rodTop??0;
   // cable/rod down to the helmet
@@ -2020,9 +2042,10 @@ function drawRobot(c,cx,tipY,k,P,o){k*=.74;
   R.cable=R.insul={x:rx-6,y:helmTop-60*k,w:D.rodW+12,h:58*k};
   // evolved aura behind (grade 7+ halo, 9+ wings, 10+ rune ring, 12 rainbow)
   const cyB=torsoTop+th*.45;
+  if(gr>=13)robotCosmos(c,cx,cyB,k,D.bw,t,gr,helmTop,hipY,0);
   if(gr>=10){c.save();c.translate(cx,cyB);c.rotate(t*.4);c.strokeStyle=FX;c.globalAlpha=.5;c.lineWidth=1.4*k;c.beginPath();c.arc(0,0,D.bw*1.02,0,7);c.stroke();c.beginPath();c.arc(0,0,D.bw*.86,0,7);c.stroke();
     for(let i=0;i<12;i++){c.rotate(Math.PI/6);sakuraP(c,D.bw*.94,0,4*k,FX);}c.restore();c.globalAlpha=1;}
-  if(gr>=9){const fl=Math.sin(t*3)*.1;for(const s2 of[-1,1]){c.save();c.translate(cx+s2*tw*.42,cyB-8*k);c.rotate(s2*(-.4+fl));c.scale(s2,1);const wl=(50+(gr-9)*10)*k;
+  if(gr>=9){const fl=Math.sin(t*3)*.1;for(const s2 of[-1,1]){c.save();c.translate(cx+s2*tw*.42,cyB-8*k);c.rotate(s2*(-.4+fl));c.scale(s2,1);const wl=(50+(Math.min(gr,12)-9)*10)*k;
       for(let f=0;f<4;f++){const g=c.createLinearGradient(0,0,wl,0);g.addColorStop(0,DK);g.addColorStop(1,gr>=11?SC[1]:'rgba(255,200,120,.25)');c.fillStyle=g;c.beginPath();c.moveTo(0,f*8*k);c.lineTo(wl*(1-f*.16),-wl*.4+f*13*k);c.lineTo(wl*(.55-f*.08),f*8*k+9*k);c.closePath();c.fill();}
       c.strokeStyle=FX;c.lineWidth=1.3*k;c.beginPath();c.moveTo(0,0);c.lineTo(wl,-wl*.4);c.stroke();c.restore();}}
   if(gr>=11)robotAura(c,cx,cyB,k,skin,t,D.bw,helmTop,hipY,gr);
@@ -2164,6 +2187,7 @@ function drawRobot(c,cx,tipY,k,P,o){k*=.74;
   c=C0;if(LY)rbPolish(LY,C0,{cx,k,bw:D.bw,cw:D.cw,tw,th,torsoTop,hipY,hr,hy,helmTop,coneTop,tipY,skin});
   // sparkles for 초월/창세
   if(gr>=11){for(let i=0;i<8;i++){const a=(t*.6+i/8)%1,px=cx+(hsh(i,3)-.5)*tw*1.8,py=hipY-a*th*2.4;c.globalAlpha=1-a;c.fillStyle=gr>=12?SC[0]:'#fff';c.fillRect(px,py,2.2*k,2.2*k);}c.globalAlpha=1;}
+  if(gr>=13)robotCosmos(c,cx,cyB,k,D.bw,t,gr,helmTop,hipY,1);
   if(o.hl&&R[o.hl]){const r=R[o.hl];c.setLineDash([4,3]);c.strokeStyle='#f6c76a';c.lineWidth=1.5;c.strokeRect(r.x,r.y,r.w,r.h);c.setLineDash([]);}
   return{R,bodyTop:helmTop};}
 
@@ -15139,7 +15163,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=392;
+const GVER=393;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
