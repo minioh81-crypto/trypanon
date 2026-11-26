@@ -894,7 +894,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v393 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v394 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -10491,23 +10491,26 @@ function lmGwangalli(){
   const shore=x=>1.4+.041*x+.58*Math.cos(x*.15)+.14*Math.sin(x*.42);
   function coastalBand(from,to,material,y){
     const pos=[],uv=[],indices=[];
-    for(let i=0;i<=160;i++){
-      const x=-32+i*.4;
+    for(let i=0;i<=360;i++){
+      const x=-72+i*.4;
       for(const z of [from(x),to(x)]){pos.push(x,y,z);uv.push(x*.27,z*.27);}
-      if(i<160){const j=i*2;indices.push(j,j+1,j+2,j+1,j+3,j+2);}
+      if(i<360){const j=i*2;indices.push(j,j+1,j+2,j+1,j+3,j+2);}
     }
     const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setIndex(indices);geo.computeVertexNormals();
     return mesh(geo,material,0,0,0);
   }
-  plane(0,-.049,-43,160,100,water);
+  plane(0,-.049,-43,220,100,water);
   coastalBand(x=>-56,shore,water,-.04);
   coastalBand(shore,x=>shore(x)+.39,wet,-.01);
   coastalBand(x=>shore(x)+.39,x=>8.7,sand,0);
-  coastalBand(x=>8.7,x=>24,paving,-.01);
-  box(0,.062,8.71,64,.13,.25,curb);
+  coastalBand(x=>8.7,x=>30,paving,-.01);
+  /* v394 360도로 돌려도 땅이 끊기지 않게 뒤쪽 도시 바닥 */
+  plane(0,-.02,52,150,44,mat('#8a9478'));
+  {const hl=[mat('#5f7a55'),mat('#6e8a60'),mat('#7f9a72')];for(const [x,z,w,h,d,k] of [[-52,58,26,9,10,0],[-26,64,30,12,12,1],[2,62,26,10,11,0],[30,66,32,13,12,2],[58,58,24,8,10,1],[-40,46,18,4.5,7,2],[44,47,20,5,7,0]])ball(x,-.6,z,w,h,d,hl[k]);}
+  box(0,.062,8.71,144,.13,.25,curb);
   const grout=mat('#87838d');
-  for(let i=-29;i<=29;i++)box(i,.002,11,.018,.003,4.3,grout);
-  for(let z=9.25;z<13;z+=.64)box(0,.002,z,60,.003,.016,grout);
+  for(let i=-70;i<=70;i++)box(i,.002,11,.018,.003,4.3,grout);
+  for(let z=9.25;z<13;z+=.64)box(0,.002,z,140,.003,.016,grout);
   const foam=[];
   for(let k=0;k<4;k++){
     const points=Array.from({length:201},()=>V(0,.013,0));
@@ -10529,17 +10532,17 @@ function lmGwangalli(){
   }
   const bridge=group(0,0,-9.1);
   const towerX=5.55, yRoad=1.52, yTower=5.45;
-  box(0,yRoad,0,70,.17,.98,deck,bridge);
-  box(0,yRoad-.39,0,70,.13,.91,deck,bridge);
+  box(0,yRoad,0,130,.17,.98,deck,bridge);
+  box(0,yRoad-.39,0,130,.13,.91,deck,bridge);
   for(const z of [-.48,.48]){
-    box(0,yRoad+.13,z,70,.083,.05,steel,bridge);
-    box(0,yRoad-.45,z,70,.052,.057,darkSteel,bridge);
+    box(0,yRoad+.13,z,130,.083,.05,steel,bridge);
+    box(0,yRoad-.45,z,130,.052,.057,darkSteel,bridge);
     for(let x=-27.7;x<28;x+=.66){
       rod([x,yRoad-.45,z],[x+.33,yRoad-.075,z],.018,steel,bridge);
       rod([x+.33,yRoad-.075,z],[x+.66,yRoad-.45,z],.018,steel,bridge);
     }
   }
-  for(const x of [-32,-28,-24,-20,-16,-12.7,-9,9,12.7,16,20,24,28,32]){
+  for(const x of [-60,-55,-50,-45,-40,-36,-32,-28,-24,-20,-16,-12.7,-9,9,12.7,16,20,24,28,32,36,40,45,50,55,60]){
     box(x,.54,0,.34,1.19,.62,concrete,bridge);box(x,1.02,0,.78,.14,.83,concrete,bridge);
   }
   for(const x of [-towerX,towerX]){
@@ -10579,7 +10582,7 @@ function lmGwangalli(){
     if(Math.abs(x)<14)nightObjects.push(box(x,yRoad-.26,.49,.46,.029,.025,pearl,bridge));
   }
   /* v390 건물은 다리 너머가 아니라 해변 산책로 뒤에 바다를 보고 섬. 다리 뒤는 수평선까지 바다 */
-  const skyline=group(0,0,12.2);skyline.rotation.y=Math.PI;
+  const skyline=group(0,0,16.4);skyline.rotation.y=Math.PI;
   const buildingMats=['#93aabb','#b1bfc9','#748ba4','#c3c5be','#9ab2ba'].map(c=>mat(c));
   const glazing=mat('#526d86'),windows=basic('#ffd285',{toneMapped:false,fog:false}),coolWindows=basic('#84acf1',{toneMapped:false,fog:false});
   const city=[];const lights=[];
@@ -10595,25 +10598,25 @@ function lmGwangalli(){
       }
     }
   };
-  for(let i=0;i<30;i++){
-    const x=-28+i*1.93;if(x>8.5&&x<20.5)continue;
-    const h=1.1+random()*1.3,d=1.0+random()*.5;
-    block(x,-d/2-random()*.4,1.5+random()*.3,h,d,buildingMats[i%5],skyline);
-  }
-  for(let i=0;i<16;i++){
-    const x=-27+i*3.6,h=2.3+random()*2.2+Math.max(0,1.6-Math.abs(x-4)*.12),d=1.6+random()*.6;
-    block(x,-2.6-d/2-random()*.6,1.9+random()*.9,h,d,buildingMats[(i+2)%5],skyline);
-  }
-  const cafe=group(-19.8,0,10.65);
-  const cafeWall=mat('#e2ceaf'), awning=mat('#be7a63');
-  for(let i=0;i<4;i++){
-    const x=i*2.65;
-    block(x,0,2.46,2.2+i%2*.45,2,cafeWall,cafe);
-    box(x,.97,-1.01,2.22,1.23,.03,glazing,cafe);
-    nightObjects.push(box(x,.95,-1.04,2.07,.98,.03,windows,cafe));
-    box(x,1.62,-1.34,2.3,.055,.83,awning,cafe).rotation.x=-.13;
-    pool(x-19.8,9.05,3.6,3.4,'#ffc57e',.40);
-  }
+  /* v394 빌딩은 뒤쪽에 띄엄띄엄 낮게 7채, 산책로 앞줄은 카페·음식점(차양·간판·테라스) */
+  for(const [x,h,w] of [[-24,2.6,2.2],[-15,2.0,2.6],[-6,2.9,2.0],[3,2.3,2.4],[12,3.1,2.1],[21,2.2,2.5],[29,2.7,2.0]])
+    block(x,-.9-random()*.5,w,h,1.6,buildingMats[Math.abs(Math.round(x))%5],skyline);
+  const shopWalls=['#f1e3c8','#e8d2c0','#dfe6e2','#f3ddd0','#e9e1cf'].map(c=>mat(c)),roofM=mat('#6f625a'),tableM=mat('#f6f1e6'),chairM=mat('#7a5a3e');
+  const awnC=['#c8503a','#2f7fb8','#3f8a5a','#e0a030','#8a4ab0','#d86a8a'],signC=['#ffe8b0','#ffffff','#fff2d0'];
+  const shop=(x,w,h,k)=>{const z=13.4,d=1.5,front=z-d/2,wall=shopWalls[k%5],aw=mat(awnC[k%6]);
+    box(x,h/2,z,w,h,d,wall);box(x,h+.05,z,w+.12,.1,d+.12,roofM);
+    box(x,.62,front-.01,w*.84,.9,.03,glazing);for(const dx of[-.25,.25])box(x+dx*w,.85,z+d/2+.01,w*.3,.42,.03,glazing);box(x,.42,z+d/2+.01,.34,.84,.03,roofM);nightObjects.push(box(x,.6,front-.03,w*.78,.82,.03,windows));
+    if(h>1.7){for(const dx of[-.28,.28])box(x+dx*w,h-.42,front-.01,w*.3,.38,.03,glazing);nightObjects.push(box(x,h-.42,front-.03,w*.72,.32,.02,windows));}
+    const a=box(x,1.22,front-.36,w*.96,.05,.78,aw);a.rotation.x=-.28;
+    for(let j=0;j<5;j++)box(x-w*.4+j*w*.2,1.12,front-.72,w*.08,.11,.02,aw);
+    const sg=box(x,1.5,front-.06,w*.6,.22,.05,basic(signC[k%3],{toneMapped:false}));nightObjects.push(sg);
+    box(x,1.5,front-.04,w*.66,.28,.04,mat(awnC[(k+3)%6]));
+    if(k%2===0)for(const dx of[-.45,.45]){const tx=x+dx*w*.8,tz=front-1.35;
+      rod([tx,0,tz],[tx,.42,tz],.03,chairM);mesh(unit('tbl',()=>new T.CylinderGeometry(.26,.26,.04,12)),tableM,tx,.44,tz);
+      for(const cx of[-.32,.32])box(tx+cx,.2,tz,.16,.4,.16,chairM);
+      rod([tx,.44,tz],[tx,1.05,tz],.018,chairM);const u=mesh(unit('cone',()=>new T.ConeGeometry(.5,.24,8)),mat(awnC[(k+1)%6],{side:T.DoubleSide}),tx,1.12,tz);}
+    pool(x,front-.9,w*1.5,2.2,'#ffc57e',.42);};
+  {let k=0;for(let x=-30;x<=30;){const w=1.7+random()*.9,h=k%3===1?2.05:1.45;shop(x+w/2,w,h,k);x+=w+.55+random()*.9;k++;}}
   function instances(records,material,parent,geometry=unit('box',()=>new T.BoxGeometry(1,1,1))){
     if(!records.length)return null;
     const result=new T.InstancedMesh(geometry,material,records.length),d=new T.Object3D();
@@ -10848,7 +10851,7 @@ function lmGwangalli(){
   world.position.z=water.uniforms.modelOffsetZ.value;
   world.scale.setScalar(water.uniforms.modelScale.value);
   G.userData.bg='#88c6f1';
-  G.userData.cam={dist:13.5,y:1.09,yaw:-.6,pitch:.52,lim:1.18,minPitch:.10,fitWidth:8.95,sway:.07,nightBg:'#253f78'};
+  G.userData.cam={dist:13.5,y:1.09,yaw:-.5,pitch:.42,minPitch:.10,fitWidth:8.95,nightBg:'#253f78'};
   G.userData.anims=[time=>{
     const light=L3.night||0,night=light>.50,t=reduceMotion?1.89:time+1.30;
     water.uniforms.time.value=t;
@@ -15163,7 +15166,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=393;
+const GVER=394;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
