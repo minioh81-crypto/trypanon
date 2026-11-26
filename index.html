@@ -913,7 +913,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v390 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v391 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -11468,7 +11468,9 @@ function lmGwanghwaPlaza(G,id){
   const aim=yi?[0,3.61,.15]:[0,2.47,.21],lampZ=yi?2.34:1.82;
   lmStatueFloodlight(G,-1.36,lampZ,[0,yi?4.06:2.74,.14],1.83,'#ffd89d');
   lmStatueFloodlight(G,1.38,lampZ-.18,aim,1.28,'#fff0c4');
-  lmStatueFloodlight(G,-1.10,yi?-1.52:-1.86,[0,aim[1],-.22],.94,'#b6d7ff');
+  /* v390 뒤쪽도 앞처럼 조명 2개(왼쪽·오른쪽) */
+  lmStatueFloodlight(G,-1.10,yi?-1.52:-1.86,[0,aim[1],-.22],1.25,'#fff0c4');
+  lmStatueFloodlight(G,1.12,yi?-1.62:-1.96,[0,yi?4.06:2.74,-.18],1.25,'#ffd89d');
   if(yi){
     /* v384 명량분수: 바닥 노즐에서 솟는 반투명 물기둥(아래 진하고 위로 옅게) + 꼭대기 물방울 + 밤 조명(노즐 불빛·물기둥이 빛남) */
     const jetTex=s3Tex('yiJetTex',16,128,(g,w,h)=>{const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'rgba(220,245,255,.06)');gr.addColorStop(.25,'rgba(225,247,255,.4)');gr.addColorStop(1,'rgba(250,255,255,.95)');g.fillStyle=gr;g.fillRect(0,0,w,h);
@@ -15156,7 +15158,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=390;
+const GVER=391;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
