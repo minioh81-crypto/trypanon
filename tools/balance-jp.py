@@ -19,11 +19,12 @@ window.__TUNE=(o)=>{const m=MODES.jp,out=[];if(o.init)Object.assign(m,JSON.parse
     if(i<9){m.Hm[i]*=f;m.vmul[i]*=g;}else{m.Hm2[i-9]*=f;m.vmul2[i-9]*=g;}});
   out[out.length-1].push(LAY.map((_,i)=>dlAt(i)));}
   return {out,Hm:m.Hm.map(v=>+v.toPrecision(4)),vmul:m.vmul.map(v=>+v.toPrecision(4)),Hm2:m.Hm2.map(v=>+v.toPrecision(4)),vmul2:m.vmul2.map(v=>+v.toPrecision(4))};};"""
+STG=os.environ.get('STAGE','jp')
 async def run(setup,simo):
   url=page('window.__K={};'+JS,'psim.html')
   async with async_playwright() as p:
     b=await p.chromium.launch(args=GL);pg=await b.new_page()
-    await prep(pg);await pg.add_init_script("localStorage.setItem('tp-stage','jp');localStorage.setItem('trypanon-save-jp',JSON.stringify(%s));"%json.dumps(setup))
+    await prep(pg);await pg.add_init_script("localStorage.setItem('tp-stage','%s');localStorage.setItem('trypanon-save-%s',JSON.stringify(%s));"%(STG,STG,json.dumps(setup)))
     await pg.goto(url);await pg.wait_for_timeout(900)
     r=await pg.evaluate("o=>window[o.fn||'__SIM'](o)",simo);await b.close();return r
 if __name__=='__main__':

@@ -894,7 +894,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v391 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v392 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -981,10 +981,10 @@ const MODES={
  hard:{n:'하드',MAXLV:20,DLOPEN:100,LREQ:[1,1,11,31,51,71,91],Hmul:10,Hm:[1,1,1.5,2.5,2.5,2.5,2.5],vmul:[1,1,2,5,10,10,12],dlMul:1.06,dlGrow:1.115,expBase:200,expGrow:1.25,yf:2.5,inv:.5,shop:1.5,chest:.7,set:0.3,MAXLV2:26,DLOPEN2:140,LREQ2:[92,100,110,120,130,136],Hm2:[2.5,3.654,37,826.2,11828,750000],vmul2:[12,14.6,148.2,1652,23656,180000],p2:{base:100,lv:20,step:12},y2:2,fs:[5,8,12],fc:[.015,.03,.06],
   fuel:[30,30,18],RESC:[17,26,43,67,103,158,241,362,546,768,1071,1494,2081,2889,4021,5596,6400,7200,8000,8800,14000,15000,16000,17000,18000,19000],
   MONC:[300,900,2700,6600,15000,30000,57000,102000,174000,285000,450000,690000,1050000,1560000,2280000,3300000,4800000,6900000,9900000,14100000,19700000,27600000,38700000,54000000,76000000,106000000]}};
-// 일본: 하드급 한 판 · 숙련 Lv.120(무한 91~100 → 초월 101~110 → 창세 111~120) · 부품 24단계. 지층 H·v는 LAY_JP 기본값에 Hm/vmul을 곱한 값
-MODES.jp={n:'일본',MAXLV:24,DLOPEN:120,MAXLV2:24,DLOPEN2:120,LREQ:[1,6,16,26,36,46,56,66,76],LREQ2:[84,92,100,108,114,118],Hmul:1,
-  Hm:[1.113,6.284,3.775,20.41,34.81,102.9,27.85,24.33,78.95],vmul:[1.368,2.762,4.053,13.82,10.59,35.11,12.22,11.06,17.79],Hm2:[166.9,275.4,2350,3.932e+04,1.35e+05,9.212e+06],vmul2:[25.84,75.68,202.6,1556,5.878e+05,1.152e+05],p2:{base:999,lv:0,step:1},dlMul:1.06,dlGrow:1.115,expBase:200,expGrow:1.25,yf:2.5,inv:.5,shop:1.5,chest:.7,set:.3,y2:2,
-  fuel:[30,30,18],fs:[5,8,12],fc:[.015,.03,.06],RESC:MODES.hard.RESC.slice(0,24),MONC:MODES.hard.MONC.slice(0,24)};
+// 일본·중국: 하드급 한 판 · 숙련 Lv.140(무한 91~100 → 초월 → 창세 → 태초 → 우주 131~140, v392) · 부품 26단계. 지층 H·v는 LAY_JP 기본값에 Hm/vmul을 곱한 값
+MODES.jp={n:'일본',MAXLV:26,DLOPEN:140,MAXLV2:26,DLOPEN2:140,LREQ:[1,6,16,26,37,48,60,72,84],LREQ2:[94,104,114,124,132,138],Hmul:1,
+  Hm:[0.5341,2.369,1.519,9.375,21.36,84.27,27.39,30.87,126.8],vmul:[0.5482,1.037,1.624,6.737,10.59,45.59,14.87,16.37,26.32],Hm2:[338.3,622.7,6337,1.161e+05,5.25e+05,3.589e+07],vmul2:[60.4,155.2,910,3407,5.878e+05,1.152e+05],p2:{base:999,lv:0,step:1},dlMul:1.06,dlGrow:1.115,expBase:200,expGrow:1.25,yf:2.5,inv:.5,shop:1.5,chest:.7,set:.3,y2:2,
+  fuel:[30,30,18],fs:[5,8,12],fc:[.015,.03,.06],RESC:MODES.hard.RESC.slice(0,26),MONC:MODES.hard.MONC.slice(0,26)};
 const MD=()=>isJP?MODES.jp:MODES[S.mode]||MODES.normal;
 const dlMul=dl=>Math.pow(MD().dlMul,dl-1);
 const dlPartReq=dl=>{const m=MD();if(S.part===2&&dl>m.p2.base)return Math.min(MAXLV,m.p2.lv+Math.floor((dl-m.p2.base)/m.p2.step));return dl>=m.DLOPEN?m.MAXLV:Math.min(m.MAXLV,Math.floor((dl-1)/5));};
@@ -1761,7 +1761,7 @@ const JPTIER=[ // [갑옷, 어두운 갑옷, 금장식, 장식 2, 눈빛, 무늬
  ['#d8302a','#6a0e0e','#ffd56a','#1a1a1e','#ffe07a','#ffd0a0'],['#d8302a','#6a0e0e','#ffd56a','#1a1a1e','#ffe07a','#ffd0a0'],
  ['#e8b030','#8a2a12','#fff0b0','#c8323a','#ffffff','#ffb8c8'],['#1a1a2a','#0a0a12','#ffd56a','#c8323a','#ff9a4a','#ffd56a'],
  ['#f2f4ff','#6a5ac8','#b8f0ff','#c9a6ff','#ffffff','#c9e8ff'],['#ffffff','#2a1a4a','#ffd56a','#ff9fff','#ffffff','#ffffff']];
-const JPGN=['일반','일반','고급','고급','희귀','희귀','영웅','영웅','전설','무한','초월','창세'],JPSTAR=[1,1,2,2,3,3,4,4,5,5,5,5];
+const JPGN=['일반','일반','고급','고급','희귀','희귀','영웅','영웅','전설','무한','초월','창세','태초','우주'],JPSTAR=[1,1,2,2,3,3,4,4,5,5,5,5,5,5];
 const JPSKIN=[{id:'samurai',n:'사무라이'},{id:'ninja',n:'닌자'},{id:'kitsune',n:'여우(키츠네)'},{id:'oni',n:'오니'},{id:'miko',n:'무녀'}];
 const SKINPAL={yi:['#a8202a','#16121a','#f2c14e','#1a3a7a','#7af0ff','#f2c14e'],oda:['#2a2430','#0c0a10','#f2c14e','#c8242a','#ff6a3a','#f2c14e'],sk_qin:['#2a1e24','#0e0a0e','#f2c14e','#c8242a','#ffb030','#e8302a'],sk_zhuge:['#f4f2ea','#2a4a8a','#f2c14e','#3a6ad0','#8af4ff','#bfe0ff'],sk_zhh:['#b8863a','#1e2a50','#ffe08a','#3a5aa0','#8ae0ff','#ffd56a'],sk_zheng:['#2a5aa8','#0e2a5a','#f2c14e','#f4ecd8','#7af0ff','#ffffff'],sk_guanyu:['#2a8a3a','#0e3a18','#f2c14e','#c8242a','#7aff9a','#c8f0a0'],sk_zhangfei:['#2a2630','#0a080e','#c8242a','#e8302a','#ff6a3a','#ff9a6a'],sk_zhaoyun:['#e8ecf4','#5a6474','#c8d4e8','#3a6ad0','#9ad4ff','#ffffff'],sk_caocao:['#4a2a6a','#1a0a2a','#f2c14e','#9a6ad0','#d8a0ff','#c8a0ff'],sk_lubu:['#c8242a','#4a0808','#ffd23a','#1a1a1e','#ffb030','#ffd0a0'],tiger:['#f29a2a','#2a1a10','#ffd23a','#fff6e6','#c8ff4a','#1a1410'],hwarang:['#2a4aa8','#141e48','#e8b030','#f4ecd8','#5ad8ff','#ff8ab0'],gumiho:['#fbf6f4','#d82a6a','#ffc8e0','#2a1a2a','#ff5ab0','#ffb0d8'],jeoseung:['#2a2238','#0c0a12','#b8b0d0','#e8e4f0','#6ac8ff','#5a4aa8'],dokkaebi:['#2a9a5a','#123020','#e8c040','#3a2a1a','#ffe04a','#5affb0'],phoenix:['#e8402a','#6a0e14','#ffd23a','#fff0c8','#ffe8a0','#ff9a3a'],ninja:['#2a3348','#141a28','#c9d1d5','#3a4a6a','#ff5a5a','#5a6a8a'],kitsune:['#fbf8f2','#c8323a','#e8b030','#2a2a30','#ffd04a','#ff8aa0'],oni:['#c8302a','#5a0e0a','#e8c030','#1a1a1a','#ffe04a','#f2c14e'],miko:['#fbfaf6','#d8283a','#e8b030','#d8283a','#ff8ab0','#f6a8c0'],mecha:['#c9d0d6','#3a4650','#f28a2a','#2a323a','#7af0b0','#f2c14e']};
 // 중국 드릴 로봇 스킨(역사 인물·삼국지 무장) · 기본 = 정화(v321)
@@ -4362,7 +4362,7 @@ function tierCard(){const dl=S.dl,g=dlGrade(dl),nx=dl+1;
    <div class="tfoot"><span>${req>0?`부품 ${ok}/10 · `:''}${won(cost)}</span><button class="primary" id="tierUp" type="button" ${all&&money?'':'disabled'}>${all?(money?(promo?'승급':'강화'):'자금 부족'):'부품 레벨 부족'}</button></div></div>`;}
 function updatePreviewInfo(){const P=levels(),p=selPart&&PARTS.find(x=>x.id===selPart),next=p&&L(p.id)<MAXLV;
   const Q=next?Object.assign({},P,{[p.id]:P[p.id]+1}):P;
-  $('#pTier').textContent=tierName()+(isJP?` · ${'★'.repeat(JPSTAR[Math.min(12,dlGrade(S.dl))-1])} ${JPGN[Math.min(12,dlGrade(S.dl))-1]}`:'');
+  $('#pTier').textContent=tierName()+(isJP?` · ${'★'.repeat(JPSTAR[Math.min(14,dlGrade(S.dl))-1])} ${JPGN[Math.min(14,dlGrade(S.dl))-1]}`:'');
   {const el=$('#jpSkins'),cur=jpSkin(),k=cur+S.dl+(isJP?'j':'k');el.hidden=false;if(el.dataset.k!==k){el.dataset.k=k;el.innerHTML=`<div class="jpskh">🤖 드릴 스킨</div><div class="jpskg">`+(()=>{const L=SKLIST().filter(x=>!x.hero),hid=isCN?'sk_qin':isJP?'oda':'yi',h=SKLIST().find(x=>x.id===hid);if(h)L.push(h);return L;})().map(x=>{const ok=dskOwn(x.id),im=robotPng(S.dl,x.id);return `<button type="button" class="jpskb ${cur===x.id?'on':''}" data-skin="${x.id}" ${ok?'':'data-lock="1"'}>${im?`<img src="${im}" alt="">`:''}<b>${x.n.replace('(키츠네)','')}</b>${ok?'':`<small>${HEROSK.has(x.id)?'♾️🔒':'🔒'}</small>`}</button>`;}).join('')+'</div>';}}
   const m=$('#pMode');m.className='pmode'+(next?' next':'');
   m.textContent=next?`미리보기 · ${p.n} Lv${P[p.id]+1}`:p?`${p.n} 최대 레벨`:'현재 드릴 · 부품을 눌러 미리보기';
@@ -15139,7 +15139,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=391;
+const GVER=392;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
