@@ -894,7 +894,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}/* v316: 아이폰이 �
   <button class="ghost" type="button" id="mInstall" hidden>📲 홈 화면에 아이콘 추가</button><p class="wnote" id="mInstNote" hidden style="white-space:pre-line;margin:0"></p>
   <button class="ghost danger" type="button" id="mReset2">엔딩 기록은 남기고 초기화</button>
   <button class="ghost danger" type="button" id="mReset">게임 초기화 (엔딩 기록까지 모두)</button>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v398 · 2026-11-26</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><p class="wnote" id="mVer" style="opacity:.6;margin:0;flex:1 1 auto;cursor:default;user-select:none">게임 버전 v399 · 2026-11-27</p><button class="ghost sm" type="button" id="mReload" style="padding:6px 12px;border-radius:10px">🔄 최신 버전 받기</button></div>
   <p class="wnote" id="mNote">초기화하면 깊이, 부품, 드릴 단계, 자원, 유물, 옷장, 투자자가 모두 처음 상태로 돌아갑니다.</p>
   <button class="primary" type="button" id="mClose">닫기</button></div></section>
 <div class="alert" id="alert" hidden role="status"></div>
@@ -14182,36 +14182,72 @@ function tuImmInside(env){const T=THREE,sc=new T.Scene();if(env)sc.environment=e
   add(new T.BoxGeometry(30,.5,.06),S('#6a6e74',0,.9),-2,3.35,.15);add(new T.BoxGeometry(30,.6,.06),S('#6a6e74',0,.9),-2,-.55,.15);
   // 이음부(2.1마다): 검은 고무 개스킷 띠 + 강판
   for(let i=0;i<14;i++){const x=-14+i*2.1;add(new T.BoxGeometry(.08,3.3,.06),S('#141414',.1,.6),x,1.4,-2.28);add(new T.BoxGeometry(.08,.06,2.5),S('#141414',.1,.6),x,2.76,-1.1);add(new T.BoxGeometry(.2,.02,2.5),S('#8a9098',.9,.3),x,.01,-1.1);}
-  // 포장 안 된 바닥(콘크리트) → 포장된 아스팔트(뒤쪽) · 포장기 · 롤러
-  const asp=add(new T.BoxGeometry(1,.04,2.3),S('#2a2a2e',0,.9),0,.02,-1.15);const lineM=new T.MeshBasicMaterial({color:'#f2f2f2'});
-  const pav=new T.Group();sc.add(pav);{const Y=tuPaint('#f2b51e',.35,.45),K=S('#1c1c20',.3,.8);add(tuRB(1.1,.4,1.6,.05),Y,0,.38,0,pav);add(new T.BoxGeometry(.5,.35,1.7),S('#3a3a40',.5,.5),.75,.4,0,pav);add(new T.BoxGeometry(.4,.4,.6),Y,-.2,.78,.3,pav);add(new T.BoxGeometry(.3,.3,.5),new T.MeshStandardMaterial({color:'#24384e',metalness:.9,roughness:.1}),-.2,.82,.3,pav);
-    for(const z of [.6,-.6])add(new T.BoxGeometry(1.0,.22,.24),K,0,.12,z,pav);add(new T.BoxGeometry(.2,.12,2.3),S('#5a5a60',.6,.4),-.65,.08,0,pav);const bc=add(new T.CylinderGeometry(.05,.05,.06,10),new T.MeshBasicMaterial({color:'#ff9a20',toneMapped:false}),-.2,1.02,.3,pav);pav.userData.bc=bc;}
+  // v399 포장 전선: 앞에서부터 용접조 → 조명 설치 → 아스팔트 덤프 → 포장기(피니셔) → 탠덤 롤러가 한 덩어리로 전진
+  const asp=add(new T.BoxGeometry(1,.04,2.3),S('#2a2a2e',0,.9),0,.02,-1.15);
+  const Y=tuPaint('#f2b51e',.35,.45),K=tuPaint('#1c1c20',.4,.6),Mt=tuPaint('#8a8e96',.85,.35),gl=tuGlass(),Wt=tuPaint('#eef0f2',.25,.45);
+  const RB=tuRB,cy=(r1,r2,h,n=16)=>new T.CylinderGeometry(r1,r2,h,n),bcM=()=>new T.MeshBasicMaterial({color:'#ff9a20',toneMapped:false});
+  const rod=(a,b,r,m,p)=>{const A=new T.Vector3(...a),B=new T.Vector3(...b),dd=B.clone().sub(A),o=new T.Mesh(cy(r,r,1,8),m);o.position.copy(A).lerp(B,.5);o.scale.y=dd.length();o.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),dd.normalize());p.add(o);return o;};
+  const canopy=(p,x0,x1,z0,z1,y0,y1,m)=>{for(const x of [x0,x1])for(const z of [z0,z1])rod([x,y0,z],[x,y1,z],.022,K,p);add(RB(x1-x0+.12,.05,z1-z0+.12,.02),m,(x0+x1)/2,y1+.02,(z0+z1)/2,p);};
+  const track=(p,x,z,l)=>{add(RB(l,.2,.24,.06),K,x,.12,z,p);for(let i=0;i<5;i++){const w=add(cy(.07,.07,.05,14),Mt,x-l/2+.12+i*(l-.24)/4,.12,z+(z>0?.13:-.13),p);w.rotation.x=Math.PI/2;}};
+  // 포장기(아스팔트 피니셔): 앞 호퍼 · 엔진 덮개와 배기관 · 뒤 조종석(지붕) · 가열 스크리드
+  const pav=new T.Group();sc.add(pav);{
+    for(const z of [-.55,.55])track(pav,.1,z,1.2);add(RB(1.2,.34,1.0,.06),Y,.05,.4,0,pav);
+    add(new T.BoxGeometry(.5,.06,1.1),Mt,.85,.32,0,pav);for(const z of [-.55,.55]){const wg=add(new T.BoxGeometry(.5,.3,.04),Y,.85,.5,z,pav);wg.rotation.x=z>0?-.35:.35;}add(new T.BoxGeometry(.46,.12,.95),S('#222226',0,1),.85,.42,0,pav);
+    for(const z of [-.3,.3]){const pr=add(cy(.06,.06,.18,12),K,1.12,.24,z,pav);pr.rotation.x=Math.PI/2;}
+    add(RB(.55,.3,.9,.06),Y,.15,.72,0,pav);for(let i=0;i<5;i++)add(new T.BoxGeometry(.02,.16,.6),K,.43,.72,-.24+i*.12,pav);add(cy(.035,.04,.4,10),K,.3,1.05,.3,pav);
+    add(new T.BoxGeometry(.5,.05,1.0),Mt,-.42,.6,0,pav);add(RB(.22,.3,.36,.03),S('#30343a',.5,.5),-.3,.78,-.2,pav);add(new T.BoxGeometry(.16,.12,.14),gl,-.3,.97,-.2,pav);
+    canopy(pav,-.66,-.18,-.5,.5,.6,1.55,Wt);const op=tuWorker('stand');op.scale.setScalar(.9);op.position.set(-.46,.62,.18);op.rotation.y=Math.PI/2;pav.add(op);
+    pav.userData.bc=add(cy(.05,.05,.07,10),bcM(),-.42,1.63,0,pav);
+    const scr=add(RB(.32,.22,2.15,.04),S('#5a5e64',.7,.4),-.82,.16,0,pav);add(new T.BoxGeometry(.3,.02,2.1),new T.MeshStandardMaterial({color:'#ff7a20',emissive:'#ff5a10',emissiveIntensity:.8}),-.82,.04,0,pav);
+    for(const z of [-1.08,1.08])add(new T.BoxGeometry(.4,.3,.03),Y,-.82,.2,z,pav);add(new T.BoxGeometry(.36,.03,2.0),tuHaz(),-.82,.29,0,pav);
+    const aug=add(cy(.06,.06,1.9,12),Mt,-.55,.12,0,pav);aug.rotation.x=Math.PI/2;for(let i=0;i<9;i++){const fl=add(cy(.1,.1,.015,12),Mt,-.55,.12,-.8+i*.2,pav);fl.rotation.x=Math.PI/2+.25;}}
   pav.position.set(-1.5,0,-1.15);
-  const rol=new T.Group();sc.add(rol);{const Y=tuPaint('#f2b51e',.35,.45),D=S('#a8acb2',.9,.3);add(tuRB(.8,.35,.8,.05),Y,0,.45,0,rol);add(new T.BoxGeometry(.3,.35,.4),new T.MeshStandardMaterial({color:'#24384e',metalness:.9,roughness:.1}),-.1,.82,0,rol);for(const x of [.45,-.45]){const r=add(new T.CylinderGeometry(.24,.24,.9,20),D,x,.24,0,rol);r.rotation.x=Math.PI/2;}}
+  // 탠덤 롤러: 앞뒤 강철 드럼 · 꺾임 관절 · 지붕 · 물탱크
+  const rol=new T.Group();sc.add(rol);const drums=[];{
+    for(const x of [-.48,.48]){const dr=add(cy(.25,.25,.86,24),S('#b8bcc2',.9,.28),x,.25,0,rol);dr.rotation.x=Math.PI/2;drums.push(dr);for(const z of [-.46,.46])add(RB(.62,.36,.05,.02),Y,x,.36,z,rol);add(RB(.46,.14,.96,.04),Y,x,.6,0,rol);}
+    add(cy(.07,.07,.2,12),K,0,.5,0,rol);add(RB(.5,.32,.7,.06),Y,-.2,.82,0,rol);add(RB(.36,.24,.7,.05),Wt,.35,.78,0,rol);
+    canopy(rol,-.34,.12,-.4,.4,.98,1.72,Y);add(new T.BoxGeometry(.14,.18,.1),S('#30343a',.5,.5),.02,1.08,-.18,rol);const op2=tuWorker('stand');op2.scale.setScalar(.82);op2.position.set(-.12,.98,.08);op2.rotation.y=Math.PI/2;rol.add(op2);
+    rol.userData.bc=add(cy(.045,.045,.06,10),bcM(),-.1,1.79,0,rol);}
   rol.position.set(-5,0,-1.15);
+  // 아스팔트 덤프: 뒤로 붙어 적재함을 들어 포장기 호퍼에 붓는다
+  const trk=new T.Group();sc.add(trk);const bed=new T.Group();{
+    add(new T.BoxGeometry(1.9,.12,.6),Mt,0,.34,0,trk);for(const x of [-.6,-.3,.6])for(const z of [-.4,.4]){const w=add(cy(.2,.2,.14,18),K,x,.2,z,trk);w.rotation.x=Math.PI/2;const h=add(cy(.1,.1,.15,12),Mt,x,.2,z+(z>0?.01:-.01),trk);h.rotation.x=Math.PI/2;}
+    add(RB(.55,.62,.86,.08),S('#d8402a',.45,.4),.72,.74,0,trk);add(new T.BoxGeometry(.04,.26,.7),gl,1.0,.92,0,trk);for(const z of [-.43,.43])add(new T.BoxGeometry(.36,.22,.02),gl,.72,.92,z,trk);add(new T.BoxGeometry(.06,.1,.8),K,1.0,.5,0,trk);
+    for(const z of [-.3,.3])add(new T.BoxGeometry(.03,.06,.12),new T.MeshBasicMaterial({color:'#fff2c0',toneMapped:false}),1.01,.55,z,trk);
+    bed.position.set(-.95,.45,0);trk.add(bed);add(RB(1.35,.46,.88,.05),S('#c8ccd2',.8,.3),.67,.24,0,bed);add(new T.BoxGeometry(1.25,.06,.78),S('#1c1c1e',0,1),.67,.44,0,bed);for(let i=0;i<4;i++)add(new T.BoxGeometry(.03,.4,.9),Mt,.15+i*.35,.24,0,bed);
+    const hy=rod([.2,.4,0],[.0,.5,0],.04,Mt,trk);trk.userData.hy=hy;}
+  trk.position.set(.5,0,-1.15);
+  // 갓 깐 아스팔트 김 · 덤프에서 쏟아지는 아스팔트
+  const SN=26,stG=new T.BufferGeometry(),stA=new Float32Array(SN*3);stG.setAttribute('position',new T.BufferAttribute(stA,3));sc.add(new T.Points(stG,new T.PointsMaterial({color:'#e8e4dc',size:.22,map:tuSoft(),transparent:true,opacity:.35,depthWrite:false})));const stV=Array.from({length:SN},()=>Math.random());
+  const AN=24,asG=new T.BufferGeometry(),asA=new Float32Array(AN*3);asG.setAttribute('position',new T.BufferAttribute(asA,3));sc.add(new T.Points(asG,new T.PointsMaterial({color:'#2a2622',size:.07})));const asV=Array.from({length:AN},()=>Math.random());
   // 조명 달기: 고소 작업차 + 인부 · 천장 조명(설치될수록 켜짐)
   const lamps=[];for(let i=0;i<12;i++){const l=add(new T.BoxGeometry(.3,.05,.12),new T.MeshBasicMaterial({color:'#3a3a32',toneMapped:false}),-13+i*2.1+1.05,2.74,-1.9);lamps.push(l);}
   const lift=new T.Group();sc.add(lift);{const Sm=S('#e8402f',.5,.4);add(new T.BoxGeometry(.6,.14,.5),Sm,0,.12,0,lift);for(let i=0;i<4;i++){const x1=add(new T.BoxGeometry(.6,.03,.03),S('#8a8e96',.8,.3),0,.35+i*.4,.2,lift);x1.rotation.z=i%2?.5:-.5;}add(new T.BoxGeometry(.65,.06,.5),Sm,0,1.95,0,lift);const w=tuWorker('reach',{harness:1});w.position.set(0,1.98,-.1);w.rotation.y=Math.PI;lift.add(w);lift.userData.w=w;for(const z of [.25,-.25])add(new T.CylinderGeometry(.012,.012,.65,6),Sm,0,2.45,z,lift).rotation.z=Math.PI/2;for(const x of [.31,-.31]){add(new T.CylinderGeometry(.012,.012,.5,6),Sm,x,2.45,0,lift).rotation.x=Math.PI/2;add(new T.CylinderGeometry(.012,.012,.5,6),Sm,x,2.2,0,lift);}}
   lift.position.set(2.2,0,-1.55);
   // 이음부 용접: 바닥 무릎 · 벽 서서 · 사다리 위
-  const J=-14+8*2.1;const W1=tuWorker('kneel');W1.position.set(J+.15,0,-1.95);W1.rotation.y=Math.PI;sc.add(W1);const W2=tuWorker('stand');W2.position.set(J-.15,0,-1.95);W2.rotation.y=Math.PI;sc.add(W2);
-  /* v376 사다리 대신 이동식 비계(바퀴 잠금·사방 난간·발끝막이·안쪽 사다리) 위에서 안전대를 걸고 작업 */const sca=new T.Group();sc.add(sca);sca.position.set(J+.05,0,-1.62);{const P=S('#c8ccd2',.85,.3),Rd=S('#e8402f',.4,.5),Wd=S('#b8864a',0,.8);const W_=.7,D_=.62,H_=1.4;
+  const crew=new T.Group();sc.add(crew);const J=0;/* v399 용접조는 비계째 crew 하나로 움직임 */const W1=tuWorker('kneel');W1.position.set(J+.15,0,-1.95);W1.rotation.y=Math.PI;crew.add(W1);const W2=tuWorker('stand');W2.position.set(J-.15,0,-1.95);W2.rotation.y=Math.PI;crew.add(W2);
+  /* v376 사다리 대신 이동식 비계(바퀴 잠금·사방 난간·발끝막이·안쪽 사다리) 위에서 안전대를 걸고 작업 */const sca=new T.Group();crew.add(sca);sca.position.set(J+.05,0,-1.62);{const P=S('#c8ccd2',.85,.3),Rd=S('#e8402f',.4,.5),Wd=S('#b8864a',0,.8);const W_=.7,D_=.62,H_=1.4;
     for(const x of [-W_/2,W_/2])for(const z of [-D_/2,D_/2]){add(new T.CylinderGeometry(.018,.018,H_+.62,8),P,x,(H_+.62)/2+.08,z,sca);const wh=add(new T.CylinderGeometry(.05,.05,.04,12),S('#1c1c20',.2,.8),x,.05,z,sca);wh.rotation.x=Math.PI/2;add(new T.BoxGeometry(.03,.03,.06),Rd,x+.04,.05,z,sca);}
     for(const y of [.12,.6,1.0,H_])for(const z of [-D_/2,D_/2])add(new T.CylinderGeometry(.012,.012,W_,6),P,0,y,z,sca).rotation.z=Math.PI/2;for(const y of [.12,.6,1.0,H_])for(const x of [-W_/2,W_/2])add(new T.CylinderGeometry(.012,.012,D_,6),P,x,y,0,sca).rotation.x=Math.PI/2;
     for(const z of [-D_/2,D_/2]){const br=add(new T.CylinderGeometry(.01,.01,Math.hypot(W_,.88),6),P,0,.56,z,sca);br.rotation.z=Math.atan2(W_,.88);}
     add(new T.BoxGeometry(W_,.035,D_),Wd,0,H_+.02,0,sca);for(const y of [H_+.28,H_+.55])for(const z of [-D_/2,D_/2])add(new T.CylinderGeometry(.014,.014,W_,6),Rd,0,y,z,sca).rotation.z=Math.PI/2;for(const y of [H_+.28,H_+.55])for(const x of [-W_/2,W_/2])add(new T.CylinderGeometry(.014,.014,D_,6),Rd,x,y,0,sca).rotation.x=Math.PI/2;
     for(const z of [-D_/2,D_/2])add(new T.BoxGeometry(W_,.1,.012),tuHaz(),0,H_+.09,z,sca);for(const x of [-W_/2,W_/2])add(new T.BoxGeometry(.012,.1,D_),tuHaz(),x,H_+.09,0,sca);
     for(let i=0;i<5;i++)add(new T.BoxGeometry(.012,.012,.22),P,-W_/2+.06,.3+i*.25,0,sca);}
-  const W3=tuWorker('reach',{harness:1});W3.position.set(J+.05,1.43,-1.7);W3.rotation.y=Math.PI;sc.add(W3);{W3.updateMatrixWorld(true);const p=W3.userData.back.getWorldPosition(new T.Vector3()),a=new T.Vector3(J+.05+.35,1.95,-1.62+.31),m=p.clone().lerp(a,.5);m.y-=.12;sc.add(new T.Mesh(new T.TubeGeometry(new T.QuadraticBezierCurve3(p,m,a),12,.008,5,false),S('#ffd21a',0,.6)));}
+  const W3=tuWorker('reach',{harness:1});W3.position.set(J+.05,1.43,-1.7);W3.rotation.y=Math.PI;crew.add(W3);{W3.updateMatrixWorld(true);const p=W3.userData.back.getWorldPosition(new T.Vector3()),a=new T.Vector3(J+.05+.35,1.95,-1.62+.31),m=p.clone().lerp(a,.5);m.y-=.12;crew.add(new T.Mesh(new T.TubeGeometry(new T.QuadraticBezierCurve3(p,m,a),12,.008,5,false),S('#ffd21a',0,.6)));}
   const WK=[W1,W2,W3],WL=WK.map(()=>{const l=new T.PointLight('#bfe0ff',0,2.4);sc.add(l);return l;});
   const NS=60,g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(new Float32Array(NS*3),3));const WSp=new T.Points(g,new T.PointsMaterial({color:'#fff2c0',size:.07,map:tuSoft(),transparent:true,depthWrite:false,blending:T.AdditiveBlending,toneMapped:false}));sc.add(WSp);const sv=Array.from({length:NS},()=>[0,0,0,2]);
   const label=(()=>{const c=document.createElement('canvas');c.width=256;c.height=64;const x=c.getContext('2d');x.fillStyle='#1a5ac0';x.fillRect(0,0,256,64);x.fillStyle='#fff';x.font='bold 30px sans-serif';x.textAlign='center';x.fillText('가덕해저터널',128,42);const t=new T.CanvasTexture(c);t.encoding=T.sRGBEncoding;return t;})();
   add(new T.PlaneGeometry(1.2,.3),new T.MeshBasicMaterial({map:label,toneMapped:false}),-6,2.4,-2.28);
   sc.userData={tbm:null,shake:{x:0,y:0},burst:()=>{},tick:(tt,dt)=>{const s=tuSec(),t=tuCur(),L=Math.min(1000,tuLen(t)-s*1000),f=Math.max(0,Math.min(1,(tuPr()-s*1000)/Math.max(1,L))),dig=TU.st==='dig';
       // 진행만큼: 아스팔트가 앞(+x)으로 깔리고 · 조명이 차례로 켜짐 · 포장기가 앞으로
-      const front=-13+f*16;asp.scale.x=Math.max(.01,front+13);asp.position.x=-13+(front+13)/2;pav.position.x=front+.6+Math.sin(tt*.3)*.05;pav.userData.bc.material.color.setHSL(.08,1,.45+.25*Math.sin(tt*12));
-      rol.position.x=Math.max(-12.5,front-2.2)+Math.sin(tt*.6)*.9;rol.children.forEach(c=>{if(c.geometry.type==='CylinderGeometry')c.rotation.y=0;});
-      lamps.forEach((l,i)=>{const on=(i+.5)/12<f;l.material.color.set(on?'#fff0c0':'#3a3a32');});lift.position.x=-13+Math.min(11,Math.floor(f*12))*2.1+1.05;lift.userData.w.userData.arm.rotation.y=Math.sin(tt*2)*.2;
+      const front=-13+f*13;sc.userData.fx=front+1.6;asp.scale.x=Math.max(.01,front+13);asp.position.x=-13+(front+13)/2;
+      const cr=(tt*.16)%1,crawl=dig?cr*.5:0;pav.position.x=front+.9+crawl;pav.userData.bc.material.color.setHSL(.08,1,.45+.25*Math.sin(tt*12));rol.userData.bc.material.color.setHSL(.08,1,.45+.25*Math.sin(tt*12+2));
+      rol.position.x=front-1.6+Math.sin(tt*.7)*.75;drums.forEach(d=>d.rotation.y=-rol.position.x/.25);
+      trk.position.x=pav.position.x+2.15;const tip=dig?.3+.12*Math.sin(tt*.8):.05;trk.children.includes(bed)&&(bed.rotation.z=-tip);
+      {const ox=pav.position.x+1.0;for(let i=0;i<AN;i++){asV[i]+=dt*(dig?1.4:0);if(asV[i]>1)asV[i]-=1;const u=asV[i];asA[i*3]=ox+.25-u*.25+Math.sin(i)*.05;asA[i*3+1]=dig?.8-u*.4:-5;asA[i*3+2]=-1.15+Math.sin(i*2.3)*.3;}asG.attributes.position.needsUpdate=true;}
+      {for(let i=0;i<SN;i++){stV[i]+=dt*.35;if(stV[i]>1)stV[i]-=1;const u=stV[i];stA[i*3]=pav.position.x-1.0-(i%7)*.35;stA[i*3+1]=.05+u*1.4;stA[i*3+2]=-1.15+Math.sin(i*1.7)*.8;}stG.attributes.position.needsUpdate=true;}
+      const lx=front+3.4;lamps.forEach((l,i)=>{const x=-13+i*2.1+1.05;l.material.color.set(x<lx-.5?'#fff0c0':'#3a3a32');});lift.position.x=Math.min(10.5,lx)+Math.sin(tt*.25)*.15;lift.userData.w.userData.arm.rotation.y=Math.sin(tt*2)*.2;
+      {let jj=Math.ceil((front+5.2+14)/2.1);crew.position.x=Math.min(10.7,-14+jj*2.1);}
       let any=false;WK.forEach((w,i)=>{const on=dig&&((tt*6+i*2.3)%5)<3.4;const tp=w.userData.tip.getWorldPosition(new T.Vector3());WL[i].position.copy(tp);WL[i].intensity=on?1.3+Math.random()*1.5:0;w.userData.on=on;w.userData.tp=tp;if(on)any=true;});if(any&&Math.random()<dt*7)tuSfx('weld');
       const a=g.attributes.position.array;for(let i=0;i<NS;i++){const p=sv[i],w=WK[i%3];p[3]+=dt*2.2;if(p[3]>1&&w.userData.on){p[3]=0;const q=w.userData.tp;a[i*3]=q.x;a[i*3+1]=q.y;a[i*3+2]=q.z;p[0]=(Math.random()-.5)*1.4;p[1]=Math.random()*1.2;p[2]=Math.random()*.9;}if(p[3]<=1){a[i*3]+=p[0]*dt;a[i*3+1]+=(p[1]-p[3]*5)*dt;a[i*3+2]+=p[2]*dt;}else a[i*3+1]=-9;}g.attributes.position.needsUpdate=true;
       seaTick(tt,dt);}};
@@ -14324,8 +14360,8 @@ function tu3Mount(host){tu3Stop();const el=document.createElement('div');el.clas
   if(typeof THREE==='undefined'){el.insertAdjacentHTML('beforeend','<div class="tunf">3D를 불러오는 중이에요 (인터넷 연결 필요)</div>');tu3={el,dead:1};return;}
   const w=el.clientWidth||360,h=el.clientHeight||300,T=THREE,ren=new T.WebGLRenderer({antialias:true,alpha:false});ren.outputEncoding=T.sRGBEncoding;ren.toneMapping=T.ACESFilmicToneMapping;ren.toneMappingExposure=.9;ren.setPixelRatio(Math.min(1.75,devicePixelRatio||1));ren.setSize(w,h);ren.setClearColor(tuCur().sea?'#0a1828':'#0e0c10');el.insertBefore(ren.domElement,el.firstChild);
   const cam=new T.PerspectiveCamera(46,w/h,.1,90);const env=tuEnv(ren),st={el,ren,cam,env,sc:tuScene(env),k:tuKey(),yaw:-.2,pitch:.22,dist:15,px:0,mode:'dig'};tu3=st;let drag=null,auto=true,t0=performance.now(),last=t0,mv=0;
-  const tgt=()=>{const c=tuCur(),dn=TU.done.includes(c.k);if(st.dbgT)return st.dbgT;return st.mode==='tbm'?[0,1.3,0]:dn?[0,c.sea?2.0:1.2,0]:c.imm?(tuImmPh()==='inside'?[-2.5,1.4,-.9]:[2.9,5.3,-.2]):[-1.0,c.sea?1.9:1.55,0];/* v395 작업 지점(내려가는 함체·TBM)을 화면 가운데에 */};
-  const scn=()=>st.mode==='tbm'?(st.show||(st.show=tuShowScene(st.env))):st.sc;const place=()=>{const [x0,y,z]=tgt(),x=x0+(st.mode==='tbm'?0:st.px),d=st.mode==='tbm'?st.dist*.68:TU.done.includes(tuCur().k)?st.dist*.62:tuCur().imm&&tuImmPh()!=='inside'?st.dist*1.22:st.dist,sh=scn().userData.shake||{x:0,y:0};cam.position.set(x+Math.sin(st.yaw)*Math.cos(st.pitch)*d+sh.x,y+Math.sin(st.pitch)*d+sh.y,z+Math.cos(st.yaw)*Math.cos(st.pitch)*d);cam.lookAt(x+sh.x*.5,y+sh.y*.5,z);/* v396 멀리 볼수록 안개도 뒤로 */{const S2=scn();if(S2.fog){const u=S2.userData;if(!u.f0)u.f0=[S2.fog.near,S2.fog.far];const ex=Math.max(0,d-11);S2.fog.near=u.f0[0]+ex;S2.fog.far=u.f0[1]+ex*1.4;}}};
+  const tgt=()=>{const c=tuCur(),dn=TU.done.includes(c.k);if(st.dbgT)return st.dbgT;return st.mode==='tbm'?[0,1.3,0]:dn?[0,c.sea?2.0:1.2,0]:c.imm?(tuImmPh()==='inside'?[(scn().userData.fx??-2.5),1.4,-.9]:[2.9,5.3,-.2]):[-1.0,c.sea?1.9:1.55,0];/* v395 작업 지점(내려가는 함체·TBM)을 화면 가운데에 */};
+  const scn=()=>st.mode==='tbm'?(st.show||(st.show=tuShowScene(st.env))):st.sc;const place=()=>{const [x0,y,z]=tgt(),x=x0+(st.mode==='tbm'?0:st.px),d=st.mode==='tbm'?st.dist*.68:TU.done.includes(tuCur().k)?st.dist*.62:tuCur().imm?(tuImmPh()!=='inside'?st.dist*1.22:st.dist*.7):st.dist,sh=scn().userData.shake||{x:0,y:0};cam.position.set(x+Math.sin(st.yaw)*Math.cos(st.pitch)*d+sh.x,y+Math.sin(st.pitch)*d+sh.y,z+Math.cos(st.yaw)*Math.cos(st.pitch)*d);cam.lookAt(x+sh.x*.5,y+sh.y*.5,z);/* v396 멀리 볼수록 안개도 뒤로 */{const S2=scn();if(S2.fog){const u=S2.userData;if(!u.f0)u.f0=[S2.fog.near,S2.fog.far];const ex=Math.max(0,d-11);S2.fog.near=u.f0[0]+ex;S2.fog.far=u.f0[1]+ex*1.4;}}};
   el.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw:st.yaw,pitch:st.pitch};mv=0;auto=false;try{el.setPointerCapture(e.pointerId);}catch(_){}});
   el.addEventListener('pointermove',e=>{if(!drag||el._pz)return;mv=Math.max(mv,Math.abs(e.clientX-drag.x)+Math.abs(e.clientY-drag.y));st.yaw=st.mode==='tbm'?drag.yaw-(e.clientX-drag.x)*.008:Math.max(-.95,Math.min(.95,drag.yaw-(e.clientX-drag.x)*.006));st.pitch=Math.max(-.05,Math.min(.85,drag.pitch+(e.clientY-drag.y)*.005));});
   el.addEventListener('pointerup',e=>{if(drag&&mv<8&&!el._pz&&!e.target.closest('.tuopen')&&!e.target.closest('.tuvw')){if(TU.st==='dig'&&st.mode!=='tbm')tuTap(e,el,st);else if(TU.st==='wait')tuMsg('⏳ 구간 끝! 자재가 모이면 자동으로 완공돼요 · 🏭 자재 탭에서 공장을 증설해요');}drag=null;});
@@ -15224,7 +15260,7 @@ function armReset(b,keep){if(b.dataset.armed){resetGame(keep);return;}b.dataset.
 $('#menuBtn').addEventListener('click',()=>{renderSeasonSeg();renderSndSeg();const b=$('#mReset');delete b.dataset.armed;b.textContent='게임 초기화 (엔딩 기록까지 모두)';const b2=$('#mReset2');delete b2.dataset.armed;b2.textContent='엔딩 기록은 남기고 초기화';$('#menu').hidden=false;});
 $('#mClose').addEventListener('click',()=>$('#menu').hidden=true);
 // reload past the browser / home-screen cache: same page with a fresh query string (progress is in localStorage, so nothing is lost)
-const GVER=398;
+const GVER=399;
 // 홈 화면 앱은 사파리와 저장 공간이 따로라 ?jptest=1 주소가 안 먹어요 → 메뉴의 「게임 버전」 글자를 7번 연속 누르면 일본 테스트 켜기/끄기
 {let n=0,t=0;const v=document.getElementById('mVer');if(v)v.addEventListener('click',()=>{const now=Date.now();n=now-t<900?n+1:1;t=now;if(n>=7){n=0;let on=false;try{on=localStorage.getItem('tp-jptest')!=='1';localStorage.setItem('tp-jptest',on?'1':'0');localStorage.setItem('tp-cntest',on?'1':'0');}catch(e){}toast(on?'🗾🐉♾️ 일본·중국·무한의 땅 테스트 켜짐 · 타이틀 세계 투어에서 고르세요':'일본·중국·무한의 땅 테스트 꺼짐',3500);if(!on&&isJP)setTimeout(()=>switchStage('kr'),800);setTimeout(()=>location.reload(),on||!isJP?1200:2000);}});}
 // home-screen icon: Android Chrome/Samsung Internet raise beforeinstallprompt (one-tap install); iPhone and other cases get the menu steps
